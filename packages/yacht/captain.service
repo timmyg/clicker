@@ -1,0 +1,18 @@
+[Unit]
+Description=captain service
+After=network.target
+
+[Service]
+ExecStartPre=/bin/bash -c 'git pull'
+ExecStartPre=/bin/bash -c 'npm i'
+ExecStart=/bin/bash -c 'npm start'
+WorkingDirectory=/home/pi/captain
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl enable myfirst

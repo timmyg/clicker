@@ -1,18 +1,33 @@
 {
-  "name": "dtv",
+  "name": "captain",
   "version": "1.0.0",
   "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "^2.381.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-react": "^7.11.1",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "prettier": "^1.15.3"
+  },
   "scripts": {
-    "start": "node app/startup.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timmyg/captain.git"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "directv-remote": "git+https://github.com/timmyg/directv-remote.git",
-    "dotenv": "^6.1.0",
-    "losant-mqtt": "^3.1.0",
-    "request": "^2.88.0",
-    "winston": "^3.1.0",
-    "winston-logzio": "^3.0.2"
-  }
+  "bugs": {
+    "url": "https://github.com/timmyg/captain/issues"
+  },
+  "homepage": "https://github.com/timmyg/captain#readme"
 }
