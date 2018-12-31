@@ -4,12 +4,21 @@
   "description": "",
   "main": "api.longshoreman.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "creds:config:dev": "AWS_KEY=$AWS_KEY_DEV AWS_SECRET=$AWS_SECRET_DEV PROFILE=kickthecan:dev STAGE=dev",
+    "creds:config:prod": "AWS_KEY=$AWS_KEY_PROD AWS_SECRET=$AWS_SECRET_PROD PROFILE=kickthecan:prod STAGE=prod",
+    "serverless:config": "serverless config credentials --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE",
+    "deploy": "serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
+    "logs:account": "serverless logs --function account --stage $STAGE --aws-profile $PROFILE",
+    "invoke:register-device": "serverless invoke local --function account --path test/data/new-account.json"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.381.0",
+    "dynamoose": "^1.3.0",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }
