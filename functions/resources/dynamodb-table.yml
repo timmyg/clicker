@@ -1,13 +1,13 @@
 Resources:
-  Devices:
+  DevicesTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
       TableName: ${self:custom.tableName}
       AttributeDefinitions:
-        - AttributeName: id
+        - AttributeName: slug
           AttributeType: S
       KeySchema:
-        - AttributeName: id
+        - AttributeName: slug
           KeyType: HASH
       # Set the capacity based on the stage
       ProvisionedThroughput:

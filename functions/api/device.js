@@ -1,19 +1,18 @@
-const uuid = require('uuid');
 const dynamoose = require('dynamoose');
 require('dotenv').config();
 
-const Device = dynamoose.model('Device', {
-  id: Number,
-  idSlug: String,
+const Device = dynamoose.model(process.env.tableName, {
+  id: {
+    type: String,
+    hashKey: true,
+  },
   losantId: String,
-  createdAt: String,
-  updatedAt: String,
 });
 
 /**
  * Registers a device if it has not been registered
  * @param   {string} losantId
- * @param   {string} idSlug
+ * @param   {string} slug
  *
  * @returns {number} 200, 201, 400
  */
@@ -21,14 +20,29 @@ module.exports.create = async event => {
   try {
     const timestamp = new Date().getTime();
     const body = JSON.parse(event.body);
-    const { losantId, idSlug } = body;
+    const { losantId, slug } = body;
 
-    const newDevice = new Device({ id: uuid.v1(), idSlug, losantId, createdAt: timestamp, updatedAt: timestamp });
+    const newDevice = new Device({ slug, losantId, createdAt: timestamp, updatedAt: timestamp });
+    console.info('creating device:');
+    console.info(newDevice);
     const createdDevice = await newDevice.save();
+    console.info({ createdDevice });
 
-    return { statusCode: 200, body: JSON.stringify({ createdDevice }) };
+    return { statusCode: 200, body: JSON.stringify(createdDevice) };
   } catch (e) {
+    console.error(e);
     return { statusCode: 400, error: `Could not create: ${e.stack}` };
+  }
+};
+
+module.exports.all = async () => {
+  try {
+    const allDevices = await Device.scan().exec();
+    console.info({ allDevices });
+
+    return { statusCode: 200, body: JSON.stringify(allDevices) };
+  } catch (e) {
+    return { statusCode: 400, error: `Could not get all: ${e.stack}` };
   }
 };
 

@@ -2,7 +2,7 @@
 # commands. Or fallsback to what we have set in the provider section.
 stage: ${opt:stage, self:provider.stage}
 # Set the table name here so we can use it while testing locally
-tableName: devices-${self:custom.stage}
+tableName: ${self:custom.stage}-devices
 # Set our DynamoDB throughput for prod and all other non-prod stages.
 tableThroughputs:
   prod: 5

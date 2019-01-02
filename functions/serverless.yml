@@ -8,23 +8,28 @@ provider:
   environment:
     tableName: ${self:custom.tableName}
   iamRoleStatements:
-    - Effect: Allow
+    - Effect: 'Allow'
       Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.tableName}'
+        - dynamodb:*
+      Resource: '*'
+custom: ${file(resources/custom.yml)}
+resources:
+  - ${file(resources/dynamodb-table.yml)}
 
 functions:
-  createDevice:
+  create:
     handler: api/device.create
     events:
       - http:
           path: device
           method: post
+          cors: true
+  all:
+    handler: api/device.all
+    events:
+      - http:
+          path: device
+          method: get
           cors: true
   hello:
     handler: api/device.hello
@@ -33,7 +38,3 @@ functions:
           path: hello
           method: get
           cors: true
-
-custom: ${file(resources/custom.yml)}
-resources:
-  - ${file(resources/dynamodb-table.yml)}
