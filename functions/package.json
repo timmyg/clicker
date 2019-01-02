@@ -1,20 +1,14 @@
 {
   "name": "functions",
   "version": "1.0.0",
-  "description": "",
-  "main": "api.longshoreman.js",
   "scripts": {
     "test": "jest",
-    "creds:config:dev": "AWS_KEY=$AWS_KEY_DEV AWS_SECRET=$AWS_SECRET_DEV PROFILE=kickthecan:dev STAGE=dev",
-    "creds:config:prod": "AWS_KEY=$AWS_KEY_PROD AWS_SECRET=$AWS_SECRET_PROD PROFILE=kickthecan:prod STAGE=prod",
-    "serverless:config": "serverless config credentials --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE",
-    "deploy": "serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
+    "deploy:prod": "AWS_KEY=$AWS_KEY_PROD AWS_SECRET=$AWS_SECRET_PROD PROFILE=$PROFILE_PROD STAGE=$STAGE_PROD && serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE && SLS_DEBUG=* serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
     "logs:account": "serverless logs --function account --stage $STAGE --aws-profile $PROFILE",
-    "invoke:register-device": "serverless invoke local --function account --path test/data/new-account.json"
+    "invoke:hello": "serverless invoke local --function hello --path resources/data/new.json"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "dynamoose": "^1.3.0",
     "uuid": "^3.3.2"
   },

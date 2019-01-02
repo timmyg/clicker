@@ -1,5 +1,6 @@
 const uuid = require('uuid');
 const dynamoose = require('dynamoose');
+require('dotenv').config();
 
 const Device = dynamoose.model('Device', {
   id: Number,
@@ -16,7 +17,7 @@ const Device = dynamoose.model('Device', {
  *
  * @returns {number} 200, 201, 400
  */
-module.exports.registerDevice = async event => {
+module.exports.create = async event => {
   try {
     const timestamp = new Date().getTime();
     const body = JSON.parse(event.body);

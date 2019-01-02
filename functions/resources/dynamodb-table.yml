@@ -6,17 +6,9 @@ Resources:
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
-        - AttributeName: losantId
-          AttributeType: S
-        - AttributeName: idSlug
-          AttributeType: S
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-        - AttributeName: losantId
-          KeyType: RANGE
-        - AttributeName: idSlug
-          KeyType: RANGE
       # Set the capacity based on the stage
       ProvisionedThroughput:
         ReadCapacityUnits: ${self:custom.tableThroughput}
