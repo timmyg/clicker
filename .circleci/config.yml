@@ -12,8 +12,8 @@ jobs:
     working_directory: ~/captain/functions
 
     steps:
-      - checkout
-         path: ~/captain
+      - checkout:
+          path: ~/captain
 
       # Download and cache dependencies
       - restore_cache:
