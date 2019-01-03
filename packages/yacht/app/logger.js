@@ -8,4 +8,4 @@ const logzioWinstonTransport = new LogzioWinstonTransport({
 const logger = winston.createLogger({
   transports: [new winston.transports.Console(), logzioWinstonTransport],
 });
-export default logger;
+module.exports = logger;

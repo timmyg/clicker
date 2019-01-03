@@ -97,7 +97,7 @@ module.exports.getIp = async event => {
     if (!device) {
       return generateResponse(404, `Device ${losantId} does not exist`);
     }
-    const ips = device.boxes.filter(d => new RegExp('directv', 'g').test(d.name));
+    const ips = device.boxes.filter(d => new RegExp('directv', 'gi').test(d.name));
     if (ips && ips.length === 1) {
       const { ip } = ips[0];
       return generateResponse(200, { ip });
@@ -119,6 +119,7 @@ module.exports.getIp = async event => {
  * @returns {number} 200, 400
  */
 module.exports.update = async event => {
+  // TODO check if exists or else it creates!
   try {
     const { losantId } = event.pathParameters;
     const body = JSON.parse(event.body);
