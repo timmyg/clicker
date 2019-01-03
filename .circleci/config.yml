@@ -13,6 +13,7 @@ jobs:
 
     steps:
       - checkout
+         path: ~/captain
 
       # Download and cache dependencies
       - restore_cache:
