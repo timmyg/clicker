@@ -61,7 +61,7 @@ module.exports.list = async () => {
     const allDevices = await Device.scan().exec();
     return generateResponse(200, allDevices);
   } catch (e) {
-    return generateRespons `Could not list: ${etack}` });
+    return generateResponse(400, `Could not list: ${e.stack}`);
   }
 };
 
@@ -100,9 +100,9 @@ module.exports.getIp = async event => {
     const ips = device.boxes.filter(d => new RegExp('directv', 'g').test(d.name));
     if (ips && ips.length === 1) {
       const { ip } = ips[0];
-      return generateResponse(200, {ip});
+      return generateResponse(200, { ip });
     }
-    return generateResponse(400,{ ips });
+    return generateResponse(400, { ips });
   } catch (e) {
     console.error(e.stack);
     return generateResponse(400, `Could not get ip: ${e.stack}`);
