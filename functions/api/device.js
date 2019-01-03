@@ -20,6 +20,17 @@ const Device = dynamoose.model(
   },
 );
 
+function generateResponse(statusCode, body) {
+  let msg = body;
+  if (typeof msg === 'string') {
+    msg = { message: msg };
+  }
+  return {
+    statusCode,
+    body: JSON.stringify(msg),
+  };
+}
+
 /**
  * Registers a device if it has not been registered (losantId is PK)
  * @param   {string} losantId device identifier for Losant platform (event.body)
@@ -33,10 +44,10 @@ module.exports.create = async event => {
     const { losantId, location } = body;
     const newDevice = new Device({ losantId, location });
     const createdDevice = await newDevice.save();
-    return { statusCode: 201, body: JSON.stringify(createdDevice) };
+    return generateResponse(201, createdDevice);
   } catch (e) {
     console.error(e);
-    return { statusCode: 400, error: `Could not create: ${e.stack}` };
+    return generateResponse(400, `Could not create: ${e.stack}`);
   }
 };
 
@@ -48,9 +59,9 @@ module.exports.create = async event => {
 module.exports.list = async () => {
   try {
     const allDevices = await Device.scan().exec();
-    return { statusCode: 200, body: JSON.stringify(allDevices) };
+    return generateResponse(200, allDevices);
   } catch (e) {
-    return { statusCode: 400, error: `Could not list: ${e.stack}` };
+    return generateRespons `Could not list: ${etack}` });
   }
 };
 
@@ -58,15 +69,18 @@ module.exports.list = async () => {
  * Get device
  * @param   {string} losantId device identifier for Losant platform (event.pathParameters)
  *
- * @returns {number} 200, 400
+ * @returns {number} 200, 400, 404
  */
 module.exports.get = async event => {
   try {
     const { losantId } = event.pathParameters;
     const device = await Device.get({ losantId });
-    return { statusCode: 200, body: JSON.stringify(device) };
+    if (device) {
+      return generateResponse(200, device);
+    }
+    return generateResponse(404, `Device ${losantId} does not exist`);
   } catch (e) {
-    return { statusCode: 400, error: `Could not get: ${e.stack}` };
+    return generateResponse(400, `Could not get: ${e.stack}`);
   }
 };
 
@@ -74,20 +88,24 @@ module.exports.get = async event => {
  * Get device DirecTV ip address
  * @param   {string} losantId device identifier for Losant platform (event.pathParameters)
  *
- * @returns {number} 200, 400
+ * @returns {number} 200, 400, 404
  */
 module.exports.getIp = async event => {
   try {
     const { losantId } = event.pathParameters;
     const device = await Device.get({ losantId });
+    if (!device) {
+      return generateResponse(404, `Device ${losantId} does not exist`);
+    }
     const ips = device.boxes.filter(d => new RegExp('directv', 'g').test(d.name));
     if (ips && ips.length === 1) {
       const { ip } = ips[0];
-      return { statusCode: 200, body: JSON.stringify({ ip }) };
+      return generateResponse(200, {ip});
     }
-    return { statusCode: 400, body: JSON.stringify({ ips }) };
+    return generateResponse(400,{ ips });
   } catch (e) {
-    return { statusCode: 400, error: `Could not get: ${e.stack}` };
+    console.error(e.stack);
+    return generateResponse(400, `Could not get ip: ${e.stack}`);
   }
 };
 
@@ -105,9 +123,9 @@ module.exports.update = async event => {
     const { losantId } = event.pathParameters;
     const body = JSON.parse(event.body);
     const updatedDevice = await Device.update({ losantId }, body);
-    return { statusCode: 200, body: JSON.stringify(updatedDevice) };
+    return generateResponse(200, updatedDevice);
   } catch (e) {
-    return { statusCode: 400, error: `Could not update: ${e.stack}` };
+    return generateResponse(400, `Could not update: ${e.stack}`);
   }
 };
 
@@ -121,9 +139,9 @@ module.exports.delete = async event => {
   try {
     const { losantId } = event.pathParameters;
     const updatedDevice = await Device.delete({ losantId });
-    return { statusCode: 200, body: JSON.stringify(updatedDevice) };
+    return generateResponse(200, updatedDevice);
   } catch (e) {
-    return { statusCode: 400, error: `Could not delete: ${e.stack}` };
+    return generateResponse(400, `Could not delete: ${e.stack}`);
   }
 };
 
@@ -135,8 +153,8 @@ module.exports.delete = async event => {
 module.exports.hello = async (event, context) => {
   try {
     const response = { event, context };
-    return { statusCode: 200, body: JSON.stringify(response) };
+    return generateResponse(200, response);
   } catch (e) {
-    return { statusCode: 400, error: `error: ${e.stack}` };
+    return generateResponse(400, `error: ${e.stack}`);
   }
 };

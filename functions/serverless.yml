@@ -31,11 +31,11 @@ functions:
           path: device
           method: get
           cors: true
-  deviceGet:
-    handler: api/device.get
+  deviceGetIp:
+    handler: api/device.getIp
     events:
       - http:
-          path: device/{losantId}
+          path: device/{losantId}/ip
           method: get
           cors: true
           request:
@@ -43,10 +43,10 @@ functions:
               paths:
                 losantId: true
   deviceGet:
-    handler: api/device.getIp
+    handler: api/device.get
     events:
       - http:
-          path: device/{losantId}/ip
+          path: device/{losantId}
           method: get
           cors: true
           request:
