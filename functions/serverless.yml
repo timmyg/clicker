@@ -17,20 +17,53 @@ resources:
   - ${file(resources/dynamodb-table.yml)}
 
 functions:
-  create:
+  deviceCreate:
     handler: api/device.create
     events:
       - http:
           path: device
           method: post
           cors: true
-  all:
-    handler: api/device.all
+  deviceList:
+    handler: api/device.list
     events:
       - http:
           path: device
           method: get
           cors: true
+  deviceGet:
+    handler: api/device.get
+    events:
+      - http:
+          path: device/{losantId}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                losantId: true
+  deviceUpdate:
+    handler: api/device.update
+    events:
+      - http:
+          path: device/{losantId}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                losantId: true
+  deviceDelete:
+    handler: api/device.delete
+    events:
+      - http:
+          path: device/{losantId}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                losantId: true
   hello:
     handler: api/device.hello
     events:

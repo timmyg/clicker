@@ -2,8 +2,9 @@
   "name": "functions",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest",
-    "deploy:prod": "AWS_KEY=$AWS_KEY_PROD AWS_SECRET=$AWS_SECRET_PROD PROFILE=$PROFILE_PROD STAGE=$STAGE_PROD && serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE && SLS_DEBUG=* serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
+    "test": "jest --coverage",
+    "deploy:dev": "AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_DEV STAGE=$STAGE_DEV && serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE && SLS_DEBUG=* serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
+    "deploy:prod": "AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_PROD STAGE=$STAGE_PROD && serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE && SLS_DEBUG=* serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
     "logs:account": "serverless logs --function account --stage $STAGE --aws-profile $PROFILE",
     "invoke:hello": "serverless invoke local --function hello --path resources/data/new.json"
   },

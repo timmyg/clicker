@@ -22,7 +22,7 @@ const device = new Device({
 
 async function getDirectvIp() {
   const allDevices = await find();
-  const dtvDevices = allDevices.filter(d => new RegExp('chromecast', 'g').test(d.name));
+  const dtvDevices = allDevices.filter(d => new RegExp('directv', 'g').test(d.name));
   if (dtvDevices && dtvDevices.length === 1) {
     const { ip } = dtvDevices[0];
     logger.info('got ip address', { ip });

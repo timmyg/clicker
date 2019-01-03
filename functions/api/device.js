@@ -1,48 +1,82 @@
 const dynamoose = require('dynamoose');
 require('dotenv').config();
 
-const Device = dynamoose.model(process.env.tableName, {
-  id: {
-    type: String,
-    hashKey: true,
+const Device = dynamoose.model(
+  process.env.tableName,
+  {
+    losantId: {
+      type: String,
+      hashKey: true,
+    },
+    location: String,
+    boxes: [Object],
+    options: Object,
+    version: Object,
+    mode: Number,
   },
-  losantId: String,
-});
+  {
+    timestamps: true,
+    useDocumentTypes: true,
+  },
+);
 
 /**
  * Registers a device if it has not been registered
- * @param   {string} losantId
- * @param   {string} slug
+ * @param   {string} losantId device identifier for Losant platform
+ * @param   {string} location human readable location for reference
  *
  * @returns {number} 200, 201, 400
  */
 module.exports.create = async event => {
   try {
-    const timestamp = new Date().getTime();
     const body = JSON.parse(event.body);
-    const { losantId, slug } = body;
-
-    const newDevice = new Device({ slug, losantId, createdAt: timestamp, updatedAt: timestamp });
-    console.info('creating device:');
-    console.info(newDevice);
+    const { losantId, location } = body;
+    const newDevice = new Device({ losantId, location });
     const createdDevice = await newDevice.save();
-    console.info({ createdDevice });
-
-    return { statusCode: 200, body: JSON.stringify(createdDevice) };
+    return { statusCode: 201, body: JSON.stringify(createdDevice) };
   } catch (e) {
     console.error(e);
     return { statusCode: 400, error: `Could not create: ${e.stack}` };
   }
 };
 
-module.exports.all = async () => {
+module.exports.list = async () => {
   try {
     const allDevices = await Device.scan().exec();
-    console.info({ allDevices });
-
     return { statusCode: 200, body: JSON.stringify(allDevices) };
   } catch (e) {
-    return { statusCode: 400, error: `Could not get all: ${e.stack}` };
+    return { statusCode: 400, error: `Could not list: ${e.stack}` };
+  }
+};
+
+module.exports.get = async event => {
+  try {
+    const { losantId } = event.pathParameters;
+    const device = await Device.get({ losantId });
+    return { statusCode: 200, body: JSON.stringify(device) };
+  } catch (e) {
+    return { statusCode: 400, error: `Could not get: ${e.stack}` };
+  }
+};
+
+module.exports.update = async event => {
+  try {
+    const { losantId } = event.pathParameters;
+    const body = JSON.parse(event.body);
+    const updatedDevice = await Device.update({ losantId }, body);
+    return { statusCode: 200, body: JSON.stringify(updatedDevice) };
+  } catch (e) {
+    return { statusCode: 400, error: `Could not update: ${e.stack}` };
+  }
+};
+
+module.exports.delete = async event => {
+  try {
+    const { losantId } = event.pathParameters;
+    const updatedDevice = await Device.delete({ losantId });
+    return { statusCode: 200, body: JSON.stringify(updatedDevice) };
+  } catch (e) {
+    return { statusCode: 400, error: `Could not delete: ${e.stack}` };
   }
 };
 

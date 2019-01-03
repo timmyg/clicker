@@ -4,10 +4,10 @@ Resources:
     Properties:
       TableName: ${self:custom.tableName}
       AttributeDefinitions:
-        - AttributeName: slug
+        - AttributeName: losantId
           AttributeType: S
       KeySchema:
-        - AttributeName: slug
+        - AttributeName: losantId
           KeyType: HASH
       # Set the capacity based on the stage
       ProvisionedThroughput:
