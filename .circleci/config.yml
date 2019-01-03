@@ -9,7 +9,7 @@ jobs:
     docker:
       - image: circleci/node:8.10
 
-    working_directory: ~/repo
+    working_directory: ~/captain
 
     steps:
       - checkout
