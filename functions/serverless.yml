@@ -42,6 +42,17 @@ functions:
             parameters:
               paths:
                 losantId: true
+  deviceGet:
+    handler: api/device.getIp
+    events:
+      - http:
+          path: device/{losantId}/ip
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                losantId: true
   deviceUpdate:
     handler: api/device.update
     events:

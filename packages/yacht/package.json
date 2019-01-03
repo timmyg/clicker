@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "directv-remote": "git+https://github.com/timmyg/directv-remote.git",
     "dotenv": "^6.1.0",
     "local-devices": "^1.1.1",
