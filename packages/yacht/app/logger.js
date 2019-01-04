@@ -1,3 +1,4 @@
+console.log('process.env.LOGZIO_TOKEN', process.env.LOGZIO_TOKEN);
 const LogzioWinstonTransport = require('winston-logzio');
 const winston = require('winston');
 

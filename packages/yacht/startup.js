@@ -1,6 +1,6 @@
-const logger = require('./logger');
 require('dotenv').config();
-const Widget = require('./widget');
+const logger = require('./app/logger');
+const Widget = require('./app/widget');
 
 logger.info('starting up');
 
