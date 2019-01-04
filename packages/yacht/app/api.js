@@ -23,7 +23,7 @@ class Api {
 
   async updateDevice(deviceId, data) {
     try {
-      logger.info('updateDevice');
+      logger.info('updateDevice', { data });
       return await this.axios.put(`/device/${deviceId}`, data);
     } catch (error) {
       return console.error(error);

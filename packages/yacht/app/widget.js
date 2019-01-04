@@ -29,8 +29,8 @@ class Widget {
   async saveBoxes() {
     const boxes = this.remote.getLocations((err, response) => {
       if (err) return logger.error(err);
-      this.api.updateDevice(this.id, { boxes });
-      return logger.info('locations', response);
+      logger.info({ boxes: response });
+      return this.api.updateDevice(this.id, { boxes });
     });
   }
 
@@ -53,7 +53,7 @@ class Widget {
       }
       // Listen for commands from Losant
       this.device.on('command', command => {
-        console.info({ command });
+        logger.info({ command });
         switch (command.name) {
           case 'tune':
             this.remote.tune(command.channel, command.client, err => {
@@ -116,7 +116,7 @@ class Widget {
         }
       });
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
   }
 
