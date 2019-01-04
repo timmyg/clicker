@@ -44,11 +44,11 @@ class Widget {
             logger.error(`not valid directv ip: ${ip}`);
             logger.error(error);
           }
+          this.saveBoxes();
         });
       } else {
-        console.error('no valid dtv ip');
+        logger.error('no valid dtv ip');
       }
-      this.saveBoxes();
       // Listen for commands from Losant
       this.device.on('command', command => {
         console.info({ command });
