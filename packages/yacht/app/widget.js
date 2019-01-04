@@ -19,21 +19,26 @@ class Widget {
 
   async saveIps() {
     const boxes = await find();
-    console.info({ boxes });
+    // console.info({ boxes });
+    // TODO remove
+    boxes[0].name = 'aa-direCTv-23429048';
+    boxes[0].ip = '127.0.0.1';
     await this.api.updateDevice(this.id, { boxes });
   }
 
   async initListeners() {
     try {
-      const ip = await this.api.getDeviceDirectvIp(this.id);
+      const { ip } = await this.api.getDeviceDirectvIp(this.id);
       DirecTV.validateIP(ip, error => {
         if (error) {
-          logger.error(`not valid directv ip: ${ip}`, error);
+          logger.error(`not valid directv ip: ${ip}`);
+          logger.error(error);
           return;
         }
         this.remote = new DirecTV.Remote(ip);
         // Listen for commands from Losant
         this.device.on('command', command => {
+          console.info({ command });
           switch (command.name) {
             case 'tune':
               this.remote.tune(command.channel, command.client, err => {

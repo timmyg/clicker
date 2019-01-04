@@ -75,10 +75,16 @@ functions:
             parameters:
               paths:
                 losantId: true
-  hello:
-    handler: api/device.hello
+  remoteCommand:
+    handler: api/remote.command
+    environment:
+      LOSANT_BASE_URL: ${env:LOSANT_BASE_URL}
     events:
       - http:
-          path: hello
-          method: get
+          path: remote/{losantId}
+          method: post
           cors: true
+          request:
+            parameters:
+              paths:
+                losantId: true

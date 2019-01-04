@@ -28,10 +28,12 @@ class Api {
   }
 
   async getDeviceDirectvIp(deviceId) {
+    // console.log({ deviceId });
     try {
-      return await this.axios.get(`/device/${deviceId}/ip/example`);
+      const res = await this.axios.get(`/device/${deviceId}/ip`);
+      return res.data;
     } catch (error) {
-      // return console.error(error);
+      return console.error(error);
     }
   }
 }
