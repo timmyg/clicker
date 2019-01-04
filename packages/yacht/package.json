@@ -1,6 +1,6 @@
 {
   "name": "dtv",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "scripts": {
     "start": "node startup.js"
