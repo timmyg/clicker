@@ -15,6 +15,7 @@ class Api {
 
   async sendCommand(losantId, name, payload) {
     try {
+      console.info(process.env.LOSANT_BASE_URL, `/devices/${losantId}`, { name, payload });
       return await this.axios.post(`/devices/${losantId}`, { name, payload });
     } catch (error) {
       return console.error(error.response.data);
