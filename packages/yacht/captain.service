@@ -10,3 +10,9 @@ ExecStart=/bin/bash -c 'cd captain/packages/yacht && npm start'
 StandardOutput=inherit
 StandardError=inherit
 User=pi
+TimeoutSec=1000
+Restart=no
+
+
+[Install]
+WantedBy=multi-user.target

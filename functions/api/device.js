@@ -9,7 +9,8 @@ const Device = dynamoose.model(
       hashKey: true,
     },
     location: String,
-    boxes: [{ name: String, ip: String, mac: String }],
+    devices: [{ name: String, ip: String, mac: String }],
+    boxes: [Object],
     options: Object,
     version: Object,
     mode: Number,
@@ -97,7 +98,10 @@ module.exports.getIp = async event => {
     if (!device) {
       return generateResponse(404, `Device ${losantId} does not exist`);
     }
-    const ips = device.boxes.filter(d => new RegExp('directv', 'gi').test(d.name));
+    if (!device.devices.length) {
+      return generateResponse(400, `No dtv ips for: ${losantId}`);
+    }
+    const ips = device.devices.filter(d => new RegExp('directv', 'gi').test(d.name));
     if (ips && ips.length === 1) {
       const { ip } = ips[0];
       return generateResponse(200, { ip });
@@ -112,7 +116,7 @@ module.exports.getIp = async event => {
 /**
  * Update device
  * @param   {string} losantId device identifier for Losant platform (event.pathParameters)
- * @param   {array} boxes
+ * @param   {array} devices
  * @param   {object} options
  * @param   {object} version
  *
