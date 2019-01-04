@@ -79,6 +79,9 @@ functions:
     handler: api/remote.command
     environment:
       LOSANT_APPLICATION_ID: ${env:LOSANT_APPLICATION_ID}
+      LOSANT_KEY: ${env:LOSANT_KEY}
+      LOSANT_SECRET: ${env:LOSANT_SECRET}
+      LOGZIO_TOKEN: ${env:LOGZIO_TOKEN}
     events:
       - http:
           path: remote/{losantId}
