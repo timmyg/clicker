@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: '/api/.env' });
 const api = require('losant-rest');
 
 class Api {
@@ -23,7 +23,7 @@ class Api {
       const params = {
         applicationId: process.env.LOSANT_APPLICATION_ID,
         deviceId: losantId,
-        deviceCommand: payload,
+        deviceCommand: { name, payload },
       };
       return await this.client.device
         .sendCommand(params)
