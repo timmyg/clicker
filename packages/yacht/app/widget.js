@@ -67,59 +67,60 @@ class Widget {
         const { name, payload } = command;
         switch (name) {
           case 'tune':
-            this.remote.tune(payload.channel, command.client, err => {
-              // if (err) return logger.error(err);
-              // return logger.info('tuned');
+            this.remote.tune(payload.channel, payload.client, err => {
+              if (err) return logger.error(err);
+              return logger.info('tuned');
             });
             break;
           case 'key':
-            this.remote.processKey(payload.key, command.client, err => {
+            this.remote.processKey(payload.key, payload.client, err => {
               if (err) return logger.error(err);
               return logger.info('keyed');
             });
             break;
-          // case 'command':
-          //   this.remote.processCommand(command.command, err => {
-          //     if (err) return logger.error(err);
-          //     return logger.info('command');
-          //   });
-          //   break;
-          // case 'channel.info':
-          //   this.remote.getProgInfo(command.channel, command.start, command.client, (err, response) => {
-          //     if (err) return logger.error(err);
-          //     return logger.info('channel.info', response);
-          //   });
-          //   break;
-          // case 'info.current':
-          //   this.remote.getTuned(command.client, (err, response) => {
-          //     if (err) return logger.error(err);
-          //     return logger.info('info.current', response);
-          //   });
-          //   break;
-          // case 'options':
-          //   this.remote.getOptions((err, response) => {
-          //     if (err) return logger.error(err);
-          //     return logger.info('options', response);
-          //   });
-          //   break;
-          // case 'locations':
-          //   this.remote.getLocations(command.type || 1, (err, response) => {
-          //     if (err) return logger.error(err);
-          //     return logger.info('locations', response);
-          //   });
-          //   break;
-          // case 'version':
-          //   this.remote.getVersion((err, response) => {
-          //     if (err) return logger.error(err);
-          //     return logger.info('version', response);
-          //   });
-          //   break;
-          // case 'mode':
-          //   this.remote.getMode(command.client, (err, response) => {
-          //     if (err) return logger.error(err);
-          //     return logger.info('mode', response);
-          //   });
-          //   break;
+          case 'command':
+            this.remote.processCommand(payload.command, (err, response) => {
+              if (err) return logger.error(err);
+              return logger.info('command', response);
+            });
+            break;
+          case 'channel.info':
+            this.remote.getProgInfo(payload.channel, payload.start, payload.client, (err, response) => {
+              if (err) return logger.error(err);
+              return logger.info('channel.info', response);
+            });
+            break;
+          case 'info.current':
+            this.remote.getTuned(payload.client, (err, response) => {
+              if (err) return logger.error(err);
+              return logger.info('info.current', response);
+            });
+            break;
+          // available endpoints
+          case 'options':
+            this.remote.getOptions((err, response) => {
+              if (err) return logger.error(err);
+              return logger.info('options', response);
+            });
+            break;
+          case 'locations':
+            this.remote.getLocations(payload.type || 1, (err, response) => {
+              if (err) return logger.error(err);
+              return logger.info('locations', response);
+            });
+            break;
+          case 'version':
+            this.remote.getVersion((err, response) => {
+              if (err) return logger.error(err);
+              return logger.info('version', response);
+            });
+            break;
+          case 'mode':
+            this.remote.getMode(payload.client, (err, response) => {
+              if (err) return logger.error(err);
+              return logger.info('mode', response);
+            });
+            break;
           case 'health':
             return logger.info('healthy');
           default:
