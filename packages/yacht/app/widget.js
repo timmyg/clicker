@@ -36,15 +36,14 @@ class Widget {
   async initListeners() {
     try {
       const result = await this.api.getDeviceDirectvIp(this.id);
-      if (result.ip) {
+      if (result && result.ip) {
         const { ip } = result;
+        this.remote = new DirecTV.Remote(ip);
         DirecTV.validateIP(result.ip, error => {
           if (error) {
             logger.error(`not valid directv ip: ${ip}`);
             logger.error(error);
-            return;
           }
-          this.remote = new DirecTV.Remote(ip);
         });
       } else {
         console.error('no valid dtv ip');
@@ -108,6 +107,8 @@ class Widget {
               return logger.info('mode', response);
             });
             break;
+          case 'health':
+            return logger.info('healthy');
           default:
             break;
         }

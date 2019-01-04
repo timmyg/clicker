@@ -99,14 +99,14 @@ module.exports.getIp = async event => {
       return generateResponse(404, `Device ${losantId} does not exist`);
     }
     if (!device.devices.length) {
-      return generateResponse(400, `No dtv ips for: ${losantId}`);
+      return generateResponse(200, { ip: null });
     }
     const ips = device.devices.filter(d => new RegExp('directv', 'gi').test(d.name));
     if (ips && ips.length === 1) {
       const { ip } = ips[0];
       return generateResponse(200, { ip });
     }
-    return generateResponse(400, { ips });
+    return generateResponse(200, { ips });
   } catch (e) {
     console.error(e.stack);
     return generateResponse(400, `Could not get ip: ${e.stack}`);
