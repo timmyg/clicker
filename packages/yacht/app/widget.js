@@ -46,7 +46,7 @@ class Widget {
             logger.error(error);
           }
           logger.info(`valid directv ip: ${ip}`);
-          this.saveBoxes();
+          // this.saveBoxes();
         });
       } else {
         logger.error('no valid dtv ip');
@@ -54,61 +54,72 @@ class Widget {
       // Listen for commands from Losant
       this.device.on('command', command => {
         logger.info({ command });
-        switch (command.name) {
+        const ip = '192.168.200.221';
+        this.remote = new DirecTV.Remote(ip);
+        DirecTV.validateIP(ip, error => {
+          if (error) {
+            logger.error(`not valid directv ip: ${ip}`);
+            logger.error(error);
+          }
+          logger.info(`valid directv ip: ${ip}`);
+          // this.saveBoxes();
+        });
+        const { name, payload } = command;
+        switch (name) {
           case 'tune':
-            this.remote.tune(command.channel, command.client, err => {
-              if (err) return logger.error(err);
-              return logger.info('tuned');
+            this.remote.tune(payload.channel, command.client, err => {
+              // if (err) return logger.error(err);
+              // return logger.info('tuned');
             });
             break;
           case 'key':
-            this.remote.tune(command.key, command.client, err => {
+            this.remote.processKey(payload.key, command.client, err => {
               if (err) return logger.error(err);
               return logger.info('keyed');
             });
             break;
-          case 'command':
-            this.remote.processCommand(command.command, err => {
-              if (err) return logger.error(err);
-              return logger.info('command');
-            });
-            break;
-          case 'channel.info':
-            this.remote.getProgInfo(command.channel, command.start, command.client, (err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('channel.info', response);
-            });
-            break;
-          case 'info.current':
-            this.remote.getTuned(command.client, (err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('info.current', response);
-            });
-            break;
-          case 'options':
-            this.remote.getOptions((err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('options', response);
-            });
-            break;
-          case 'locations':
-            this.remote.getLocations(command.type || 1, (err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('locations', response);
-            });
-            break;
-          case 'version':
-            this.remote.getVersion((err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('version', response);
-            });
-            break;
-          case 'mode':
-            this.remote.getMode(command.client, (err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('mode', response);
-            });
-            break;
+          // case 'command':
+          //   this.remote.processCommand(command.command, err => {
+          //     if (err) return logger.error(err);
+          //     return logger.info('command');
+          //   });
+          //   break;
+          // case 'channel.info':
+          //   this.remote.getProgInfo(command.channel, command.start, command.client, (err, response) => {
+          //     if (err) return logger.error(err);
+          //     return logger.info('channel.info', response);
+          //   });
+          //   break;
+          // case 'info.current':
+          //   this.remote.getTuned(command.client, (err, response) => {
+          //     if (err) return logger.error(err);
+          //     return logger.info('info.current', response);
+          //   });
+          //   break;
+          // case 'options':
+          //   this.remote.getOptions((err, response) => {
+          //     if (err) return logger.error(err);
+          //     return logger.info('options', response);
+          //   });
+          //   break;
+          // case 'locations':
+          //   this.remote.getLocations(command.type || 1, (err, response) => {
+          //     if (err) return logger.error(err);
+          //     return logger.info('locations', response);
+          //   });
+          //   break;
+          // case 'version':
+          //   this.remote.getVersion((err, response) => {
+          //     if (err) return logger.error(err);
+          //     return logger.info('version', response);
+          //   });
+          //   break;
+          // case 'mode':
+          //   this.remote.getMode(command.client, (err, response) => {
+          //     if (err) return logger.error(err);
+          //     return logger.info('mode', response);
+          //   });
+          //   break;
           case 'health':
             return logger.info('healthy');
           default:
@@ -128,7 +139,7 @@ class Widget {
    */
   async init() {
     await this.api.registerDevice(this.id);
-    this.saveDevices();
+    // this.saveDevices();
     this.device.connect(error => {
       if (error) {
         logger.error(error);
