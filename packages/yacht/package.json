@@ -9,17 +9,12 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "bluebird": "^3.5.3",
     "directv-remote": "git+https://github.com/timmyg/directv-remote.git",
     "dotenv": "^6.1.0",
     "local-devices": "^1.1.1",
     "losant-mqtt": "^3.1.0",
     "request": "^2.88.0",
     "winston": "^3.1.0",
-    "winston-logzio": "^3.0.2",
-    "yarn": "^1.12.3"
-  },
-  "devDependencies": {
-    "os": "^0.1.1"
+    "winston-logzio": "^3.0.2"
   }
 }

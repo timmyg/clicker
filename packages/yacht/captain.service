@@ -3,10 +3,12 @@ Description=captain service
 After=network.target
 
 [Service]
+ExecStartPre=/bin/bash -c 'git clone git@github.com:timmyg/captain.git'
+ExecStartPre=/bin/bash -c 'cd captain'
 ExecStartPre=/bin/bash -c 'git pull origin master'
-ExecStartPre=/bin/bash -c 'npx yarn install'
+ExecStartPre=/bin/bash -c 'yarn install'
 ExecStart=/bin/bash -c 'npm start'
-WorkingDirectory=/home/pi/captain
+WorkingDirectory=/home/pi
 StandardOutput=inherit
 StandardError=inherit
 Restart=always
