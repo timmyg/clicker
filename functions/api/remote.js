@@ -1,24 +1,36 @@
-require('dotenv').config();
-
-const axios = require('axios');
+require('dotenv').config({ path: '../.env' });
+const api = require('losant-rest');
 
 class Api {
   constructor() {
-    this.axios = axios.create({
-      baseURL: process.env.LOSANT_BASE_URL,
-      timeout: 3000,
-      headers: {
-        'Content-Type': 'application/json',
+    this.client = api.createClient();
+  }
+
+  async setAuth(deviceId) {
+    const response = await this.client.auth.authenticateDevice({
+      credentials: {
+        deviceId,
+        key: process.env.LOSANT_KEY,
+        secret: process.env.LOSANT_SECRET,
       },
     });
+    this.client.setOption('accessToken', response.token);
   }
 
   async sendCommand(losantId, name, payload) {
     try {
-      console.info(process.env.LOSANT_BASE_URL, `/devices/${losantId}`, { name, payload });
-      return await this.axios.post(`/devices/${losantId}`, { name, payload });
+      await this.setAuth(losantId);
+      const params = {
+        applicationId: process.env.LOSANT_APPLICATION_ID,
+        deviceId: losantId,
+        deviceCommand: payload,
+      };
+      return await this.client.device
+        .sendCommand(params)
+        .then(console.info)
+        .catch(console.error);
     } catch (error) {
-      return console.error(error.response.data);
+      return console.error(error);
     }
   }
 }
@@ -47,7 +59,7 @@ module.exports.command = async event => {
     const { losantId } = event.pathParameters;
     const body = JSON.parse(event.body);
     const { name, payload } = body;
-    const api = new Api();
+    const api = new Api(losantId);
     await api.sendCommand(losantId, name, payload);
     return generateResponse(200, 'ok');
   } catch (e) {

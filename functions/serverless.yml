@@ -78,7 +78,7 @@ functions:
   remoteCommand:
     handler: api/remote.command
     environment:
-      LOSANT_BASE_URL: ${env:LOSANT_BASE_URL}
+      LOSANT_APPLICATION_ID: ${env:LOSANT_APPLICATION_ID}
     events:
       - http:
           path: remote/{losantId}
