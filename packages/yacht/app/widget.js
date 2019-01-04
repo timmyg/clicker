@@ -18,8 +18,9 @@ class Widget {
   }
 
   async saveDevices() {
+    logger.info('finding devices');
     const devices = await find();
-    logger.info('saving devices', devices);
+    logger.info('found devices', { devices });
     // boxes[0].name = 'aa-direCTv-23429048';
     // boxes[0].ip = '127.0.0.1';
     await this.api.updateDevice(this.id, { devices });
@@ -44,6 +45,7 @@ class Widget {
             logger.error(`not valid directv ip: ${ip}`);
             logger.error(error);
           }
+          logger.info(`valid directv ip: ${ip}`);
           this.saveBoxes();
         });
       } else {
@@ -132,7 +134,7 @@ class Widget {
         logger.error(error);
         return;
       }
-      logger.info(`successfully connected!\n`);
+      logger.info(`successfully connected!`);
       this.initListeners();
     });
   }

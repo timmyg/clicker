@@ -1,4 +1,5 @@
 const axios = require('axios');
+const logger = require('./logger');
 
 class Api {
   constructor() {
@@ -13,6 +14,7 @@ class Api {
 
   async registerDevice(losantId) {
     try {
+      logger.info('registerDevice');
       return await this.axios.post(`/device`, { losantId, location: '' });
     } catch (error) {
       return console.error(error.response.data);
@@ -21,6 +23,7 @@ class Api {
 
   async updateDevice(deviceId, data) {
     try {
+      logger.info('updateDevice');
       return await this.axios.put(`/device/${deviceId}`, data);
     } catch (error) {
       return console.error(error);
@@ -28,8 +31,8 @@ class Api {
   }
 
   async getDeviceDirectvIp(deviceId) {
-    // console.log({ deviceId });
     try {
+      logger.info('getDeviceDirectvIp');
       const res = await this.axios.get(`/device/${deviceId}/ip`);
       return res.data;
     } catch (error) {
