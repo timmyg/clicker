@@ -90,6 +90,8 @@ module.exports.get = async event => {
  * @param   {string} losantId device identifier for Losant platform (event.pathParameters)
  *
  * @returns {number} 200, 400, 404
+ *
+ * TODO, refactor, this is ugly
  */
 module.exports.getIp = async event => {
   try {
@@ -98,7 +100,7 @@ module.exports.getIp = async event => {
     if (!device) {
       return generateResponse(404, `Device ${losantId} does not exist`);
     }
-    if (!device.devices.length) {
+    if (!device.devices || !device.devices.length) {
       return generateResponse(200, { ip: null });
     }
     const ips = device.devices.filter(d => new RegExp('directv', 'gi').test(d.name));
