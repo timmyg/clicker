@@ -91,3 +91,10 @@ functions:
             parameters:
               paths:
                 losantId: true
+  botIncoming:
+    handler: api/bot.smsIncoming
+    events:
+      - http:
+          path: bot/sms/incoming
+          method: post
+          cors: true

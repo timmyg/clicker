@@ -56,6 +56,7 @@ function generateResponse(statusCode, body) {
  */
 module.exports.command = async event => {
   try {
+    console.log({ event });
     const { losantId } = event.pathParameters;
     const body = JSON.parse(event.body);
     const { name, payload } = body;
