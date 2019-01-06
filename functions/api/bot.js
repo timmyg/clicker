@@ -64,6 +64,7 @@ module.exports.smsIncoming = async (event, context) => {
     const channel = 1;
     if (isNumber(channel)) {
       callRemoteCommandFunction(parseInt(channel));
+      return generateResponse(200, 'cool');
     }
     // }
     return generateResponse(204, `invalid structure: ${message}`);
