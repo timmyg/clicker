@@ -57,10 +57,11 @@ module.exports.smsIncoming = async (event, context) => {
   try {
     console.log(JSON.stringify(event));
     console.log(JSON.stringify(context));
-    const requestBody = JSON.parse(event.body);
-    const { Body: message } = requestBody;
+    // const requestBody = JSON.parse(event.body);
+    // const { Body: message } = requestBody;
     if (message.includes('#gonoels')) {
-      const channel = message.split(' ')[1];
+      // const channel = message.split(' ')[1];
+      const channel = 1;
       if (isNumber(channel)) {
         callRemoteCommandFunction(parseInt(channel));
       }
