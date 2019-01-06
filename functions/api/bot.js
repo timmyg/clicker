@@ -59,13 +59,13 @@ module.exports.smsIncoming = async (event, context) => {
     console.log(JSON.stringify(context));
     // const requestBody = JSON.parse(event.body);
     // const { Body: message } = requestBody;
-    if (message.includes('#gonoels')) {
-      // const channel = message.split(' ')[1];
-      const channel = 1;
-      if (isNumber(channel)) {
-        callRemoteCommandFunction(parseInt(channel));
-      }
+    // if (message.includes('#gonoels')) {
+    // const channel = message.split(' ')[1];
+    const channel = 1;
+    if (isNumber(channel)) {
+      callRemoteCommandFunction(parseInt(channel));
     }
+    // }
     return generateResponse(204, `invalid structure: ${message}`);
   } catch (e) {
     console.error(e);
