@@ -10,6 +10,7 @@
     "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
   },
   "dependencies": {
+    "aws": "0.0.3-2",
     "dotenv": "^6.2.0",
     "dynamoose": "^1.3.0",
     "losant-rest": "^2.3.2",
