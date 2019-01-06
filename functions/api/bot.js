@@ -55,18 +55,25 @@ function callRemoteCommandFunction(channel) {
  */
 module.exports.smsIncoming = async (event, context) => {
   try {
-    console.log(JSON.stringify(event));
-    console.log(JSON.stringify(context));
-    // const requestBody = JSON.parse(event.body);
-    // const { Body: message } = requestBody;
-    // if (message.includes('#gonoels')) {
-    // const channel = message.split(' ')[1];
-    const channel = 1;
-    if (isNumber(channel)) {
-      callRemoteCommandFunction(parseInt(channel));
-      return generateResponse(200, 'cool');
+    // console.log(JSON.stringify(event));
+    // console.log(JSON.stringify(context));
+    const requestBody = event.body;
+    const fields = JSON.parse(
+      '{"' +
+        decodeURI(requestBody)
+          .replace(/"/g, '\\"')
+          .replace(/&/g, '","')
+          .replace(/=/g, '":"') +
+        '"}',
+    );
+    const message = fields.Body;
+    if (message.includes('#gonoels')) {
+      const channel = message.split(' ')[1];
+      if (isNumber(channel)) {
+        callRemoteCommandFunction(parseInt(channel));
+        return generateResponse(200, 'cool');
+      }
     }
-    // }
     return generateResponse(204, `invalid structure: ${message}`);
   } catch (e) {
     console.error(e);
