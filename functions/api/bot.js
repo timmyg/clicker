@@ -47,7 +47,7 @@ function callRemoteCommandFunction(channel) {
 }
 
 /**
- * Registers a device if it has not been registered (losantId is PK)
+ * Handles sms incoming webhook from twilio
  * @param   {string} losantId device identifier for Losant platform (event.body)
  * @param   {string} location human readable location for reference (event.body)
  *
@@ -56,6 +56,8 @@ function callRemoteCommandFunction(channel) {
 module.exports.smsIncoming = async event => {
   try {
     console.log({ event });
+    console.log(event.body);
+    console.log(event.Body);
     const requestBody = JSON.parse(event.body);
     const { Body: message } = requestBody;
     if (message.includes('#gonoels')) {
