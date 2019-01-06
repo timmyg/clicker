@@ -66,6 +66,6 @@ module.exports.smsIncoming = async event => {
     return generateResponse(204, `invalid structure: ${message}`);
   } catch (e) {
     console.error(e);
-    return generateResponse(400, `error: ${e.stack}`);
+    return generateResponse(400, `error - ${e.stack}`);
   }
 };
