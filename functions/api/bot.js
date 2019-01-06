@@ -66,6 +66,7 @@ module.exports.smsIncoming = async (event, context) => {
           .replace(/=/g, '":"') +
         '"}',
     );
+    console.log({ fields });
     const message = fields.Body;
     if (message.includes('#gonoels')) {
       const channel = message.split(' ')[1];
