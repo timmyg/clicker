@@ -55,6 +55,7 @@ function callRemoteCommandFunction(channel) {
  */
 module.exports.smsIncoming = async event => {
   try {
+    console.log({ event });
     const requestBody = JSON.parse(event.body);
     const { Body: message } = requestBody;
     if (message.includes('#gonoels')) {
