@@ -1,4 +1,4 @@
-const aws = require('aws');
+const aws = require('aws-sdk');
 require('dotenv').config();
 
 function generateResponse(statusCode, body) {
