@@ -61,8 +61,8 @@ function getTwilioMessageText(queryString) {
  */
 module.exports.smsIncoming = async (event, context) => {
   try {
-    // console.log(JSON.stringify(event));
-    // console.log(JSON.stringify(context));
+    console.log(JSON.stringify(event));
+    console.log(JSON.stringify(context));
     const requestBody = event.body;
     const message = getTwilioMessageText(requestBody);
     if (message.includes('#gonoels')) {
