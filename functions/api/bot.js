@@ -1,4 +1,5 @@
 const aws = require('aws-sdk');
+const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.AUTH_TOKEN);
 require('dotenv').config();
 
 function generateResponse(statusCode, body) {
@@ -46,6 +47,11 @@ function callRemoteCommandFunction(channel) {
   });
 }
 
+function getTwilioMessageText(queryString) {
+  console.log(qs.parse(queryString));
+  return qs.parse(queryString).body;
+}
+
 /**
  * Handles sms incoming webhook from twilio
  * @param   {string} losantId device identifier for Losant platform (event.body)
@@ -58,16 +64,7 @@ module.exports.smsIncoming = async (event, context) => {
     // console.log(JSON.stringify(event));
     // console.log(JSON.stringify(context));
     const requestBody = event.body;
-    const fields = JSON.parse(
-      '{"' +
-        decodeURI(requestBody)
-          .replace(/"/g, '\\"')
-          .replace(/&/g, '","')
-          .replace(/=/g, '":"') +
-        '"}',
-    );
-    console.log({ fields });
-    const message = fields.Body;
+    const message = getTwilioMessageText(requestBody);
     if (message.includes('#gonoels')) {
       const channel = message.split(' ')[1];
       if (isNumber(channel)) {
