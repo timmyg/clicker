@@ -17,7 +17,7 @@ function isNumber(str) {
   return !isNaN(str);
 }
 
-function callRemoteCommandFunction(channel, callback) {
+async function callRemoteCommandFunction(channel) {
   var lambda = new aws.Lambda();
   var opts = {
     FunctionName: 'serverless-api-with-dynamodb-prod-remoteCommand',
@@ -34,13 +34,7 @@ function callRemoteCommandFunction(channel, callback) {
   };
 
   console.log('call lambda');
-  lambda.invoke(opts, function(err, data) {
-    console.log('lambda', err, data);
-    if (err) {
-      return console.error('error : ' + err);
-    }
-    return callback(err);
-  });
+  return lambda.invoke(opts).promise();
 }
 
 function getTwilioMessageText(queryString) {
@@ -68,6 +62,7 @@ module.exports.smsIncoming = async (event, context) => {
       if (isNumber(channel)) {
         console.log('2');
         callRemoteCommandFunction(parseInt(channel), err => {
+          console.log('back');
           return generateResponse(200, 'cool');
         });
       }
