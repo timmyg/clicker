@@ -1,6 +1,6 @@
 const aws = require('aws-sdk');
 const qs = require('qs');
-const promisify = require('utils').promisify;
+const promisify = util.promisify;
 require('dotenv').config();
 
 function generateResponse(statusCode, body) {
