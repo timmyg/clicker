@@ -1,5 +1,6 @@
 const aws = require('aws-sdk');
 const qs = require('qs');
+const promisify = require('utils').promisify;
 require('dotenv').config();
 
 function generateResponse(statusCode, body) {
@@ -34,19 +35,8 @@ async function callRemoteCommandFunction(channel) {
   };
 
   console.log('call lambda');
-  lambda.invoke(opts, function(err, data) {
-    console.log('lambda', err, data);
-    if (err) {
-      console.log('error : ' + err);
-      return;
-    } else if (data) {
-      const response = {
-        statusCode: 200,
-        body: JSON.parse(data.Payload),
-      };
-      return;
-    }
-  });
+  const invoke = promisify(lambda.invoke);
+  return await invoke;
 }
 
 function getTwilioMessageText(queryString) {
@@ -73,7 +63,8 @@ module.exports.smsIncoming = async (event, context) => {
       const channel = message.split(' ')[1];
       if (isNumber(channel)) {
         console.log('2');
-        callRemoteCommandFunction(parseInt(channel));
+        await callRemoteCommandFunction(parseInt(channel));
+        console.log('back');
         return generateResponse(200, 'cool');
       }
     }
