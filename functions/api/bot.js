@@ -1,6 +1,5 @@
 const aws = require('aws-sdk');
 const qs = require('qs');
-const promisify = util.promisify;
 require('dotenv').config();
 
 function generateResponse(statusCode, body) {
@@ -18,7 +17,7 @@ function isNumber(str) {
   return !isNaN(str);
 }
 
-async function callRemoteCommandFunction(channel) {
+async function callRemoteCommandFunction(channel, callback) {
   var lambda = new aws.Lambda();
   var opts = {
     FunctionName: 'serverless-api-with-dynamodb-prod-remoteCommand',
@@ -35,8 +34,13 @@ async function callRemoteCommandFunction(channel) {
   };
 
   console.log('call lambda');
-  const invoke = promisify(lambda.invoke);
-  return await invoke;
+  lambda.invoke(opts, function(err, data) {
+    console.log('lambda', err, data);
+    if (err) {
+      return console.error('error : ' + err);
+    }
+    return callback(err);
+  });
 }
 
 function getTwilioMessageText(queryString) {
@@ -63,9 +67,9 @@ module.exports.smsIncoming = async (event, context) => {
       const channel = message.split(' ')[1];
       if (isNumber(channel)) {
         console.log('2');
-        await callRemoteCommandFunction(parseInt(channel));
-        console.log('back');
-        return generateResponse(200, 'cool');
+        await callRemoteCommandFunction(parseInt(channel), err => {
+          return generateResponse(200, 'cool');
+        });
       }
     }
     return generateResponse(204, `invalid structure: ${message}`);
