@@ -17,7 +17,7 @@ function isNumber(str) {
   return !isNaN(str);
 }
 
-function callRemoteCommandFunction(channel) {
+async function callRemoteCommandFunction(channel) {
   var lambda = new aws.Lambda();
   var opts = {
     FunctionName: 'serverless-api-with-dynamodb-prod-remoteCommand',
@@ -33,16 +33,18 @@ function callRemoteCommandFunction(channel) {
     }),
   };
 
+  console.log('call lambda');
   lambda.invoke(opts, function(err, data) {
+    console.log('lambda', err, data);
     if (err) {
       console.log('error : ' + err);
-      callback(err, null);
+      return;
     } else if (data) {
       const response = {
         statusCode: 200,
         body: JSON.parse(data.Payload),
       };
-      callback(null, response);
+      return;
     }
   });
 }
