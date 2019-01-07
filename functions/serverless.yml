@@ -11,6 +11,8 @@ provider:
     - Effect: 'Allow'
       Action:
         - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
       Resource: '*'
 custom: ${file(resources/custom.yml)}
 resources:
