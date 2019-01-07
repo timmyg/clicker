@@ -26,10 +26,12 @@ async function callRemoteCommandFunction(channel) {
       pathParameters: {
         losantId: '5bf8677684a2990008742e14',
       },
-      name: 'tune',
-      payload: {
-        channel,
-      },
+      body: JSON.stringify({
+        name: 'tune',
+        payload: {
+          channel,
+        },
+      }),
     }),
   };
 
