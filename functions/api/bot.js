@@ -17,7 +17,7 @@ function isNumber(str) {
   return !isNaN(str);
 }
 
-async function callRemoteCommandFunction(channel, callback) {
+function callRemoteCommandFunction(channel, callback) {
   var lambda = new aws.Lambda();
   var opts = {
     FunctionName: 'serverless-api-with-dynamodb-prod-remoteCommand',
@@ -67,12 +67,13 @@ module.exports.smsIncoming = async (event, context) => {
       const channel = message.split(' ')[1];
       if (isNumber(channel)) {
         console.log('2');
-        await callRemoteCommandFunction(parseInt(channel), err => {
+        callRemoteCommandFunction(parseInt(channel), err => {
           return generateResponse(200, 'cool');
         });
       }
+    } else {
+      return generateResponse(204, `invalid structure: ${message}`);
     }
-    return generateResponse(204, `invalid structure: ${message}`);
   } catch (e) {
     console.error(e);
     return generateResponse(400, `error - ${e.stack}`);
