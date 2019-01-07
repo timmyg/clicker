@@ -1,5 +1,4 @@
 const aws = require('aws-sdk');
-const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.AUTH_TOKEN);
 require('dotenv').config();
 
 function generateResponse(statusCode, body) {
