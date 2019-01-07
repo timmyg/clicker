@@ -49,7 +49,7 @@ function callRemoteCommandFunction(channel) {
 
 function getTwilioMessageText(queryString) {
   console.log(qs.parse(queryString));
-  return qs.parse(queryString).body;
+  return qs.parse(queryString).Body;
 }
 
 /**
