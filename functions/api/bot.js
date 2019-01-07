@@ -61,7 +61,7 @@ module.exports.smsIncoming = async (event, context) => {
       const channel = message.split(' ')[1];
       if (isNumber(channel)) {
         console.log('2');
-        callRemoteCommandFunction(parseInt(channel));
+        await callRemoteCommandFunction(parseInt(channel));
         console.log('back');
         return generateResponse(200, 'cool');
       }
