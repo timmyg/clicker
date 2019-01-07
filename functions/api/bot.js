@@ -65,9 +65,12 @@ module.exports.smsIncoming = async (event, context) => {
     console.log(JSON.stringify(context));
     const requestBody = event.body;
     const message = getTwilioMessageText(requestBody);
+    console.log(message);
     if (message.includes('#gonoels')) {
+      console.log('1');
       const channel = message.split(' ')[1];
       if (isNumber(channel)) {
+        console.log('2');
         callRemoteCommandFunction(parseInt(channel));
         return generateResponse(200, 'cool');
       }
