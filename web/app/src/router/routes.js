@@ -1,24 +1,30 @@
-import Dashboard from "../components/Dashboard";
-import Login from "../components/LogIn";
+import Dashboard from '../components/Dashboard';
+import Login from '../components/LogIn';
+import Landing from '../components/Landing';
 
 export default [
   {
-    path: "/",
-    name: "dashboard",
+    path: '/',
+    name: 'landing',
+    component: Landing,
+  },
+  {
+    path: '/dev/dashboard',
+    name: 'dashboard',
     component: Dashboard,
     meta: {
-      authRequired: true
-    }
+      authRequired: true,
+    },
   },
   {
-    path: "/login",
-    name: "login",
-    component: Login
+    path: '/dev/login',
+    name: 'login',
+    component: Login,
   },
   {
-    path: "/404",
-    name: "404",
+    path: '/404',
+    name: '404',
     component: 404,
-    props: true
-  }
+    props: true,
+  },
 ];
