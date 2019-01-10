@@ -1,0 +1,8 @@
+[build]
+  # Directory to change to before starting a build. 
+  # This is where we will look for package.json/.nvmrc/etc.
+  base = "web/app/"
+  publish = "web/app/dist/"
+
+  # Default build command.
+  command = "npm run build"
