@@ -11,6 +11,7 @@
     "gotrue-js": "^0.9.22",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
+    "vue-scroll-reveal": "^1.0.11",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

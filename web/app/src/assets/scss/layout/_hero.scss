@@ -1,115 +1,91 @@
 .hero {
-    position: relative;
-    padding-top: 40px;
-    padding-bottom: 40px;
+  position: relative;
+  text-align: center;
+  padding-top: 40px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 230px;
+    width: 80%;
+    background: mix(color(primary, 1), color(primary, 2));
+    background: linear-gradient(to top right, color(primary, 1) 0, color(primary, 2) 100%);
+  }
+}
+
+.hero-inner {
+  position: relative; /* To display all elements above the background color */
+}
+
+.hero-title {
+  @include font-weight(bold);
 }
 
 .hero-paragraph {
-    margin-bottom: 32px;
+  margin-bottom: 32px;
 }
 
-.hero-browser {
-    position: relative;
-    margin-top: 80px;
+.hero-illustration {
+  margin-top: 40px;
+  padding-bottom: 40px;
+
+  img,
+  svg {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    margin: 0 auto;
+    overflow: visible;
+  }
 }
 
-.hero-browser-inner {
-    position: relative; /* To display bubbles below the browser */
+@include media('>medium') {
+  .hero {
+    text-align: left;
+    padding-top: 92px;
+    padding-bottom: 80px;
 
+    &::before {
+      left: 620px;
+      height: 800px;
+      width: 100%;
+    }
+  }
+
+  .hero-inner {
+    /* Split hero in two half */
+    display: flex;
+  }
+
+  .hero-copy {
+    padding-right: 48px;
+    min-width: 512px;
+  }
+
+  .hero-illustration {
+    margin-top: -68px;
+    padding-bottom: 0;
+
+    img,
     svg {
-        width: 100%;
-        height: auto;
-        overflow: visible;
+      max-width: none;
+      width: 528px;
     }
+  }
 }
 
-.bubble-1,
-.bubble-2,
-.bubble-3,
-.bubble-4 {
-    position: absolute;
-
-    svg {
-        height: auto;
+@include media('>large') {
+  .hero {
+    &::before {
+      left: auto;
+      width: 43%;
     }
-}
+  }
 
-.bubble-1 {
-    top: -15px;
-    left: 70px;
-
-    svg {
-        width: 34px;
-    }
-}
-
-.bubble-2 {
-    bottom: 0;
-    right: -30px;
-
-    svg {
-        width: 78px;
-    }
-}
-
-.bubble-3 {
-    left: -40px;
-    bottom: -40px;
-
-    svg {
-        width: 143px;
-    }
-}
-
-.bubble-4 {
-    top: -25px;
-    right: -54px;
-
-    svg {
-        width: 104px;
-    }
-}
-
-@include media( '>medium' ) {
-
-    .hero {
-        padding-top: 80px;
-        padding-bottom: 120px;
-    }
-
-    .hero-paragraph {
-        margin-bottom: 40px;
-        padding-left: 72px;
-        padding-right: 72px;
-    }
-
-    .bubble-1,
-    .bubble-2,
-    .bubble-3,
-    .bubble-4 {
-
-        svg {
-            width: auto;
-        }
-    }
-
-    .bubble-1 {
-        top: 85px;
-        left: -30px;
-    }
-
-    .bubble-2 {
-        bottom: -8px;
-        right: -75px;
-    }
-
-    .bubble-3 {
-        left: -140px;
-        bottom: -120px;
-    }
-
-    .bubble-4 {
-        top: -35px;
-        right: -110px;
-    }
+  .hero-copy {
+    padding-right: 88px;
+    min-width: 552px;
+  }
 }

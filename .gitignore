@@ -3,3 +3,4 @@ node_modules
 .serverless
 coverage
 .DS_Store
+.netlify

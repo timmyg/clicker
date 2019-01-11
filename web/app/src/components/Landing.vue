@@ -49,235 +49,144 @@
       </header>
 
       <main>
-        <section class="hero text-center">
-          <div class="container-sm">
+        <section class="hero">
+          <div class="container">
             <div class="hero-inner">
-              <h1 class="hero-title h2-mobile mt-0 is-revealing">Landing template for startups</h1>
-              <p
-                class="hero-paragraph is-revealing"
-              >Our landing page template works on all devices, so you only have to set it up once, and get beautiful results forever.</p>
-              <div class="hero-form newsletter-form field field-grouped is-revealing">
-                <div class="control control-expanded">
-                  <input
-                    class="input"
-                    type="email"
-                    name="email"
-                    placeholder="Your best email&hellip;"
-                  >
-                </div>
-                <div class="control">
-                  <a
-                    class="button button-primary button-block button-shadow"
-                    href="#"
-                  >Get early access</a>
-                </div>
+              <div class="hero-copy">
+                <h1 class="hero-title h2-mobile mt-0 is-revealing">Landing template for startups</h1>
+                <p
+                  class="hero-paragraph is-revealing"
+                >Our landing page template works on all devices, so you only have to set it up once, and get beautiful results forever.</p>
+                <p class="hero-cta is-revealing">
+                  <a class="button button-primary button-shadow" href="#">Pricing and plans</a>
+                </p>
               </div>
-              <div class="hero-browser">
-                <div class="bubble-3 is-revealing">
-                  <svg
-                    width="427"
-                    height="286"
-                    viewBox="0 0 427 286"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                  >
-                    <defs>
+              <div class="hero-illustration is-revealing">
+                <svg
+                  width="528"
+                  height="413"
+                  viewBox="0 0 528 413"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="hero-illustration-a">
+                      <stop stop-color="#A7FDE8" stop-opacity="0" offset="0%"></stop>
+                      <stop stop-color="#6EFACC" offset="100%"></stop>
+                    </linearGradient>
+                    <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="hero-illustration-b">
+                      <stop stop-color="#FF4F7A" stop-opacity="0" offset="0%"></stop>
+                      <stop stop-color="#FF4F7A" offset="100%"></stop>
+                    </linearGradient>
+                    <radialGradient fx="50%" fy="50%" r="100%" id="hero-illustration-c">
+                      <stop stop-color="#6EFACC" offset="0%"></stop>
+                      <stop stop-color="#6EFACC" stop-opacity="0" offset="100%"></stop>
+                    </radialGradient>
+                    <linearGradient x1="0%" y1="100%" y2="0%" id="hero-illustration-d">
+                      <stop stop-color="#007CFE" stop-opacity="0" offset="0%"></stop>
+                      <stop stop-color="#007DFF" offset="100%"></stop>
+                    </linearGradient>
+                    <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="hero-illustration-e">
+                      <stop stop-color="#FF4F7A" stop-opacity="0" offset="0%"></stop>
+                      <stop stop-color="#FF4F7A" offset="100%"></stop>
+                    </linearGradient>
+                    <filter
+                      x="-500%"
+                      y="-500%"
+                      width="1000%"
+                      height="1000%"
+                      filterUnits="objectBoundingBox"
+                      id="dropshadow-1"
+                    >
+                      <feOffset dy="16" in="SourceAlpha" result="shadowOffsetOuter"></feOffset>
+                      <feGaussianBlur
+                        stdDeviation="24"
+                        in="shadowOffsetOuter"
+                        result="shadowBlurOuter"
+                      ></feGaussianBlur>
+                      <feColorMatrix
+                        values="0 0 0 0 0.12 0 0 0 0 0.17 0 0 0 0 0.21 0 0 0 0.2 0"
+                        in="shadowBlurOuter"
+                      ></feColorMatrix>
+                    </filter>
+                  </defs>
+                  <g transform="translate(0 -1)" fill="none" fill-rule="evenodd">
+                    <g transform="translate(128 290)" fill="url(#hero-illustration-a)">
                       <path
-                        d="M213.5 286C331.413 286 427 190.413 427 72.5S304.221 16.45 186.309 16.45C68.396 16.45 0-45.414 0 72.5S95.587 286 213.5 286z"
-                        id="bubble-3-a"
-                      ></path>
-                    </defs>
-                    <g fill="none" fill-rule="evenodd">
-                      <mask id="bubble-3-b" fill="#fff">
-                        <use xlink:href="#bubble-3-a"></use>
-                      </mask>
-                      <use fill="#4E8FF8" xlink:href="#bubble-3-a"></use>
-                      <path
-                        d="M64.5 129.77c117.913 0 213.5-95.588 213.5-213.5 0-117.914-122.779-56.052-240.691-56.052C-80.604-139.782-149-201.644-149-83.73c0 117.913 95.587 213.5 213.5 213.5z"
-                        fill="#1274ED"
-                        mask="url(#bubble-3-b)"
+                        d="M62.225 0l1.415 1.414L1.414 63.64 0 62.225zM66.468 4.243l1.414 1.414L5.657 67.882l-1.414-1.414zM70.71 8.485L72.126 9.9 9.899 72.125 8.485 70.71zM74.953 12.728l1.415 1.414-62.226 62.226-1.414-1.415zM79.196 16.97l1.414 1.415L18.385 80.61l-1.414-1.414zM83.439 21.213l1.414 1.414-62.226 62.226-1.414-1.414zM87.681 25.456l1.414 1.414L26.87 89.095l-1.414-1.414zM91.924 29.698l1.414 1.415-62.225 62.225-1.415-1.414z"
                       ></path>
                       <path
-                        d="M381.5 501.77c117.913 0 213.5-95.588 213.5-213.5 0-117.914-122.779-56.052-240.691-56.052C236.396 232.218 168 170.356 168 288.27c0 117.913 95.587 213.5 213.5 213.5z"
-                        fill="#75ABF3"
-                        mask="url(#bubble-3-b)"
+                        d="M91.924 29.698l1.414 1.415-62.225 62.225-1.415-1.414zM96.167 33.941l1.414 1.414-62.226 62.226-1.414-1.414zM100.41 38.184l1.413 1.414-62.225 62.225-1.414-1.414zM104.652 42.426l1.414 1.415-62.225 62.225-1.415-1.414zM108.894 46.669l1.415 1.414-62.226 62.226-1.414-1.415zM113.137 50.912l1.414 1.414-62.225 62.225-1.414-1.414zM117.38 55.154l1.414 1.415-62.225 62.225-1.415-1.414zM121.622 59.397l1.415 1.414-62.226 62.226-1.414-1.415z"
                       ></path>
-                    </g>
-                  </svg>
-                </div>
-                <div class="bubble-4 is-revealing">
-                  <svg
-                    width="230"
-                    height="235"
-                    viewBox="0 0 230 235"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                  >
-                    <defs>
-                      <path
-                        d="M196.605 234.11C256.252 234.11 216 167.646 216 108 216 48.353 167.647 0 108 0S0 48.353 0 108s136.959 126.11 196.605 126.11z"
-                        id="bubble-4-a"
-                      ></path>
-                    </defs>
-                    <g fill="none" fill-rule="evenodd">
-                      <mask id="bubble-4-b" fill="#fff">
-                        <use xlink:href="#bubble-4-a"></use>
-                      </mask>
-                      <use fill="#7CE8DD" xlink:href="#bubble-4-a"></use>
-                      <circle fill="#3BDDCC" mask="url(#bubble-4-b)" cx="30" cy="108" r="108"></circle>
-                      <circle
-                        fill="#B1F1EA"
-                        opacity=".7"
-                        mask="url(#bubble-4-b)"
-                        cx="265"
-                        cy="88"
-                        r="108"
-                      ></circle>
-                    </g>
-                  </svg>
-                </div>
-                <div class="hero-browser-inner is-revealing">
-                  <svg
-                    width="800"
-                    height="450"
-                    viewBox="0 0 800 450"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                  >
-                    <defs>
-                      <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="browser-a">
-                        <stop stop-color="#F6F8FA" stop-opacity=".48" offset="0%"></stop>
-                        <stop stop-color="#F6F8FA" offset="100%"></stop>
-                      </linearGradient>
-                      <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="browser-b">
-                        <stop stop-color="#F6F8FA" stop-opacity=".48" offset="0%"></stop>
-                        <stop stop-color="#F6F8FA" offset="100%"></stop>
-                      </linearGradient>
-                      <linearGradient x1="100%" y1="-12.816%" x2="0%" y2="-12.816%" id="browser-c">
-                        <stop stop-color="#F6F8FA" stop-opacity="0" offset="0%"></stop>
-                        <stop stop-color="#E3E7EB" offset="50.045%"></stop>
-                        <stop stop-color="#F6F8FA" stop-opacity="0" offset="100%"></stop>
-                      </linearGradient>
-                      <filter
-                        x="-500%"
-                        y="-500%"
-                        width="1000%"
-                        height="1000%"
-                        filterUnits="objectBoundingBox"
-                        id="dropshadow-1"
-                      >
-                        <feOffset dy="16" in="SourceAlpha" result="shadowOffsetOuter"></feOffset>
-                        <feGaussianBlur
-                          stdDeviation="24"
-                          in="shadowOffsetOuter"
-                          result="shadowBlurOuter"
-                        ></feGaussianBlur>
-                        <feColorMatrix
-                          values="0 0 0 0 0.12 0 0 0 0 0.17 0 0 0 0 0.21 0 0 0 0.2 0"
-                          in="shadowBlurOuter"
-                        ></feColorMatrix>
-                      </filter>
-                    </defs>
-                    <g fill="none" fill-rule="evenodd">
-                      <rect
-                        width="800"
-                        height="450"
-                        rx="4"
-                        fill="#FFF"
-                        style="mix-blend-mode:multiply;filter:url(#dropshadow-1)"
-                      ></rect>
-                      <rect width="800" height="450" rx="4" fill="#FFF"></rect>
-                      <g fill="url(#browser-a)" transform="translate(47 67)">
-                        <path
-                          d="M146 0h122v122H146zM0 0h122v122H0zM292 0h122v122H292zM438 0h122v122H438zM584 0h122v122H584z"
-                        ></path>
-                      </g>
-                      <g transform="translate(47 239)" fill="url(#browser-b)">
-                        <path
-                          d="M146 0h122v122H146zM0 0h122v122H0zM292 0h122v122H292zM438 0h122v122H438zM584 0h122v122H584z"
-                        ></path>
-                      </g>
-                      <path fill="url(#browser-c)" d="M0 146h706v2H0z" transform="translate(47 67)"></path>
-                      <g transform="translate(0 12)">
-                        <circle fill="#FF6D8B" cx="36" cy="4" r="4"></circle>
-                        <circle fill="#FFCB4F" cx="52" cy="4" r="4"></circle>
-                        <circle fill="#7CE8DD" cx="68" cy="4" r="4"></circle>
-                        <path fill="url(#browser-c)" d="M0 20h800v2H0z"></path>
-                        <path fill="#E3E7EB" d="M742 2h24v4h-24z"></path>
-                      </g>
                       <g>
-                        <path fill="#F6F8FA" d="M47 385h706v32H47z"></path>
-                        <path fill="#E3E7EB" d="M356 399h88v4h-88z"></path>
+                        <path
+                          d="M100.811 0l-1.414 1.414 62.225 62.226 1.415-1.415zM96.569 4.243l-1.415 1.414 62.226 62.225 1.414-1.414zM92.326 8.485L90.912 9.9l62.225 62.226 1.414-1.414zM88.083 12.728l-1.414 1.414 62.225 62.226 1.415-1.415zM83.84 16.97l-1.414 1.415 62.226 62.225 1.414-1.414zM79.598 21.213l-1.414 1.414 62.225 62.226 1.414-1.414zM75.355 25.456l-1.414 1.414 62.226 62.225 1.414-1.414zM71.113 29.698l-1.415 1.415 62.226 62.225 1.414-1.414z"
+                        ></path>
+                        <path
+                          d="M71.113 29.698l-1.415 1.415 62.226 62.225 1.414-1.414zM66.87 33.941l-1.414 1.414 62.225 62.226 1.414-1.414zM62.627 38.184l-1.414 1.414 62.226 62.225 1.414-1.414zM58.385 42.426l-1.414 1.415 62.225 62.225 1.414-1.414zM54.142 46.669l-1.414 1.414 62.225 62.226 1.415-1.415zM49.9 50.912l-1.415 1.414 62.226 62.225 1.414-1.414zM45.657 55.154l-1.414 1.415 62.225 62.225 1.414-1.414zM41.414 59.397L40 60.811l62.225 62.226 1.415-1.415z"
+                        ></path>
                       </g>
                     </g>
-                  </svg>
-                </div>
-                <div class="bubble-1 is-revealing">
-                  <svg
-                    width="61"
-                    height="52"
-                    viewBox="0 0 61 52"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                  >
-                    <defs>
+                    <g transform="matrix(1 0 0 -1 326 124)" fill="url(#hero-illustration-a)">
                       <path
-                        d="M32 43.992c17.673 0 28.05 17.673 28.05 0S49.674 0 32 0C14.327 0 0 14.327 0 32c0 17.673 14.327 11.992 32 11.992z"
-                        id="bubble-1-a"
-                      ></path>
-                    </defs>
-                    <g fill="none" fill-rule="evenodd">
-                      <mask id="bubble-1-b" fill="#fff">
-                        <use xlink:href="#bubble-1-a"></use>
-                      </mask>
-                      <use fill="#FF6D8B" xlink:href="#bubble-1-a"></use>
-                      <path
-                        d="M2 43.992c17.673 0 28.05 17.673 28.05 0S19.674 0 2 0c-17.673 0-32 14.327-32 32 0 17.673 14.327 11.992 32 11.992z"
-                        fill="#FF4F73"
-                        mask="url(#bubble-1-b)"
+                        d="M62.225 0l1.415 1.414L1.414 63.64 0 62.225zM66.468 4.243l1.414 1.414L5.657 67.882l-1.414-1.414zM70.71 8.485L72.126 9.9 9.899 72.125 8.485 70.71zM74.953 12.728l1.415 1.414-62.226 62.226-1.414-1.415zM79.196 16.97l1.414 1.415L18.385 80.61l-1.414-1.414zM83.439 21.213l1.414 1.414-62.226 62.226-1.414-1.414zM87.681 25.456l1.414 1.414L26.87 89.095l-1.414-1.414zM91.924 29.698l1.414 1.415-62.225 62.225-1.415-1.414z"
                       ></path>
                       <path
-                        d="M74 30.992c17.673 0 28.05 17.673 28.05 0S91.674-13 74-13C56.327-13 42 1.327 42 19c0 17.673 14.327 11.992 32 11.992z"
-                        fill-opacity="0.8"
-                        fill="#FFA3B5"
-                        mask="url(#bubble-1-b)"
+                        d="M91.924 29.698l1.414 1.415-62.225 62.225-1.415-1.414zM96.167 33.941l1.414 1.414-62.226 62.226-1.414-1.414zM100.41 38.184l1.413 1.414-62.225 62.225-1.414-1.414zM104.652 42.426l1.414 1.415-62.225 62.225-1.415-1.414zM108.894 46.669l1.415 1.414-62.226 62.226-1.414-1.415zM113.137 50.912l1.414 1.414-62.225 62.225-1.414-1.414zM117.38 55.154l1.414 1.415-62.225 62.225-1.415-1.414zM121.622 59.397l1.415 1.414-62.226 62.226-1.414-1.415z"
                       ></path>
+                      <g>
+                        <path
+                          d="M100.811 0l-1.414 1.414 62.225 62.226 1.415-1.415zM96.569 4.243l-1.415 1.414 62.226 62.225 1.414-1.414zM92.326 8.485L90.912 9.9l62.225 62.226 1.414-1.414zM88.083 12.728l-1.414 1.414 62.225 62.226 1.415-1.415zM83.84 16.97l-1.414 1.415 62.226 62.225 1.414-1.414zM79.598 21.213l-1.414 1.414 62.225 62.226 1.414-1.414zM75.355 25.456l-1.414 1.414 62.226 62.225 1.414-1.414zM71.113 29.698l-1.415 1.415 62.226 62.225 1.414-1.414z"
+                        ></path>
+                        <path
+                          d="M71.113 29.698l-1.415 1.415 62.226 62.225 1.414-1.414zM66.87 33.941l-1.414 1.414 62.225 62.226 1.414-1.414zM62.627 38.184l-1.414 1.414 62.226 62.225 1.414-1.414zM58.385 42.426l-1.414 1.415 62.225 62.225 1.414-1.414zM54.142 46.669l-1.414 1.414 62.225 62.226 1.415-1.415zM49.9 50.912l-1.415 1.414 62.226 62.225 1.414-1.414zM45.657 55.154l-1.414 1.415 62.225 62.225 1.414-1.414zM41.414 59.397L40 60.811l62.225 62.226 1.415-1.415z"
+                        ></path>
+                      </g>
                     </g>
-                  </svg>
-                </div>
-                <div class="bubble-2 is-revealing">
-                  <svg
-                    width="179"
-                    height="126"
-                    viewBox="0 0 179 126"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                  >
-                    <defs>
-                      <path
-                        d="M104.697 125.661c41.034 0 74.298-33.264 74.298-74.298s-43.231-7.425-84.265-7.425S0-28.44 0 12.593c0 41.034 63.663 113.068 104.697 113.068z"
-                        id="bubble-2-a"
-                      ></path>
-                    </defs>
-                    <g fill="none" fill-rule="evenodd">
-                      <mask id="bubble-2-b" fill="#fff">
-                        <use xlink:href="#bubble-2-a"></use>
-                      </mask>
-                      <use fill="#838DEA" xlink:href="#bubble-2-a"></use>
-                      <path
-                        d="M202.697 211.661c41.034 0 74.298-33.264 74.298-74.298s-43.231-7.425-84.265-7.425S98 57.56 98 98.593c0 41.034 63.663 113.068 104.697 113.068z"
-                        fill="#626CD5"
-                        mask="url(#bubble-2-b)"
-                      ></path>
-                      <path
-                        d="M43.697 56.661c41.034 0 74.298-33.264 74.298-74.298s-43.231-7.425-84.265-7.425S-61-97.44-61-56.407C-61-15.373 2.663 56.661 43.697 56.661z"
-                        fill="#B1B6F1"
-                        opacity=".64"
-                        mask="url(#bubble-2-b)"
-                      ></path>
-                    </g>
-                  </svg>
-                </div>
+                    <path d="M0 0h528v414H0z"></path>
+                    <path
+                      fill="#FFF"
+                      d="M0 63h528v297H0z"
+                      style="mix-blend-mode:multiply;filter:url(#dropshadow-1)"
+                    ></path>
+                    <path fill="#FFF" d="M0 63h528v297H0z"></path>
+                    <path fill="url(#hero-illustration-b)" d="M408 230h80v48h-80z"></path>
+                    <path
+                      d="M0 0h4v4H0V0zm0 12h4v4H0v-4zm0 12h4v4H0v-4zm0 12h4v4H0v-4zm0 12h4v4H0v-4zm0 12h4v4H0v-4zM12 0h4v4h-4V0zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zM24 0h4v4h-4V0zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zM36 0h4v4h-4V0zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zM48 0h4v4h-4V0zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zM60 0h4v4h-4V0zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4zm0 12h4v4h-4v-4z"
+                      transform="rotate(45 -118.861 431.981)"
+                      fill="url(#hero-illustration-c)"
+                    ></path>
+                    <path
+                      fill="#FFF"
+                      d="M288 254h160v160H288z"
+                      style="mix-blend-mode:multiply;filter:url(#dropshadow-1)"
+                    ></path>
+                    <path fill="#FFF" d="M288 254h160v160H288z"></path>
+                    <path
+                      d="M248 79h88v24c0 35.346-28.654 64-64 64h-24V79z"
+                      fill="url(#hero-illustration-d)"
+                    ></path>
+                    <path
+                      d="M348 132c0 26.51-21.49 48-48 48 0-26.51 21.49-48 48-48z"
+                      fill="url(#hero-illustration-e)"
+                      transform="matrix(1 0 0 -1 0 312)"
+                    ></path>
+                    <path
+                      fill="#FFF"
+                      d="M200 31h88v88h-88z"
+                      style="mix-blend-mode:multiply;filter:url(#dropshadow-1)"
+                    ></path>
+                    <path fill="#FFF" d="M200 31h88v88h-88z"></path>
+                    <path fill="#F6F8FA" d="M24 248l88 88H24z"></path>
+                    <rect
+                      fill="url(#hero-illustration-d)"
+                      x="335"
+                      y="242"
+                      width="32"
+                      height="32"
+                      rx="16"
+                    ></rect>
+                  </g>
+                </svg>
               </div>
             </div>
           </div>
@@ -420,6 +329,241 @@
           </div>
         </section>
 
+        <section class="features-tabs section">
+          <div class="container">
+            <div class="features-tabs-inner section-inner has-top-divider">
+              <div class="tabs-container">
+                <ul class="tabs-links">
+                  <li class="is-revealing">
+                    <a href="#tab-1" class="tab-link is-active">
+                      <img src="/img/tabs-icon-01.svg" alt="Tabs icon 01">
+                      <span class="h4 m-0">Amazing features</span>
+                    </a>
+                  </li>
+                  <li class="is-revealing">
+                    <a href="#tab-2" class="tab-link">
+                      <img src="/img/tabs-icon-02.svg" alt="Tabs icon 02">
+                      <span class="h4 m-0">Endless possibilities</span>
+                    </a>
+                  </li>
+                  <li class="is-revealing">
+                    <a href="#tab-3" class="tab-link">
+                      <img src="/img/tabs-icon-03.svg" alt="Tabs icon 03">
+                      <span class="h4 m-0">Ease of use</span>
+                    </a>
+                  </li>
+                </ul>
+                <div class="tabs-content">
+                  <div id="tab-1" class="tab-panel is-active">
+                    <h2>Discover</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p
+                      class="mb-0"
+                    >A arcu cursus vitae congue. Vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique.</p>
+                  </div>
+                  <div id="tab-2" class="tab-panel">
+                    <h2>Power of customisation</h2>
+                    <p>A arcu cursus vitae congue. Vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique.</p>
+                    <p
+                      class="mb-0"
+                    >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. A arcu cursus vitae congue.</p>
+                  </div>
+                  <div id="tab-3" class="tab-panel">
+                    <h2>Keep it simple</h2>
+                    <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+                    <p
+                      class="mb-0"
+                    >Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="testimonials section">
+          <div class="container">
+            <div class="testimonials-inner section-inner">
+              <h2 class="section-title mt-0 text-center">Testimonials</h2>
+              <div class="testimonials-wrap">
+                <div class="testimonial text-center text-xs is-revealing">
+                  <div class="testimonial-inner">
+                    <div class="testimonial-main">
+                      <div class="testimonial-header">
+                        <img class="mb-16" src="/img/testimonial-01.png" alt="Testimonial">
+                      </div>
+                      <div class="testimonial-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                      </div>
+                    </div>
+                    <div class="testimonial-footer">
+                      <div class="testimonial-name">Mark Simons</div>
+                      <div class="testimonial-link">
+                        <a href="#">company.com</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="testimonial text-center text-xs is-revealing">
+                  <div class="testimonial-inner">
+                    <div class="testimonial-main">
+                      <div class="testimonial-header">
+                        <img class="mb-16" src="/img/testimonial-02.png" alt="Testimonial">
+                      </div>
+                      <div class="testimonial-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                      </div>
+                    </div>
+                    <div class="testimonial-footer">
+                      <div class="testimonial-name">Emma Patrick</div>
+                      <div class="testimonial-link">
+                        <a href="#">fast.com</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="testimonial text-center text-xs is-revealing">
+                  <div class="testimonial-inner">
+                    <div class="testimonial-main">
+                      <div class="testimonial-header">
+                        <img class="mb-16" src="/img/testimonial-03.png" alt="Testimonial">
+                      </div>
+                      <div class="testimonial-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                      </div>
+                    </div>
+                    <div class="testimonial-footer">
+                      <div class="testimonial-name">David Harris</div>
+                      <div class="testimonial-link">
+                        <a href="#">traction.com</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="pricing section">
+          <div class="container">
+            <div class="pricing-inner section-inner">
+              <h2 class="section-title mt-0 text-center">Pricing</h2>
+              <div>
+                <div class="pricing-tables-wrap">
+                  <div class="pricing-table is-revealing">
+                    <div class="pricing-table-inner">
+                      <div class="pricing-table-main">
+                        <div class="pricing-table-header mb-24 pb-24">
+                          <div class="pricing-table-title h4 mt-0 mb-16">Startup</div>
+                          <div class="pricing-table-price">
+                            <span class="pricing-table-price-currency">$</span>
+                            <span class="pricing-table-price-amount h1">29</span>/m
+                          </div>
+                        </div>
+                        <ul class="pricing-table-features list-reset text-xs">
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="pricing-table-cta">
+                        <a
+                          class="button button-secondary button-shadow button-block"
+                          href="#"
+                        >Get started</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pricing-table is-revealing">
+                    <div class="pricing-table-inner">
+                      <div class="pricing-table-main">
+                        <div class="pricing-table-header mb-24 pb-24">
+                          <div class="pricing-table-title h4 mt-0 mb-16">Enterprise</div>
+                          <div class="pricing-table-price">
+                            <span class="pricing-table-price-currency">$</span>
+                            <span class="pricing-table-price-amount h1">49</span>/m
+                          </div>
+                        </div>
+                        <ul class="pricing-table-features list-reset text-xs">
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                          <li>
+                            <span>Lorem ipsum dolor sit amet</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="pricing-table-cta">
+                        <a
+                          class="button button-primary button-shadow button-block"
+                          href="#"
+                        >Get started</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pricing-faqs container-sm is-revealing">
+                <h4 class="mt-40 mb-32">FAQs</h4>
+                <ul class="accordion">
+                  <li>
+                    <div class="accordion-title">
+                      <span>In a professional context it often happens that private?</span>
+                      <div class="accordion-icon"></div>
+                    </div>
+                    <div class="accordion-body">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="accordion-title">
+                      <span>Lorem ipsum dolor sit amet, consectetur</span>
+                      <div class="accordion-icon"></div>
+                    </div>
+                    <div class="accordion-body">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Ut enim ad minim veniam semper. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="accordion-title">
+                      <span>In a professional context it often happens that private?</span>
+                      <div class="accordion-icon"></div>
+                    </div>
+                    <div class="accordion-body">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="accordion-title">
+                      <span>Lorem ipsum dolor sit amet, consectetur</span>
+                      <div class="accordion-icon"></div>
+                    </div>
+                    <div class="accordion-body">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Ut enim ad minim veniam semper. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="newsletter section">
           <div class="container-sm">
             <div class="newsletter-inner section-inner">
@@ -498,7 +642,7 @@
             <ul class="footer-social-links list-reset">
               <li>
                 <a href="#">
-                  <span class="screen-reader-text">Facebook</span>
+                  <span class="een-reader-text">Facebook</span>
                   <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M6.023 16L6 9H3V6h3V4c0-2.7 1.672-4 4.08-4 1.153 0 2.144.086 2.433.124v2.821h-1.67c-1.31 0-1.563.623-1.563 1.536V6H13l-1 3H9.28v7H6.023z"
