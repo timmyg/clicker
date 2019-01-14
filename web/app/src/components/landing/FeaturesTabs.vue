@@ -1,26 +1,24 @@
 <template>
   <div class="container">
     <div class="features-tabs-inner section-inner has-top-divider">
-      <h2 class="section-title mt-0 mb-64 text-center">Bring Vegas To You</h2>
-
       <div class="tabs-container">
         <ul class="tabs-links">
           <li class="is-revealing">
             <a href="#tab-1" class="tab-link is-active" v-on:click="tabClick($event)">
               <img src="/img/tabs-icon-01.svg" alt="Tabs icon 01">
-              <span class="h4 m-0">Amazing features</span>
+              <span class="h4 m-0">Control All or One</span>
             </a>
           </li>
           <li class="is-revealing">
             <a href="#tab-2" class="tab-link" v-on:click="tabClick($event)">
               <img src="/img/tabs-icon-02.svg" alt="Tabs icon 02">
-              <span class="h4 m-0">Endless possibilities</span>
+              <span class="h4 m-0">Network Effects</span>
             </a>
           </li>
           <li class="is-revealing">
             <a href="#tab-3" class="tab-link" v-on:click="tabClick($event)">
               <img src="/img/tabs-icon-03.svg" alt="Tabs icon 03">
-              <span class="h4 m-0">Ease of use</span>
+              <span class="h4 m-0">Daily Scheduler</span>
             </a>
           </li>
         </ul>

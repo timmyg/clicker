@@ -1,35 +1,10 @@
 <template>
   <div class="container">
     <div class="site-footer-inner">
-      <div class="brand footer-brand">
-        <a href="#">
-          <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <title>Ava</title>
-            <defs>
-              <path
-                d="M32 16H16v16H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h28a2 2 0 0 1 2 2v14z"
-                id="logo-gradient-footer-a"
-              ></path>
-              <linearGradient x1="50%" y1="50%" y2="100%" id="logo-gradient-footer-b">
-                <stop stop-color="#FFF" stop-opacity="0" offset="0%"></stop>
-                <stop stop-color="#FFF" offset="100%"></stop>
-              </linearGradient>
-            </defs>
-            <g fill="none" fill-rule="evenodd">
-              <mask id="logo-gradient-footer-c" fill="#fff">
-                <use xlink:href="#logo-gradient-footer-a"></use>
-              </mask>
-              <use fill-opacity="0.32" fill="#FFF" xlink:href="#logo-gradient-footer-a"></use>
-              <path
-                fill="url(#logo-gradient-footer-b)"
-                mask="url(#logo-gradient-footer-c)"
-                d="M-16-16h32v32h-32z"
-              ></path>
-            </g>
-          </svg>
-        </a>
-      </div>
-      <ul class="footer-links list-reset">
+      <!-- <div class="brand footer-brand">
+        <a href="#"></a>
+      </div>-->
+      <!-- <ul class="footer-links list-reset">
         <li>
           <a href="#">Contact</a>
         </li>
@@ -42,8 +17,8 @@
         <li>
           <a href="#">Support</a>
         </li>
-      </ul>
-      <ul class="footer-social-links list-reset">
+      </ul>-->
+      <!-- <ul class="footer-social-links list-reset">
         <li>
           <a href="#">
             <span class="een-reader-text">Facebook</span>
@@ -77,8 +52,8 @@
             </svg>
           </a>
         </li>
-      </ul>
-      <div class="footer-copyright">&copy; 2018 Ava, all rights reserved</div>
+      </ul>-->
+      <!-- <div class="footer-copyright">&copy; 2018 Ava, all rights reserved</div> -->
     </div>
   </div>
 </template>
