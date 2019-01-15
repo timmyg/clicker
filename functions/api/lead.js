@@ -2,7 +2,7 @@ require('dotenv').config();
 const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.HUBSPOT_API_KEY });
 const headers = {
-  'Access-Control-Allow-Origin': 'tryclicker.com',
+  'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Content-Type': 'application/json',
 };
