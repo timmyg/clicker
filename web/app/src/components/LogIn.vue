@@ -127,7 +127,6 @@ export default {
               "You have successfully signed up. Check your email to confirm your account.",
             type: "success"
           });
-          console.log("a confirmation email has been sent to you!");
         })
         .catch(err => this.handleUnsuccessfulLogin(err));
     },

@@ -65,7 +65,6 @@ export default {
     Interested,
   },
   mounted: function() {
-    console.log(VueScrollReveal, this);
     this.$sr.reveal('.feature', {
       delay: 150,
       duration: 1000,
@@ -88,6 +87,20 @@ export default {
       distance: '10px',
       easing: 'cubic-bezier(0.15, 0.21, 0.95, 1)',
       origin: 'bottom',
+    });
+    this.$sr.reveal('.testimonial', {
+      delay: 90,
+      duration: 600,
+      distance: '10px',
+      easing: 'cubic-bezier(0.6, 0.2, 0.1, 1)',
+      origin: 'bottom',
+    });
+    this.$sr.reveal('.newsletter', {
+      delay: 90,
+      duration: 600,
+      distance: '10px',
+      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
+      origin: 'right',
     });
   },
   methods: {

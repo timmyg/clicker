@@ -6,22 +6,24 @@
         <p
           class="section-paragraph"
         >Clicker is currently in closed beta, but leave us your email and we'll keep you up to date with our broader launch.</p>
+        <p v-if="submitted" class="section-paragraph">Thank you! We'll be in contact.</p>
+        <form
+          class="footer-form newsletter-form field field-grouped is-revealing"
+          v-on:submit.prevent="onSubmit"
+          v-else
+        >
+          <div class="control control-expanded">
+            <input class="input" type="email" placeholder="email address" v-model.trim="email">
+          </div>
+          <div class="control">
+            <button
+              type="submit"
+              :disabled="submitting"
+              class="button button-primary button-block button-shadow"
+            >Submit</button>
+          </div>
+        </form>
       </div>
-      <form
-        class="footer-form newsletter-form field field-grouped is-revealing"
-        v-on:submit.prevent="onSubmit"
-      >
-        <div class="control control-expanded">
-          <input class="input" type="email" placeholder="email address" v-model.trim="email">
-        </div>
-        <div class="control">
-          <button
-            type="submit"
-            :disabled="submitting"
-            class="button button-primary button-block button-shadow"
-          >Submit</button>
-        </div>
-      </form>
     </div>
   </div>
 </template>
@@ -39,12 +41,12 @@ export default {
   methods: {
     onSubmit() {
       this.submitting = true;
-      // console.log(this.email);
       const { email } = this;
       this.$http
         .post('hitmeback', { email })
         .then(response => {
-          console.log('cool', this.email);
+          this.submitting = false;
+          this.submitted = true;
         })
         .catch(e => {
           console.error(e);
