@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --host local.tryclicker.com",
-    "build": "vue-cli-service build --mode development",
+    "build": "vue-cli-service build",
+    "build:dev": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
