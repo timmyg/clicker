@@ -21,7 +21,7 @@ const Device = dynamoose.model(
   },
 );
 
-function generateResponse(statusCode, body) {
+function generateResponse(statusCode, body = {}) {
   let msg = body;
   if (typeof msg === 'string') {
     msg = { message: msg };

@@ -100,3 +100,10 @@ functions:
           path: bot/sms/incoming
           method: post
           cors: true
+  newLead:
+    handler: api/lead.new
+    events:
+      - http:
+          path: hitmeback
+          method: post
+          cors: true
