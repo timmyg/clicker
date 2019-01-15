@@ -1124,10 +1124,9 @@ websocket-stream@^5.1.2:
     ws "^3.2.0"
     xtend "^4.0.0"
 
-winston-logzio@^3.0.2:
+"winston-logzio@https://github.com/timmyg/winston-logzio.git":
   version "3.0.3"
-  resolved "https://registry.yarnpkg.com/winston-logzio/-/winston-logzio-3.0.3.tgz#0a8b0d27bc1fb614317973b80b8bd26701104a89"
-  integrity sha512-M63eVk4v4W+vkTwKWLi2DqEGN8+DEzOqRgEi/TxnluYBuDP56SDAl8gyYldcgKWjRVAc0xB6u1rPvBVafZC86w==
+  resolved "https://github.com/timmyg/winston-logzio.git#3356b3511b230bd2a84ce58d2b944116341bbfbc"
   dependencies:
     json-stringify-safe "5.0.1"
     lodash.assign "4.2.0"

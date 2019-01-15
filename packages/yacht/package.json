@@ -16,6 +16,6 @@
     "losant-mqtt": "^3.1.0",
     "request": "^2.88.0",
     "winston": "^3.1.0",
-    "winston-logzio": "^3.0.2"
+    "winston-logzio": "https://github.com/timmyg/winston-logzio.git"
   }
 }
