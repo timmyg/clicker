@@ -70,4 +70,3 @@ export default {
   name: 'Quotes',
 };
 </script>
-

@@ -7,14 +7,21 @@
           class="section-paragraph"
         >Clicker is currently in closed beta, but leave us your email and we'll keep you up to date with our broader launch.</p>
       </div>
-      <div class="footer-form newsletter-form field field-grouped is-revealing">
+      <form
+        class="footer-form newsletter-form field field-grouped is-revealing"
+        v-on:submit.prevent="onSubmit"
+      >
         <div class="control control-expanded">
-          <input class="input" type="email" name="email" placeholder="email address">
+          <input class="input" type="email" placeholder="email address" v-model.trim="email">
         </div>
         <div class="control">
-          <a class="button button-primary button-block button-shadow" href="#">Submit</a>
+          <button
+            type="submit"
+            :disabled="submitting"
+            class="button button-primary button-block button-shadow"
+          >Submit</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -22,17 +29,38 @@
 <script>
 export default {
   name: 'Interested',
-  created() {
-    console.log('created');
-    this.$http
-      .get('posts')
-      .then(response => {
-        this.posts = response.data;
-      })
-      .catch(e => {
-        console.error(e);
-      });
+  data: function() {
+    return {
+      email: '',
+      submitting: false,
+      submitted: false,
+    };
+  },
+  methods: {
+    onSubmit() {
+      this.submitting = true;
+      // console.log(this.email);
+      const { email } = this;
+      this.$http
+        .post('hitmeback', { email })
+        .then(response => {
+          console.log('cool', this.email);
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+a[type='submit'] {
+  -webkit-appearance: inherit;
+}
+button[disabled] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+</style>
 

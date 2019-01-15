@@ -55,4 +55,3 @@ export default {
   name: 'FeaturesTabs',
 };
 </script>
-
