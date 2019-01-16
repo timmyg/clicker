@@ -51,8 +51,5 @@
 // Usage: color(typography, 1) ----------------------------------------------
 // --------------------------------------------------------------------
 @function color($elem, $variant) {
-  //   @error "helllo";
-  //   @error $elem;
-  //   @error $variant;
   @return map-get(map-get($color, $elem), $variant);
 }

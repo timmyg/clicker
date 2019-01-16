@@ -6,7 +6,8 @@
         <p
           class="section-paragraph"
         >Clicker is currently in closed beta, but leave us your email and we'll keep you up to date with our broader launch.</p>
-        <p v-if="submitted" class="section-paragraph">Thank you! We'll be in contact.</p>
+        <p v-if="submitted">Thank you! We'll be in contact.</p>
+        <p v-if="error" class="error">Oh no! Something is wrong on our end. We've been alerted, please try again in a bit.</p>
         <form
           class="footer-form newsletter-form field field-grouped is-revealing"
           v-on:submit.prevent="onSubmit"
@@ -36,6 +37,7 @@ export default {
       email: '',
       submitting: false,
       submitted: false,
+      error: false,
     };
   },
   methods: {
@@ -50,6 +52,8 @@ export default {
         })
         .catch(e => {
           console.error(e);
+          this.submitting = false;
+          this.error = true;
         });
     },
   },
@@ -63,6 +67,9 @@ a[type='submit'] {
 button[disabled] {
   opacity: 0.6;
   pointer-events: none;
+}
+.error {
+  color: color(additional-2, 1);
 }
 </style>
 
