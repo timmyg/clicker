@@ -28,9 +28,10 @@ function generateResponse(statusCode, body) {
  */
 module.exports.new = async (event, context) => {
   const body = JSON.parse(event.body);
-  const { email } = body;
+  const { email, source } = body;
   const contact = {
-    properties: [{ property: 'email', value: email }],
+    properties: [{ property: 'email', value: email },
+    { property: 'source', value: 'landing page' }],
   };
   const hubspotContact = await hubspot.contacts.create(contact);
   return generateResponse(201, hubspotContact);
