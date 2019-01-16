@@ -1,11 +1,11 @@
 <template>
   <div class="container has-animations">
-    <div class="site-header-inner is-revealing">
+    <div class="site-header-inner">
       <div class="brand header-brand">
-        <span v-scroll-reveal="{ delay: 1350, origin: 'right' }">
+        <span class="logo is-revealing">
           <logo></logo>
         </span>
-        <span class="name brand-font" v-scroll-reveal="{ delay: 650, origin: 'top' }">Clicker</span>
+        <span class="name brand-font  is-revealing">Clicker</span>
       </div>
     </div>
   </div>

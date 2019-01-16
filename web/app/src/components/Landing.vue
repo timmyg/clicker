@@ -102,6 +102,27 @@ export default {
       easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
       origin: 'right',
     });
+    this.$sr.reveal('.hero-title, .hero-paragraph, .hero-illustration', {
+      delay: 90,
+      duration: 600,
+      distance: '10px',
+      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
+      origin: 'right',
+    });
+    this.$sr.reveal('.brand .logo', {
+      delay: 1350,
+      duration: 600,
+      distance: '5px',
+      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
+      origin: 'right',
+    });
+    this.$sr.reveal('.brand .name', {
+      delay: 650,
+      duration: 600,
+      distance: '5px',
+      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
+      origin: 'top',
+    });
   },
   methods: {
     tabClick: function(e) {
