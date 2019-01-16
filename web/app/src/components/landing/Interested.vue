@@ -72,7 +72,7 @@ button[disabled] {
   color: color(additional-2, 1);
 }
 .success {
-  color: color(additional-2, 1);
+  color: color(additional, 3);
 }
 </style>
 
