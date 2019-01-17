@@ -5,7 +5,7 @@
         <span class="logo is-revealing">
           <logo></logo>
         </span>
-        <span class="name brand-font  is-revealing">Clicker</span>
+        <span class="name brand-font is-revealing">Clicker</span>
       </div>
     </div>
   </div>
