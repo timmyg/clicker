@@ -61,12 +61,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a[type='submit'] {
-  -webkit-appearance: inherit;
-}
-button[disabled] {
-  opacity: 0.6;
-  pointer-events: none;
+button[type='submit'] {
+  display: inline-flex;
+  &[disabled] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
 }
 .error {
   color: color(additional-2, 1);
