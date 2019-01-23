@@ -46,7 +46,6 @@ import PageHeader from './landing/PageHeader';
 import PageFooter from './landing/PageFooter';
 import Interested from './landing/Interested';
 import VueScrollReveal from 'vue-scroll-reveal';
-import VueSegment from '@guivic/vue-segment';
 
 Vue.use(VueScrollReveal, {
   class: 'v-scroll-reveal', // A CSS class applied to elements with the v-scroll-reveal directive; useful for animation overrides.
@@ -55,8 +54,6 @@ Vue.use(VueScrollReveal, {
   distance: '10px',
   mobile: false,
 });
-
-Vue.use(VueSegment, { writeKey: process.env.VUE_APP_SEGMENT_KEY });
 
 export default {
   components: {
