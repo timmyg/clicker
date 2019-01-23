@@ -44,6 +44,7 @@ export default {
     onSubmit() {
       this.submitting = true;
       const { email } = this;
+      this.$segment.identify({ email });
       this.$http
         .post('hitmeback', { email })
         .then(() => {
