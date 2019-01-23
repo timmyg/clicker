@@ -46,7 +46,7 @@ export default {
       const { email } = this;
       this.$http
         .post('hitmeback', { email })
-        .then(response => {
+        .then(() => {
           this.submitting = false;
           this.submitted = true;
         })
@@ -75,4 +75,3 @@ button[type='submit'] {
   color: color(additional, 3);
 }
 </style>
-
