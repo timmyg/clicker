@@ -1,5 +1,7 @@
 {
   "name": "clicker",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
