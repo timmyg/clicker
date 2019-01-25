@@ -61,6 +61,7 @@ module.exports.command = async event => {
     const body = JSON.parse(event.body);
     const { name, payload } = body;
     const api = new Api(losantId);
+    payload.ip = '192.168.200.221';
     await api.sendCommand(losantId, name, payload);
     return generateResponse(200, 'ok');
   } catch (e) {
