@@ -27,7 +27,7 @@
     "npm": "^6.6.0",
     "prerender-spa-plugin": "^3.4.0",
     "sass-loader": "^7.0.1",
-    "vue-segment-analytics": "^0.3.1",
+    "vue-segment-analytics": "https://github.com/volley/vue-segment-analytics",
     "vue-template-compiler": "^2.5.17"
   },
   "gitHooks": {
