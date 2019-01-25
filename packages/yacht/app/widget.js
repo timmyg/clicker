@@ -36,25 +36,28 @@ class Widget {
 
   async initListeners() {
     try {
-      const result = await this.api.getDeviceDirectvIp(this.id);
-      if (result && result.ip) {
-        const { ip } = result;
-        this.remote = new DirecTV.Remote(ip);
-        DirecTV.validateIP(result.ip, error => {
-          if (error) {
-            logger.error(`not valid directv ip: ${ip}`);
-            logger.error(error);
-          }
-          logger.info(`valid directv ip: ${ip}`);
-          // this.saveBoxes();
-        });
-      } else {
-        logger.error('no valid dtv ip');
-      }
+      // const result = await this.api.getDeviceDirectvIp(this.id);
+      // if (result && result.ip) {
+      //   const { ip } = result;
+      //   this.remote = new DirecTV.Remote(ip);
+      //   DirecTV.validateIP(result.ip, error => {
+      //     if (error) {
+      //       logger.error(`not valid directv ip: ${ip}`);
+      //       logger.error(error);
+      //     }
+      //     logger.info(`valid directv ip: ${ip}`);
+      //     // this.saveBoxes();
+      //   });
+      // } else {
+      //   logger.error('no valid dtv ip');
+      // }
       // Listen for commands from Losant
       this.device.on('command', command => {
         logger.info({ command });
-        const ip = '192.168.200.221';
+        // const ip = '192.168.200.221';
+        const { name, payload } = command;
+        const { ip } = payload;
+        console.log({ ip, name, payload });
         this.remote = new DirecTV.Remote(ip);
         DirecTV.validateIP(ip, error => {
           if (error) {
@@ -64,7 +67,6 @@ class Widget {
           logger.info(`valid directv ip: ${ip}`);
           // this.saveBoxes();
         });
-        const { name, payload } = command;
         switch (name) {
           case 'tune':
             this.remote.tune(payload.channel, payload.client, err => {
