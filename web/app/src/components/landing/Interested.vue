@@ -44,9 +44,10 @@ export default {
     onSubmit() {
       this.submitting = true;
       const { email } = this;
+      this.$segment.identify({ email });
       this.$http
         .post('hitmeback', { email })
-        .then(response => {
+        .then(() => {
           this.submitting = false;
           this.submitted = true;
         })
@@ -61,12 +62,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a[type='submit'] {
-  -webkit-appearance: inherit;
-}
-button[disabled] {
-  opacity: 0.6;
-  pointer-events: none;
+button[type='submit'] {
+  display: inline-flex;
+  &[disabled] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
 }
 .error {
   color: color(additional-2, 1);
@@ -75,4 +76,3 @@ button[disabled] {
   color: color(additional, 3);
 }
 </style>
-
