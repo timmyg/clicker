@@ -54,7 +54,8 @@ class Widget {
       // Listen for commands from Losant
       this.device.on('command', command => {
         logger.info({ command });
-        const ip = '192.168.200.221';
+        // const ip = '192.168.200.221';
+        const { ip, name, payload } = command;
         this.remote = new DirecTV.Remote(ip);
         DirecTV.validateIP(ip, error => {
           if (error) {
@@ -64,7 +65,6 @@ class Widget {
           logger.info(`valid directv ip: ${ip}`);
           // this.saveBoxes();
         });
-        const { name, payload } = command;
         switch (name) {
           case 'tune':
             this.remote.tune(payload.channel, payload.client, err => {
