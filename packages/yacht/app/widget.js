@@ -55,7 +55,9 @@ class Widget {
       this.device.on('command', command => {
         logger.info({ command });
         // const ip = '192.168.200.221';
-        const { ip, name, payload } = command;
+        const { name, payload } = command;
+        const { ip } = payload;
+        console.log({ ip, name, payload });
         this.remote = new DirecTV.Remote(ip);
         DirecTV.validateIP(ip, error => {
           if (error) {
