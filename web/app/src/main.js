@@ -29,7 +29,7 @@ Vue.prototype.$http = axios.create({
 //   router // Optional
 // })
 
-import VueSegment from 'vue-segment';
+import VueSegment from '@guivic/vue-segment';
 Vue.use(VueSegment, { writeKey: process.env.VUE_APP_SEGMENT_KEY });
 // In your components
 this.$segment.track({
