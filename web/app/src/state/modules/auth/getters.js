@@ -3,5 +3,5 @@ const loggedIn = state => {
 };
 
 export default {
-  loggedIn
+  loggedIn,
 };

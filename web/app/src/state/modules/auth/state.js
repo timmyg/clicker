@@ -1,17 +1,17 @@
-import GoTrue from "gotrue-js";
+import GoTrue from 'gotrue-js';
 
 export const auth = new GoTrue({
-  APIUrl: "https://netlify-gotrue-in-vue.netlify.com/.netlify/identity",
-  audience: "",
-  setCookie: false
+  APIUrl: 'https://netlify-gotrue-in-vue.netlify.com/.netlify/identity',
+  audience: '',
+  setCookie: false,
 });
 
 const state = {
-  currentUser: getSavedState("auth.currentUser"),
+  currentUser: getSavedState('auth.currentUser'),
   loading: false,
   loggedIn: false,
   token: null,
-  notifications: []
+  notifications: [],
 };
 
 function getSavedState(key) {

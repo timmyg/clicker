@@ -14,33 +14,33 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 export default {
-  name: "Notification",
+  name: 'Notification',
   props: {
     notification: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
-      timer: null
+      timer: null,
     };
   },
   methods: {
-    ...mapActions("auth", ["removeNotification"]),
+    ...mapActions('auth', ['removeNotification']),
     triggerClose() {
       if (this.timer) {
         clearTimeout(this.timer);
       }
       this.removeNotification(this.notification);
-    }
+    },
   },
   mounted() {
     this.timer = setTimeout(() => {
       this.triggerClose();
     }, 3000);
-  }
+  },
 };
 </script>
 
@@ -58,7 +58,7 @@ export default {
   background: white;
   color: #64b587;
   &:after {
-    content: "";
+    content: '';
     position: fixed;
     right: 0;
     bottom: 0;

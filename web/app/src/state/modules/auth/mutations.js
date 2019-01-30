@@ -1,6 +1,6 @@
 const SET_CURRENT_USER = (state, value) => {
   state.currentUser = value;
-  saveState("auth.currentUser", value);
+  saveState('auth.currentUser', value);
 };
 
 const TOGGLE_LOAD = state => {
@@ -12,7 +12,7 @@ const ADD_NOTIFICATION = (state, notification) => {
 };
 
 const YAY = () => {
-  console.log("yay");
+  console.log('yay');
 };
 
 const REMOVE_NOTIFICATION = (state, notification) => {
@@ -24,7 +24,7 @@ export default {
   SET_CURRENT_USER,
   TOGGLE_LOAD,
   ADD_NOTIFICATION,
-  REMOVE_NOTIFICATION
+  REMOVE_NOTIFICATION,
 };
 
 function saveState(key, state) {

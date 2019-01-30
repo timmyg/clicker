@@ -1,13 +1,13 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import auth from "./modules/auth";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import auth from './modules/auth';
 
 Vue.use(Vuex);
 
 const modules = { auth };
 
 const store = new Vuex.Store({
-  modules
+  modules,
 });
 
 // Automatically run the `init` action for every module,

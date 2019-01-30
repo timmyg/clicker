@@ -30,11 +30,11 @@ Vue.prototype.$http = axios.create({
 // })
 
 import VueSegment from 'vue-segment';
-Vue.use(VueSegment, { writeKey:  process.env.VUE_APP_SEGMENT_KEY });
+Vue.use(VueSegment, { writeKey: process.env.VUE_APP_SEGMENT_KEY });
 // In your components
 this.$segment.track({
-	event: 'visit my page',
-	awesome: true,
+  event: 'visit my page',
+  awesome: true,
 });
 
 Vue.config.productionTip = false;

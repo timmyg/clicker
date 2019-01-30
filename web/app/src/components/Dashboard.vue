@@ -224,15 +224,15 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   props: {
-    msg: String
+    msg: String,
   },
   methods: {
-    ...mapActions("auth", ["attemptLogout", "addNotification"]),
+    ...mapActions('auth', ['attemptLogout', 'addNotification']),
     logout() {
       this.attemptLogout()
         .then(() => {
@@ -245,30 +245,30 @@ export default {
     handleSuccessfulLogout() {
       this.transferToLoginScreen();
       this.addNotification({
-        title: "Logged Out",
-        text: "You have been successfully logged out.",
-        type: "success"
+        title: 'Logged Out',
+        text: 'You have been successfully logged out.',
+        type: 'success',
       });
     },
     handleUnsuccessfulLogout(err) {
       this.addNotification({
-        title: "Oops! Looks like something is wrong!",
+        title: 'Oops! Looks like something is wrong!',
         text: err,
-        type: "fail"
+        type: 'fail',
       });
     },
     transferToLoginScreen() {
-      this.$router.push(this.$route.query.redirect || "/login");
-    }
+      this.$router.push(this.$route.query.redirect || '/login');
+    },
   },
   mounted() {
-    const lazyLoadImages = document.querySelectorAll(".lazy");
+    const lazyLoadImages = document.querySelectorAll('.lazy');
     var imageObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           var image = entry.target;
           image.src = image.dataset.src;
-          image.classList.remove("lazy");
+          image.classList.remove('lazy');
           imageObserver.unobserve(image);
         }
       });
@@ -276,7 +276,7 @@ export default {
     lazyLoadImages.forEach(img => {
       imageObserver.observe(img);
     });
-  }
+  },
 };
 </script>
 
@@ -317,7 +317,7 @@ export default {
 
 .logo--title {
   display: block;
-  font-family: "Paytone One", sans-serif;
+  font-family: 'Paytone One', sans-serif;
   color: #e2873e;
   font-size: 1.5em;
   margin-top: 10px;
@@ -383,7 +383,7 @@ export default {
   span {
     text-decoration: underline;
     &:after {
-      content: "\21E8";
+      content: '\21E8';
       position: absolute;
       bottom: 6px;
       text-decoration: none;

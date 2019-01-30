@@ -1,24 +1,24 @@
-import { auth } from "./state";
+import { auth } from './state';
 
 const init = ({ dispatch }) => {
-  dispatch("validate");
+  dispatch('validate');
 };
 
 const validate = ({ commit, state }) => {
   if (!state.currentUser) return Promise.resolve(null);
   const user = auth.currentUser();
-  commit("SET_CURRENT_USER", user);
+  commit('SET_CURRENT_USER', user);
   return user;
 };
 
 const attemptLogin = ({ commit, dispatch }, credentials) => {
   return new Promise((resolve, reject) => {
-    dispatch("attemptConfirmation", credentials).then(() => {
+    dispatch('attemptConfirmation', credentials).then(() => {
       auth
         .login(credentials.email, credentials.password)
         .then(response => {
           resolve(response);
-          commit("SET_CURRENT_USER", response);
+          commit('SET_CURRENT_USER', response);
         })
         .catch(error => {
           reject(error.json);
@@ -37,14 +37,14 @@ const attemptConfirmation = ({ commit, dispatch }, credentials) => {
       .confirm(credentials.token)
       .then(response => {
         credentials.token = null;
-        dispatch("attemptLogin", credentials);
+        dispatch('attemptLogin', credentials);
         console.log(
-          "Confirmation email sent",
+          'Confirmation email sent',
           JSON.stringify({
-            response
-          })
+            response,
+          }),
         );
-        commit("YAY");
+        commit('YAY');
         resolve(response);
       })
       .catch(error => {
@@ -59,8 +59,8 @@ const attemptSignUp = ({ commit }, credentials) => {
     auth
       .signup(credentials.email, credentials.password)
       .then(response => {
-        console.log("Confirmation email sent", response);
-        commit("TOGGLE_LOAD");
+        console.log('Confirmation email sent', response);
+        commit('TOGGLE_LOAD');
         resolve(response);
       })
       .catch(error => {
@@ -78,21 +78,21 @@ const attemptLogout = ({ commit }) => {
       .then(response => {
         console.log(response);
         resolve(response);
-        commit("SET_CURRENT_USER", null);
+        commit('SET_CURRENT_USER', null);
       })
       .catch(error => {
         reject(error);
-        console.log("Could not log out", error);
+        console.log('Could not log out', error);
       });
   });
 };
 
 const addNotification = ({ commit }, notification) => {
-  commit("ADD_NOTIFICATION", notification);
+  commit('ADD_NOTIFICATION', notification);
 };
 
 const removeNotification = ({ commit }, notification) => {
-  commit("REMOVE_NOTIFICATION", notification);
+  commit('REMOVE_NOTIFICATION', notification);
 };
 
 export default {
@@ -103,5 +103,5 @@ export default {
   attemptLogin,
   attemptLogout,
   addNotification,
-  removeNotification
+  removeNotification,
 };

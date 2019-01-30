@@ -76,13 +76,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import Notification from "./Notification";
+import { mapState, mapActions } from 'vuex';
+import Notification from './Notification';
 
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
-    Notification
+    Notification,
   },
   data() {
     return {
@@ -91,41 +91,40 @@ export default {
       showPassword: false,
       loginCreds: {
         email: null,
-        password: null
+        password: null,
       },
       signupCreds: {
         email: null,
-        password: null
-      }
+        password: null,
+      },
     };
   },
   computed: {
-    ...mapState("auth", ["notifications", "currentUser"]),
+    ...mapState('auth', ['notifications', 'currentUser']),
     eyeIcon() {
       return {
         far: true,
-        "fa-eye": this.showPassword,
-        "fa-eye-slash": !this.showPassword
+        'fa-eye': this.showPassword,
+        'fa-eye-slash': !this.showPassword,
       };
-    }
+    },
   },
   methods: {
-    ...mapActions("auth", ["attemptLogin", "attemptSignUp", "addNotification"]),
+    ...mapActions('auth', ['attemptLogin', 'attemptSignUp', 'addNotification']),
     toggleSignup() {
       this.isLogin = !this.isLogin;
     },
     toggleIcon() {
       this.showPassword = !this.showPassword;
-      this.$refs.passwordField.type = this.showPassword ? "text" : "password";
+      this.$refs.passwordField.type = this.showPassword ? 'text' : 'password';
     },
     signup() {
       this.attemptSignUp(this.signupCreds)
         .then(() => {
           this.addNotification({
-            title: "Sign Up",
-            text:
-              "You have successfully signed up. Check your email to confirm your account.",
-            type: "success"
+            title: 'Sign Up',
+            text: 'You have successfully signed up. Check your email to confirm your account.',
+            type: 'success',
           });
         })
         .catch(err => this.handleUnsuccessfulLogin(err));
@@ -133,7 +132,7 @@ export default {
     login() {
       let token = decodeURIComponent(window.location.search)
         .substring(1)
-        .split("confirmation_token=")[1];
+        .split('confirmation_token=')[1];
       this.attemptLogin({ token, ...this.loginCreds })
         .then(() => {
           this.handleSuccessfulLogin();
@@ -145,40 +144,36 @@ export default {
     handleSuccessfulLogin() {
       this.transferToDashboard();
       this.addNotification({
-        title: "Log In",
-        text: "You have successfully logged in.",
-        type: "success"
+        title: 'Log In',
+        text: 'You have successfully logged in.',
+        type: 'success',
       });
     },
     handleUnsuccessfulLogin(err) {
       this.addNotification({
-        title: "Oops! Looks like something is wrong!",
+        title: 'Oops! Looks like something is wrong!',
         text: err,
-        type: "fail"
+        type: 'fail',
       });
     },
     transferToDashboard() {
-      this.$router.push(this.$route.query.redirect || "/");
-    }
-  }
+      this.$router.push(this.$route.query.redirect || '/');
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 /* paytone-one-regular - latin */
 @font-face {
-  font-family: "Paytone One";
+  font-family: 'Paytone One';
   font-style: normal;
   font-weight: 400;
-  src: url("../assets/fonts/paytone-one-v10-latin-regular.eot"); /* IE9 Compat Modes */
-  src: local("Paytone One Regular"), local("PaytoneOne-Regular"),
-    url("../assets/fonts/paytone-one.woff2") format("woff2"),
-    /* Super Modern Browsers */
-      url("../assets/fonts/paytone-one-v10-latin-regular.ttf")
-      format("truetype"),
-    /* Safari, Android, iOS */
-      url("../assets/fonts/paytone-one-v10-latin-regular.svg#PaytoneOne")
-      format("svg"); /* Legacy iOS */
+  src: url('../assets/fonts/paytone-one-v10-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local('Paytone One Regular'), local('PaytoneOne-Regular'),
+    url('../assets/fonts/paytone-one.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('../assets/fonts/paytone-one-v10-latin-regular.ttf') format('truetype'),
+    /* Safari, Android, iOS */ url('../assets/fonts/paytone-one-v10-latin-regular.svg#PaytoneOne') format('svg'); /* Legacy iOS */
   font-display: swap;
 }
 
@@ -189,7 +184,7 @@ export default {
   justify-content: center;
   // background: url(../assets/backdrop-low.jpg) center center fixed;
   background-repeat: no-repeat;
-  background-attachment: fixed; 
+  background-attachment: fixed;
   background-position: center;
   filter: contrast(1.75) brightness(1.2);
   background-size: cover;
@@ -226,7 +221,7 @@ export default {
   }
   span {
     display: block;
-    font-family: "Paytone One", sans-serif;
+    font-family: 'Paytone One', sans-serif;
     color: #e2873e;
   }
 }
