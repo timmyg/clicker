@@ -12,7 +12,7 @@
     "axios": "^0.18.0",
     "gotrue-js": "^0.9.22",
     "vue": "^2.5.17",
-    "vue-multianalytics": "^1.11.0",
+    "vue-multianalytics": "https://github.com/timmyg/vue-multianalytics",
     "vue-router": "^3.0.1",
     "vue-scroll-reveal": "^1.0.11",
     "vuex": "^3.0.1"
