@@ -9,33 +9,18 @@ Vue.prototype.$http = axios.create({
   timeout: 6000,
 });
 
-// import VueMultianalytics from 'vue-multianalytics'
-// const segmentConfig = {
-//   token: process.env.VUE_APP_SEGMENT_KEY
-// }
-// Vue.use(VueMultianalytics, {
-//   modules: {
-//     segment: segmentConfig
-//   },
-//   routing: {
-//     vueRouter: router
-//   },
-// })
-
-// import VueSegmentAnalytics from 'vue-segment-analytics'
-
-// Vue.use(VueSegmentAnalytics, {
-//   id: process.env.VUE_APP_SEGMENT_KEY,
-//   router // Optional
-// })
-
-import VueSegment from '@guivic/vue-segment';
-Vue.use(VueSegment, { writeKey: process.env.VUE_APP_SEGMENT_KEY });
-// In your components
-this.$segment.track({
-  event: 'visit my page',
-  awesome: true,
-});
+import VueMultianalytics from 'vue-multianalytics'
+const segmentConfig = {
+  token: process.env.VUE_APP_SEGMENT_KEY
+}
+Vue.use(VueMultianalytics, {
+  modules: {
+    segment: segmentConfig
+  },
+  routing: {
+    vueRouter: router
+  },
+})
 
 Vue.config.productionTip = false;
 

@@ -9,14 +9,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@guivic/vue-segment": "0.0.2",
     "axios": "^0.18.0",
     "gotrue-js": "^0.9.22",
     "vue": "^2.5.17",
     "vue-multianalytics": "^1.11.0",
     "vue-router": "^3.0.1",
     "vue-scroll-reveal": "^1.0.11",
-    "vue-segment-analytics": "^0.3.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
