@@ -13,12 +13,12 @@
       </div>
       <template v-if="notifications.length > 0">
         <transition-group name="notification-list" tag="div" class="notifications" appear>
-          <notification
+          <!-- <notification
             appear
             v-for="(notification, idx) in notifications"
             :key="idx"
             :notification="notification"
-          ></notification>
+          ></notification> -->
         </transition-group>
       </template>
       <form @submit.prevent="login()" v-if="isLogin">
@@ -189,7 +189,7 @@ export default {
   justify-content: center;
   // background: url(../assets/backdrop-low.jpg) center center fixed;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; 
   background-position: center;
   filter: contrast(1.75) brightness(1.2);
   background-size: cover;
