@@ -10,16 +10,23 @@ Vue.prototype.$http = axios.create({
 });
 
 import VueMultianalytics from 'vue-multianalytics'
-const segmentConfig = {
-  token: process.env.VUE_APP_SEGMENT_KEY
+
+const ga = {
+  appName: 'tryclicker.com',
+  appVersion: '0.1',
+  trackingId: process.env.VUE_APP_GOOGLE_ANALYTICS_KEY,
 }
+
+const mixpanel = {
+  token: process.env.VUE_APP_MIXPANEL_KEY
+}
+
+
 Vue.use(VueMultianalytics, {
   modules: {
-    segment: segmentConfig
-  },
-  routing: {
-    vueRouter: router
-  },
+    ga,
+    mixpanel,
+  }
 })
 
 Vue.config.productionTip = false;
