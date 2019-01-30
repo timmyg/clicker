@@ -11,23 +11,28 @@ Vue.prototype.$http = axios.create({
 
 import VueMultianalytics from 'vue-multianalytics'
 
-const ga = {
-  appName: 'tryclicker.com',
-  appVersion: '0.1',
-  trackingId: process.env.VUE_APP_GOOGLE_ANALYTICS_KEY,
-}
-
-const mixpanel = {
-  token: process.env.VUE_APP_MIXPANEL_KEY
-}
-
-
-Vue.use(VueMultianalytics, {
-  modules: {
-    ga,
-    mixpanel,
+if (process.env.NODE_ENV === 'production') {
+  const ga = {
+    appName: 'tryclicker.com',
+    appVersion: '0.1',
+    trackingId: process.env.VUE_APP_GOOGLE_ANALYTICS_KEY,
   }
-})
+
+  const mixpanel = {
+    token: process.env.VUE_APP_MIXPANEL_KEY
+  }
+
+
+  Vue.use(VueMultianalytics, {
+    modules: {
+      ga,
+      mixpanel,
+    },
+    routing: {
+      vueRouter: router
+    }
+  })
+}
 
 Vue.config.productionTip = false;
 

@@ -44,7 +44,7 @@ export default {
     onSubmit() {
       this.submitting = true;
       const { email } = this;
-      this.$ma.setUserProperties({ email });
+      this.$ma.setUsername(email);
       this.$http
         .post('hitmeback', { email })
         .then(() => {
