@@ -1,7 +1,7 @@
 const dynamoose = require('dynamoose');
 require('dotenv').config();
 
-const Device = dynamoose.model(
+const Widget = dynamoose.model(
   process.env.tableName,
   {
     losantId: {
@@ -32,6 +32,10 @@ function generateResponse(statusCode, body = {}) {
   };
 }
 
+module.exports.health = async event => {
+  return generateResponse(200, 'i\'m good');
+};
+
 /**
  * Registers a device if it has not been registered (losantId is PK)
  * @param   {string} losantId device identifier for Losant platform (event.body)
@@ -59,7 +63,7 @@ module.exports.create = async event => {
  */
 module.exports.list = async () => {
   try {
-    const allDevices = await Device.scan().exec();
+    const allDevices = await Widget.scan().exec();
     return generateResponse(200, allDevices);
   } catch (e) {
     return generateResponse(400, `Could not list: ${e.stack}`);
@@ -75,7 +79,7 @@ module.exports.list = async () => {
 module.exports.get = async event => {
   try {
     const { losantId } = event.pathParameters;
-    const device = await Device.get({ losantId });
+    const device = await Widget.get({ losantId });
     if (device) {
       return generateResponse(200, device);
     }
@@ -96,7 +100,7 @@ module.exports.get = async event => {
 module.exports.getIp = async event => {
   try {
     const { losantId } = event.pathParameters;
-    const device = await Device.get({ losantId });
+    const device = await Widget.get({ losantId });
     if (!device) {
       return generateResponse(404, `Device ${losantId} does not exist`);
     }
@@ -129,7 +133,7 @@ module.exports.update = async event => {
   try {
     const { losantId } = event.pathParameters;
     const body = JSON.parse(event.body);
-    const updatedDevice = await Device.update({ losantId }, body);
+    const updatedDevice = await Widget.update({ losantId }, body);
     return generateResponse(200, updatedDevice);
   } catch (e) {
     return generateResponse(400, `Could not update: ${e.stack}`);
@@ -145,7 +149,7 @@ module.exports.update = async event => {
 module.exports.delete = async event => {
   try {
     const { losantId } = event.pathParameters;
-    const updatedDevice = await Device.delete({ losantId });
+    const updatedDevice = await Widget.delete({ losantId });
     return generateResponse(200, updatedDevice);
   } catch (e) {
     return generateResponse(400, `Could not delete: ${e.stack}`);

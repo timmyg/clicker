@@ -1,0 +1,51 @@
+service: serverless-api-with-dynamodb
+
+frameworkVersion: '>=1.1.0 <2.0.0'
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  environment:
+    tableName: ${self:custom.tableName}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+custom: ${file(resources/custom.yml)}
+resources:
+  - ${file(resources/dynamodb-table.yml)}
+
+functions:
+  remoteCommand:
+    handler: api/remote.command
+    environment:
+      LOSANT_APPLICATION_ID: ${env:LOSANT_APPLICATION_ID}
+      LOSANT_KEY: ${env:LOSANT_KEY}
+      LOSANT_SECRET: ${env:LOSANT_SECRET}
+      LOGZIO_TOKEN: ${env:LOGZIO_TOKEN}
+    events:
+      - http:
+          path: remote/{losantId}
+          method: post
+          cors: true
+          request:
+            parameters:
+              paths:
+                losantId: true
+  botIncoming:
+    handler: api/bot.smsIncoming
+    events:
+      - http:
+          path: bot/sms/incoming
+          method: post
+          cors: true
+  newLead:
+    handler: api/lead.new
+    events:
+      - http:
+          path: hitmeback
+          method: post
+          cors: true
