@@ -5,10 +5,9 @@ provider:
   runtime: nodejs8.10
   environment:
     tableName: ${self:custom.tableName}
+    serviceName: ${self:service}
   stage: ${self:custom.stage}
   region: us-east-1
-  environment:
-    SERVICE_NAME: ${self:service}
 
 plugins:
   - serverless-domain-manager
