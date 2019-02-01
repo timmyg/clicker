@@ -26,7 +26,10 @@ defaults: &defaults
             npm run deploy:stage
           fi
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-            npm run deploy:develop
+            echo 'we in develop'
+            AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_DEV STAGE=$STAGE_DEV
+            serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE
+            SLS_DEBUG=* serverless deploy  --aws-profile $PROFILE
           fi
 
 version: 2.0
