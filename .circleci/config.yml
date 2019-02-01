@@ -27,6 +27,7 @@ defaults: &defaults
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
             echo "$AWS_ACCESS_KEY_ID"
             echo "$AWS_SECRET_ACCESS_KEY"
+            npx serverless --version
             npx serverless deploy --verbose --stage develop
           fi
 
