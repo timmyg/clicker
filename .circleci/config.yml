@@ -19,27 +19,16 @@ defaults: &defaults
     - run:
         name: Deploy application
         command: |
+          AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_DEV STAGE=$STAGE_DEV
+
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            npm run deploy:prod
+            serverless deploy --stage prod -v
           fi
           if [ "${CIRCLE_BRANCH}" == "stage" ]; then
-            npm run deploy:stage
+            serverless deploy --stage stage -v
           fi
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-            echo "we in develop"
-            echo "$AWS_KEY"
-            echo "$AWS_SECRET"
-            echo "$PROFILE_DEV"
-            echo "$STAGE_DEV"
-            AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_DEV STAGE=$STAGE_DEV
-            echo "2"
-            echo "$AWS_KEY"
-            echo "$AWS_SECRET"
-            echo "$PROFILE_DEV"
-            serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE_DEV
-            echo "3"
-            echo "$PROFILE"
-            SLS_DEBUG=* serverless deploy  --aws-profile $PROFILE
+            serverless deploy --stage stage -v
           fi
 
 version: 2.0

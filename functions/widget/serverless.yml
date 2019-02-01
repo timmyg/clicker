@@ -9,8 +9,8 @@ provider:
   stage: ${self:custom.stage}
   region: us-east-1
 
-plugins:
-  - serverless-domain-manager
+# plugins:
+#   - serverless-domain-manager
 
 custom:
   # Our stage is based on what is passed in when running serverless
@@ -23,28 +23,28 @@ custom:
     prod: 5
     default: 1
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
-  customDomain:
-    domainName: 'api.tryclicker.com' # Change this to your domain.
-    basePath: 'widgets' # This will be prefixed to all routes
-    stage: ${self:provider.stage}
-    createRoute53Record: true
+#   customDomain:
+#     domainName: 'api.tryclicker.com' # Change this to your domain.
+#     basePath: 'widgets' # This will be prefixed to all routes
+#     stage: ${self:provider.stage}
+#     createRoute53Record: true
 
-resources:
-  - Resources:
-    WidgetsTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableName}
-        AttributeDefinitions:
-          - AttributeName: losantId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: losantId
-            KeyType: HASH
-        # Set the capacity based on the stage
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
+# resources:
+#   - Resources:
+#     WidgetsTable:
+#       Type: 'AWS::DynamoDB::Table'
+#       Properties:
+#         TableName: ${self:custom.tableName}
+#         AttributeDefinitions:
+#           - AttributeName: losantId
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: losantId
+#             KeyType: HASH
+#         # Set the capacity based on the stage
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: ${self:custom.tableThroughput}
+#           WriteCapacityUnits: ${self:custom.tableThroughput}
 
 
 
