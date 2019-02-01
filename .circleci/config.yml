@@ -10,10 +10,11 @@ jobs:
       - image: circleci/node:8.10
     working_directory: ~/captain/functions/widget
     steps:
-      - serverlessci
+      - sayhello:
+          to: 'Lev'
 
 commands:
-  serverlessci:
+  sayhello:
     description: 'CI steps for building, testing, deploying serverless functions'
     parameters:
       to:
