@@ -7,7 +7,6 @@ defaults: &defaults
     - run:
         name: Install Serverless CLI and dependencies
         command: |
-          sudo npm i -g serverless
           npm i
     - save_cache: # special step to save the dependency cache
         key: dependency-cache-{{ checksum "package.json" }}
@@ -28,7 +27,7 @@ defaults: &defaults
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
             echo "$AWS_ACCESS_KEY_ID"
             echo "$AWS_SECRET_ACCESS_KEY"
-            serverless deploy --verbose --stage stage
+            serverless deploy --verbose --stage develop
           fi
 
 version: 2.0
