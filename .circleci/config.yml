@@ -19,8 +19,6 @@ defaults: &defaults
     - run:
         name: Deploy application
         command: |
-          AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_DEV STAGE=$STAGE_DEV
-
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
             serverless deploy --stage prod -v
           fi
@@ -28,7 +26,9 @@ defaults: &defaults
             serverless deploy --stage stage -v
           fi
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-            serverless deploy --stage stage -v
+            echo "$AWS_ACCESS_KEY_ID"
+            echo "$AWS_SECRET_ACCESS_KEY"
+            serverless deploy --verbose --stage stage
           fi
 
 version: 2.0
