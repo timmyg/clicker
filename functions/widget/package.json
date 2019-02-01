@@ -4,7 +4,10 @@
   "description": "",
   "main": "widget.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage",
+    "deploy:develop": "AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_DEV STAGE=$STAGE_DEV && serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE && cd widget && SLS_DEBUG=* serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
+    "deploy:stage": "AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_STAGE STAGE=$STAGE_STAGE && serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE && cd widget && SLS_DEBUG=* serverless deploy -v --stage $STAGE --aws-profile $PROFILE",
+    "deploy:prod": "AWS_KEY=$AWS_KEY AWS_SECRET=$AWS_SECRET PROFILE=$PROFILE_PROD STAGE=$STAGE_PROD && serverless config credentials -o --provider aws --key $AWS_KEY --secret $AWS_SECRET -n $PROFILE && cd widget && SLS_DEBUG=* serverless deploy -v --stage $STAGE --aws-profile $PROFILE"
   },
   "dependencies": {
     "dotenv": "^6.2.0",

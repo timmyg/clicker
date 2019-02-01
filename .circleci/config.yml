@@ -4,39 +4,47 @@ jobs:
     branches:
       only:
         - master
-        # - develop
-        #  - /feature-.*/
+        - stage
+        - develop
     docker:
       - image: circleci/node:8.10
+    working_directory: ~/captain/functions/widget
+    steps:
+      - serverlessci
 
-    working_directory: ~/captain/functions
-
+commands:
+  serverlessci:
+    description: 'CI steps for building, testing, deploying serverless functions'
+    parameters:
+      to:
+        type: string
+        default: 'Hello World'
     steps:
       - checkout:
           path: ~/captain
-
-      # Download and cache dependencies
       - restore_cache:
-          keys:
-            - v1-dependencies-
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install Serverless CLI and dependencies
           command: |
             sudo npm i -g serverless
             npm i
-
-      - save_cache:
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - node_modules
-          key: v1-dependencies-
-
+            - ./node_modules
       - run:
           name: Run tests
           command: npm test
-
       - run:
           name: Deploy application
-          command: npm run deploy:prod
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              npm run deploy:prod
+            fi
+            if [ "${CIRCLE_BRANCH}" == "stage" ]; then
+              npm run deploy:stage
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npm run deploy:develop
+            fi
