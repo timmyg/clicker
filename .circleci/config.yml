@@ -5,7 +5,7 @@ defaults: &defaults
     - restore_cache:
         key: dependency-cache-{{ checksum "package.json" }}
     - run:
-        name: Install Serverless CLI and dependencies
+        name: install dependencies
         command: |
           npm i
     - save_cache: # special step to save the dependency cache
@@ -13,18 +13,19 @@ defaults: &defaults
         paths:
           - ./node_modules
     - run:
-        name: Run tests
+        name: run tests
         command: npm test
     - run:
-        name: Deploy application
+        name: deploy functions
         command: |
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            serverless deploy --stage prod -v
+            npx serverless deploy --verbose --stage prod
           fi
           if [ "${CIRCLE_BRANCH}" == "stage" ]; then
-            serverless deploy --stage stage -v
+            npx serverless deploy --verbose --stage stage
           fi
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+            echo $PWD
             echo "$AWS_ACCESS_KEY_ID"
             echo "$AWS_SECRET_ACCESS_KEY"
             npx serverless --version
@@ -42,14 +43,4 @@ jobs:
     docker:
       - image: circleci/node:8.10
     working_directory: ~/captain/functions/widget
-    #     steps:
-    #       - serverlessci
-
-    # commands:
-    #   serverlessci:
-    # description: 'CI steps for building, testing, deploying serverless functions'
-    # parameters:
-    #   to:
-    #     type: string
-    #     default: 'Hello World'
     <<: *defaults
