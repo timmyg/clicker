@@ -2,7 +2,7 @@ const dynamoose = require('dynamoose');
 require('dotenv').config();
 
 const Widget = dynamoose.model(
-  process.env.tableName,
+  process.env.tableWidget,
   {
     losantId: {
       type: String,

@@ -29,7 +29,7 @@ defaults: &defaults
             echo "$AWS_ACCESS_KEY_ID"
             echo "$AWS_SECRET_ACCESS_KEY"
             npx serverless --version
-            npx serverless deploy --verbose --stage develop
+            npx serverless deploy--stage develop -v
           fi
 
 version: 2.0
