@@ -56,6 +56,6 @@ functions:
     handler: widget.health
     events:
       - http:
-          path: widget/health
+          path: health
           method: get
           cors: true
