@@ -40,14 +40,4 @@ jobs:
     docker:
       - image: circleci/node:8.10
     working_directory: ~/captain/functions/widget
-    #     steps:
-    #       - serverlessci
-
-    # commands:
-    #   serverlessci:
-    # description: 'CI steps for building, testing, deploying serverless functions'
-    # parameters:
-    #   to:
-    #     type: string
-    #     default: 'Hello World'
     <<: *defaults
