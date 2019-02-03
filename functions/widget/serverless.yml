@@ -14,18 +14,12 @@ provider:
         - lambda:InvokeAsync
       Resource: '*'
 
-# plugins:
-#   - serverless-domain-manager
+plugins:
+  - serverless-domain-manager
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-<<<<<<< HEAD
   tableWidget: widgets-${self:custom.stage}
-=======
-  # Set the table name here so we can use it while testing locally
-  tableWidget: widgets-${self:custom.stage}
-  # Set our DynamoDB throughput for prod and all other non-prod stages.
->>>>>>> 31148c7bc467da77fcd06594c750f62ad8034ed8
   tableThroughputs:
     prod: 5
     default: 1
@@ -34,7 +28,6 @@ custom:
     stage: api-stage.tryclicker.com
     dev: api-dev.tryclicker.com
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
-<<<<<<< HEAD
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: 'widgets'
@@ -42,14 +35,6 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-=======
-  # customDomain:
-  #   domainName: 'api.tryclicker.com' # Change this to your domain.
-  #   basePath: 'widgets' # This will be prefixed to all routes
-  #   stage: ${self:provider.stage}
-  #   createRoute53Record: true
-
->>>>>>> 31148c7bc467da77fcd06594c750f62ad8034ed8
 resources:
   Resources:
     DevicesTable:
@@ -74,64 +59,3 @@ functions:
           path: widget/health
           method: get
           cors: true
-<<<<<<< HEAD
-=======
-  create:
-    handler: api/widget.create
-    events:
-      - http:
-          path: widget
-          method: post
-          cors: true
-  list:
-    handler: api/widget.list
-    events:
-      - http:
-          path: widget
-          method: get
-          cors: true
-  getIp:
-    handler: api/widget.getIp
-    events:
-      - http:
-          path: widget/{losantId}/ip
-          method: get
-          cors: true
-          request:
-            parameters:
-              paths:
-                losantId: true
-  get:
-    handler: api/widget.get
-    events:
-      - http:
-          path: widget/{losantId}
-          method: get
-          cors: true
-          request:
-            parameters:
-              paths:
-                losantId: true
-  update:
-    handler: api/widget.update
-    events:
-      - http:
-          path: widget/{losantId}
-          method: put
-          cors: true
-          request:
-            parameters:
-              paths:
-                losantId: true
-  delete:
-    handler: api/widget.delete
-    events:
-      - http:
-          path: widget/{losantId}
-          method: delete
-          cors: true
-          request:
-            parameters:
-              paths:
-                losantId: true
->>>>>>> 31148c7bc467da77fcd06594c750f62ad8034ed8
