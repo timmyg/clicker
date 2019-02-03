@@ -8,7 +8,7 @@ defaults: &defaults
         name: Install Serverless CLI and dependencies
         command: |
           sudo npm i -g serverless
-          npm i
+          npm i --only=production
     - save_cache: # special step to save the dependency cache
         key: dependency-cache-{{ checksum "package.json" }}
         paths:
@@ -20,13 +20,13 @@ defaults: &defaults
         name: Deploy application
         command: |
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            npm run deploy:prod
+            npx serverless deploy --stage prod --verbose
           fi
           if [ "${CIRCLE_BRANCH}" == "stage" ]; then
-            npm run deploy:stage
+            npx serverless deploy --stage stage --verbose
           fi
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-            npm run deploy:develop
+            npx serverless deploy --stage dev --verbose
           fi
 
 version: 2.0

@@ -2,7 +2,7 @@ const dynamoose = require('dynamoose');
 require('dotenv').config();
 
 const Widget = dynamoose.model(
-  process.env.tableName,
+  process.env.tableWidget,
   {
     losantId: {
       type: String,
@@ -33,7 +33,7 @@ function generateResponse(statusCode, body = {}) {
 }
 
 module.exports.health = async event => {
-  return generateResponse(200, `${process.env.serviceName}: i\'m good`);
+  return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableWidget})`);
 };
 
 /**
