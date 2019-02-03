@@ -6,8 +6,7 @@ defaults: &defaults
         key: dependency-cache-{{ checksum "package.json" }}
     - run:
         name: Install dependencies
-        command: |
-          npm i
+        command: npm i
     - save_cache: # special step to save the dependency cache
         key: dependency-cache-{{ checksum "package.json" }}
         paths:
