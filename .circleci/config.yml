@@ -1,24 +1,6 @@
-version: 2.0
-jobs:
-  build-widget:
-    docker:
-      - image: circleci/node:8.10
-    working_directory: ~/captain/functions/widget
-    <<: *defaults
-  build-lead:
-    docker:
-      - image: circleci/node:8.10
-    working_directory: ~/captain/functions/lead
-    <<: *defaults
-
-workflows:
-  version: 2
-  build-test-deploy:
-    jobs:
-      - build-widget
-      - build-lead
-      
 defaults: &defaults
+  docker:
+    - image: circleci/node:8.10
   steps:
     - checkout:
         path: ~/captain
@@ -51,3 +33,19 @@ defaults: &defaults
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
             npx serverless deploy --stage dev --verbose
           fi
+
+version: 2.0
+jobs:
+  build-widget:
+    working_directory: ~/captain/functions/widget
+    <<: *defaults
+  build-lead:
+    working_directory: ~/captain/functions/lead
+    <<: *defaults
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build-widget
+      - build-lead
