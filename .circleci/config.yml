@@ -1,6 +1,6 @@
 version: 2.0
 jobs:
-  build-widget:
+  build:
     branches:
       only:
         - master
