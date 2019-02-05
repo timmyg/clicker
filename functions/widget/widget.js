@@ -33,7 +33,7 @@ function generateResponse(statusCode, body = {}) {
 }
 
 module.exports.health = async event => {
-  return generateResponse(200, `${process.env.serviceName}: i\'m good`);
+  return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableWidget})`);
 };
 
 /**

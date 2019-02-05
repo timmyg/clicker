@@ -5,31 +5,26 @@ defaults: &defaults
     - restore_cache:
         key: dependency-cache-{{ checksum "package.json" }}
     - run:
-        name: install dependencies
-        command: |
-          npm i
+        name: Install dependencies
+        command: npm i
     - save_cache: # special step to save the dependency cache
         key: dependency-cache-{{ checksum "package.json" }}
         paths:
           - ./node_modules
     - run:
-        name: run tests
+        name: Run tests
         command: npm test
     - run:
-        name: deploy functions
+        name: Deploy application
         command: |
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            npx serverless deploy --verbose --stage prod
+            npx serverless deploy --stage prod --verbose
           fi
           if [ "${CIRCLE_BRANCH}" == "stage" ]; then
-            npx serverless deploy --verbose --stage stage
+            npx serverless deploy --stage stage --verbose
           fi
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-            echo $PWD
-            echo "$AWS_ACCESS_KEY_ID"
-            echo "$AWS_SECRET_ACCESS_KEY"
-            npx serverless --version
-            npx serverless deploy --stage develop -v
+            npx serverless deploy --stage dev --verbose
           fi
 
 version: 2.0
