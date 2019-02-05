@@ -73,9 +73,9 @@ jobs:
   #             npx serverless deploy --stage dev --verbose
   #           fi
 
-workflows:
-  version: 2
-  build-test-deploy:
-    jobs:
-      - build-widget
-      # - build-lead
+# workflows:
+#   version: 2
+#   build-test-deploy:
+#     jobs:
+#       - build-widget
+#       # - build-lead
