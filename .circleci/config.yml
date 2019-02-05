@@ -1,35 +1,6 @@
-defaults: &defaults
-  steps:
-    - checkout:
-        path: ~/captain
-    - restore_cache:
-        key: dependency-cache-{{ checksum "package.json" }}
-    - run:
-        name: Install dependencies
-        command: npm i
-    - save_cache: # special step to save the dependency cache
-        key: dependency-cache-{{ checksum "package.json" }}
-        paths:
-          - ./node_modules
-    - run:
-        name: Run tests
-        command: npm test
-    - run:
-        name: Deploy application
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            npx serverless deploy --stage prod --verbose
-          fi
-          if [ "${CIRCLE_BRANCH}" == "stage" ]; then
-            npx serverless deploy --stage stage --verbose
-          fi
-          if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-            npx serverless deploy --stage dev --verbose
-          fi
-
 version: 2.0
 jobs:
-  build_widget:
+  build-widget:
     branches:
       only:
         - master
@@ -38,8 +9,34 @@ jobs:
     docker:
       - image: circleci/node:8.10
     working_directory: ~/captain/functions/widget
-    <<: *defaults
-  build_lead:
+    steps:
+      - checkout:
+          path: ~/captain
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm i
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Run tests
+          command: npm test
+      - run:
+          name: Deploy application
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              npx serverless deploy --stage prod --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "stage" ]; then
+              npx serverless deploy --stage stage --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npx serverless deploy --stage dev --verbose
+            fi
+  build-lead:
     branches:
       only:
         - master
@@ -48,11 +45,37 @@ jobs:
     docker:
       - image: circleci/node:8.10
     working_directory: ~/captain/functions/lead
-    <<: *defaults
+    steps:
+      - checkout:
+          path: ~/captain
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm i
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Run tests
+          command: npm test
+      - run:
+          name: Deploy application
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              npx serverless deploy --stage prod --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "stage" ]; then
+              npx serverless deploy --stage stage --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npx serverless deploy --stage dev --verbose
+            fi
 
 workflows:
   version: 2
-  build_test_deploy:
+  build-test-deploy:
     jobs:
       - build_widget
       - build_lead
