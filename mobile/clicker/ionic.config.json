@@ -1,7 +1,0 @@
-{
-  "name": "clicker",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
-}
