@@ -1,0 +1,40 @@
+service: lead
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  runtime: nodejs8.10
+  environment:
+    HUBSPOT_API_KEY: ${env:HUBSPOT_API_KEY}
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  domains:
+    prod: api.tryclicker.com
+    stage: api-stage.tryclicker.com
+    dev: api-dev.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: 'leads'
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+
+functions:
+  new:
+    handler: lead.new
+    events:
+      - http:
+          path: hitmeback
+          method: post
+          cors: true
+  health:
+    handler: lead.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors: true

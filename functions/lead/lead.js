@@ -30,9 +30,12 @@ module.exports.new = async (event, context) => {
   const body = JSON.parse(event.body);
   const { email, source } = body;
   const contact = {
-    properties: [{ property: 'email', value: email },
-    { property: 'source', value: 'landing page' }],
+    properties: [{ property: 'email', value: email }, { property: 'source', value: 'landing page' }],
   };
   const hubspotContact = await hubspot.contacts.create(contact);
   return generateResponse(201, hubspotContact);
+};
+
+module.exports.health = async event => {
+  return generateResponse(200, `hello`);
 };

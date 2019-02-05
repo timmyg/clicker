@@ -29,7 +29,7 @@ defaults: &defaults
 
 version: 2.0
 jobs:
-  build:
+  build_widget:
     branches:
       only:
         - master
@@ -38,4 +38,14 @@ jobs:
     docker:
       - image: circleci/node:8.10
     working_directory: ~/captain/functions/widget
+    <<: *defaults
+  build_lead:
+    branches:
+      only:
+        - master
+        - stage
+        - develop
+    docker:
+      - image: circleci/node:8.10
+    working_directory: ~/captain/functions/lead
     <<: *defaults
