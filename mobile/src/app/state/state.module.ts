@@ -5,9 +5,10 @@ import { StoreModule } from '@ngrx/store';
 
 import { appReducer } from './app.reducer';
 import { LocationsEffects } from './location/location.effects';
+import { GamesEffects } from './game/game.effects';
 
 @NgModule({
-  imports: [CommonModule, StoreModule.forRoot(appReducer), EffectsModule.forRoot([LocationsEffects])],
+  imports: [CommonModule, StoreModule.forRoot(appReducer), EffectsModule.forRoot([LocationsEffects, GamesEffects])],
   declarations: [],
 })
 export class StateModule {

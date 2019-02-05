@@ -1,3 +1,15 @@
-<p>
-  games works!
-</p>
+<ion-header>
+  <ion-toolbar> <ion-title> choose your game</ion-title> </ion-toolbar>
+</ion-header>
+<section>
+  <ion-list>
+    <ion-card *ngFor="let game of (games$ | async)" [routerLink]="['../tvs']">
+      <ion-card-header>
+        <ion-card-subtitle>
+          <span>{{ game.start | amDateFormat: 'h:mm a' }}</span> <span float-right></span>
+        </ion-card-subtitle>
+        <ion-card-title>{{ game.title }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+</section>

@@ -12,7 +12,7 @@ import * as fromLocation from '../../../state/location/location.actions';
   styleUrls: ['./locations.component.scss'],
 })
 export class LocationsComponent implements OnInit {
-  locations$: Observable<Array<Establishment>>;
+  locations$: Observable<Establishment[]>;
 
   constructor(private store: Store<fromStore.AppState>) {
     this.locations$ = this.store.select(getAllLocations);

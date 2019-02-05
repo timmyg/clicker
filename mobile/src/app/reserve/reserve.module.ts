@@ -9,6 +9,7 @@ import { ReservePage } from './reserve.page';
 import { LocationsComponent } from './components/locations/locations.component';
 import { GamesComponent } from './components/games/games.component';
 import { TvsComponent } from './components/tvs/tvs.component';
+import { MomentModule } from 'ngx-moment';
 
 const routes: Routes = [
   {
@@ -31,7 +32,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
   declarations: [ReservePage, LocationsComponent, GamesComponent, TvsComponent],
 })
 export class ReservePageModule {}
