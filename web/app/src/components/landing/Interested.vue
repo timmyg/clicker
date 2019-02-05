@@ -46,7 +46,7 @@ export default {
       const { email } = this;
       this.$ma.setUsername(email); 
       this.$http
-        .post('hitmeback', { email })
+        .post('/leads/hitmeback', { email })
         .then(() => {
           this.submitting = false;
           this.submitted = true;

@@ -6,3 +6,12 @@
 
   # Default build command.
   command = "npm run build"
+
+[context.production.environment]
+  VUE_APP_API_URL = "https://api.tryclicker.com"
+  VUE_APP_GOOGLE_ANALYTICS_KEY = "UA-133061864-1"
+  VUE_APP_MIXPANEL_KEY = "a5f9c5bd18751b156742e6bf23b744f5"
+  VUE_APP_SEGMENT_KEY = "Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I"
+[context.stage.environment]
+[context.development.environment]
+
