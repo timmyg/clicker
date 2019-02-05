@@ -1,7 +1,1 @@
-<ion-header>
-  <ion-toolbar> <ion-title>reserve</ion-title> </ion-toolbar>
-</ion-header>
-
 <div *ngIf="(loading$ | async)">loading</div>
-<!-- <ion-content padding> <app-locations [locations]="locations$ | async"></app-locations> </ion-content> -->
-<div *ngFor="let l of (locations$ | async)">{{ l.name }}</div>

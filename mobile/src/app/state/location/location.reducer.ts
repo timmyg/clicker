@@ -23,6 +23,7 @@ export function reducer(state = initialState, action: fromLocation.LocationActio
     }
 
     case fromLocation.GET_ALL_LOCATIONS_SUCCESS: {
+      console.log(action);
       return {
         ...state,
         loading: false,
@@ -44,19 +45,6 @@ export function reducer(state = initialState, action: fromLocation.LocationActio
   }
 }
 
-export const getAllLocations = (state: State) => {
-  // TODO dont think we should have this if() but is undefined at first
-  if (state) {
-    return state.locations;
-  }
-};
-export const getLoading = (state: State) => {
-  if (state) {
-    return state.loading;
-  }
-};
-export const getError = (state: State) => {
-  if (state) {
-    return state.error;
-  }
-};
+export const getAllLocations = (state: State) => state.locations;
+export const getLoading = (state: State) => state.loading;
+export const getError = (state: State) => state.error;

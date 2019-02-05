@@ -14,8 +14,22 @@ export class LocationService {
     // return this.httpClient.get<Establishment[]>(this.url);
     const location1: Establishment = {
       id: 1,
-      name: 'Buffalo Wings & Rings: Oakley',
+      name: 'Buffalo Wings & Rings',
+      town: 'Oakley Station',
+      distance: '0.1 miles',
     };
-    return of([location1]).pipe(delay(1000));
+    const location2: Establishment = {
+      id: 1,
+      name: 'Buffalo Wings & Rings',
+      town: 'Finneytown',
+      distance: '7 miles',
+    };
+    const location3: Establishment = {
+      id: 1,
+      name: 'Buffalo Wings & Rings',
+      town: 'Beechmont',
+      distance: '12 miles',
+    };
+    return of([location1, location2, location3]).pipe(delay(1000));
   }
 }

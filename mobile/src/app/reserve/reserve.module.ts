@@ -6,14 +6,27 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ReservePage } from './reserve.page';
-import { LocationsComponent } from './presentation/locations/locations.component';
-import { GamesComponent } from './presentation/games/games.component';
-import { TvsComponent } from './presentation/tvs/tvs.component';
+import { LocationsComponent } from './components/locations/locations.component';
+import { GamesComponent } from './components/games/games.component';
+import { TvsComponent } from './components/tvs/tvs.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ReservePage,
+    redirectTo: 'locations',
+    pathMatch: 'full',
+  },
+  {
+    path: 'locations',
+    component: LocationsComponent,
+  },
+  {
+    path: 'games',
+    component: GamesComponent,
+  },
+  {
+    path: 'tvs',
+    component: TvsComponent,
   },
 ];
 

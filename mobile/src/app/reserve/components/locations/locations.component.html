@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar> <ion-title> choose your location</ion-title> </ion-toolbar>
+</ion-header>
+<section>
+  <ion-list>
+    <ion-card *ngFor="let location of (locations$ | async)" [routerLink]="['../games']">
+      <ion-card-header>
+        <ion-card-subtitle>
+          <span>{{ location.town }}</span> <span float-right>{{ location.distance }}</span>
+        </ion-card-subtitle>
+        <ion-card-title>{{ location.name }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+</section>
