@@ -17,6 +17,8 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "serverless": "^1.36.3",
+    "serverless-domain-manager": "^2.6.13"
   }
 }
