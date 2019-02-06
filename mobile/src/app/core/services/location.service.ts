@@ -17,18 +17,21 @@ export class LocationService {
       name: 'Buffalo Wings & Rings',
       town: 'Oakley Station',
       distance: '0.1 miles',
+      img: '/assets/bwr-logo.png',
     };
     const location2: Establishment = {
       id: 1,
       name: 'Buffalo Wings & Rings',
       town: 'Finneytown',
       distance: '7 miles',
+      img: '/assets/bwr-logo.png',
     };
     const location3: Establishment = {
       id: 1,
       name: 'Buffalo Wings & Rings',
       town: 'Beechmont',
       distance: '12 miles',
+      img: '/assets/bwr-logo.png',
     };
     return of([location1, location2, location3]).pipe(delay(500));
   }

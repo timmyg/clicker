@@ -8,7 +8,9 @@
         <ion-card-subtitle>
           <span>{{ location.town }}</span> <span float-right>{{ location.distance }}</span>
         </ion-card-subtitle>
-        <ion-card-title>{{ location.name }}</ion-card-title>
+        <ion-card-title>
+          <img [src]="location.img" class="logo" /> <span>{{ location.name }}</span>
+        </ion-card-title>
       </ion-card-header>
     </ion-card>
   </ion-list>

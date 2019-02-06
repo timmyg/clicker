@@ -6,9 +6,9 @@
     <ion-card *ngFor="let game of games" (click)="onGameClick(game)">
       <ion-card-header>
         <ion-card-subtitle>
-          <span>{{ game.start | amDateFormat: 'h:mm a' }}</span> <span float-right></span>
+          <span>{{ game.start | amDateFormat: 'h:mm a' }}</span>
         </ion-card-subtitle>
-        <ion-card-title>{{ game.title }}</ion-card-title>
+        <ion-card-title> <ion-icon name="basketball" size="large"></ion-icon>{{ game.title }} </ion-card-title>
       </ion-card-header>
     </ion-card>
   </ion-list>

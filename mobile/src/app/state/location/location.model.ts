@@ -3,4 +3,5 @@ export interface Establishment {
   name: string;
   town: string;
   distance?: string;
+  img?: string;
 }
