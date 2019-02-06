@@ -4,15 +4,15 @@
 <section>
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>ESPN2</ion-card-subtitle>
-      <ion-card-title>Kansas at Oklahoma State</ion-card-title>
+      <ion-card-subtitle>{{ reservation.game.channelTitle }}</ion-card-subtitle>
+      <ion-card-title>{{ reservation.gameTitle }}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-      <p>You are reserving TV #21 until 8:05pm for 2 tokens</p>
-      <p>[insert coin icon] x 2</p>
+      <p>You are reserving TV {{ reservation.tvTag }} until {{ reservation.end | amDateFormat: 'h:mm a' }}</p>
+      <p><b>Cost:</b> {{ reservation.cost }} tokens</p>
     </ion-card-content>
   </ion-card>
 
-  <ion-button color="success" size="large" expand="block" (click)="onConfirm()">Confirm</ion-button>
+  <ion-button color="success" size="large" expand="block" (click)="onConfirm()">Confirm (2 tokens)</ion-button>
 </section>

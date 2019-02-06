@@ -17,6 +17,8 @@ export class GameService {
       id: 1,
       title: 'Xavier at Georgetown',
       type: 'basketball',
+      channel: 206,
+      channelTitle: 'FS1',
       start: moment()
         .hour(20)
         .minutes(0)
@@ -26,6 +28,8 @@ export class GameService {
       id: 1,
       title: 'West Virginia at Texas Tech',
       type: 'basketball',
+      channel: 206,
+      channelTitle: 'ESPN2',
       start: moment()
         .hour(20)
         .minutes(0)
@@ -35,6 +39,8 @@ export class GameService {
       id: 1,
       title: 'North Carolina at Duke',
       type: 'basketball',
+      channel: 206,
+      channelTitle: 'ESPN',
       start: moment()
         .hour(20)
         .minutes(30)
@@ -44,6 +50,8 @@ export class GameService {
       id: 1,
       title: 'LSU at Florida State',
       type: 'basketball',
+      channel: 206,
+      channelTitle: 'ACCN',
       start: moment()
         .hour(20)
         .minutes(30)
@@ -53,6 +61,8 @@ export class GameService {
       id: 1,
       title: 'Kansas at Oklahoma State',
       type: 'basketball',
+      channel: 206,
+      channelTitle: 'ESPN',
       start: moment()
         .hour(20)
         .minutes(0)
@@ -62,6 +72,8 @@ export class GameService {
       id: 1,
       title: 'Cincinnati at Memphis',
       type: 'basketball',
+      channel: 206,
+      channelTitle: 'CBSSN',
       start: moment()
         .hour(20)
         .minutes(0)
@@ -71,6 +83,8 @@ export class GameService {
       id: 1,
       title: 'St. Marys at Gonzaga',
       type: 'basketball',
+      channel: 206,
+      channelTitle: 'ESPNU',
       start: moment()
         .hour(22)
         .minutes(0)

@@ -53,7 +53,8 @@ export class ReservePage implements OnInit {
   }
   onChooseTv(tv: TV) {
     this.reservation.tv = tv;
-    this.reservation.activeStep = 'confirms';
+    this.reservation.activeStep = 'confirmation';
+    console.log('confirm');
   }
   onConfirm() {
     this.navCtrl.navigateForward('/tabs/profile');

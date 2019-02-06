@@ -11,4 +11,23 @@ export class Reservation {
   location: Establishment;
   game: Game;
   tv: TV;
+  start: Date;
+  end: Date;
+  cost: number;
+
+  get tvTag() {
+    return this.tv.tag;
+  }
+
+  get locationName() {
+    return this.location.name;
+  }
+
+  get locationTown() {
+    return this.location.town;
+  }
+
+  get gameTitle() {
+    return this.game.title;
+  }
 }

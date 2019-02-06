@@ -11,5 +11,9 @@
     (chooseGame)="onChooseGame($event)"
   ></app-games>
   <app-tvs *ngIf="reservation.activeStep === 'tvs'" [tvs]="tvs$ | async" (chooseTv)="onChooseTv($event)"></app-tvs>
-  <app-confirmation *ngIf="reservation.activeStep === 'confirmation'" (confirm)="onConfirm()"></app-confirmation>
+  <app-confirmation
+    *ngIf="reservation.activeStep === 'confirmation'"
+    [reservation]="reservation"
+    (confirm)="onConfirm()"
+  ></app-confirmation>
 </section>

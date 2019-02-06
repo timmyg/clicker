@@ -13,7 +13,7 @@ import { Establishment } from 'src/app/state/location/location.model';
   styleUrls: ['./tvs.component.scss'],
 })
 export class TvsComponent implements OnInit {
-  @Output() chooseLocation = new EventEmitter<TV>();
+  @Output() chooseTv = new EventEmitter<TV>();
   @Input() tvs: TV[];
 
   constructor() {}
@@ -21,6 +21,6 @@ export class TvsComponent implements OnInit {
   ngOnInit() {}
 
   onTvClick(tv: TV) {
-    this.chooseLocation.emit(tv);
+    this.chooseTv.emit(tv);
   }
 }

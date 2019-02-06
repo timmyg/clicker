@@ -1,11 +1,14 @@
-[build]
-  # Directory to change to before starting a build. 
-  # This is where we will look for package.json/.nvmrc/etc.
-  base = "web/app/"
-  publish = "web/app/dist/"
+# we are publishing two separate netlify sites so this 
+# is configured in netlify web UI
 
-  # Default build command.
-  command = "npm run build"
+# [build]
+#   # Directory to change to before starting a build. 
+#   # This is where we will look for package.json/.nvmrc/etc.
+#   base = "web/app/"
+#   publish = "web/app/dist/"
+
+#   # Default build command.
+#   command = "npm run build"
 
 [context.production.environment]
   VUE_APP_API_URL = "https://api.tryclicker.com"

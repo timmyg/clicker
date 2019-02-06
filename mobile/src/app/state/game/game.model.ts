@@ -3,4 +3,6 @@ export interface Game {
   title: string;
   start: Date;
   type: string;
+  channelTitle: string;
+  channel: number;
 }
