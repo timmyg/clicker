@@ -27,14 +27,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/reserve',
+        redirectTo: 'reserve',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/reserve',
+    redirectTo: 'tabs/reserve',
     pathMatch: 'full',
   },
 ];

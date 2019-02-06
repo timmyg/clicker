@@ -1,20 +1,20 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import * as fromLocations from './location.reducer';
-import { State as LocationState } from './location.reducer';
+import * as fromTvs from './tv.reducer';
+import { State as TvState } from './tv.reducer';
 
-export const getLocationsState = createFeatureSelector<LocationState>('location');
+export const getTvsState = createFeatureSelector<TvState>('tv');
 
-export const getAllLocations = createSelector(
-  getLocationsState,
-  fromLocations.getAllLocations,
+export const getAllTvs = createSelector(
+  getTvsState,
+  fromTvs.getAllTvs,
 );
 
 export const getLoading = createSelector(
-  getLocationsState,
-  fromLocations.getLoading,
+  getTvsState,
+  fromTvs.getLoading,
 );
 
 export const getError = createSelector(
-  getLocationsState,
-  fromLocations.getError,
+  getTvsState,
+  fromTvs.getError,
 );

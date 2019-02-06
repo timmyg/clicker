@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 import { Game } from 'src/app/state/game/game.model';
-import { Store } from '@ngrx/store';
-import { getAllGames } from 'src/app/state/game';
-import * as fromStore from '../../../state/app.reducer';
-import * as fromGame from '../../../state/game/game.actions';
 
 @Component({
   selector: 'app-games',
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.scss'],
 })
-export class GamesComponent implements OnInit {
-  games$: Observable<Game[]>;
+export class GamesComponent implements OnInit, OnChanges {
+  @Output() chooseGame = new EventEmitter<Game>();
+  @Input() games: Game[];
 
-  constructor(private store: Store<fromStore.AppState>) {
-    this.games$ = this.store.select(getAllGames);
+  constructor() {}
+
+  ngOnInit() {}
+
+  ngOnChanges() {
+    console.log(this.games);
   }
 
-  ngOnInit() {
-    this.store.dispatch(new fromGame.GetAllGames());
+  onGameClick(game: Game) {
+    this.chooseGame.emit(game);
   }
 }

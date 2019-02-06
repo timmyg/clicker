@@ -13,7 +13,6 @@ export class GameService {
 
   getGames(): Observable<Array<Game>> {
     // return this.httpClient.get<Game[]>(this.url);
-    console.log('get games service');
     const game1: Game = {
       id: 1,
       title: 'Xavier at Georgetown',
@@ -77,7 +76,6 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    console.log('........');
     return of([game1, game2, game3, game4, game5, game6, game7]).pipe(delay(1000));
   }
 }

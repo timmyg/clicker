@@ -3,7 +3,7 @@
 </ion-header>
 <section>
   <ion-list>
-    <ion-card *ngFor="let location of (locations$ | async)" [routerLink]="['../games']">
+    <ion-card *ngFor="let location of locations" (click)="onLocationClick(location)">
       <ion-card-header>
         <ion-card-subtitle>
           <span>{{ location.town }}</span> <span float-right>{{ location.distance }}</span>

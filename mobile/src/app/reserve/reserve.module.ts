@@ -10,29 +10,17 @@ import { LocationsComponent } from './components/locations/locations.component';
 import { GamesComponent } from './components/games/games.component';
 import { TvsComponent } from './components/tvs/tvs.component';
 import { MomentModule } from 'ngx-moment';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'locations',
-    pathMatch: 'full',
-  },
-  {
-    path: 'locations',
-    component: LocationsComponent,
-  },
-  {
-    path: 'games',
-    component: GamesComponent,
-  },
-  {
-    path: 'tvs',
-    component: TvsComponent,
+    component: ReservePage,
   },
 ];
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
-  declarations: [ReservePage, LocationsComponent, GamesComponent, TvsComponent],
+  declarations: [ReservePage, LocationsComponent, GamesComponent, TvsComponent, ConfirmationComponent],
 })
 export class ReservePageModule {}

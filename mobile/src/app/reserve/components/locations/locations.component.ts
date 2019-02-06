@@ -1,10 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Establishment } from 'src/app/state/location/location.model';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { getAllLocations } from 'src/app/state/location';
-import * as fromStore from '../../../state/app.reducer';
-import * as fromLocation from '../../../state/location/location.actions';
 
 @Component({
   selector: 'app-locations',
@@ -12,13 +8,18 @@ import * as fromLocation from '../../../state/location/location.actions';
   styleUrls: ['./locations.component.scss'],
 })
 export class LocationsComponent implements OnInit {
-  locations$: Observable<Establishment[]>;
+  @Output() chooseLocation = new EventEmitter<Establishment>();
+  @Input() locations: Establishment[];
 
-  constructor(private store: Store<fromStore.AppState>) {
-    this.locations$ = this.store.select(getAllLocations);
+  constructor() {}
+
+  ngOnInit() {}
+
+  ngOnChanges() {
+    console.log(this.locations);
   }
 
-  ngOnInit() {
-    this.store.dispatch(new fromLocation.GetAllLocations());
+  onLocationClick(location: Establishment) {
+    this.chooseLocation.emit(location);
   }
 }

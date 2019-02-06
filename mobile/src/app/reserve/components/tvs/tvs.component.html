@@ -1,3 +1,8 @@
-<p>
-  tvs works!
-</p>
+<ion-header>
+  <ion-toolbar> <ion-title> choose your tv </ion-title> </ion-toolbar>
+</ion-header>
+<section>
+  <ion-list>
+    <ion-button color="light" *ngFor="let tv of tvs" (click)="onTvClick(tv)">{{ tv.tag }}</ion-button>
+  </ion-list>
+</section>

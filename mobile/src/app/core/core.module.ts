@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationService } from './services/location.service';
 import { GameService } from './services/game.service';
+import { TvService } from './services/tv.service';
+import { ReservationService } from './services/reservation.service';
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, HttpClientModule],
-  providers: [LocationService, GameService],
+  providers: [LocationService, GameService, TvService, ReservationService],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders {

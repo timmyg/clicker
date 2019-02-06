@@ -1,42 +1,40 @@
-import * as fromGame from './game.actions';
-import { Game } from './game.model';
+import * as fromTv from './tv.actions';
+import { TV } from './tv.model';
 
 export interface State {
-  games: Game[];
+  tvs: TV[];
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
-  games: [],
+  tvs: [],
   loading: false,
   error: '',
 };
 
-export function reducer(state = initialState, action: fromGame.GameActions): State {
+export function reducer(state = initialState, action: fromTv.TvActions): State {
   switch (action.type) {
-    case fromGame.GET_GAMES: {
-      console.log(action);
+    case fromTv.GET_ALL_TVS: {
       return {
         ...state,
         loading: true,
       };
     }
 
-    case fromGame.GET_GAMES_SUCCESS: {
-      console.log(action);
+    case fromTv.GET_ALL_TVS_SUCCESS: {
       return {
         ...state,
         loading: false,
-        games: action.payload,
+        tvs: action.payload,
       };
     }
 
-    case fromGame.GET_GAMES_FAIL: {
+    case fromTv.GET_ALL_TVS_SUCCESS: {
       return {
         ...state,
         loading: false,
-        error: 'error loading games',
+        error: 'error loading tvs',
       };
     }
 
@@ -46,6 +44,6 @@ export function reducer(state = initialState, action: fromGame.GameActions): Sta
   }
 }
 
-export const getAllGames = (state: State) => state.games;
+export const getAllTvs = (state: State) => state.tvs;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

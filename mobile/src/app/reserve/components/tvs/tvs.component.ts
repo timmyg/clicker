@@ -1,15 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { getAllTvs } from 'src/app/state/tv';
+import * as fromStore from '../../../state/app.reducer';
+import * as fromTv from '../../../state/tv/tv.actions';
+import { Observable } from 'rxjs';
+import { TV } from 'src/app/state/tv/tv.model';
+import { Store } from '@ngrx/store';
+import { Establishment } from 'src/app/state/location/location.model';
 
 @Component({
   selector: 'app-tvs',
   templateUrl: './tvs.component.html',
-  styleUrls: ['./tvs.component.scss']
+  styleUrls: ['./tvs.component.scss'],
 })
 export class TvsComponent implements OnInit {
+  @Output() chooseLocation = new EventEmitter<TV>();
+  @Input() tvs: TV[];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  onTvClick(tv: TV) {
+    this.chooseLocation.emit(tv);
   }
-
 }
