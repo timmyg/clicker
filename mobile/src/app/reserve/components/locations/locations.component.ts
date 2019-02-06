@@ -15,9 +15,7 @@ export class LocationsComponent implements OnInit {
 
   ngOnInit() {}
 
-  ngOnChanges() {
-    console.log(this.locations);
-  }
+  ngOnChanges() {}
 
   onLocationClick(location: Establishment) {
     this.chooseLocation.emit(location);

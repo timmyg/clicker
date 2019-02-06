@@ -30,6 +30,6 @@ export class LocationService {
       town: 'Beechmont',
       distance: '12 miles',
     };
-    return of([location1, location2, location3]).pipe(delay(1000));
+    return of([location1, location2, location3]).pipe(delay(500));
   }
 }

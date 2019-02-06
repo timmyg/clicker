@@ -3,6 +3,8 @@
 </ion-header>
 <section>
   <ion-list>
-    <ion-button color="light" *ngFor="let tv of tvs" (click)="onTvClick(tv)">{{ tv.tag }}</ion-button>
+    <ion-button color="light" size="large" *ngFor="let tv of tvs" (click)="onTvClick(tv)" [disabled]="tv.reserved">{{
+      tv.tag
+    }}</ion-button>
   </ion-list>
 </section>

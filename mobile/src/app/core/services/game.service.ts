@@ -90,6 +90,6 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    return of([game1, game2, game3, game4, game5, game6, game7]).pipe(delay(1000));
+    return of([game1, game2, game3, game4, game5, game6, game7]).pipe(delay(500));
   }
 }

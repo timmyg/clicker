@@ -7,12 +7,13 @@ import { appReducer } from './app.reducer';
 import { LocationsEffects } from './location/location.effects';
 import { GamesEffects } from './game/game.effects';
 import { TvsEffects } from './tv/tv.effects';
+import { ReservationsEffects } from './reservation/reservation.effects';
 
 @NgModule({
   imports: [
     CommonModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([LocationsEffects, GamesEffects, TvsEffects]),
+    EffectsModule.forRoot([LocationsEffects, GamesEffects, TvsEffects, ReservationsEffects]),
   ],
   declarations: [],
 })

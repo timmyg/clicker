@@ -3,15 +3,31 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-item>
-    <ion-label>Phone #</ion-label>
-    <ion-input value="513-843-3209" readonly></ion-input>
-  </ion-item>
-  <h6>Your Reservations</h6>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>ESPN2 - TV #21 until 8:05pm</ion-card-subtitle>
-      <ion-card-title>Kansas at Oklahoma State</ion-card-title>
-    </ion-card-header>
-  </ion-card>
+  <b>Phone:&nbsp;</b> <span>513-843-3209</span> <br />
+  <h6>Your Reservations:</h6>
+  <div *ngIf="(reservations$ | async).length > 0; else empty">
+    <ion-card *ngFor="let r of (reservations$ | async)">
+      <ion-card-header>
+        <ion-card-subtitle
+          >{{ r.game.channelTitle }} - TV #{{ r.tvTag }} until {{ r.end | amDateFormat: 'h:mm a' }}</ion-card-subtitle
+        >
+        <ion-card-title>{{ r.gameTitle }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </div>
+  <ng-template #empty> You do not have any active reservations </ng-template>
 </ion-content>
+
+<!-- 
+<div *ngIf="user$ | async as user; else loading">
+    <user-profile
+      [user]="user.profile">
+    </user-profile>
+    <user-messages
+      [user]="user.messages">
+    </user-messages>
+  </div>
+  
+  <ng-template #loading>
+    Loading stuff...
+  </ng-template> -->

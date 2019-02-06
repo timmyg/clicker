@@ -23,7 +23,6 @@ export function reducer(state = initialState, action: fromLocation.LocationActio
     }
 
     case fromLocation.GET_ALL_LOCATIONS_SUCCESS: {
-      console.log(action);
       return {
         ...state,
         loading: false,

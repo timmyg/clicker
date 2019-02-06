@@ -16,7 +16,6 @@ export const initialState: State = {
 export function reducer(state = initialState, action: fromGame.GameActions): State {
   switch (action.type) {
     case fromGame.GET_GAMES: {
-      console.log(action);
       return {
         ...state,
         loading: true,
@@ -24,7 +23,6 @@ export function reducer(state = initialState, action: fromGame.GameActions): Sta
     }
 
     case fromGame.GET_GAMES_SUCCESS: {
-      console.log(action);
       return {
         ...state,
         loading: false,

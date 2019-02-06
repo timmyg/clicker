@@ -6,21 +6,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ProfilePage } from './profile.page';
+import { MomentModule } from 'ngx-moment';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfilePage
-  }
+    component: ProfilePage,
+  },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
-  declarations: [ProfilePage]
+  imports: [CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
+  declarations: [ProfilePage],
 })
 export class ProfilePageModule {}

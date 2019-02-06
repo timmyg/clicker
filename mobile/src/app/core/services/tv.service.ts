@@ -55,7 +55,6 @@ export class TvService {
     const tv10: TV = {
       id: 1,
       tag: '10',
-      reserved: true,
     };
     const tv11: TV = {
       id: 1,
@@ -64,7 +63,6 @@ export class TvService {
     const tv12: TV = {
       id: 1,
       tag: '12',
-      reserved: true,
     };
     const tv13: TV = {
       id: 1,
@@ -73,7 +71,6 @@ export class TvService {
     const tv14: TV = {
       id: 1,
       tag: '14',
-      reserved: true,
     };
     const tv15: TV = {
       id: 1,
@@ -82,7 +79,6 @@ export class TvService {
     const tv16: TV = {
       id: 1,
       tag: '16',
-      reserved: true,
     };
     const tv17: TV = {
       id: 1,
@@ -109,7 +105,6 @@ export class TvService {
     const tv22: TV = {
       id: 1,
       tag: '22',
-      reserved: true,
     };
     const tv23: TV = {
       id: 1,
@@ -118,7 +113,6 @@ export class TvService {
     const tv24: TV = {
       id: 1,
       tag: '24',
-      reserved: true,
     };
     const tv25: TV = {
       id: 1,
@@ -127,7 +121,6 @@ export class TvService {
     const tv26: TV = {
       id: 1,
       tag: '26',
-      reserved: true,
     };
     const tv27: TV = {
       id: 1,
@@ -210,6 +203,6 @@ export class TvService {
       tv34,
       tv35,
       tv36,
-    ]).pipe(delay(1000));
+    ]).pipe(delay(500));
   }
 }

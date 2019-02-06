@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import * as moment from 'moment';
-import { Reservation } from '../../reservation.model';
+import { Reservation } from '../../../state/reservation/reservation.model';
 
 @Component({
   selector: 'app-confirmation',
@@ -8,7 +8,7 @@ import { Reservation } from '../../reservation.model';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent implements OnInit {
-  @Output() confirm = new EventEmitter();
+  @Output() confirm = new EventEmitter<Reservation>();
   @Input() reservation: Reservation;
 
   constructor() {}
@@ -21,11 +21,9 @@ export class ConfirmationComponent implements OnInit {
     this.reservation.cost = 2;
   }
 
-  ngOnChanges(): void {
-    console.log(this.reservation);
-  }
+  ngOnChanges(): void {}
 
   onConfirm() {
-    this.confirm.emit();
+    this.confirm.emit(this.reservation);
   }
 }

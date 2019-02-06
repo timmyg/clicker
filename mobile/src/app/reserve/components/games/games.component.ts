@@ -14,9 +14,7 @@ export class GamesComponent implements OnInit, OnChanges {
 
   ngOnInit() {}
 
-  ngOnChanges() {
-    console.log(this.games);
-  }
+  ngOnChanges() {}
 
   onGameClick(game: Game) {
     this.chooseGame.emit(game);
