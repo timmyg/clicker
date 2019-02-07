@@ -3,8 +3,10 @@
 </ion-header>
 
 <ion-content padding>
-  <b>Phone:&nbsp;</b> <span>513-843-3209</span> <br />
-  <b>Wallet:&nbsp;</b> <span>2 Coins</span> <a (click)="openWallet()">Buy more</a> <br />
+  <div margin-bottom><b>Phone:&nbsp;</b> <span>513-843-3209</span></div>
+  <div margin-bottom>
+    <b>Wallet:&nbsp;</b> <span>2 Coins</span> <a (click)="openWallet()" padding-start>Purchase tokens</a> <br />
+  </div>
   <h6>Your Reservations:</h6>
   <div *ngIf="(reservations$ | async).length > 0; else empty">
     <ion-card *ngFor="let r of (reservations$ | async)">

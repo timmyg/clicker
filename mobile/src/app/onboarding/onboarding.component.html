@@ -1,10 +1,10 @@
-<ion-slides pager="true" [options]="options" align-items-center>
+<ion-slides pager="true" [options]="options" align-items-center *ngIf="onboarded">
   <ion-slide>
     <ion-card>
       <ion-icon name="tv"></ion-icon>
       <ion-card-header> <ion-card-title>What is Clicker?</ion-card-title> </ion-card-header>
       <ion-card-content>
-        <span> Clicker allows you change the channel at your favorite places with just a few clicks</span>
+        <span> Clicker allows you to change the channel at your favorite places with just a few clicks</span>
       </ion-card-content>
     </ion-card>
   </ion-slide>

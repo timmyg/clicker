@@ -1,7 +1,5 @@
-<!-- <div *ngIf="(loading$ | async)">loading</div> -->
 <section>
-  <app-onboarding *ngIf="!onboarded" (onboarded)="onOnboarded()"></app-onboarding>
-  <section *ngIf="onboarded">
+  <section>
     <app-locations
       *ngIf="reservation.activeStep === 'locations'"
       [locations]="locations$ | async"
