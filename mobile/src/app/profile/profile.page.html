@@ -4,6 +4,7 @@
 
 <ion-content padding>
   <b>Phone:&nbsp;</b> <span>513-843-3209</span> <br />
+  <b>Wallet:&nbsp;</b> <span>2 Coins</span> <a (click)="openWallet()">Buy more</a> <br />
   <h6>Your Reservations:</h6>
   <div *ngIf="(reservations$ | async).length > 0; else empty">
     <ion-card *ngFor="let r of (reservations$ | async)">
@@ -17,17 +18,3 @@
   </div>
   <ng-template #empty> You do not have any active reservations </ng-template>
 </ion-content>
-
-<!-- 
-<div *ngIf="user$ | async as user; else loading">
-    <user-profile
-      [user]="user.profile">
-    </user-profile>
-    <user-messages
-      [user]="user.messages">
-    </user-messages>
-  </div>
-  
-  <ng-template #loading>
-    Loading stuff...
-  </ng-template> -->
