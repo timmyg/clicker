@@ -5,10 +5,12 @@ import { LocationService } from './services/location.service';
 import { GameService } from './services/game.service';
 import { TvService } from './services/tv.service';
 import { ReservationService } from './services/reservation.service';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, HttpClientModule],
+
+  imports: [CommonModule, HttpClientModule, IonicStorageModule.forRoot()],
   providers: [LocationService, GameService, TvService, ReservationService],
 })
 export class CoreModule {

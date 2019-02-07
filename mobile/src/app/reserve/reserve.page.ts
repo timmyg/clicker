@@ -16,6 +16,7 @@ import { getAllLocations } from 'src/app/state/location';
 import { getAllGames } from 'src/app/state/game';
 import { getAllTvs } from 'src/app/state/tv';
 import { getAllReservations } from 'src/app/state/reservation';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-reserve',
@@ -30,8 +31,9 @@ export class ReservePage implements OnInit {
   tvs$: Observable<TV[]>;
   reservations$: Observable<Reservation[]>;
   reservation: Reservation = new Reservation();
+  onboarded: boolean;
 
-  constructor(private store: Store<fromStore.AppState>, private navCtrl: NavController) {
+  constructor(private store: Store<fromStore.AppState>, private navCtrl: NavController, private storage: Storage) {
     this.loading$ = this.store.select(getLoading);
     this.error$ = this.store.select(getError);
     this.locations$ = this.store.select(getAllLocations);
@@ -41,9 +43,21 @@ export class ReservePage implements OnInit {
   }
 
   ngOnInit() {
+    this.checkOnboarded();
     this.store.dispatch(new fromLocation.GetAllLocations());
     this.store.dispatch(new fromGame.GetAllGames());
     this.store.dispatch(new fromTv.GetAllTvs());
+  }
+
+  checkOnboarded() {
+    this.storage.get('onboarded').then(onboarded => {
+      this.onboarded = onboarded;
+    });
+  }
+
+  onOnboarded() {
+    console.log('ononboarded');
+    this.onboarded = true;
   }
 
   onChooseLocation(location: Establishment) {

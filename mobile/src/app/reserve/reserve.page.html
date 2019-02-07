@@ -1,19 +1,22 @@
 <!-- <div *ngIf="(loading$ | async)">loading</div> -->
 <section>
-  <app-locations
-    *ngIf="reservation.activeStep === 'locations'"
-    [locations]="locations$ | async"
-    (chooseLocation)="onChooseLocation($event)"
-  ></app-locations>
-  <app-games
-    *ngIf="reservation.activeStep === 'games'"
-    [games]="games$ | async"
-    (chooseGame)="onChooseGame($event)"
-  ></app-games>
-  <app-tvs *ngIf="reservation.activeStep === 'tvs'" [tvs]="tvs$ | async" (chooseTv)="onChooseTv($event)"></app-tvs>
-  <app-confirmation
-    *ngIf="reservation.activeStep === 'confirmation'"
-    [reservation]="reservation"
-    (confirm)="onConfirm(reservation)"
-  ></app-confirmation>
+  <app-onboarding *ngIf="!onboarded" (onboarded)="onOnboarded()"></app-onboarding>
+  <section *ngIf="onboarded">
+    <app-locations
+      *ngIf="reservation.activeStep === 'locations'"
+      [locations]="locations$ | async"
+      (chooseLocation)="onChooseLocation($event)"
+    ></app-locations>
+    <app-games
+      *ngIf="reservation.activeStep === 'games'"
+      [games]="games$ | async"
+      (chooseGame)="onChooseGame($event)"
+    ></app-games>
+    <app-tvs *ngIf="reservation.activeStep === 'tvs'" [tvs]="tvs$ | async" (chooseTv)="onChooseTv($event)"></app-tvs>
+    <app-confirmation
+      *ngIf="reservation.activeStep === 'confirmation'"
+      [reservation]="reservation"
+      (confirm)="onConfirm(reservation)"
+    ></app-confirmation>
+  </section>
 </section>

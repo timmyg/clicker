@@ -1,0 +1,10 @@
+ion-slides {
+  height: 80vh;
+  align-items: center;
+  ion-slide {
+    min-height: 300px;
+    ion-icon {
+      font-size: 64px;
+    }
+  }
+}

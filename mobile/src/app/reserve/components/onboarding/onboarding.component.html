@@ -1,0 +1,35 @@
+<ion-slides pager="true" [options]="options" align-items-center>
+  <ion-slide>
+    <ion-card>
+      <ion-icon name="tv"></ion-icon>
+      <ion-card-header> <ion-card-title>What is Clicker?</ion-card-title> </ion-card-header>
+      <ion-card-content>
+        <span> Clicker allows you change the channel at your favorite places with just a few clicks</span>
+      </ion-card-content>
+    </ion-card>
+  </ion-slide>
+  <ion-slide>
+    <ion-card>
+      <ion-icon name="wifi"></ion-icon>
+      <ion-card-header> <ion-card-title>How's it work?</ion-card-title> </ion-card-header>
+      <ion-card-content>
+        <span>If you're at a Clicker enabled location, it's simple:</span>
+        <ul text-left>
+          <li>Choose your location so we know where you're at.</li>
+          <li>Choose the channel from our live guide.</li>
+          <li>Choose the TV - all TVs have a label in the corner.</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </ion-slide>
+  <ion-slide>
+    <ion-card>
+      <ion-icon name="basketball"></ion-icon>
+      <ion-card-header> <ion-card-title>Let's Do It.</ion-card-title> </ion-card-header>
+      <ion-card-content>
+        <span> We put two tokens in your account to get you started.</span>
+        <div margin-top><ion-button color="primary" (click)="onGetStarted()">Go</ion-button></div>
+      </ion-card-content>
+    </ion-card>
+  </ion-slide>
+</ion-slides>
