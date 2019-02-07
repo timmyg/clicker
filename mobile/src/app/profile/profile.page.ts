@@ -22,7 +22,7 @@ export class ProfilePage implements OnInit {
   async openWallet() {
     const modal = await this.modalController.create({
       component: WalletPage,
-      componentProps: { value: 123 },
+      componentProps: { monies: 9 },
     });
     return await modal.present();
   }
