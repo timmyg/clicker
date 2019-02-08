@@ -1,7 +1,7 @@
 ion-slides {
   height: 100vh;
   align-items: center;
-  background: white;
+  background: #7b7b7b;
   ion-slide {
     min-height: 300px;
     ion-icon {
@@ -10,6 +10,7 @@ ion-slides {
     ion-card {
       min-height: 250px;
       padding: 20px 0;
+      background: white;
     }
   }
 }
