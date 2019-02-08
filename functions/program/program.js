@@ -4,7 +4,7 @@ const uuid = require('uuid/v5');
 require('dotenv').config();
 
 const Program = dynamoose.model(
-  process.env.tableWidget,
+  process.env.tableProgram,
   {
     programId: {
       type: String,
@@ -51,7 +51,7 @@ function generateResponse(statusCode, body = {}) {
 }
 
 module.exports.health = async event => {
-  return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableWidget})`);
+  return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
 };
 
 /**
@@ -64,7 +64,7 @@ module.exports.health = async event => {
 module.exports.pull = async event => {
   try {
     const url = process.env.GUIDE_ENDPOINT;
-    const channels = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
+    const channelsToPull = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
     const startTime = moment()
       .utc()
       .subtract(6, 'hours')
@@ -72,9 +72,9 @@ module.exports.pull = async event => {
       .seconds(0)
       .toString();
     const hours = 24;
-    const result = await axios.get(url, { params: { channels: channels.join(','), startTime, hours } });
-    const channels = result.data.schedule;
-    channels.forEach(channel => {
+    const result = await axios.get(url, { params: { channels: channelsToPull.join(','), startTime, hours } });
+    const { schedule } = result.data;
+    schedule.forEach(channel => {
       Program.batchPut(channel.schedules);
     });
     return generateResponse(201);
