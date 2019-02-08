@@ -6,6 +6,7 @@ import * as fromStore from '../state/app.reducer';
 import { getAllReservations } from '../state/reservation';
 import { ModalController } from '@ionic/angular';
 import { WalletPage } from '../shared/wallet/wallet.page';
+import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-profile',
@@ -14,18 +15,24 @@ import { WalletPage } from '../shared/wallet/wallet.page';
 })
 export class ProfilePage implements OnInit {
   reservations$: Observable<Reservation[]>;
+  faCopyright = faCopyright;
+  walletModal;
 
   constructor(private store: Store<fromStore.AppState>, public modalController: ModalController) {
     this.reservations$ = this.store.select(getAllReservations);
   }
 
   async openWallet() {
-    const modal = await this.modalController.create({
+    this.walletModal = await this.modalController.create({
       component: WalletPage,
       componentProps: { monies: 9 },
     });
-    return await modal.present();
+    return await this.walletModal.present();
   }
+
+  // async closeWallet() {
+  //   return await this.walletModal.dismiss();
+  // }
 
   ngOnInit() {}
 }
