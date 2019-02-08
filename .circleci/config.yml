@@ -42,6 +42,9 @@ jobs:
   build-lead:
     working_directory: ~/captain/functions/lead
     <<: *defaults
+  build-program:
+    working_directory: ~/captain/functions/program
+    <<: *defaults
 
 workflows:
   version: 2
@@ -49,3 +52,4 @@ workflows:
     jobs:
       - build-widget
       - build-lead
+      - build-program
