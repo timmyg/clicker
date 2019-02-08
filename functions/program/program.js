@@ -70,7 +70,7 @@ module.exports.health = async event => {
  */
 module.exports.pull = async event => {
   try {
-    const url = process.env.GUIDE_ENDPOINT;
+    const url = 'https://www.directv.com/json/channelschedule';
     const channelsToPull = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
     const startTime = moment()
       .utc()
@@ -83,7 +83,8 @@ module.exports.pull = async event => {
     const params = { channels: channelsToPull.join(','), startTime, hours };
     const result = await axios.get(url, { params });
     const { schedule } = result.data;
-    console.info(`pulled ${schedule.length} programs`);
+    console.info(`pulled ${schedule.length} channels`);
+    const allPrograms = [];
     schedule.forEach(channel => {
       channel.schedules.forEach(program => {
         program.chId = channel.chId;
@@ -92,10 +93,12 @@ module.exports.pull = async event => {
         program.chHd = channel.chHd;
         program.chCat = channel.chCat;
         program.blackOut = channel.blackOut;
+        allPrograms.push(channel);
       });
-      Program.batchPut(channel.schedules);
     });
-    return generateResponse(201);
+    console.log(allPrograms.length);
+    const dbResult = Program.batchPut(allPrograms);
+    return generateResponse(201, dbResult);
   } catch (e) {
     console.error(e);
     return generateResponse(400, `Could not create: ${e.stack}`);
