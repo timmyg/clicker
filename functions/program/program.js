@@ -93,8 +93,7 @@ module.exports.pull = async event => {
         program.chCat = channel.chCat;
         program.blackOut = channel.blackOut;
       });
-      const dbResult = await Program.batchPut(channel.schedules);
-      console.log({ dbResult });
+      Program.batchPut(channel.schedules);
     });
     return generateResponse(201);
   } catch (e) {
