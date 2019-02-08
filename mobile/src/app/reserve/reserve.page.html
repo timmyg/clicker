@@ -1,4 +1,4 @@
-<section>
+<section *ngIf="!(loading | async); else spinner">
   <app-locations
     *ngIf="reservation.activeStep === 'locations'"
     [locations]="locations$ | async"

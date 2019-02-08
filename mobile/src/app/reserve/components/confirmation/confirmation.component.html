@@ -13,5 +13,11 @@
       <p><b>Cost:</b> {{ reservation.cost }} tokens</p>
     </ion-card-content>
   </ion-card>
-  <ion-button color="success" size="large" expand="block" (click)="onConfirm()">Confirm (2 tokens)</ion-button>
+  <ion-button color="success" size="large" expand="block" (click)="onConfirm()" slot="end" [disabled]="saving">
+    <span *ngIf="!saving">Confirm (2 tokens)</span>
+    <span *ngIf="saving">
+      Tuning
+      <ion-spinner name="dots"></ion-spinner>
+    </span>
+  </ion-button>
 </section>

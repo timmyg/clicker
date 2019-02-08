@@ -10,6 +10,7 @@ import { Reservation } from '../../../state/reservation/reservation.model';
 export class ConfirmationComponent implements OnInit {
   @Output() confirm = new EventEmitter<Reservation>();
   @Input() reservation: Reservation;
+  saving: boolean;
 
   constructor() {}
 
@@ -24,6 +25,9 @@ export class ConfirmationComponent implements OnInit {
   ngOnChanges(): void {}
 
   onConfirm() {
-    this.confirm.emit(this.reservation);
+    this.saving = true;
+    setTimeout(() => {
+      this.confirm.emit(this.reservation);
+    }, 3000);
   }
 }
