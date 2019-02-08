@@ -56,6 +56,26 @@ module.exports.create = async event => {
       .toString();
     const hours = 24;
     const result = await axios.get(url, { params: { channels: channels.join(','), startTime, hours } });
+    const channels = result.data.schedule;
+    channels.forEach(channel => {
+      channel.schedules.forEach(program => {
+        // description: null
+        // title: "Outside the Lines"
+        // duration: 30
+        // price: 0
+        // repeat : false
+        // ltd : "Live"
+        // programID : "SH000296530000"
+        // blackoutCode : "NA"
+        // airTime : "2019-02-06T18:00:00.000+0000"
+        // episodeTitle: null
+        // format: "HD"
+        // eventCode: ""
+        // mainCategory: "Sports"
+        // hd: 1
+        // liveStreaming: "B"
+      });
+    });
   } catch (e) {
     console.error(e);
     return generateResponse(400, `Could not create: ${e.stack}`);
