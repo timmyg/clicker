@@ -1,6 +1,0 @@
-{
-  "pathParameters": {
-    "losantId": "5c2e7652c853d20008cd8cab"
-  },
-  "body": "{\"name\":\"tune\",\"payload\":{\"channel\":41}}"
-}

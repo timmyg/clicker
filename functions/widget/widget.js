@@ -1,12 +1,17 @@
 const dynamoose = require('dynamoose');
+const uuid = require('uuid/v5');
 require('dotenv').config();
 
 const Widget = dynamoose.model(
   process.env.tableWidget,
   {
-    losantId: {
+    id: {
       type: String,
       hashKey: true,
+      default: uuid,
+    },
+    losantId: {
+      type: String,
     },
     location: String,
     devices: [{ name: String, ip: String, mac: String }],
