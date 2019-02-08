@@ -6,6 +6,7 @@ provider:
   environment:
     tableProgram: ${self:custom.tableProgram}
     serviceName: ${self:service}
+    GUIDE_ENDPOINT: ${env:GUIDE_ENDPOINT}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
