@@ -12,4 +12,10 @@ import { OnboardingModule } from '../onboarding/onboarding.module';
   imports: [IonicModule, CommonModule, FormsModule, TabsPageRoutingModule, OnboardingModule],
   declarations: [TabsPage],
 })
-export class TabsPageModule {}
+export class TabsPageModule {
+  // showOnboarding: boolean;
+  // onShowOnboarding() {
+  //   console.log('oso');
+  //   this.showOnboarding = true;
+  // }
+}

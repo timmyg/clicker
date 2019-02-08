@@ -1,4 +1,4 @@
-<ion-slides pager="true" [options]="options" align-items-center *ngIf="onboarded">
+<ion-slides pager="true" [options]="options" align-items-center *ngIf="ready && !onboarded">
   <ion-slide>
     <ion-card>
       <ion-icon name="tv"></ion-icon>
@@ -28,7 +28,7 @@
       <ion-card-header> <ion-card-title>Let's Do It.</ion-card-title> </ion-card-header>
       <ion-card-content>
         <span> We put two tokens in your account to get you started.</span>
-        <div margin-top><ion-button color="primary" (click)="onGetStarted()">Go</ion-button></div>
+        <div margin-top><ion-button color="success" (click)="onGetStarted()" size="large">Go</ion-button></div>
       </ion-card-content>
     </ion-card>
   </ion-slide>

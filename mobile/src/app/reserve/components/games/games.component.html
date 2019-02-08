@@ -8,7 +8,16 @@
         <ion-card-subtitle>
           <span>{{ game.start | amDateFormat: 'h:mm a' }}</span>
         </ion-card-subtitle>
-        <ion-card-title> <ion-icon name="basketball" size="large"></ion-icon>{{ game.title }} </ion-card-title>
+        <ion-card-title>
+          <ion-grid>
+            <ion-row align-items-center>
+              <ion-col size="1" no-padding align-items-center>
+                <ion-icon name="basketball" size="large"></ion-icon>
+              </ion-col>
+              <ion-col size="11"> {{ game.title }} </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-title>
       </ion-card-header>
     </ion-card>
   </ion-list>

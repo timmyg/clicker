@@ -26,7 +26,7 @@ export class GameService {
     };
     const game2: Game = {
       id: 1,
-      title: 'West Virginia at Texas Tech',
+      title: 'West Virginia at Texas',
       type: 'basketball',
       channel: 206,
       channelTitle: 'ESPN2',
@@ -90,6 +90,6 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    return of([game1, game2, game3, game4, game5, game6, game7]).pipe(delay(500));
+    return of([game1, game2, game3, game4]).pipe(delay(500));
   }
 }

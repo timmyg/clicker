@@ -8,6 +8,7 @@ import { Storage } from '@ionic/storage';
 })
 export class OnboardingComponent implements OnInit {
   onboarded: boolean;
+  ready: boolean;
 
   options = {
     effect: 'flip',
@@ -21,13 +22,15 @@ export class OnboardingComponent implements OnInit {
   }
 
   checkOnboarded() {
+    // TODO this might slow down the apparent opening of the app?
     this.storage.get('onboarded').then(onboarded => {
       this.onboarded = onboarded;
+      this.ready = true;
     });
   }
 
   onGetStarted() {
     this.storage.set('onboarded', true);
-    this.onboarded = false;
+    this.onboarded = true;
   }
 }

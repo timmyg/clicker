@@ -7,6 +7,7 @@ import { getAllReservations } from '../state/reservation';
 import { ModalController } from '@ionic/angular';
 import { WalletPage } from '../shared/wallet/wallet.page';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +19,11 @@ export class ProfilePage implements OnInit {
   faCopyright = faCopyright;
   walletModal;
 
-  constructor(private store: Store<fromStore.AppState>, public modalController: ModalController) {
+  constructor(
+    private store: Store<fromStore.AppState>,
+    public modalController: ModalController,
+    private storage: Storage,
+  ) {
     this.reservations$ = this.store.select(getAllReservations);
   }
 
@@ -30,9 +35,10 @@ export class ProfilePage implements OnInit {
     return await this.walletModal.present();
   }
 
-  // async closeWallet() {
-  //   return await this.walletModal.dismiss();
-  // }
-
   ngOnInit() {}
+
+  onLogout() {
+    this.storage.clear();
+    location.reload();
+  }
 }

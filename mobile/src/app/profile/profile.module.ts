@@ -9,6 +9,7 @@ import { ProfilePage } from './profile.page';
 import { MomentModule } from 'ngx-moment';
 import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CoreModule } from '../core/core.module';
 
 const routes: Routes = [
   {
