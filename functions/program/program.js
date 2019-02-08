@@ -1,20 +1,37 @@
 const dynamoose = require('dynamoose');
 const axios = require('axios');
+const uuid = require('uuid/v5');
 require('dotenv').config();
 
 const Program = dynamoose.model(
   process.env.tableWidget,
   {
-    losantId: {
+    programId: {
       type: String,
       hashKey: true,
     },
-    location: String,
-    devices: [{ name: String, ip: String, mac: String }],
-    boxes: [Object],
-    options: Object,
-    version: Object,
-    mode: Number,
+    id: {
+      type: String,
+      // hashKey: true,
+      default: uuid,
+    },
+    description: String, // null
+    title: String, // "Oklahoma State @ Kansas"
+    duration: Number, // 120
+    price: Number, // 0
+    repeat: boolean, // false
+    ltd: String, // "Live"
+    programID: String, // "SH000296530000"
+    blackoutCode: String,
+    airTime: Date, // "2019-02-06T18:00:00.000+0000"
+    subcategoryList: [String], // ["Basketball"]
+    mainCategory: String, // "Sports"
+    episodeTitle: String, // "Oklahoma State at Kansas"
+    format: String, // "HD"
+    mainCategory: String, // "Sports"
+    hd: Number, // 1
+    liveStreaming: String, // "B"
+    rating: String, // "NR (Not Rated)"
   },
   {
     timestamps: true,
@@ -44,7 +61,7 @@ module.exports.health = async event => {
  *
  * @returns {number} 201, 400
  */
-module.exports.create = async event => {
+module.exports.pull = async event => {
   try {
     const url = process.env.GUIDE_ENDPOINT;
     const channels = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
@@ -58,24 +75,9 @@ module.exports.create = async event => {
     const result = await axios.get(url, { params: { channels: channels.join(','), startTime, hours } });
     const channels = result.data.schedule;
     channels.forEach(channel => {
-      channel.schedules.forEach(program => {
-        // description: null
-        // title: "Outside the Lines"
-        // duration: 30
-        // price: 0
-        // repeat : false
-        // ltd : "Live"
-        // programID : "SH000296530000"
-        // blackoutCode : "NA"
-        // airTime : "2019-02-06T18:00:00.000+0000"
-        // episodeTitle: null
-        // format: "HD"
-        // eventCode: ""
-        // mainCategory: "Sports"
-        // hd: 1
-        // liveStreaming: "B"
-      });
+      Program.batchPut(channel.schedules);
     });
+    return generateResponse(201);
   } catch (e) {
     console.error(e);
     return generateResponse(400, `Could not create: ${e.stack}`);

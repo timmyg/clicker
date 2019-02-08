@@ -1,0 +1,68 @@
+service: programs
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  runtime: nodejs8.10
+  environment:
+    tableProgram: ${self:custom.tableProgram}
+    serviceName: ${self:service}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  tableProgram: programs-${self:custom.stage}
+  tableThroughputs:
+    prod: 5
+    default: 1
+  domains:
+    prod: api.tryclicker.com
+    stage: api-stage.tryclicker.com
+    dev: api-dev.tryclicker.com
+  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: 'programs'
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+resources:
+  Resources:
+    DevicesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableProgram}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
+
+functions:
+  health:
+    handler: program.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors: true
+  pull:
+    handler: program.pull
+    events:
+      - http:
+          path: pull
+          method: post
+          cors: true
