@@ -85,10 +85,10 @@ module.exports.pull = async event => {
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
     const allPrograms = build(schedule);
-    const dbResult = await Program.batchPut(allPrograms);
-    console.log({ dbResult });
     console.log(JSON.stringify(allPrograms[0]));
     console.log(JSON.stringify(allPrograms[allPrograms.length - 1]));
+    const dbResult = await Program.batchPut(allPrograms);
+    console.log({ dbResult });
     return generateResponse(201, dbResult);
   } catch (e) {
     console.error(e);
