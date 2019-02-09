@@ -1,6 +1,7 @@
 const dynamoose = require('dynamoose');
 const axios = require('axios');
 const moment = require('moment');
+const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
 require('dotenv').config();
 
@@ -94,8 +95,6 @@ module.exports.pull = async event => {
 function build(dtvSchedule) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
-    console.log(channel.chNum);
-    console.log(channel.schedules.length);
     channel.schedules.forEach(program => {
       if (program.programId !== '-1') {
         program.id = generateId(program);
@@ -109,7 +108,9 @@ function build(dtvSchedule) {
       }
     });
   });
-  return allPrograms;
+  // filter out duplicates - happens with sd/hd channels
+  const filteredPrograms = _.uniqBy(allPrograms, 'id');
+  return filteredPrograms;
 }
 
 function generateId(program) {
