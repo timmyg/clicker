@@ -102,16 +102,17 @@ function build(dtvSchedule) {
     console.log(channel.chNum);
     console.log(channel.schedules.length);
     channel.schedules.forEach(program => {
-      // if (program.programId !== '-1') {
-      program.id = uuid();
-      program.chId = channel.chId;
-      program.chNum = channel.chNum;
-      program.chCall = channel.chCall;
-      program.chHd = channel.chHd;
-      program.chCat = channel.chCat;
-      program.blackOut = channel.blackOut;
-      allPrograms.push(new Program(program));
-      // }
+      program.programId = program.programID;
+      if (program.programId !== '-1') {
+        program.id = uuid();
+        program.chId = channel.chId;
+        program.chNum = channel.chNum;
+        program.chCall = channel.chCall;
+        program.chHd = channel.chHd;
+        program.chCat = channel.chCat;
+        program.blackOut = channel.blackOut;
+        allPrograms.push(new Program(program));
+      }
     });
   });
   return allPrograms;
