@@ -1,20 +1,15 @@
 const dynamoose = require('dynamoose');
 const axios = require('axios');
 const moment = require('moment');
-const uuid = require('uuid/v4');
+const uuid = require('uuid/v5');
 require('dotenv').config();
 
 const Program = dynamoose.model(
   process.env.tableProgram,
   {
-    programId: {
-      type: String,
-      hashKey: true,
-    },
     id: {
       type: String,
-      // hashKey: true,
-      // default: uuid,
+      hashKey: true,
     },
     chId: String, // 206 (from channel)
     chNum: String, // 206 (from channel)
@@ -102,9 +97,8 @@ function build(dtvSchedule) {
     console.log(channel.chNum);
     console.log(channel.schedules.length);
     channel.schedules.forEach(program => {
-      program.programId = program.programID;
       if (program.programId !== '-1') {
-        program.id = uuid();
+        program.id = generateId(program);
         program.chId = channel.chId;
         program.chNum = channel.chNum;
         program.chCall = channel.chCall;
@@ -118,4 +112,7 @@ function build(dtvSchedule) {
   return allPrograms;
 }
 
-// module.exports.build = build;
+function generateId(program) {
+  const namespace = 'ef45d397-0411-5f5e-8940-9bdbdef3958b';
+  return uuid(program.chNum + airTime, namespace);
+}
