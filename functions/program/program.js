@@ -13,7 +13,7 @@ const Program = dynamoose.model(
     },
     id: {
       type: String,
-      // hashKey: true,
+      // hashKey: true, 
       default: uuid,
     },
     chId: String, // 206 (from channel)
