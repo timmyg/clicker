@@ -99,7 +99,7 @@ module.exports.pull = async event => {
     console.log(allPrograms.length);
     const dbResult = Program.batchPut(allPrograms);
     console.log(JSON.stringify(allPrograms[0]));
-    console.log(JSON.stringify(allPrograms[channel.schedules.length - 1]));
+    console.log(JSON.stringify(allPrograms[allPrograms.length - 1]));
     return generateResponse(201, dbResult);
   } catch (e) {
     console.error(e);
