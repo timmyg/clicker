@@ -43,10 +43,10 @@ resources:
       Properties:
         TableName: ${self:custom.tableProgram}
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: programId
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: programId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
