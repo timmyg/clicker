@@ -85,8 +85,8 @@ module.exports.pull = async event => {
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
     const allPrograms = build(schedule);
-    console.log(JSON.stringify(allPrograms[0]));
-    console.log(JSON.stringify(allPrograms[allPrograms.length - 1]));
+    console.log(allPrograms.length);
+    console.log(JSON.stringify(allPrograms));
     const dbResult = await Program.batchPut(allPrograms);
     console.log({ dbResult });
     return generateResponse(201, dbResult);
@@ -102,6 +102,7 @@ function build(dtvSchedule) {
     console.log(channel.chNum);
     console.log(channel.schedules.length);
     channel.schedules.forEach(program => {
+      // if (program.programId !== '-1') {
       program.id = uuid();
       program.chId = channel.chId;
       program.chNum = channel.chNum;
@@ -109,10 +110,8 @@ function build(dtvSchedule) {
       program.chHd = channel.chHd;
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
-      // delete program.schedules;
-      if (program.programId != '-1') {
-        allPrograms.push(new Program(program));
-      }
+      allPrograms.push(new Program(program));
+      // }
     });
   });
   return allPrograms;
