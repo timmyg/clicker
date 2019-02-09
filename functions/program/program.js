@@ -97,7 +97,7 @@ module.exports.pull = async event => {
 };
 
 function build(dtvSchedule) {
-  // const allPrograms = [];
+  const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.chId = channel.chId;
@@ -106,7 +106,7 @@ function build(dtvSchedule) {
       program.chHd = channel.chHd;
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
-      delete program.schedules;
+      // delete program.schedules;
       allPrograms.push(new Program(program));
     });
   });
