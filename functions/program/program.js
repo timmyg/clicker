@@ -110,7 +110,9 @@ function build(dtvSchedule) {
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
       // delete program.schedules;
-      allPrograms.push(new Program(program));
+      if (program.programId != '-1') {
+        allPrograms.push(new Program(program));
+      }
     });
   });
   return allPrograms;
