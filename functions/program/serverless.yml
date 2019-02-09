@@ -38,7 +38,7 @@ custom:
     endpointType: 'edge'
 resources:
   Resources:
-    DevicesTable:
+    ProgramTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableProgram}
