@@ -14,7 +14,7 @@ const Program = dynamoose.model(
     id: {
       type: String,
       // hashKey: true,
-      default: uuid,
+      // default: uuid,
     },
     chId: String, // 206 (from channel)
     chNum: String, // 206 (from channel)
@@ -100,6 +100,7 @@ function build(dtvSchedule) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
+      program.id = uuid();
       program.chId = channel.chId;
       program.chNum = channel.chNum;
       program.chCall = channel.chCall;
