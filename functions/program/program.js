@@ -113,6 +113,7 @@ function build(dtvSchedule) {
 }
 
 function generateId(program) {
-  const namespace = 'ef45d397-0411-5f5e-8940-9bdbdef3958b';
-  return uuid(program.chNum + airTime, namespace);
+  const { chNum, airTime } = program;
+  const id = chNum + airTime;
+  return uuid(id, uuid.DNS);
 }
