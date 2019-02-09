@@ -84,19 +84,7 @@ module.exports.pull = async event => {
     const result = await axios.get(url, { params });
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
-    const allPrograms = [];
-    schedule.forEach(channel => {
-      channel.schedules.forEach(program => {
-        program.chId = channel.chId;
-        program.chNum = channel.chNum;
-        program.chCall = channel.chCall;
-        program.chHd = channel.chHd;
-        program.chCat = channel.chCat;
-        program.blackOut = channel.blackOut;
-        allPrograms.push(channel);
-      });
-    });
-    console.log(allPrograms.length);
+    const allPrograms = build(schedule);
     const dbResult = Program.batchPut(allPrograms);
     console.log(JSON.stringify(allPrograms[0]));
     console.log(JSON.stringify(allPrograms[allPrograms.length - 1]));
@@ -106,3 +94,22 @@ module.exports.pull = async event => {
     return generateResponse(400, `Could not create: ${e.stack}`);
   }
 };
+
+function build(dtvSchedule) {
+  const allPrograms = [];
+  dtvSchedule.forEach(channel => {
+    channel.schedules.forEach(program => {
+      program.chId = channel.chId;
+      program.chNum = channel.chNum;
+      program.chCall = channel.chCall;
+      program.chHd = channel.chHd;
+      program.chCat = channel.chCat;
+      program.blackOut = channel.blackOut;
+      delete program.schedules;
+      allPrograms.push(channel);
+    });
+  });
+  return allPrograms;
+}
+
+// module.exports.build = build;
