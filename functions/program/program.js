@@ -93,6 +93,8 @@ module.exports.pull = async event => {
         program.chCat = channel.chCat;
         program.blackOut = channel.blackOut;
       });
+      console.log(JSON.stringify(channel.schedules[0]));
+      console.log(JSON.stringify(channel.schedules[1]));
       Program.batchPut(channel.schedules);
     });
     return generateResponse(201);
