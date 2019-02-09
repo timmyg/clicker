@@ -14,7 +14,7 @@ const Program = dynamoose.model(
     id: {
       type: String,
       // hashKey: true,
-      default: uuid(),
+      default: uuid,
     },
     chId: String, // 206 (from channel)
     chNum: String, // 206 (from channel)
@@ -85,8 +85,8 @@ module.exports.pull = async event => {
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
     const allPrograms = build(schedule);
-    const dbResult = await Program.batchPut(allPrograms);
-    console.log({ dbResult });
+    // const dbResult = await Program.batchPut(allPrograms);
+    // console.log({ dbResult });
     console.log(JSON.stringify(allPrograms[0]));
     console.log(JSON.stringify(allPrograms[allPrograms.length - 1]));
     return generateResponse(201, dbResult);
@@ -97,7 +97,7 @@ module.exports.pull = async event => {
 };
 
 function build(dtvSchedule) {
-  const allPrograms = [];
+  // const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.chId = channel.chId;
@@ -107,7 +107,7 @@ function build(dtvSchedule) {
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
       delete program.schedules;
-      allPrograms.push(channel);
+      allPrograms.push(new Program(program));
     });
   });
   return allPrograms;
