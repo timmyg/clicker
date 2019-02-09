@@ -74,11 +74,11 @@ module.exports.pull = async event => {
     const channelsToPull = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
     const startTime = moment()
       .utc()
-      .subtract(6, 'hours')
+      .subtract(2, 'hours')
       .minutes(0)
       .seconds(0)
       .toString();
-    const hours = 24;
+    const hours = 8;
     console.log({ url, params: { channels: channelsToPull.join(','), startTime, hours } });
     const params = { channels: channelsToPull.join(','), startTime, hours };
     const result = await axios.get(url, { params });
@@ -99,6 +99,8 @@ module.exports.pull = async event => {
 function build(dtvSchedule) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
+    console.log(channel.chNum);
+    console.log(channel.schedules.length);
     channel.schedules.forEach(program => {
       program.id = uuid();
       program.chId = channel.chId;
