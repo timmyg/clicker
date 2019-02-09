@@ -20,7 +20,7 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  tableProgram: programs-${self:custom.stage}
+  tableProgram: programs2-${self:custom.stage}
   tableThroughputs:
     prod: 5
     default: 1
