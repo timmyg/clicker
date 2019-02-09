@@ -109,7 +109,7 @@ function build(dtvSchedule) {
     });
   });
   // filter out duplicates - happens with sd/hd channels
-  const filteredPrograms = _.uniqBy(allPrograms, 'id');
+  const filteredPrograms = uniqBy(allPrograms, 'id');
   return filteredPrograms;
 }
 
