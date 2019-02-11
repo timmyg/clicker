@@ -1,11 +1,13 @@
 const dynamoose = require('dynamoose');
 const axios = require('axios');
 const moment = require('moment');
+const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
+let Program;
 require('dotenv').config();
 
 function init() {
-  const Program = dynamoose.model(
+  Program = dynamoose.model(
     process.env.tableProgram,
     {
       id: {
@@ -68,7 +70,7 @@ module.exports.health = async event => {
 module.exports.pull = async event => {
   try {
     init();
-    const url = 'https://www.directv.com/json/channelschedule';
+    const url = process.env.GUIDE_ENDPOINT;
     const channelsToPull = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
     const startTime = moment()
       .utc()
@@ -103,22 +105,20 @@ function build(dtvSchedule) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
-      if (program.programId !== '-1') {
-        program.id = generateId(program);
-        program.chId = channel.chId;
-        program.chNum = channel.chNum;
-        program.chCall = channel.chCall;
-        program.chHd = channel.chHd;
-        program.chCat = channel.chCat;
-        program.blackOut = channel.blackOut;
-        allPrograms.push(program);
-      }
+      program.chId = channel.chId;
+      program.chNum = channel.chNum;
+      program.chCall = channel.chCall;
+      program.chHd = channel.chHd;
+      program.chCat = channel.chCat;
+      program.blackOut = channel.blackOut;
+      program.id = generateId(program);
+      allPrograms.push(program);
     });
   });
   // filter out duplicates - happens with sd/hd channels
-  // const filteredPrograms = uniqBy(allPrograms, 'id');
-  // return filteredPrograms;
-  return allPrograms;
+  const filteredPrograms = uniqBy(allPrograms, 'id');
+  return filteredPrograms;
+  // return allPrograms;
 }
 
 function generateId(program) {
@@ -127,5 +127,6 @@ function generateId(program) {
   return uuid(id, uuid.DNS);
 }
 
+module.exports.transformPrograms = transformPrograms;
 module.exports.build = build;
 module.exports.generateId = generateId;

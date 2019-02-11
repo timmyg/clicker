@@ -1,4 +1,4 @@
-const { build, generateId } = require('./program');
+const { build, generateId, transformPrograms } = require('./program');
 const data = require('../resources/channelschedule-2.json');
 
 test('generateId generates the same id when same program', () => {
@@ -27,7 +27,6 @@ test('generateId generates different ids when different programs', () => {
 
 test('build programs', () => {
   const response = build(data.schedule);
-  // console.log(response);
   expect(response[0]).toHaveProperty('id');
-  expect(response.length).toBe(219);
+  expect(response.length).toBe(183);
 });
