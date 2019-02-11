@@ -1,4 +1,4 @@
-const { build, generateId, transformPrograms } = require('./program');
+const { build, generateId } = require('./program');
 const data = require('../resources/channelschedule-2.json');
 
 test('generateId generates the same id when same program', () => {
