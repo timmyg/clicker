@@ -7,7 +7,10 @@
           class="section-paragraph"
         >Clicker is currently in closed beta, but leave us your email and we'll keep you up to date with our broader launch.</p>
         <p v-if="submitted" class="success">Thank you! We'll be in contact.</p>
-        <p v-else-if="error" class="error">Oh no! Something is wrong on our end. We've been alerted, please try again in a bit.</p>
+        <p
+          v-else-if="error"
+          class="error"
+        >Oh no! Something is wrong on our end. We've been alerted, please try again in a bit.</p>
         <form
           class="footer-form newsletter-form field field-grouped is-revealing"
           v-on:submit.prevent="onSubmit"
@@ -44,7 +47,7 @@ export default {
     onSubmit() {
       this.submitting = true;
       const { email } = this;
-      this.$ma.setUsername(email); 
+      this.$analytics.alias(email);
       this.$http
         .post('/leads/hitmeback', { email })
         .then(() => {

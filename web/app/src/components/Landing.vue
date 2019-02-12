@@ -32,6 +32,7 @@
       <footer class="site-footer text-light">
         <page-footer></page-footer>
       </footer>
+      <analytics></analytics>
     </div>
   </section>
 </template>
@@ -45,6 +46,7 @@ import FeaturesTabs from './landing/FeaturesTabs';
 import PageHeader from './landing/PageHeader';
 import PageFooter from './landing/PageFooter';
 import Interested from './landing/Interested';
+import Analytics from './Analytics';
 import VueScrollReveal from 'vue-scroll-reveal';
 
 Vue.use(VueScrollReveal, {
@@ -64,6 +66,7 @@ export default {
     PageHeader,
     PageFooter,
     Interested,
+    Analytics,
   },
   mounted: function() {
     this.$sr.reveal('.feature', {

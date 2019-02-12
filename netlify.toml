@@ -17,6 +17,7 @@
   VUE_APP_SEGMENT_KEY = "Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I"
 [context.stage.environment]
   VUE_APP_API_URL = "https://api-stage.tryclicker.com"
+  VUE_APP_SEGMENT_KEY="VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
 [context.development.environment]
   VUE_APP_API_URL = "https://api-dev.tryclicker.com"
-
+  VUE_APP_SEGMENT_KEY = "VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
