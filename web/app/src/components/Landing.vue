@@ -14,9 +14,9 @@
           <features></features>
         </section>
 
-        <!-- <section class="features-tabs section">
+        <section class="features-tabs section">
           <features-tabs></features-tabs>
-        </section>-->
+        </section>
         <section class="testimonials section">
           <quotes></quotes>
         </section>

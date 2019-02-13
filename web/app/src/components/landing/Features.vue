@@ -26,7 +26,7 @@
             <h3 class="feature-title">Increase Dwell Time</h3>
             <p
               class="text-sm"
-            >Improve ticket sizes by over 50% while your patrons stick around and enjoy the game.</p>
+            >Improve ticket sizes while your patrons stick around and enjoy the game.</p>
           </div>
         </div>
         <div class="feature is-revealing">
@@ -82,9 +82,7 @@
               </svg>
             </div>
             <h3 class="feature-title">Smart Channels</h3>
-            <p
-              class="text-sm"
-            >When TVs arent changed by patrons, we'll make sure the best games are on anyway.</p>
+            <p class="text-sm">We'll make sure the best games are on - even when TVs are idle.</p>
           </div>
         </div>
         <div class="feature is-revealing">
@@ -115,7 +113,7 @@
               </svg>
             </div>
             <h3 class="feature-title">Stay Focused</h3>
-            <p class="text-sm">Allow your staff to focus on their jobs and keeping patrons happy.</p>
+            <p class="text-sm">Allow your staff to focus on their jobs and keep patrons happy.</p>
           </div>
         </div>
       </div>

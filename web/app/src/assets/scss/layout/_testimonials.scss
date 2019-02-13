@@ -44,16 +44,16 @@
     width: 100%;
   }
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    @include shadow;
-    mix-blend-mode: multiply;
-  }
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   @include shadow;
+  //   mix-blend-mode: multiply;
+  // }
 }
 
 .testimonial-header {
@@ -114,9 +114,9 @@
       background-repeat: no-repeat;
     }
 
-    .section-title {
-      margin-bottom: 80px;
-    }
+    // .section-title {
+    //   margin-bottom: 80px;
+    // }
   }
 
   .testimonial {

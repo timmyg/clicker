@@ -2,14 +2,13 @@
   <div class="container">
     <div class="hero-inner has-animations">
       <div class="hero-copy">
-        <h1
-          class="hero-title h2-mobile mt-0 is-revealing"
-          v-scroll-reveal
-        >Put the TV remote in your patron's hands</h1>
+        <!-- <h1 class="hero-title h2-mobile mt-0 is-revealing" v-scroll-reveal>Change the game</h1> -->
+        <!-- <h1>Put the Remote in your Patron's Hands</h1> -->
+        <h1>Change the game</h1>
         <p
           class="hero-paragraph is-revealing"
           v-scroll-reveal="{ delay: 250 }"
-        >Delight everyone who walks in to your establishment by allowing them to watch what they want.</p>
+        >Get Clicker at your establishment and allow your patrons to choose the channel they want to watch.</p>
         <!-- <p class="hero-cta is-revealing">
                   <a class="button button-primary button-shadow" href="#">Pricing and plans</a>
         </p>-->
@@ -137,3 +136,7 @@ export default {
   name: 'Hero',
 };
 </script>
+
+<style lang="scss" scoped>
+</style>
+

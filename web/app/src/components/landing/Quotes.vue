@@ -1,8 +1,11 @@
 <template>
   <div class="container">
     <div class="testimonials-inner section-inner">
-      <h2 class="section-title mt-64 text-center">&nbsp;</h2>
-      <div class="testimonials-wrap">
+      <h2 class="mt-64 text-center">Gambling is here to stay</h2>
+      <p
+        class="blurb"
+      >With the recent growth in sports gambling and likelihood of mass legalization, interest in "other market" games will continue to increase.</p>
+      <div class="testimonials-wrap mt-64">
         <div class="testimonial text-center text-xs is-revealing">
           <div class="testimonial-inner">
             <div class="testimonial-main">
@@ -17,6 +20,7 @@
               <div class="testimonial-link">
                 <a
                   href="https://www2.deloitte.com/insights/us/en/industry/technology/technology-media-and-telecom-predictions/tv-sports-betting.html"
+                  target="_blank"
                 >Deloitte Insights</a>
               </div>
             </div>
@@ -36,6 +40,7 @@
               <div class="testimonial-link">
                 <a
                   href="https://www.mckinsey.com/industries/media-and-entertainment/our-insights/we-are-wrong-about-millennial-sports-fans"
+                  target="_blank"
                 >McKinsey</a>
               </div>
             </div>
@@ -55,6 +60,7 @@
               <div class="testimonial-link">
                 <a
                   href="https://www.prnewswire.com/news-releases/sports-betting-market-to-rise-at-nearly-862-cagr-to-2022-669711413.html"
+                  target="_blank"
                 >Cision</a>
               </div>
             </div>
@@ -70,3 +76,12 @@ export default {
   name: 'Quotes',
 };
 </script>
+
+<style lang="scss" scoped>
+.blurb {
+  max-width: 760px;
+  text-align: center;
+  margin: 0 auto;
+}
+</style>
+
