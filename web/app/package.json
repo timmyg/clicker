@@ -28,8 +28,7 @@
     "npm": "^6.6.0",
     "prerender-spa-plugin": "^3.4.0",
     "prettier": "^1.16.2",
-    "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.17"
+    "sass-loader": "^7.0.1"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
