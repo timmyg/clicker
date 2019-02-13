@@ -8,7 +8,6 @@
       <main>
         <section class="hero">
           <hero></hero>
-          <hero-image></hero-image>
         </section>
 
         <section class="features section text-center">
@@ -42,7 +41,6 @@
 import Vue from 'vue';
 import Quotes from './landing/Quotes';
 import Hero from './landing/Hero';
-import HeroImage from './landing/HeroImage';
 import Features from './landing/Features';
 import FeaturesTabs from './landing/FeaturesTabs';
 import PageHeader from './landing/PageHeader';
@@ -63,7 +61,6 @@ export default {
   components: {
     Quotes,
     Hero,
-    HeroImage,
     Features,
     FeaturesTabs,
     PageHeader,

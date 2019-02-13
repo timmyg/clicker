@@ -11,24 +11,26 @@
   "dependencies": {
     "axios": "^0.18.0",
     "gotrue-js": "^0.9.22",
-    "vue": "^2.5.17",
+    "vue": "^2.6.6",
     "vue-router": "^3.0.1",
     "vue-scroll-reveal": "^1.0.11",
-    "vuex": "^3.0.1"
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.3",
-    "@vue/cli-plugin-eslint": "^3.0.3",
-    "@vue/cli-service": "^3.0.3",
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-eslint": "^3.4.0",
+    "@vue/cli-service": "^3.4.0",
     "@vue/eslint-config-prettier": "^3.0.5",
     "eslint-plugin-vue": "^5.1.0",
     "install": "^0.12.2",
     "lint-staged": "^7.2.2",
     "node-sass": "^4.9.0",
-    "npm": "^6.6.0",
+    "npm": "^6.7.0",
     "prerender-spa-plugin": "^3.4.0",
-    "prettier": "^1.16.2",
-    "sass-loader": "^7.0.1"
+    "prettier": "^1.16.4",
+    "sass-loader": "^7.0.1",
+    "vue-svg-loader": "^0.12.0",
+    "vue-template-compiler": "^2.6.6"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
