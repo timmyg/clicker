@@ -5,35 +5,57 @@
         <div class="feature is-revealing">
           <div class="feature-inner">
             <div class="feature-icon">
-              <svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
+              <svg
+                width="80"
+                height="80"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  fill="none"
+                  fill-rule="evenodd"
+                >
                   <path
                     d="M48.066 61.627c6.628 0 10.087-16.79 10.087-23.418 0-6.627-5.025-9.209-11.652-9.209C39.874 29 24 42.507 24 49.135c0 6.627 17.439 12.492 24.066 12.492z"
                     fill-opacity="0.24"
                     fill="#A0A6EE"
                   ></path>
-                  <path d="M26 54l28-28" stroke="#838DEA" stroke-width="2" stroke-linecap="square"></path>
+                  <path
+                    d="M26 54l28-28"
+                    stroke="#838DEA"
+                    stroke-width="2"
+                    stroke-linecap="square"
+                  ></path>
                   <path
                     d="M26 46l20-20M26 38l12-12M26 30l4-4M34 54l20-20M42 54l12-12"
                     stroke="#767DE1"
                     stroke-width="2"
                     stroke-linecap="square"
                   ></path>
-                  <path d="M50 54l4-4" stroke="#838DEA" stroke-width="2" stroke-linecap="square"></path>
+                  <path
+                    d="M50 54l4-4"
+                    stroke="#838DEA"
+                    stroke-width="2"
+                    stroke-linecap="square"
+                  ></path>
                 </g>
               </svg>
             </div>
             <h3 class="feature-title">Increase Dwell Time</h3>
-            <p
-              class="text-sm"
-            >Improve ticket sizes while your patrons stick around and enjoy the game.</p>
+            <p class="text-sm">Improve ticket sizes while your patrons stick around and enjoy the game.</p>
           </div>
         </div>
         <div class="feature is-revealing">
           <div class="feature-inner">
             <div class="feature-icon">
-              <svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
+              <svg
+                width="80"
+                height="80"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  fill="none"
+                  fill-rule="evenodd"
+                >
                   <path
                     d="M48.066 61.627c6.628 0 10.087-16.79 10.087-23.418 0-6.627-5.025-9.209-11.652-9.209C39.874 29 24 42.507 24 49.135c0 6.627 17.439 12.492 24.066 12.492z"
                     fill-opacity="0.24"
@@ -49,9 +71,7 @@
               </svg>
             </div>
             <h3 class="feature-title">Majority Wins</h3>
-            <p
-              class="text-sm"
-            >In the case there's a disagreement over a channel, we'll ensure the majority wins.</p>
+            <p class="text-sm">In the case there's a disagreement over a channel, we'll ensure the majority wins.</p>
           </div>
         </div>
       </div>
@@ -59,8 +79,15 @@
         <div class="feature is-revealing">
           <div class="feature-inner">
             <div class="feature-icon">
-              <svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
+              <svg
+                width="80"
+                height="80"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  fill="none"
+                  fill-rule="evenodd"
+                >
                   <path
                     d="M48.066 61.627c6.628 0 10.087-16.79 10.087-23.418 0-6.627-5.025-9.209-11.652-9.209C39.874 29 24 42.507 24 49.135c0 6.627 17.439 12.492 24.066 12.492z"
                     fill-opacity="0.32"
@@ -88,8 +115,16 @@
         <div class="feature is-revealing">
           <div class="feature-inner">
             <div class="feature-icon">
-              <svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(24 25)" fill="none" fill-rule="evenodd">
+              <svg
+                width="80"
+                height="80"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  transform="translate(24 25)"
+                  fill="none"
+                  fill-rule="evenodd"
+                >
                   <path
                     d="M24.066 36.627c6.628 0 10.087-16.79 10.087-23.418C34.153 6.582 29.128 4 22.501 4 15.874 4 0 17.507 0 24.135c0 6.627 17.439 12.492 24.066 12.492z"
                     fill-opacity="0.32"
