@@ -12,9 +12,17 @@
           <ion-grid no-padding>
             <ion-row align-items-center>
               <ion-col size="1" no-padding align-items-center>
-                <ion-icon name="basketball" size="large"></ion-icon>
+                <ion-icon *ngIf="game.type === 'basketball'" name="basketball" class="sport" size="large"></ion-icon>
+                <ion-icon
+                  *ngIf="game.type === 'football'"
+                  name="american-football"
+                  class="sport"
+                  size="large"
+                ></ion-icon>
+                <ion-icon *ngIf="game.type === 'baseball'" name="baseball" class="sport" size="large"></ion-icon>
+                <ion-icon *ngIf="game.type === 'soccer'" name="football" class="sport" size="large"></ion-icon>
               </ion-col>
-              <ion-col size="11"> {{ game.title }} </ion-col>
+              <ion-col size="11" class="title"> {{ game.title }} </ion-col>
             </ion-row>
           </ion-grid>
         </ion-card-title>

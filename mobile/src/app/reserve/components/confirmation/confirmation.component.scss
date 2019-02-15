@@ -1,3 +1,17 @@
 ion-spinner {
   vertical-align: middle;
 }
+
+// TODO duplicated
+ion-icon.sport {
+  display: inline;
+  &[name='basketball'] {
+    color: #fa8320;
+  }
+  &[name='american-football'] {
+    color: #624a2e;
+  }
+  ::ng-deep svg {
+    height: 30px;
+  }
+}

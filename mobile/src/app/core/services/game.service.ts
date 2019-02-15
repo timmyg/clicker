@@ -20,11 +20,22 @@ export class GameService {
       channel: 206,
       channelTitle: 'FS1',
       start: moment()
-        .hour(20)
+        .hour(19)
         .minutes(0)
         .toDate(),
     };
     const game2: Game = {
+      id: 1,
+      title: 'Florida at Florida State',
+      type: 'football',
+      channel: 206,
+      channelTitle: 'ABC',
+      start: moment()
+        .hour(20)
+        .minutes(0)
+        .toDate(),
+    };
+    const game3: Game = {
       id: 1,
       title: 'West Virginia at Texas',
       type: 'basketball',
@@ -35,23 +46,12 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    const game3: Game = {
+    const game4: Game = {
       id: 1,
-      title: 'North Carolina at Duke',
+      title: 'Clemson at Wake Forest',
       type: 'basketball',
       channel: 206,
       channelTitle: 'ESPN',
-      start: moment()
-        .hour(20)
-        .minutes(30)
-        .toDate(),
-    };
-    const game4: Game = {
-      id: 1,
-      title: 'LSU at Florida State',
-      type: 'basketball',
-      channel: 206,
-      channelTitle: 'ACCN',
       start: moment()
         .hour(20)
         .minutes(30)
@@ -59,12 +59,12 @@ export class GameService {
     };
     const game5: Game = {
       id: 1,
-      title: 'Kansas at Oklahoma State',
+      title: 'Kansas at Oklahoma',
       type: 'basketball',
       channel: 206,
       channelTitle: 'ESPN',
       start: moment()
-        .hour(20)
+        .hour(21)
         .minutes(0)
         .toDate(),
     };
@@ -75,7 +75,7 @@ export class GameService {
       channel: 206,
       channelTitle: 'CBSSN',
       start: moment()
-        .hour(20)
+        .hour(22)
         .minutes(0)
         .toDate(),
     };
@@ -90,6 +90,6 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    return of([game1, game2, game3, game4]).pipe(delay(500));
+    return of([game1, game2, game3, game4, game5, game6, game7]).pipe(delay(500));
   }
 }
