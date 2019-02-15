@@ -1,45 +1,89 @@
 <template>
   <div class="container">
     <div class="features-tabs-inner section-inner has-top-divider">
+      <p class="blurb">Through use of a phone app, guests at your location will be able to pick the channel they want to watch for a purchased timeframe.</p>
       <div class="tabs-container">
         <ul class="tabs-links">
-          <li class="is-revealing">
-            <a href="#tab-1" class="tab-link is-active" v-on:click="tabClick($event)">
-              <img src="/img/tabs-icon-01.svg" alt="Tabs icon 01">
-              <span class="h4 m-0">Flip to the Game</span>
+          <li>
+            <a
+              href="#tab-1"
+              class="tab-link is-active"
+              v-on:click="tabClick($event)"
+            >
+              <img
+                src="/img/tabs-icon-01.svg"
+                alt="Tabs icon 01"
+              >
+              <span class="h4 m-0">1. Pick your bar or restaurant location</span>
             </a>
           </li>
-          <li class="is-revealing">
-            <a href="#tab-2" class="tab-link" v-on:click="tabClick($event)">
-              <img src="/img/tabs-icon-02.svg" alt="Tabs icon 02">
-              <span class="h4 m-0">Network Effects</span>
+          <li>
+            <a
+              href="#tab-2"
+              class="tab-link"
+              v-on:click="tabClick($event)"
+            >
+              <img
+                src="/img/tabs-icon-02.svg"
+                alt="Tabs icon 02"
+              >
+              <span class="h4 m-0">2. Choose the game you want to watch</span>
             </a>
           </li>
-          <li class="is-revealing">
-            <a href="#tab-3" class="tab-link" v-on:click="tabClick($event)">
-              <img src="/img/tabs-icon-03.svg" alt="Tabs icon 03">
-              <span class="h4 m-0">Know your Customers</span>
+          <li>
+            <a
+              href="#tab-3"
+              class="tab-link"
+              v-on:click="tabClick($event)"
+            >
+              <img
+                src="/img/tabs-icon-03.svg"
+                alt="Tabs icon 03"
+              >
+              <span class="h4 m-0">3. Select the TV you want to watch</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#tab-4"
+              class="tab-link"
+              v-on:click="tabClick($event)"
+            >
+              <img
+                src="/img/tabs-icon-03.svg"
+                alt="Tabs icon 03"
+              >
+              <span class="h4 m-0">4. Select the duration and tune the channel</span>
             </a>
           </li>
         </ul>
-        <div class="tabs-content" scroll-reveal>
-          <div id="tab-1" class="tab-panel is-active">
-            <h3>Just Like Your Living Room Couch</h3>
-            <p
-              class="mt-32"
-            >Through the use of our phone app, patrons at the restaurant will be able to pick the channel they want to watch for a purchased timeframe.</p>
+        <div
+          class="tabs-content"
+          scroll-reveal
+        >
+          <div
+            id="tab-1"
+            class="tab-panel is-active"
+          >
+            [location screen here]
           </div>
-          <div id="tab-2" class="tab-panel">
-            <h3>Be the Place Everyone Wants to Be</h3>
-            <p
-              class="mt-32"
-            >With their new superpower, your patrons will not only come back time and time again, but bring their family and friends.</p>
+          <div
+            id="tab-2"
+            class="tab-panel"
+          >
+            [channel screen here]
           </div>
-          <div id="tab-3" class="tab-panel">
-            <h3>Data is King</h3>
-            <p
-              class="mt-32"
-            >While passively learning your customers favorite teams, we can retarget and push them deals to come in the next time their teams are on.</p>
+          <div
+            id="tab-3"
+            class="tab-panel"
+          >
+            [tv screen here]
+          </div>
+          <div
+            id="tab-4"
+            class="tab-panel"
+          >
+            [duration screen here]
           </div>
         </div>
       </div>

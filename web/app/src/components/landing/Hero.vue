@@ -1,15 +1,16 @@
 <template>
   <div class="container">
-    <div class="hero-inner has-animations">
-      <div class="hero-copy">
-        <h1>Change the game</h1>
+    <div class="hero-inner">
+      <div class="hero-copy col">
+        <h1 class="listen-up">Change the game</h1>
         <p
-          class="hero-paragraph is-revealing"
+          class="hero-paragraph"
           v-scroll-reveal="{ delay: 250 }"
-        >Get Clicker at your establishment and allow your patrons to choose the channel they want to watch.</p>
+        >Empower your guests to change the channel simply from their phone.</p>
+        <signup></signup>
       </div>
       <div
-        class="hero-illustration is-revealing"
+        class="hero-illustration col"
         v-scroll-reveal="{ delay: 450, origin: 'right', distance: '100px' }"
       >
         <hero-image></hero-image>
@@ -20,10 +21,12 @@
 
 <script>
 import HeroImage from './HeroImage';
+import Signup from './Signup';
 export default {
   name: 'Hero',
   components: {
     HeroImage,
+    Signup,
   },
 };
 </script>

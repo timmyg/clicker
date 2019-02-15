@@ -2,17 +2,6 @@
   position: relative;
   text-align: center;
   padding-top: 40px;
-
-  &::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 230px;
-    width: 80%;
-    background: mix(color(primary, 1), color(primary, 2));
-    background: linear-gradient(to top right, color(primary, 1) 0, color(primary, 2) 100%);
-  }
 }
 
 .hero-inner {
@@ -62,6 +51,10 @@
   .hero-copy {
     padding-right: 48px;
     min-width: 512px;
+    font-size: 1.2rem;
+    .listen-up {
+      font-size: 50px;
+    }
   }
 
   .hero-illustration {

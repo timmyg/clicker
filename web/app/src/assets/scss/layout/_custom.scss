@@ -1,0 +1,15 @@
+.flex-grid {
+  display: flex;
+}
+
+.flex-grid-thirds {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-grid-thirds .col {
+  width: 32%;
+}
+
+.col {
+  flex: 1;
+}

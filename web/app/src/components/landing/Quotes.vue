@@ -1,16 +1,18 @@
 <template>
   <div class="container">
     <div class="testimonials-inner section-inner">
-      <h2 class="mt-64 text-center">Gambling is here to stay</h2>
-      <p
-        class="blurb"
-      >With the recent growth in sports gambling and likelihood of mass legalization, interest in "other market" games will continue to increase.</p>
+      <h2 class="mt-64 text-center">Sports gambling is here to stay</h2>
+      <p class="blurb">With the recent growth in sports gambling and likelihood of mass legalization, interest in "other market" games will continue to increase.</p>
       <div class="testimonials-wrap mt-64">
-        <div class="testimonial text-center text-xs is-revealing">
+        <div class="testimonial text-center text-xs ">
           <div class="testimonial-inner">
             <div class="testimonial-main">
               <div class="testimonial-header">
-                <img class="mb-16" src="/img/deloitte.png" alt="Deloitte logo">
+                <img
+                  class="mb-16"
+                  src="/img/deloitte.png"
+                  alt="Deloitte logo"
+                >
               </div>
               <div class="testimonial-body">
                 <p>60 percent of North American men aged 18–34 who watch sports on TV will also bet on sports.</p>
@@ -26,11 +28,15 @@
             </div>
           </div>
         </div>
-        <div class="testimonial text-center text-xs is-revealing">
+        <div class="testimonial text-center text-xs ">
           <div class="testimonial-inner">
             <div class="testimonial-main">
               <div class="testimonial-header">
-                <img class="mb-16" src="/img/mckinsey.jpg" alt="McKinsey logo">
+                <img
+                  class="mb-16"
+                  src="/img/mckinsey.jpg"
+                  alt="McKinsey logo"
+                >
               </div>
               <div class="testimonial-body">
                 <p>Millenials and Generation Xers spend over 5 hours a day on their smartphones.</p>
@@ -46,11 +52,15 @@
             </div>
           </div>
         </div>
-        <div class="testimonial text-center text-xs is-revealing">
+        <div class="testimonial text-center text-xs ">
           <div class="testimonial-inner">
             <div class="testimonial-main">
               <div class="testimonial-header">
-                <img class="mb-16" src="/img/cision.png" alt="Cision logo">
+                <img
+                  class="mb-16"
+                  src="/img/cision.png"
+                  alt="Cision logo"
+                >
               </div>
               <div class="testimonial-body">
                 <p>Sports betting is estimated to grow at nearly 9 percent per year between 2018 and 2022.</p>

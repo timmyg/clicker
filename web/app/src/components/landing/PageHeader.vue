@@ -1,18 +1,18 @@
 <template>
-  <div class="container has-animations">
+  <div class="container">
     <div class="site-header-inner">
       <div class="brand header-brand">
-        <span class="logo is-revealing">
-          <logo></logo>
+        <span class="logo">
+          <Logo />
         </span>
-        <span class="name brand-font is-revealing">Clicker</span>
+        <span class="name brand-font ">Clicker</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from './Logo';
+import Logo from '../../assets/img/logo.svg';
 
 export default {
   name: 'PageHeader',
@@ -29,6 +29,9 @@ export default {
   .name {
     font-size: 34px;
     padding: 4px 6px;
+  }
+  .logo svg {
+    height: 60px;
   }
 }
 </style>

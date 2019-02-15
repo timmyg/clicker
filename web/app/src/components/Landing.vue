@@ -10,13 +10,14 @@
           <hero></hero>
         </section>
 
+        <section class="features-tabs section">
+          <features-tabs></features-tabs>
+        </section>
+
         <section class="features section text-center">
           <features></features>
         </section>
 
-        <section class="features-tabs section">
-          <features-tabs></features-tabs>
-        </section>
         <section class="testimonials section">
           <quotes></quotes>
         </section>
@@ -68,66 +69,7 @@ export default {
     Interested,
     Analytics,
   },
-  mounted: function() {
-    this.$sr.reveal('.feature', {
-      delay: 150,
-      duration: 1000,
-      distance: '60px',
-      easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
-      origin: 'bottom',
-      interval: 150,
-    });
-    this.$sr.reveal('.tab-link', {
-      delay: 150,
-      duration: 700,
-      distance: '50px',
-      easing: 'cubic-bezier(0.715, 0.21, 0.95, 1)',
-      origin: 'left',
-      interval: 50,
-    });
-    this.$sr.reveal('.tab-panel', {
-      delay: 50,
-      duration: 300,
-      distance: '10px',
-      easing: 'cubic-bezier(0.15, 0.21, 0.95, 1)',
-      origin: 'bottom',
-    });
-    this.$sr.reveal('.testimonial', {
-      delay: 90,
-      duration: 600,
-      distance: '10px',
-      easing: 'cubic-bezier(0.6, 0.2, 0.1, 1)',
-      origin: 'bottom',
-    });
-    this.$sr.reveal('.newsletter', {
-      delay: 90,
-      duration: 600,
-      distance: '10px',
-      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
-      origin: 'right',
-    });
-    this.$sr.reveal('.hero-title, .hero-paragraph, .hero-illustration', {
-      delay: 90,
-      duration: 600,
-      distance: '10px',
-      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
-      origin: 'right',
-    });
-    this.$sr.reveal('.brand .logo', {
-      delay: 1350,
-      duration: 600,
-      distance: '5px',
-      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
-      origin: 'right',
-    });
-    this.$sr.reveal('.brand .name', {
-      delay: 650,
-      duration: 600,
-      distance: '5px',
-      easing: 'cubic-bezier(0.5, -0.01, 0, 1.005)',
-      origin: 'top',
-    });
-  },
+  mounted: function() {},
   methods: {
     tabClick: function(e) {
       e.preventDefault();

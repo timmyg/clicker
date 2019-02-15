@@ -4,7 +4,7 @@
       <h2 class="section-title mt-0 text-center">Pricing</h2>
       <div>
         <div class="pricing-tables-wrap">
-          <div class="pricing-table is-revealing">
+          <div class="pricing-table ">
             <div class="pricing-table-inner">
               <div class="pricing-table-main">
                 <div class="pricing-table-header mb-24 pb-24">
@@ -30,11 +30,14 @@
                 </ul>
               </div>
               <div class="pricing-table-cta">
-                <a class="button button-secondary button-shadow button-block" href="#">Get started</a>
+                <a
+                  class="button button-secondary button-shadow button-block"
+                  href="#"
+                >Get started</a>
               </div>
             </div>
           </div>
-          <div class="pricing-table is-revealing">
+          <div class="pricing-table ">
             <div class="pricing-table-inner">
               <div class="pricing-table-main">
                 <div class="pricing-table-header mb-24 pb-24">
@@ -60,13 +63,16 @@
                 </ul>
               </div>
               <div class="pricing-table-cta">
-                <a class="button button-primary button-shadow button-block" href="#">Get started</a>
+                <a
+                  class="button button-primary button-shadow button-block"
+                  href="#"
+                >Get started</a>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="pricing-faqs container-sm is-revealing">
+      <div class="pricing-faqs container-sm ">
         <h4 class="mt-40 mb-32">FAQs</h4>
         <ul class="accordion">
           <li>

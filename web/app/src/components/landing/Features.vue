@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="features-inner section-inner has-bottom-divider">
-      <div class="features-wrap has-animations">
-        <div class="feature is-revealing">
+      <div class="features-wrap">
+        <div class="feature ">
           <div class="feature-inner">
             <div class="feature-icon">
               <svg
@@ -44,39 +44,7 @@
             <p class="text-sm">Improve ticket sizes while your patrons stick around and enjoy the game.</p>
           </div>
         </div>
-        <div class="feature is-revealing">
-          <div class="feature-inner">
-            <div class="feature-icon">
-              <svg
-                width="80"
-                height="80"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g
-                  fill="none"
-                  fill-rule="evenodd"
-                >
-                  <path
-                    d="M48.066 61.627c6.628 0 10.087-16.79 10.087-23.418 0-6.627-5.025-9.209-11.652-9.209C39.874 29 24 42.507 24 49.135c0 6.627 17.439 12.492 24.066 12.492z"
-                    fill-opacity="0.24"
-                    fill="#75ABF3"
-                  ></path>
-                  <path
-                    d="M34 52V35M40 52V42M46 52V35M52 52V42M28 52V28"
-                    stroke="#4D8EF7"
-                    stroke-width="2"
-                    stroke-linecap="square"
-                  ></path>
-                </g>
-              </svg>
-            </div>
-            <h3 class="feature-title">Majority Wins</h3>
-            <p class="text-sm">In the case there's a disagreement over a channel, we'll ensure the majority wins.</p>
-          </div>
-        </div>
-      </div>
-      <div class="features-wrap">
-        <div class="feature is-revealing">
+        <div class="feature ">
           <div class="feature-inner">
             <div class="feature-icon">
               <svg
@@ -112,7 +80,40 @@
             <p class="text-sm">We'll make sure the best games are on - even when TVs are idle.</p>
           </div>
         </div>
-        <div class="feature is-revealing">
+      </div>
+      <div class="features-wrap">
+        <div class="feature ">
+          <div class="feature-inner">
+            <div class="feature-icon">
+              <svg
+                width="80"
+                height="80"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  fill="none"
+                  fill-rule="evenodd"
+                >
+                  <path
+                    d="M48.066 61.627c6.628 0 10.087-16.79 10.087-23.418 0-6.627-5.025-9.209-11.652-9.209C39.874 29 24 42.507 24 49.135c0 6.627 17.439 12.492 24.066 12.492z"
+                    fill-opacity="0.24"
+                    fill="#75ABF3"
+                  ></path>
+                  <path
+                    d="M34 52V35M40 52V42M46 52V35M52 52V42M28 52V28"
+                    stroke="#4D8EF7"
+                    stroke-width="2"
+                    stroke-linecap="square"
+                  ></path>
+                </g>
+              </svg>
+            </div>
+            <h3 class="feature-title">Know Your Guests</h3>
+            <p class="text-sm">Learn your customers favorite teams and target them for increased visit frequency.</p>
+          </div>
+        </div>
+
+        <div class="feature ">
           <div class="feature-inner">
             <div class="feature-icon">
               <svg
