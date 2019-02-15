@@ -3,16 +3,10 @@
     <div class="hero-inner">
       <div class="hero-copy col">
         <h1 class="listen-up">Change the game</h1>
-        <p
-          class="hero-paragraph"
-          v-scroll-reveal="{ delay: 250 }"
-        >Empower your guests to change the channel simply from their phone.</p>
+        <p class="hero-paragraph">Empower your guests to change the channel simply from their phone.</p>
         <signup></signup>
       </div>
-      <div
-        class="hero-illustration col"
-        v-scroll-reveal="{ delay: 450, origin: 'right', distance: '100px' }"
-      >
+      <div class="hero-illustration col">
         <hero-image></hero-image>
       </div>
     </div>

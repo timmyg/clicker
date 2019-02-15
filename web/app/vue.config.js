@@ -7,6 +7,7 @@ module.exports = {
       sass: {
         data: `
           @import "@/assets/scss/style.scss";
+          @import "~vue2-animate/src/sass/vue2-animate.scss";
         `,
       },
     },
