@@ -88,10 +88,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.blurb {
-  max-width: 760px;
-  text-align: center;
-  margin: 0 auto;
-}
 </style>
 
