@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="flex-grid">
+    <div class="flex-grid wrapper">
       <div class="hero-copy col">
         <h1 class="listen-up">Change the game</h1>
         <p class="hero-paragraph">Empower your guests to change the channel simply from their phone.</p>
@@ -26,6 +26,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  flex-direction: column;
+}
 .hero-illustration {
   display: flex;
   justify-content: space-between;

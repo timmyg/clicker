@@ -1,7 +1,7 @@
 .hero {
   position: relative;
   text-align: center;
-  padding-top: 40px;
+  // padding-top: 40px;
 }
 
 .hero-inner {
@@ -74,6 +74,9 @@
     &::before {
       left: auto;
       width: 43%;
+    }
+    .wrapper {
+      flex-direction: row;
     }
   }
 
