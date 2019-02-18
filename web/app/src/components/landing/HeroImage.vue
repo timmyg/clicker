@@ -1,36 +1,39 @@
 <template>
-  <section class="wrapper">
+  <div class="hero-img-wrapper">
     <div id="bricks">
       <Bricks />
     </div>
-    <div id="tv-1" class="tv">
+    <div
+      id="tv-1"
+      class="tv col"
+      v-bind:class="{ changing: changing }"
+    >
       <TV />
       <div class="channel">
-        <ChannelBaseball />
-        <ChannelBasketball />
-        <ChannelSoccer />
-        <ChannelTennis />
-        <ChannelTrophy />
-        <div class="normal"></div>
+        <ChannelBaseball v-if="channel === 1" />
+        <ChannelBasketball v-else-if="channel === 2" />
+        <ChannelSoccer v-else-if="channel === 3" />
+        <ChannelTennis v-else-if="channel === 4" />
+        <ChannelTrophy v-else-if="channel === 5" />
         <div class="tv-static"></div>
       </div>
     </div>
-    <div id="tv-2" class="tv">
-      <TV />
-      <div class="channel">
-        <ChannelBaseball />
-        <ChannelBasketball />
-        <ChannelSoccer />
-        <ChannelTennis />
-        <ChannelTrophy />
-        <div class="normal"></div>
-        <div class="tv-static"></div>
-      </div>
+    <div
+      id="phone-wrapper"
+      class="col"
+    >
+      <transition name="fadeUp">
+        <FunnelIcon
+          id="zap"
+          v-show="changing"
+        />
+      </transition>
+      <Phone
+        v-on:click="clickerClick()"
+        id="phone"
+      />
     </div>
-    <div id="phone">
-      <Phone />
-    </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -42,6 +45,8 @@
     import ChannelSoccer from '../../assets/img/hero/channels/soccer.svg';
     import ChannelTennis from '../../assets/img/hero/channels/tennis.svg';
     import ChannelTrophy from '../../assets/img/hero/channels/trophy.svg';
+    import FunnelIcon from 'vue-ionicons/dist/md-funnel.vue'
+    import RightIcon from 'vue-ionicons/dist/ios-return-right.vue'
     export default {
         name: 'HeroImage',
         components: {
@@ -53,43 +58,83 @@
             ChannelSoccer,
             ChannelTennis,
             ChannelTrophy,
+            FunnelIcon,
+            RightIcon
         },
+        data() {
+            return {
+                channel: null,
+                changing: false,
+            }
+        },
+        mounted() {
+            this.changeChannel();
+        },
+        methods: {
+            changeChannel() {
+                this.changing = true;
+                this.channel = this.getRandom();
+                setTimeout(()=> {
+                    this.changing = false;
+                }, 300)
+            },
+            getRandom() {
+                const max = 5;
+                let random = Math.floor(Math.random() * max) + 1;
+                if (random !== this.channel) {
+                    return random
+                } else {
+                    return this.getRandom();
+                }
+            },
+            clickerClick() {
+                console.log("click");
+                this.changeChannel();
+            }
+        }
     };
 </script>
 
 <style lang="scss" scoped>
     @import '../../assets/scss/custom/static';
+    .hero-img-wrapper {
+        display: flex;
+        // flex-grow: inherit;
+        // flex-direction: column;
+    }
+    .col {
+        position: relative;
+        flex: 1;
+    }
     .tv {
         position: absolute;
-        top: -30px;
         svg {
-            height: 200px;
+            height: 250px;
+            max-width: none;
         }
-        &#tv-1 {
-            left: -130px;
-            .channel {
-                left: 196px;
-                svg {
-                    left: -193px;;
-                }
+        &.changing {
+            .tv-static {
+                visibility: visible;
             }
         }
-        &#tv-2 {
-            left: 170px;
+        &:not(.changing) {
+            .tv-static {
+                visibility: hidden;
+            }
+        }
+        &#tv-1 {
+            top: 75px;
             .channel {
-                left: 196px;
-                svg {
-                    left: 93px;
-                }
+                right: 65px;
             }
         }
         .channel {
-            top: 65px;
-            height: 74px;
-            width: 135px;
-            border-radius: 40px;
+            top: 81px;
+            height: 91px;
+            width: 169px;
+            border-radius: 2px;
             position: absolute;
-            top: 34px;
+            background: white;
             .normal,
             .tv-static {
                 position: absolute;
@@ -97,43 +142,43 @@
                 width: inherit;
                 border-radius: 2px;
             }
-            .normal {
-                background: white;
-            }
             svg {
                 position: absolute;
-                height: 100px;
+                height: 60px;
+                top: 13px;
             }
         }
     }
     
-    #phone {
+    #phone-wrapper {
         position: absolute;
-        bottom: 5px;
-        left: 30px;
+        // right: 56px;
+        top: 300px;
+        #phone {
+            opacity: .8;
+            &:hover {
+                opacity: 1;
+                cursor: pointer;
+            }
+        }
+        #zap {
+            position: absolute;
+            left: 140px;
+            top: -30px;
+            color: lightgrey;
+        }
         svg {
             height: 100px;
         }
     }
-    
-    
-    // .screen {
 
-        // &#screen-1 {
-        //     left: 67px;
-        // }
-        // &#screen-2 {
-        //     left: 367px;
-        // }
-        // .normal,
-        // .tv-static {
-        //     position: absolute;
-        //     height: inherit;
-        //     width: inherit;
-        //     border-radius: 2px;
-        // }
-        // .normal {
-        //     background: white;
-        // }
-    // }
+    @include media('<medium') { 
+        .tv#tv-1 {
+            top: 283px;
+        }
+        #phone-wrapper {
+            top: 510px;
+        }
+    }
+    
 </style>

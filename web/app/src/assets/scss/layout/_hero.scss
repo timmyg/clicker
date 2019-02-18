@@ -43,45 +43,36 @@
     }
   }
 
-  .hero-inner {
-    /* Split hero in two half */
-    display: flex;
-  }
+  // .hero-inner {
+  //   /* Split hero in two half */
+  //   display: flex;
+  // }
 
-  .hero-copy {
-    padding-right: 48px;
-    min-width: 512px;
-    font-size: 1.2rem;
-    .listen-up {
-      font-size: 50px;
-    }
-  }
+  // .hero-copy {
+  //   padding-right: 48px;
+  //   min-width: 512px;
+  //   font-size: 1.2rem;
+  //   .listen-up {
+  //     font-size: 50px;
+  //   }
+  // }
 
   .hero-illustration {
-    margin-top: -68px;
-    padding-bottom: 0;
+    // margin-top: -68px;
+    // padding-bottom: 0;
 
     img,
     svg {
-      max-width: none;
-      width: 528px;
+      // max-width: none;
+      // width: 528px;
     }
   }
 }
 
-@include media('>large') {
+@include media('>small') {
   .hero {
-    &::before {
-      left: auto;
-      width: 43%;
-    }
     .wrapper {
       flex-direction: row;
     }
-  }
-
-  .hero-copy {
-    padding-right: 88px;
-    min-width: 552px;
   }
 }

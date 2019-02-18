@@ -7,7 +7,9 @@
         <signup></signup>
       </div>
       <div class="hero-illustration col">
-        <hero-image></hero-image>
+        <div class="flex-grid img-wrapper">
+          <hero-image></hero-image>
+        </div>
       </div>
     </div>
   </div>
@@ -29,10 +31,14 @@ export default {
 .wrapper {
   flex-direction: column;
 }
-.hero-illustration {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
+.img-wrapper {
+  justify-content: center;
+}
+
+@include media('<medium') { 
+  .hero-illustration {
+    height: 280px;
+  }
 }
 </style>
 
