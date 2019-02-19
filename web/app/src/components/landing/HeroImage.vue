@@ -7,11 +7,27 @@
     >
       <TV />
       <div class="channel">
-        <ChannelBaseball v-if="channel === 1" />
-        <ChannelBasketball v-else-if="channel === 2" />
-        <ChannelSoccer v-else-if="channel === 3" />
-        <ChannelTennis v-else-if="channel === 4" />
-        <ChannelTrophy v-else-if="channel === 5" />
+        <Channel1 v-if="channel === 1" />
+        <Channel2 v-if="channel === 2" />
+        <Channel3 v-if="channel === 3" />
+        <Channel4 v-if="channel === 4" />
+        <Channel5 v-if="channel === 5" />
+        <Channel6 v-if="channel === 6" />
+        <Channel7 v-if="channel === 7" />
+        <Channel8 v-if="channel === 8" />
+        <Channel9 v-if="channel === 9" />
+        <Channel10 v-if="channel === 10" />
+        <Channel11 v-if="channel === 11" />
+        <Channel12 v-if="channel === 12" />
+        <Channel13 v-if="channel === 13" />
+        <Channel14 v-if="channel === 14" />
+        <Channel15 v-if="channel === 15" />
+        <Channel16 v-if="channel === 16" />
+        <Channel17 v-if="channel === 17" />
+        <Channel18 v-if="channel === 18" />
+        <Channel19 v-if="channel === 19" />
+        <Channel20 v-if="channel === 20" />
+        <Channel21 v-if="channel === 21" />
         <div class="tv-static"></div>
       </div>
     </div>
@@ -43,26 +59,58 @@
     import Bricks from '../../assets/img/hero/wall.svg';
     import TV from '../../assets/img/hero/tv-mounted.svg';
     import Phone from '../../assets/img/hero/phone-hand.svg';
-    import ChannelBaseball from '../../assets/img/hero/channels/baseball.svg';
-    import ChannelBasketball from '../../assets/img/hero/channels/basketball.svg';
-    import ChannelSoccer from '../../assets/img/hero/channels/soccer.svg';
-    import ChannelTennis from '../../assets/img/hero/channels/tennis.svg';
-    import ChannelTrophy from '../../assets/img/hero/channels/trophy.svg';
     import FunnelIcon from 'vue-ionicons/dist/md-funnel.vue'
     import RightIcon from 'vue-ionicons/dist/ios-return-right.vue'
+    import Channel1 from '../../assets/img/hero/channels/024-tactics.svg';
+    import Channel2 from '../../assets/img/hero/channels/020-stadium.svg';
+    import Channel3 from '../../assets/img/hero/channels/014-red-card.svg';
+    import Channel4 from '../../assets/img/hero/channels/037-baseball.svg';
+    import Channel5 from '../../assets/img/hero/channels/033-soccer.svg';
+    import Channel6 from '../../assets/img/hero/channels/001-golf.svg';
+    import Channel7 from '../../assets/img/hero/channels/027-foam-hand.svg';
+    import Channel8 from '../../assets/img/hero/channels/017-hockey-sticks.svg';
+    import Channel9 from '../../assets/img/hero/channels/016-helmet.svg';
+    import Channel10 from '../../assets/img/hero/channels/003-race-horse.svg';
+    import Channel11 from '../../assets/img/hero/channels/022-basketball.svg';
+    import Channel12 from '../../assets/img/hero/channels/021-soccer.svg';
+    import Channel13 from '../../assets/img/hero/channels/037-tennis.svg';
+    import Channel14 from '../../assets/img/hero/channels/009-trophy.svg';
+    import Channel15 from '../../assets/img/hero/channels/005-car-1.svg';
+    import Channel16 from '../../assets/img/hero/channels/007-boxing.svg';
+    import Channel17 from '../../assets/img/hero/channels/050-american-football.svg';
+    import Channel18 from '../../assets/img/hero/channels/048-trophy.svg';
+    import Channel19 from '../../assets/img/hero/channels/044-baseball-helmet.svg';
+    import Channel20 from '../../assets/img/hero/channels/002-goal-post.svg';
+    import Channel21 from '../../assets/img/hero/channels/016-punching-ball.svg';
     export default {
         name: 'HeroImage',
         components: {
             Bricks,
             TV,
             Phone,
-            ChannelBaseball,
-            ChannelBasketball,
-            ChannelSoccer,
-            ChannelTennis,
-            ChannelTrophy,
             FunnelIcon,
-            RightIcon
+            RightIcon,
+            Channel1, 
+            Channel2, 
+            Channel3, 
+            Channel4, 
+            Channel5, 
+            Channel6, 
+            Channel7, 
+            Channel8, 
+            Channel9, 
+            Channel10,
+            Channel11,
+            Channel12,
+            Channel13,
+            Channel14,
+            Channel15,
+            Channel16,
+            Channel17,
+            Channel18,
+            Channel19,
+            Channel20,
+            Channel21,
         },
         data() {
             return {
@@ -82,8 +130,8 @@
                 }, 300)
             },
             getRandom() {
-                const max = 5;
-                let random = Math.floor(Math.random() * max) + 1;
+                const channels = 21;
+                let random = Math.floor(Math.random() * channels) + 1;
                 if (random !== this.channel) {
                     return random
                 } else {
