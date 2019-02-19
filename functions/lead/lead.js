@@ -1,6 +1,8 @@
 require('dotenv').config();
 const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.HUBSPOT_API_KEY });
+const Trello = require('trello');
+const trello = new Trello(process.env.TRELLO_API_KEY, process.env.TRELLO_AUTH_TOKEN);
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
@@ -28,13 +30,27 @@ function generateResponse(statusCode, body) {
  */
 module.exports.new = async (event, context) => {
   const body = JSON.parse(event.body);
-  const { email, source } = body;
+  const { email } = body;
+  const hubspotContact = await createHubspotContact(email);
+  const trelloContact = await createTrelloCard(email);
+  return generateResponse(201, { hubspotContact, trelloContact });
+};
+
+async function createHubspotContact(email) {
   const contact = {
     properties: [{ property: 'email', value: email }, { property: 'source', value: 'landing page' }],
   };
   const hubspotContact = await hubspot.contacts.create(contact);
-  return generateResponse(201, hubspotContact);
-};
+  return hubspotContact;
+}
+
+async function createTrelloCard(email) {
+  const webSignupsList = '5c5dd0800e00da44c0fadb1e';
+  var card = await trello.addCard(email, '', webSignupsList);
+  console.log({ card });
+  // addDueDateToCard
+  return card;
+}
 
 module.exports.health = async event => {
   return generateResponse(200, `hello`);

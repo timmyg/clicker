@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "dotenv": "^6.2.0",
-    "hubspot": "^2.0.0"
+    "hubspot": "^2.0.0",
+    "trello": "^0.9.1"
   }
 }

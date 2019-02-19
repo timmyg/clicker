@@ -5,6 +5,8 @@ provider:
   runtime: nodejs8.10
   environment:
     HUBSPOT_API_KEY: ${env:HUBSPOT_API_KEY}
+    TRELLO_API_KEY: ${env:TRELLO_API_KEY}
+    TRELLO_AUTH_TOKEN: ${env:TRELLO_AUTH_TOKEN}
 
 plugins:
   - serverless-domain-manager
