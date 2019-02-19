@@ -47,7 +47,7 @@
       />
       <div id="change">
         <div class="text">
-          Click to change the channel
+          Tap to change the channel
         </div>
         <RightIcon />
       </div>

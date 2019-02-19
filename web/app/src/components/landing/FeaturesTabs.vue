@@ -37,7 +37,7 @@
               class="tab-link"
               v-on:click="tabClick($event)"
             >
-              <span class="h4 m-0">4. Select the duration and tune the channel</span>
+              <span class="h4 m-0">4. Choose duration and tune the channel</span>
             </a>
           </li>
         </ul>

@@ -109,7 +109,7 @@
               </svg>
             </div>
             <h3 class="feature-title">Know Your Guests</h3>
-            <p class="text-sm">Learn your customers favorite teams and target them for increased visit frequency.</p>
+            <p class="text-sm">Learn their favorite teams and target them for increased visit frequency.</p>
           </div>
         </div>
 
