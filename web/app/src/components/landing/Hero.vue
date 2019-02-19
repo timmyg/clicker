@@ -3,7 +3,7 @@
     <div class="flex-grid wrapper">
       <div class="hero-copy col">
         <h1 class="listen-up">Change the game</h1>
-        <p class="hero-paragraph">Empower your guests to change the channel simply from their phone.</p>
+        <p class="hero-paragraph">Empower your guests to change the <span class="mobile-break">channel simply from their phone.</span></p>
         <signup></signup>
       </div>
       <div class="hero-illustration col">
@@ -34,10 +34,38 @@ export default {
 .img-wrapper {
   justify-content: center;
 }
+.hero-illustration {
+  background-image: url(/img/wall.svg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position-y: 20px;
+  height: 360px;
+}
+
+@include media('>large') { 
+  .hero > div {
+    min-height: 350px;
+  }
+  .hero-illustration {
+    background-image: url(/img/wall-sm.svg);
+    background-position-y: 0px;
+    height: inherit;
+  }
+  .hero-paragraph {
+    margin-bottom: 32px;
+    max-width: 380px;
+  }
+}
+@include media('>small') { 
+  .hero-copy {
+    text-align: left;
+    padding-right: 30px;
+  }
+}
 
 @include media('<medium') { 
-  .hero-illustration {
-    height: 280px;
+  .mobile-break {
+    display: inline-block;
   }
 }
 </style>

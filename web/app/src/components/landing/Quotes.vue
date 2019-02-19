@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="testimonials-inner section-inner">
+    <div>
       <h2 class="mt-64 text-center">Sports gambling is here to stay</h2>
       <p class="blurb">With the recent growth in sports gambling and likelihood of mass legalization, interest in "other market" games will continue to increase.</p>
       <div class="testimonials-wrap mt-64">

@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <div class="features-tabs-inner section-inner">
-      <p class="blurb mb-64">Through use of a phone app, guests at your location will be able to pick the channel they want to watch for a purchased timeframe.</p>
+  <div class="container mt-64 mb-64">
+    <div>
+      <p class="blurb">Through use of a phone app, guests at your location will be able to pick the channel they want to watch for a purchased timeframe.</p>
       <div class="tabs-container mt-32">
         <ul class="tabs-links">
           <li>
@@ -116,8 +116,16 @@ export default {
 
 <style lang="scss" scoped>
 img {
-  height: 600px;
+  height: 390px;
   max-width: none;
   width: inherit;
+}
+@include media('>large') { 
+  img {
+    height: 600px;
+  }
+  .tabs-links {
+    margin-top: 90px;
+  }
 }
 </style>

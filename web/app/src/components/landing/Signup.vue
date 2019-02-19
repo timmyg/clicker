@@ -76,5 +76,8 @@ button[type='submit'] {
 .success {
   color: color(additional, 3);
 }
+.center {
+  margin: 0 auto;
+}
 </style>
 

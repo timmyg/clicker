@@ -4,7 +4,7 @@
       <div class="newsletter-header text-center ">
         <h2 class="section-title mt-0">Stay in the know</h2>
         <p class="section-paragraph">Clicker is currently in closed beta, but leave us your email and we'll keep you up to date with our broader launch.</p>
-        <signup></signup>
+        <Signup class="center" />
       </div>
     </div>
   </div>

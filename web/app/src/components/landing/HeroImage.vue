@@ -1,8 +1,5 @@
 <template>
   <div class="hero-img-wrapper">
-    <!-- <div id="bricks">
-      <Bricks />
-    </div> -->
     <div
       id="tv-1"
       class="tv col"
@@ -32,6 +29,12 @@
         v-on:click="clickerClick()"
         id="phone"
       />
+      <div id="change">
+        <div class="text">
+          Click to change the channel
+        </div>
+        <RightIcon />
+      </div>
     </div>
   </div>
 </template>
@@ -122,7 +125,7 @@
             }
         }
         &#tv-1 {
-            top: -40px;
+            top: 227px;
             .channel {
                 right: 65px;
             }
@@ -148,12 +151,29 @@
             }
         }
     }
+
+    div#change {
+        font-size: 10px;
+        line-height: 10px;
+        width: 80px;
+        position: absolute;
+        left: -70px;
+        top: 30px;
+        .ion {
+            font-size: 20px;
+        }
+    }
     
     #phone-wrapper {
         position: absolute;
-        // right: 56px;
-        top: 200px;
+        top: 510px;
         #phone {
+            padding-left: 20px;
+            width: inherit;
+            svg {
+                height: 600px;
+                widows: inherit;
+            }
             opacity: .8;
             &:hover {
                 opacity: 1;
@@ -162,8 +182,9 @@
         }
         #zap {
             position: absolute;
-            left: 140px;
-            top: -30px;
+            top: -40px;
+            width: 100px;
+            left: 0px;
             color: lightgrey;
         }
         svg {
@@ -171,12 +192,12 @@
         }
     }
 
-    @include media('<medium') { 
+    @include media('>medium') { 
         .tv#tv-1 {
-            top: 283px;
+            top: -40px;
         }
         #phone-wrapper {
-            top: 510px;
+            top: 220px;
         }
     }
     
