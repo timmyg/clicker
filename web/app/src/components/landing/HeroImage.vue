@@ -1,8 +1,8 @@
 <template>
   <div class="hero-img-wrapper">
-    <div id="bricks">
+    <!-- <div id="bricks">
       <Bricks />
-    </div>
+    </div> -->
     <div
       id="tv-1"
       class="tv col"
@@ -99,8 +99,7 @@
     @import '../../assets/scss/custom/static';
     .hero-img-wrapper {
         display: flex;
-        // flex-grow: inherit;
-        // flex-direction: column;
+        justify-content: center;
     }
     .col {
         position: relative;
@@ -123,7 +122,7 @@
             }
         }
         &#tv-1 {
-            top: 75px;
+            top: -40px;
             .channel {
                 right: 65px;
             }
@@ -153,7 +152,7 @@
     #phone-wrapper {
         position: absolute;
         // right: 56px;
-        top: 300px;
+        top: 200px;
         #phone {
             opacity: .8;
             &:hover {

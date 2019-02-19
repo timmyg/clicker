@@ -7,9 +7,9 @@
         <signup></signup>
       </div>
       <div class="hero-illustration col">
-        <div class="flex-grid img-wrapper">
-          <hero-image></hero-image>
-        </div>
+        <!-- <div class="flex-grid img-wrapper"> -->
+        <hero-image></hero-image>
+        <!-- </div> -->
       </div>
     </div>
   </div>

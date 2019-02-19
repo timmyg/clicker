@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="features-tabs-inner section-inner">
-      <p class="blurb mb-64">Through use of a phone app, guests at your location will be able to pick the channel they want to watch for a purchased timeframe. Click the phone above to try it out.</p>
+      <p class="blurb mb-64">Through use of a phone app, guests at your location will be able to pick the channel they want to watch for a purchased timeframe.</p>
       <div class="tabs-container mt-32">
         <ul class="tabs-links">
           <li>
