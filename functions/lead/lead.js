@@ -3,6 +3,7 @@ const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.HUBSPOT_API_KEY });
 const Trello = require('trello');
 const trello = new Trello(process.env.TRELLO_API_KEY, process.env.TRELLO_AUTH_TOKEN);
+const stage = process.env.stage;
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
@@ -31,9 +32,12 @@ function generateResponse(statusCode, body) {
 module.exports.new = async (event, context) => {
   const body = JSON.parse(event.body);
   const { email } = body;
-  const hubspotContact = await createHubspotContact(email);
-  const trelloContact = await createTrelloCard(email);
-  return generateResponse(201, { hubspotContact, trelloContact });
+  if (stage === 'prod') {
+    const hubspotContact = await createHubspotContact(email);
+    const trelloContact = await createTrelloCard(email);
+    return generateResponse(201, { hubspotContact, trelloContact });
+  }
+  return generateResponse(201, "not prod so didn't actually create anything");
 };
 
 async function createHubspotContact(email) {
