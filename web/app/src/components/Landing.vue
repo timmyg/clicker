@@ -22,10 +22,15 @@
         </section> -->
 
         <!-- <section class="pricing section">
-          <pricing></pricing>
-        </section>-->
+          <Pricing />
+        </section> -->
+
+        <section class="pricing section">
+          <Faq />
+        </section>
+
         <section class="newsletter section">
-          <interested></interested>
+          <Interested />
         </section>
       </main>
 
@@ -45,6 +50,8 @@ import Features from './landing/Features';
 import FeaturesTabs from './landing/FeaturesTabs';
 import PageHeader from './landing/PageHeader';
 import PageFooter from './landing/PageFooter';
+import Faq from './landing/Faq';
+import Pricing from './landing/Pricing';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
 import VueScrollReveal from 'vue-scroll-reveal';
@@ -59,6 +66,8 @@ export default {
     FeaturesTabs,
     PageHeader,
     PageFooter,
+    Faq,
+    Pricing,
     Interested,
     Analytics,
   },

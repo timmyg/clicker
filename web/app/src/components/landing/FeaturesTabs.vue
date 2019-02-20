@@ -1,6 +1,11 @@
 <template>
     <div class="mt-64 mb-64">
-      <p class="container blurb">Through use of a phone app, guests at your bar or restaurant will be able to pick the channel they want to watch for a purchased timeframe.<br>In 4 easy steps, guests can:</p>
+      <p class="container blurb">
+        Through use of a phone app, guests at your bar or restaurant will be able to pick the channel they want to watch for a purchased timeframe.
+        <br/>
+        <br/>
+      </p>
+      <h3 class="text-center">In 4 easy steps, guests can:</h3>
       <div class="features-desktop container">
         <div class="tabs-container mt-32">
           <ul class="tabs-links">
