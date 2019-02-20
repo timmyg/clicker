@@ -21,3 +21,8 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+// scroll reveal
+html.sr .load-hidden {
+  visibility: hidden;
+}

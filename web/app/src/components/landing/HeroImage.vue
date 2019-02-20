@@ -33,7 +33,7 @@
     </div>
     <div
       id="phone-wrapper"
-      class="col"
+      class="col load-hidden"
     >
       <transition name="fadeUp">
         <FunnelIcon
@@ -41,11 +41,13 @@
           v-show="changing"
         />
       </transition>
-      <Phone
-        v-on:click="clickerClick()"
-        id="phone"
-      />
-      <div id="change">
+      <div v-scroll-reveal.reset="{ duration: 800, delay: 150, origin: 'bottom', distance: '10px'}">
+        <Phone
+            v-on:click="clickerClick()"
+            id="phone"
+        />
+      </div>
+      <div id="change" v-scroll-reveal.reset="{ duration: 1400, delay: 150, origin: 'right', distance: '10px'}">
         <div class="text">
           Tap to change the channel
         </div>

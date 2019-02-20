@@ -1,6 +1,6 @@
 <template>
     <div class="mt-64 mb-64">
-      <p class="container blurb">Through use of a phone app, guests at your location will be able to pick the channel they want to watch for a purchased timeframe.</p>
+      <p class="container blurb">Through use of a phone app, guests at your bar or restaurant will be able to pick the channel they want to watch for a purchased timeframe.<br>In 4 easy steps, guests can:</p>
       <div class="features-desktop container">
         <div class="tabs-container mt-32">
           <ul class="tabs-links">
@@ -59,19 +59,19 @@ export default {
     activeTab: 0,
     features: [
         { 
-          message: 'Pick your bar or restaurant location',
+          message: 'Pick bar or restaurant location',
           img: '/img/mockups/1-location.png' 
         },
         { 
-          message: 'Choose the game you want to watch',
+          message: 'Choose game or channel',
           img: '/img/mockups/2-game.png' 
         },
         { 
-          message: 'Select the TV you want to watch',
+          message: 'Select the TV to watch it on',
           img: '/img/mockups/3-tv.png' 
         },
         { 
-          message: 'Choose duration and tune the channel',
+          message: 'Choose duration, tune channel',
           img: '/img/mockups/4-confirm.png' 
         },
       ]
