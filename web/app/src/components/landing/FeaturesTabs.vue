@@ -1,54 +1,44 @@
 <template>
-    <div class="mt-64 mb-64">
-      <p class="container blurb">
-        Through use of a phone app, guests at your bar or restaurant will be able to pick the channel they want to watch for a purchased timeframe.
-        <br/>
-        <br/>
-      </p>
-      <h3 class="text-center">In 4 easy steps, guests can:</h3>
-      <div class="features-desktop container">
-        <div class="tabs-container mt-32">
-          <ul class="tabs-links">
-            <li v-for="(feature, index) in features" :key="feature.img">
-              <a
-                href="#tab-1"
-                class="tab-link"
-                :class="{'is-active': index === activeTab}"
-                v-on:click="tabClick(index)"
-              >
-                <span class="h4 m-0">{{index+1}}. {{feature.message}}</span>
-              </a>
-            </li>
-          </ul>
-          <div
-            class="tabs-content"
-            v-for="(feature, index) in features" :key="feature.img"
-          >
-            <div
-              class="tab-panel"
+  <div class="mt-64 mb-64">
+    <p
+      class="container blurb"
+    >Through use of a phone app, guests at your bar or restaurant will be able to pick the channel they want to watch for a purchased timeframe.
+      <br>
+      <br>
+    </p>
+    <h3 class="text-center">In 4 easy steps, guests can:</h3>
+    <div class="features-desktop container">
+      <div class="tabs-container mt-32">
+        <ul class="tabs-links">
+          <li v-for="(feature, index) in features" :key="feature.img">
+            <a
+              href="#tab-1"
+              class="tab-link"
               :class="{'is-active': index === activeTab}"
+              v-on:click="tabClick(index)"
             >
-              <img
-                :src="feature.img"
-                alt=""
-              >
-            </div>
+              <span class="h4 m-0">{{index+1}}. {{feature.message}}</span>
+            </a>
+          </li>
+        </ul>
+        <div class="tabs-content" v-for="(feature, index) in features" :key="feature.img">
+          <div class="tab-panel" :class="{'is-active': index === activeTab}">
+            <img :src="feature.img" alt>
           </div>
         </div>
       </div>
-      <div class="carousel text-center">
-        <carousel :navigationEnabled="true" :perPage="1">
-          <slide v-for="(feature, index) in features" :key="feature.img">
-            <span class="label">
-              <span>{{index+1}}. {{feature.message}}</span>
-              <img
-                :src="feature.img"
-              >
-            </span>
-          </slide>
-        </carousel
-      ></div>
     </div>
+    <div class="carousel text-center">
+      <carousel :navigationEnabled="true" :perPage="1">
+        <slide v-for="(feature, index) in features" :key="feature.img">
+          <span class="label">
+            <span>{{index+1}}. {{feature.message}}</span>
+            <img :src="feature.img">
+          </span>
+        </slide>
+      </carousel>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -57,30 +47,30 @@ export default {
   name: 'FeaturesTabs',
   components: {
     Carousel,
-    Slide
+    Slide,
   },
-  data: function () {
+  data: function() {
     return {
-    activeTab: 0,
-    features: [
-        { 
+      activeTab: 0,
+      features: [
+        {
           message: 'Pick bar or restaurant location',
-          img: '/img/mockups/1-location.png' 
+          img: '/img/mockups/1-location.png',
         },
-        { 
+        {
           message: 'Choose game or channel',
-          img: '/img/mockups/2-game.png' 
+          img: '/img/mockups/2-game.png',
         },
-        { 
+        {
           message: 'Select the TV to watch it on',
-          img: '/img/mockups/3-tv.png' 
+          img: '/img/mockups/3-tv.png',
         },
-        { 
+        {
           message: 'Choose duration, tune channel',
-          img: '/img/mockups/4-confirm.png' 
+          img: '/img/mockups/4-confirm.png',
         },
-      ]
-    }
+      ],
+    };
   },
   methods: {
     tabClick(tabNumber) {
@@ -120,10 +110,10 @@ button.VueCarousel-navigation-button[type='button'] {
     right: $button-position;
   }
   &.VueCarousel-navigation--disabled {
-    opacity: .1;
+    opacity: 0.1;
   }
 }
-@include media('>large') { 
+@include media('>large') {
   img {
     height: 600px;
   }
@@ -131,7 +121,7 @@ button.VueCarousel-navigation-button[type='button'] {
     margin-top: 90px;
   }
 }
-@include media('>small') { 
+@include media('>small') {
   img {
     height: 600px;
   }
