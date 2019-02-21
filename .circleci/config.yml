@@ -3,7 +3,7 @@ defaults: &defaults
     - image: circleci/node:8.10
   steps:
     - checkout:
-        path: ~/captain
+        path: ~/clicker
     - restore_cache:
         key: dependency-cache-{{ checksum "package.json" }}
     - run:
@@ -37,13 +37,13 @@ defaults: &defaults
 version: 2.0
 jobs:
   build-widget:
-    working_directory: ~/captain/functions/widget
+    working_directory: ~/clicker/functions/widget
     <<: *defaults
   build-lead:
-    working_directory: ~/captain/functions/lead
+    working_directory: ~/clicker/functions/lead
     <<: *defaults
   build-program:
-    working_directory: ~/captain/functions/program
+    working_directory: ~/clicker/functions/program
     <<: *defaults
 
 workflows:
