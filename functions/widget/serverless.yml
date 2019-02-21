@@ -25,7 +25,7 @@ custom:
     default: 1
   domains:
     prod: api.tryclicker.com
-    stage: api-stage.tryclicker.com
+    release: api-release.tryclicker.com
     dev: api-dev.tryclicker.com
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   customDomain:
