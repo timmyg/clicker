@@ -1,7 +1,7 @@
 <template>
   <div class="mt-64 mb-64">
     <p class="container blurb">
-      With our
+      With the
       <span class="brand-font">Clicker</span> app, guests will be able to pick the channel and TV they want to watch.
       <br>
       <br>

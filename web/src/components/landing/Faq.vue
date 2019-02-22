@@ -32,16 +32,7 @@
               <p>Our platform allows for transparent reservations so that your guests will know which TVs are available to be reserved.</p>
             </div>
           </li>
-          <!-- <li v-on:click="questionToggle(4)" :class="{'is-open': isOpen(4)}">
-            <div class="accordion-title">
-              <span>What if a guest has a TV reserved and wants to change it?</span>
-              <div class="accordion-icon"></div>
-            </div>
-            <div class="accordion-body">
-              <p>Our reservations are time based, so guests can freely change channels throughout their reservation period.</p>
-            </div>
-          </li>-->
-          <li v-on:click="questionToggle(5)" :class="{'is-open': isOpen(5)}">
+          <li v-on:click="questionToggle(4)" :class="{'is-open': isOpen(4)}">
             <div class="accordion-title">
               <span>What cable providers do you support?</span>
               <div class="accordion-icon"></div>
@@ -50,24 +41,18 @@
               <p>Currently, we support DIRECTV and are adding more providers.</p>
             </div>
           </li>
-          <li v-on:click="questionToggle(6)" :class="{'is-open': isOpen(6)}">
+          <li v-on:click="questionToggle(5)" :class="{'is-open': isOpen(5)}">
             <div class="accordion-title">
               <span>Do all TVs have to be connected?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>We recommend having only a subset of your TVs to allow your staff to control your main TVs. Staff will still be able to manually change any TV at any time.</p>
+              <p>
+                We recommend having only a subset of your TVs on
+                <span class="brand-font">Clicker</span> to allow your staff to control your main TVs. Staff will still be able to manually change any TV at any time.
+              </p>
             </div>
           </li>
-          <!-- <li v-on:click="questionToggle(7)" :class="{'is-open': isOpen(7)}">
-            <div class="accordion-title">
-              <span>I want it! When can I get it?</span>
-              <div class="accordion-icon"></div>
-            </div>
-            <div class="accordion-body">
-              <p>We are currently running a pilot with a handful of customers. Leave us your email address below and someone will follow up with you shortly. Hello@tryclicker.com</p>
-            </div>
-          </li>-->
         </ul>
       </div>
     </div>
