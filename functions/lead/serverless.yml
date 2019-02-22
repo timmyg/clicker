@@ -16,7 +16,7 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   domains:
     prod: api.tryclicker.com
-    stage: api-stage.tryclicker.com
+    release: api-release.tryclicker.com
     dev: api-dev.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}

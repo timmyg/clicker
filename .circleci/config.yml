@@ -3,7 +3,7 @@ defaults: &defaults
     - image: circleci/node:8.10
   steps:
     - checkout:
-        path: ~/captain
+        path: ~/clicker
     - restore_cache:
         key: dependency-cache-{{ checksum "package.json" }}
     - run:
@@ -21,14 +21,14 @@ defaults: &defaults
         branches:
           only:
             - master
-            - stage
+            - release
             - develop
         command: |
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
             npx serverless deploy --stage prod --verbose
           fi
-          if [ "${CIRCLE_BRANCH}" == "stage" ]; then
-            npx serverless deploy --stage stage --verbose
+          if [ "${CIRCLE_BRANCH}" == "release" ]; then
+            npx serverless deploy --stage release --verbose
           fi
           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
             npx serverless deploy --stage dev --verbose
@@ -37,13 +37,13 @@ defaults: &defaults
 version: 2.0
 jobs:
   build-widget:
-    working_directory: ~/captain/functions/widget
+    working_directory: ~/clicker/functions/widget
     <<: *defaults
   build-lead:
-    working_directory: ~/captain/functions/lead
+    working_directory: ~/clicker/functions/lead
     <<: *defaults
   build-program:
-    working_directory: ~/captain/functions/program
+    working_directory: ~/clicker/functions/program
     <<: *defaults
 
 workflows:
