@@ -19,18 +19,16 @@
 
         <!-- <section class="testimonials section">
           <quotes></quotes>
-        </section> -->
-
+        </section>-->
         <!-- <section class="pricing section">
           <Pricing />
-        </section> -->
-
+        </section>-->
         <section class="pricing section">
-          <Faq />
+          <Faq/>
         </section>
 
         <section class="newsletter section">
-          <Interested />
+          <Interested/>
         </section>
       </main>
 
@@ -44,6 +42,8 @@
 
 <script>
 import Vue from 'vue';
+import VueScrollReveal from 'vue-scroll-reveal';
+import VueBrowserUpdate from 'vue-browserupdate';
 import Quotes from './landing/Quotes';
 import Hero from './landing/Hero';
 import Features from './landing/Features';
@@ -54,9 +54,9 @@ import Faq from './landing/Faq';
 import Pricing from './landing/Pricing';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
-import VueScrollReveal from 'vue-scroll-reveal';
 
-Vue.use(VueScrollReveal); 
+Vue.use(VueScrollReveal);
+Vue.use(VueBrowserUpdate);
 
 export default {
   components: {
