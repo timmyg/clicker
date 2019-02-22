@@ -3,9 +3,9 @@
     <div class="newsletter-inner section-inner mb-32">
       <div class="newsletter-header text-center">
         <h2 class="section-title mt-0">Stay in the know</h2>
-        <p
-          class="section-paragraph"
-        >Clicker is currently in piloting in a few select locations, but leave us your email and we'll keep you up to date with our public launch.</p>
+        <p class="section-paragraph">
+          <span class="brand-font">Clicker</span> is currently piloting in a few select locations, leave us your email and we'll follow up with more information.
+        </p>
         <Signup class="center"/>
       </div>
     </div>

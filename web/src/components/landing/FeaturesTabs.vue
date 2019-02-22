@@ -1,8 +1,8 @@
 <template>
   <div class="mt-64 mb-64">
-    <p
-      class="container blurb"
-    >Through use of a phone app, guests at your bar or restaurant will be able to pick the channel they want to watch for a purchased timeframe.
+    <p class="container blurb">
+      With our
+      <span class="brand-font">Clicker</span> app, guests will be able to pick the channel and TV they want to watch.
       <br>
       <br>
     </p>
@@ -66,7 +66,7 @@ export default {
           img: '/img/mockups/3-tv.png',
         },
         {
-          message: 'Choose duration, tune channel',
+          message: 'Use tokens to complete reservation',
           img: '/img/mockups/4-confirm.png',
         },
       ],

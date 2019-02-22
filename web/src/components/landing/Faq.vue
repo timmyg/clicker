@@ -11,7 +11,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>We'll send you a small device (the size of a pack of gum) that is securely preconfigured with your Wi-Fi credentials, and you'll simply plug it into the wall. From there, you'll identify TV labels through a form on our website, and that's it! We'll provide TV labels if you don't have any.</p>
+              <p>It's simple! We'll send you a small device that's already set up with your Wi-Fi. Then we'll work with you to map your TV labels (a process that takes 5 minutes).</p>
             </div>
           </li>
           <li v-on:click="questionToggle(2)" :class="{'is-open': isOpen(2)}">
@@ -29,10 +29,10 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Our platform allows for transparent reservations so that your guests will know what TVs are available to be reserved up front.</p>
+              <p>Our platform allows for transparent reservations so that your guests will know what TVs are available to be reserved.</p>
             </div>
           </li>
-          <li v-on:click="questionToggle(4)" :class="{'is-open': isOpen(4)}">
+          <!-- <li v-on:click="questionToggle(4)" :class="{'is-open': isOpen(4)}">
             <div class="accordion-title">
               <span>What if a guest has a TV reserved and wants to change it?</span>
               <div class="accordion-icon"></div>
@@ -40,34 +40,34 @@
             <div class="accordion-body">
               <p>Our reservations are time based, so guests can freely change channels throughout their reservation period.</p>
             </div>
-          </li>
+          </li>-->
           <li v-on:click="questionToggle(5)" :class="{'is-open': isOpen(5)}">
             <div class="accordion-title">
-              <span>What channels are available?</span>
+              <span>What cable providers do you support?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Currently, guests can choose from the best sports games currently airing, both local and national. DirecTV is currently our only supported provider.</p>
+              <p>Currently, we support DirecTV and are adding more providers actively.</p>
             </div>
           </li>
           <li v-on:click="questionToggle(6)" :class="{'is-open': isOpen(6)}">
             <div class="accordion-title">
-              <span>What if we want to show the big game on our main TVs?</span>
+              <span>Do all TVs have to be connected?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>All of your TVs do not have to be Clicker-enabled, we recommend having only a subset of your TVs to prevents issues like this from arising</p>
+              <p>We recommend having only a subset of your TVs to allow your staff to control your main TVs. Staff will still be able to manually change channels at any time.</p>
             </div>
           </li>
-          <li v-on:click="questionToggle(7)" :class="{'is-open': isOpen(7)}">
+          <!-- <li v-on:click="questionToggle(7)" :class="{'is-open': isOpen(7)}">
             <div class="accordion-title">
               <span>I want it! When can I get it?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>We are currently running a pilot with a handful of customers. Leave us your email address and someone will follow up with you shortly.</p>
+              <p>We are currently running a pilot with a handful of customers. Leave us your email address below and someone will follow up with you shortly. Hello@tryclicker.com</p>
             </div>
-          </li>
+          </li>-->
         </ul>
       </div>
     </div>

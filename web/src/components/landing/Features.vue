@@ -54,8 +54,10 @@
                 </g>
               </svg>
             </div>
-            <h3 class="feature-title">Smart Channels</h3>
-            <p class="text-sm">We'll make sure the best games are on - even when TVs are idle.</p>
+            <h3 class="feature-title">Optimize TVs</h3>
+            <p class="text-sm">
+              <span class="brand-font">Clicker</span> makes sure the best games are on - even when TVs are idle.
+            </p>
           </div>
         </div>
       </div>
@@ -79,10 +81,8 @@
                 </g>
               </svg>
             </div>
-            <h3 class="feature-title">Know Your Guests</h3>
-            <p
-              class="text-sm"
-            >Learn their favorite teams and target them for increased visit frequency.</p>
+            <h3 class="feature-title">Stay Connected</h3>
+            <p class="text-sm">Track favorite teams and target them for marketing opportunities.</p>
           </div>
         </div>
 
@@ -113,8 +113,8 @@
                 </g>
               </svg>
             </div>
-            <h3 class="feature-title">Stay Focused</h3>
-            <p class="text-sm">Allow your staff to focus on their jobs and keep patrons happy.</p>
+            <h3 class="feature-title">Empower Everyone</h3>
+            <p class="text-sm">Instant gratification for guests, and less distractions for staff.</p>
           </div>
         </div>
       </div>
