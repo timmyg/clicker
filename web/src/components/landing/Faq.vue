@@ -2,43 +2,70 @@
   <div class="container mb-64">
     <div class="pricing-inner section-inner">
       <!-- <h2 class="section-title mt-0 text-center">FAQs</h2> -->
-      <div class="pricing-faqs container-sm ">
+      <div class="pricing-faqs container-sm">
         <h4 class="mt-40 mb-32">FAQs</h4>
         <ul class="accordion">
-          <li v-on:click="questionToggle(1)" :class="{'is-open': openQuestions.indexOf(1) > -1}">
+          <li v-on:click="questionToggle(1)" :class="{'is-open': isOpen(1)}">
             <div class="accordion-title">
-              <span>In a professional context it often happens that private?</span>
+              <span>What is the installation and setup process?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+              <p>We'll send you a small device (the size of a pack of gum) that is securely preconfigured with your Wi-Fi credentials, and you'll simply plug it into the wall. From there, you'll identify TV labels through a form on our website, and that's it! We'll provide TV labels if you don't have any.</p>
             </div>
           </li>
-          <li v-on:click="questionToggle(2)" :class="{'is-open': openQuestions.indexOf(2) > -1}">
+          <li v-on:click="questionToggle(2)" :class="{'is-open': isOpen(2)}">
             <div class="accordion-title">
-              <span>Lorem ipsum dolor sit amet, consectetur</span>
+              <span>What are tokens, and how do guests get them?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Ut enim ad minim veniam semper. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Tokens are credits your guests can use toward reserving TVs. When they sign up, we give them a few for free, and they can purchase more with a credit card.</p>
             </div>
           </li>
-          <li v-on:click="questionToggle(3)" :class="{'is-open': openQuestions.indexOf(3) > -1}">
+          <li v-on:click="questionToggle(3)" :class="{'is-open': isOpen(3)}">
             <div class="accordion-title">
-              <span>In a professional context it often happens that private?</span>
+              <span>What if two people want to watch different channels on the same TV?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+              <p>Our platform allows for transparent reservations so that your guests will know what TVs are available to be reserved up front.</p>
             </div>
           </li>
-          <li v-on:click="questionToggle(4)" :class="{'is-open': openQuestions.indexOf(4) > -1}">
+          <li v-on:click="questionToggle(4)" :class="{'is-open': isOpen(4)}">
             <div class="accordion-title">
-              <span>Lorem ipsum dolor sit amet, consectetur</span>
+              <span>What if a guest has a TV reserved and wants to change it?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Ut enim ad minim veniam semper. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Our reservations are time based, so guests can freely change channels throughout their reservation period.</p>
+            </div>
+          </li>
+          <li v-on:click="questionToggle(5)" :class="{'is-open': isOpen(5)}">
+            <div class="accordion-title">
+              <span>What channels are available?</span>
+              <div class="accordion-icon"></div>
+            </div>
+            <div class="accordion-body">
+              <p>Currently, guests can choose from the best sports games currently airing, both local and national. DirecTV is currently our only supported provider.</p>
+            </div>
+          </li>
+          <li v-on:click="questionToggle(6)" :class="{'is-open': isOpen(6)}">
+            <div class="accordion-title">
+              <span>What if we want to show the big game on our main TVs?</span>
+              <div class="accordion-icon"></div>
+            </div>
+            <div class="accordion-body">
+              <p>All of your TVs do not have to be Clicker-enabled, we recommend having only a subset of your TVs to prevents issues like this from arising</p>
+            </div>
+          </li>
+          <li v-on:click="questionToggle(7)" :class="{'is-open': isOpen(7)}">
+            <div class="accordion-title">
+              <span>I want it! When can I get it?</span>
+              <div class="accordion-icon"></div>
+            </div>
+            <div class="accordion-body">
+              <p>We are currently running a pilot with a handful of customers. Leave us your email address and someone will follow up with you shortly.</p>
             </div>
           </li>
         </ul>
@@ -52,18 +79,21 @@ export default {
   name: 'Faq',
   methods: {
     questionToggle(value) {
-        var i = this.openQuestions.indexOf(value);
-        if (i === -1) {
-            this.openQuestions.push(value);
-        } else {
-            this.openQuestions.splice(i, 1);
-        }
+      var i = this.openQuestions.indexOf(value);
+      if (i === -1) {
+        this.openQuestions.push(value);
+      } else {
+        this.openQuestions.splice(i, 1);
+      }
+    },
+    isOpen(questionNumber) {
+      return this.openQuestions.indexOf(questionNumber) > -1;
     },
   },
-  data: function () {
+  data: function() {
     return {
       openQuestions: [],
-    }
-  }
+    };
+  },
 };
 </script>
