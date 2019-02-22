@@ -1,50 +1,50 @@
-defaults: &defaults
-  docker:
-    - image: circleci/node:8.10
-  steps:
-    - checkout:
-        path: ~/clicker
-    - restore_cache:
-        key: dependency-cache-{{ checksum "package.json" }}
-    - run:
-        name: Install dependencies
-        command: npm i
-    - save_cache:
-        key: dependency-cache-{{ checksum "package.json" }}
-        paths:
-          - ./node_modules
-    - run:
-        name: Run tests
-        command: npm test
-    - run:
-        name: Deploy application
-        branches:
-          only:
-            - master
-            - release
-            - develop
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            npx serverless deploy --stage prod --verbose
-          fi
-          if [ "${CIRCLE_BRANCH}" == "release" ]; then
-            npx serverless deploy --stage release --verbose
-          fi
-          if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-            npx serverless deploy --stage dev --verbose
-          fi
-
+aliases:
+  - &serverless_build_test_deploy
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - checkout:
+          path: ~/clicker
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm i
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Run tests
+          command: npm test
+      - run:
+          name: Deploy application
+          branches:
+            only:
+              - master
+              - release
+              - develop
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              npx serverless deploy --stage prod --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              npx serverless deploy --stage release --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npx serverless deploy --stage dev --verbose
+            fi
 version: 2.0
 jobs:
   build-widget:
     working_directory: ~/clicker/functions/widget
-    <<: *defaults
+    <<: *serverless_build_test_deploy
   build-lead:
     working_directory: ~/clicker/functions/lead
-    <<: *defaults
+    <<: *serverless_build_test_deploy
   build-program:
     working_directory: ~/clicker/functions/program
-    <<: *defaults
+    <<: *serverless_build_test_deploy
 
 workflows:
   version: 2
