@@ -6,7 +6,7 @@
       <br>
       <br>
     </p>
-    <h3 class="text-center">In 4 easy steps, guests can:</h3>
+    <h3 class="text-center">In four easy steps, guests can:</h3>
     <div class="features-desktop container">
       <div class="tabs-container mt-32">
         <ul class="tabs-links">

@@ -82,7 +82,9 @@
               </svg>
             </div>
             <h3 class="feature-title">Stay Connected</h3>
-            <p class="text-sm">Track favorite teams and target them for marketing opportunities.</p>
+            <p
+              class="text-sm"
+            >Track guests' favorite teams and target them for marketing opportunities.</p>
           </div>
         </div>
 

@@ -11,7 +11,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>It's simple! We'll send you a small device that's already set up with your Wi-Fi. Then we'll work with you to map your TV labels (a process that takes 5 minutes).</p>
+              <p>It's simple! We'll send a small device that's already set up with your Wi-Fi. Then, we'll work with you to map your TV labels - a process that takes no more than 5 minutes.</p>
             </div>
           </li>
           <li v-on:click="questionToggle(2)" :class="{'is-open': isOpen(2)}">
@@ -20,7 +20,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Tokens are credits your guests can use toward reserving TVs. When they sign up, we give them a few for free, and they can purchase more with a credit card.</p>
+              <p>Tokens are credits your guests can use toward reserving TVs. When signing up, we give them a few to start out, and they can purchase more with a credit card.</p>
             </div>
           </li>
           <li v-on:click="questionToggle(3)" :class="{'is-open': isOpen(3)}">
@@ -29,7 +29,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Our platform allows for transparent reservations so that your guests will know what TVs are available to be reserved.</p>
+              <p>Our platform allows for transparent reservations so that your guests will know which TVs are available to be reserved.</p>
             </div>
           </li>
           <!-- <li v-on:click="questionToggle(4)" :class="{'is-open': isOpen(4)}">
@@ -47,7 +47,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Currently, we support DirecTV and are adding more providers actively.</p>
+              <p>Currently, we support DIRECTV and are adding more providers.</p>
             </div>
           </li>
           <li v-on:click="questionToggle(6)" :class="{'is-open': isOpen(6)}">
@@ -56,7 +56,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>We recommend having only a subset of your TVs to allow your staff to control your main TVs. Staff will still be able to manually change channels at any time.</p>
+              <p>We recommend having only a subset of your TVs to allow your staff to control your main TVs. Staff will still be able to manually change any TV at any time.</p>
             </div>
           </li>
           <!-- <li v-on:click="questionToggle(7)" :class="{'is-open': isOpen(7)}">

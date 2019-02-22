@@ -2,15 +2,8 @@
   <div class="container">
     <div class="flex-grid wrapper">
       <div class="hero-copy col">
-        <h1 class="listen-up">Change the game.
-          <br>Literally.
-        </h1>
-        <p class="hero-paragraph">
-          At your bar or restaurant, now you can empower your guests to change the
-          <span
-            class="mobile-breakXXX"
-          >channel easily from their phone.</span>
-        </p>
+        <h1 class="listen-up">Change the game.<br>Literally.</h1>
+        <p class="hero-paragraph">Empower guests at your bar or restaurant to change the channel easily from their phone.</p>
         <signup></signup>
       </div>
       <div class="hero-illustration col">
@@ -76,4 +69,3 @@ export default {
   }
 }
 </style>
-
