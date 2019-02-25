@@ -41,14 +41,12 @@ aliases:
 version: 2.0
 jobs:
   build:
-    docker:
-      - image: circleci/golang
     steps:
       - checkout
       - run:
           name: Determine which projects have changed and trigger the builds
           command: |
-            git diff --no-commit-id --name-only -- functions `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u > projects
+            git diff --no-commit-id --name-only `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u > projects
             echo -e "Modified directories:`cat projects`\n"
             projects_inc_dep=(`cat projects`)
             echo -e "Calculating dependencies\n"
