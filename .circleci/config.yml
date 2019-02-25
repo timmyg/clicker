@@ -25,19 +25,15 @@ aliases:
               - release
               - develop
           command: |
-            folder = 
-            for folder in `git log --format="" --name-only ${CIRCLE_COMPARE_URL##http*/} | cut -d"/" -f1 | sort -u`; do
-              echo "contents in $folder were modified"
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                npx serverless deploy --stage prod --verbose
-              fi
-              if [ "${CIRCLE_BRANCH}" == "release" ]; then
-                npx serverless deploy --stage release --verbose
-              fi
-              if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-                npx serverless deploy --stage dev --verbose
-              fi
-            done
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              npx serverless deploy --stage prod --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              npx serverless deploy --stage release --verbose
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npx serverless deploy --stage dev --verbose
+            fi
 version: 2.0
 jobs:
   build:
