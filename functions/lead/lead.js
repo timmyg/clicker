@@ -22,6 +22,7 @@ function generateResponse(statusCode, body) {
   };
 }
 
+
 /**
  * Handles sms incoming webhook from twilio
  * @param   {string} losantId device identifier for Losant platform (event.body)
