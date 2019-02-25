@@ -1,8 +1,7 @@
 aliases:
   - &serverless_build_test_deploy
-    # docker:
-    # - image: circleci/node:8.10
-    machine: true
+    docker:
+      - image: circleci/node:8.10
     steps:
       - checkout:
           path: ~/clicker
