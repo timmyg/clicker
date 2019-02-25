@@ -15,23 +15,13 @@ function generateResponse(statusCode, body) {
   if (typeof msg === 'string') {
     msg = { message: msg };
   }
-  
+
   return {
     statusCode,
     headers,
     body: JSON.stringify(msg),
   };
 }
-
-
-
-
-
-
-
-
-
-
 
 /**
  * Handles sms incoming webhook from twilio
