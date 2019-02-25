@@ -1,3 +1,5 @@
-lead
-program
-widget
+functions/lead
+functions/program
+functions/widget
+mobile/app
+web/app
