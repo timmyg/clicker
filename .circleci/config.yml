@@ -54,7 +54,7 @@ jobs:
             echo -e "Calculating dependencies\n"
             for dir in `ls -d */`; do
               for dep in `go list -f '{{ .Deps }}' ./${dir} 2>/dev/null`; do
-                for project_dep in `echo $dep | grep github.com/tufin/circleci-monorepo | egrep -v "vendor|${dir%\/}"`; do
+                for project_dep in `echo $dep | grep github.com/teamclicker/clicker | egrep -v "vendor|${dir%\/}"`; do
                   if [[ " ${projects_inc_dep[@]} " =~ " ${project_dep##*\/} " ]] && ! [[ " ${projects_inc_dep[@]} " =~ " ${dir%\/} " ]]; then
                     projects_inc_dep+=(${dir%\/})
                   fi
@@ -67,11 +67,11 @@ jobs:
                 printf "\nTriggerring build for project: "$project
                 curl -s -u ${CIRCLE_TOKEN}: \
                   -d build_parameters[CIRCLE_JOB]=${project} \
-                  https://circleci.com/api/v1.1/project/github/Tufin/circleci-monorepo/tree/$CIRCLE_BRANCH
+                  https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/$CIRCLE_BRANCH
               fi
             done
   service1:
-    working_directory: /go/src/github.com/tufin/circleci-monorepo
+    working_directory: /go/src/github.com/teamclicker/clicker
     docker:
       - image: tufin/circleci-golang
     environment:
@@ -93,7 +93,7 @@ jobs:
       - store_test_results:
           path: /tmp/test-results
   service2:
-    working_directory: /go/src/github.com/tufin/circleci-monorepo
+    working_directory: /go/src/github.com/teamclicker/clicker
     docker:
       - image: tufin/circleci-golang
     environment:
