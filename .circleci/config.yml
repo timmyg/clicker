@@ -41,6 +41,8 @@ aliases:
 version: 2.0
 jobs:
   build:
+    docker:
+      - image: circleci/node:8.10
     steps:
       - checkout
       - run:
