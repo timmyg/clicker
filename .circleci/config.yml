@@ -70,59 +70,15 @@ jobs:
                   https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/$CIRCLE_BRANCH
               fi
             done
-  service1:
-    working_directory: /go/src/github.com/teamclicker/clicker
-    docker:
-      - image: tufin/circleci-golang
-    environment:
-      PROJECT_NAME: service1
-      TEST_RESULTS: /tmp/test-results
-    steps:
-      - checkout
-      - run:
-          name: Build
-          command: |
-            /scripts/go_build.sh ${PROJECT_NAME} ${PROJECT_NAME}
-      - run:
-          name: Run Tests
-          command: |
-            /scripts/go_test.sh ${TEST_RESULTS} ${PROJECT_NAME}
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: raw-test-output
-      - store_test_results:
-          path: /tmp/test-results
-  service2:
-    working_directory: /go/src/github.com/teamclicker/clicker
-    docker:
-      - image: tufin/circleci-golang
-    environment:
-      PROJECT_NAME: service2
-      TEST_RESULTS: /tmp/test-results
-    steps:
-      - checkout
-      - run:
-          name: Build
-          command: |
-            /scripts/go_build.sh ${PROJECT_NAME} ${PROJECT_NAME}
-      - run:
-          name: Run Tests
-          command: |
-            /scripts/go_test.sh ${TEST_RESULTS} ${PROJECT_NAME}
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: raw-test-output
-      - store_test_results:
-          path: /tmp/test-results
-  # build-widget:
-  #   working_directory: ~/clicker/functions/widget
-  #   <<: *serverless_build_test_deploy
-  # build-lead:
-  #   working_directory: ~/clicker/functions/lead
-  #   <<: *serverless_build_test_deploy
-  # build-program:
-  #   working_directory: ~/clicker/functions/program
-  #   <<: *serverless_build_test_deploy
+  widget:
+    working_directory: ~/clicker/functions/widget
+    <<: *serverless_build_test_deploy
+  lead:
+    working_directory: ~/clicker/functions/lead
+    <<: *serverless_build_test_deploy
+  program:
+    working_directory: ~/clicker/functions/program
+    <<: *serverless_build_test_deploy
 # workflows:
 #   version: 2
 #   build-test-deploy:
