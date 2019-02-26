@@ -48,6 +48,7 @@ function init() {
 
 
 
+
 function generateResponse(statusCode, body = {}) {
   let msg = body;
   if (typeof msg === 'string') {
