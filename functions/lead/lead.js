@@ -16,6 +16,7 @@ function generateResponse(statusCode, body) {
     msg = { message: msg };
   }
 
+  
   return {
     statusCode,
     headers,

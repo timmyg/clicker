@@ -10,6 +10,7 @@ Vue.prototype.$http = axios.create({
   timeout: 8000,
 });
 
+
 Vue.config.productionTip = false;
 
 new Vue({
