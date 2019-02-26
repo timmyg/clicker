@@ -88,6 +88,7 @@ jobs:
   #             - release
   #             - develop
   #         command: |
+  #           echo -e "deploy clicker web"
   #           if [ "${CIRCLE_BRANCH}" == "master" ]; then
   #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c7458709c6a819dd611ee82
   #           fi
@@ -110,6 +111,7 @@ jobs:
               - release
               - develop
           command: |
+            echo -e "deploy clicker mobile"
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a22aad21db652db51e1
             fi
