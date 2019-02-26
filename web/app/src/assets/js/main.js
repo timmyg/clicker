@@ -3,12 +3,15 @@
 
   doc.classList.remove('no-js');
   doc.classList.add('js');
+  
 
   // Reveal animations
   if (document.body.classList.contains('has-animations')) {
     /* global ScrollReveal */
     const sr = (window.sr = ScrollReveal());
 
+    
+    
     //   sr.reveal('.hero-title, .hero-paragraph, .newsletter-header, .newsletter-form', {
     //       duration: 1000,
     //       distance: '40px',
