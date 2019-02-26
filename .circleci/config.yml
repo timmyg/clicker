@@ -97,25 +97,25 @@ jobs:
   #           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
   #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c745884ad8fd5e199de18cf
   #           fi
-  # mobile/app:
-  #   working_directory: ~/clicker/mobile/app
-  #   docker:
-  #     - image: circleci/node:8.10
-  #   steps:
-  #     - run:
-  #         name: Deploy application
-  #         branches:
-  #           only:
-  #             - master
-  #             - release
-  #             - develop
-  #         command: |
-  #           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-  #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a22aad21db652db51e1
-  #           fi
-  #           if [ "${CIRCLE_BRANCH}" == "release" ]; then
-  #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a2933754a346bf8ef90
-  #           fi
-  #           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-  #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a2f1056ec16dab4338b
-  #           fi
+  mobile/app:
+    working_directory: ~/clicker/mobile/app
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - run:
+          name: Deploy application
+          branches:
+            only:
+              - master
+              - release
+              - develop
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a22aad21db652db51e1
+            fi
+            if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a2933754a346bf8ef90
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a2f1056ec16dab4338b
+            fi
