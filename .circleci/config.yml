@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Determine which projects have changed and trigger the builds
           command: |
-            git diff --no-commit-id --name-only `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u > projects
+            git diff --no-commit-id --name-only  `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f-2 | sort -u > projects
             echo -e "Modified directories:`cat projects`\n"
             projects_inc_dep=(`cat projects`)
             echo -e "Calculating dependencies\n"
@@ -69,7 +69,7 @@ jobs:
   widget:
     working_directory: ~/clicker/functions/widget
     <<: *serverless_build_test_deploy
-  lead:
+  functions/lead:
     working_directory: ~/clicker/functions/lead
     <<: *serverless_build_test_deploy
   program:
