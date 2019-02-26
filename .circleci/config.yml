@@ -66,16 +66,16 @@ jobs:
                   https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/$CIRCLE_BRANCH
               fi
             done
-  widget:
+  functions/widget:
     working_directory: ~/clicker/functions/widget
     <<: *serverless_build_test_deploy
   functions/lead:
     working_directory: ~/clicker/functions/lead
     <<: *serverless_build_test_deploy
-  program:
+  functions/program:
     working_directory: ~/clicker/functions/program
     <<: *serverless_build_test_deploy
-  web_app:
+  web/app:
     working_directory: ~/clicker/web/app
     docker:
       - image: circleci/node:8.10
@@ -97,7 +97,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               curl -X POST -d {} https://api.netlify.com/build_hooks/5c745884ad8fd5e199de18cf
             fi
-  mobile_app:
+  mobile/app:
     working_directory: ~/clicker/mobile/app
     docker:
       - image: circleci/node:8.10

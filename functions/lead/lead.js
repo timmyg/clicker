@@ -17,7 +17,7 @@ function generateResponse(statusCode, body) {
   }
 
 
-  
+
   return {
     statusCode,
     headers,
@@ -25,6 +25,7 @@ function generateResponse(statusCode, body) {
   };
 }
  
+
 
 /**
  * Handles sms incoming webhook from twilio
