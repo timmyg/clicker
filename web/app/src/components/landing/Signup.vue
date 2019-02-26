@@ -1,31 +1,23 @@
 <template>
-  <p
-    v-if="submitted"
-    class="success"
-  >Thank you! We'll be in contact.</p>
+  <p v-if="submitted" class="success">Thank you! We'll be in contact.</p>
   <p
     v-else-if="error"
     class="error"
   >Oh no! Something is wrong on our end. We've been alerted, please try again in a bit.</p>
   <form
-    class="footer-form newsletter-form field field-grouped "
+    class="footer-form newsletter-form field field-grouped"
     v-on:submit.prevent="onSubmit"
     v-else
   >
     <div class="control control-expanded">
-      <input
-        class="input"
-        type="email"
-        placeholder="email address"
-        v-model.trim="email"
-      >
+      <input class="input" type="email" placeholder="Enter your email" v-model.trim="email">
     </div>
     <div class="control">
       <button
         type="submit"
         :disabled="submitting"
         class="button button-primary button-block button-shadow"
-      >Submit</button>
+      >Learn More</button>
     </div>
   </form>
 </template>

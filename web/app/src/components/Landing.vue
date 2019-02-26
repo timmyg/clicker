@@ -17,15 +17,18 @@
           <features></features>
         </section>
 
-        <section class="testimonials section">
+        <!-- <section class="testimonials section">
           <quotes></quotes>
+        </section>-->
+        <!-- <section class="pricing section">
+          <Pricing />
+        </section>-->
+        <section class="pricing section">
+          <Faq/>
         </section>
 
-        <!-- <section class="pricing section">
-          <pricing></pricing>
-        </section>-->
         <section class="newsletter section">
-          <interested></interested>
+          <Interested/>
         </section>
       </main>
 
@@ -39,15 +42,21 @@
 
 <script>
 import Vue from 'vue';
+import VueScrollReveal from 'vue-scroll-reveal';
+import VueBrowserUpdate from 'vue-browserupdate';
 import Quotes from './landing/Quotes';
 import Hero from './landing/Hero';
 import Features from './landing/Features';
 import FeaturesTabs from './landing/FeaturesTabs';
 import PageHeader from './landing/PageHeader';
 import PageFooter from './landing/PageFooter';
+import Faq from './landing/Faq';
+import Pricing from './landing/Pricing';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
-import VueScrollReveal from 'vue-scroll-reveal';
+
+Vue.use(VueScrollReveal);
+Vue.use(VueBrowserUpdate);
 
 export default {
   components: {
@@ -57,6 +66,8 @@ export default {
     FeaturesTabs,
     PageHeader,
     PageFooter,
+    Faq,
+    Pricing,
     Interested,
     Analytics,
   },

@@ -2,8 +2,8 @@
   <div class="container">
     <div class="flex-grid wrapper">
       <div class="hero-copy col">
-        <h1 class="listen-up">Change the game</h1>
-        <p class="hero-paragraph">Empower your guests to change the <span class="mobile-break">channel simply from their phone.</span></p>
+        <h1 class="listen-up">Change the game.<br>Literally.</h1>
+        <p class="hero-paragraph">Empower guests at your bar or restaurant to change the channel easily from their phone.</p>
         <signup></signup>
       </div>
       <div class="hero-illustration col">
@@ -42,7 +42,7 @@ export default {
   height: 360px;
 }
 
-@include media('>large') { 
+@include media('>large') {
   .hero > div {
     min-height: 350px;
   }
@@ -56,17 +56,16 @@ export default {
     max-width: 380px;
   }
 }
-@include media('>small') { 
+@include media('>small') {
   .hero-copy {
     text-align: left;
     padding-right: 30px;
   }
 }
 
-@include media('<medium') { 
+@include media('<medium') {
   .mobile-break {
     display: inline-block;
   }
 }
 </style>
-

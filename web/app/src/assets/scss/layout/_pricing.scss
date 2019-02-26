@@ -1,0 +1,121 @@
+.pricing {
+  position: relative;
+
+  .section-inner {
+    padding-bottom: 0;
+  }
+
+  .section-title {
+    margin-bottom: 48px;
+  }
+
+  .accordion {
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+}
+
+.pricing-tables-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-right: -12px;
+  margin-left: -12px;
+  margin-top: -12px;
+
+  &:last-of-type {
+    margin-bottom: -12px;
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 12px;
+  }
+}
+
+.pricing-table {
+  padding: 12px;
+  width: 344px;
+  max-width: 344px;
+  flex-grow: 1;
+}
+
+.pricing-table-inner {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  background: color(bg, 1);
+  padding: 24px;
+  height: 100%;
+
+  > * {
+    position: relative; /* To display all elements above the box with shadow */
+    width: 100%;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    @include shadow;
+    mix-blend-mode: multiply;
+  }
+}
+
+.pricing-table-header {
+  @if (get-font-family(heading) != get-font-family(base)) {
+    @include font-family(heading);
+  }
+  @include divider(after);
+}
+
+.pricing-table-price-currency {
+  @include font-size(3, mobile, true, true, true);
+  @if (get-font-size(3, desktop) != get-font-size(3, mobile)) {
+    @include media('>medium') {
+      @include font-size(3, desktop, true, true, true);
+    }
+  }
+}
+
+.pricing-table-features {
+  margin-bottom: 90px;
+
+  li {
+    color: color(typography, 3);
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+
+    &::before {
+      content: '';
+      width: 16px;
+      height: 12px;
+      margin-right: 12px;
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+.pricing-table-cta {
+  align-self: flex-end;
+}
+
+.container .container-sm.pricing-faqs {
+  /* Make faq's widht match pricing tables */
+  max-width: 664px;
+}
+
+@include media('>medium') {
+  .pricing {
+    .section-title {
+      margin-bottom: 72px;
+    }
+
+    &::before {
+      left: calc(50% - 720px);
+    }
+  }
+}

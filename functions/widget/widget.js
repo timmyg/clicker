@@ -26,6 +26,8 @@ const Widget = dynamoose.model(
   },
 );
 
+
+
 function generateResponse(statusCode, body = {}) {
   let msg = body;
   if (typeof msg === 'string') {
