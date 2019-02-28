@@ -86,7 +86,7 @@ jobs:
       - image: circleci/node:8.10
     steps:
       - run:
-          name: Deploy application
+          name: Trigger Netlify build + deploy
           branches:
             only:
               - master
@@ -109,7 +109,7 @@ jobs:
       - image: circleci/node:8.10
     steps:
       - run:
-          name: Deploy application
+          name: Trigger Netlify build + deploy
           branches:
             only:
               - master
@@ -134,7 +134,7 @@ jobs:
       - checkout:
           path: ~/clicker
       - run:
-          name: Deploy application
+          name: Upload app zip to s3
           branches:
             only:
               - master
@@ -153,4 +153,4 @@ jobs:
               filename="antenna-develop.tar.gz"
             fi
             tar zcvf $filename antenna
-            aws s3 cp $filename s3://clicker-antenna/app
+            aws s3 cp $filename s3://clicker-antenna/app/
