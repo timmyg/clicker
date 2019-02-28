@@ -124,11 +124,16 @@ jobs:
   packages/antenna:
     working_directory: ~/clicker/packages/antenna
     docker:
-      - image: circleci/python:2.7-jessie
+      - image: circleci/node:8.10
     steps:
       - run:
           name: Install aws cli
-          command: sudo pip install awscli
+          command: |
+            apt-get -y -qq update
+            apt-get -y -qq install python3.4-dev
+            curl -O https://bootstrap.pypa.io/get-pip.py
+            python3.4 get-pip.py --user
+            pip install awscli --upgrade --user
       - run:
           name: Deploy application
           branches:
