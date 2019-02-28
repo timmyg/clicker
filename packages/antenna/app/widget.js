@@ -3,6 +3,7 @@ const find = require('local-devices');
 const { Device } = require('losant-mqtt');
 const logger = require('./logger');
 const Api = require('./api');
+const arpScanner = require('arpscan');
 
 class Widget {
   constructor() {
@@ -11,46 +12,41 @@ class Widget {
       key: process.env.LOSANT_KEY,
       secret: process.env.LOSANT_SECRET,
     });
-    this.id = process.env.LOSANT_DEVICE_ID;
+    this.id = this.device.id;
     this.remote = null;
-    this.api = new Api();
+    this.api = new Api(this.id);
     this.init();
   }
 
-  async saveDevices() {
-    logger.info('finding devices');
-    const devices = await find();
-    logger.info('found devices', { devices });
-    // boxes[0].name = 'aa-direCTv-23429048';
-    // boxes[0].ip = '127.0.0.1';
-    await this.api.updateDevice(this.id, { devices });
+  async saveIp() {
+    logged.info('about to save ips....');
+    const localDevices = await arpScanner();
+    logged.info({ localDevices });
+    const ips = localDevices.map(device => device.ip);
+    logged.info({ ips });
+    ips.forEach(ip => {
+      DirecTV.validateIP(ip, error => {
+        if (error) {
+          return logger.info(`.......... not valid directv ip: ${ip}`);
+        }
+        logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
+        this.saveBoxes(ip);
+        return this.api.updateDeviceDirectvIp(ip);
+      });
+    });
   }
 
-  async saveBoxes() {
-    const boxes = this.remote.getLocations((err, response) => {
+  async saveBoxes(ip) {
+    const remote = new DirecTV.Remote(ip);
+    const boxes = remote.getLocations((err, response) => {
       if (err) return logger.error(err);
       logger.info({ boxes: response });
-      return this.api.updateDevice(this.id, { boxes });
+      return this.api.updateDeviceBoxes(boxes);
     });
   }
 
   async initListeners() {
     try {
-      // const result = await this.api.getDeviceDirectvIp(this.id);
-      // if (result && result.ip) {
-      //   const { ip } = result;
-      //   this.remote = new DirecTV.Remote(ip);
-      //   DirecTV.validateIP(result.ip, error => {
-      //     if (error) {
-      //       logger.error(`not valid directv ip: ${ip}`);
-      //       logger.error(error);
-      //     }
-      //     logger.info(`valid directv ip: ${ip}`);
-      //     // this.saveBoxes();
-      //   });
-      // } else {
-      //   logger.error('no valid dtv ip');
-      // }
       // Listen for commands from Losant
       this.device.on('command', command => {
         logger.info({ command });
@@ -59,14 +55,6 @@ class Widget {
         const { ip } = payload;
         console.log({ ip, name, payload });
         this.remote = new DirecTV.Remote(ip);
-        DirecTV.validateIP(ip, error => {
-          if (error) {
-            logger.error(`not valid directv ip: ${ip}`);
-            logger.error(error);
-          }
-          logger.info(`valid directv ip: ${ip}`);
-          // this.saveBoxes();
-        });
         switch (name) {
           case 'tune':
             this.remote.tune(payload.channel, payload.client, err => {
@@ -141,8 +129,8 @@ class Widget {
    * 4. listen for commands
    */
   async init() {
-    await this.api.registerDevice(this.id);
-    // this.saveDevices();
+    await this.api.registerDevice();
+    await this.saveIp();
     this.device.connect(error => {
       if (error) {
         logger.error(error);

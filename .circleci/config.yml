@@ -18,7 +18,7 @@ aliases:
           name: Run tests
           command: npm test
       - run:
-          name: Deploy application
+          name: Deploy serverless function
           branches:
             only:
               - master
@@ -39,10 +39,15 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.10
+    branches:
+      only:
+        - master
+        - release
+        - develop
     steps:
       - checkout
       - run:
-          name: Determine which projects have changed and trigger the builds
+          name: Trigger builds for changed projects
           command: |
             git diff --no-commit-id --name-only  `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f-2 | sort -u > projects
             echo -e "Modified directories:`cat projects`\n"
@@ -59,7 +64,7 @@ jobs:
             done
             echo -e "Building: ${projects_inc_dep[@]}\n"
             for project in ${projects_inc_dep[@]}; do
-              if grep -Fxq $project project-dirs; then
+              if grep -Fxq $project .projects; then
                 printf "\nTriggering build for project: $project"
                 curl -s -u ${CIRCLE_TOKEN}: \
                   -d build_parameters[CIRCLE_JOB]=${project} \
@@ -75,36 +80,36 @@ jobs:
   functions/program:
     working_directory: ~/clicker/functions/program
     <<: *serverless_build_test_deploy
-  # web/app:
-  #   working_directory: ~/clicker/web/app
-  #   docker:
-  #     - image: circleci/node:8.10
-  #   steps:
-  #     - run:
-  #         name: Deploy application
-  #         branches:
-  #           only:
-  #             - master
-  #             - release
-  #             - develop
-  #         command: |
-  #           echo -e "deploy clicker web"
-  #           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-  #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c7458709c6a819dd611ee82
-  #           fi
-  #           if [ "${CIRCLE_BRANCH}" == "release" ]; then
-  #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c74588dce2aff6b7eb9d135
-  #           fi
-  #           if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-  #             curl -X POST -d {} https://api.netlify.com/build_hooks/5c745884ad8fd5e199de18cf
-  #           fi
+  web/app:
+    working_directory: ~/clicker/web/app
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - run:
+          name: Trigger Netlify build + deploy
+          branches:
+            only:
+              - master
+              - release
+              - develop
+          command: |
+            echo -e "deploy clicker web"
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              curl -X POST -d {} https://api.netlify.com/build_hooks/5c7458709c6a819dd611ee82
+            fi
+            if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              curl -X POST -d {} https://api.netlify.com/build_hooks/5c74588dce2aff6b7eb9d135
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              curl -X POST -d {} https://api.netlify.com/build_hooks/5c745884ad8fd5e199de18cf
+            fi
   mobile/app:
     working_directory: ~/clicker/mobile/app
     docker:
       - image: circleci/node:8.10
     steps:
       - run:
-          name: Deploy application
+          name: Trigger Netlify build + deploy
           branches:
             only:
               - master
@@ -121,3 +126,31 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a2f1056ec16dab4338b
             fi
+  packages/antenna:
+    working_directory: ~/clicker/packages
+    docker:
+      - image: mesosphere/aws-cli
+    steps:
+      - checkout:
+          path: ~/clicker
+      - run:
+          name: Upload app zip to s3
+          branches:
+            only:
+              - master
+              - release
+              - develop
+          command: |
+            echo -e "upload antenna package to s3"
+            filename=
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              filename="antenna.tar.gz"
+            fi
+            if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              filename="antenna-release.tar.gz"
+            fi
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              filename="antenna-develop.tar.gz"
+            fi
+            tar zcvf $filename antenna
+            aws s3 cp $filename s3://clicker-antenna/app/

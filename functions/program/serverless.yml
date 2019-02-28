@@ -67,3 +67,6 @@ functions:
           path: pull
           method: post
           cors: true
+      - schedule: cron(0 2 * * ? *)
+      - schedule: cron(0 10 * * ? *)
+      - schedule: cron(0 18 * * ? *)
