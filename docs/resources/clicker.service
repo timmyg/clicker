@@ -1,3 +1,4 @@
+# https://www.freedesktop.org/software/systemd/man/systemd.service.html
 [Unit]
 Description=clicker service
 After=network.target
@@ -5,14 +6,23 @@ After=network.target
 [Service]
 WorkingDirectory=/home/pi
 EnvironmentFile=/home/pi/.env
-ExecStartPre=/bin/bash -c 'if cd clicker; then git pull origin master; else git clone git@github.com:teamclicker/clicker.git;fi'
-ExecStartPre=/bin/bash -c 'cd /home/pi/clicker/packages/yacht && /home/pi/.yarn/bin/yarn install'
-ExecStart=/bin/bash -c 'node /home/pi/clicker/packages/yacht/startup.js'
+# before or after the command in ExecStart=
+ExecStartPre=/bin/bash -c 'if cd clicker; then git pull origin master; else git clone --depth 1 git@github.com:teamclicker/clicker.git;fi'
+ExecStartPre=/bin/bash -c 'cd /home/pi/clicker/packages/antenna && /home/pi/.yarn/bin/yarn install'
+# executed when this service is started
+ExecStart=/bin/bash -c 'node /home/pi/clicker/packages/antenna/startup.js'
 StandardOutput=inherit
 StandardError=inherit
 User=pi
-TimeoutSec=600
-RestartSec=5
+# Configures the time to wait for start-up
+# TimeoutStartSec=
+# time to wait for each ExecStop=, configures the time to wait for the service itself to stop.=
+# TimeoutStopSec=
+# shorthand for configuring both TimeoutStartSec= and TimeoutStopSec=
+TimeoutSec=6s
+# time to sleep before restarting a service (as configured with Restart=).
+RestartSec=5s
+# whether the service shall be restarted when the service process exits, is killed, or a timeout is reached
 Restart=always
 
 [Install]
