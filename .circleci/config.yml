@@ -128,7 +128,7 @@ jobs:
     steps:
       - run:
           name: Install aws cli
-          command: sudo pip install awscli
+          command: pip install awscli
       - run:
           name: Deploy application
           branches:
