@@ -126,6 +126,8 @@ jobs:
     docker:
       - image: mesosphere/aws-cli
     steps:
+      - checkout:
+          path: ~/clicker
       - run:
           name: Deploy application
           branches:
