@@ -140,7 +140,7 @@ jobs:
             echo -e "upload antenna package to s3"
             pwd
             whoami
-            cp -R ./antenna /tmp
+            cp -R antenna /tmp
             cd /tmp
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               tar zcvf antenna.tar.gz antenna
