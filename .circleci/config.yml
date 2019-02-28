@@ -148,6 +148,7 @@ jobs:
               aws s3 cp antenna-release.tar.gz s3://clicker-antenna
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              pwd
               tar zcvf antenna-develop.tar.gz antenna
               pwd
               aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
