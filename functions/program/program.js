@@ -24,6 +24,7 @@ function init() {
       description: String, // null
       title: String, // "Oklahoma State @ Kansas"
       duration: Number, // 120
+      endTime: Date, // created
       price: Number, // 0
       repeat: Boolean, // false
       ltd: String, // "Live"
@@ -113,16 +114,18 @@ function build(dtvSchedule) {
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
       program.id = generateId(program);
-      program.endTime =
-        moment(program.airTime)
-          .add(program.duration, 'minutes')
-          .unix() + '000';
-      // expire 6 hours from end time
-      program.expires = parseInt(
+      program.endTime = new Date(
+        parseInt(
+          moment(program.airTime)
+            .add(program.duration, 'minutes')
+            .unix() + '000',
+        ),
+      );
+      // expire 6 hours from end time, or 1 week
+      program.expires =
         moment(program.endTime)
           .add(6, 'hours')
-          .diff(moment(), 'seconds'),
-      );
+          .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
       console.log({ program });
       allPrograms.push(program);
     });
