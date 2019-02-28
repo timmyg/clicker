@@ -39,6 +39,11 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.10
+    branches:
+      only:
+        - master
+        - release
+        - develop
     steps:
       - checkout
       - run:
@@ -148,4 +153,4 @@ jobs:
               filename="antenna-develop.tar.gz"
             fi
             tar zcvf $filename antenna
-            aws s3 cp $filename s3://clicker-antenna
+            aws s3 cp $filename s3://clicker-antenna/app
