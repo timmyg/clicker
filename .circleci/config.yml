@@ -137,29 +137,15 @@ jobs:
               - develop
           command: |
             echo -e "upload antenna package to s3"
-            # pwd
-            # whoami
-            # cp -R antenna /tmp
-            # cd /tmp
+            filename=
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              tar zcvf antenna.tar.gz antenna
-              aws s3 cp antenna.tar.gz s3://clicker-antenna
+              filename="antenna.tar.gz"
             fi
             if [ "${CIRCLE_BRANCH}" == "release" ]; then
-              tar zcvf antenna-release.tar.gz antenna
-              aws s3 cp antenna-release.tar.gz s3://clicker-antenna
+              filename="antenna-release.tar.gz"
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              # pwd
-              # tar -zcvf antenna-develop.tar.gz antenna
-              # tar c antenna | gzip | aws s3 cp - "s3://clicker-antenna/clicker-antenna-develop.tar.gz"
-              # pwd
-              # aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
-              # npm run compress
-              # npm run deploy
-              # mkdir /tmp
-              # tar -zcvf antenna.tar.gz *  -C /tmp
-              # aws s3 cp /tmp/antenna.tar.gz s3://clicker-antenna
-              tar zcvf antenna-develop.tar.gz antenna
-              aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
+              filename="antenna-develop.tar.gz"
             fi
+            tar zcvf $filename antenna
+            aws s3 cp $filename s3://clicker-antenna
