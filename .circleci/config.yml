@@ -138,16 +138,16 @@ jobs:
               - develop
           command: |
             echo -e "upload antenna package to s3"
-            ls
+            pwd
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              tar -zcvf antenna.tar.gz antenna
+              tar -vczf antenna.tar.gz antenna
               aws s3 cp antenna.tar.gz s3://clicker-antenna
             fi
             if [ "${CIRCLE_BRANCH}" == "release" ]; then
-              tar -zcvf antenna-release.tar.gz antenna
+              tar -vczf antenna-release.tar.gz antenna
               aws s3 cp antenna-release.tar.gz s3://clicker-antenna
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              tar -zcvf antenna-develop.tar.gz antenna
+              tar -vczf antenna-develop.tar.gz antenna
               aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
             fi
