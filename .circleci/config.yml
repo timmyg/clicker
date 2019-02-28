@@ -47,7 +47,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Determine which projects have changed and trigger the builds
+          name: Trigger builds for changed projects
           command: |
             git diff --no-commit-id --name-only  `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f-2 | sort -u > projects
             echo -e "Modified directories:`cat projects`\n"
