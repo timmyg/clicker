@@ -149,5 +149,6 @@ jobs:
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               tar zcvf antenna-develop.tar.gz antenna
+              pwd
               aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
             fi
