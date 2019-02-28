@@ -155,7 +155,7 @@ jobs:
               # aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
               # npm run compress
               # npm run deploy
-              mkdir /tmp
+              # mkdir /tmp
               tar -zcvf antenna.tar.gz *  -C /tmp
               aws s3 cp /tmp/antenna.tar.gz s3://clicker-antenna
             fi
