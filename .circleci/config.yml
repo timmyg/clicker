@@ -140,14 +140,14 @@ jobs:
             echo -e "upload antenna package to s3"
             pwd
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              tar -vczf antenna.tar.gz antenna
+              tar zcvf antenna.tar.gz antenna
               aws s3 cp antenna.tar.gz s3://clicker-antenna
             fi
             if [ "${CIRCLE_BRANCH}" == "release" ]; then
-              tar -vczf antenna-release.tar.gz antenna
+              tar zcvf antenna-release.tar.gz antenna
               aws s3 cp antenna-release.tar.gz s3://clicker-antenna
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              tar -vczf antenna-develop.tar.gz antenna
+              tar zcvf antenna-develop.tar.gz antenna
               aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
             fi
