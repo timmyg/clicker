@@ -148,4 +148,4 @@ jobs:
               filename="antenna-develop.tar.gz"
             fi
             tar zcvf $filename antenna
-            aws s3 cp $filename s3://clicker-antenna
+            aws s3 cp $filename s3://clicker-antenna/app
