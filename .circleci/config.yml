@@ -124,11 +124,8 @@ jobs:
   packages/antenna:
     working_directory: ~/clicker/packages/antenna
     docker:
-      - image: datagovsg/python-node
+      - image: mesosphere/aws-cli
     steps:
-      - run:
-          name: Install aws cli
-          command: pip install awscli
       - run:
           name: Deploy application
           branches:
@@ -152,10 +149,12 @@ jobs:
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               # pwd
-              # # tar zcvf antenna-develop.tar.gz antenna
+              # tar -zcvf antenna-develop.tar.gz antenna
               # tar c antenna | gzip | aws s3 cp - "s3://clicker-antenna/clicker-antenna-develop.tar.gz"
-              # pwd
-              # # aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
-              npm run compress
-              npm run deploy
+              pwd
+              # aws s3 cp antenna-develop.tar.gz s3://clicker-antenna
+              # npm run compress
+              # npm run deploy
+              tar -zcvf antenna.tar.gz *
+              aws s3 cp antenna.tar.gz s3://clicker-antenna
             fi
