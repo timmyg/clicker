@@ -39,6 +39,11 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.10
+    branches:
+      only:
+        - master
+        - release
+        - develop
     steps:
       - checkout
       - run:
