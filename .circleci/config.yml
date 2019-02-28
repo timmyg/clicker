@@ -122,7 +122,7 @@ jobs:
               curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a2f1056ec16dab4338b
             fi
   packages/antenna:
-    working_directory: ~/clicker/packages
+    working_directory: ~/clicker/packages/antenna
     docker:
       - image: circleci/python:2.7-jessie
     steps:
