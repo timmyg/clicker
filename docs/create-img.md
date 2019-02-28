@@ -31,3 +31,8 @@ resources:
 - download nodejs https://github.com/sdesalas/node-pi-zero
 - systemd processes https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units
 - systemd https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
+
+?'s
+startup script
+better way of pulling code?
+really bad to pull github repo?
