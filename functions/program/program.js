@@ -123,6 +123,7 @@ function build(dtvSchedule) {
           .add(6, 'hours')
           .diff(moment(), 'seconds'),
       );
+      console.log({ program });
       allPrograms.push(program);
     });
   });
