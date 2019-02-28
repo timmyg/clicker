@@ -18,7 +18,7 @@ aliases:
           name: Run tests
           command: npm test
       - run:
-          name: Deploy application
+          name: Deploy serverless function
           branches:
             only:
               - master
