@@ -1,29 +1,29 @@
-# Creating the raspbian image
+## Creating the raspbian image with necessary dependencies
+
+##### on sd card
 
 1. download raspbian lite zip https://www.raspberrypi.org/downloads/raspbian/
 2. write to sd card with etcher
 3. add empty [ssh](resources/ssh) file to boot (may have to eject/insert again, use disk utility)
-4. create [wpa_supplicant.conf](resources/wpa_supplicant.conf), enter wifi details (see resources) and place into boot directory. This will be copied over on launch
+4. create [wpa_supplicant.conf](resources/wpa_supplicant.conf), enter wifi details (see resources) and place into boot directory. This will be copied over on launch. This is needed to connect via ssh for customer setup
+
+##### on raspberry pi (w/ sd card)
+
 5. eject sd card, insert card into pi, attach to computer via usb
 6. setup ssh computer to pi - https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
-    - ssh-keygen
-    - ssh-copy-id pi@raspberrypi.local
-7. setup ssh pi to github  - https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
-    - ssh-keygen
-    - add public key to github
-8. install node LTS (10.15)
+   - `ssh-keygen`
+   - `ssh-copy-id pi@raspberrypi.local`
+7. install node LTS (10.15), to run app
    - `wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh | bash`
-9. install yarn (1.13.0)
+8. install yarn (1.13.0), faster dependency installs than npm
    - `curl -o- -L https://yarnpkg.com/install.sh | bash`
-10. install git (2.11)
-   - `sudo apt-get install git`
-11. add app startup/sync script
-    - sudo vi /etc/systemd/system/clicker.service
-    - input [clicker.service](resources/clicker.service) contents
-    - need to pull first to get rsa fingerprint
-    - start service: `sudo systemctl start clicker`
-    - enable at startup: `sudo systemctl enable clicker`
+9. add app startup/sync script
 
+- `sudo vi /etc/systemd/system/antenna.service`
+- input [antenna.service](resources/antenna.service) contents
+- need to pull first to get rsa fingerprint
+- start service: `sudo systemctl start antenna`
+- enable at startup: `sudo systemctl enable antenna`
 
 resources:
 
@@ -34,5 +34,4 @@ resources:
 
 ?'s
 startup script
-better way of pulling code?
-really bad to pull github repo?
+restart on a schedule?
