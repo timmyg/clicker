@@ -28,7 +28,7 @@ function init() {
       price: Number, // 0
       repeat: Boolean, // false
       ltd: String, // "Live"
-      programID: String, // "SH000296530000"
+      programID: String, // "SH000296530000" - use this to get summary
       blackoutCode: String,
       airTime: Date, // "2019-02-06T18:00:00.000+0000"
       subcategoryList: [String], // ["Basketball"]
