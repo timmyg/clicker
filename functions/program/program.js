@@ -118,9 +118,11 @@ function build(dtvSchedule) {
           .add(program.duration, 'minutes')
           .unix() + '000';
       // expire 6 hours from end time
-      program.expires = moment(program.endTime)
-        .add(6, 'hours')
-        .diff(moment(), 'seconds');
+      program.expires = parseInt(
+        moment(program.endTime)
+          .add(6, 'hours')
+          .diff(moment(), 'seconds'),
+      );
       allPrograms.push(program);
     });
   });
