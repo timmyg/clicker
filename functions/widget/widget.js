@@ -14,11 +14,12 @@ const Widget = dynamoose.model(
       type: String,
     },
     location: String,
-    devices: [{ name: String, ip: String, mac: String }],
-    boxes: [Object],
+    devices: [{ name: String, ip: String, mac: String }], // TODO move to ip string
+    boxes: [Object], // move to boxes model, link to widget id
     options: Object,
     version: Object,
     mode: Number,
+    active: Number,
   },
   {
     timestamps: true,
@@ -177,3 +178,8 @@ module.exports.hello = async (event, context) => {
     return generateResponse(400, `error: ${e.stack}`);
   }
 };
+
+// TODO
+// endpoint that changes all channels to music for setup
+// endpoint to map box identifiers to ids
+// endpoint to activate after setup is complete (location = active)

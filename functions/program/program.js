@@ -15,6 +15,7 @@ function init() {
         type: String,
         hashKey: true,
       },
+      expires: Number,
       chId: String, // 206 (from channel)
       chNum: String, // 206 (from channel)
       chCall: String, // "ESPN" (from channel)
@@ -24,10 +25,11 @@ function init() {
       description: String, // null
       title: String, // "Oklahoma State @ Kansas"
       duration: Number, // 120
+      endTime: Date, // created
       price: Number, // 0
       repeat: Boolean, // false
       ltd: String, // "Live"
-      programID: String, // "SH000296530000"
+      programID: String, // "SH000296530000" - use this to get summary
       blackoutCode: String,
       airTime: Date, // "2019-02-06T18:00:00.000+0000"
       subcategoryList: [String], // ["Basketball"]
@@ -80,7 +82,7 @@ module.exports.pull = async event => {
       .minutes(0)
       .seconds(0)
       .toString();
-    const hours = 8;
+    const hours = 24;
     const params = { channels: channelsToPull.join(','), startTime, hours };
     const result = await axios.get(url, { params });
     const { schedule } = result.data;
@@ -114,6 +116,19 @@ function build(dtvSchedule) {
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
       program.id = generateId(program);
+      program.endTime = new Date(
+        parseInt(
+          moment(program.airTime)
+            .add(program.duration, 'minutes')
+            .unix() + '000',
+        ),
+      );
+      // expire 6 hours from end time, or 1 week
+      program.expires =
+        moment(program.endTime)
+          .add(6, 'hours')
+          .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
+      console.log({ program });
       allPrograms.push(program);
     });
   });
