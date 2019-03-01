@@ -51,12 +51,17 @@ import FeaturesTabs from './landing/FeaturesTabs';
 import PageHeader from './landing/PageHeader';
 import PageFooter from './landing/PageFooter';
 import Faq from './landing/Faq';
-import Pricing from './landing/Pricing';
+// import Pricing from './landing/Pricing';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
 
 Vue.use(VueScrollReveal);
-Vue.use(VueBrowserUpdate);
+Vue.use(VueBrowserUpdate, {
+  options: {
+    // Your browser update options
+  },
+  test: true,
+});
 
 export default {
   components: {
@@ -67,7 +72,7 @@ export default {
     PageHeader,
     PageFooter,
     Faq,
-    Pricing,
+    // Pricing,
     Interested,
     Analytics,
   },
