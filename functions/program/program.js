@@ -6,7 +6,6 @@ const uuid = require('uuid/v5');
 let Program;
 require('dotenv').config();
 
-
 function init() {
   Program = dynamoose.model(
     process.env.tableProgram,
@@ -47,7 +46,6 @@ function init() {
     },
   );
 }
-
 
 function generateResponse(statusCode, body = {}) {
   let msg = body;

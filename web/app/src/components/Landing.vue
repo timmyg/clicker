@@ -51,12 +51,20 @@ import FeaturesTabs from './landing/FeaturesTabs';
 import PageHeader from './landing/PageHeader';
 import PageFooter from './landing/PageFooter';
 import Faq from './landing/Faq';
-import Pricing from './landing/Pricing';
+// import Pricing from './landing/Pricing';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
 
 Vue.use(VueScrollReveal);
-Vue.use(VueBrowserUpdate);
+Vue.use(VueBrowserUpdate, {
+  options: {
+    // http://browser-update.org/
+    // latest version of safari
+    required: { e: -1, f: -3, o: -3, s: 0, c: -3 },
+    insecure: true,
+    api: 2019.03,
+  },
+});
 
 export default {
   components: {
@@ -67,7 +75,7 @@ export default {
     PageHeader,
     PageFooter,
     Faq,
-    Pricing,
+    // Pricing,
     Interested,
     Analytics,
   },
