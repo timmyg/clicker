@@ -11,22 +11,17 @@
 
 5. eject sd card, insert card into pi, attach to computer via usb
 6. setup ssh computer to pi - https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
-   - `ssh-keygen` (if creating new)
+   - `ssh-keygen`
    - `ssh-copy-id pi@raspberrypi.local`
-6. change default raspberry password
-    - `passwd`
 7. install node LTS (10.15), to run app
-   - `ssh pi@raspberrypi.local`
    - `wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh | bash`
 8. install yarn (1.13.0), faster dependency installs than npm
    - `curl -o- -L https://yarnpkg.com/install.sh | bash`
-9. install aws cli
-    - `sudo apt-get update`
-    - `sudo apt-get install awscli`
 9. add app startup/sync script
 
-- `sudo vim.tiny /etc/systemd/system/antenna.service`
+- `sudo vi /etc/systemd/system/antenna.service`
 - input [antenna.service](resources/antenna.service) contents
+- need to pull first to get rsa fingerprint
 - start service: `sudo systemctl start antenna`
 - enable at startup: `sudo systemctl enable antenna`
 
@@ -40,4 +35,3 @@ resources:
 ?'s
 startup script
 restart on a schedule?
-docker possible? any benefits?
