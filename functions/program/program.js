@@ -94,7 +94,7 @@ module.exports.pullNew = async event => {
 
 module.exports.pullDescriptions = async event => {
   // find programs by unique programID without descriptions
-  const allPrograms = Program.null('description');
+  const allPrograms = await Program.query('description').null();
   console.log('null program descriptions:', allPrograms.length);
   const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programID))];
   console.log('unique null program descriptions:', uniqueProgramIds.length);
