@@ -6,7 +6,6 @@ provider:
   environment:
     tableProgram: ${self:custom.tableProgram}
     serviceName: ${self:service}
-    GUIDE_ENDPOINT: ${env:GUIDE_ENDPOINT}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -60,8 +59,8 @@ functions:
           path: health
           method: get
           cors: true
-  pull:
-    handler: program.pull
+  pullNew:
+    handler: program.pullNew
     events:
       - http:
           path: pull
@@ -70,3 +69,13 @@ functions:
       - schedule: cron(0 2 * * ? *)
       - schedule: cron(0 10 * * ? *)
       - schedule: cron(0 18 * * ? *)
+  pullDescriptions:
+    handler: program.pullDescriptions
+    events:
+      - http:
+          path: pull
+          method: post
+          cors: true
+      - schedule: cron(1 2 * * ? *)
+      - schedule: cron(1 10 * * ? *)
+      - schedule: cron(1 18 * * ? *)

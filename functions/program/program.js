@@ -3,6 +3,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
+const directvEndpoint = 'https://www.directv.com/json';
 let Program;
 require('dotenv').config();
 
@@ -21,7 +22,8 @@ function init() {
       chHd: Boolean, // false (from channel)
       chCat: [String], // ["Sports Channels"]
       blackOut: Boolean, // false (from channel)
-      description: String, // null
+      description: String, // null, populated later
+      progType: String, // null, populated later
       title: String, // "Oklahoma State @ Kansas"
       duration: Number, // 120
       endTime: Date, // created
@@ -62,18 +64,13 @@ module.exports.health = async event => {
   return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
 };
 
-/**
- * Registers a device if it has not been registered (losantId is PK)
- * @param   {string} losantId device identifier for Losant platform (event.body)
- * @param   {string} location human readable location for reference (event.body)
- *
- * @returns {number} 201, 400
- */
-module.exports.pull = async event => {
+module.exports.pullNew = async event => {
   try {
     init();
-    const url = process.env.GUIDE_ENDPOINT;
+    const url = `${directvEndpoint}/channelschedule`;
+    // TODO dont hardcode channels, different depending on zip code!
     const channelsToPull = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
+    // TODO add zip code cookie
     const startTime = moment()
       .utc()
       .subtract(6, 'hours')
@@ -94,6 +91,33 @@ module.exports.pull = async event => {
     return generateResponse(400, `Could not create: ${e.stack}`);
   }
 };
+
+module.exports.pullDescriptions = async event => {
+  // find programs by unique programID without descriptions
+  const allPrograms = Program.null('description');
+  console.log('null program descriptions:', allPrograms.length);
+  const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programID))];
+  console.log('unique null program descriptions:', uniqueProgramIds.length);
+  // call endpoint for each program
+  for (const programId of uniqueProgramIds) {
+    console.log('update program', programId);
+    const url = `${directvEndpoint}/program/flip/${programId}`;
+    const result = await axios.get(url);
+    console.log('result', result);
+    const { programDetail } = result.data;
+    const { description, progType } = programDetail;
+    // save description for all program ids
+    // await Program.update({ programID: programId }, { description, progType });
+    const programs = await Program.batchGet([{ programID: programId }]);
+    console.log('programs to update:', programs.length);
+    for (const p of programs) {
+      await Program.update({ id: p.id }, { description, progType });
+    }
+  }
+  return generateResponse(200);
+};
+
+module.exports.assignRelevance = async event => {};
 
 function transformPrograms(programs) {
   const allPrograms = [];
