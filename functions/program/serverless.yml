@@ -63,7 +63,7 @@ functions:
     handler: program.pullNew
     events:
       - http:
-          path: pull
+          path: new
           method: post
           cors: true
       - schedule: cron(0 2 * * ? *)
@@ -73,7 +73,7 @@ functions:
     handler: program.pullDescriptions
     events:
       - http:
-          path: pull
+          path: descriptions
           method: post
           cors: true
       - schedule: cron(1 2 * * ? *)
