@@ -1,6 +1,6 @@
 # https://www.freedesktop.org/software/systemd/man/systemd.service.html
 [Unit]
-Description=clicker service
+Description=antenna service
 After=network.target
 
 [Service]
