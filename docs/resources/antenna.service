@@ -9,7 +9,7 @@ EnvironmentFile=/home/pi/.env
 # before or after the command in ExecStart=
 ExecStartPre=/bin/bash -c 'rm -rf antenna'
 ExecStartPre=/bin/bash -c 'aws s3 cp s3://clicker-antenna/app/antenna.tar.gz antenna.tar.gz'
-ExecStartPre=/bin/bash -c 'tar -xzf antenna.tar.gz'
+ExecStartPre=/bin/bash -c 'mkdir antenna && tar -xzf antenna.tar.gz -C antenna'
 ExecStartPre=/bin/bash -c 'rm -rf antenna.tar.gz'
 # executed when this service is started
 ExecStart=/bin/bash -c 'node /home/pi/antenna/startup.js'
