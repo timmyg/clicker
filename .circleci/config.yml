@@ -127,12 +127,15 @@ jobs:
               curl -X POST -d {} https://api.netlify.com/build_hooks/5c745a2f1056ec16dab4338b
             fi
   packages/antenna:
-    working_directory: ~/clicker/packages
+    working_directory: ~/clicker/packages/antenna
     docker:
-      - image: mesosphere/aws-cli
+      - image: chybie/node-aws-cli
     steps:
       - checkout:
           path: ~/clicker
+      - run:
+          name: Install dependencies
+          command: npm i
       - run:
           name: Upload app zip to s3
           branches:
@@ -152,5 +155,5 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               filename="antenna-develop.tar.gz"
             fi
-            tar zcvf $filename antenna
+            tar zcvf $filename *
             aws s3 cp $filename s3://clicker-antenna/app/
