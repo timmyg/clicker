@@ -13,9 +13,10 @@
 
 5. eject sd card, insert card into pi, attach to computer via usb
 5. change password
+    - `ssh pi@raspberrypi.local`
     - `passwd`
 6. setup ssh computer to pi - https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
-   - `ssh-keygen`
+   <!-- - `ssh-keygen` -->
    - `ssh-copy-id pi@raspberrypi.local`
 7. install node LTS (10.15), to run app
    - `wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh | bash`
@@ -30,9 +31,10 @@
 - `sudo vim.tiny /etc/systemd/system/antenna.service`
 - input [antenna.service](resources/antenna.service) contents
 - need to pull first to get rsa fingerprint
-- test service: `sudo systemctl restart antenna`
+- test service: `sudo systemctl daemon-reload && sudo systemctl restart antenna`
 - enable at startup: `sudo systemctl enable antenna`
 - `systemctl status antenna.service`
+- `journalctl -xe`
 
 resources:
 
