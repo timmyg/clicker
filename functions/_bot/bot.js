@@ -1,4 +1,4 @@
- const aws = require('aws-sdk');
+const aws = require('aws-sdk');
 const qs = require('qs');
 require('dotenv').config();
 
@@ -34,8 +34,6 @@ async function callRemoteCommandFunction(channel) {
       }),
     }),
   };
-
-  console.log('call lambda');
   return lambda.invoke(opts).promise();
 }
 
