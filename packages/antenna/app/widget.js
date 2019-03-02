@@ -1,9 +1,8 @@
 const DirecTV = require('directv-remote');
-const find = require('local-devices');
 const { Device } = require('losant-mqtt');
 const logger = require('./logger');
 const Api = require('./api');
-const arpScanner = require('arpscan');
+const arpScanner = require('arpscan-new');
 
 class Widget {
   constructor() {
@@ -19,19 +18,22 @@ class Widget {
   }
 
   async saveIp() {
-    logged.info('about to save ips....');
-    const localDevices = await arpScanner();
-    logged.info({ localDevices });
-    const ips = localDevices.map(device => device.ip);
-    logged.info({ ips });
-    ips.forEach(ip => {
-      DirecTV.validateIP(ip, error => {
-        if (error) {
-          return logger.info(`.......... not valid directv ip: ${ip}`);
-        }
-        logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
-        this.saveBoxes(ip);
-        return this.api.updateDeviceDirectvIp(ip);
+    logger.info('about to save ips....');
+    // const localDevices = await arpScanner();
+    arpScanner((err, localDevices) => {
+      if (err) logger.error(err);
+      logger.info({ localDevices });
+      const ips = localDevices.map(device => device.ip);
+      logger.info({ ips });
+      ips.forEach(ip => {
+        DirecTV.validateIP(ip, error => {
+          if (error) {
+            return logger.info(`.......... not valid directv ip: ${ip}`);
+          }
+          logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
+          this.saveBoxes(ip);
+          return this.api.updateDeviceDirectvIp(ip);
+        });
       });
     });
   }
