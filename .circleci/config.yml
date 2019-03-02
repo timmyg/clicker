@@ -129,7 +129,7 @@ jobs:
   packages/antenna:
     working_directory: ~/clicker/packages
     docker:
-      - image: mesosphere/aws-cli
+      - image: chybie/node-aws-cli
     steps:
       - checkout:
           path: ~/clicker
