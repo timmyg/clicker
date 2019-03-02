@@ -10,7 +10,7 @@ EnvironmentFile=/home/pi/.env
 ExecStartPre=/bin/bash -c 'rm -rf antenna'
 ExecStartPre=/bin/bash -c 'aws s3 cp s3://clicker-antenna/app/antenna.tar.gz antenna.tar.gz'
 ExecStartPre=/bin/bash -c 'tar -xzf antenna.tar.gz'
-ExecStartPre=/bin/bash -c 'cd /home/pi/antenna && /home/pi/.yarn/bin/yarn install'
+ExecStartPre=/bin/bash -c 'rm -rf antenna.tar.gz'
 # executed when this service is started
 ExecStart=/bin/bash -c 'node /home/pi/antenna/startup.js'
 StandardOutput=inherit
@@ -21,7 +21,7 @@ User=pi
 # time to wait for each ExecStop=, configures the time to wait for the service itself to stop
 # TimeoutStopSec=
 # shorthand for configuring both TimeoutStartSec= and TimeoutStopSec=
-TimeoutSec=6s
+TimeoutSec=600s
 # time to sleep before restarting a service (as configured with Restart=).
 RestartSec=3s
 # whether the service shall be restarted when the service process exits, is killed, or a timeout is reached

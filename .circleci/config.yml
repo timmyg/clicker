@@ -134,6 +134,9 @@ jobs:
       - checkout:
           path: ~/clicker
       - run:
+          name: Install dependencies
+          command: npm i
+      - run:
           name: Upload app zip to s3
           branches:
             only:
