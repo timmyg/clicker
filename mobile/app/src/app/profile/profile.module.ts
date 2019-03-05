@@ -7,9 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { ProfilePage } from './profile.page';
 import { MomentModule } from 'ngx-moment';
-import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CoreModule } from '../core/core.module';
+import { WalletPage } from './wallet/wallet.page';
 
 const routes: Routes = [
   {
@@ -23,11 +22,11 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    SharedModule,
     MomentModule,
     FontAwesomeModule,
     RouterModule.forChild(routes),
   ],
-  declarations: [ProfilePage],
+  declarations: [ProfilePage, WalletPage],
+  entryComponents: [WalletPage]
 })
 export class ProfilePageModule {}

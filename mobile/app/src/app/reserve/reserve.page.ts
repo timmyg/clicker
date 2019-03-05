@@ -17,6 +17,7 @@ import { getAllGames } from 'src/app/state/game';
 import { getAllTvs } from 'src/app/state/tv';
 import { getAllReservations } from 'src/app/state/reservation';
 import { Storage } from '@ionic/storage';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-reserve',
@@ -30,9 +31,10 @@ export class ReservePage implements OnInit {
   games$: Observable<Game[]>;
   tvs$: Observable<TV[]>;
   reservations$: Observable<Reservation[]>;
-  reservation: Reservation = new Reservation();
+  reservation: Reservation;
 
-  constructor(private store: Store<fromStore.AppState>, private navCtrl: NavController, private storage: Storage) {
+  constructor(private store: Store<fromStore.AppState>, private navCtrl: NavController,
+    private storage: Storage, private route: ActivatedRoute) {
     this.loading$ = this.store.select(getLoading);
     this.error$ = this.store.select(getError);
     this.locations$ = this.store.select(getAllLocations);
@@ -42,9 +44,24 @@ export class ReservePage implements OnInit {
   }
 
   ngOnInit() {
+    this.reservation = new Reservation();
+    // if theres a reservation being passed in, set it to the reservation
+    this.route.paramMap.subscribe(paramsMap => {
+      const reservationId = paramsMap.get('reservationId')
+      console.log(reservationId)
+      this.reservations$.subscribe(reservations => {
+        console.log({reservations})
+        const selectedReservation = reservations.find(r => r.id === reservationId);
+        if (selectedReservation) {
+          selectedReservation.activeStep === 'games';
+          this.reservation = selectedReservation;
+        }
+      })
+    });
     this.store.dispatch(new fromLocation.GetAllLocations());
     this.store.dispatch(new fromGame.GetAllGames());
     this.store.dispatch(new fromTv.GetAllTvs());
+    this.store.dispatch(new fromReservation.GetAllReservations());
   }
 
   onChooseLocation(location: Establishment) {

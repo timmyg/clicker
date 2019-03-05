@@ -6,7 +6,7 @@ export class Reservation {
   constructor() {
     this.activeStep = 'locations';
   }
-
+  id: String;
   activeStep: String;
   location: Establishment;
   game: Game;

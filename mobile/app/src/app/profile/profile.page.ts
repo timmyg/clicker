@@ -5,9 +5,9 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations } from '../state/reservation';
 import { ModalController } from '@ionic/angular';
-import { WalletPage } from '../shared/wallet/wallet.page';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
+import { WalletPage } from './wallet/wallet.page';
 
 @Component({
   selector: 'app-profile',
