@@ -15,6 +15,7 @@ export class ReservationService {
 
   createReservation(reservation: Reservation): Observable<Reservation> {
     // return this.httpClient.get<Establishment[]>(this.url);
+    reservation.id = "76924ed7-1455-4c96-9aee-da96cff99157";
     return of(reservation);
   }
 }

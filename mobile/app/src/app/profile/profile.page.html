@@ -4,25 +4,27 @@
 
 <ion-content padding>
   <div margin-bottom><b>Phone:&nbsp;</b> <span>513-843-3209</span></div>
-  <div margin-bottom>
-    <b>Wallet:&nbsp;</b>
-    <h1 class="inline">2</h1>
-    <span>&nbsp;</span> <fa-icon [icon]="faCopyright" class="coin" size="2x"></fa-icon>
-    <a (click)="openWallet()" padding-start>Purchase tokens</a> <br />
-  </div>
+  <ion-row margin-bottom align-items-center>
+    <b>Wallet:</b>
+    <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
+    <span>&nbsp;</span>
+    <span>2</span>
+    <a (click)="openWallet()" padding-start>Get more</a> <br />
+  </ion-row>
   <b margin-bottom>Your Reservations:&nbsp;</b><br />
-  <div margin-top>
+  <ion-row margin-top>
     <div *ngIf="(reservations$ | async).length > 0; else empty" margin-top>
-      <ion-card *ngFor="let r of (reservations$ | async)">
+      <ion-card *ngFor="let r of (reservations$ | async)" [routerLink]="['/tabs/reserve', r.id]">
         <ion-card-header>
-          <ion-card-subtitle
-            >{{ r.game.channelTitle }} - TV #{{ r.tvTag }} until {{ r.end | amDateFormat: 'h:mm a' }}</ion-card-subtitle
-          >
+          <ion-card-subtitle>
+            <span>{{ r.game.channelTitle }} - TV #{{ r.tvTag }}</span>
+            <span float-right>{{ r.end | amDifference: today :'minutes'}} mins remaining</span>
+          </ion-card-subtitle>
           <ion-card-title>{{ r.gameTitle }}</ion-card-title>
         </ion-card-header>
       </ion-card>
     </div>
     <ng-template #empty margin-top> You do not have any active reservations </ng-template>
-  </div>
+  </ion-row>
   <div margin-top text-center><a (click)="onLogout()" color="danger" padding-top text-center>Logout</a></div>
 </ion-content>
