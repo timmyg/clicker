@@ -8,21 +8,22 @@ import { Reservation } from '../../../state/reservation/reservation.model';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent implements OnInit {
-  @Output() confirm = new EventEmitter<Reservation>();
   @Input() reservation: Reservation;
+  @Output() confirm = new EventEmitter<Reservation>();
+  @Output() changeTitle = new EventEmitter<String>();
+  title = 'Confirmation';
   saving: boolean;
 
   constructor() {}
 
   ngOnInit() {
+    this.changeTitle.emit(this.title);
     this.reservation.end = moment()
       .add(2, 'h')
       .minutes(0)
       .toDate();
     this.reservation.cost = 2;
   }
-
-  ngOnChanges(): void {}
 
   onConfirm() {
     this.saving = true;

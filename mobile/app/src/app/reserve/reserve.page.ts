@@ -32,9 +32,14 @@ export class ReservePage implements OnInit {
   tvs$: Observable<TV[]>;
   reservations$: Observable<Reservation[]>;
   reservation: Reservation;
+  title: String;
 
-  constructor(private store: Store<fromStore.AppState>, private navCtrl: NavController,
-    private storage: Storage, private route: ActivatedRoute) {
+  constructor(
+    private store: Store<fromStore.AppState>,
+    private navCtrl: NavController,
+    private storage: Storage,
+    private route: ActivatedRoute,
+  ) {
     this.loading$ = this.store.select(getLoading);
     this.error$ = this.store.select(getError);
     this.locations$ = this.store.select(getAllLocations);
@@ -47,16 +52,16 @@ export class ReservePage implements OnInit {
     this.reservation = new Reservation();
     // if theres a reservation being passed in, set it to the reservation
     this.route.paramMap.subscribe(paramsMap => {
-      const reservationId = paramsMap.get('reservationId')
-      console.log(reservationId)
+      const reservationId = paramsMap.get('reservationId');
+      console.log(reservationId);
       this.reservations$.subscribe(reservations => {
-        console.log({reservations})
+        console.log({ reservations });
         const selectedReservation = reservations.find(r => r.id === reservationId);
         if (selectedReservation) {
           selectedReservation.activeStep === 'games';
           this.reservation = selectedReservation;
         }
-      })
+      });
     });
     this.store.dispatch(new fromLocation.GetAllLocations());
     this.store.dispatch(new fromGame.GetAllGames());
@@ -80,5 +85,9 @@ export class ReservePage implements OnInit {
     this.store.dispatch(new fromReservation.CreateReservation(reservation));
     this.navCtrl.navigateForward('/tabs/profile');
     this.reservation = new Reservation();
+  }
+
+  onChangeTitle(title: String) {
+    this.title = title;
   }
 }

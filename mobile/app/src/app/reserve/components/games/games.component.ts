@@ -6,15 +6,15 @@ import { Game } from 'src/app/state/game/game.model';
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.scss'],
 })
-export class GamesComponent implements OnInit, OnChanges {
-  @Output() chooseGame = new EventEmitter<Game>();
+export class GamesComponent {
   @Input() games: Game[];
+  @Output() chooseGame = new EventEmitter<Game>();
+  @Output() changeTitle = new EventEmitter<String>();
+  title = 'Choose Channel';
 
-  constructor() {}
-
-  ngOnInit() {}
-
-  ngOnChanges() {}
+  ngOnInit() {
+    this.changeTitle.emit(this.title);
+  }
 
   onGameClick(game: Game) {
     this.chooseGame.emit(game);
