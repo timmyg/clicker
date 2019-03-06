@@ -1,32 +1,22 @@
-<ion-header>
-  <ion-toolbar> <ion-title> choose your game</ion-title> </ion-toolbar>
-</ion-header>
-<section>
-  <ion-list>
-    <ion-card *ngFor="let game of games" (click)="onGameClick(game)">
-      <ion-card-header>
-        <ion-card-subtitle>
-          <span>{{ game.start | amDateFormat: 'h:mm a' }}</span> <span float-right>{{ game.channelTitle }}</span>
-        </ion-card-subtitle>
-        <ion-card-title>
-          <ion-grid no-padding>
-            <ion-row align-items-center>
-              <ion-col size="1" no-padding align-items-center>
-                <ion-icon *ngIf="game.type === 'basketball'" name="basketball" class="sport" size="large"></ion-icon>
-                <ion-icon
-                  *ngIf="game.type === 'football'"
-                  name="american-football"
-                  class="sport"
-                  size="large"
-                ></ion-icon>
-                <ion-icon *ngIf="game.type === 'baseball'" name="baseball" class="sport" size="large"></ion-icon>
-                <ion-icon *ngIf="game.type === 'soccer'" name="football" class="sport" size="large"></ion-icon>
-              </ion-col>
-              <ion-col size="11" class="title"> {{ game.title }} </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-title>
-      </ion-card-header>
-    </ion-card>
-  </ion-list>
-</section>
+<ion-list>
+  <ion-card *ngFor="let game of games" (click)="onGameClick(game)">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <span>{{ game.start | amDateFormat: 'h:mm a' }}</span> <span float-right>{{ game.channelTitle }}</span>
+      </ion-card-subtitle>
+      <ion-card-title>
+        <ion-grid no-padding>
+          <ion-row align-items-center>
+            <ion-col size="1" no-padding align-items-center>
+              <ion-icon *ngIf="game.type === 'basketball'" name="basketball" class="sport" size="large"></ion-icon>
+              <ion-icon *ngIf="game.type === 'football'" name="american-football" class="sport" size="large"></ion-icon>
+              <ion-icon *ngIf="game.type === 'baseball'" name="baseball" class="sport" size="large"></ion-icon>
+              <ion-icon *ngIf="game.type === 'soccer'" name="football" class="sport" size="large"></ion-icon>
+            </ion-col>
+            <ion-col size="11" class="title"> {{ game.title }} </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+</ion-list>

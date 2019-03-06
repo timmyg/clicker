@@ -1,10 +1,7 @@
-<ion-header>
-  <ion-toolbar> <ion-title> choose your tv </ion-title> </ion-toolbar>
-</ion-header>
-<section padding>
-  <ion-list>
-    <ion-button color="light" size="large" *ngFor="let tv of tvs" (click)="onTvClick(tv)" [disabled]="tv.reserved">{{
+<ion-row>
+  <ion-col *ngFor="let tv of tvs" size="4">
+    <ion-button color="light" size="large" expand="block" (click)="onTvClick(tv)" [disabled]="tv.reserved">{{
       tv.tag
     }}</ion-button>
-  </ion-list>
-</section>
+  </ion-col>
+</ion-row>
