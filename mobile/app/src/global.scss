@@ -9,3 +9,12 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+[no-padding-top] {
+  padding-top: 0;
+}
+
+[no-margin-horizontal] {
+  margin-left: 0;
+  margin-right: 0;
+}

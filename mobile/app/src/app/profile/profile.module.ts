@@ -9,6 +9,8 @@ import { ProfilePage } from './profile.page';
 import { MomentModule } from 'ngx-moment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { WalletPage } from './wallet/wallet.page';
+import { SharedModule } from '../shared/shared.module';
+import { ReservationComponent } from './reservation/reservation.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     IonicModule,
@@ -26,7 +29,7 @@ const routes: Routes = [
     FontAwesomeModule,
     RouterModule.forChild(routes),
   ],
-  declarations: [ProfilePage, WalletPage],
+  declarations: [ProfilePage, WalletPage, ReservationComponent],
   entryComponents: [WalletPage]
 })
 export class ProfilePageModule {}

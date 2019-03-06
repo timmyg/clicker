@@ -1,17 +1,13 @@
-<ion-header>
-  <ion-toolbar> <ion-title> choose your location</ion-title> </ion-toolbar>
-</ion-header>
-<section>
-  <ion-list>
-    <ion-card *ngFor="let location of locations" (click)="onLocationClick(location)">
-      <ion-card-header>
-        <ion-card-subtitle>
-          <span>{{ location.town }}</span> <span float-right>{{ location.distance }}</span>
-        </ion-card-subtitle>
-        <ion-card-title>
-          <img [src]="location.img" class="logo" /> <span>{{ location.name }}</span>
-        </ion-card-title>
-      </ion-card-header>
-    </ion-card>
-  </ion-list>
-</section>
+<ion-list>
+  <ion-card *ngFor="let location of (locations$ | async)" (click)="onLocationClick(location)">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <span>{{ location.town }}</span> <span float-right>{{ location.distance }}</span>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content no-padding-top>
+      <img [src]="location.img" class="logo" />
+      <h1>{{ location.name }}</h1>
+    </ion-card-content>
+  </ion-card>
+</ion-list>

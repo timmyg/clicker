@@ -14,7 +14,7 @@ import { WalletPage } from './wallet/wallet.page';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage {
   reservations$: Observable<Reservation[]>;
   faCopyright = faCopyright;
   walletModal;
@@ -35,10 +35,9 @@ export class ProfilePage implements OnInit {
     return await this.walletModal.present();
   }
 
-  ngOnInit() {}
-
   onLogout() {
     this.storage.clear();
     location.reload();
   }
+
 }

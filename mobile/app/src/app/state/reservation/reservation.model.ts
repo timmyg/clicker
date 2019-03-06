@@ -1,19 +1,29 @@
-import { Establishment } from '../location/location.model';
-import { Game } from '../game/game.model';
+import { Location } from '../location/location.model';
+import { Program } from '../program/program.model';
 import { TV } from '../tv/tv.model';
+import * as moment from 'moment';
 
 export class Reservation {
   constructor() {
-    this.activeStep = 'locations';
+    this.details = {
+      start: moment().toDate(),
+      end: moment()
+        .add(2, 'h')
+        .minutes(0)
+        .toDate(),
+      tokens: 2,
+    };
   }
+
   id: String;
-  activeStep: String;
-  location: Establishment;
-  game: Game;
+  location: Location;
+  program: Program;
   tv: TV;
-  start: Date;
-  end: Date;
-  cost: number;
+  details: {
+    start: Date;
+    end: Date;
+    tokens: number;
+  };
 
   get tvTag() {
     return this.tv.tag;
@@ -27,7 +37,7 @@ export class Reservation {
     return this.location.town;
   }
 
-  get gameTitle() {
-    return this.game.title;
+  get programTitle() {
+    return this.program.title;
   }
 }

@@ -15,8 +15,8 @@ export class TvsEffects {
     ofType(TvActions.GET_ALL_TVS),
     switchMap(() =>
       this.tvService.getTvs().pipe(
-        map((tvs: TV[]) => new TvActions.GetAllTvsSuccess(tvs)),
-        catchError(err => of(new TvActions.GetAllTvsFail(err))),
+        map((tvs: TV[]) => new TvActions.GetAllByLocationSuccess(tvs)),
+        catchError(err => of(new TvActions.GetAllByLocationFail(err))),
       ),
     ),
   );

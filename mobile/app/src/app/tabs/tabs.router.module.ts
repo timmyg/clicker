@@ -17,15 +17,6 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'reserve/:reservationId',
-        children: [
-          {
-            path: '',
-            loadChildren: '../reserve/reserve.module#ReservePageModule',
-          },
-        ],
-      },
-      {
         path: 'reserve',
         children: [
           {
