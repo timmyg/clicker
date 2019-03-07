@@ -35,12 +35,17 @@
       slot="end"
       [disabled]="saving"
       margin-top
+      align-items-center
     >
-      <span *ngIf="!saving">Confirm (2 tokens)</span>
-      <span *ngIf="saving">
+      <ion-row *ngIf="!saving; else isSaving" >
+        <span>Confirm</span>
+        <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start/>
+        <span>2</span>
+      </ion-row>
+      <ng-template #isSaving>
         Tuning
-        <ion-spinner name="dots"></ion-spinner>
-      </span>
+        <ion-spinner name="dots" margin-start></ion-spinner>
+      </ng-template>
     </ion-button>
   </ion-card-content>
 </ion-card>

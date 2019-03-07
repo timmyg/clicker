@@ -11,6 +11,7 @@ import { GamesComponent } from './components/games/games.component';
 import { TvsComponent } from './components/tvs/tvs.component';
 import { MomentModule } from 'ngx-moment';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -20,7 +21,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
+  imports: [SharedModule, CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
   declarations: [ReservePage, LocationsComponent, GamesComponent, TvsComponent, ConfirmationComponent],
   exports: [TvsComponent]
 })
