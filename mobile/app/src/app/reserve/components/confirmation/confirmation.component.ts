@@ -9,8 +9,8 @@ import { Reservation } from '../../../state/reservation/reservation.model';
 })
 export class ConfirmationComponent implements OnInit {
   @Input() reservation: Reservation;
-  @Output() confirm = new EventEmitter<Reservation>();
-  @Output() changeTitle = new EventEmitter<String>();
+  @Output() confirm = new EventEmitter<Reservation>(true);
+  @Output() changeTitle = new EventEmitter<String>(true);
   title = 'Confirmation';
   saving: boolean;
 

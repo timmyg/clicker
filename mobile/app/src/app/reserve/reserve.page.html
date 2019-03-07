@@ -1,29 +1,36 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ title }} </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button class="show-back-button" *ngIf="activeStep != 'locations'" (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="!searchGamesMode"> {{ title }} </ion-title>
+    <ion-searchbar *ngIf="searchGamesMode"></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-icon slot="icon-only" name="search" *ngIf="activeStep === 'games'"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <app-locations
-    *ngIf="reservation.activeStep === 'locations'"
+    *ngIf="activeStep === 'locations'"
     [locations]="locations$ | async"
     (chooseLocation)="onChooseLocation($event)"
     (changeTitle)="onChangeTitle($event)"
   ></app-locations>
   <app-games
-    *ngIf="reservation.activeStep === 'games'"
+    *ngIf="activeStep === 'games'"
     [games]="games$ | async"
     (chooseGame)="onChooseGame($event)"
     (changeTitle)="onChangeTitle($event)"
   ></app-games>
   <app-tvs
-    *ngIf="reservation.activeStep === 'tvs'"
+    *ngIf="activeStep === 'tvs'"
     [tvs]="tvs$ | async"
     (chooseTv)="onChooseTv($event)"
     (changeTitle)="onChangeTitle($event)"
   ></app-tvs>
   <app-confirmation
-    *ngIf="reservation.activeStep === 'confirmation'"
+    *ngIf="activeStep === 'confirmation'"
     [reservation]="reservation"
     (confirm)="onConfirm(reservation)"
     (changeTitle)="onChangeTitle($event)"

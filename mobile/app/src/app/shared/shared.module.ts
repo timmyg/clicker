@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MomentModule } from 'ngx-moment';
-import { TimeagoModule } from 'ngx-timeago';
 
 @NgModule({
   declarations: [],
-  imports: [FontAwesomeModule, MomentModule, TimeagoModule],
-  exports: [FontAwesomeModule, MomentModule, TimeagoModule],
+  imports: [FontAwesomeModule, MomentModule],
+  exports: [FontAwesomeModule, MomentModule],
 })
-export class SharedModule { }
+export class SharedModule {}

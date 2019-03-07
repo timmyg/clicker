@@ -8,8 +8,8 @@ import { TV } from 'src/app/state/tv/tv.model';
 })
 export class TvsComponent implements OnInit {
   @Input() tvs: TV[];
-  @Output() chooseTv = new EventEmitter<TV>();
-  @Output() changeTitle = new EventEmitter<String>();
+  @Output() chooseTv = new EventEmitter<TV>(true);
+  @Output() changeTitle = new EventEmitter<String>(true);
   title = 'Choose TV';
 
   constructor() {}

@@ -8,8 +8,8 @@ import { Establishment } from 'src/app/state/location/location.model';
 })
 export class LocationsComponent implements OnInit {
   @Input() locations: Establishment[];
-  @Output() chooseLocation = new EventEmitter<Establishment>();
-  @Output() changeTitle = new EventEmitter<String>();
+  @Output() chooseLocation = new EventEmitter<Establishment>(true);
+  @Output() changeTitle = new EventEmitter<String>(true);
   title = 'Choose Location';
 
   constructor() {}

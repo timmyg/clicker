@@ -8,8 +8,8 @@ import { Game } from 'src/app/state/game/game.model';
 })
 export class GamesComponent {
   @Input() games: Game[];
-  @Output() chooseGame = new EventEmitter<Game>();
-  @Output() changeTitle = new EventEmitter<String>();
+  @Output() chooseGame = new EventEmitter<Game>(true);
+  @Output() changeTitle = new EventEmitter<String>(true);
   title = 'Choose Channel';
 
   ngOnInit() {

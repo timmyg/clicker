@@ -16,8 +16,8 @@ import { getAllLocations } from 'src/app/state/location';
 import { getAllGames } from 'src/app/state/game';
 import { getAllTvs } from 'src/app/state/tv';
 import { getAllReservations } from 'src/app/state/reservation';
-import { Storage } from '@ionic/storage';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reserve',
@@ -33,12 +33,14 @@ export class ReservePage implements OnInit {
   reservations$: Observable<Reservation[]>;
   reservation: Reservation;
   title: String;
+  activeStep: String;
+  searchGamesMode = false;
 
   constructor(
     private store: Store<fromStore.AppState>,
     private navCtrl: NavController,
-    private storage: Storage,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.loading$ = this.store.select(getLoading);
     this.error$ = this.store.select(getError);
@@ -58,11 +60,21 @@ export class ReservePage implements OnInit {
         console.log({ reservations });
         const selectedReservation = reservations.find(r => r.id === reservationId);
         if (selectedReservation) {
-          selectedReservation.activeStep === 'games';
+          this.activeStep = 'games';
           this.reservation = selectedReservation;
         }
       });
     });
+    this.route.queryParamMap.subscribe(queryParamMap => {
+      console.log(queryParamMap);
+      if (queryParamMap && queryParamMap.get('step')) {
+        this.activeStep = queryParamMap.get('step');
+      }
+    });
+    this.route.queryParams.subscribe(val => {
+      console.log(val);
+    });
+    this.route.queryParamMap.pipe(map(params => console.log(params)));
     this.store.dispatch(new fromLocation.GetAllLocations());
     this.store.dispatch(new fromGame.GetAllGames());
     this.store.dispatch(new fromTv.GetAllTvs());
@@ -71,15 +83,18 @@ export class ReservePage implements OnInit {
 
   onChooseLocation(location: Establishment) {
     this.reservation.location = location;
-    this.reservation.activeStep = 'games';
+    let navigationExtras: NavigationExtras = {
+      queryParams: { step: 'games' },
+    };
+    this.router.navigate([], navigationExtras);
   }
   onChooseGame(game: Game) {
     this.reservation.game = game;
-    this.reservation.activeStep = 'tvs';
+    this.navigateToStep('tvs');
   }
   onChooseTv(tv: TV) {
     this.reservation.tv = tv;
-    this.reservation.activeStep = 'confirmation';
+    this.navigateToStep('confirmation');
   }
   onConfirm(reservation: Reservation) {
     this.store.dispatch(new fromReservation.CreateReservation(reservation));
@@ -87,7 +102,19 @@ export class ReservePage implements OnInit {
     this.reservation = new Reservation();
   }
 
+  private navigateToStep(stepName: string) {
+    let navigationExtras: NavigationExtras = {
+      queryParams: { step: stepName },
+    };
+    console.log(navigationExtras);
+    this.router.navigate([], navigationExtras);
+  }
+
   onChangeTitle(title: String) {
     this.title = title;
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 }
