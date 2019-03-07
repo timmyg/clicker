@@ -25,8 +25,13 @@
   </ion-card-header>
 
   <ion-card-content>
-    <p>You are reserving TV #{{ reservation.tvTag }} until {{ reservation.end | amDateFormat: 'h:mm a' }}</p>
-    <p><b>Cost:</b> {{ reservation.cost }} tokens</p>
+    <ion-row>
+      <p>You are reserving TV #{{ reservation.tvTag }} until {{ reservation.end | amDateFormat: 'h:mm a' }}</p>
+    </ion-row>
+    <ion-row align-items-center>
+      <b>Cost:</b> <img class="coin" src="./assets/coin.svg" width="15" height="15" padding-start />
+      <span>2</span>
+    </ion-row>
     <ion-button
       color="success"
       size="large"
