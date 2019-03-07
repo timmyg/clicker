@@ -3,7 +3,9 @@
 </ion-header>
 
 <ion-content padding>
-  <div margin-bottom><b>Phone:&nbsp;</b> <span>513-843-3209</span></div>
+  <ion-row margin-bottom>
+    <b>Phone:&nbsp;</b><span>513-843-3209</span>
+  </ion-row>
   <ion-row margin-bottom align-items-center>
     <b>Wallet:</b>
     <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
@@ -11,17 +13,13 @@
     <span>2</span>
     <a (click)="openWallet()" padding-start>Get more</a> <br />
   </ion-row>
-  <b margin-bottom>Your Reservations:&nbsp;</b><br />
-  <ion-row margin-top>
+  <ion-row margin-bottom>
+    <b>My Reservations:</b>
+  </ion-row>
+  <ion-row margin-bottom>
     <div *ngIf="(reservations$ | async).length > 0; else empty" margin-top>
       <ion-card *ngFor="let r of (reservations$ | async)" [routerLink]="['/tabs/reserve', r.id]">
-        <ion-card-header>
-          <ion-card-subtitle>
-            <span>{{ r.game.channelTitle }} - TV #{{ r.tvTag }}</span>
-            <span float-right>{{ r.end | amDifference: today :'minutes'}} mins remaining</span>
-          </ion-card-subtitle>
-          <ion-card-title>{{ r.gameTitle }}</ion-card-title>
-        </ion-card-header>
+        <app-reservation [reservation]="r"></app-reservation>
       </ion-card>
     </div>
     <ng-template #empty margin-top> You do not have any active reservations </ng-template>

@@ -1,0 +1,8 @@
+<ion-card-header>
+  <ion-card-subtitle>
+    <span>{{ reservation.game.channelTitle }} - TV #{{ reservation.tvTag }}</span>
+    <!-- <span float-right>{{ reservation.end | amDifference: today :'minutes'}} mins remaining</span> -->
+    <span float-right>{{ minutesFromNow$ | async }}</span>
+  </ion-card-subtitle>
+  <ion-card-title>{{ reservation.gameTitle }}</ion-card-title>
+</ion-card-header>
