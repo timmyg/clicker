@@ -1,5 +1,5 @@
 <ion-list>
-  <ion-card *ngFor="let location of locations" (click)="onLocationClick(location)">
+  <ion-card *ngFor="let location of (locations$ | async)" (click)="onLocationClick(location)">
     <ion-card-header>
       <ion-card-subtitle>
         <span>{{ location.town }}</span> <span float-right>{{ location.distance }}</span>
@@ -7,7 +7,7 @@
     </ion-card-header>
     <ion-card-content no-padding-top>
       <img [src]="location.img" class="logo" />
-      <h1>{{ location.name }}</h1>
+      <h1>{{ location.name }}!</h1>
     </ion-card-content>
   </ion-card>
 </ion-list>

@@ -17,12 +17,35 @@ const routes: Routes = [
   {
     path: '',
     component: ReservePage,
+    children: [
+      {
+        path: 'locations',
+        component: LocationsComponent,
+      },
+      {
+        path: 'channels',
+        component: GamesComponent,
+      },
+      {
+        path: 'tvs',
+        component: TvsComponent,
+      },
+      {
+        path: 'confirmation',
+        component: ConfirmationComponent,
+      },
+    ],
   },
+  // {
+  //   path: '',
+  //   redirectTo: 'locations',
+  //   pathMatch: 'full',
+  // },
 ];
 
 @NgModule({
   imports: [SharedModule, CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
   declarations: [ReservePage, LocationsComponent, GamesComponent, TvsComponent, ConfirmationComponent],
-  exports: [TvsComponent]
+  exports: [TvsComponent],
 })
 export class ReservePageModule {}

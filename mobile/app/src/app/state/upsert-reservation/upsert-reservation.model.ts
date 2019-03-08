@@ -3,7 +3,11 @@ import { Game } from '../game/game.model';
 import { TV } from '../tv/tv.model';
 
 export class Reservation {
+  // constructor() {
+  //   this.activeStep = 'locations';
+  // }
   id: String;
+  // activeStep: String;
   location: Establishment;
   game: Game;
   tv: TV;

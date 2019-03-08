@@ -18,6 +18,7 @@ import { getAllTvs } from 'src/app/state/tv';
 import { getAllReservations } from 'src/app/state/reservation';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { ReserveService } from './reserve.service';
 
 @Component({
   selector: 'app-reserve',
@@ -41,44 +42,49 @@ export class ReservePage implements OnInit {
     private navCtrl: NavController,
     private route: ActivatedRoute,
     private router: Router,
+    private reserveService: ReserveService,
   ) {
+    reserveService.titleEmitted$.subscribe(title => {
+      this.title = title;
+    });
     this.loading$ = this.store.select(getLoading);
     this.error$ = this.store.select(getError);
-    this.locations$ = this.store.select(getAllLocations);
-    this.games$ = this.store.select(getAllGames);
-    this.reservations$ = this.store.select(getAllReservations);
-    this.tvs$ = this.store.select(getAllTvs);
+    // this.locations$ = this.store.select(getAllLocations);
+    // this.games$ = this.store.select(getAllGames);
+    // this.reservations$ = this.store.select(getAllReservations);
+    // this.tvs$ = this.store.select(getAllTvs);
   }
 
   ngOnInit() {
-    this.reservation = new Reservation();
-    // if theres a reservation being passed in, set it to the reservation
-    this.route.paramMap.subscribe(paramsMap => {
-      const reservationId = paramsMap.get('reservationId');
-      console.log(reservationId);
-      this.reservations$.subscribe(reservations => {
-        console.log({ reservations });
-        const selectedReservation = reservations.find(r => r.id === reservationId);
-        if (selectedReservation) {
-          this.activeStep = 'games';
-          this.reservation = selectedReservation;
-        }
-      });
-    });
-    this.route.queryParamMap.subscribe(queryParamMap => {
-      console.log(queryParamMap);
-      if (queryParamMap && queryParamMap.get('step')) {
-        this.activeStep = queryParamMap.get('step');
-      }
-    });
-    this.route.queryParams.subscribe(val => {
-      console.log(val);
-    });
-    this.route.queryParamMap.pipe(map(params => console.log(params)));
-    this.store.dispatch(new fromLocation.GetAllLocations());
-    this.store.dispatch(new fromGame.GetAllGames());
-    this.store.dispatch(new fromTv.GetAllTvs());
-    this.store.dispatch(new fromReservation.GetAllReservations());
+    console.log('reserve page oninit');
+    // this.reservation = new Reservation();
+    // // if theres a reservation being passed in, set it to the reservation
+    // this.route.paramMap.subscribe(paramsMap => {
+    //   const reservationId = paramsMap.get('reservationId');
+    //   console.log(reservationId);
+    //   this.reservations$.subscribe(reservations => {
+    //     console.log({ reservations });
+    //     const selectedReservation = reservations.find(r => r.id === reservationId);
+    //     if (selectedReservation) {
+    //       this.activeStep = 'games';
+    //       this.reservation = selectedReservation;
+    //     }
+    //   });
+    // });
+    // this.route.queryParamMap.subscribe(queryParamMap => {
+    //   console.log(queryParamMap);
+    //   if (queryParamMap && queryParamMap.get('step')) {
+    //     this.activeStep = queryParamMap.get('step');
+    //   }
+    // });
+    // this.route.queryParams.subscribe(val => {
+    //   console.log(val);
+    // });
+    // this.route.queryParamMap.pipe(map(params => console.log(params)));
+    // this.store.dispatch(new fromLocation.GetAllLocations());
+    // this.store.dispatch(new fromGame.GetAllGames());
+    // this.store.dispatch(new fromTv.GetAllTvs());
+    // this.store.dispatch(new fromReservation.GetAllReservations());
   }
 
   onChooseLocation(location: Establishment) {

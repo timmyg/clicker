@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import * as moment from 'moment';
 import { Reservation } from '../../../state/reservation/reservation.model';
+import { ReserveService } from '../../reserve.service';
 
 @Component({
   selector: 'app-confirmation',
@@ -14,10 +15,10 @@ export class ConfirmationComponent implements OnInit {
   title = 'Confirmation';
   saving: boolean;
 
-  constructor() {}
+  constructor(private reserveService: ReserveService) {}
 
   ngOnInit() {
-    this.changeTitle.emit(this.title);
+    this.reserveService.emitTitle(this.title);
     this.reservation.end = moment()
       .add(2, 'h')
       .minutes(0)

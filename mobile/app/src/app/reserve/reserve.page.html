@@ -11,7 +11,8 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-locations
+  <router-outlet></router-outlet>
+  <!-- <app-locations
     *ngIf="activeStep === 'locations'"
     [locations]="locations$ | async"
     (chooseLocation)="onChooseLocation($event)"
@@ -34,5 +35,5 @@
     [reservation]="reservation"
     (confirm)="onConfirm(reservation)"
     (changeTitle)="onChangeTitle($event)"
-  ></app-confirmation>
+  ></app-confirmation> -->
 </ion-content>
