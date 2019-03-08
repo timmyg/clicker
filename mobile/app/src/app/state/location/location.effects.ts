@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 
-import { Establishment } from './location.model';
+import { Location } from './location.model';
 import * as LocationActions from './location.actions';
 import { LocationService } from '../../core/services/location.service';
 
@@ -15,8 +15,8 @@ export class LocationsEffects {
     ofType(LocationActions.GET_ALL_LOCATIONS),
     switchMap(() =>
       this.locationService.getLocations().pipe(
-        map((locations: Establishment[]) => new LocationActions.GetAllLocationsSuccess(locations)),
-        catchError(err => of(new LocationActions.GetAllLocationsFail(err))),
+        map((locations: Location[]) => new LocationActions.GetAllSuccess(locations)),
+        catchError(err => of(new LocationActions.GetAllFail(err))),
       ),
     ),
   );

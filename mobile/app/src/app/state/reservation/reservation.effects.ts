@@ -15,8 +15,8 @@ export class ReservationsEffects {
     ofType(ReservationActions.GET_RESERVATIONS),
     switchMap(() =>
       this.reservationService.getReservations().pipe(
-        map((reservations: Reservation[]) => new ReservationActions.GetAllReservationsSuccess(reservations)),
-        catchError(err => of(new ReservationActions.GetAllReservationsFail(err))),
+        map((reservations: Reservation[]) => new ReservationActions.GetAllSuccess(reservations)),
+        catchError(err => of(new ReservationActions.GetAllFail(err))),
       ),
     ),
   );
@@ -24,10 +24,10 @@ export class ReservationsEffects {
   @Effect()
   createReservation$: Observable<Action> = this.actions$.pipe(
     ofType(ReservationActions.CREATE_RESERVATION),
-    switchMap((action: ReservationActions.CreateReservation) =>
+    switchMap((action: ReservationActions.Create) =>
       this.reservationService.createReservation(action.payload).pipe(
-        map((reservation: Reservation) => new ReservationActions.CreateReservationSuccess(reservation)),
-        catchError(err => of(new ReservationActions.CreateReservationFail(err))),
+        map((reservation: Reservation) => new ReservationActions.CreateSuccess(reservation)),
+        catchError(err => of(new ReservationActions.CreateFail(err))),
       ),
     ),
   );

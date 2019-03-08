@@ -3,14 +3,14 @@ import { Reservation } from './reservation.model';
 
 export interface State {
   reservations: Reservation[];
-  reservationToUpdate: Reservation;
+  reservationToUpdate: Partial<Reservation>;
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
   reservations: [],
-  reservationToUpdate: null,
+  reservationToUpdate: {},
   loading: false,
   error: '',
 };
@@ -52,6 +52,7 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       };
     }
     case fromReservation.SET_RESERVATION_LOCATION: {
+      console.log(action);
       state.reservationToUpdate.location = action.payload;
       return {
         ...state,
@@ -59,7 +60,7 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       };
     }
     case fromReservation.SET_RESERVATION_CHANNEL: {
-      state.reservationToUpdate.game = action.payload;
+      state.reservationToUpdate.program = action.payload;
       return {
         ...state,
         loading: false,

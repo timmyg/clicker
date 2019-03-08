@@ -19,11 +19,11 @@ export class ConfirmationComponent implements OnInit {
 
   ngOnInit() {
     this.reserveService.emitTitle(this.title);
-    this.reservation.end = moment()
+    this.reservation.details.end = moment()
       .add(2, 'h')
       .minutes(0)
       .toDate();
-    this.reservation.cost = 2;
+    this.reservation.details.cost = 2;
   }
 
   onConfirm() {

@@ -1,11 +1,11 @@
-import { Establishment } from '../location/location.model';
-import { Game } from '../game/game.model';
+import { Location } from '../location/location.model';
+import { Program } from '../program/program.model';
 import { TV } from '../tv/tv.model';
 
 export class Reservation {
   id: String;
-  location: Establishment;
-  game: Game;
+  location: Location;
+  program: Program;
   tv: TV;
   details: {
     start: Date;
@@ -25,7 +25,7 @@ export class Reservation {
     return this.location.town;
   }
 
-  get gameTitle() {
-    return this.game.title;
+  get programTitle() {
+    return this.program.title;
   }
 }

@@ -5,7 +5,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { appReducer } from './app.reducer';
 import { LocationsEffects } from './location/location.effects';
-import { GamesEffects } from './game/game.effects';
+import { ProgramsEffects } from './program/program.effects';
 import { TvsEffects } from './tv/tv.effects';
 import { ReservationsEffects } from './reservation/reservation.effects';
 
@@ -13,7 +13,7 @@ import { ReservationsEffects } from './reservation/reservation.effects';
   imports: [
     CommonModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([LocationsEffects, GamesEffects, TvsEffects, ReservationsEffects]),
+    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, TvsEffects, ReservationsEffects]),
   ],
   declarations: [],
 })

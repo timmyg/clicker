@@ -1,4 +1,4 @@
-export interface Establishment {
+export interface Location {
   id: number;
   name: string;
   town: string;

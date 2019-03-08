@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
-import { Game } from '../../state/game/game.model';
+import { Program } from '../../state/program/program.model';
 import { delay } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Injectable()
-export class GameService {
-  private url = 'api/games';
+export class ProgramService {
+  private url = 'api/programs';
   constructor(private httpClient: HttpClient) {}
 
-  getGames(): Observable<Array<Game>> {
-    // return this.httpClient.get<Game[]>(this.url);
-    const game1: Game = {
+  getPrograms(): Observable<Array<Program>> {
+    // return this.httpClient.get<Program[]>(this.url);
+    const program1: Program = {
       id: 1,
       title: 'Xavier at Georgetown',
       type: 'basketball',
@@ -24,7 +24,7 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    const game2: Game = {
+    const program2: Program = {
       id: 1,
       title: 'Florida at Florida State',
       type: 'football',
@@ -35,7 +35,7 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    const game3: Game = {
+    const program3: Program = {
       id: 1,
       title: 'West Virginia at Texas',
       type: 'basketball',
@@ -46,7 +46,7 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    const game4: Game = {
+    const program4: Program = {
       id: 1,
       title: 'Clemson at Wake Forest',
       type: 'basketball',
@@ -57,7 +57,7 @@ export class GameService {
         .minutes(30)
         .toDate(),
     };
-    const game5: Game = {
+    const program5: Program = {
       id: 1,
       title: 'Kansas at Oklahoma',
       type: 'basketball',
@@ -68,7 +68,7 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    const game6: Game = {
+    const program6: Program = {
       id: 1,
       title: 'Cincinnati at Memphis',
       type: 'basketball',
@@ -79,7 +79,7 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    const game7: Game = {
+    const program7: Program = {
       id: 1,
       title: 'St. Marys at Gonzaga',
       type: 'basketball',
@@ -90,6 +90,6 @@ export class GameService {
         .minutes(0)
         .toDate(),
     };
-    return of([game1, game2, game3, game4, game5, game6, game7]).pipe(delay(500));
+    return of([program1, program2, program3, program4, program5, program6, program7]).pipe(delay(500));
   }
 }

@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { Reservation } from './reservation.model';
-import { Establishment } from '../location/location.model';
-import { Game } from '../game/game.model';
+import { Location } from '../location/location.model';
+import { Program } from '../program/program.model';
 import { TV } from '../tv/tv.model';
 
 export const GET_RESERVATIONS = '[RESERVATION] Get Reservations';
@@ -15,63 +15,63 @@ export const SET_RESERVATION_LOCATION = '[RESERVATION WIZARD] Set Reservation Lo
 export const SET_RESERVATION_CHANNEL = '[RESERVATION WIZARD] Set Reservation Channel';
 export const SET_RESERVATION_TV = '[RESERVATION WIZARD] Set Reservation TV';
 
-export class GetAllReservations implements Action {
+export class GetAll implements Action {
   readonly type = GET_RESERVATIONS;
 }
 
-export class GetAllReservationsSuccess implements Action {
+export class GetAllSuccess implements Action {
   readonly type = GET_RESERVATIONS_SUCCESS;
   constructor(public payload: Reservation[]) {}
 }
 
-export class GetAllReservationsFail implements Action {
+export class GetAllFail implements Action {
   readonly type = GET_RESERVATIONS_FAIL;
   constructor(public payload: any) {}
 }
 
-export class CreateReservation implements Action {
+export class Create implements Action {
   readonly type = CREATE_RESERVATION;
   constructor(public payload: Reservation) {}
 }
 
-export class CreateReservationSuccess implements Action {
+export class CreateSuccess implements Action {
   readonly type = CREATE_RESERVATION_SUCCESS;
   constructor(public payload: Reservation) {}
 }
 
-export class CreateReservationFail implements Action {
+export class CreateFail implements Action {
   readonly type = CREATE_RESERVATION_FAIL;
   constructor(public payload: any) {}
 }
 
-export class SetReservationForUpdate implements Action {
+export class SetForUpdate implements Action {
   readonly type = SET_RESERVATION_FOR_UPDATE;
   constructor(public payload: Reservation) {}
 }
 
-export class SetReservationLocation implements Action {
+export class SetLocation implements Action {
   readonly type = SET_RESERVATION_LOCATION;
-  constructor(public payload: Establishment) {}
+  constructor(public payload: Location) {}
 }
 
-export class SetReservationChannel implements Action {
+export class SetChannel implements Action {
   readonly type = SET_RESERVATION_CHANNEL;
-  constructor(public payload: Game) {}
+  constructor(public payload: Program) {}
 }
 
-export class SetReservationTv implements Action {
+export class SetTv implements Action {
   readonly type = SET_RESERVATION_TV;
   constructor(public payload: TV) {}
 }
 
 export type ReservationActions =
-  | GetAllReservations
-  | GetAllReservationsSuccess
-  | GetAllReservationsFail
-  | CreateReservation
-  | CreateReservationSuccess
-  | CreateReservationFail
-  | SetReservationForUpdate
-  | SetReservationLocation
-  | SetReservationChannel
-  | SetReservationTv;
+  | GetAll
+  | GetAllSuccess
+  | GetAllFail
+  | Create
+  | CreateSuccess
+  | CreateFail
+  | SetForUpdate
+  | SetLocation
+  | SetChannel
+  | SetTv;

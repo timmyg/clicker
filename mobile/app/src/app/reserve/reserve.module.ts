@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ReservePage } from './reserve.page';
 import { LocationsComponent } from './components/locations/locations.component';
-import { GamesComponent } from './components/games/games.component';
+import { ProgramsComponent } from './components/programs/programs.component';
 import { TvsComponent } from './components/tvs/tvs.component';
 import { MomentModule } from 'ngx-moment';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
@@ -23,8 +23,8 @@ const routes: Routes = [
         component: LocationsComponent,
       },
       {
-        path: 'channels',
-        component: GamesComponent,
+        path: 'programs',
+        component: ProgramsComponent,
       },
       {
         path: 'tvs',
@@ -45,7 +45,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [SharedModule, CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
-  declarations: [ReservePage, LocationsComponent, GamesComponent, TvsComponent, ConfirmationComponent],
+  declarations: [ReservePage, LocationsComponent, ProgramsComponent, TvsComponent, ConfirmationComponent],
   exports: [TvsComponent],
 })
 export class ReservePageModule {}

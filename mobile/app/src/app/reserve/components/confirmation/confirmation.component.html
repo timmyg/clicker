@@ -1,25 +1,30 @@
 <ion-card>
   <ion-card-header>
-    <ion-card-subtitle>{{ reservation.game.channelTitle }}</ion-card-subtitle>
+    <ion-card-subtitle>{{ reservation.program.channelTitle }}</ion-card-subtitle>
     <ion-card-title class="title">
       <ion-row>
         <ion-col size="1" no-padding align-items-center>
           <ion-icon
-            *ngIf="reservation.game.type === 'basketball'"
+            *ngIf="reservation.program.type === 'basketball'"
             name="basketball"
             class="sport"
             size="large"
           ></ion-icon>
           <ion-icon
-            *ngIf="reservation.game.type === 'football'"
+            *ngIf="reservation.program.type === 'football'"
             name="american-football"
             class="sport"
             size="large"
           ></ion-icon>
-          <ion-icon *ngIf="reservation.game.type === 'baseball'" name="baseball" class="sport" size="large"></ion-icon>
-          <ion-icon *ngIf="reservation.game.type === 'soccer'" name="football" class="sport" size="large"></ion-icon>
+          <ion-icon
+            *ngIf="reservation.program.type === 'baseball'"
+            name="baseball"
+            class="sport"
+            size="large"
+          ></ion-icon>
+          <ion-icon *ngIf="reservation.program.type === 'soccer'" name="football" class="sport" size="large"></ion-icon>
         </ion-col>
-        <ion-col> {{ reservation.gameTitle }}</ion-col>
+        <ion-col> {{ reservation.programTitle }}</ion-col>
       </ion-row>
     </ion-card-title>
   </ion-card-header>
@@ -29,8 +34,7 @@
       <p>You are reserving TV #{{ reservation.tvTag }} until {{ reservation.end | amDateFormat: 'h:mm a' }}</p>
     </ion-row>
     <ion-row align-items-center>
-      <b>Cost:</b> <img class="coin" src="./assets/coin.svg" width="15" height="15" padding-start />
-      <span>2</span>
+      <b>Cost:</b> <img class="coin" src="./assets/coin.svg" width="15" height="15" padding-start /> <span>2</span>
     </ion-row>
     <ion-button
       color="success"
@@ -42,9 +46,8 @@
       margin-top
       align-items-center
     >
-      <ion-row *ngIf="!saving; else isSaving" >
-        <span>Confirm</span>
-        <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start/>
+      <ion-row *ngIf="!saving; else isSaving">
+        <span>Confirm</span> <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
         <span>2</span>
       </ion-row>
       <ng-template #isSaving>
