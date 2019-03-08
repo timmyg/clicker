@@ -7,9 +7,11 @@ export class Reservation {
   location: Establishment;
   game: Game;
   tv: TV;
-  start: Date;
-  end: Date;
-  cost: number;
+  details: {
+    start: Date;
+    end: Date;
+    cost: number;
+  };
 
   get tvTag() {
     return this.tv.tag;

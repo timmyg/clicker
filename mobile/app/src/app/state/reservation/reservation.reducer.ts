@@ -3,14 +3,14 @@ import { Reservation } from './reservation.model';
 
 export interface State {
   reservations: Reservation[];
-  reservation: Reservation;
+  reservationToUpdate: Reservation;
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
   reservations: [],
-  reservation: null,
+  reservationToUpdate: null,
   loading: false,
   error: '',
 };
@@ -41,8 +41,35 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       return {
         ...state,
         loading: false,
-
         reservations: [...state.reservations, action.payload],
+      };
+    }
+    case fromReservation.SET_RESERVATION_FOR_UPDATE: {
+      return {
+        ...state,
+        loading: false,
+        reservationToUpdate: action.payload,
+      };
+    }
+    case fromReservation.SET_RESERVATION_LOCATION: {
+      state.reservationToUpdate.location = action.payload;
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case fromReservation.SET_RESERVATION_CHANNEL: {
+      state.reservationToUpdate.game = action.payload;
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case fromReservation.SET_RESERVATION_TV: {
+      state.reservationToUpdate.tv = action.payload;
+      return {
+        ...state,
+        loading: false,
       };
     }
 
