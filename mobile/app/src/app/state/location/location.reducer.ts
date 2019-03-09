@@ -1,8 +1,8 @@
 import * as fromLocation from './location.actions';
-import { Establishment } from './location.model';
+import { Location } from './location.model';
 
 export interface State {
-  locations: Establishment[];
+  locations: Location[];
   loading: boolean;
   error: string;
 }

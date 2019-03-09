@@ -3,20 +3,27 @@ import { Reservation } from './reservation.model';
 
 export interface State {
   reservations: Reservation[];
-  reservation: Reservation;
+  reservationToUpdate: Partial<Reservation>;
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
   reservations: [],
-  reservation: null,
+  reservationToUpdate: null,
   loading: false,
   error: '',
 };
 
 export function reducer(state = initialState, action: fromReservation.ReservationActions): State {
   switch (action.type) {
+    case fromReservation.START_RESERVATION: {
+      return {
+        ...state,
+        reservationToUpdate: new Reservation(),
+        loading: true,
+      };
+    }
     case fromReservation.GET_RESERVATIONS: {
       return {
         ...state,
@@ -41,8 +48,36 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       return {
         ...state,
         loading: false,
-
         reservations: [...state.reservations, action.payload],
+      };
+    }
+    case fromReservation.SET_RESERVATION_FOR_UPDATE: {
+      return {
+        ...state,
+        loading: false,
+        reservationToUpdate: action.payload,
+      };
+    }
+    case fromReservation.SET_RESERVATION_LOCATION: {
+      console.log(action);
+      state.reservationToUpdate.location = action.payload;
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case fromReservation.SET_RESERVATION_PROGRAM: {
+      state.reservationToUpdate.program = action.payload;
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case fromReservation.SET_RESERVATION_TV: {
+      state.reservationToUpdate.tv = action.payload;
+      return {
+        ...state,
+        loading: false,
       };
     }
 
@@ -67,6 +102,7 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
   }
 }
 
+export const getReservation = (state: State) => state.reservationToUpdate;
 export const getAllReservations = (state: State) => state.reservations;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

@@ -7,13 +7,13 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
-  styleUrls: ['./reservation.component.scss']
+  styleUrls: ['./reservation.component.scss'],
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
   minutesFromNow$: Observable<number>;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     let refreshSeconds = 30;
@@ -23,16 +23,15 @@ export class ReservationComponent implements OnInit {
     this.minutesFromNow$ = interval(refreshSeconds * 1000).pipe(
       startWith(this.getMinutes()), // this sets inital value
       map(() => {
-        return this.getMinutes()
+        return this.getMinutes();
       }),
-      distinctUntilChanged()
+      distinctUntilChanged(),
     );
   }
 
   private getMinutes() {
-    const endTime = moment(this.reservation.end);
+    const endTime = moment(this.reservation.details.end);
     const duration = moment.duration(endTime.diff(moment()));
     return Math.ceil(duration.asMinutes());
   }
-
 }

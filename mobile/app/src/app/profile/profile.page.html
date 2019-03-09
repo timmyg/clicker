@@ -1,28 +1,25 @@
 <ion-header>
-  <ion-toolbar> <ion-title>profile</ion-title> </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>Account</ion-title>
+    <ion-buttons slot="end"> <ion-button (click)="onLogout()"> Logout </ion-button> </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-row margin-bottom>
-    <b>Phone:&nbsp;</b><span>513-843-3209</span>
-  </ion-row>
-  <ion-row margin-bottom align-items-center>
-    <b>Wallet:</b>
-    <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
-    <span>&nbsp;</span>
-    <span>2</span>
-    <a (click)="openWallet()" padding-start>Get more</a> <br />
-  </ion-row>
-  <ion-row margin-bottom>
-    <b>My Reservations:</b>
-  </ion-row>
-  <ion-row margin-bottom>
-    <div *ngIf="(reservations$ | async).length > 0; else empty" margin-top>
-      <ion-card *ngFor="let r of (reservations$ | async)" [routerLink]="['/tabs/reserve', r.id]">
+<ion-content margin-top>
+  <ion-grid padding-horizontal padding-top size="12">
+    <ion-row margin-bottom> <b>Phone:&nbsp;</b><span>513-843-3209</span> </ion-row>
+    <ion-row margin-bottom align-items-center>
+      <b>Wallet:</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" /> <span>&nbsp;</span>
+      <span>2</span> <a (click)="openWallet()" padding-start>Get more</a> <br />
+    </ion-row>
+    <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
+    <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
+      <div *ngFor="let r of (reservations$ | async)" [routerLink]="['/tabs/reserve', r.id]">
         <app-reservation [reservation]="r"></app-reservation>
-      </ion-card>
+      </div>
     </div>
-    <ng-template #empty margin-top> You do not have any active reservations </ng-template>
-  </ion-row>
-  <div margin-top text-center><a (click)="onLogout()" color="danger" padding-top text-center>Logout</a></div>
+    <ng-template #empty>
+      <div padding-horizontal><span>You do not have any active reservations</span></div>
+    </ng-template>
+  </ion-grid>
 </ion-content>

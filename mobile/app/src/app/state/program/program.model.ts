@@ -1,4 +1,4 @@
-export interface Game {
+export interface Program {
   id: number;
   title: string;
   start: Date;
