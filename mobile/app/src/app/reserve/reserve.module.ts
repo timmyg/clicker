@@ -36,11 +36,6 @@ const routes: Routes = [
       },
     ],
   },
-  // {
-  //   path: '',
-  //   redirectTo: 'locations',
-  //   pathMatch: 'full',
-  // },
 ];
 
 @NgModule({

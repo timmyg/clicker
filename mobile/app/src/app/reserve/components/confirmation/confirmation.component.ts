@@ -1,7 +1,12 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import * as moment from 'moment';
+import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../../../state/reservation/reservation.model';
 import { ReserveService } from '../../reserve.service';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { getReservation } from 'src/app/state/reservation';
+import * as fromStore from '../../../state/app.reducer';
+import * as fromReservation from '../../../state/reservation/reservation.actions';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-confirmation',
@@ -9,27 +14,32 @@ import { ReserveService } from '../../reserve.service';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent implements OnInit {
-  @Input() reservation: Reservation;
-  @Output() confirm = new EventEmitter<Reservation>(true);
-  @Output() changeTitle = new EventEmitter<String>(true);
+  reservation$: Observable<Partial<Reservation>>;
+  reservation: Partial<Reservation>;
   title = 'Confirmation';
   saving: boolean;
 
-  constructor(private reserveService: ReserveService) {}
-
-  ngOnInit() {
+  constructor(
+    private store: Store<fromStore.AppState>,
+    private reserveService: ReserveService,
+    private router: Router,
+  ) {
+    this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
-    this.reservation.details.end = moment()
-      .add(2, 'h')
-      .minutes(0)
-      .toDate();
-    this.reservation.details.cost = 2;
   }
 
-  onConfirm() {
+  ngOnInit() {
+    this.reservation$.subscribe(reservation => {
+      this.reservation = reservation;
+    });
+  }
+
+  onConfirm(reservation: Reservation) {
     this.saving = true;
+    // TODO subscribe
+    this.store.dispatch(new fromReservation.Create(this.reservation));
     setTimeout(() => {
-      this.confirm.emit(this.reservation);
+      this.router.navigate(['/tabs/profile']);
     }, 3000);
   }
 }

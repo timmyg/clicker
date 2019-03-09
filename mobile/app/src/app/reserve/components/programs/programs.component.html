@@ -1,5 +1,5 @@
 <ion-list>
-  <ion-card *ngFor="let program of programs" (click)="onProgramClick(program)">
+  <ion-card *ngFor="let program of (programs$ | async)" (click)="onProgramClick(program)">
     <ion-card-header>
       <ion-card-subtitle>
         <span>{{ program.start | amDateFormat: 'h:mm a' }}</span> <span float-right>{{ program.programTitle }}</span>

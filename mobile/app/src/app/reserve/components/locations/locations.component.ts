@@ -9,7 +9,6 @@ import * as fromLocation from '../../../state/location/location.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 @Component({
-  selector: 'app-locations',
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss'],
 })
@@ -33,6 +32,6 @@ export class LocationsComponent implements OnInit {
 
   onLocationClick(location: Location) {
     this.store.dispatch(new fromReservation.SetLocation(location));
-    this.router.navigate(['../channels'], { relativeTo: this.route });
+    this.router.navigate(['../programs'], { relativeTo: this.route });
   }
 }

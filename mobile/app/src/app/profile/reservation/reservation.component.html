@@ -1,14 +1,10 @@
-<ion-grid>
-  <ion-col size="12">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-subtitle>
-          <span>{{ reservation.program.channelTitle }} - TV #{{ reservation.tvTag }}</span>
-          <!-- <span float-right>{{ reservation.end | amDifference: today :'minutes'}} mins remaining</span> -->
-          <span float-right>{{ minutesFromNow$ | async }} min left</span>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content> {{ reservation.programTitle }} </ion-card-content>
-    </ion-card>
-  </ion-col>
-</ion-grid>
+<ion-card no-margin-horizontal>
+  <ion-card-header>
+    <ion-card-subtitle>
+      <span>{{ reservation.program.channelTitle }} - TV #{{ reservation.tvTag }}</span>
+      <!-- <span float-right>{{ reservation.end | amDifference: today :'minutes'}} mins remaining</span> -->
+      <span float-right>{{ minutesFromNow$ | async }} min left</span>
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content> {{ reservation.programTitle }} </ion-card-content>
+</ion-card>

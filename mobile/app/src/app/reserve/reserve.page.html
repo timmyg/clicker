@@ -6,34 +6,8 @@
     <ion-title *ngIf="!searchGamesMode"> {{ title }} </ion-title>
     <ion-searchbar *ngIf="searchGamesMode"></ion-searchbar>
     <ion-buttons slot="end">
-      <ion-icon slot="icon-only" name="search" *ngIf="activeStep === 'games'"></ion-icon>
+      <ion-icon slot="icon-only" name="search" *ngIf="activeStep === 'programs'"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <router-outlet></router-outlet>
-  <!-- <app-locations
-    *ngIf="activeStep === 'locations'"
-    [locations]="locations$ | async"
-    (chooseLocation)="onChooseLocation($event)"
-    (changeTitle)="onChangeTitle($event)"
-  ></app-locations>
-  <app-games
-    *ngIf="activeStep === 'games'"
-    [games]="games$ | async"
-    (chooseGame)="onChooseGame($event)"
-    (changeTitle)="onChangeTitle($event)"
-  ></app-games>
-  <app-tvs
-    *ngIf="activeStep === 'tvs'"
-    [tvs]="tvs$ | async"
-    (chooseTv)="onChooseTv($event)"
-    (changeTitle)="onChangeTitle($event)"
-  ></app-tvs>
-  <app-confirmation
-    *ngIf="activeStep === 'confirmation'"
-    [reservation]="reservation"
-    (confirm)="onConfirm(reservation)"
-    (changeTitle)="onChangeTitle($event)"
-  ></app-confirmation> -->
-</ion-content>
+<ion-content> <router-outlet></router-outlet> </ion-content>

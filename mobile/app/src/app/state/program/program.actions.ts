@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Program } from './program.model';
+import { Location } from '../location/location.model';
 
 export const GET_PROGRAMS = '[PROGRAM] Get Programs';
 export const GET_PROGRAMS_SUCCESS = '[PROGRAM] Get Programs Success';
@@ -7,6 +8,7 @@ export const GET_PROGRAMS_FAIL = '[PROGRAM] Get Programs Fail';
 
 export class GetAllByLocation implements Action {
   readonly type = GET_PROGRAMS;
+  constructor(public payload: Location) {}
 }
 
 export class GetAllByLocationSuccess implements Action {
