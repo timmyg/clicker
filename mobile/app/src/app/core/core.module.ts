@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationService } from './services/location.service';
-import { GameService } from './services/game.service';
+import { ProgramService } from './services/program.service';
 import { TvService } from './services/tv.service';
 import { ReservationService } from './services/reservation.service';
 import { IonicStorageModule } from '@ionic/storage';
@@ -11,7 +11,7 @@ import { IonicStorageModule } from '@ionic/storage';
   declarations: [],
 
   imports: [CommonModule, HttpClientModule, IonicStorageModule.forRoot()],
-  providers: [LocationService, GameService, TvService, ReservationService],
+  providers: [LocationService, ProgramService, TvService, ReservationService],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders {

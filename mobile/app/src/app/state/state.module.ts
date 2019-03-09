@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { appReducer } from './app.reducer';
 import { LocationsEffects } from './location/location.effects';
-import { GamesEffects } from './game/game.effects';
+import { ProgramsEffects } from './program/program.effects';
 import { TvsEffects } from './tv/tv.effects';
 import { ReservationsEffects } from './reservation/reservation.effects';
 
@@ -13,7 +14,10 @@ import { ReservationsEffects } from './reservation/reservation.effects';
   imports: [
     CommonModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([LocationsEffects, GamesEffects, TvsEffects, ReservationsEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+    }),
+    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, TvsEffects, ReservationsEffects]),
   ],
   declarations: [],
 })

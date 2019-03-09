@@ -1,19 +1,19 @@
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 
 import * as fromLocation from './location/location.reducer';
-import * as fromGame from './game/game.reducer';
+import * as fromProgram from './program/program.reducer';
 import * as fromTv from './tv/tv.reducer';
 import * as fromReservation from './reservation/reservation.reducer';
 
 export interface AppState {
   location: fromLocation.State;
-  game: fromGame.State;
+  program: fromProgram.State;
   tv: fromTv.State;
   reservation: fromReservation.State;
 }
 export const appReducer: ActionReducerMap<AppState> = {
   location: fromLocation.reducer,
-  game: fromGame.reducer,
+  program: fromProgram.reducer,
   tv: fromTv.reducer,
   reservation: fromReservation.reducer,
 };
