@@ -1,13 +1,33 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button class="show-back-button" *ngIf="activeStep != 'locations'" (click)="goBack()"></ion-back-button>
-    </ion-buttons>
-    <ion-title *ngIf="!searchGamesMode"> {{ title }} </ion-title>
-    <ion-searchbar *ngIf="searchGamesMode"></ion-searchbar>
     <ion-buttons slot="end">
-      <ion-icon slot="icon-only" name="search" *ngIf="activeStep === 'programs'"></ion-icon>
+      <ion-icon
+        slot="icon-only"
+        name="search"
+        *ngIf="!searchProgramsMode && isProgramsPage()"
+        (click)="openSearch()"
+      ></ion-icon>
+      <!-- <ion-icon
+        slot="icon-only"
+        name="close"
+        *ngIf="searchProgramsMode && isProgramsPage()"
+        (click)="closeSearch()"
+      ></ion-icon> -->
     </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button
+        class="show-back-button"
+        *ngIf="showBack() && !searchProgramsMode"
+        (click)="goBack()"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="!searchProgramsMode"> {{ title }} </ion-title>
+    <ion-searchbar
+      *ngIf="searchProgramsMode"
+      (ionCancel)="closeSearch()"
+      (ionChange)="onSearch($event)"
+      showCancelButton
+    ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content> <router-outlet></router-outlet> </ion-content>

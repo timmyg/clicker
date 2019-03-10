@@ -29,6 +29,10 @@ export class ProgramsComponent {
     this.programs$ = this.store.select(getAllPrograms);
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
+    this.reserveService.searchTermEmitted$.subscribe(term => {
+      // this.term = term;
+      console.log({ term });
+    });
   }
 
   ngOnInit() {

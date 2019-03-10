@@ -5,13 +5,16 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class ReserveService {
-  // Observable string sources
   private emitTitleSource = new Subject<any>();
-  // Observable string streams
   titleEmitted$ = this.emitTitleSource.asObservable();
-  // Service message commands
+  private emitSearchTermSource = new Subject<any>();
+  searchTermEmitted$ = this.emitSearchTermSource.asObservable();
+
   emitTitle(title: any) {
-    console.log(title);
     this.emitTitleSource.next(title);
+  }
+
+  emitSearch(term: string) {
+    this.emitSearchTermSource.next(term);
   }
 }
