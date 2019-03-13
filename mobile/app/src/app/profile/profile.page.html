@@ -12,6 +12,9 @@
       <b>Wallet:</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" /> <span>&nbsp;</span>
       <span>2</span> <a (click)="openWallet()" padding-start>Get more</a> <br />
     </ion-row>
+    <ion-row margin-bottom align-items-center>
+      <b>Feedback:</b><a (click)="openFeedback()" padding-start>Provide Feedback</a> <br />
+    </ion-row>
     <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
     <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
       <div *ngFor="let r of (reservations$ | async)" [routerLink]="['/tabs/reserve', r.id]">

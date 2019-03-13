@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Feedback </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <p>Please leave your feedback below:</p>
+  <ion-textarea (ionChange)="onChange($event)" autofocus></ion-textarea>
+  <ion-button expand="full" (click)="submit()" [disabled]="!this.text || this.text.length === 0"
+    >Submit Feedback</ion-button
+  >
+</ion-content>

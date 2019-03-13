@@ -11,6 +11,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { WalletPage } from './wallet/wallet.page';
 import { SharedModule } from '../shared/shared.module';
 import { ReservationComponent } from './reservation/reservation.component';
+import { FeedbackPage } from './feedback/feedback.page';
 
 const routes: Routes = [
   {
@@ -29,7 +30,7 @@ const routes: Routes = [
     FontAwesomeModule,
     RouterModule.forChild(routes),
   ],
-  declarations: [ProfilePage, WalletPage, ReservationComponent],
-  entryComponents: [WalletPage]
+  declarations: [ProfilePage, WalletPage, FeedbackPage, ReservationComponent],
+  entryComponents: [WalletPage, FeedbackPage],
 })
 export class ProfilePageModule {}

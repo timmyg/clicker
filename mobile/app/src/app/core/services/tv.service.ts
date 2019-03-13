@@ -4,13 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { TV } from '../../state/tv/tv.model';
 import { delay } from 'rxjs/operators';
+import { Location } from 'src/app/state/location/location.model';
 
 @Injectable()
 export class TvService {
   private url = 'api/tvs';
   constructor(private httpClient: HttpClient) {}
 
-  getTvs(): Observable<Array<TV>> {
+  getTvs(location: Location): Observable<Array<TV>> {
     // return this.httpClient.get<TV[]>(this.url);
     const tv1: TV = {
       id: 1,

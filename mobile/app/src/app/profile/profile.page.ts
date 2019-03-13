@@ -8,6 +8,7 @@ import { ModalController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
+import { FeedbackPage } from './feedback/feedback.page';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class ProfilePage {
   reservations$: Observable<Reservation[]>;
   faCopyright = faCopyright;
   walletModal;
+  feedbackModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -35,9 +37,15 @@ export class ProfilePage {
     return await this.walletModal.present();
   }
 
+  async openFeedback() {
+    this.feedbackModal = await this.modalController.create({
+      component: FeedbackPage,
+    });
+    return await this.feedbackModal.present();
+  }
+
   onLogout() {
     this.storage.clear();
     location.reload();
   }
-
 }

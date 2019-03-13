@@ -13,8 +13,8 @@ export class TvsEffects {
   @Effect()
   getAllTvs$: Observable<Action> = this.actions$.pipe(
     ofType(TvActions.GET_ALL_TVS),
-    switchMap(() =>
-      this.tvService.getTvs().pipe(
+    switchMap((action: TvActions.GetAllByLocation) =>
+      this.tvService.getTvs(action.payload).pipe(
         map((tvs: TV[]) => new TvActions.GetAllByLocationSuccess(tvs)),
         catchError(err => of(new TvActions.GetAllByLocationFail(err))),
       ),
