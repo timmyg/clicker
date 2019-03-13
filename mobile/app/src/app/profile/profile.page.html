@@ -17,9 +17,7 @@
     </ion-row>
     <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
     <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
-      <div *ngFor="let r of (reservations$ | async)" [routerLink]="['/tabs/reserve', r.id]">
-        <app-reservation [reservation]="r"></app-reservation>
-      </div>
+      <div *ngFor="let r of (reservations$ | async)"><app-reservation [reservation]="r"></app-reservation></div>
     </div>
     <ng-template #empty>
       <div padding-horizontal><span>You do not have any active reservations</span></div>

@@ -2,9 +2,11 @@
   <ion-card-header>
     <ion-card-subtitle>
       <span>{{ reservation.program.channelTitle }} - TV #{{ reservation.tvTag }}</span>
-      <!-- <span float-right>{{ reservation.end | amDifference: today :'minutes'}} mins remaining</span> -->
       <span float-right>{{ minutesFromNow$ | async }} min left</span>
     </ion-card-subtitle>
   </ion-card-header>
-  <ion-card-content> {{ reservation.programTitle }} </ion-card-content>
+  <ion-card-content>
+    <div>{{ reservation.programTitle }}</div>
+    <div><a (click)="modify()">Modify</a></div>
+  </ion-card-content>
 </ion-card>
