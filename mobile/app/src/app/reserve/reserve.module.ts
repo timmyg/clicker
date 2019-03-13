@@ -12,6 +12,7 @@ import { TvsComponent } from './components/tvs/tvs.component';
 import { MomentModule } from 'ngx-moment';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { SharedModule } from '../shared/shared.module';
+import { ProgramsFilterPipe } from './pipes/programs-filter.pipe';
 
 const routes: Routes = [
   {
@@ -40,7 +41,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [SharedModule, CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
-  declarations: [ReservePage, LocationsComponent, ProgramsComponent, TvsComponent, ConfirmationComponent],
+  declarations: [ReservePage, LocationsComponent, ProgramsComponent, TvsComponent, ConfirmationComponent, ProgramsFilterPipe],
   exports: [TvsComponent],
 })
 export class ReservePageModule {}

@@ -10,9 +10,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StateModule } from './state/state.module';
 import { CoreModule } from './core/core.module';
+import { AutofocusPipe } from './pipes/autofocus.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AutofocusPipe],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, StateModule.forRoot(), CoreModule.forRoot()],
   providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

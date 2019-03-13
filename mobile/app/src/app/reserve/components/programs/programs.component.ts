@@ -19,6 +19,7 @@ export class ProgramsComponent {
   programs$: Observable<Program[]>;
   reservation$: Observable<Partial<Reservation>>;
   title = 'Choose Game';
+  searchTerm: string;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -29,9 +30,11 @@ export class ProgramsComponent {
     this.programs$ = this.store.select(getAllPrograms);
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
-    this.reserveService.searchTermEmitted$.subscribe(term => {
-      // this.term = term;
-      console.log({ term });
+    this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
+      this.searchTerm = searchTerm;
+    });
+    this.reserveService.closeSearchEmitted$.subscribe(() => {
+      this.searchTerm = null;
     });
   }
 

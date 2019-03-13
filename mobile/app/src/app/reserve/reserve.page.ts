@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, Events } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavController, Events, IonSearchbar } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,7 @@ import * as fromReservation from '../state/reservation/reservation.actions';
   styleUrls: ['./reserve.page.scss'],
 })
 export class ReservePage implements OnInit {
+  @ViewChild(IonSearchbar) searchbar: IonSearchbar;
   title: String;
   searchProgramsMode: boolean;
 
@@ -34,6 +35,14 @@ export class ReservePage implements OnInit {
     this.router.navigate(['./locations'], { relativeTo: this.route });
   }
 
+  ionViewDidEnter() {
+    console.log('didenter');
+
+    // setTimeout(() => {
+    //   this.searchbar.setFocus();
+    // }, 0);
+  }
+
   goBack() {
     this.navCtrl.back();
   }
@@ -51,8 +60,8 @@ export class ReservePage implements OnInit {
   }
 
   closeSearch() {
-    console.log('close search');
     this.searchProgramsMode = false;
+    this.reserveService.emitCloseSearch();
   }
 
   onSearch(e) {

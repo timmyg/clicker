@@ -9,6 +9,8 @@ export class ReserveService {
   titleEmitted$ = this.emitTitleSource.asObservable();
   private emitSearchTermSource = new Subject<any>();
   searchTermEmitted$ = this.emitSearchTermSource.asObservable();
+  private emitCloseSearchSource = new Subject<any>();
+  closeSearchEmitted$ = this.emitCloseSearchSource.asObservable();
 
   emitTitle(title: any) {
     this.emitTitleSource.next(title);
@@ -16,5 +18,9 @@ export class ReserveService {
 
   emitSearch(term: string) {
     this.emitSearchTermSource.next(term);
+  }
+
+  emitCloseSearch() {
+    this.emitCloseSearchSource.next();
   }
 }
