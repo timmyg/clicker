@@ -3,6 +3,7 @@ import { interval, Observable, of } from 'rxjs';
 import { map, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import * as moment from 'moment';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-reservation',
@@ -13,7 +14,7 @@ export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
   minutesFromNow$: Observable<number>;
 
-  constructor() {}
+  constructor(public actionSheetController: ActionSheetController) {}
 
   ngOnInit() {
     let refreshSeconds = 30;
@@ -27,6 +28,38 @@ export class ReservationComponent implements OnInit {
       }),
       distinctUntilChanged(),
     );
+  }
+
+  async showModify() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Modify Reservation',
+      buttons: [
+        {
+          text: 'Cancel Reservation',
+          role: 'destructive',
+          handler: () => {
+            // TODO
+          },
+        },
+        {
+          text: 'Change Channel',
+          handler: () => {
+            // TODO
+          },
+        },
+        {
+          text: 'Add Time',
+          handler: () => {
+            // TODO
+          },
+        },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  modify() {
+    this.showModify();
   }
 
   private getMinutes() {
