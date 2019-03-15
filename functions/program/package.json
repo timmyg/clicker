@@ -15,6 +15,7 @@
     "dynamoose": "^1.5.2",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

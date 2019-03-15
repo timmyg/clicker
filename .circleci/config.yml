@@ -80,6 +80,21 @@ jobs:
   functions/program:
     working_directory: ~/clicker/functions/program
     <<: *serverless_build_test_deploy
+  functions/feedback:
+    working_directory: ~/clicker/functions/program
+    <<: *serverless_build_test_deploy
+  functions/location:
+    working_directory: ~/clicker/functions/program
+    <<: *serverless_build_test_deploy
+  functions/receiver:
+    working_directory: ~/clicker/functions/program
+    <<: *serverless_build_test_deploy
+  functions/user:
+    working_directory: ~/clicker/functions/program
+    <<: *serverless_build_test_deploy
+  functions/reservation:
+    working_directory: ~/clicker/functions/program
+    <<: *serverless_build_test_deploy
   web/app:
     working_directory: ~/clicker/web/app
     docker:

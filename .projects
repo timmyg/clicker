@@ -1,6 +1,11 @@
+functions/widget
 functions/lead
 functions/program
-functions/widget
+functions/feedback
+functions/location
+functions/receiver
+functions/user
+functions/reservation
 mobile/app
 web/app
 packages/antenna

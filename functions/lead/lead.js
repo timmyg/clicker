@@ -1,31 +1,10 @@
 require('dotenv').config();
+const { generateResponse } = require('serverless-helpers');
 const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.HUBSPOT_API_KEY });
 const Trello = require('trello');
 const trello = new Trello(process.env.TRELLO_API_KEY, process.env.TRELLO_AUTH_TOKEN);
 const stage = process.env.stage;
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Content-Type': 'application/json',
-};
-
-function generateResponse(statusCode, body) {
-  let msg = body;
-  if (typeof msg === 'string') {
-    msg = { message: msg };
-  }
-
-
-
-  return {
-    statusCode,
-    headers,
-    body: JSON.stringify(msg),
-  };
-}
- 
-
 
 /**
  * Handles sms incoming webhook from twilio

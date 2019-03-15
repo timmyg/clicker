@@ -3,6 +3,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
+const { generateResponse } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program;
 require('dotenv').config();
@@ -47,17 +48,6 @@ function init() {
       useDocumentTypes: true,
     },
   );
-}
-
-function generateResponse(statusCode, body = {}) {
-  let msg = body;
-  if (typeof msg === 'string') {
-    msg = { message: msg };
-  }
-  return {
-    statusCode,
-    body: JSON.stringify(msg),
-  };
 }
 
 module.exports.health = async event => {
