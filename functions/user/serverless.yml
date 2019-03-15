@@ -1,12 +1,9 @@
-service: lead
+service: user
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
   runtime: nodejs8.10
   environment:
-    HUBSPOT_API_KEY: ${env:HUBSPOT_API_KEY}
-    TRELLO_API_KEY: ${env:TRELLO_API_KEY}
-    TRELLO_AUTH_TOKEN: ${env:TRELLO_AUTH_TOKEN}
     stage: ${self:custom.stage}
 
 plugins:
@@ -20,22 +17,15 @@ custom:
     dev: api-dev.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: leads
+    basePath: users
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
 
 functions:
-  new:
-    handler: lead.new
-    events:
-      - http:
-          path: hitmeback
-          method: post
-          cors: true
   health:
-    handler: lead.health
+    handler: user.health
     events:
       - http:
           path: health

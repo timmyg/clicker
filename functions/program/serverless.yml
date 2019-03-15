@@ -30,7 +30,7 @@ custom:
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: 'programs'
+    basePath: programs
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true

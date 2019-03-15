@@ -1,5 +1,6 @@
 const dynamoose = require('dynamoose');
 const uuid = require('uuid/v5');
+const { generateResponse } = require('serverless-helpers');
 require('dotenv').config();
 
 const Widget = dynamoose.model(
@@ -26,17 +27,6 @@ const Widget = dynamoose.model(
     useDocumentTypes: true,
   },
 );
-
-function generateResponse(statusCode, body = {}) {
-  let msg = body;
-  if (typeof msg === 'string') {
-    msg = { message: msg };
-  }
-  return {
-    statusCode,
-    body: JSON.stringify(msg),
-  };
-}
 
 module.exports.health = async event => {
   return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableWidget})`);

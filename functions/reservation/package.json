@@ -1,0 +1,14 @@
+{
+  "name": "reservations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "reservation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git"
+  }
+}
