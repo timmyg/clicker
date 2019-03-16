@@ -26,6 +26,7 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
 
+
 functions:
   new:
     handler: lead.new
