@@ -1,4 +1,4 @@
-const { respond } = require('serverless-helpers');
+const { respond, getPathParameters } = require('serverless-helpers');
 const uuid = require('uuid/v5');
 
 const Location = dynamoose.model(
@@ -35,7 +35,6 @@ module.exports.add = async event => {
 // TODO
 module.exports.update = async event => {
   // get id from params
-  // const featureName = decodeURI(event.pathParameters.id); // move to shared?
   // upsert
 };
 
