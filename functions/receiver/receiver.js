@@ -1,4 +1,35 @@
 const { respond } = require('serverless-helpers');
+const uuid = require('uuid/v5');
+
+const Receiver = dynamoose.model(
+  process.env.tableReceiver,
+  {
+    id: {
+      type: String,
+      hashKey: true,
+      default: uuid,
+    },
+  },
+  {
+    timestamps: true,
+    useDocumentTypes: true,
+  },
+);
+
+const Box = dynamoose.model(
+  process.env.tableBox,
+  {
+    id: {
+      type: String,
+      hashKey: true,
+      default: uuid,
+    },
+  },
+  {
+    timestamps: true,
+    useDocumentTypes: true,
+  },
+);
 
 module.exports.health = async event => {
   return respond(200, `hello`);

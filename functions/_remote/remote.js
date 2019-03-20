@@ -10,8 +10,8 @@ class Api {
     const response = await this.client.auth.authenticateDevice({
       credentials: {
         deviceId,
-        key: process.env.LOSANT_KEY,
-        secret: process.env.LOSANT_SECRET,
+        key: process.env.losantKey,
+        secret: process.env.losantSecret,
       },
     });
     this.client.setOption('accessToken', response.token);
@@ -21,7 +21,7 @@ class Api {
     try {
       await this.setAuth(losantId);
       const params = {
-        applicationId: process.env.LOSANT_APPLICATION_ID,
+        applicationId: process.env.losantAppId,
         deviceId: losantId,
         deviceCommand: { name, payload },
       };
