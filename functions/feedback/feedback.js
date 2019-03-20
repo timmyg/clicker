@@ -1,6 +1,6 @@
 const { respond, getBody } = require('serverless-helpers');
 const Trello = require('trello');
-const trello = new Trello(process.env.TRELLO_API_KEY, process.env.TRELLO_AUTH_TOKEN);
+const trello = new Trello(process.env.trelloApiKey, process.env.trelloAuthToken);
 const feedbackListId = '5c8fd3a717571b6e37148786';
 
 // TODO test

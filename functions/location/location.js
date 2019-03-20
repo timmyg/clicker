@@ -1,4 +1,23 @@
 const { respond } = require('serverless-helpers');
+const uuid = require('uuid/v5');
+
+const Location = dynamoose.model(
+  process.env.tableLocation,
+  {
+    id: {
+      type: String,
+      hashKey: true,
+      default: uuid,
+    },
+    name: {
+      type: String,
+    },
+  },
+  {
+    timestamps: true,
+    useDocumentTypes: true,
+  },
+);
 
 // TODO
 module.exports.all = async event => {

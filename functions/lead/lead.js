@@ -1,9 +1,9 @@
 require('dotenv').config();
 const { respond, getBody } = require('serverless-helpers');
 const Hubspot = require('hubspot');
-const hubspot = new Hubspot({ apiKey: process.env.HUBSPOT_API_KEY });
+const hubspot = new Hubspot({ apiKey: process.env.hubspotApiKey });
 const Trello = require('trello');
-const trello = new Trello(process.env.TRELLO_API_KEY, process.env.TRELLO_AUTH_TOKEN);
+const trello = new Trello(process.env.trelloApiKey, process.env.trelloAuthToken);
 const stage = process.env.stage;
 const webSignupsListId = '5c5dd0800e00da44c0fadb1e';
 
