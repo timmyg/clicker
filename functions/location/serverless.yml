@@ -42,6 +42,6 @@ functions:
     handler: location.update
     events:
       - http:
-          path: { id }
+          path: '{id}'
           method: put
           cors: true
