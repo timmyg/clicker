@@ -1,17 +1,17 @@
-frameworkVersion: ${file(../serverless.base.yml):frameworkVersion}
-plugins: ${file(../serverless.base.yml):plugins}
+frameworkVersion: ${file(serverless.base.yml):frameworkVersion}
+plugins: ${file(serverless.base.yml):plugins}
 service: ${self:custom.basePath}
 provider:
-  name: ${file(../serverless.base.yml):provider.name}
-  runtime: ${file(../serverless.base.yml):provider.runtime}
+  name: ${file(serverless.base.yml):provider.name}
+  runtime: ${file(serverless.base.yml):provider.runtime}
   environment:
     TRELLO_API_KEY: ${env:TRELLO_API_KEY}
     TRELLO_AUTH_TOKEN: ${env:TRELLO_AUTH_TOKEN}
     stage: ${self:custom.stage}
 custom:
-  stage: ${file(../serverless.base.yml):custom.stage}
-  domains: ${file(../serverless.base.yml):custom.domains}
-  customDomain: ${file(../serverless.base.yml):custom.customDomain}
+  stage: ${file(serverless.base.yml):custom.stage}
+  domains: ${file(serverless.base.yml):custom.domains}
+  customDomain: ${file(serverless.base.yml):custom.customDomain}
   basePath: feedback
 
 functions:
