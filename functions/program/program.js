@@ -53,8 +53,13 @@ function init() {
 module.exports.health = async event => {
   return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
 };
+// TODO
+module.exports.getAll = async event => {
+  // get all programs for right now
+  return respond(200);
+};
 
-module.exports.pullNew = async event => {
+module.exports.syncNew = async event => {
   try {
     init();
     const url = `${directvEndpoint}/channelschedule`;
@@ -82,7 +87,7 @@ module.exports.pullNew = async event => {
   }
 };
 
-module.exports.pullDescriptions = async event => {
+module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   const allPrograms = await Program.query('description').null();
   console.log('null program descriptions:', allPrograms.length);

@@ -31,3 +31,45 @@ functions:
           path: health
           method: get
           cors: true
+  get:
+    handler: receiver.getBoxes
+    events:
+      - http:
+          path: '{id}/boxes'
+          method: get
+          cors: true
+  register:
+    handler: receiver.register
+    events:
+      - http:
+          path: '{id}'
+          method: put
+          cors: true
+  setIp:
+    handler: receiver.setIp
+    events:
+      - http:
+          path: '{id}/ip'
+          method: put
+          cors: true
+  setBoxes:
+    handler: receiver.setBoxes
+    events:
+      - http:
+          path: '{id}/boxes'
+          method: put
+          cors: true
+  setTags:
+    handler: receiver.setTags
+    events:
+      - http:
+          path: '{id}/boxes/tags'
+          method: put
+          cors: true
+  identify:
+    handler: receiver.identify
+    events:
+      - http:
+          path: '{id}/identify'
+          method: post
+          cors: true

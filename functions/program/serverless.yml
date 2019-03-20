@@ -50,7 +50,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-          
 
 functions:
   health:
@@ -60,23 +59,39 @@ functions:
           path: health
           method: get
           cors: true
-  pullNew:
-    handler: program.pullNew
+  getAll:
+    handler: program.getAll
     events:
       - http:
-          path: new
-          method: post
+          path: ''
+          method: get
           cors: true
-      - schedule: cron(0 2 * * ? *)
-      - schedule: cron(0 10 * * ? *)
-      - schedule: cron(0 18 * * ? *)
-  pullDescriptions:
-    handler: program.pullDescriptions
+  syncDescriptions:
+    handler: program.syncDescriptions
     events:
       - http:
           path: descriptions
           method: post
           cors: true
       - schedule: cron(1 2 * * ? *)
-      - schedule: cron(1 10 * * ? *)
-      - schedule: cron(1 18 * * ? *)
+  syncNew:
+    handler: program.syncNew
+    events:
+      - http:
+          path: new
+          method: post
+          cors: true
+      - schedule: cron(0 2 * * ? *)
+      # - schedule: cron(0 10 * * ? *)
+      # - schedule: cron(0 18 * * ? *)
+  syncDescriptions:
+    handler: program.syncDescriptions
+    events:
+      - http:
+          path: descriptions
+          method: post
+          cors: true
+      - schedule: cron(1 2 * * ? *)
+      # - schedule: cron(1 10 * * ? *)
+      # - schedule: cron(1 18 * * ? *)
+
