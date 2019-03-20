@@ -39,7 +39,7 @@ export default {
       const { email } = this;
       this.$analytics.alias(email);
       this.$http
-        .post('/leads/hitmeback', { email })
+        .post('/leads', { email })
         .then(() => {
           this.submitting = false;
           this.submitted = true;

@@ -1,27 +1,26 @@
 require('dotenv').config();
-const { generateResponse } = require('serverless-helpers');
+const { respond, getBody } = require('serverless-helpers');
 const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.HUBSPOT_API_KEY });
 const Trello = require('trello');
 const trello = new Trello(process.env.TRELLO_API_KEY, process.env.TRELLO_AUTH_TOKEN);
 const stage = process.env.stage;
+const webSignupsListId = '5c5dd0800e00da44c0fadb1e';
 
-/**
- * Handles sms incoming webhook from twilio
- * @param   {string} losantId device identifier for Losant platform (event.body)
- * @param   {string} location human readable location for reference (event.body)
- *
- * @returns {number} 201, 400
- */
-module.exports.new = async (event, context) => {
-  const body = JSON.parse(event.body);
+// TODO test
+module.exports.create = async event => {
+  const body = getBody(event);
   const { email } = body;
   if (stage === 'prod') {
     const hubspotContact = await createHubspotContact(email);
     const trelloContact = await createTrelloCard(email);
-    return generateResponse(201, { hubspotContact, trelloContact });
+    return respond(201, { hubspotContact, trelloContact });
   }
-  return generateResponse(201, "not prod so didn't actually create anything");
+  return respond(201, "not prod so didn't actually create anything");
+};
+
+module.exports.health = async event => {
+  return respond(200, `hello`);
 };
 
 async function createHubspotContact(email) {
@@ -33,13 +32,6 @@ async function createHubspotContact(email) {
 }
 
 async function createTrelloCard(email) {
-  const webSignupsList = '5c5dd0800e00da44c0fadb1e';
-  var card = await trello.addCard(email, '', webSignupsList);
-  console.log({ card });
-  // addDueDateToCard
+  const card = await trello.addCard(email, '', webSignupsListId);
   return card;
 }
-
-module.exports.health = async event => {
-  return generateResponse(200, `hello`);
-};

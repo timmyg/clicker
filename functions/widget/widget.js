@@ -1,6 +1,6 @@
 const dynamoose = require('dynamoose');
 const uuid = require('uuid/v5');
-const { generateResponse } = require('serverless-helpers');
+const { respond } = require('serverless-helpers');
 require('dotenv').config();
 
 const Widget = dynamoose.model(
@@ -29,7 +29,7 @@ const Widget = dynamoose.model(
 );
 
 module.exports.health = async event => {
-  return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableWidget})`);
+  return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableWidget})`);
 };
 
 /**
@@ -45,10 +45,10 @@ module.exports.create = async event => {
     const { losantId, location } = body;
     const newDevice = new Device({ losantId, location });
     const createdDevice = await newDevice.save();
-    return generateResponse(201, createdDevice);
+    return respond(201, createdDevice);
   } catch (e) {
     console.error(e);
-    return generateResponse(400, `Could not create: ${e.stack}`);
+    return respond(400, `Could not create: ${e.stack}`);
   }
 };
 
@@ -60,9 +60,9 @@ module.exports.create = async event => {
 module.exports.list = async () => {
   try {
     const allDevices = await Widget.scan().exec();
-    return generateResponse(200, allDevices);
+    return respond(200, allDevices);
   } catch (e) {
-    return generateResponse(400, `Could not list: ${e.stack}`);
+    return respond(400, `Could not list: ${e.stack}`);
   }
 };
 
@@ -77,11 +77,11 @@ module.exports.get = async event => {
     const { losantId } = event.pathParameters;
     const device = await Widget.get({ losantId });
     if (device) {
-      return generateResponse(200, device);
+      return respond(200, device);
     }
-    return generateResponse(404, `Device ${losantId} does not exist`);
+    return respond(404, `Device ${losantId} does not exist`);
   } catch (e) {
-    return generateResponse(400, `Could not get: ${e.stack}`);
+    return respond(400, `Could not get: ${e.stack}`);
   }
 };
 
@@ -98,20 +98,20 @@ module.exports.getIp = async event => {
     const { losantId } = event.pathParameters;
     const device = await Widget.get({ losantId });
     if (!device) {
-      return generateResponse(404, `Device ${losantId} does not exist`);
+      return respond(404, `Device ${losantId} does not exist`);
     }
     if (!device.devices || !device.devices.length) {
-      return generateResponse(200, { ip: null });
+      return respond(200, { ip: null });
     }
     const ips = device.devices.filter(d => new RegExp('directv', 'gi').test(d.name));
     if (ips && ips.length === 1) {
       const { ip } = ips[0];
-      return generateResponse(200, { ip });
+      return respond(200, { ip });
     }
-    return generateResponse(200, { ips });
+    return respond(200, { ips });
   } catch (e) {
     console.error(e.stack);
-    return generateResponse(400, `Could not get ip: ${e.stack}`);
+    return respond(400, `Could not get ip: ${e.stack}`);
   }
 };
 
@@ -130,9 +130,9 @@ module.exports.update = async event => {
     const { losantId } = event.pathParameters;
     const body = JSON.parse(event.body);
     const updatedDevice = await Widget.update({ losantId }, body);
-    return generateResponse(200, updatedDevice);
+    return respond(200, updatedDevice);
   } catch (e) {
-    return generateResponse(400, `Could not update: ${e.stack}`);
+    return respond(400, `Could not update: ${e.stack}`);
   }
 };
 
@@ -146,9 +146,9 @@ module.exports.delete = async event => {
   try {
     const { losantId } = event.pathParameters;
     const updatedDevice = await Widget.delete({ losantId });
-    return generateResponse(200, updatedDevice);
+    return respond(200, updatedDevice);
   } catch (e) {
-    return generateResponse(400, `Could not delete: ${e.stack}`);
+    return respond(400, `Could not delete: ${e.stack}`);
   }
 };
 
@@ -160,9 +160,9 @@ module.exports.delete = async event => {
 module.exports.hello = async (event, context) => {
   try {
     const response = { event, context };
-    return generateResponse(200, response);
+    return respond(200, response);
   } catch (e) {
-    return generateResponse(400, `error: ${e.stack}`);
+    return respond(400, `error: ${e.stack}`);
   }
 };
 

@@ -3,7 +3,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { generateResponse } = require('serverless-helpers');
+const { respond } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program;
 require('dotenv').config();
@@ -51,7 +51,7 @@ function init() {
 }
 
 module.exports.health = async event => {
-  return generateResponse(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
+  return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
 };
 
 module.exports.pullNew = async event => {
@@ -75,10 +75,10 @@ module.exports.pullNew = async event => {
     const allPrograms = build(schedule);
     const transformedPrograms = transformPrograms(allPrograms);
     const dbResult = await Program.batchPut(transformedPrograms);
-    return generateResponse(201, dbResult);
+    return respond(201, dbResult);
   } catch (e) {
     console.error(e);
-    return generateResponse(400, `Could not create: ${e.stack}`);
+    return respond(400, `Could not create: ${e.stack}`);
   }
 };
 
@@ -104,7 +104,7 @@ module.exports.pullDescriptions = async event => {
       await Program.update({ id: p.id }, { description, progType });
     }
   }
-  return generateResponse(200);
+  return respond(200);
 };
 
 module.exports.assignRelevance = async event => {};

@@ -2,7 +2,7 @@ const aws = require('aws-sdk');
 const qs = require('qs');
 require('dotenv').config();
 
-function generateResponse(statusCode, body) {
+function respond(statusCode, body) {
   let msg = body;
   if (typeof msg === 'string') {
     msg = { message: msg };
@@ -63,13 +63,13 @@ module.exports.smsIncoming = async (event, context) => {
         console.log('2');
         await callRemoteCommandFunction(parseInt(channel));
         console.log('back');
-        return generateResponse(200, 'cool');
+        return respond(200, 'cool');
       }
     } else {
-      return generateResponse(204, `invalid structure: ${message}`);
+      return respond(204, `invalid structure: ${message}`);
     }
   } catch (e) {
     console.error(e);
-    return generateResponse(400, `error - ${e.stack}`);
+    return respond(400, `error - ${e.stack}`);
   }
 };
