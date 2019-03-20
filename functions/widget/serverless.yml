@@ -19,7 +19,6 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  tableWidget: widgets-${self:custom.stage}
   tableThroughputs:
     prod: 5
     default: 1
@@ -35,17 +34,18 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  tableWidget: widgets-${self:custom.stage}
 resources:
   Resources:
-    DevicesTable:
+    WidgetsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableWidget}
         AttributeDefinitions:
-          - AttributeName: losantId
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: losantId
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}

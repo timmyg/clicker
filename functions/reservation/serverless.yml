@@ -5,6 +5,7 @@ provider:
   runtime: nodejs8.10
   environment:
     stage: ${self:custom.stage}
+    tableReservation: ${self:custom.tableReservation}
 
 plugins:
   - serverless-domain-manager
@@ -22,6 +23,22 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  tableReservation: reservations-${self:custom.stage}
+resources:
+  Resources:
+    ReservationTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableReservation}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
@@ -30,4 +47,39 @@ functions:
       - http:
           path: health
           method: get
+          cors: true
+  getAll:
+    handler: reservation.getAll
+    events:
+      - http:
+          path: ''
+          method: get
+          cors: true
+  create:
+    handler: reservation.create
+    events:
+      - http:
+          path: ''
+          method: post
+          cors: true
+  cancel:
+    handler: reservation.cancel
+    events:
+      - http:
+          path: '{id}'
+          method: delete
+          cors: true
+  changeChannel:
+    handler: reservation.changeChannel
+    events:
+      - http:
+          path: '{id}/channel'
+          method: put
+          cors: true
+  changeTime:
+    handler: reservation.changeTime
+    events:
+      - http:
+          path: '{id}/time'
+          method: put
           cors: true

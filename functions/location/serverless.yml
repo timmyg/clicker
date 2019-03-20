@@ -5,6 +5,7 @@ provider:
   runtime: nodejs8.10
   environment:
     stage: ${self:custom.stage}
+    tableLocation: ${self:custom.tableLocation}
 
 plugins:
   - serverless-domain-manager
@@ -22,6 +23,22 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  tableLocation: locations-${self:custom.stage}
+resources:
+  Resources:
+    LocationsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableLocation}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:

@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   environment:
+    tableUser: ${self:custom.tableUser}
     stage: ${self:custom.stage}
 
 plugins:
@@ -22,6 +23,22 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  tableUser: users-${self:custom.stage}
+resources:
+  Resources:
+    UsersTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableUser}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
@@ -30,4 +47,25 @@ functions:
       - http:
           path: health
           method: get
+          cors: true
+  register:
+    handler: user.register
+    events:
+      - http:
+          path: ''
+          method: post
+          cors: true
+  get:
+    handler: user.get
+    events:
+      - http:
+          path: ''
+          method: get
+          cors: true
+  addTokens:
+    handler: user.addTokens
+    events:
+      - http:
+          path: 'tokens'
+          method: post
           cors: true
