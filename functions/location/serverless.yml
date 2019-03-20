@@ -1,12 +1,27 @@
-frameworkVersion: ${file(../serverless.base.yml):frameworkVersion}
-plugins: ${file(../serverless.base.yml):plugins}
-custom: ${file(../serverless.base.yml):custom}
-provider:
-  name: ${file(../serverless.base.yml):provider.name}
-  runtime: ${file(../serverless.base.yml):provider.runtime}
-  # environment:
-
 service: location
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  runtime: nodejs8.10
+  environment:
+    stage: ${self:custom.stage}
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    dev: api-dev.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: locations
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
 
 functions:
   health:

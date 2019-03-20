@@ -1,22 +1,40 @@
-frameworkVersion: ${file(../serverless.base.yml):frameworkVersion}
-plugins: ${file(../serverless.base.yml):plugins}
-service: ${self:custom.basePath}
+service: programs
+frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
-  name: ${file(../serverless.base.yml):provider.name}
-  runtime: ${file(../serverless.base.yml):provider.runtime}
+  name: aws
+  runtime: nodejs8.10
   environment:
     tableProgram: ${self:custom.tableProgram}
     serviceName: ${self:service}
-    stage: ${self:custom.stage}
-  iamRoleStatements: ${file(../serverless.base.yml):provider.iamRoleStatements}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+
+plugins:
+  - serverless-domain-manager
+
 custom:
-  stage: ${file(../serverless.base.yml):custom.stage}
-  domains: ${file(../serverless.base.yml):custom.domains}
-  customDomain: ${file(../serverless.base.yml):custom.customDomain}
-  tableThroughputs: ${file(../serverless.base.yml):custom.tableThroughputs}
-  tableThroughput: ${file(../serverless.base.yml):custom.tableThroughput}
+  stage: ${opt:stage, self:provider.stage}
   tableProgram: programs-${self:custom.stage}
-  basePath: program
+  tableThroughputs:
+    prod: 5
+    default: 1
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    dev: api-dev.tryclicker.com
+  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: programs
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
 resources:
   Resources:
     ProgramTable:
