@@ -1,4 +1,4 @@
-frameworkVersion: ${file(serverless2.base.yml):frameworkVersion}
+frameworkVersion: ${file(serverless.base.yml):frameworkVersion}
 plugins: ${file(serverless.base.yml):plugins}
 service: ${self:custom.basePath}
 provider:
