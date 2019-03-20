@@ -23,11 +23,11 @@ custom:
   tableThroughputs:
     prod: 5
     default: 1
+  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     dev: api-dev.tryclicker.com
-  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: programs
@@ -66,14 +66,6 @@ functions:
           path: ''
           method: get
           cors: true
-  syncDescriptions:
-    handler: program.syncDescriptions
-    events:
-      - http:
-          path: descriptions
-          method: post
-          cors: true
-      - schedule: cron(1 2 * * ? *)
   syncNew:
     handler: program.syncNew
     events:
@@ -82,8 +74,6 @@ functions:
           method: post
           cors: true
       - schedule: cron(0 2 * * ? *)
-      # - schedule: cron(0 10 * * ? *)
-      # - schedule: cron(0 18 * * ? *)
   syncDescriptions:
     handler: program.syncDescriptions
     events:
@@ -92,6 +82,3 @@ functions:
           method: post
           cors: true
       - schedule: cron(1 2 * * ? *)
-      # - schedule: cron(1 10 * * ? *)
-      # - schedule: cron(1 18 * * ? *)
-
