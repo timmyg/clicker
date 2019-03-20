@@ -1,5 +1,5 @@
-const { generateResponse } = require('serverless-helpers');
+const { respond } = require('serverless-helpers');
 
 module.exports.health = async event => {
-  return generateResponse(200, `hello`);
+  return respond(200, `hello`);
 };

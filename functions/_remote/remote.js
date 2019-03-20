@@ -35,7 +35,7 @@ class Api {
   }
 }
 
-function generateResponse(statusCode, body) {
+function respond(statusCode, body) {
   let msg = body;
   if (typeof msg === 'string') {
     msg = { message: msg };
@@ -63,9 +63,9 @@ module.exports.command = async event => {
     const api = new Api(losantId);
     payload.ip = '192.168.200.221';
     await api.sendCommand(losantId, name, payload);
-    return generateResponse(200, 'ok');
+    return respond(200, 'ok');
   } catch (e) {
     console.error(e);
-    return generateResponse(400, `Could not send command: ${e.stack}`);
+    return respond(400, `Could not send command: ${e.stack}`);
   }
 };
