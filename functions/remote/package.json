@@ -1,19 +1,20 @@
 {
-  "name": "reservations",
+  "name": "remote",
   "version": "1.0.0",
   "description": "",
-  "main": "reservation.js",
+  "main": "remote.js",
   "scripts": {
     "test": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.1"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.1",
+    "trello": "^0.9.1"
   },
   "devDependencies": {
     "jest": "^24.0.0",
-    "serverless": "^1.36.3",
+    "serverless": "1.38.0",
     "serverless-domain-manager": "^2.6.13"
   }
 }

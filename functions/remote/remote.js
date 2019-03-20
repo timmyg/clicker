@@ -48,7 +48,7 @@ function respond(statusCode, body) {
 
 /**
  * Registers a device if it has not been registered (losantId is PK)
- * @param   {string} losantId device identifier for Losant platform (event.pathParameters)
+ * @param   {string} losantId device identifier for Losant platform
  * @param   {string} name command name (event.body)
  * @param   {object} payload payload to send to losant (event.body)
  *
@@ -57,11 +57,11 @@ function respond(statusCode, body) {
 module.exports.command = async event => {
   try {
     console.log({ event });
-    const { losantId } = event.pathParameters;
-    const body = JSON.parse(event.body);
+    const { losantId } = getPathParameters(event);
+    const body = JSON.getBody(event.body);
     const { name, payload } = body;
     const api = new Api(losantId);
-    payload.ip = '192.168.200.221';
+    // payload.ip = '192.168.200.221';
     await api.sendCommand(losantId, name, payload);
     return respond(200, 'ok');
   } catch (e) {

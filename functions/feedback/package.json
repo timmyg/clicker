@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.1",
     "trello": "^0.9.1"
   },
   "devDependencies": {
