@@ -1,11 +1,12 @@
 functions/feedback
-functions/widget
 functions/lead
 functions/location
 functions/program
 functions/receiver
+functions/remote
 functions/reservation
 functions/user
+functions/widget
 mobile/app
 web/app
 packages/antenna

@@ -12,6 +12,7 @@ provider:
 plugins:
   - serverless-domain-manager
 
+  
 custom:
   stage: ${opt:stage, self:provider.stage}
   domains:

@@ -86,6 +86,9 @@ jobs:
   functions/receiver:
     working_directory: ~/clicker/functions/receiver
     <<: *serverless_build_test_deploy
+  functions/remote:
+    working_directory: ~/clicker/functions/remote
+    <<: *serverless_build_test_deploy
   functions/reservation:
     working_directory: ~/clicker/functions/reservation
     <<: *serverless_build_test_deploy
