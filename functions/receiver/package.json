@@ -9,7 +9,8 @@
     "invoke:boxes:set": "serverless invoke local --function setBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json",
     "invoke:boxes:identify": "serverless invoke local --function identify --path ../.resources/data/receiver.json",
-    "invoke:receiver:upsert": "serverless invoke local --function register --path ../.resources/data/receiver-upsert.json"
+    "invoke:receiver:create": "serverless invoke local --function upsert --path ../.resources/data/receiver-create.json",
+    "invoke:receiver:upsert": "serverless invoke local --function upsert --path ../.resources/data/receiver-upsert.json"
   },
   "author": "",
   "license": "ISC",

@@ -31,11 +31,11 @@ module.exports.register = async event => {
     const body = getBody(event);
     const { losantId } = body;
 
-    const widgets = await Widget.query('losantId')
+    const widget = await Widget.queryOne('losantId')
       .eq(losantId)
       .exec();
-    if (widgets && widgets.length) {
-      return respond(200, widgets[0]);
+    if (widget) {
+      return respond(200, widget);
     } else {
       const widget = await Widget.create({ losantId });
       return respond(201, widget);

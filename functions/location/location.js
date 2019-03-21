@@ -6,14 +6,14 @@ require('dotenv').config({ path: '../.env' });
 const Location = dynamoose.model(
   process.env.tableLocation,
   {
+    receiverId: {
+      type: String,
+      hashKey: true,
+    },
     id: {
       type: String,
       default: uuid,
       rangeKey: true,
-    },
-    receiverId: {
-      type: String,
-      hashKey: true,
     },
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
@@ -35,12 +35,14 @@ module.exports.all = async event => {
 module.exports.add = async event => {
   // validate name, zip, neighborhood, lat, lng
   const body = getBody(event);
-  const { name, neighborhood, zip, lat, lng } = body;
-  const locations = await Location.scan({ name, neighborhood }).exec();
-  if (locations && locations.length) {
-    return respond(200, locations[0]);
+  const { name, neighborhood, zip, lat, lng, receiverId } = body;
+  const location = await Location.queryOne('receiverId')
+    .eq(receiverId)
+    .exec();
+  if (location) {
+    return respond(200, location);
   } else {
-    const location = await Location.create({ name, neighborhood, zip, lat, lng });
+    const location = await Location.create({ name, neighborhood, zip, lat, lng, receiverId });
     return respond(201, location);
   }
 };

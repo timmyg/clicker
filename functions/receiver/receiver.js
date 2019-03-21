@@ -12,7 +12,7 @@ const Receiver = dynamoose.model(
       rangeKey: true,
       default: uuid,
     },
-    ip: { type: String, required: true },
+    ip: { type: String },
   },
   {
     timestamps: true,
@@ -78,12 +78,13 @@ module.exports.upsert = async event => {
   try {
     const body = getBody(event);
     const { ip, widgetId } = body;
-
-    const receivers = await Receiver.scan('widgetId')
+    console.log(ip, widgetId);
+    const receiver = await Receiver.queryOne('widgetId')
       .eq(widgetId)
       .exec();
-    if (receivers && receivers.length) {
-      const updatedReceiver = await Receiver.update({ id: receivers[0].id }, { ip }, { returnValues: 'ALL_NEW' });
+    console.log(receiver);
+    if (receiver) {
+      const updatedReceiver = await Receiver.update({ id: receiver.id }, { ip }, { returnValues: 'ALL_NEW' });
       return respond(200, updatedReceiver);
     } else {
       const receiver = await Receiver.create({ widgetId, ip });
