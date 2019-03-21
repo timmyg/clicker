@@ -8,15 +8,18 @@ const Location = dynamoose.model(
   {
     id: {
       type: String,
-      hashKey: true,
       default: uuid,
+      rangeKey: true,
     },
-    receiverId: String,
-    name: String,
-    neighborhood: String,
-    zip: Number,
-    lat: Number,
-    lng: Number,
+    receiverId: {
+      type: String,
+      hashKey: true,
+    },
+    name: { type: String, required: true },
+    neighborhood: { type: String, required: true },
+    zip: { type: Number, required: true },
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
   },
   {
     timestamps: true,

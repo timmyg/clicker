@@ -31,9 +31,6 @@ module.exports.register = async event => {
     const body = getBody(event);
     const { losantId } = body;
 
-    // const widgets = await Widget.scan('losantId')
-    //   .eq(losantId)
-    //   .exec();
     const widgets = await Widget.query('losantId')
       .eq(losantId)
       .exec();
