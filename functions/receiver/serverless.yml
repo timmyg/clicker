@@ -45,9 +45,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: widgetId
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: widgetId
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
@@ -58,9 +62,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: receiverId
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: receiverId
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
@@ -73,7 +81,7 @@ functions:
           path: health
           method: get
           cors: true
-  get:
+  getBoxes:
     handler: receiver.getBoxes
     events:
       - http:
@@ -81,7 +89,7 @@ functions:
           method: get
           cors: true
   register:
-    handler: receiver.register
+    handler: receiver.upsert
     events:
       - http:
           path: '{id}'

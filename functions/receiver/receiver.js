@@ -1,5 +1,7 @@
-const { respond } = require('serverless-helpers');
-const uuid = require('uuid/v5');
+const dynamoose = require('dynamoose');
+const { respond, getBody, getPathParameters } = require('serverless-helpers');
+const uuid = require('uuid/v1');
+require('dotenv').config({ path: '../.env' });
 
 const Receiver = dynamoose.model(
   process.env.tableReceiver,
@@ -9,6 +11,8 @@ const Receiver = dynamoose.model(
       hashKey: true,
       default: uuid,
     },
+    widgetId: String,
+    ip: String,
   },
   {
     timestamps: true,
@@ -24,6 +28,11 @@ const Box = dynamoose.model(
       hashKey: true,
       default: uuid,
     },
+    receiverId: String,
+    clientAddress: String, // dtv calls this clientAddr
+    locationName: String, // dtv name
+    label: String, // physical label id on tv
+    setupChannel: Number,
   },
   {
     timestamps: true,
@@ -37,48 +46,81 @@ module.exports.health = async event => {
 
 // TODO
 module.exports.identify = async event => {
-  // check if receiver fully setup (ready = true ?)
-  // get receiver id from path
-  // get boxes
-  // change channel of each box and save channel to box
+  const params = getPathParameters(event);
+  const { id: receiverId } = params;
+  const boxes = await Box.scan('receiverId')
+    .eq(receiverId)
+    .exec();
+  let setupChannel = 801; // first music channel
+  for (const b of boxes) {
+    console.log({ id: b.id }, { setupChannel });
+    await Box.update({ id: b.id }, { setupChannel });
+    setupChannel++;
+    // TODO actually change channel with REMOTE
+  }
   return respond(200, `hello`);
 };
 
-// TODO
 module.exports.getBoxes = async event => {
-  // get receiver id/losant id from path
-  // need to get reservations to get availability
-  // return boxes array with id/tag/available
-  return respond(200, `hello`);
+  // TODO need to get availability from reservations
+  const params = getPathParameters(event);
+  const { id: receiverId } = params;
+  const allBoxes = await Box.scan('receiverId')
+    .eq(receiverId)
+    .exec();
+  return respond(200, allBoxes);
 };
 
-// TODO
-module.exports.register = async event => {
-  // get receiver id/losant id from path
-  // upsert receiver
-  return respond(200, `hello`);
+module.exports.upsert = async event => {
+  try {
+    const body = getBody(event);
+    const { ip, widgetId } = body;
+
+    const receivers = await Receiver.scan('widgetId')
+      .eq(widgetId)
+      .exec();
+    if (receivers && receivers.length) {
+      const updatedReceiver = await Receiver.update({ id: receivers[0].id }, { ip }, { returnValues: 'ALL_NEW' });
+      return respond(200, updatedReceiver);
+    } else {
+      const receiver = await Receiver.create({ widgetId, ip });
+      return respond(201, receiver);
+    }
+  } catch (e) {
+    return respond(400, `Could not create: ${e.stack}`);
+  }
 };
 
-// TODO
-module.exports.setIp = async event => {
-  // get receiver id/losant id from path
-  // set ip address
-  return respond(200, `hello`);
-};
+// // TODO
+// module.exports.setIp = async event => {
+//   // get receiver id/losant id from path
+//   // set ip address
+//   return respond(200, `hello`);
+// };
 
-// TODO
 module.exports.setBoxes = async event => {
-  // get receiver id/losant id from path
-  // get boxes from body
-  // check if boxes already set (or ready = true ?)
-  // set boxes if not
+  // TODO ensure dont accidentally overwrite labels
+  const body = getBody(event);
+  const params = getPathParameters(event);
+  const { id: receiverId } = params;
+  body.forEach(b => (b.receiverId = receiverId));
+  await Box.batchPut(body);
   return respond(200, `hello`);
 };
 
 // TODO
-module.exports.setTags = async event => {
-  // get receiver id/losant id from path
-  // get boxes/tags array from body
-  // loop through and set each box's tag
+module.exports.setLabels = async event => {
+  const params = getPathParameters(event);
+  const data = getBody(event);
+  const { id: receiverId } = params;
+
+  const boxes = await Box.scan('receiverId')
+    .eq(receiverId)
+    .exec();
+  for (const d of data) {
+    await Box.update({ id: b.id }, { setupChannel });
+    setupChannel++;
+    // TODO actually change channel with REMOTE
+  }
   return respond(200, `hello`);
 };
