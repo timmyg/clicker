@@ -6,13 +6,14 @@ require('dotenv').config({ path: '../.env' });
 const Widget = dynamoose.model(
   process.env.tableWidget,
   {
-    id: {
-      type: String,
-      hashKey: true,
-      default: uuid,
-    },
     losantId: {
       type: String,
+      hashKey: true,
+    },
+    id: {
+      type: String,
+      default: uuid,
+      rangeKey: true,
     },
   },
   {
@@ -30,7 +31,10 @@ module.exports.register = async event => {
     const body = getBody(event);
     const { losantId } = body;
 
-    const widgets = await Widget.scan('losantId')
+    // const widgets = await Widget.scan('losantId')
+    //   .eq(losantId)
+    //   .exec();
+    const widgets = await Widget.query('losantId')
       .eq(losantId)
       .exec();
     if (widgets && widgets.length) {
