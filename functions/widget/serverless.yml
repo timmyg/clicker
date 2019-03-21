@@ -44,9 +44,14 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: losantId
+            AttributeType: S
+        # can be composed of one attribute, called a hash key, or a compound key called the hash and range key.
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: losantId
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
