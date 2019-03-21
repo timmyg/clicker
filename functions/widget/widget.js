@@ -14,13 +14,6 @@ const Widget = dynamoose.model(
     losantId: {
       type: String,
     },
-    // location: String,
-    // devices: [{ name: String, ip: String, mac: String }], // TODO move to ip string
-    // boxes: [Object], // move to boxes model, link to widget id
-    // options: Object,
-    // version: Object,
-    // mode: Number,
-    // active: Number,
   },
   {
     timestamps: true,

@@ -1,12 +1,13 @@
-service: feedback
+service: remote
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
   runtime: nodejs8.10
   environment:
     stage: ${self:custom.stage}
-    trelloApiKey: ${env:TRELLO_API_KEY}
-    trelloAuthToken: ${env:TRELLO_AUTH_TOKEN}
+    losantKey: ${env:LOSANT_KEY}
+    losantSecret: ${env:LOSANT_SECRET}
+    losantAppId: ${env:LOSANT_APP_ID}
 
 plugins:
   - serverless-domain-manager
@@ -19,7 +20,7 @@ custom:
     dev: api-dev.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: feedback
+    basePath: remote
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true
@@ -27,16 +28,16 @@ custom:
 
 functions:
   health:
-    handler: feedback.health
+    handler: remote.health
     events:
       - http:
           path: health
           method: get
           cors: true
   create:
-    handler: feedback.create
+    handler: remote.command
     events:
       - http:
-          path: ''
+          path: 'command'
           method: post
           cors: true
