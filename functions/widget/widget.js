@@ -9,7 +9,7 @@ const Widget = dynamoose.model(
     id: {
       type: String,
       hashKey: true,
-      default: uuid(),
+      default: uuid,
     },
     losantId: {
       type: String,
