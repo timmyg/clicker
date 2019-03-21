@@ -6,13 +6,13 @@ require('dotenv').config({ path: '../.env' });
 const Receiver = dynamoose.model(
   process.env.tableReceiver,
   {
+    widgetId: { type: String, hashKey: true },
     id: {
       type: String,
-      hashKey: true,
+      rangeKey: true,
       default: uuid,
     },
-    widgetId: String,
-    ip: String,
+    ip: { type: String, required: true },
   },
   {
     timestamps: true,
@@ -23,12 +23,15 @@ const Receiver = dynamoose.model(
 const Box = dynamoose.model(
   process.env.tableBox,
   {
-    id: {
+    receiverId: {
       type: String,
       hashKey: true,
+    },
+    id: {
+      type: String,
+      rangeKey: true,
       default: uuid,
     },
-    receiverId: String,
     clientAddress: String, // dtv calls this clientAddr
     locationName: String, // dtv name
     label: String, // physical label id on tv
@@ -48,7 +51,7 @@ module.exports.health = async event => {
 module.exports.identify = async event => {
   const params = getPathParameters(event);
   const { id: receiverId } = params;
-  const boxes = await Box.scan('receiverId')
+  const boxes = await Box.query('receiverId')
     .eq(receiverId)
     .exec();
   let setupChannel = 801; // first music channel
@@ -105,7 +108,7 @@ module.exports.setBoxes = async event => {
   const { id: receiverId } = params;
   body.forEach(b => (b.receiverId = receiverId));
   await Box.batchPut(body);
-  return respond(200, `hello`);
+  return respond(201, `hello`);
 };
 
 // TODO

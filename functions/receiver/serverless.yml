@@ -43,14 +43,14 @@ resources:
       Properties:
         TableName: ${self:custom.tableReceiver}
         AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
           - AttributeName: widgetId
+            AttributeType: S
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: id
-            KeyType: HASH
           - AttributeName: widgetId
+            KeyType: HASH
+          - AttributeName: id
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
@@ -60,14 +60,14 @@ resources:
       Properties:
         TableName: ${self:custom.tableBox}
         AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
           - AttributeName: receiverId
+            AttributeType: S
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: id
-            KeyType: HASH
           - AttributeName: receiverId
+            KeyType: HASH
+          - AttributeName: id
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}

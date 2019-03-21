@@ -42,12 +42,16 @@ resources:
       Properties:
         TableName: ${self:custom.tableWidget}
         AttributeDefinitions:
+          - AttributeName: losantId
+            AttributeType: S
           - AttributeName: id
             AttributeType: S
         # can be composed of one attribute, called a hash key, or a compound key called the hash and range key.
         KeySchema:
-          - AttributeName: id
+          - AttributeName: losantId
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
