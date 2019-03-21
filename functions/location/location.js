@@ -1,5 +1,5 @@
 const { respond, getPathParameters } = require('serverless-helpers');
-const uuid = require('uuid/v5');
+const uuid = require('uuid/v1');
 
 const Location = dynamoose.model(
   process.env.tableLocation,
@@ -7,7 +7,7 @@ const Location = dynamoose.model(
     id: {
       type: String,
       hashKey: true,
-      default: uuid,
+      default: uuid(),
     },
     name: {
       type: String,

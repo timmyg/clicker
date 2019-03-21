@@ -1,24 +1,11 @@
 {
   "name": "functions",
   "version": "1.0.0",
+  "description": "wrapper project for serverless functions",
   "scripts": {
     "test": "jest --coverage",
     "logs:account": "serverless logs --function account --stage $STAGE --aws-profile $PROFILE",
-    "invoke:hello": "serverless invoke local --function hello --path resources/data/new.json",
+    "invoke:widget:register": "serverless invoke local --function register --path ../.resources/data/widget.json",
     "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
-  },
-  "dependencies": {
-    "aws-sdk": "^2.384.0",
-    "dotenv": "^6.2.0",
-    "dynamoose": "^1.3.0",
-    "hubspot": "^2.0.0",
-    "losant-rest": "^2.3.2",
-    "qs": "^6.6.0",
-    "uuid": "^3.3.2"
-  },
-  "devDependencies": {
-    "jest": "^23.6.0",
-    "serverless": "^1.36.3",
-    "serverless-domain-manager": "^2.6.13"
   }
 }
