@@ -4,7 +4,8 @@
   "description": "",
   "main": "widget.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "invoke:register": "serverless invoke local --function register --path ../.resources/data/widget.json"
   },
   "dependencies": {
     "dotenv": "^6.2.0",

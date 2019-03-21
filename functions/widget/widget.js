@@ -1,7 +1,7 @@
 const dynamoose = require('dynamoose');
 const uuid = require('uuid/v1');
 const { respond, getBody } = require('serverless-helpers');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
 const Widget = dynamoose.model(
   process.env.tableWidget,
@@ -30,11 +30,9 @@ module.exports.register = async event => {
     const body = getBody(event);
     const { losantId } = body;
 
-    console.log(`find widgets with ${losantId} in ${process.env.tableWidget}`);
-    const widgets = await Widget.query('losantId')
+    const widgets = await Widget.scan('losantId')
       .eq(losantId)
       .exec();
-    console.log({ widgets });
     if (widgets && widgets.length) {
       return respond(200, widgets[0]);
     } else {
@@ -42,7 +40,6 @@ module.exports.register = async event => {
       return respond(201, widget);
     }
   } catch (e) {
-    console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
   }
 };

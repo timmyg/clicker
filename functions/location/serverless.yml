@@ -59,6 +59,13 @@ functions:
           path: health
           method: get
           cors: true
+  add:
+    handler: location.add
+    events:
+      - http:
+          path: ''
+          method: post
+          cors: true
   all:
     handler: location.all
     events:
