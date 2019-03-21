@@ -42,11 +42,15 @@ resources:
       Properties:
         TableName: ${self:custom.tableLocation}
         AttributeDefinitions:
+          - AttributeName: receiverId
+            AttributeType: S
           - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: receiverId
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
