@@ -44,13 +44,9 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: losantId
-            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: losantId
-            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
@@ -70,11 +66,18 @@ functions:
           path: ''
           method: get
           cors: true
-  upsert:
-    handler: location.upsert
+  create:
+    handler: location.create
     events:
       - http:
           path: ''
+          method: post
+          cors: true
+  update:
+    handler: location.update
+    events:
+      - http:
+          path: '{id}'
           method: put
           cors: true
   getBoxes:
