@@ -1,6 +1,6 @@
 {
-  "body": [{ "channel": 801, "label": "2" }, { "channel": 802, "label": "J4" }],
+  "body": [{ "setupChannel": 801, "label": "2" }, { "setupChannel": 803, "label": "J4" }],
   "pathParameters": {
-    "id": "715e47f2-4c11-11e9-a2fc-d9e639691272"
+    "id": "1926fd60-4c49-11e9-a14d-793fbe38ca56"
   }
 }
