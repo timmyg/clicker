@@ -15,12 +15,14 @@ const Location = dynamoose.model(
       type: String,
       required: true,
     },
-    boxes: {
-      clientAddress: String, // dtv calls this clientAddr
-      locationName: String, // dtv name
-      label: String, // physical label id on tv
-      setupChannel: Number,
-    },
+    boxes: [
+      {
+        clientAddress: String, // dtv calls this clientAddr
+        locationName: String, // dtv name
+        label: String, // physical label id on tv
+        setupChannel: Number,
+      },
+    ],
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
     zip: { type: Number, required: true },
@@ -56,9 +58,7 @@ module.exports.update = async event => {
     const body = getBody(event);
     const { id } = params;
 
-    // console.log({ id: id, ...body });
-    // const updatedLocation = await Location.update({ losantId: id, ...body });
-    await Location.update({ id: id }, body, { returnValues: 'ALL_NEW' });
+    const updatedLocation = await Location.update({ id }, body, { returnValues: 'ALL_NEW' });
     return respond(200, updatedLocation);
   } catch (e) {
     console.error(e);
@@ -76,16 +76,14 @@ module.exports.getBoxes = async event => {
   return respond(200, location.boxes);
 };
 
-module.exports.setBoxes = async event => {
-  // TODO ensure dont accidentally overwrite labels
-  const body = getBody(event);
+module.exports.addBoxes = async event => {
+  const boxes = getBody(event);
   const params = getPathParameters(event);
+  const { id } = params;
 
   // TODO do we need to add main receiver as a box?
-
-  const { id } = params;
-  await Location.update({ id }, { boxes: body });
-  return respond(200);
+  const updatedBoxes = await Location.update({ id }, { boxes }, { returnValues: 'ALL_NEW' });
+  return respond(200, updatedBoxes);
 };
 
 module.exports.setLabels = async event => {
@@ -96,16 +94,18 @@ module.exports.setLabels = async event => {
     .eq(id)
     .exec();
   const { boxes } = location;
+  console.log(boxes, boxesWithLabels);
   const updatedBoxes = boxes.map(x => Object.assign(x, boxesWithLabels.find(y => y.setupChannel == x.setupChannel)));
+  console.log(updatedBoxes);
   await Location.update({ id }, { boxes: updatedBoxes });
 
   return respond(200, boxes);
 };
 
-module.exports.identify = async event => {
+module.exports.identifyBoxes = async event => {
   const params = getPathParameters(event);
-  const boxesWithLabels = getBody(event);
   const { id } = params;
+
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();

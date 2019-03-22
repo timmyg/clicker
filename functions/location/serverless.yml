@@ -87,22 +87,22 @@ functions:
           path: '{id}/boxes'
           method: get
           cors: true
-  setBoxes:
-    handler: location.setBoxes
+  addBoxes:
+    handler: location.addBoxes
     events:
       - http:
           path: '{id}/boxes'
           method: put
           cors: true
-  setTags:
-    handler: location.setTags
+  setLabels:
+    handler: location.setLabels
     events:
       - http:
-          path: '{id}/boxes/tags'
+          path: '{id}/boxes/labels'
           method: put
           cors: true
-  identify:
-    handler: location.identify
+  identifyBoxes:
+    handler: location.identifyBoxes
     events:
       - http:
           path: '{id}/identify'
