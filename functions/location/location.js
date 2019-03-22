@@ -120,6 +120,6 @@ module.exports.identifyBoxes = async event => {
   return respond(200, `hello`);
 };
 
-module.exports.health = async => {
+module.exports.health = async event => {
   return respond(200, 'ok');
 };
