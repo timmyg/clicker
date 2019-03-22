@@ -1,9 +1,8 @@
 {
   "body": {
-    "receiverId": "a3b512e9-fe23-4443-9a0a-2979c5c84046",
-    "name": "cool name 2"
+    "ip": "192.234.44.1"
   },
   "pathParameters": {
-    "id": "5184b8e0-4c09-11e9-afd6-79db73ddd9a8"
+    "id": "ce28e8c0-4c46-11e9-a984-61397daeb360"
   }
 }
