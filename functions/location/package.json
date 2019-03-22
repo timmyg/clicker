@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage",
     "invoke:all": "serverless invoke local --function all",
-    "invoke:add": "serverless invoke local --function add --path ../.resources/data/location-create.json",
+    "invoke:add": "serverless invoke local --function upsert --path ../.resources/data/location-create.json",
     "invoke:update": "serverless invoke local --function update --path ../.resources/data/location-update.json"
   },
   "author": "",

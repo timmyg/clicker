@@ -47,33 +47,6 @@ module.exports.health = async event => {
   return respond(200, `hello`);
 };
 
-// TODO
-module.exports.identify = async event => {
-  const params = getPathParameters(event);
-  const { id: receiverId } = params;
-  const boxes = await Box.query('receiverId')
-    .eq(receiverId)
-    .exec();
-  let setupChannel = 801; // first music channel
-  for (const b of boxes) {
-    console.log({ id: b.id }, { setupChannel });
-    await Box.update({ id: b.id }, { setupChannel });
-    setupChannel++;
-    // TODO actually change channel with REMOTE
-  }
-  return respond(200, `hello`);
-};
-
-module.exports.getBoxes = async event => {
-  // TODO need to get availability from reservations
-  const params = getPathParameters(event);
-  const { id: receiverId } = params;
-  const allBoxes = await Box.scan('receiverId')
-    .eq(receiverId)
-    .exec();
-  return respond(200, allBoxes);
-};
-
 module.exports.upsert = async event => {
   try {
     const body = getBody(event);
@@ -101,30 +74,3 @@ module.exports.upsert = async event => {
 //   // set ip address
 //   return respond(200, `hello`);
 // };
-
-module.exports.setBoxes = async event => {
-  // TODO ensure dont accidentally overwrite labels
-  const body = getBody(event);
-  const params = getPathParameters(event);
-  const { id: receiverId } = params;
-  body.forEach(b => (b.receiverId = receiverId));
-  await Box.batchPut(body);
-  return respond(201, `hello`);
-};
-
-// TODO
-module.exports.setLabels = async event => {
-  const params = getPathParameters(event);
-  const data = getBody(event);
-  const { id: receiverId } = params;
-
-  const boxes = await Box.scan('receiverId')
-    .eq(receiverId)
-    .exec();
-  for (const d of data) {
-    await Box.update({ id: b.id }, { setupChannel });
-    setupChannel++;
-    // TODO actually change channel with REMOTE
-  }
-  return respond(200, `hello`);
-};

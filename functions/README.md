@@ -1,6 +1,6 @@
 #### manual
 
-1.  widget `npm run invoke:register`
+1.  location `invoke:upsert`
 2.  receiver `invoke:receiver:create`
 3.  location `invoke:add` (location details, receiverId)
 
