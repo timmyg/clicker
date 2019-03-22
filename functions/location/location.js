@@ -121,5 +121,5 @@ module.exports.identifyBoxes = async event => {
 };
 
 module.exports.health = async => {
-  return respond();
+  return respond(200, 'ok');
 };

@@ -105,6 +105,6 @@ functions:
     handler: location.identifyBoxes
     events:
       - http:
-          path: '{id}/identify'
+          path: '{id}/boxes/identify'
           method: post
           cors: true
