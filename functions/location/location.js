@@ -8,15 +8,25 @@ const Location = dynamoose.model(
   {
     id: {
       type: String,
-      hashKey: true,
       default: uuid,
+      hashKey: true,
     },
-    receiverId: String,
-    name: String,
-    neighborhood: String,
-    zip: Number,
-    lat: Number,
-    lng: Number,
+    losantId: {
+      type: String,
+      rangeKey: true,
+    },
+    boxes: {
+      clientAddress: String, // dtv calls this clientAddr
+      locationName: String, // dtv name
+      label: String, // physical label id on tv
+      setupChannel: Number,
+    },
+    name: { type: String, required: true },
+    neighborhood: { type: String, required: true },
+    zip: { type: Number, required: true },
+    // lat: { type: Number, required: true },
+    // lng: { type: Number, required: true },
+    ip: String,
   },
   {
     timestamps: true,
@@ -29,35 +39,79 @@ module.exports.all = async event => {
   return respond(200, allLocations);
 };
 
-module.exports.add = async event => {
-  // validate name, zip, neighborhood, lat, lng
-  const body = getBody(event);
-  const { name, neighborhood, zip, lat, lng } = body;
-  const locations = await Location.scan({ name, neighborhood }).exec();
-  if (locations && locations.length) {
-    return respond(200, locations[0]);
-  } else {
-    const location = await Location.create({ name, neighborhood, zip, lat, lng });
-    return respond(201, location);
-  }
-};
-
-module.exports.update = async event => {
-  const params = getPathParameters(event);
-  const body = getBody(event);
-  const { id } = params;
-  const { receiverId, name, neighborhood } = body;
-
-  // add non null values to be updated
-  let updateData = Object.assign({}, receiverId && { receiverId }, name && { name }, neighborhood && { neighborhood });
-
+module.exports.upsert = async event => {
   try {
-    const updatedLocation = await Location.update({ id }, updateData, { returnValues: 'ALL_NEW' });
-    return respond(200, updatedLocation);
+    const body = getBody(event);
+    const { losantId } = body;
+
+    const locations = await Location.scan('losantId')
+      .eq(losantId)
+      .exec();
+    if (locations && locations.length) {
+      const updatedLocation = await Location.update({ id: locations[0].id }, body, { returnValues: 'ALL_NEW' });
+      return respond(200, updatedLocation);
+    } else {
+      const location = await Location.create(body);
+      return respond(201, location);
+    }
   } catch (e) {
     console.error(e);
     return respond(400, e);
   }
+};
+
+module.exports.getBoxes = async event => {
+  // TODO need to get availability from reservations
+  const params = getPathParameters(event);
+  const { id: locationId } = params;
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+  return respond(200, location.boxes);
+};
+
+module.exports.setBoxes = async event => {
+  // TODO ensure dont accidentally overwrite labels
+  const body = getBody(event);
+  const params = getPathParameters(event);
+
+  // TODO do we need to add main receiver as a box?
+
+  const { id } = params;
+  await Location.update({ id }, { boxes: body });
+  return respond(200);
+};
+
+module.exports.setLabels = async event => {
+  const params = getPathParameters(event);
+  const boxesWithLabels = getBody(event);
+  const { id } = params;
+  const location = await Location.queryOne('id')
+    .eq(id)
+    .exec();
+  const { boxes } = location;
+  const updatedBoxes = boxes.map(x => Object.assign(x, boxesWithLabels.find(y => y.setupChannel == x.setupChannel)));
+  await Location.update({ id }, { boxes: updatedBoxes });
+
+  return respond(200, boxes);
+};
+
+module.exports.identify = async event => {
+  const params = getPathParameters(event);
+  const boxesWithLabels = getBody(event);
+  const { id } = params;
+  const location = await Location.queryOne('id')
+    .eq(id)
+    .exec();
+  const { boxes } = location;
+  let setupChannel = 801; // first music channel
+  for (const b of boxes) {
+    b.setupChannel = setupChannel;
+    setupChannel++;
+    // TODO actually change channel with REMOTE
+  }
+  await Location.update({ id }, { boxes });
+  return respond(200, `hello`);
 };
 
 module.exports.health = async => {
