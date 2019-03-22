@@ -13,7 +13,7 @@ const Location = dynamoose.model(
     },
     losantId: {
       type: String,
-      rangeKey: true,
+      required: true,
     },
     boxes: {
       clientAddress: String, // dtv calls this clientAddr
@@ -39,21 +39,27 @@ module.exports.all = async event => {
   return respond(200, allLocations);
 };
 
-module.exports.upsert = async event => {
+module.exports.create = async event => {
   try {
     const body = getBody(event);
-    const { losantId } = body;
+    const location = await Location.create(body);
+    return respond(201, location);
+  } catch (e) {
+    console.error(e);
+    return respond(400, e);
+  }
+};
 
-    const locations = await Location.scan('losantId')
-      .eq(losantId)
-      .exec();
-    if (locations && locations.length) {
-      const updatedLocation = await Location.update({ id: locations[0].id }, body, { returnValues: 'ALL_NEW' });
-      return respond(200, updatedLocation);
-    } else {
-      const location = await Location.create(body);
-      return respond(201, location);
-    }
+module.exports.update = async event => {
+  try {
+    const params = getPathParameters(event);
+    const body = getBody(event);
+    const { id } = params;
+
+    // console.log({ id: id, ...body });
+    // const updatedLocation = await Location.update({ losantId: id, ...body });
+    await Location.update({ id: id }, body, { returnValues: 'ALL_NEW' });
+    return respond(200, updatedLocation);
   } catch (e) {
     console.error(e);
     return respond(400, e);

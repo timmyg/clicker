@@ -1,7 +1,7 @@
 #### manual
 
-1.  location `invoke:upsert`
-2.  receiver `invoke:receiver:create`
+1.  location `invoke:add`
+2.  location `invoke:update`
 3.  location `invoke:add` (location details, receiverId)
 
 #### startup
