@@ -5,37 +5,36 @@ const Api = require('./api');
 const browser = require('iotdb-arp');
 
 class Widget {
-  constructor() {
+  constructor(losantKey, losantSecret, losantDeviceId, locationId) {
     this.device = new Device({
-      id: process.env.LOSANT_DEVICE_ID,
-      key: process.env.LOSANT_KEY,
-      secret: process.env.LOSANT_SECRET,
+      id: losantDeviceId,
+      key: losantKey,
+      secret: losantSecret,
     });
-    this.id = this.device.id;
+    this.locationId = locationId;
     this.remote = null;
-    this.api = new Api(this.id);
+    this.api = new Api(this.locationId);
     this.init();
   }
 
   async saveIp() {
-    logger.info('about to save ips....');
-    // const localDevices = await arpScanner();
-    browser.browser({}, function (error, device) {
+    logger.info('about to search ips....');
+    browser.browser({}, (error, device) => {
       if (device) {
-          logger.info({ device });
-          const { ip } = device;
-          DirecTV.validateIP(ip, error => {
-            if (error) {
-              return logger.info(`.......... not valid directv ip: ${ip}`);
-            }
-            logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
-            this.saveBoxes(ip);
-            return this.api.updateDeviceDirectvIp(ip);
-          });
+        logger.info({ device });
+        const { ip } = device;
+        DirecTV.validateIP(ip, error => {
+          if (error) {
+            return logger.info(`.......... not valid directv ip: ${ip}`);
+          }
+          logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
+          this.saveBoxes(ip);
+          return this.api.updateIp(ip);
+        });
       } else if (error) {
         logger.error(error);
       } else {
-        logger.info('no ips')
+        logger.error('no ips found...');
       }
     });
   }
@@ -45,7 +44,7 @@ class Widget {
     const boxes = remote.getLocations((err, response) => {
       if (err) return logger.error(err);
       logger.info({ boxes: response });
-      return this.api.updateDeviceBoxes(boxes);
+      return this.api.setBoxes(boxes);
     });
   }
 
@@ -133,7 +132,7 @@ class Widget {
    * 4. listen for commands
    */
   async init() {
-    await this.api.registerDevice();
+    // await this.api.register();
     await this.saveIp();
     this.device.connect(error => {
       if (error) {

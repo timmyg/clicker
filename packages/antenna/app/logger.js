@@ -3,7 +3,7 @@ const winston = require('winston');
 
 const addAppNameFormat = winston.format(info => {
   const newInfo = info;
-  newInfo.losantId = process.env.LOSANT_DEVICE_ID;
+  newInfo.locationId = process.env.LOCATION_ID;
   return newInfo;
 });
 
