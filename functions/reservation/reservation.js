@@ -9,9 +9,13 @@ const Reservation = dynamoose.model(
       hashKey: true,
       default: uuid,
     },
-    location: {
-      type: Object, // ?
-    },
+    location: {},
+    box: {},
+    program: {},
+    cost: Number,
+    userId: Number,
+    start: Date,
+    end: Date,
   },
   {
     timestamps: true,
