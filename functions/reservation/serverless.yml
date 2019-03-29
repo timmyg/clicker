@@ -48,9 +48,9 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: userId
-            KeyType: RANGE
-          - AttributeName: id
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
