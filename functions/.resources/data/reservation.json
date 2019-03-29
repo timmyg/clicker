@@ -1,8 +1,16 @@
 {
+  "pathParameters": {
+    "id": "35aefac0-51d3-11e9-9331-17a52abe47f5"
+  },
   "headers": {
     "userid": "1926fd60-4c49-11e9-a14d-793fbe38ca56"
   },
   "body": {
-    "name": "Bob"
+    "cost": 2,
+    "start": 1553829770,
+    "end": 1553831584,
+    "program": {
+      "channel": 432
+    }
   }
 }

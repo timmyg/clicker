@@ -1,3 +1,4 @@
+const dynamoose = require('dynamoose');
 const { respond } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 

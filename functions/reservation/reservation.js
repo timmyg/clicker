@@ -41,10 +41,13 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
+  console.log("1")
   const body = getBody(event);
+  console.log("1.1")
   const { userid: userId } = event.headers;
-
+console.log("2")
   body.userId = userId;
+  console.log(body)
   const reservation = await Reservation.create(body);
   // TODO change channel
   return respond(201, reservation);
@@ -62,7 +65,6 @@ module.exports.getAll = async event => {
 };
 
 module.exports.cancel = async event => {
-  const body = getBody(event);
   const { userid: userId } = event.headers;
   const params = getPathParameters(event);
   const { id } = params;
@@ -71,7 +73,6 @@ module.exports.cancel = async event => {
   return respond(200, `hello`);
 };
 
-// TODO
 module.exports.changeChannel = async event => {
   const program = getBody(event);
   const { userid: userId } = event.headers;
