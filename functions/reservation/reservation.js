@@ -1,21 +1,34 @@
-const { respond } = require('serverless-helpers');
-const uuid = require('uuid/v5');
+const dynamoose = require('dynamoose');
+const { getBody, getPathParameters, respond } = require('serverless-helpers');
+const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
   {
+    userId: { type: String, hashKey: true, required: true },
     id: {
       type: String,
-      hashKey: true,
+      rangeKey: true,
       default: uuid,
     },
-    location: {},
-    box: {},
-    program: {},
-    cost: Number,
-    userId: Number,
-    start: Date,
-    end: Date,
+    location: {
+      id: { type: String, required: true },
+      losantId: { type: String, required: true },
+    },
+    box: {
+      clientAddress: { type: String, required: true },
+      locationName: { type: String, required: true },
+      label: { type: String, required: true },
+    },
+    program: {
+      id: { type: String, required: true },
+      channel: { type: Number, required: true },
+      title: { type: String, required: true },
+    },
+    cost: { type: Number, required: true },
+    start: { type: Date, required: true },
+    end: { type: Date, required: true },
+    cancelled: Boolean,
   },
   {
     timestamps: true,
@@ -27,40 +40,58 @@ module.exports.health = async event => {
   return respond(200, `hello`);
 };
 
-// TODO
-module.exports.getAll = async event => {
-  // get user
-  // get all reservations for a user
-  return respond(200, `hello`);
-};
-
-// TODO
 module.exports.create = async event => {
-  // get user
-  // get from body (location, program, box, cost)
-  // create reservation
-  // change channel
-  return respond(200, `hello`);
+  const body = getBody(event);
+  const { userid: userId } = event.headers;
+
+  body.userId = userId;
+  const reservation = await Reservation.create(body);
+  // TODO change channel
+  return respond(201, reservation);
 };
 
-// TODO
+module.exports.getAll = async event => {
+  const { userid: userId } = event.headers;
+  console.log('1');
+  const userReservations = await Reservation.query('userId')
+    .eq(userId)
+    .exec();
+  console.log('2');
+  // TODO filter out cancelled and past reservations
+  return respond(200, userReservations);
+};
+
 module.exports.cancel = async event => {
-  // get reservation id from path
-  // update reservation to cancelled
+  const body = getBody(event);
+  const { userid: userId } = event.headers;
+  const params = getPathParameters(event);
+  const { id } = params;
+
+  await Reservation.update({ id, userId }, { cancelled: true });
   return respond(200, `hello`);
 };
 
 // TODO
 module.exports.changeChannel = async event => {
-  // get reservation id from path
-  // update reservation channel
-  // change channel
+  const program = getBody(event);
+  const { userid: userId } = event.headers;
+  const params = getPathParameters(event);
+  const { id } = params;
+
+  await Reservation.update({ id, userId }, { program });
+  // TODO change channel
   return respond(200, `hello`);
 };
 
 // TODO
 module.exports.changeTime = async event => {
-  // get reservation id from path
-  // update reservation end time
+  const body = getBody(event);
+  const { end } = body;
+  const { userid: userId } = event.headers;
+  const params = getPathParameters(event);
+  const { id } = params;
+
+  await Reservation.update({ id, userId }, { end });
+  // TODO change channel
   return respond(200, `hello`);
 };

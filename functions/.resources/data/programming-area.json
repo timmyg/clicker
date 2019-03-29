@@ -1,0 +1,9 @@
+{
+  "pathParameters": {
+    "areaId": "45207"
+  },
+  "body": {
+    "localChannels": [5, 9, 12, 19],
+    "localSportsChannels": [434]
+  }
+}

@@ -1,5 +1,5 @@
 const { respond } = require('serverless-helpers');
-const uuid = require('uuid/v5');
+const uuid = require('uuid/v1');
 
 const User = dynamoose.model(
   process.env.tableUser,
@@ -12,6 +12,10 @@ const User = dynamoose.model(
     name: {
       type: String,
     },
+    tokens: {
+      type: Number,
+      required: true
+    }
   },
   {
     timestamps: true,
@@ -19,29 +23,36 @@ const User = dynamoose.model(
   },
 );
 
-//TODO
+
 module.exports.health = async event => {
-  return respond(200, `hello`);
+  return respond();
 };
 
-//TODO
-module.exports.register = async event => {
-  // get user from token
-  // create unless already created
-  return respond(200, `hello`);
+module.exports.create = async event => {
+  const body = getBody(event);
+  const { name } = body;
+
+  const initialTokens = 2;
+  const user = await User.create(name, tokens: initialTokens);
+  return respond(201, user);
 };
 
-//TODO
 module.exports.get = async event => {
-  // get user from token
-  // return user
-  return respond(200, `hello`);
+  const { userid: id } = event.headers;
+
+  const user = await User.queryOne('id')
+    .eq(id)
+    .exec();
+
+  return respond(200, user);
 };
 
-//TODO
 module.exports.addTokens = async event => {
-  // get user from token
-  // get tokens amount from body
-  // add tokens to user
-  return respond(200, `hello`);
+  const body = getBody(event);
+  const { tokens } = body;
+  const { userid: id } = event.headers;
+  
+  const updatedUser = await User.update({ id }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+
+  return respond(200, updatedUser);
 };

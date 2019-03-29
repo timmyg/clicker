@@ -4,7 +4,10 @@
   "description": "",
   "main": "user.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "invoke:create": "serverless invoke local --function create --path ../.resources/data/user.json",
+    "invoke:get": "serverless invoke local --function get --path ../.resources/data/user.json",
+    "invoke:addTokens": "serverless invoke local --function addTokens --path ../.resources/data/user.json"
   },
   "author": "",
   "license": "ISC",

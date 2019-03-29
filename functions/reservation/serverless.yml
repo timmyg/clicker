@@ -42,9 +42,13 @@ resources:
       Properties:
         TableName: ${self:custom.tableReservation}
         AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
           - AttributeName: id
             AttributeType: S
         KeySchema:
+          - AttributeName: userId
+            KeyType: RANGE
           - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
