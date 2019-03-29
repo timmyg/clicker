@@ -17,31 +17,74 @@ function init() {
         hashKey: true,
       },
       expires: Number,
-      chId: String, // 206 (from channel)
-      chNum: String, // 206 (from channel)
-      chCall: String, // "ESPN" (from channel)
-      chHd: Boolean, // false (from channel)
-      chCat: [String], // ["Sports Channels"]
-      blackOut: Boolean, // false (from channel)
-      description: String, // null, populated later
-      progType: String, // null, populated later
+      channel: Number,
+      name: String,
       title: String, // "Oklahoma State @ Kansas"
-      duration: Number, // 120
-      endTime: Date, // created
-      price: Number, // 0
-      repeat: Boolean, // false
-      ltd: String, // "Live"
-      programID: String, // "SH000296530000" - use this to get summary
-      blackoutCode: String,
-      airTime: Date, // "2019-02-06T18:00:00.000+0000"
-      subcategoryList: [String], // ["Basketball"]
-      mainCategory: String, // "Sports"
       episodeTitle: String, // "Oklahoma State at Kansas"
-      format: String, // "HD"
+      description: String,
+      duration: Number, // mins
+      startTime: Date,
+      endTime: Date,
+      repeat: Boolean,
+      programId: String, // "SH000296530000" - use this to get summary
+      categories: [String], // ["Sports Channels"]
+      subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
-      hd: Number, // 1
-      liveStreaming: String, // "B"
-      rating: String, // "NR (Not Rated)"
+    },
+    {
+      timestamps: true,
+      useDocumentTypes: true,
+    },
+  );
+  // Program = dynamoose.model(
+  //   process.env.tableProgram,
+  //   {
+  //     id: {
+  //       type: String,
+  //       hashKey: true,
+  //     },
+  //     expires: Number,
+  //     chId: String, // 206 (from channel)
+  //     chNum: String, // 206 (from channel)
+  //     chCall: String, // "ESPN" (from channel)
+  //     chHd: Boolean, // false (from channel)
+  //     chCat: [String], // ["Sports Channels"]
+  //     blackOut: Boolean, // false (from channel)
+  //     description: String, // null, populated later
+  //     progType: String, // null, populated later
+  //     title: String, // "Oklahoma State @ Kansas"
+  //     duration: Number, // 120
+  //     endTime: Date, // created
+  //     price: Number, // 0
+  //     repeat: Boolean, // false
+  //     ltd: String, // "Live"
+  //     programID: String, // "SH000296530000" - use this to get summary
+  //     blackoutCode: String,
+  //     airTime: Date, // "2019-02-06T18:00:00.000+0000"
+  //     subcategoryList: [String], // ["Basketball"]
+  //     mainCategory: String, // "Sports"
+  //     episodeTitle: String, // "Oklahoma State at Kansas"
+  //     format: String, // "HD"
+  //     mainCategory: String, // "Sports"
+  //     hd: Number, // 1
+  //     liveStreaming: String, // "B"
+  //     rating: String, // "NR (Not Rated)"
+  //   },
+  //   {
+  //     timestamps: true,
+  //     useDocumentTypes: true,
+  //   },
+  // );
+  // );
+
+  ProgrammingArea = dynamoose.model(
+    {
+      zip: {
+        type: Number,
+        hashKey: true,
+      },
+      localChannels: [Number],
+      localSportsChannels: [Number],
     },
     {
       timestamps: true,
@@ -53,6 +96,24 @@ function init() {
 module.exports.health = async event => {
   return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
 };
+
+module.exports.createAreaProgramming = async event => {
+  const params = getPathParameters(event);
+  const body = getBody(event);
+  const { areaId } = params;
+
+  const programmingArea = await ProgrammingArea.create({ id: areaId, ...body });
+  return respond(201, programmingArea);
+};
+
+module.exports.getAreaProgramming = async event => {
+  const params = getPathParameters(event);
+  const { areaId } = params;
+
+  const programmingArea = await ProgrammingArea.get({ id: areaId });
+  return respond(200, programmingArea);
+};
+
 // TODO
 module.exports.getAll = async event => {
   // get all programs for right now

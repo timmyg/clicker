@@ -5,14 +5,13 @@ provider:
   runtime: nodejs8.10
   environment:
     stage: ${self:custom.stage}
-    losantKey: ${env:LOSANT_KEY}
-    losantSecret: ${env:LOSANT_SECRET}
-    losantAppId: ${env:LOSANT_APP_ID}
+    losantKey: ${env:losantKey}
+    losantSecret: ${env:losantSecret}
+    losantAppId: ${env:losantAppId}
 
 plugins:
   - serverless-domain-manager
 
-  
 custom:
   stage: ${opt:stage, self:provider.stage}
   domains:
@@ -39,6 +38,6 @@ functions:
     handler: remote.command
     events:
       - http:
-          path: 'command'
+          path: command
           method: post
           cors: true

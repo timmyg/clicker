@@ -5,6 +5,7 @@ provider:
   runtime: nodejs8.10
   environment:
     tableProgram: ${self:custom.tableProgram}
+    tableProgrammingArea: ${self:custom.tableProgrammingArea}
     serviceName: ${self:service}
   iamRoleStatements:
     - Effect: 'Allow'
@@ -20,6 +21,7 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage}
   tableProgram: programs-${self:custom.stage}
+  tableProgrammingArea: programming-area-${self:custom.stage}
   tableThroughputs:
     prod: 5
     default: 1
@@ -41,6 +43,19 @@ resources:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableProgram}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
+    ProgammingAreaTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableProgrammingArea}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -82,3 +97,17 @@ functions:
           method: post
           cors: true
       - schedule: cron(1 2 * * ? *)
+  createAreaProgramming:
+    handler: program.createAreaProgramming
+    events:
+      - http:
+          path: 'area/{areaId}'
+          method: post
+          cors: true
+  getAreaProgramming:
+    handler: program.getAreaProgramming
+    events:
+      - http:
+          path: 'area/{areaId}'
+          method: get
+          cors: true

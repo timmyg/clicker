@@ -4,7 +4,10 @@
   "description": "",
   "main": "remote.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "invoke:channel": "serverless invoke local --function command --path ../.resources/data/remote-channel.json",
+    "invoke:key": "serverless invoke local --function command --path ../.resources/data/remote-key.json",
+    "invoke:boxes": "serverless invoke local --function command --path ../.resources/data/remote-boxes.json"
   },
   "author": "",
   "license": "ISC",

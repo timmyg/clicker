@@ -59,8 +59,8 @@ functions:
           path: health
           method: get
           cors: true
-  register:
-    handler: user.register
+  create:
+    handler: user.create
     events:
       - http:
           path: ''

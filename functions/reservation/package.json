@@ -4,7 +4,12 @@
   "description": "",
   "main": "reservation.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "invoke:getAll": "serverless invoke local --function getAll --path ../.resources/data/reservation.json",
+    "invoke:create": "serverless invoke local --function create --path ../.resources/data/reservation.json",
+    "invoke:cancel": "serverless invoke local --function cancel --path ../.resources/data/reservation.json",
+    "invoke:changeChannel": "serverless invoke local --function changeChannel --path ../.resources/data/reservation.json",
+    "invoke:changeTime": "serverless invoke local --function changeTime --path ../.resources/data/reservation.json"
   },
   "author": "",
   "license": "ISC",
