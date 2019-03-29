@@ -12,8 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.4",
+=======
     "dynamoose": "^1.7.2",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.3",
+>>>>>>> 1dc6b6730061131a9777517136b5dd0920518d79
     "uuid": "^3.3.2"
   },
   "devDependencies": {

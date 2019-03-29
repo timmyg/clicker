@@ -1,5 +1,5 @@
 const dynamoose = require('dynamoose');
-const { getBody, getPathParameters, respond } = require('serverless-helpers');
+const { getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
@@ -32,7 +32,6 @@ const Reservation = dynamoose.model(
   },
   {
     timestamps: true,
-    useDocumentTypes: true,
   },
 );
 
@@ -49,19 +48,26 @@ console.log("2")
   body.userId = userId;
   console.log(body)
   const reservation = await Reservation.create(body);
-  // TODO change channel
+
+  // change channel
+  const { losantId } = body.location;
+  const { clientAddress: client } = body.box;
+  const { channel } = body.program;
+  const payload = { client, channel };
+  invokeFunction(`remote-${process.env.stage}-tune`, { losantId, payload });
+
   return respond(201, reservation);
 };
 
 module.exports.getAll = async event => {
   const { userid: userId } = event.headers;
-  console.log('1');
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
-  console.log('2');
-  // TODO filter out cancelled and past reservations
-  return respond(200, userReservations);
+  const filtered = userReservations.filter(r => {
+    r.cancelled != true;
+  });
+  return respond(200, filters);
 };
 
 module.exports.cancel = async event => {

@@ -17,7 +17,7 @@ class Api {
     this.client.setOption('accessToken', response.token);
   }
 
-  async sendCommand(losantId, name, payload) {
+  async sendCommand(name, losantId, payload) {
     try {
       await this.setAuth(losantId);
       const params = {
@@ -44,10 +44,24 @@ module.exports.command = async event => {
     const body = getBody(event);
     const { losantId, name, payload } = body;
     const api = new Api(losantId);
-    await api.sendCommand(losantId, name, payload);
+    await api.sendCommand(name, losantId, payload);
     return respond();
   } catch (e) {
     console.error(e);
     return respond(400, `Could not send command: ${e.stack}`);
+  }
+};
+
+module.exports.tune = async event => {
+  try {
+    const body = getBody(event);
+    const { losantId, payload } = body;
+    const { client, channel } = payload;
+    const api = new Api(losantId);
+    await api.sendCommand('tune', losantId, { client, channel });
+    return respond();
+  } catch (e) {
+    console.error(e);
+    return respond(400, `Could not tune: ${e.stack}`);
   }
 };

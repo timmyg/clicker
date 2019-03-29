@@ -20,7 +20,6 @@ const User = dynamoose.model(
   },
   {
     timestamps: true,
-    useDocumentTypes: true,
   },
 );
 

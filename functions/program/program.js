@@ -33,7 +33,6 @@ function init() {
     },
     {
       timestamps: true,
-      useDocumentTypes: true,
     },
   );
   // Program = dynamoose.model(
@@ -72,7 +71,6 @@ function init() {
   //   },
   //   {
   //     timestamps: true,
-  //     useDocumentTypes: true,
   //   },
   // );
   // );
@@ -88,7 +86,6 @@ function init() {
     },
     {
       timestamps: true,
-      useDocumentTypes: true,
     },
   );
 }

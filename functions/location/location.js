@@ -32,7 +32,6 @@ const Location = dynamoose.model(
   },
   {
     timestamps: true,
-    useDocumentTypes: true,
   },
 );
 
