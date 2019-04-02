@@ -40,13 +40,13 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  console.log("1")
+  console.log('1');
   const body = getBody(event);
-  console.log("1.1")
+  console.log('1.1');
   const { userid: userId } = event.headers;
-console.log("2")
+  console.log('2');
   body.userId = userId;
-  console.log(body)
+  console.log(body);
   const reservation = await Reservation.create(body);
 
   // change channel
@@ -67,7 +67,7 @@ module.exports.getAll = async event => {
   const filtered = userReservations.filter(r => {
     r.cancelled != true;
   });
-  return respond(200, filters);
+  return respond(200, filtered);
 };
 
 module.exports.cancel = async event => {
