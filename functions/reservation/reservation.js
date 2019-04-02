@@ -64,9 +64,11 @@ module.exports.getAll = async event => {
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
+  console.log(userReservations);
   const filtered = userReservations.filter(r => {
     r.cancelled != true;
   });
+  console.log(filtered);
   return respond(200, filtered);
 };
 
