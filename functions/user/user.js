@@ -33,7 +33,7 @@ module.exports.create = async event => {
   const { name } = body;
 
   const initialTokens = 2;
-  const user = await User.create(name, tokens: initialTokens);
+  const user = await User.create({name, tokens: initialTokens});
   return respond(201, user);
 };
 
