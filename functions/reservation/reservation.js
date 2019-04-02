@@ -65,9 +65,7 @@ module.exports.getAll = async event => {
     .eq(userId)
     .exec();
   console.log(userReservations);
-  const filtered = userReservations.filter(r => {
-    r.cancelled != true;
-  });
+  const filtered = userReservations.filter(r => r.cancelled != true);
   console.log(filtered);
   return respond(200, filtered);
 };
