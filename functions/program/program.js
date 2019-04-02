@@ -18,7 +18,7 @@ function init() {
       },
       expires: Number,
       channel: Number,
-      name: String,
+      channelTitle: String,
       title: String, // "Oklahoma State @ Kansas"
       episodeTitle: String, // "Oklahoma State at Kansas"
       description: String,
@@ -114,7 +114,19 @@ module.exports.getAreaProgramming = async event => {
 // TODO
 module.exports.getAll = async event => {
   // get all programs for right now
-  return respond(200);
+  // hardcoded for 45255
+  const programs = [
+    { channel: 5, channelTitle: 'NBC' },
+    { channel: 9, channelTitle: 'ABC' },
+    { channel: 12, channelTitle: 'CBS' },
+    { channel: 19, channelTitle: 'FOX' },
+    { channel: 206, channelTitle: 'ESPN' },
+    { channel: 209, channelTitle: 'ESPN2' },
+    { channel: 213, channelTitle: 'MLB' },
+    { channel: 219, channelTitle: 'FS1' },
+    { channel: 660, channelTitle: 'FSOH' },
+  ];
+  return respond(200, programs);
 };
 
 module.exports.syncNew = async event => {
