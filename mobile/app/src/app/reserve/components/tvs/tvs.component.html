@@ -1,7 +1,7 @@
 <ion-row>
   <ion-col *ngFor="let tv of (tvs$ | async)" size="4">
     <ion-button color="light" size="large" expand="block" (click)="onTvClick(tv)" [disabled]="tv.reserved">{{
-      tv.tag
+      tv.label
     }}</ion-button>
   </ion-col>
 </ion-row>

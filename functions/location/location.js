@@ -37,6 +37,9 @@ const Location = dynamoose.model(
 
 module.exports.all = async event => {
   const allLocations = await Location.scan().exec();
+  allLocations.forEach(l => {
+    delete l.boxes;
+  });
   return respond(200, allLocations);
 };
 

@@ -31,7 +31,9 @@
 
   <ion-card-content>
     <ion-row>
-      <p>You are reserving TV #{{ reservation.tv.tag }} until {{ reservation.details.end | amDateFormat: 'h:mm a' }}</p>
+      <p>
+        You are reserving TV #{{ reservation.tv.label }} until {{ reservation.details.end | amDateFormat: 'h:mm a' }}
+      </p>
     </ion-row>
     <ion-row align-items-center>
       <b>Tokens:</b> <img class="coin" src="./assets/coin.svg" width="15" height="15" padding-start />
