@@ -103,6 +103,7 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
 }
 
 export const getReservation = (state: State) => state.reservationToUpdate;
+export const getReservationTvs = (state: State) => state.reservationToUpdate.location.boxes;
 export const getAllReservations = (state: State) => state.reservations;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

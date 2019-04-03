@@ -9,6 +9,11 @@ export const getReservation = createSelector(
   fromReservations.getReservation,
 );
 
+export const getReservationTvs = createSelector(
+  getReservationsState,
+  fromReservations.getReservationTvs,
+);
+
 export const getAllReservations = createSelector(
   getReservationsState,
   fromReservations.getAllReservations,

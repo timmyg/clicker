@@ -18,7 +18,7 @@ import { Reservation } from 'src/app/state/reservation/reservation.model';
 export class ProgramsComponent {
   programs$: Observable<Program[]>;
   reservation$: Observable<Partial<Reservation>>;
-  title = 'Choose Game';
+  title = 'Choose Channel';
   searchTerm: string;
 
   constructor(

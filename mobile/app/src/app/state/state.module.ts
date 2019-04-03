@@ -7,7 +7,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducer } from './app.reducer';
 import { LocationsEffects } from './location/location.effects';
 import { ProgramsEffects } from './program/program.effects';
-import { TvsEffects } from './tv/tv.effects';
 import { ReservationsEffects } from './reservation/reservation.effects';
 
 @NgModule({
@@ -17,7 +16,7 @@ import { ReservationsEffects } from './reservation/reservation.effects';
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
     }),
-    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, TvsEffects, ReservationsEffects]),
+    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, ReservationsEffects]),
   ],
   declarations: [],
 })

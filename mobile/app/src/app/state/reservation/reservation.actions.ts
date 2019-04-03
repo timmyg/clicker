@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { Reservation } from './reservation.model';
 import { Location } from '../location/location.model';
 import { Program } from '../program/program.model';
-import { TV } from '../tv/tv.model';
+import { TV } from '../location/tv.model';
 
 export const GET_RESERVATIONS = '[RESERVATION] Get Reservations';
 export const GET_RESERVATIONS_SUCCESS = '[RESERVATION] Get Reservations Success';

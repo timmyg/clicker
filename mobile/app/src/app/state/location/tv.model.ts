@@ -1,5 +1,5 @@
 export interface TV {
-  id: number;
-  tag: string;
+  clientAddress: number;
+  label: string;
   reserved?: boolean;
 }

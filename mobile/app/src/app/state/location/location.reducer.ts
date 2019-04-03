@@ -1,26 +1,28 @@
 import * as fromLocation from './location.actions';
 import { Location } from './location.model';
+import { TV } from '../location/tv.model';
 
 export interface State {
   locations: Location[];
+  tvs: TV[];
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
   locations: [],
+  tvs: [],
   loading: false,
   error: '',
 };
 
 export function reducer(state = initialState, action: fromLocation.LocationActions): State {
   switch (action.type) {
-    case fromLocation.GET_ALL_LOCATIONS: {
+    case fromLocation.GET_ALL_LOCATIONS:
       return {
         ...state,
         loading: true,
       };
-    }
 
     case fromLocation.GET_ALL_LOCATIONS_SUCCESS: {
       return {
@@ -30,13 +32,12 @@ export function reducer(state = initialState, action: fromLocation.LocationActio
       };
     }
 
-    case fromLocation.GET_ALL_LOCATIONS_FAIL: {
+    case fromLocation.GET_ALL_LOCATIONS_FAIL:
       return {
         ...state,
         loading: false,
-        error: 'error loading locations',
+        error: 'error!',
       };
-    }
 
     default: {
       return state;

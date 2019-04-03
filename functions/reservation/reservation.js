@@ -40,16 +40,12 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  console.log('1');
   const body = getBody(event);
-  console.log('1.1');
   const { userid: userId } = event.headers;
-  console.log('2');
   body.userId = userId;
-  console.log(body);
   const reservation = await Reservation.create(body);
 
-  // change channel
+  // TODO - this should change channel - need to test
   const { losantId } = body.location;
   const { clientAddress: client } = body.box;
   const { channel } = body.program;
@@ -64,9 +60,7 @@ module.exports.getAll = async event => {
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
-  console.log(userReservations);
   const filtered = userReservations.filter(r => r.cancelled != true);
-  console.log(filtered);
   return respond(200, filtered);
 };
 
@@ -80,6 +74,7 @@ module.exports.cancel = async event => {
 };
 
 module.exports.changeChannel = async event => {
+  // TODO ensure user owns tv
   const program = getBody(event);
   const { userid: userId } = event.headers;
   const params = getPathParameters(event);
@@ -90,8 +85,8 @@ module.exports.changeChannel = async event => {
   return respond(200, `hello`);
 };
 
-// TODO
 module.exports.changeTime = async event => {
+  // TODO ensure user has enough tokens
   const body = getBody(event);
   const { end } = body;
   const { userid: userId } = event.headers;

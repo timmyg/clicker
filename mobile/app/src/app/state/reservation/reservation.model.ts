@@ -1,7 +1,7 @@
 import { Location } from '../location/location.model';
 import { Program } from '../program/program.model';
-import { TV } from '../tv/tv.model';
 import * as moment from 'moment';
+import { TV } from '../location/tv.model';
 
 export class Reservation {
   constructor() {
@@ -26,7 +26,7 @@ export class Reservation {
   };
 
   get tvTag() {
-    return this.tv.tag;
+    return this.tv.label;
   }
 
   get locationName() {

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationService } from './services/location.service';
 import { ProgramService } from './services/program.service';
-import { TvService } from './services/tv.service';
 import { ReservationService } from './services/reservation.service';
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -11,7 +10,7 @@ import { IonicStorageModule } from '@ionic/storage';
   declarations: [],
 
   imports: [CommonModule, HttpClientModule, IonicStorageModule.forRoot()],
-  providers: [LocationService, ProgramService, TvService, ReservationService],
+  providers: [LocationService, ProgramService, ReservationService],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders {
