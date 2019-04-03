@@ -53,7 +53,6 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       };
     }
     case fromReservation.SET_RESERVATION_LOCATION_SUCCESS: {
-      console.log(action);
       state.reservation.location = action.payload;
       return {
         ...state,
