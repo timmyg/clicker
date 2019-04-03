@@ -4,14 +4,12 @@ import { TV } from '../location/tv.model';
 
 export interface State {
   locations: Location[];
-  tvs: TV[];
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
   locations: [],
-  tvs: [],
   loading: false,
   error: '',
 };

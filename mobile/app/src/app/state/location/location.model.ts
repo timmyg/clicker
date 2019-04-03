@@ -1,7 +1,7 @@
 import { TV } from '../location/tv.model';
 
 export interface Location {
-  id: number;
+  id: string;
   name: string;
   town: string;
   boxes: TV[];

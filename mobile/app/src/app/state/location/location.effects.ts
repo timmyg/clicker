@@ -14,7 +14,7 @@ export class LocationsEffects {
   getAllLocations$: Observable<Action> = this.actions$.pipe(
     ofType(LocationActions.GET_ALL_LOCATIONS),
     switchMap(() =>
-      this.locationService.getLocations().pipe(
+      this.locationService.getAll().pipe(
         map((locations: Location[]) => new LocationActions.GetAllSuccess(locations)),
         catchError(err => of(new LocationActions.GetAllFail(err))),
       ),

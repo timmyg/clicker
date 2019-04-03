@@ -11,11 +11,11 @@ export class LocationService {
   private url = `${environment.apiBaseUrl}/locations`;
   constructor(private httpClient: HttpClient) {}
 
-  getLocations(): Observable<Array<Location>> {
+  getAll(): Observable<Location[]> {
     return this.httpClient.get<Location[]>(this.url);
   }
 
-  getTvs(location: Location): Observable<Array<TV>> {
-    return this.httpClient.get<TV[]>(`${this.url}/${location.id}/boxes`);
+  get(locationId: string): Observable<Location> {
+    return this.httpClient.get<Location>(`${this.url}/${locationId}`);
   }
 }

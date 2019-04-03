@@ -7,6 +7,8 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 import { Reservation } from './reservation.model';
 import * as ReservationActions from './reservation.actions';
 import { ReservationService } from '../../core/services/reservation.service';
+import { LocationService } from 'src/app/core/services/location.service';
+import { Location } from '../location/location.model';
 
 @Injectable()
 export class ReservationsEffects {
@@ -32,5 +34,20 @@ export class ReservationsEffects {
     ),
   );
 
-  constructor(private actions$: Actions, private reservationService: ReservationService) {}
+  @Effect()
+  setLocation$: Observable<Action> = this.actions$.pipe(
+    ofType(ReservationActions.SET_RESERVATION_LOCATION),
+    switchMap((action: ReservationActions.SetLocation) =>
+      this.locationService.get(action.payload.id).pipe(
+        map((location: Location) => new ReservationActions.SetLocationSuccess(location)),
+        catchError(err => of(new ReservationActions.SetLocationFail(err))),
+      ),
+    ),
+  );
+
+  constructor(
+    private actions$: Actions,
+    private reservationService: ReservationService,
+    private locationService: LocationService,
+  ) {}
 }

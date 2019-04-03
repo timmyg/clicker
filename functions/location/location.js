@@ -40,6 +40,17 @@ module.exports.all = async event => {
   return respond(200, allLocations);
 };
 
+module.exports.get = async event => {
+  const params = getPathParameters(event);
+  const { id } = params;
+
+  const location = await Location.queryOne('id')
+    .eq(id)
+    .exec();
+
+  return respond(200, location);
+};
+
 module.exports.create = async event => {
   try {
     const body = getBody(event);

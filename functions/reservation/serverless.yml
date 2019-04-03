@@ -63,11 +63,18 @@ functions:
           path: health
           method: get
           cors: true
-  getAll:
-    handler: reservation.getAll
+  all:
+    handler: reservation.all
     events:
       - http:
           path: ''
+          method: get
+          cors: true
+  get:
+    handler: reservation.get
+    events:
+      - http:
+          path: '{id}'
           method: get
           cors: true
   create:

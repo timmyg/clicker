@@ -55,13 +55,22 @@ module.exports.create = async event => {
   return respond(201, reservation);
 };
 
-module.exports.getAll = async event => {
+module.exports.all = async event => {
   const { userid: userId } = event.headers;
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
   const filtered = userReservations.filter(r => r.cancelled != true);
   return respond(200, filtered);
+};
+
+module.exports.get = async event => {
+  const { userid: userId } = event.headers;
+  const params = getPathParameters(event);
+  const { id } = params;
+
+  const reservation = await Reservation.get({ id, userId });
+  return respond(200, reservation);
 };
 
 module.exports.cancel = async event => {

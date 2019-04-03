@@ -3,14 +3,14 @@ import { Reservation } from './reservation.model';
 
 export interface State {
   reservations: Reservation[];
-  reservationToUpdate: Partial<Reservation>;
+  reservation: Partial<Reservation>;
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
   reservations: [],
-  reservationToUpdate: null,
+  reservation: null,
   loading: false,
   error: '',
 };
@@ -20,22 +20,16 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
     case fromReservation.START_RESERVATION: {
       return {
         ...state,
-        reservationToUpdate: new Reservation(),
+        reservation: new Reservation(),
         loading: true,
       };
     }
-    case fromReservation.GET_RESERVATIONS: {
+    case fromReservation.CREATE_RESERVATION:
+    case fromReservation.GET_RESERVATIONS:
       return {
         ...state,
         loading: true,
       };
-    }
-    case fromReservation.CREATE_RESERVATION: {
-      return {
-        ...state,
-        loading: true,
-      };
-    }
 
     case fromReservation.GET_RESERVATIONS_SUCCESS: {
       return {
@@ -55,26 +49,26 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       return {
         ...state,
         loading: false,
-        reservationToUpdate: action.payload,
+        reservation: action.payload,
       };
     }
-    case fromReservation.SET_RESERVATION_LOCATION: {
+    case fromReservation.SET_RESERVATION_LOCATION_SUCCESS: {
       console.log(action);
-      state.reservationToUpdate.location = action.payload;
+      state.reservation.location = action.payload;
       return {
         ...state,
         loading: false,
       };
     }
     case fromReservation.SET_RESERVATION_PROGRAM: {
-      state.reservationToUpdate.program = action.payload;
+      state.reservation.program = action.payload;
       return {
         ...state,
         loading: false,
       };
     }
     case fromReservation.SET_RESERVATION_TV: {
-      state.reservationToUpdate.tv = action.payload;
+      state.reservation.tv = action.payload;
       return {
         ...state,
         loading: false,
@@ -102,8 +96,8 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
   }
 }
 
-export const getReservation = (state: State) => state.reservationToUpdate;
-export const getReservationTvs = (state: State) => state.reservationToUpdate.location.boxes;
+export const getReservation = (state: State) => state.reservation;
+export const getReservationTvs = (state: State) => state.reservation.location.boxes;
 export const getAllReservations = (state: State) => state.reservations;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;
