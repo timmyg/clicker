@@ -1,49 +1,43 @@
-// import * as fromProgram from './program.actions';
-// import { Program } from './program.model';
+import * as fromFeedback from './feedback.actions';
 
-// export interface State {
-//   programs: Program[];
-//   loading: boolean;
-//   error: string;
-// }
+export interface State {
+  loading: boolean;
+  error: string;
+}
 
-// export const initialState: State = {
-//   programs: [],
-//   loading: false,
-//   error: '',
-// };
+export const initialState: State = {
+  loading: false,
+  error: '',
+};
 
-// export function reducer(state = initialState, action: fromProgram.ProgramActions): State {
-//   switch (action.type) {
-//     case fromProgram.GET_PROGRAMS: {
-//       return {
-//         ...state,
-//         loading: true,
-//       };
-//     }
+export function reducer(state = initialState, action: fromFeedback.FeedbackActions): State {
+  switch (action.type) {
+    case fromFeedback.SUBMIT_FEEDBACK: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case fromFeedback.SUBMIT_FEEDBACK_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
 
-//     case fromProgram.GET_PROGRAMS_SUCCESS: {
-//       return {
-//         ...state,
-//         loading: false,
-//         programs: action.payload,
-//       };
-//     }
+    case fromFeedback.SUBMIT_FEEDBACK_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        error: 'error submitting feedback',
+      };
+    }
 
-//     case fromProgram.GET_PROGRAMS_FAIL: {
-//       return {
-//         ...state,
-//         loading: false,
-//         error: 'error loading programs',
-//       };
-//     }
+    default: {
+      return state;
+    }
+  }
+}
 
-//     default: {
-//       return state;
-//     }
-//   }
-// }
-
-// export const getAllPrograms = (state: State) => state.programs;
-// export const getLoading = (state: State) => state.loading;
-// export const getError = (state: State) => state.error;
+export const getLoading = (state: State) => state.loading;
+export const getError = (state: State) => state.error;

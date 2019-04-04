@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 @Injectable()
 export class FeedbackService {
-  private url = 'api/feedback';
+  private prefix = `feedback`;
   constructor(private httpClient: HttpClient) {}
 
-  submit(text: String): Observable<any> {
-    // return this.httpClient.get<Program[]>(this.url);
-    return of('').pipe(delay(500));
+  submit(message: String): Observable<any> {
+    console.log('feedback!', message);
+    return this.httpClient.post<any>(`${this.prefix}`, { message });
   }
 }

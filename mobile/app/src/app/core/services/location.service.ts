@@ -3,19 +3,17 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { Location } from '../../state/location/location.model';
-import { environment } from 'src/environments/environment';
-import { TV } from 'src/app/state/location/tv.model';
 
 @Injectable()
 export class LocationService {
-  private url = `${environment.apiBaseUrl}/locations`;
+  private prefix = `locations`;
   constructor(private httpClient: HttpClient) {}
 
   getAll(): Observable<Location[]> {
-    return this.httpClient.get<Location[]>(this.url);
+    return this.httpClient.get<Location[]>(this.prefix);
   }
 
   get(locationId: string): Observable<Location> {
-    return this.httpClient.get<Location>(`${this.url}/${locationId}`);
+    return this.httpClient.get<Location>(`${this.prefix}/${locationId}`);
   }
 }

@@ -4,26 +4,16 @@ import * as moment from 'moment';
 import { TV } from '../location/tv.model';
 
 export class Reservation {
-  constructor() {
-    this.details = {
-      start: moment().toDate(),
-      end: moment()
-        .add(2, 'h')
-        .minutes(0)
-        .toDate(),
-      tokens: 2,
-    };
-  }
+  constructor() {}
 
   id: String;
   location: Location;
   program: Program;
   tv: TV;
-  details: {
-    start: Date;
-    end: Date;
-    tokens: number;
-  };
+  start: Date;
+  end: Date;
+  cost: Number;
+  reserve: boolean;
 
   get tvTag() {
     return this.tv.label;
@@ -34,7 +24,7 @@ export class Reservation {
   }
 
   get locationTown() {
-    return this.location.town;
+    return this.location.neighborhood;
   }
 
   get programTitle() {

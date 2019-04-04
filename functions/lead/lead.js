@@ -5,7 +5,7 @@ const hubspot = new Hubspot({ apiKey: process.env.hubspotApiKey });
 const Trello = require('trello');
 const trello = new Trello(process.env.trelloApiKey, process.env.trelloAuthToken);
 const stage = process.env.stage;
-const webSignupsListId = '5c5dd0800e00da44c0fadb1e';
+const webSignupsListId = '5ca63bbb28858a47be1b5f9a';
 
 // TODO test
 module.exports.create = async event => {

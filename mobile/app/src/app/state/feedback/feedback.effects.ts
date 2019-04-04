@@ -5,7 +5,6 @@ import { Observable, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 
 import * as FeedbackActions from './feedback.actions';
-import { ProgramService } from '../../core/services/program.service';
 import { FeedbackService } from 'src/app/core/services/feedback.service';
 
 @Injectable()

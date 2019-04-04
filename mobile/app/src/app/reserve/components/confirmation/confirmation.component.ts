@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../../../state/reservation/reservation.model';
 import { ReserveService } from '../../reserve.service';
 import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { getReservation } from 'src/app/state/reservation';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-confirmation',
@@ -18,6 +19,25 @@ export class ConfirmationComponent implements OnInit {
   reservation: Partial<Reservation>;
   title = 'Confirmation';
   saving: boolean;
+  reservationPlans = [
+    {
+      tokens: 1,
+      title: "Don't reserve",
+      minutes: 0,
+    },
+    {
+      tokens: 2,
+      title: '30 minutes',
+      minutes: 30,
+      reserve: true,
+    },
+    {
+      tokens: 4,
+      title: '1 hour',
+      minutes: 60,
+      reserve: true,
+    },
+  ];
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -34,11 +54,16 @@ export class ConfirmationComponent implements OnInit {
     });
   }
 
-  onLengthChange(x) {
-    console.log(x);
+  onLengthChange(e) {
+    const plan = this.reservationPlans.find(p => p.minutes === +e.detail.value);
+    this.reservation.cost = plan.tokens;
+    this.reservation.end = moment()
+      .add(plan.minutes, 'm')
+      .toDate();
+    this.reservation.reserve = plan.reserve;
   }
 
-  onConfirm(reservation: Reservation) {
+  onConfirm() {
     this.saving = true;
     // TODO subscribe
     this.store.dispatch(new fromReservation.Create(this.reservation));

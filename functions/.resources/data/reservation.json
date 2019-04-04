@@ -11,6 +11,15 @@
     "end": 1553831584,
     "program": {
       "channel": 432
+    },
+    "box": {
+      "clientAddress": "435.453",
+      "locationName": "name",
+      "label": "633"
+    },
+    "location": {
+      "id": "43aefac0-51d3-11e9-9331-17a52abe47g1",
+      "losantId": "92308409324"
     }
   }
 }

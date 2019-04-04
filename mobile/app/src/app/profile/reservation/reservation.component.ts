@@ -63,7 +63,7 @@ export class ReservationComponent implements OnInit {
   }
 
   private getMinutes() {
-    const endTime = moment(this.reservation.details.end);
+    const endTime = moment(this.reservation.end);
     const duration = moment.duration(endTime.diff(moment()));
     return Math.ceil(duration.asMinutes());
   }

@@ -30,35 +30,32 @@
   </ion-card-header>
 
   <ion-card-content>
-    <ion-row>
-      <p>
-        You are reserving TV #{{ reservation.tv.label }} until {{ reservation.details.end | amDateFormat: 'h:mm a' }}
-      </p>
-    </ion-row>
-    <ion-row align-items-center>
-      <b>Tokens:</b> <img class="coin" src="./assets/coin.svg" width="15" height="15" padding-start />
-      <span>{{ reservation.details.tokens }}</span>
-    </ion-row>
-    <ion-list>
-      <ion-radio-group (onChange)="onLengthChange()">
+    <ion-list id="length">
+      <ion-radio-group (ionChange)="onLengthChange($event)">
         <ion-list-header> Reservation Length </ion-list-header>
-        <ion-item>
-          <ion-label flex>
-            <span>1-time change</span>
-            <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start /> <span>1</span>
+        <ion-item *ngFor="let p of reservationPlans">
+          <ion-label flex ion-justify-items-end>
+            <span>{{ p.title }}</span>
+            <div flex ion-align-items-center float-right>
+              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+              <span>{{ p.tokens }}</span>
+            </div>
           </ion-label>
-          <ion-radio slot="start" value="1" checked></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>30 minutes</ion-label>
-          <ion-radio slot="start" value="30"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>2 hours</ion-label>
-          <ion-radio slot="start" value="120"></ion-radio>
+          <ion-radio slot="start" value="{{ p.minutes }}" checked></ion-radio>
         </ion-item>
       </ion-radio-group>
     </ion-list>
+    <p class="ion-text-center" padding-top>
+      <span *ngIf="reservation.reserve; else oneTime">
+        You are tuning <b>TV {{ reservation.tvTag }}</b> to {{ reservation.program.channelTitle }} are reserving it
+        until {{ reservation.end | amDateFormat: 'h:mm a' }}. You will be able to change the channel until your time
+        expires
+      </span>
+      <ng-template #oneTime>
+        You are tuning <b>TV {{ reservation.tvTag }}</b> to {{ reservation.program.channelTitle }} but others will be
+        able to change the channel
+      </ng-template>
+    </p>
     <ion-button
       color="success"
       size="large"
@@ -71,7 +68,7 @@
     >
       <ion-row *ngIf="!saving; else isSaving">
         <span>Confirm</span> <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
-        <span>2</span>
+        <span>{{ reservation.cost }}</span>
       </ion-row>
       <ng-template #isSaving>
         Tuning
