@@ -59,6 +59,7 @@ export class ConfirmationComponent implements OnInit {
     this.reservation.cost = plan.tokens;
     this.reservation.end = moment()
       .add(plan.minutes, 'm')
+      .add(1, 'm') // add another minute, since im nice
       .toDate();
     this.reservation.reserve = plan.reserve;
   }

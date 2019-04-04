@@ -17,7 +17,6 @@ export class OnboardingComponent implements OnInit {
   constructor(private storage: Storage) {}
 
   ngOnInit() {
-    console.log('onboarding component');
     this.checkOnboarded();
   }
 

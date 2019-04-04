@@ -47,9 +47,8 @@
     </ion-list>
     <p class="ion-text-center" padding-top>
       <span *ngIf="reservation.reserve; else oneTime">
-        You are tuning <b>TV {{ reservation.tvTag }}</b> to {{ reservation.program.channelTitle }} are reserving it
-        until {{ reservation.end | amDateFormat: 'h:mm a' }}. You will be able to change the channel until your time
-        expires
+        You are tuning <b>TV {{ reservation.tvTag }}</b> to {{ reservation.program.channelTitle }} and reserving until
+        {{ reservation.end | amDateFormat: 'h:mma' }}. You will be able to change the channel during your reservation.
       </span>
       <ng-template #oneTime>
         You are tuning <b>TV {{ reservation.tvTag }}</b> to {{ reservation.program.channelTitle }} but others will be

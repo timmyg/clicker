@@ -7,9 +7,7 @@ import { Program } from '../../state/program/program.model';
 @Injectable()
 export class ProgramService {
   private prefix = `programs`;
-  constructor(private httpClient: HttpClient) {
-    console.log({ httpClient });
-  }
+  constructor(private httpClient: HttpClient) {}
 
   getPrograms(): Observable<Array<Program>> {
     return this.httpClient.get<Program[]>(this.prefix);

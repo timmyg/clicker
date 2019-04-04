@@ -12,6 +12,7 @@ import { StateModule } from './state/state.module';
 import { CoreModule } from './core/core.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiInterceptor } from './api-interceptor';
+import { AuthPage } from './auth/auth.page';
 
 @NgModule({
   declarations: [AppComponent],
