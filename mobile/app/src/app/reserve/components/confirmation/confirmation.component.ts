@@ -34,6 +34,10 @@ export class ConfirmationComponent implements OnInit {
     });
   }
 
+  onLengthChange(x) {
+    console.log(x);
+  }
+
   onConfirm(reservation: Reservation) {
     this.saving = true;
     // TODO subscribe

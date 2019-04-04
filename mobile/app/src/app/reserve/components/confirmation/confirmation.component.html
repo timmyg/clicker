@@ -39,6 +39,26 @@
       <b>Tokens:</b> <img class="coin" src="./assets/coin.svg" width="15" height="15" padding-start />
       <span>{{ reservation.details.tokens }}</span>
     </ion-row>
+    <ion-list>
+      <ion-radio-group (onChange)="onLengthChange()">
+        <ion-list-header> Reservation Length </ion-list-header>
+        <ion-item>
+          <ion-label flex>
+            <span>1-time change</span>
+            <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start /> <span>1</span>
+          </ion-label>
+          <ion-radio slot="start" value="1" checked></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>30 minutes</ion-label>
+          <ion-radio slot="start" value="30"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>2 hours</ion-label>
+          <ion-radio slot="start" value="120"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
     <ion-button
       color="success"
       size="large"
