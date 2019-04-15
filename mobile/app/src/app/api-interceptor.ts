@@ -13,12 +13,13 @@ export class ApiInterceptor implements HttpInterceptor {
       'need to subscribe to the cookie or something, and there is a race condition for setting it on initial page load...',
     );
     this.storage.get('userid').then(userId => {
+      console.log('setting userId', userId);
       this.userId = userId;
     });
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('intercept');
+    console.log('intercept', this.userId);
     const apiReq = req.clone({
       url: `${environment.apiBaseUrl}/${req.url}`,
       setHeaders: {

@@ -1,5 +1,5 @@
 const dynamoose = require('dynamoose');
-const { getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
+const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
@@ -41,8 +41,7 @@ module.exports.health = async event => {
 
 module.exports.create = async event => {
   const body = getBody(event);
-  const { userid: userId } = event.headers;
-  body.userId = userId;
+  body.userId = getAuthBearerToken(event);
   const reservation = await Reservation.create(body);
 
   // TODO - this should change channel - need to test
@@ -56,7 +55,7 @@ module.exports.create = async event => {
 };
 
 module.exports.all = async event => {
-  const { userid: userId } = event.headers;
+  const userId = getAuthBearerToken(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
@@ -65,7 +64,7 @@ module.exports.all = async event => {
 };
 
 module.exports.get = async event => {
-  const { userid: userId } = event.headers;
+  const userId = getAuthBearerToken(event);
   const params = getPathParameters(event);
   const { id } = params;
 
@@ -74,7 +73,7 @@ module.exports.get = async event => {
 };
 
 module.exports.cancel = async event => {
-  const { userid: userId } = event.headers;
+  const userId = getAuthBearerToken(event);
   const params = getPathParameters(event);
   const { id } = params;
 
@@ -84,8 +83,8 @@ module.exports.cancel = async event => {
 
 module.exports.changeChannel = async event => {
   // TODO ensure user owns tv
+  const userId = getAuthBearerToken(event);
   const program = getBody(event);
-  const { userid: userId } = event.headers;
   const params = getPathParameters(event);
   const { id } = params;
 
@@ -96,9 +95,9 @@ module.exports.changeChannel = async event => {
 
 module.exports.changeTime = async event => {
   // TODO ensure user has enough tokens
+  const userId = getAuthBearerToken(event);
   const body = getBody(event);
   const { end } = body;
-  const { userid: userId } = event.headers;
   const params = getPathParameters(event);
   const { id } = params;
 

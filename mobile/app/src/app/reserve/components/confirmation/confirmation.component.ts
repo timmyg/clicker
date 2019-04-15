@@ -59,15 +59,15 @@ export class ConfirmationComponent implements OnInit {
     this.reservation.cost = plan.tokens;
     this.reservation.end = moment()
       .add(plan.minutes, 'm')
-      .add(1, 'm') // add another minute, since im nice
+      .add(1, 'm') // add another minute, just to be nice
       .toDate();
     this.reservation.reserve = plan.reserve;
   }
 
   onConfirm() {
     this.saving = true;
-    // TODO subscribe
     this.store.dispatch(new fromReservation.Create(this.reservation));
+    // TODO subscribe
     setTimeout(() => {
       this.router.navigate(['/tabs/profile']);
     }, 3000);

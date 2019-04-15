@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-const uuid = require('uuid/v1');
+import { v1 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-auth',
