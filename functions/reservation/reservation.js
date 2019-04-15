@@ -46,7 +46,7 @@ module.exports.create = async event => {
 
   // TODO - this should change channel - need to test
   const { losantId } = body.location;
-  const { clientAddress: client } = body.box;
+  const { clientAddress: client } = body.tv;
   const { channel } = body.program;
   const payload = { client, channel };
   invokeFunction(`remote-${process.env.stage}-tune`, { losantId, payload });

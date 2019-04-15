@@ -61,6 +61,7 @@ export class ConfirmationComponent implements OnInit {
       .add(plan.minutes, 'm')
       .add(1, 'm') // add another minute, just to be nice
       .toDate();
+    this.reservation.start = moment().toDate();
     this.reservation.reserve = plan.reserve;
   }
 
