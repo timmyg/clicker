@@ -9,6 +9,7 @@ import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
 import { FeedbackPage } from './feedback/feedback.page';
+import * as fromReservation from '../state/reservation/reservation.actions';
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +28,10 @@ export class ProfilePage {
     private storage: Storage,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
+  }
+
+  ngOnInit() {
+    this.store.dispatch(new fromReservation.GetAll());
   }
 
   async openWallet() {

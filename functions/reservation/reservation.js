@@ -23,6 +23,7 @@ const Reservation = dynamoose.model(
     program: {
       id: { type: String, required: true },
       channel: { type: Number, required: true },
+      channelTitle: { type: String, required: true },
       title: { type: String, required: true },
     },
     cost: { type: Number, required: true },
