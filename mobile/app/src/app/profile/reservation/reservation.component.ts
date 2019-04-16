@@ -51,20 +51,18 @@ export class ReservationComponent implements OnInit {
         {
           text: 'Change Channel',
           handler: () => {
-            this.store.dispatch(new fromReservation.SetForUpdate(this.reservation));
-            // this.router.navigate(['/tabs/reserve'], { queryParams: { mode: 'edit' } });
-            this.router.navigateByUrl('/tabs/reserve;mode=edit');
-            // this.router.navigateByUrl('/tabs/reserve;mode=edit');
-            // this.location.go('/tabs/reserve?mode=edit');
-            // this.location.go(
-            //   this.router.createUrlTree(['/tabs/reserve'], { queryParams: { mode: 'edit' } }).toString(),
-            // );
+            const reservationToUpdate = this.reservation;
+            delete reservationToUpdate.program;
+            this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
+            this.router.navigate(['/tabs/reserve']);
           },
         },
         {
           text: 'Add Time',
           handler: () => {
-            // TODO
+            const reservationToUpdate = this.reservation;
+            this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
+            this.router.navigate(['/tabs/reserve']);
           },
         },
       ],
