@@ -9,14 +9,14 @@ export class Reservation {
   id: String;
   location: Location;
   program: Program;
-  tv: TV;
+  box: TV;
   start: Date;
   end: Date;
   cost: Number;
   reserve: boolean;
 
   get tvTag() {
-    return this.tv.label;
+    return this.box.label;
   }
 
   get locationName() {

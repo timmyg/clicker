@@ -43,13 +43,16 @@ module.exports.health = async event => {
 module.exports.create = async event => {
   const body = getBody(event);
   body.userId = getAuthBearerToken(event);
+  // body.box = body.tv;
   const reservation = await Reservation.create(body);
 
   // TODO - this should change channel - need to test
   const { losantId } = body.location;
-  const { clientAddress: client } = body.tv;
+  const { clientAddress: client } = reservation.box;
   const { channel } = body.program;
   const payload = { client, channel };
+  console.log('new reservation, change channel');
+  console.log(`remote-${process.env.stage}-tune`, { losantId, payload });
   invokeFunction(`remote-${process.env.stage}-tune`, { losantId, payload });
 
   return respond(201, reservation);

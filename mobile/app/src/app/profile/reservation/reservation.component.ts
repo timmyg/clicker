@@ -17,6 +17,7 @@ export class ReservationComponent implements OnInit {
   constructor(public actionSheetController: ActionSheetController) {}
 
   ngOnInit() {
+    console.log(this.reservation);
     let refreshSeconds = 30;
     // if (this.getMinutes() < 10) {
     //   refreshSeconds = 10;

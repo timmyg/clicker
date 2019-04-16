@@ -42,7 +42,7 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       return {
         ...state,
         loading: false,
-        reservations: [...state.reservations, action.payload],
+        // reservations: [...state.reservations, action.payload],
       };
     }
     case fromReservation.SET_RESERVATION_FOR_UPDATE: {
@@ -67,7 +67,7 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       };
     }
     case fromReservation.SET_RESERVATION_TV: {
-      state.reservation.tv = action.payload;
+      state.reservation.box = action.payload;
       return {
         ...state,
         loading: false,
