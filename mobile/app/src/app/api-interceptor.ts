@@ -16,7 +16,6 @@ export class ApiInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return from(this.getToken()).pipe(
       mergeMap(token => {
-        console.log('intercept', token);
         const apiReq = req.clone({
           url: `${environment.apiBaseUrl}/${req.url}`,
           setHeaders: {

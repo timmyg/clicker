@@ -4,6 +4,11 @@ import { map, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import * as moment from 'moment';
 import { ActionSheetController } from '@ionic/angular';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../state/app.reducer';
+import * as fromReservation from '../../state/reservation/reservation.actions';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-reservation',
@@ -14,13 +19,15 @@ export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
   minutesFromNow$: Observable<number>;
 
-  constructor(public actionSheetController: ActionSheetController) {}
+  constructor(
+    public actionSheetController: ActionSheetController,
+    private store: Store<fromStore.AppState>,
+    private router: Router,
+    private location: Location,
+  ) {}
 
   ngOnInit() {
     let refreshSeconds = 30;
-    // if (this.getMinutes() < 10) {
-    //   refreshSeconds = 10;
-    // }
     this.minutesFromNow$ = interval(refreshSeconds * 1000).pipe(
       startWith(this.getMinutes()), // this sets inital value
       map(() => {
@@ -44,7 +51,14 @@ export class ReservationComponent implements OnInit {
         {
           text: 'Change Channel',
           handler: () => {
-            // TODO
+            this.store.dispatch(new fromReservation.SetForUpdate(this.reservation));
+            // this.router.navigate(['/tabs/reserve'], { queryParams: { mode: 'edit' } });
+            this.router.navigateByUrl('/tabs/reserve;mode=edit');
+            // this.router.navigateByUrl('/tabs/reserve;mode=edit');
+            // this.location.go('/tabs/reserve?mode=edit');
+            // this.location.go(
+            //   this.router.createUrlTree(['/tabs/reserve'], { queryParams: { mode: 'edit' } }).toString(),
+            // );
           },
         },
         {

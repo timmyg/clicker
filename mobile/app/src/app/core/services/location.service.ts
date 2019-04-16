@@ -10,7 +10,6 @@ export class LocationService {
   constructor(private httpClient: HttpClient) {}
 
   getAll(): Observable<Location[]> {
-    console.log('getall lo');
     return this.httpClient.get<Location[]>(this.prefix);
   }
 

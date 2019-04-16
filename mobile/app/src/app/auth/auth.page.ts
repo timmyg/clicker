@@ -17,7 +17,6 @@ export class AuthPage implements OnInit {
   checkUser() {
     // TODO for now, check if cookie, if not, assume new user
     this.storage.get('userid').then(userId => {
-      console.log({ userId });
       if (!userId) {
         this.storage.set('userid', uuid());
       }

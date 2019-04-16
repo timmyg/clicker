@@ -8,8 +8,8 @@ export class ReservationService {
   private prefix = `reservations`;
   constructor(private httpClient: HttpClient) {}
 
-  getAll(): Observable<Array<Reservation>> {
-    return this.httpClient.get<Reservation[]>(`${this.prefix}`);
+  getActive(): Observable<Array<Reservation>> {
+    return this.httpClient.get<Reservation[]>(`${this.prefix}/active`);
   }
 
   get(reservation: Reservation): Observable<Array<Reservation>> {
