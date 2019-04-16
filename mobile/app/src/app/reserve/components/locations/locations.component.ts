@@ -8,6 +8,7 @@ import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 @Component({
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss'],
@@ -21,7 +22,8 @@ export class LocationsComponent implements OnInit {
     private reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {
+  ) // private navCtrl: NavController,
+  {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
   }
@@ -33,5 +35,6 @@ export class LocationsComponent implements OnInit {
   onLocationClick(location: Location) {
     this.store.dispatch(new fromReservation.SetLocation(location));
     this.router.navigate(['../programs'], { relativeTo: this.route });
+    // this.navCtrl.navigateForward(['../programs'], { relativeTo: this.route });
   }
 }

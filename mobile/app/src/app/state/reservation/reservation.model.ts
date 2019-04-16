@@ -30,4 +30,17 @@ export class Reservation {
   get programTitle() {
     return this.program.title;
   }
+
+  hasLocation() {
+    // console.log('hasLocation', this.location && this.location.id);
+    return this.location && this.location.id;
+  }
+
+  hasChannel() {
+    return this.program && this.program.channel;
+  }
+
+  hasTV() {
+    return this.box && this.box.label;
+  }
 }

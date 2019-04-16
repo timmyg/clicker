@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController, Events, IonSearchbar } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
-import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import * as fromReservation from '../state/reservation/reservation.actions';
@@ -29,18 +29,44 @@ export class ReservePage implements OnInit {
     });
   }
 
+  // 1. location
+  // 2. channel
+  // 3. tv
+
   ngOnInit() {
     // TODO load from reservationId if passed in and navigate accordingly
+    // console.log('oninit', this.router.url);
+    console.log('reserve component init');
     this.store.dispatch(new fromReservation.Start());
-    this.router.navigate(['./locations'], { relativeTo: this.route });
+    console.log('navigate to locatoins');
+    this.router.navigate(['/tabs/reserve/locations']);
   }
 
-  ionViewDidEnter() {
-    console.log('didenter');
+  ngOnDestroy(): void {
+    console.log('ondestroy');
+  }
 
-    // setTimeout(() => {
-    //   this.searchbar.setFocus();
-    // }, 0);
+  async ionViewDidEnter() {
+    console.log('ionViewDidEnter');
+    this.ngOnInit();
+    //   const state = await this.store.pipe(first()).toPromise();
+    //   const reservation: Partial<Reservation> = state.reservation.reservation;
+    //   // console.log(reservation);
+    //   if (reservation.hasLocation()) {
+    //     if (reservation.hasTV()) {
+    //       // console.log('go to confirmation');
+    //       this.router.navigate(['./confirmation'], { relativeTo: this.route });
+    //     } else if (reservation.hasChannel()) {
+    //       // console.log('go to tv');
+    //       this.router.navigate(['./tvs'], { relativeTo: this.route });
+    //     } else {
+    //       console.log('go to channel');
+    //       this.navCtrl.navigateForward(['./programs'], { relativeTo: this.route });
+    //     }
+    //   } else {
+    //     console.log('no location', this.router.url);
+    //     this.navCtrl.navigateForward(['./locations'], { relativeTo: this.route });
+    //   }
   }
 
   goBack() {

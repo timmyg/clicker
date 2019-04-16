@@ -3,7 +3,7 @@ import { Reservation } from '../state/reservation/reservation.model';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
-import { getAllReservations } from '../state/reservation';
+import { getAllReservations, getLoading } from '../state/reservation';
 import { ModalController, AlertController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
@@ -18,6 +18,7 @@ import * as fromReservation from '../state/reservation/reservation.actions';
 })
 export class ProfilePage {
   reservations$: Observable<Reservation[]>;
+  isReservationsLoading$: Observable<boolean>;
   faCopyright = faCopyright;
   walletModal;
   feedbackModal;
@@ -29,6 +30,7 @@ export class ProfilePage {
     private storage: Storage,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
+    this.isReservationsLoading$ = this.store.select(getLoading);
   }
 
   ngOnInit() {
@@ -58,12 +60,12 @@ export class ProfilePage {
         {
           text: 'Cancel',
           role: 'cancel',
-          handler: () => alert.dismiss(),
+          // handler: () => alert.dismiss(),
         },
         {
           text: 'Logout',
           role: 'destructive',
-          cssClass: 'danger',
+          cssClass: 'secondary',
           handler: () => {
             this.storage.clear().then(() => location.reload());
           },

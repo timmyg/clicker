@@ -41,7 +41,14 @@ const routes: Routes = [
 
 @NgModule({
   imports: [SharedModule, CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
-  declarations: [ReservePage, LocationsComponent, ProgramsComponent, TvsComponent, ConfirmationComponent, ProgramsFilterPipe],
+  declarations: [
+    ReservePage,
+    LocationsComponent,
+    ProgramsComponent,
+    TvsComponent,
+    ConfirmationComponent,
+    ProgramsFilterPipe,
+  ],
   exports: [TvsComponent],
 })
 export class ReservePageModule {}

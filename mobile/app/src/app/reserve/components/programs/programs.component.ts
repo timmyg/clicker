@@ -39,9 +39,28 @@ export class ProgramsComponent {
   }
 
   ngOnInit() {
+    console.log('programs oninit');
     this.reservation$.subscribe(r => {
+      console.log(r);
       this.store.dispatch(new fromProgram.GetAllByLocation(r.location));
     });
+    this.programs$.subscribe(p => {
+      console.log({ p });
+    });
+  }
+
+  ngOnDestroy(): void {
+    console.log('ondestroy');
+  }
+
+  ngOnChanges(): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    console.log('onchanges');
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter');
   }
 
   onProgramClick(program: Program) {

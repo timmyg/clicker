@@ -16,11 +16,15 @@
       <b>Feedback:</b><a (click)="openFeedback()" padding-start>Provide Feedback</a> <br />
     </ion-row>
     <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
-    <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
-      <div *ngFor="let r of (reservations$ | async)"><app-reservation [reservation]="r"></app-reservation></div>
-    </div>
-    <ng-template #empty>
-      <div padding-horizontal><span>You do not have any active reservations</span></div>
+
+    <ion-spinner *ngIf="(isReservationsLoading$ | async); else ready"></ion-spinner>
+    <ng-template #ready>
+      <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
+        <div *ngFor="let r of (reservations$ | async)"><app-reservation [reservation]="r"></app-reservation></div>
+      </div>
+      <ng-template #empty>
+        <div padding-horizontal><span>No active reservations</span></div>
+      </ng-template>
     </ng-template>
   </ion-grid>
 </ion-content>

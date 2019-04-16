@@ -28,7 +28,10 @@ export class ReservationsEffects {
     ofType(ReservationActions.CREATE_RESERVATION),
     switchMap((action: ReservationActions.Create) =>
       this.reservationService.create(action.payload).pipe(
-        map((reservation: Reservation) => new ReservationActions.CreateSuccess(reservation)),
+        switchMap((reservation: Reservation) => [
+          new ReservationActions.CreateSuccess(reservation),
+          new ReservationActions.GetAll(),
+        ]),
         catchError(err => of(new ReservationActions.CreateFail(err))),
       ),
     ),

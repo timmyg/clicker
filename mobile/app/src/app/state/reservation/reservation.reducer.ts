@@ -21,7 +21,6 @@ export function reducer(state = initialState, action: fromReservation.Reservatio
       return {
         ...state,
         reservation: new Reservation(),
-        loading: true,
       };
     }
     case fromReservation.CREATE_RESERVATION:

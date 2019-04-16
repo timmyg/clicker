@@ -70,6 +70,7 @@ export class ConfirmationComponent implements OnInit {
     this.store.dispatch(new fromReservation.Create(this.reservation));
     // TODO subscribe
     setTimeout(() => {
+      this.store.dispatch(new fromReservation.Start());
       this.router.navigate(['/tabs/profile']);
     }, 3000);
   }
