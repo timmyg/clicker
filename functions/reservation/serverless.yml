@@ -70,6 +70,13 @@ functions:
           path: ''
           method: get
           cors: true
+  active:
+    handler: reservation.active
+    events:
+      - http:
+          path: 'active'
+          method: get
+          cors: true
   get:
     handler: reservation.get
     events:
