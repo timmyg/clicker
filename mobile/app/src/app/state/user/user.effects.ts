@@ -25,8 +25,11 @@ export class UserEffects {
   create$: Observable<Action> = this.actions$.pipe(
     ofType(UserActions.CREATE),
     switchMap((user: User) =>
-      this.userService.create(user).pipe(
-        map((user: User) => new UserActions.CreateSuccess(user)),
+      this.userService.create().pipe(
+        map((user: User) => {
+          this.userService.set(user);
+          return new UserActions.CreateSuccess(user);
+        }),
         catchError(err => of(new UserActions.CreateFail(err))),
       ),
     ),

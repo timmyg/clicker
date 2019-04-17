@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Store } from '@ngrx/store';
-import { v1 as uuid } from 'uuid';
 import * as fromStore from '../state/app.reducer';
 import * as fromUser from '../state/user/user.actions';
 
@@ -21,9 +20,9 @@ export class AuthPage implements OnInit {
     // TODO for now, check if cookie, if not, assume new user
     this.storage.get('userid').then(userId => {
       if (!userId) {
-        const id = uuid();
-        this.storage.set('userid', id);
-        this.store.dispatch(new fromUser.Create(id));
+        // const id = uuid();
+        // this.storage.set('userid', id);
+        this.store.dispatch(new fromUser.Create());
       }
       this.store.dispatch(new fromUser.Get());
     });

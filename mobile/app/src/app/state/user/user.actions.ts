@@ -24,7 +24,7 @@ export class GetFail implements Action {
 
 export class Create implements Action {
   readonly type = CREATE;
-  constructor(public payload: User) {}
+  constructor() {}
 }
 
 export class CreateSuccess implements Action {
