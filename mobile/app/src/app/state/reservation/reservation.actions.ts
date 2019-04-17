@@ -10,6 +10,12 @@ export const GET_RESERVATIONS_FAIL = '[RESERVATION] Get Reservations Fail';
 export const CREATE_RESERVATION = '[RESERVATION] Create Reservation';
 export const CREATE_RESERVATION_SUCCESS = '[RESERVATION] Create Reservation Success';
 export const CREATE_RESERVATION_FAIL = '[RESERVATION] Create Reservation Fail';
+export const UPDATE_RESERVATION = '[RESERVATION] Update Reservation';
+export const UPDATE_RESERVATION_SUCCESS = '[RESERVATION] Update Reservation Success';
+export const UPDATE_RESERVATION_FAIL = '[RESERVATION] Update Reservation Fail';
+export const CANCEL_RESERVATION = '[RESERVATION] Cancel Reservation';
+export const CANCEL_RESERVATION_SUCCESS = '[RESERVATION] Cancel Reservation Success';
+export const CANCEL_RESERVATION_FAIL = '[RESERVATION] Cancel Reservation Fail';
 export const START_RESERVATION = '[RESERVATION WIZARD] Start New Reservation';
 export const SET_RESERVATION_FOR_UPDATE = '[RESERVATION WIZARD] Set Existing Reservation for Update';
 export const SET_RESERVATION_LOCATION = '[RESERVATION WIZARD] Set Reservation Location';
@@ -51,6 +57,35 @@ export class CreateFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class Update implements Action {
+  readonly type = UPDATE_RESERVATION;
+  constructor(public payload: Partial<Reservation>) {}
+}
+
+export class UpdateSuccess implements Action {
+  readonly type = UPDATE_RESERVATION_SUCCESS;
+  constructor(public payload: Reservation) {}
+}
+
+export class UpdateFail implements Action {
+  readonly type = UPDATE_RESERVATION_FAIL;
+  constructor(public payload: any) {}
+}
+
+export class Cancel implements Action {
+  readonly type = CANCEL_RESERVATION;
+  constructor(public payload: Partial<Reservation>) {}
+}
+
+export class CancelSuccess implements Action {
+  readonly type = CANCEL_RESERVATION_SUCCESS;
+}
+
+export class CancelFail implements Action {
+  readonly type = CANCEL_RESERVATION_FAIL;
+  constructor(public payload: any) {}
+}
+
 export class SetForUpdate implements Action {
   readonly type = SET_RESERVATION_FOR_UPDATE;
   constructor(public payload: Reservation) {}
@@ -89,6 +124,12 @@ export type ReservationActions =
   | Create
   | CreateSuccess
   | CreateFail
+  | Update
+  | UpdateSuccess
+  | UpdateFail
+  | Cancel
+  | CancelSuccess
+  | CancelFail
   | SetForUpdate
   | SetLocation
   | SetLocationSuccess

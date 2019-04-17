@@ -10,6 +10,7 @@ import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
 import { FeedbackPage } from './feedback/feedback.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -28,6 +29,8 @@ export class ProfilePage {
     public modalController: ModalController,
     public alertController: AlertController,
     private storage: Storage,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.isReservationsLoading$ = this.store.select(getLoading);
@@ -52,6 +55,11 @@ export class ProfilePage {
     return await this.feedbackModal.present();
   }
 
+  createNewReservation() {
+    this.store.dispatch(new fromReservation.Start());
+    this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
+  }
+
   async onLogout() {
     const alert = await this.alertController.create({
       header: 'Are you sure?',
@@ -60,7 +68,6 @@ export class ProfilePage {
         {
           text: 'Cancel',
           role: 'cancel',
-          // handler: () => alert.dismiss(),
         },
         {
           text: 'Logout',

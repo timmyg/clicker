@@ -34,7 +34,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'tabs/reserve',
+    redirectTo: 'tabs/reserve/locations',
     pathMatch: 'full',
   },
 ];

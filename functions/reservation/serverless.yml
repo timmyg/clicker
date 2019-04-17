@@ -99,16 +99,9 @@ functions:
           method: delete
           cors: true
   changeChannel:
-    handler: reservation.changeChannel
+    handler: reservation.update
     events:
       - http:
-          path: '{id}/channel'
-          method: put
-          cors: true
-  changeTime:
-    handler: reservation.changeTime
-    events:
-      - http:
-          path: '{id}/time'
+          path: '{id}'
           method: put
           cors: true

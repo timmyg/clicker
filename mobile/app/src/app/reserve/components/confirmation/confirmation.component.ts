@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { getReservation } from 'src/app/state/reservation';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
 @Component({
@@ -19,7 +19,9 @@ export class ConfirmationComponent implements OnInit {
   reservation: Partial<Reservation>;
   title = 'Confirmation';
   saving: boolean;
-  reservationPlans = [
+  isEditMode: boolean;
+  initialEndTime: Date;
+  private reservationPlans = [
     {
       tokens: 1,
       title: "Don't reserve",
@@ -43,6 +45,7 @@ export class ConfirmationComponent implements OnInit {
     private store: Store<fromStore.AppState>,
     private reserveService: ReserveService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
@@ -50,24 +53,36 @@ export class ConfirmationComponent implements OnInit {
 
   ngOnInit() {
     this.reservation$.subscribe(reservation => {
+      this.initialEndTime = reservation.end;
       this.reservation = reservation;
+      if (reservation.id) {
+        this.isEditMode = true;
+      }
     });
+  }
+
+  get availablePlans() {
+    if (this.isEditMode) {
+      this.reservationPlans[0].title = "Don't extend";
+      this.reservationPlans[0].tokens = 0;
+    }
+    return this.reservationPlans;
   }
 
   onLengthChange(e) {
     const plan = this.reservationPlans.find(p => p.minutes === +e.detail.value);
     this.reservation.cost = plan.tokens;
-    this.reservation.end = moment()
-      .add(plan.minutes, 'm')
-      .add(1, 'm') // add another minute, just to be nice
-      .toDate();
+    const endTimeInitial = this.initialEndTime ? moment(this.initialEndTime) : moment();
+    this.reservation.end = endTimeInitial.add(plan.minutes, 'm').toDate();
     this.reservation.start = moment().toDate();
     this.reservation.reserve = plan.reserve;
   }
 
   onConfirm() {
     this.saving = true;
-    this.store.dispatch(new fromReservation.Create(this.reservation));
+    this.isEditMode
+      ? this.store.dispatch(new fromReservation.Update(this.reservation))
+      : this.store.dispatch(new fromReservation.Create(this.reservation));
     // TODO subscribe
     setTimeout(() => {
       this.store.dispatch(new fromReservation.Start());

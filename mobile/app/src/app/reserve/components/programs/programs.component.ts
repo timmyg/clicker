@@ -10,6 +10,7 @@ import * as fromReservation from '../../../state/reservation/reservation.actions
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReserveService } from '../../reserve.service';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
+import { first } from 'rxjs/operators';
 
 @Component({
   templateUrl: './programs.component.html',
@@ -39,32 +40,20 @@ export class ProgramsComponent {
   }
 
   ngOnInit() {
-    console.log('programs oninit');
     this.reservation$.subscribe(r => {
-      console.log(r);
       this.store.dispatch(new fromProgram.GetAllByLocation(r.location));
     });
-    this.programs$.subscribe(p => {
-      console.log({ p });
-    });
   }
 
-  ngOnDestroy(): void {
-    console.log('ondestroy');
-  }
-
-  ngOnChanges(): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-    console.log('onchanges');
-  }
-
-  ionViewDidEnter() {
-    console.log('ionViewDidEnter');
-  }
-
-  onProgramClick(program: Program) {
+  async onProgramClick(program: Program) {
     this.store.dispatch(new fromReservation.SetProgram(program));
-    this.router.navigate(['../tvs'], { relativeTo: this.route });
+    // if editing, may already have a tv
+    const state = await this.store.pipe(first()).toPromise();
+    const reservation: Partial<Reservation> = state.reservation.reservation;
+    if (reservation.box && reservation.box.label) {
+      this.router.navigate(['../confirmation'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+    } else {
+      this.router.navigate(['../tvs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+    }
   }
 }

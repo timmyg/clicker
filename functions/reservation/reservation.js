@@ -96,27 +96,23 @@ module.exports.cancel = async event => {
   return respond(200, `hello`);
 };
 
-module.exports.changeChannel = async event => {
+module.exports.update = async event => {
   // TODO ensure user owns tv
   const userId = getAuthBearerToken(event);
-  const program = getBody(event);
+  const reservation = getBody(event);
   const params = getPathParameters(event);
   const { id } = params;
 
-  await Reservation.update({ id, userId }, { program });
-  // TODO change channel
-  return respond(200, `hello`);
-};
+  await Reservation.update({ id, userId }, reservation);
 
-module.exports.changeTime = async event => {
-  // TODO ensure user has enough tokens
-  const userId = getAuthBearerToken(event);
-  const body = getBody(event);
-  const { end } = body;
-  const params = getPathParameters(event);
-  const { id } = params;
+  // TODO - this should change channel - need to test
+  const { losantId } = reservation.location;
+  const { clientAddress: client } = reservation.box;
+  const { channel } = reservation.program;
+  const payload = { client, channel };
+  console.log('new reservation, change channel');
+  console.log(`remote-${process.env.stage}-tune`, { losantId, payload });
+  invokeFunction(`remote-${process.env.stage}-tune`, { losantId, payload });
 
-  await Reservation.update({ id, userId }, { end });
-  // TODO change channel
   return respond(200, `hello`);
 };

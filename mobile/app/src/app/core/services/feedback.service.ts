@@ -9,7 +9,6 @@ export class FeedbackService {
   constructor(private httpClient: HttpClient) {}
 
   submit(message: String): Observable<any> {
-    console.log('feedback!', message);
     return this.httpClient.post<any>(`${this.prefix}`, { message });
   }
 }

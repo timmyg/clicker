@@ -10,7 +10,9 @@ export class ProgramsFilterPipe implements PipeTransform {
     if (!searchText) return programs;
     searchText = searchText.toLowerCase();
     return programs.filter(p => {
-      return p.channelTitle.toLowerCase().includes(searchText) || p.title.toLowerCase().includes(searchText);
+      return (
+        p.channelTitle.toLowerCase().includes(searchText) || (p.title && p.title.toLowerCase().includes(searchText))
+      );
     });
   }
 }

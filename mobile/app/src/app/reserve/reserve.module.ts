@@ -35,6 +35,11 @@ const routes: Routes = [
         path: 'confirmation',
         component: ConfirmationComponent,
       },
+      {
+        path: '',
+        redirectTo: 'locations',
+        pathMatch: 'full',
+      },
     ],
   },
 ];

@@ -16,7 +16,15 @@ export class ReservationService {
     return this.httpClient.get<Reservation[]>(`${this.prefix}/${reservation.id}`);
   }
 
-  create(reservation: Partial<Reservation>): Observable<Partial<Reservation>> {
+  create(reservation: Partial<Reservation>): Observable<Reservation> {
     return this.httpClient.post<Reservation>(`${this.prefix}`, reservation);
+  }
+
+  update(reservation: Partial<Reservation>): Observable<Reservation> {
+    return this.httpClient.put<Reservation>(`${this.prefix}/${reservation.id}`, reservation);
+  }
+
+  cancel(reservation: Partial<Reservation>): Observable<Reservation> {
+    return this.httpClient.delete<Reservation>(`${this.prefix}/${reservation.id}`);
   }
 }

@@ -32,7 +32,6 @@ export class Reservation {
   }
 
   hasLocation() {
-    // console.log('hasLocation', this.location && this.location.id);
     return this.location && this.location.id;
   }
 

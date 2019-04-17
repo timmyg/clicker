@@ -15,10 +15,4 @@ import { AuthPage } from '../auth/auth.page';
   declarations: [TabsPage],
   entryComponents: [AuthPage],
 })
-export class TabsPageModule {
-  // showOnboarding: boolean;
-  // onShowOnboarding() {
-  //   console.log('oso');
-  //   this.showOnboarding = true;
-  // }
-}
+export class TabsPageModule {}

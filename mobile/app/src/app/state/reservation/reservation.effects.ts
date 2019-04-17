@@ -38,6 +38,31 @@ export class ReservationsEffects {
   );
 
   @Effect()
+  updateReservation$: Observable<Action> = this.actions$.pipe(
+    ofType(ReservationActions.UPDATE_RESERVATION),
+    switchMap((action: ReservationActions.Update) =>
+      this.reservationService.update(action.payload).pipe(
+        switchMap((reservation: Reservation) => [
+          new ReservationActions.UpdateSuccess(reservation),
+          new ReservationActions.GetAll(),
+        ]),
+        catchError(err => of(new ReservationActions.UpdateFail(err))),
+      ),
+    ),
+  );
+
+  @Effect()
+  cancelReservation$: Observable<Action> = this.actions$.pipe(
+    ofType(ReservationActions.CANCEL_RESERVATION),
+    switchMap((action: ReservationActions.Cancel) =>
+      this.reservationService.cancel(action.payload).pipe(
+        switchMap(() => [new ReservationActions.CancelSuccess(), new ReservationActions.GetAll()]),
+        catchError(err => of(new ReservationActions.CancelFail(err))),
+      ),
+    ),
+  );
+
+  @Effect()
   setLocation$: Observable<Action> = this.actions$.pipe(
     ofType(ReservationActions.SET_RESERVATION_LOCATION),
     switchMap((action: ReservationActions.SetLocation) =>

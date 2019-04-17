@@ -1,5 +1,5 @@
 <ion-card *ngIf="(reservation$ | async) as reservation">
-  <ion-card-header>
+  <!-- <ion-card-header>
     <ion-card-subtitle>{{ reservation.program.channelTitle }}</ion-card-subtitle>
     <ion-card-content>
       <ion-row>
@@ -27,13 +27,14 @@
         <ion-col> {{ reservation.program.title }}</ion-col>
       </ion-row>
     </ion-card-content>
-  </ion-card-header>
+  </ion-card-header> -->
 
   <ion-card-content>
     <ion-list id="length">
       <ion-radio-group (ionChange)="onLengthChange($event)">
-        <ion-list-header> Reservation Length </ion-list-header>
-        <ion-item *ngFor="let p of reservationPlans">
+        <ion-list-header *ngIf="!isEditMode"> Reservation Length </ion-list-header>
+        <ion-list-header *ngIf="isEditMode"> Extend Reservation Length </ion-list-header>
+        <ion-item *ngFor="let p of availablePlans">
           <ion-label flex ion-justify-items-end>
             <span>{{ p.title }}</span>
             <div flex ion-align-items-center float-right>
@@ -46,14 +47,18 @@
       </ion-radio-group>
     </ion-list>
     <p class="ion-text-center" padding-top>
-      <span *ngIf="reservation.reserve; else oneTime">
-        You are tuning <b>TV {{ reservation.tvTag }}</b> to {{ reservation.program.channelTitle }} and reserving until
-        {{ reservation.end | amDateFormat: 'h:mma' }}. You will be able to freely change the channel during your
-        reservation.
+      <!-- show always -->
+      <span
+        >You are tuning <b>TV {{ reservation.box.label }}</b> to {{ reservation.program.channelTitle }}</span
+      >
+      <!-- show if new and reserving, or editing -->
+      <span *ngIf="reservation.reserve || isEditMode; else oneTime">
+        and reserving until {{ reservation.end | amDateFormat: 'h:mma' }}. You will be able to freely change the channel
+        during your reservation.
       </span>
+      <!-- show when new and not reserving -->
       <ng-template #oneTime>
-        You are tuning <b>TV {{ reservation.tvTag }}</b> to {{ reservation.program.channelTitle }} but others will be
-        able to change the channel
+        <span *ngIf="!editMode">&nbsp; but others will be able to change the channel</span>
       </ng-template>
     </p>
     <ion-button

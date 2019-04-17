@@ -9,6 +9,8 @@ import * as fromLocation from '../../../state/location/location.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { first } from 'rxjs/operators';
+import { Reservation } from 'src/app/state/reservation/reservation.model';
 @Component({
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss'],
@@ -21,20 +23,33 @@ export class LocationsComponent implements OnInit {
     private store: Store<fromStore.AppState>,
     private reserveService: ReserveService,
     private router: Router,
-    private route: ActivatedRoute,
-  ) // private navCtrl: NavController,
-  {
+    private route: ActivatedRoute, // private navCtrl: NavController,
+  ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.store.dispatch(new fromLocation.GetAll());
+    // TODO should be a better way to get reservation
+    const state = await this.store.pipe(first()).toPromise();
+    const reservation: Partial<Reservation> = state.reservation.reservation;
+    // check if editing existing reservation
+    if (reservation && reservation.location) {
+      // is editing
+      if (!reservation.program) {
+        this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+      } else {
+        this.router.navigate(['../confirmation'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+      }
+    } else {
+      this.store.dispatch(new fromReservation.Start());
+    }
   }
 
   onLocationClick(location: Location) {
     this.store.dispatch(new fromReservation.SetLocation(location));
-    this.router.navigate(['../programs'], { relativeTo: this.route });
+    this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     // this.navCtrl.navigateForward(['../programs'], { relativeTo: this.route });
   }
 }

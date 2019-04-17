@@ -1,5 +1,13 @@
-<ion-list>
-  <ion-card *ngFor="let program of (programs$ | async | programsFilter: searchTerm)" (click)="onProgramClick(program)">
+<ion-row
+  ><ion-col *ngFor="let program of (programs$ | async | programsFilter: searchTerm)" size="4">
+    <ion-button color="light" size="large" expand="block" (click)="onProgramClick(program)">{{
+      program.channelTitle
+    }}</ion-button>
+  </ion-col>
+</ion-row>
+<!-- 
+  <ion-list>
+    <ion-card *ngFor="let program of (programs$ | async | programsFilter: searchTerm)" (click)="onProgramClick(program)">
     <ion-card-header>
       <ion-card-subtitle>
         <span>{{ program.start | amDateFormat: 'h:mm a' }}</span> <span float-right>{{ program.channelTitle }}</span>
@@ -26,4 +34,4 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-</ion-list>
+  </ion-list> -->
