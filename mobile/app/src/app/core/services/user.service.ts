@@ -13,4 +13,8 @@ export class UserService {
   get(): Observable<User> {
     return this.httpClient.get<User>(this.prefix);
   }
+
+  create(user: User): Observable<User> {
+    return this.httpClient.post<User>(this.prefix, user);
+  }
 }

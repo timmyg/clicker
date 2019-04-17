@@ -15,28 +15,28 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: fromUser.UserActions): State {
   switch (action.type) {
-    case fromUser.GET: {
+    case fromUser.GET:
+    case fromUser.CREATE:
       return {
         ...state,
         loading: true,
       };
-    }
 
-    case fromUser.GET_SUCCESS: {
+    case fromUser.GET_SUCCESS:
+    case fromUser.CREATE_SUCCESS:
       return {
         ...state,
         loading: false,
         me: action.payload,
       };
-    }
 
-    case fromUser.GET_FAIL: {
+    case fromUser.GET_FAIL:
+    case fromUser.CREATE_FAIL:
       return {
         ...state,
         loading: false,
-        error: 'error loading programs',
+        error: action.payload,
       };
-    }
 
     default: {
       return state;

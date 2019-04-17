@@ -21,5 +21,16 @@ export class UserEffects {
     ),
   );
 
+  @Effect()
+  create$: Observable<Action> = this.actions$.pipe(
+    ofType(UserActions.CREATE),
+    switchMap((user: User) =>
+      this.userService.create(user).pipe(
+        map((user: User) => new UserActions.CreateSuccess(user)),
+        catchError(err => of(new UserActions.CreateFail(err))),
+      ),
+    ),
+  );
+
   constructor(private actions$: Actions, private userService: UserService) {}
 }
