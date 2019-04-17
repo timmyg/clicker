@@ -6,6 +6,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { appReducer } from './app.reducer';
 import { LocationsEffects } from './location/location.effects';
+import { UserEffects } from './user/user.effects';
 import { ProgramsEffects } from './program/program.effects';
 import { ReservationsEffects } from './reservation/reservation.effects';
 import { FeedbackEffects } from './feedback/feedback.effects';
@@ -17,7 +18,7 @@ import { FeedbackEffects } from './feedback/feedback.effects';
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
     }),
-    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, ReservationsEffects, FeedbackEffects]),
+    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, ReservationsEffects, FeedbackEffects, UserEffects]),
   ],
   declarations: [],
 })

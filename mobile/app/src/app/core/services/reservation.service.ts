@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()

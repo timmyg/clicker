@@ -1,5 +1,5 @@
 const dynamoose = require('dynamoose');
-const { respond, getBody } = require('serverless-helpers');
+const { respond, getBody, getAuthBearerToken } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const User = dynamoose.model(
@@ -37,10 +37,10 @@ module.exports.create = async event => {
 };
 
 module.exports.get = async event => {
-  const { userid: id } = event.headers;
+  const userId = getAuthBearerToken(event);
 
   const user = await User.queryOne('id')
-    .eq(id)
+    .eq(userId)
     .exec();
 
   return respond(200, user);

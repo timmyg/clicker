@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { Store } from '@ngrx/store';
 import { v1 as uuid } from 'uuid';
+import * as fromStore from '../state/app.reducer';
+import * as fromUser from '../state/user/user.actions';
 
 @Component({
   selector: 'app-auth',
@@ -8,7 +11,7 @@ import { v1 as uuid } from 'uuid';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
-  constructor(private storage: Storage) {}
+  constructor(private storage: Storage, private store: Store<fromStore.AppState>) {}
 
   ngOnInit() {
     this.checkUser();
@@ -20,6 +23,7 @@ export class AuthPage implements OnInit {
       if (!userId) {
         this.storage.set('userid', uuid());
       }
+      this.store.dispatch(new fromUser.Get());
     });
   }
 }
