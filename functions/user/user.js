@@ -30,10 +30,10 @@ module.exports.health = async event => {
 module.exports.create = async event => {
   const body = getBody(event);
   const { name } = body;
-  const userId: id = getAuthBearerToken(event);
+  const userId = getAuthBearerToken(event);
 
   const initialTokens = 2;
-  const user = await User.create({ id, name, tokens: initialTokens });
+  const user = await User.create({ id: userId, name, tokens: initialTokens });
   return respond(201, user);
 };
 
