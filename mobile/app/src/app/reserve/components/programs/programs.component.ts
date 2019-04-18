@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Program } from 'src/app/state/program/program.model';
 import { Store } from '@ngrx/store';
-import { getAllPrograms } from 'src/app/state/program';
+import { getAllPrograms, getLoading } from 'src/app/state/program';
 import { getReservation } from 'src/app/state/reservation';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromProgram from '../../../state/program/program.actions';
@@ -19,6 +19,7 @@ import { first, take } from 'rxjs/operators';
 export class ProgramsComponent {
   programs$: Observable<Program[]>;
   reservation$: Observable<Partial<Reservation>>;
+  isLoading$: Observable<boolean>;
   title = 'Choose Channel';
   searchTerm: string;
 
@@ -40,6 +41,7 @@ export class ProgramsComponent {
   }
 
   ngOnInit() {
+    this.isLoading$ = this.store.select(getLoading);
     this.reservation$
       .pipe(take(1))
       .subscribe(reservation => this.store.dispatch(new fromProgram.GetAllByLocation(reservation.location)));

@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
 import { Observable } from 'rxjs';
-import { getAllLocations } from 'src/app/state/location';
+import { getAllLocations, getLoading } from 'src/app/state/location';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
@@ -18,6 +18,7 @@ import { Reservation } from 'src/app/state/reservation/reservation.model';
 export class LocationsComponent implements OnInit {
   locations$: Observable<Location[]>;
   title = 'Choose Location';
+  isLoading$: Observable<boolean>;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -31,6 +32,7 @@ export class LocationsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.isLoading$ = this.store.select(getLoading);
     this.store.dispatch(new fromLocation.GetAll());
     // TODO should be a better way to get reservation
     const state = await this.store.pipe(first()).toPromise();

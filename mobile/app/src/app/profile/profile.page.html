@@ -17,7 +17,9 @@
     </ion-row>
     <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
 
-    <ion-spinner *ngIf="(isReservationsLoading$ | async); else ready"></ion-spinner>
+    <ion-row *ngIf="(isReservationsLoading$ | async); else ready" margin-vertical>
+      <ion-spinner name="crescent" class="center"></ion-spinner>
+    </ion-row>
     <ng-template #ready>
       <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
         <div *ngFor="let r of (reservations$ | async)">
