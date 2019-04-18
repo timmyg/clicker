@@ -39,7 +39,7 @@
             <span>{{ p.title }}</span>
             <div flex ion-align-items-center float-right>
               <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-              <span>{{ p.tokens }}</span>
+              <span padding-start>{{ p.tokens }}</span>
             </div>
           </ion-label>
           <ion-radio slot="start" value="{{ p.minutes }}" checked></ion-radio>
@@ -53,7 +53,7 @@
       >
       <!-- show if new and reserving, or editing -->
       <span *ngIf="reservation.reserve || isEditMode; else oneTime">
-        and reserving until {{ reservationEnd$ | async | amDateFormat: 'h:mm:ssa' }}. You will be able to freely change
+        and reserving until {{ reservationEnd$ | async | amDateFormat: 'h:mm:a' }}. You will be able to freely change
         the channel during your reservation.
       </span>
       <!-- show when new and not reserving -->

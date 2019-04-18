@@ -33,10 +33,10 @@ export class ReservePage implements OnInit {
   // 2. channel
   // 3. tv
 
-  ngOnInit() {
-    // this.store.dispatch(new fromReservation.Start());
-    console.log(this.route.snapshot);
-  }
+  // ngOnInit() {
+  //   // this.store.dispatch(new fromReservation.Start());
+  //   console.log(this.route.snapshot);
+  // }
 
   goBack() {
     this.navCtrl.back();
@@ -51,9 +51,9 @@ export class ReservePage implements OnInit {
     return this.router.url != '/tabs/reserve/locations';
   }
 
-  showStartOver() {
-    return this.router.url != '/tabs/reserve/locations';
-  }
+  // showStartOver() {
+  //   return this.router.url != '/tabs/reserve/locations';
+  // }
 
   isProgramsPage() {
     return this.router.url.includes('programs');

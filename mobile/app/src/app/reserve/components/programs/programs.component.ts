@@ -50,7 +50,7 @@ export class ProgramsComponent {
     // if editing, may already have a tv
     const state = await this.store.pipe(first()).toPromise();
     const reservation: Partial<Reservation> = state.reservation.reservation;
-    if (reservation.box && reservation.box.label) {
+    if (reservation.id && reservation.box && reservation.box.label) {
       this.router.navigate(['../confirmation'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     } else {
       this.router.navigate(['../tvs'], { relativeTo: this.route, queryParamsHandling: 'merge' });

@@ -23,7 +23,6 @@ export class ConfirmationComponent implements OnInit {
   title = 'Confirmation';
   saving: boolean;
   isEditMode: boolean;
-  // initialEndTime: Date;
   private reservationPlans = [
     {
       tokens: 1,
@@ -83,7 +82,7 @@ export class ConfirmationComponent implements OnInit {
         .clone()
         .toDate(),
     );
-    this.reservationEnd$ = interval(5 * 1000).pipe(
+    this.reservationEnd$ = interval(15 * 1000).pipe(
       startWith(
         this.getInitialEndTime()
           .clone()

@@ -24,6 +24,7 @@ export class LocationsComponent implements OnInit {
     private reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute, // private navCtrl: NavController,
+    private navCtrl: NavController,
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
@@ -35,12 +36,21 @@ export class LocationsComponent implements OnInit {
     const state = await this.store.pipe(first()).toPromise();
     const reservation: Partial<Reservation> = state.reservation.reservation;
     // check if editing existing reservation
-    if (reservation && reservation.location) {
+    if (reservation && reservation.id) {
       // is editing
       if (!reservation.program) {
-        this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+        console.log('go to program');
+        this.navCtrl.navigateForward(['../programs'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'merge',
+          // skipLocationChange: true,
+        });
       } else {
-        this.router.navigate(['../confirmation'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+        this.navCtrl.navigateForward(['../confirmation'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'merge',
+          // skipLocationChange: true,
+        });
       }
     } else {
       this.store.dispatch(new fromReservation.Start());

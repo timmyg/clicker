@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
-  minutesFromNow$: Observable<number>;
+  minutesFromNow$: Observable<string>;
   editChannelModal;
   editTimeModal;
 
@@ -35,9 +35,9 @@ export class ReservationComponent implements OnInit {
   private setMinutesRefresher() {
     let refreshSeconds = 30;
     this.minutesFromNow$ = interval(refreshSeconds * 1000).pipe(
-      startWith(this.getMinutes()), // this sets inital value
+      startWith(this.getTimeRemaining()), // this sets inital value
       map(() => {
-        return this.getMinutes();
+        return this.getTimeRemaining();
       }),
       distinctUntilChanged(),
     );
@@ -60,7 +60,7 @@ export class ReservationComponent implements OnInit {
             const reservationToUpdate = Object.assign({}, this.reservation);
             delete reservationToUpdate.program;
             this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
-            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'channel' } });
+            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'channel' }, skipLocationChange: true });
           },
         },
         {
@@ -68,7 +68,7 @@ export class ReservationComponent implements OnInit {
           handler: () => {
             const reservationToUpdate = Object.assign({}, this.reservation);
             this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
-            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'time' } });
+            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'time' }, skipLocationChange: true });
           },
         },
       ],
@@ -100,9 +100,19 @@ export class ReservationComponent implements OnInit {
     this.showModify();
   }
 
-  private getMinutes() {
+  private getTimeRemaining(): string {
     const endTime = moment(this.reservation.end);
     const duration = moment.duration(endTime.diff(moment()));
-    return Math.ceil(duration.asMinutes());
+    let minutes = Math.ceil(duration.asMinutes());
+    if (minutes >= 60) {
+      let hours = 0;
+      while (minutes >= 60) {
+        minutes -= 60;
+        hours++;
+      }
+      return `${hours}h ${minutes}m`;
+    }
+    // return Math.ceil(duration.asMinutes());
+    return `${minutes}m`;
   }
 }

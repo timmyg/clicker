@@ -13,6 +13,7 @@ import { FeedbackPage } from './feedback/feedback.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-profile',
@@ -66,6 +67,13 @@ export class ProfilePage {
   createNewReservation() {
     this.store.dispatch(new fromReservation.Start());
     this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
+  }
+
+  // this will make sure it disappears from screen if you stay on screen
+  // ... definitely a better way to do this
+  isActive(reservation: Reservation) {
+    const remaining = moment.duration(moment(reservation.end).diff(moment())).asSeconds();
+    return remaining > 0;
   }
 
   async onLogout() {
