@@ -110,7 +110,11 @@ export class ReservationComponent implements OnInit {
         minutes -= 60;
         hours++;
       }
-      return `${hours}h ${minutes}m`;
+      let msg = `${hours}h`;
+      if (minutes) {
+        msg = `${msg} ${minutes}m`;
+      }
+      return msg;
     }
     // return Math.ceil(duration.asMinutes());
     return `${minutes}m`;

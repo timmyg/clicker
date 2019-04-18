@@ -120,7 +120,7 @@ export class ConfirmationComponent implements OnInit {
 
   async showTunedToast(label: string, channelName: string) {
     const toast = await this.toastController.create({
-      message: `TV ${label} successfully changes to ${channelName}`,
+      message: `TV ${label} successfully changed to ${channelName}`,
       duration: 2000,
     });
     toast.present();
