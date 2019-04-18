@@ -6,6 +6,6 @@ export interface Location {
   name: string;
   neighborhood: string;
   boxes: TV[];
-  distance?: string;
+  distance?: number;
   img?: string;
 }
