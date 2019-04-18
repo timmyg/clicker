@@ -104,6 +104,8 @@ module.exports.update = async event => {
   const params = getPathParameters(event);
   const { id } = params;
 
+  delete reservation.cost;
+  delete reservation.createdAt;
   await Reservation.update({ id, userId }, reservation);
 
   // TODO - this should change channel - need to test
