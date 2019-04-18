@@ -51,7 +51,7 @@ module.exports.create = async event => {
 
   // TODO - this should change channel - need to test
   const { losantId } = reservation.location;
-  const { clientAddress: client } = reservationCreated.box;
+  const { clientAddress: client } = reservation.box;
   const { channel } = reservation.program;
   const payload = { client, channel };
   console.log('new reservation, change channel');
