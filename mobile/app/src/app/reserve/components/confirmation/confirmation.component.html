@@ -53,8 +53,8 @@
       >
       <!-- show if new and reserving, or editing -->
       <span *ngIf="reservation.reserve || isEditMode; else oneTime">
-        and reserving until {{ reservationEnd$ | async | amDateFormat: 'h:mm' }}. You will be able to freely change the
-        channel during your reservation.
+        and reserving until {{ reservationEnd$ | async | amDateFormat: 'h:mm:ssa' }}. You will be able to freely change
+        the channel during your reservation.
       </span>
       <!-- show when new and not reserving -->
       <ng-template #oneTime>

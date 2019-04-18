@@ -23,7 +23,7 @@ export class ConfirmationComponent implements OnInit {
   title = 'Confirmation';
   saving: boolean;
   isEditMode: boolean;
-  initialEndTime: Date;
+  // initialEndTime: Date;
   private reservationPlans = [
     {
       tokens: 1,
@@ -56,7 +56,7 @@ export class ConfirmationComponent implements OnInit {
 
   ngOnInit() {
     this.reservation$.subscribe(reservation => {
-      this.initialEndTime = reservation.end;
+      // this.initialEndTime = reservation.end;
       this.reservation = reservation;
       if (reservation.id) {
         this.isEditMode = true;
@@ -75,16 +75,34 @@ export class ConfirmationComponent implements OnInit {
   onLengthChange(e) {
     const plan = this.reservationPlans.find(p => p.minutes === +e.detail.value);
     this.reservation.cost = plan.tokens;
-    const endTimeInitial = this.reservation.end ? moment(this.reservation.end) : moment();
+    // const endTimeInitial = this.reservation.end ? moment(this.reservation.end) : moment();
     this.reservation.minutes = plan.minutes;
     this.reservation.reserve = plan.reserve;
-    this.reservationEnd$ = interval(15 * 1000).pipe(
-      startWith(endTimeInitial.add(plan.minutes, 'm').toDate()), // this sets inital value
+    console.log(
+      this.getInitialEndTime()
+        .clone()
+        .toDate(),
+    );
+    this.reservationEnd$ = interval(5 * 1000).pipe(
+      startWith(
+        this.getInitialEndTime()
+          .clone()
+          .add(plan.minutes, 'm')
+          .toDate(),
+      ), // this sets inital value
       map(() => {
-        return endTimeInitial.add(plan.minutes, 'm').toDate();
+        console.log(this.getInitialEndTime().toDate());
+        return this.getInitialEndTime()
+          .clone()
+          .add(plan.minutes, 'm')
+          .toDate();
       }),
       distinctUntilChanged(),
     );
+  }
+
+  getInitialEndTime() {
+    return this.reservation.end ? moment(this.reservation.end) : moment();
   }
 
   onConfirm() {

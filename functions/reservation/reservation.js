@@ -43,15 +43,15 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  const body = getBody(event);
-  body.userId = getAuthBearerToken(event);
+  let reservation = getBody(event);
+  reservation.userId = getAuthBearerToken(event);
 
   reservation = calculateReservationTimes(reservation);
-  const reservation = await Reservation.create(body);
+  const reservationCreated = await Reservation.create(body);
 
   // TODO - this should change channel - need to test
   const { losantId } = body.location;
-  const { clientAddress: client } = reservation.box;
+  const { clientAddress: client } = reservationCreated.box;
   const { channel } = body.program;
   const payload = { client, channel };
   console.log('new reservation, change channel');
@@ -103,7 +103,7 @@ module.exports.update = async event => {
   console.log('resrvation update', event);
   // TODO ensure user owns tv
   const userId = getAuthBearerToken(event);
-  const reservation = getBody(event);
+  let reservation = getBody(event);
   const params = getPathParameters(event);
   const { id } = params;
 
