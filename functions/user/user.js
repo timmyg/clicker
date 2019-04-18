@@ -1,5 +1,5 @@
 const dynamoose = require('dynamoose');
-const { respond, getBody, getAuthBearerToken } = require('serverless-helpers');
+const { respond, getBody, getAuthBearerToken, getPathParameters } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const User = dynamoose.model(

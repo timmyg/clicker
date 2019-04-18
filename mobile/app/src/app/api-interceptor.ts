@@ -25,7 +25,7 @@ export class ApiInterceptor implements HttpInterceptor {
   private addToken(request: HttpRequest<any>): Observable<HttpRequest<any>> {
     console.log('add token', request);
     // skip if initial user creation
-    if (request.url === 'users' && request.method === 'POST') {
+    if (request.url.split('/')[0] === 'users') {
       return of(
         request.clone({
           url: `${environment.apiBaseUrl}/${request.url}`,
