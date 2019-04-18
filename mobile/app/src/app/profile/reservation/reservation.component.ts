@@ -29,6 +29,10 @@ export class ReservationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.setMinutesRefresher();
+  }
+
+  private setMinutesRefresher() {
     let refreshSeconds = 30;
     this.minutesFromNow$ = interval(refreshSeconds * 1000).pipe(
       startWith(this.getMinutes()), // this sets inital value
@@ -74,13 +78,10 @@ export class ReservationComponent implements OnInit {
 
   async onReservationCancel(reservation: Reservation) {
     const alert = await this.alertController.create({
-      header: 'Thank you',
-      message: 'You will not be refunded any tokens, but you will be freeing up a TV for other patrons',
+      header: 'Are you sure?',
+      message:
+        'You will not be refunded any tokens, but you will be freeing up a TV for other patrons, which is appreciated ✌️',
       buttons: [
-        // {
-        //   text: 'Nevermind',
-        //   role: 'cancel',
-        // },
         {
           text: 'Cancel Reservation',
           role: 'destructive',
@@ -98,20 +99,6 @@ export class ReservationComponent implements OnInit {
   modify() {
     this.showModify();
   }
-
-  // async openEditChannel() {
-  //   this.editChannelModal = await this.modalController.create({
-  //     component: FeedbackPage,
-  //   });
-  //   return await this.feedbackModal.present();
-  // }
-
-  // async openEditTime() {
-  //   this.editTimeModal = await this.modalController.create({
-  //     component: FeedbackPage,
-  //   });
-  //   return await this.feedbackModal.present();
-  // }
 
   private getMinutes() {
     const endTime = moment(this.reservation.end);

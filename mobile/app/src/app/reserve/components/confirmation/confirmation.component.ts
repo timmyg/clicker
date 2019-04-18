@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../../../state/reservation/reservation.model';
 import { ReserveService } from '../../reserve.service';
-import { Observable } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { getReservation } from 'src/app/state/reservation';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { ToastController } from '@ionic/angular';
+import { startWith, map, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-confirmation',
@@ -16,6 +18,7 @@ import * as moment from 'moment';
 })
 export class ConfirmationComponent implements OnInit {
   reservation$: Observable<Partial<Reservation>>;
+  reservationEnd$: Observable<Date>;
   reservation: Partial<Reservation>;
   title = 'Confirmation';
   saving: boolean;
@@ -45,7 +48,7 @@ export class ConfirmationComponent implements OnInit {
     private store: Store<fromStore.AppState>,
     private reserveService: ReserveService,
     private router: Router,
-    private route: ActivatedRoute,
+    public toastController: ToastController,
   ) {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
@@ -72,10 +75,16 @@ export class ConfirmationComponent implements OnInit {
   onLengthChange(e) {
     const plan = this.reservationPlans.find(p => p.minutes === +e.detail.value);
     this.reservation.cost = plan.tokens;
-    const endTimeInitial = this.initialEndTime ? moment(this.initialEndTime) : moment();
-    this.reservation.end = endTimeInitial.add(plan.minutes, 'm').toDate();
-    this.reservation.start = moment().toDate();
+    const endTimeInitial = this.reservation.end ? moment(this.reservation.end) : moment();
+    this.reservation.minutes = plan.minutes;
     this.reservation.reserve = plan.reserve;
+    this.reservationEnd$ = interval(15 * 1000).pipe(
+      startWith(endTimeInitial.add(plan.minutes, 'm').toDate()), // this sets inital value
+      map(() => {
+        return endTimeInitial.add(plan.minutes, 'm').toDate();
+      }),
+      distinctUntilChanged(),
+    );
   }
 
   onConfirm() {
@@ -84,9 +93,19 @@ export class ConfirmationComponent implements OnInit {
       ? this.store.dispatch(new fromReservation.Update(this.reservation))
       : this.store.dispatch(new fromReservation.Create(this.reservation));
     // TODO subscribe
+    const reservation = this.reservation;
     setTimeout(() => {
       this.store.dispatch(new fromReservation.Start());
       this.router.navigate(['/tabs/profile']);
+      this.showTunedToast(reservation.box.label, reservation.program.channelTitle);
     }, 3000);
+  }
+
+  async showTunedToast(label: string, channelName: string) {
+    const toast = await this.toastController.create({
+      message: `TV ${label} successfully changes to ${channelName}`,
+      duration: 2000,
+    });
+    toast.present();
   }
 }

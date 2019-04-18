@@ -1,6 +1,7 @@
 const dynamoose = require('dynamoose');
 const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+const moment = require('moment');
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
@@ -27,6 +28,7 @@ const Reservation = dynamoose.model(
       title: { type: String, required: true },
     },
     cost: { type: Number, required: true },
+    minutes: { type: Number, required: true },
     start: { type: Date, required: true },
     end: { type: Date, required: true },
     cancelled: Boolean,
@@ -43,7 +45,8 @@ module.exports.health = async event => {
 module.exports.create = async event => {
   const body = getBody(event);
   body.userId = getAuthBearerToken(event);
-  // body.box = body.tv;
+
+  reservation = calculateReservationTimes(reservation);
   const reservation = await Reservation.create(body);
 
   // TODO - this should change channel - need to test
@@ -104,8 +107,11 @@ module.exports.update = async event => {
   const params = getPathParameters(event);
   const { id } = params;
 
+  // "errorMessage": "Invalid UpdateExpression: Two document paths overlap with each other; must remove or rewrite one
+  // of these paths; path one: [createdAt], path two: [cost]"
   delete reservation.cost;
   delete reservation.createdAt;
+  reservation = calculateReservationTimes(reservation);
   await Reservation.update({ id, userId }, reservation);
 
   // TODO - this should change channel - need to test
@@ -119,3 +125,11 @@ module.exports.update = async event => {
 
   return respond(200, `hello`);
 };
+
+function calculateReservationTimes(reservation) {
+  reservation.start = moment().toDate();
+  reservation.end = moment()
+    .add(reservation.minutes, 'm')
+    .toDate();
+  return reservation;
+}

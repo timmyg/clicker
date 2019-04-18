@@ -1,6 +1,5 @@
 import { Location } from '../location/location.model';
 import { Program } from '../program/program.model';
-import * as moment from 'moment';
 import { TV } from '../location/tv.model';
 
 export class Reservation {
@@ -12,6 +11,7 @@ export class Reservation {
   box: TV;
   start: Date;
   end: Date;
+  minutes: Number;
   cost: Number;
   reserve: boolean;
 
