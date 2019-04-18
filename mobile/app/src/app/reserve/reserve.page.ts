@@ -11,7 +11,7 @@ import * as fromReservation from '../state/reservation/reservation.actions';
   templateUrl: './reserve.page.html',
   styleUrls: ['./reserve.page.scss'],
 })
-export class ReservePage implements OnInit {
+export class ReservePage {
   @ViewChild(IonSearchbar) searchbar: IonSearchbar;
   title: String;
   searchProgramsMode: boolean;
