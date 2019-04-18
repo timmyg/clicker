@@ -1,6 +1,5 @@
 import * as fromLocation from './location.actions';
 import { Location } from './location.model';
-import { TV } from '../location/tv.model';
 
 export interface State {
   locations: Location[];

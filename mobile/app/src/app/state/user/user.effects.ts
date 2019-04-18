@@ -15,22 +15,12 @@ export class UserEffects {
     ofType(UserActions.GET),
     switchMap(() =>
       this.userService.get().pipe(
-        map((user: User) => new UserActions.GetSuccess(user)),
-        catchError(err => of(new UserActions.GetFail(err))),
-      ),
-    ),
-  );
-
-  @Effect()
-  create$: Observable<Action> = this.actions$.pipe(
-    ofType(UserActions.CREATE),
-    switchMap((user: User) =>
-      this.userService.create().pipe(
         map((user: User) => {
+          console.log('user');
           this.userService.set(user);
-          return new UserActions.CreateSuccess(user);
+          return new UserActions.GetSuccess(user);
         }),
-        catchError(err => of(new UserActions.CreateFail(err))),
+        catchError(err => of(new UserActions.GetFail(err))),
       ),
     ),
   );

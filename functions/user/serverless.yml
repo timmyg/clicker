@@ -70,7 +70,7 @@ functions:
     handler: user.get
     events:
       - http:
-          path: ''
+          path: '{id}'
           method: get
           cors: true
   addTokens:

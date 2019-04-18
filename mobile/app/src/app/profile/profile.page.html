@@ -10,7 +10,7 @@
     <ion-row margin-bottom> <b>Phone:&nbsp;</b><span>513-843-3209</span> </ion-row>
     <ion-row margin-bottom align-items-center>
       <b>Wallet:</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" /> <span>&nbsp;</span>
-      <span>2</span> <a (click)="openWallet()" padding-start>Get more</a> <br />
+      <span>{{ (user$ | async)?.tokens }}</span> <a (click)="openWallet()" padding-start>Get more</a> <br />
     </ion-row>
     <ion-row margin-bottom align-items-center>
       <b>Feedback:</b><a (click)="openFeedback()" padding-start>Provide Feedback</a> <br />

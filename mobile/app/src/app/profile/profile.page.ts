@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading } from '../state/reservation';
+import { getUser } from '../state/user';
 import { ModalController, AlertController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
@@ -11,6 +12,7 @@ import { WalletPage } from './wallet/wallet.page';
 import { FeedbackPage } from './feedback/feedback.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
+import { User } from '../state/user/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +21,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ProfilePage {
   reservations$: Observable<Reservation[]>;
+  user$: Observable<User>;
+  user: User;
   isReservationsLoading$: Observable<boolean>;
   faCopyright = faCopyright;
   walletModal;
@@ -33,17 +37,21 @@ export class ProfilePage {
     private route: ActivatedRoute,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
+    this.user$ = this.store.select(getUser);
     this.isReservationsLoading$ = this.store.select(getLoading);
   }
 
   ngOnInit() {
     this.store.dispatch(new fromReservation.GetAll());
+    this.user$.subscribe(user => {
+      this.user = user;
+    });
   }
 
   async openWallet() {
     this.walletModal = await this.modalController.create({
       component: WalletPage,
-      componentProps: { monies: 9 },
+      componentProps: { monies: this.user.tokens },
     });
     return await this.walletModal.present();
   }

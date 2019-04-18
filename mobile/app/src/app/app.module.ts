@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -12,21 +12,47 @@ import { StateModule } from './state/state.module';
 import { CoreModule } from './core/core.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiInterceptor } from './api-interceptor';
-import { Storage, IonicStorageModule } from '@ionic/storage';
+import { Store } from '@ngrx/store';
+import { AppState } from './state/app.reducer';
+import * as fromUser from './state/user/user.actions';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+function initApplication(): Function {
+  return () => new Promise(resolve => setTimeout(resolve, 1000));
+}
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    StateModule.forRoot(),
-    CoreModule.forRoot(),
-    IonicStorageModule.forRoot(),
-  ],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, StateModule.forRoot(), CoreModule.forRoot()],
   providers: [
-    // Storage,
+    {
+      // load user on startup
+      // TODO i dont think its waiting until its actually loaded...
+      provide: APP_INITIALIZER,
+      useFactory: (store: Store<AppState>) => {
+        return () =>
+          new Promise(resolve => {
+            console.log('1');
+            const loaded$ = new Subject();
+            store.dispatch(new fromUser.Get());
+            store
+              .select((state: AppState) => state.user.me)
+              .pipe(takeUntil(loaded$))
+              .subscribe(loaded => {
+                console.log('2', loaded);
+                if (loaded) {
+                  console.log('loaded');
+                  loaded$.next();
+                  resolve();
+                }
+              });
+          });
+      },
+      multi: true,
+      deps: [Store],
+    },
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

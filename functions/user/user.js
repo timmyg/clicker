@@ -38,10 +38,11 @@ module.exports.create = async event => {
 };
 
 module.exports.get = async event => {
-  const userId = getAuthBearerToken(event);
+  const params = getPathParameters(event);
+  const { id } = params;
 
   const user = await User.queryOne('id')
-    .eq(userId)
+    .eq(id)
     .exec();
 
   return respond(200, user);
