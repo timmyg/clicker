@@ -30,6 +30,7 @@ const Location = dynamoose.model(
     // lng: { type: Number, required: true },
     ip: String,
     img: String,
+    distance: String,
   },
   {
     timestamps: true,
