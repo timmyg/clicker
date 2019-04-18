@@ -21,6 +21,7 @@ export class ReservePage implements OnInit {
     private reserveService: ReserveService,
     private navCtrl: NavController,
     private router: Router,
+    private route: ActivatedRoute,
     public events: Events,
   ) {
     this.reserveService.titleEmitted$.subscribe(title => {
@@ -34,13 +35,23 @@ export class ReservePage implements OnInit {
 
   ngOnInit() {
     // this.store.dispatch(new fromReservation.Start());
+    console.log(this.route.snapshot);
   }
 
   goBack() {
     this.navCtrl.back();
   }
 
+  onStartOver() {
+    this.store.dispatch(new fromReservation.Start());
+    this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
+  }
+
   showBack() {
+    return this.router.url != '/tabs/reserve/locations';
+  }
+
+  showStartOver() {
     return this.router.url != '/tabs/reserve/locations';
   }
 

@@ -98,7 +98,7 @@ functions:
           path: '{id}'
           method: delete
           cors: true
-  changeChannel:
+  update:
     handler: reservation.update
     events:
       - http:

@@ -16,7 +16,6 @@ export class UserEffects {
     switchMap(() =>
       this.userService.get().pipe(
         map((user: User) => {
-          console.log('user');
           this.userService.set(user);
           return new UserActions.GetSuccess(user);
         }),

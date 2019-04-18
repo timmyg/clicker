@@ -13,15 +13,11 @@ export class UserService {
   constructor(private httpClient: HttpClient, private storage: Storage) {}
 
   get(): Observable<User> {
-    console.log('get');
     return from(this.storage.get('userid')).pipe(
       mergeMap(userId => {
-        console.log('a', userId);
         if (userId) {
-          console.log('b');
           return this.httpClient.get<User>(`${this.prefix}/${userId}`);
         } else {
-          console.log('c');
           return this.httpClient.post<User>(this.prefix, {});
         }
       }),

@@ -10,7 +10,7 @@ import * as fromReservation from '../../../state/reservation/reservation.actions
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReserveService } from '../../reserve.service';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
-import { first } from 'rxjs/operators';
+import { first, take } from 'rxjs/operators';
 
 @Component({
   templateUrl: './programs.component.html',
@@ -40,9 +40,9 @@ export class ProgramsComponent {
   }
 
   ngOnInit() {
-    this.reservation$.subscribe(r => {
-      this.store.dispatch(new fromProgram.GetAllByLocation(r.location));
-    });
+    this.reservation$
+      .pipe(take(1))
+      .subscribe(reservation => this.store.dispatch(new fromProgram.GetAllByLocation(reservation.location)));
   }
 
   async onProgramClick(program: Program) {

@@ -34,16 +34,13 @@ function initApplication(): Function {
       useFactory: (store: Store<AppState>) => {
         return () =>
           new Promise(resolve => {
-            console.log('1');
             const loaded$ = new Subject();
             store.dispatch(new fromUser.Get());
             store
               .select((state: AppState) => state.user.me)
               .pipe(takeUntil(loaded$))
               .subscribe(loaded => {
-                console.log('2', loaded);
                 if (loaded) {
-                  console.log('loaded');
                   loaded$.next();
                   resolve();
                 }

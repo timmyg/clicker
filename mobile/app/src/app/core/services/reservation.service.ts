@@ -21,6 +21,7 @@ export class ReservationService {
   }
 
   update(reservation: Partial<Reservation>): Observable<Reservation> {
+    console.log('update', reservation);
     return this.httpClient.put<Reservation>(`${this.prefix}/${reservation.id}`, reservation);
   }
 

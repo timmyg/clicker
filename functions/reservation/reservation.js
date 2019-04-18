@@ -97,6 +97,7 @@ module.exports.cancel = async event => {
 };
 
 module.exports.update = async event => {
+  console.log('resrvation update', event);
   // TODO ensure user owns tv
   const userId = getAuthBearerToken(event);
   const reservation = getBody(event);
