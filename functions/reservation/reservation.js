@@ -128,7 +128,7 @@ module.exports.update = async event => {
 
 function calculateReservationTimes(reservation) {
   reservation.start = moment().toDate();
-  const initialEndTimeMoment = this.reservation.end ? moment(this.reservation.end) : moment();
+  const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
   reservation.end = initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
   return reservation;
 }
