@@ -47,12 +47,12 @@ module.exports.create = async event => {
   reservation.userId = getAuthBearerToken(event);
 
   reservation = calculateReservationTimes(reservation);
-  const reservationCreated = await Reservation.create(body);
+  await Reservation.create(reservation);
 
   // TODO - this should change channel - need to test
-  const { losantId } = body.location;
+  const { losantId } = reservation.location;
   const { clientAddress: client } = reservationCreated.box;
-  const { channel } = body.program;
+  const { channel } = reservation.program;
   const payload = { client, channel };
   console.log('new reservation, change channel');
   console.log(`remote-${process.env.stage}-tune`, { losantId, payload });
