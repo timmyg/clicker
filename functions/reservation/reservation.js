@@ -67,7 +67,7 @@ module.exports.all = async event => {
     .eq(userId)
     .exec();
   const filtered = userReservations.filter(r => r.cancelled != true);
-  const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
+  const sorted = filtered.sort((a, b) => (a.end > b.end ? 1 : -1));
   return respond(200, sorted);
 };
 
