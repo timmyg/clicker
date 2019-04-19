@@ -42,7 +42,8 @@ module.exports.all = async event => {
   allLocations.forEach(l => {
     delete l.boxes;
   });
-  return respond(200, allLocations);
+  const sorted = allLocations.sort((a, b) => a.distance.localeCompare(b.distance));
+  return respond(200, sorted);
 };
 
 module.exports.get = async event => {
