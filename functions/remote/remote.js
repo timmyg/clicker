@@ -64,6 +64,7 @@ module.exports.tune = async event => {
     const { losantId, payload } = body;
     const { client, channel } = payload;
     const api = new Api(losantId);
+
     await api.sendCommand('tune', losantId, { client, channel });
     return respond();
   } catch (e) {
