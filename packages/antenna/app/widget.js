@@ -18,6 +18,7 @@ class Widget {
   }
 
   async saveIp() {
+    const context = this;
     logger.info('about to search ips....');
     browser.browser({}, (error, device) => {
       if (device) {
@@ -28,8 +29,8 @@ class Widget {
             return logger.info(`.......... not valid directv ip: ${ip}`);
           }
           logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
-          this.saveBoxes(ip);
-          return this.api.updateIp(ip);
+          context.saveBoxes(ip);
+          return context.api.updateIp(ip);
         });
       } else if (error) {
         logger.error(error);
