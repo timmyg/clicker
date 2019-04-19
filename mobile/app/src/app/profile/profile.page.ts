@@ -14,6 +14,7 @@ import * as fromReservation from '../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-profile',
@@ -36,6 +37,7 @@ export class ProfilePage {
     private storage: Storage,
     private router: Router,
     private route: ActivatedRoute,
+    public intercom: Intercom,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
@@ -58,10 +60,16 @@ export class ProfilePage {
   }
 
   async openFeedback() {
-    this.feedbackModal = await this.modalController.create({
-      component: FeedbackPage,
+    // this.feedbackModal = await this.modalController.create({
+    //   component: FeedbackPage,
+    // });
+    // return await this.feedbackModal.present();
+    this.intercom.boot({ app_id: 'lp9l5d9l' });
+    this.intercom.showNewMessage();
+    this.intercom.onHide(() => {
+      console.log('hide!');
+      this.intercom.shutdown();
     });
-    return await this.feedbackModal.present();
   }
 
   createNewReservation() {

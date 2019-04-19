@@ -5,6 +5,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { IntercomModule } from 'ng-intercom';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,14 +19,20 @@ import * as fromUser from './state/user/user.actions';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-function initApplication(): Function {
-  return () => new Promise(resolve => setTimeout(resolve, 1000));
-}
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, StateModule.forRoot(), CoreModule.forRoot()],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    StateModule.forRoot(),
+    CoreModule.forRoot(),
+    IntercomModule.forRoot({
+      appId: 'lp9l5d9l', // from your Intercom config
+      updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
+    }),
+  ],
   providers: [
     {
       // load user on startup

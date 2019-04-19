@@ -7,13 +7,15 @@
 
 <ion-content margin-top>
   <ion-grid padding-horizontal padding-top size="12">
+    <ion-row margin-bottom>
+      <ion-button size="small" color="primary" (click)="createNewReservation()">New Reservation</ion-button>
+      <ion-button size="small" color="success" (click)="openWallet()">Add Money</ion-button>
+      <ion-button size="small" color="light" (click)="openFeedback()">Give Feedback</ion-button>
+    </ion-row>
     <ion-row margin-bottom> <b>Phone:&nbsp;</b><span>513-843-3209</span> </ion-row>
     <ion-row margin-bottom align-items-center>
-      <b>Wallet:</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" /> <span>&nbsp;</span>
-      <span>{{ (user$ | async)?.tokens }}</span> <a (click)="openWallet()" padding-start>Get more</a> <br />
-    </ion-row>
-    <ion-row margin-bottom align-items-center>
-      <b>Feedback:</b><a (click)="openFeedback()" padding-start>Provide Feedback</a> <br />
+      <b>Wallet:&nbsp;</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
+      <span>&nbsp;{{ (user$ | async)?.tokens }}</span>
     </ion-row>
     <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
 
@@ -27,9 +29,11 @@
         </div>
       </div>
       <ng-template #empty>
-        <div padding-horizontal><span>No active reservations</span></div>
+        <div padding-horizontal class="ion-text-center">
+          <p>No active reservations.</p>
+          <p><a (click)="createNewReservation()">Change the channel now.</a></p>
+        </div>
       </ng-template>
     </ng-template>
-    <ion-row margin-top> <a (click)="createNewReservation()" class="center">New Reservation</a> </ion-row>
   </ion-grid>
 </ion-content>

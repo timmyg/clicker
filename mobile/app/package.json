@@ -5,7 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4100",
+    "start": "ng serve --port 4100 --host local.tryclicker.com",
     "build": "ng build --configuration=$ENV",
     "test": "ng test",
     "lint": "ng lint",
@@ -36,6 +36,7 @@
     "angular-in-memory-web-api": "^0.8.0",
     "core-js": "^2.6.5",
     "moment": "^2.24.0",
+    "ng-intercom": "^7.0.1-beta.3",
     "ngx-moment": "^3.3.0",
     "rxjs": "~6.3.3",
     "uuid": "^3.3.2",
