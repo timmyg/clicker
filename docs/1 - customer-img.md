@@ -2,6 +2,7 @@
 
 ##### on raspberry pi (w/ sd card)
 
+0. use etcher to write image
 1. configure wifi
 
    - `wpa_passphrase` to generate encrypted psk password (need ssid and password)

@@ -24,7 +24,7 @@ class Api {
 
   async setBoxes(boxes) {
     try {
-      logger.info('update device boxes', { data });
+      logger.info('update device boxes', { boxes });
       return await this.axios.put(`/locations/${this.locationId}/boxes`, boxes);
     } catch (error) {
       return console.error(error);
