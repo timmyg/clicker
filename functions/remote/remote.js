@@ -25,6 +25,12 @@ class Api {
         deviceId: losantId,
         deviceCommand: { name, payload },
       };
+      console.log("send command -------->");
+      console.log({
+        applicationId: process.env.losantAppId,
+        deviceId: losantId,
+        deviceCommand: { name, payload },
+      };);
       return await this.client.device
         .sendCommand(params)
         .then(console.info)

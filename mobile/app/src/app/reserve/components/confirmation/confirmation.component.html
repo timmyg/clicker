@@ -80,5 +80,8 @@
         <ion-spinner name="crescent" margin-start></ion-spinner>
       </ng-template>
     </ion-button>
+    <ion-row class="ion-text-center" *ngIf="reservation.location && reservation.location.name">
+      <p class="center">{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</p></ion-row
+    >
   </ion-card-content>
 </ion-card>
