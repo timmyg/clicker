@@ -87,13 +87,6 @@ functions:
           path: '{id}'
           method: put
           cors: true
-  getBoxes:
-    handler: location.getBoxes
-    events:
-      - http:
-          path: '{id}/boxes'
-          method: get
-          cors: true
   addBoxes:
     handler: location.addBoxes
     events:

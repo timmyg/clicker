@@ -53,6 +53,7 @@ module.exports.get = async event => {
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();
+  location.boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
 
   return respond(200, location);
 };
@@ -80,17 +81,6 @@ module.exports.update = async event => {
     console.error(e);
     return respond(400, e);
   }
-};
-
-module.exports.getBoxes = async event => {
-  // TODO need to get availability from reservations
-  const params = getPathParameters(event);
-  const { id: locationId } = params;
-  const location = await Location.queryOne('id')
-    .eq(locationId)
-    .exec();
-  const sorted = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
-  return respond(200, sorted);
 };
 
 module.exports.addBoxes = async event => {

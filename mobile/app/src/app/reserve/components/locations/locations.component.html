@@ -6,7 +6,11 @@
     <ion-card *ngFor="let location of (locations$ | async)" (click)="onLocationClick(location)">
       <ion-card-header>
         <ion-card-subtitle>
-          <span>{{ location.neighborhood }}</span> <span float-right>{{ location.distance }} miles</span>
+          <span>{{ location.neighborhood }}</span>
+          <span float-right>
+            <span *ngIf="location.distance > 0.1; else near"> {{ location.distance }} miles </span>
+            <ng-template #near> Near </ng-template>
+          </span>
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content no-padding-top>
