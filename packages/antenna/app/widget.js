@@ -24,7 +24,6 @@ class Widget {
       if (device) {
         logger.info({ device });
         let { ip } = device;
-        ip = '192s.168.0.0';
         if (
           !/^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/.test(
             ip,
@@ -49,11 +48,12 @@ class Widget {
   }
 
   async saveBoxes(ip) {
+    logger.info(`*#$&%~%*$& save boxes: ${ip}`);
     const remote = new DirecTV.Remote(ip);
-    const boxes = remote.getLocations((err, response) => {
+    const boxes = remote.getLocations(undefined, (err, response) => {
       if (err) return logger.error(err);
       logger.info({ boxes: response });
-      return this.api.setBoxes(boxes);
+      return this.api.setBoxes(response.locations);
     });
   }
 

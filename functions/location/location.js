@@ -20,6 +20,7 @@ const Location = dynamoose.model(
         clientAddress: String, // dtv calls this clientAddr
         locationName: String, // dtv name
         label: String, // physical label id on tv
+        tunerBond: Boolean, // not sure what this is
         setupChannel: Number,
       },
     ],
@@ -87,6 +88,9 @@ module.exports.addBoxes = async event => {
   const boxes = getBody(event);
   const params = getPathParameters(event);
   const { id } = params;
+  boxes.forEach(b => {
+    b.clientAddress = b.clientAddr;
+  });
 
   // TODO do we need to add main receiver as a box?
   const updatedBoxes = await Location.update({ id }, { boxes }, { returnValues: 'ALL_NEW' });
