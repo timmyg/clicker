@@ -61,12 +61,13 @@ module.exports.command = async event => {
 module.exports.tune = async event => {
   try {
     const body = getBody(event);
-    console.log(body);
-    const { losantId, payload } = body;
-    console.log(losantId);
-    console.log(payload);
+    // console.log(body);
+    // TODO why body.body
+    const { losantId, payload } = body.body;
+    // console.log(losantId);
+    // console.log(payload);
     const { client, channel } = payload;
-    console.log(client, channel);
+    // console.log(client, channel);
     const api = new Api(losantId);
 
     await api.sendCommand('tune', losantId, { client, channel });
