@@ -22,6 +22,7 @@ export class FeedbackPage {
     const toast = await this.toastController.create({
       message: 'Thanks for your feedback!',
       duration: 2000,
+      cssClass: 'ion-text-center',
     });
     toast.present();
   }

@@ -89,7 +89,7 @@ module.exports.getBoxes = async event => {
   const location = await Location.queryOne('id')
     .eq(locationId)
     .exec();
-  const sorted = location.boxes.sort((a, b) => (a.label < b.label ? -1 : 1));
+  const sorted = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
   return respond(200, sorted);
 };
 

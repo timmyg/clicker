@@ -122,6 +122,7 @@ export class ConfirmationComponent implements OnInit {
     const toast = await this.toastController.create({
       message: `TV ${label} successfully changed to ${channelName}`,
       duration: 2000,
+      cssClass: 'ion-text-center',
     });
     toast.present();
   }
