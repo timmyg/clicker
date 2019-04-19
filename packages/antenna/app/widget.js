@@ -23,7 +23,15 @@ class Widget {
     browser.browser({}, (error, device) => {
       if (device) {
         logger.info({ device });
-        const { ip } = device;
+        let { ip } = device;
+        ip = '192s.168.0.0';
+        if (
+          !/^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/.test(
+            ip,
+          )
+        ) {
+          return logger.info(`.......... invalid ip: ${ip}`);
+        }
         DirecTV.validateIP(ip, error => {
           if (error) {
             return logger.info(`.......... not valid directv ip: ${ip}`);
