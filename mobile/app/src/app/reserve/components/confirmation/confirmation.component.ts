@@ -116,7 +116,7 @@ export class ConfirmationComponent implements OnInit {
     setTimeout(() => {
       this.store.dispatch(new fromReservation.Start());
       this.router.navigate(['/tabs/profile']);
-      this.showTunedToast(reservation.box.label, reservation.program.channelTitle);
+      this.showTunedToast(reservation.box.label || reservation.box.locationName, reservation.program.channelTitle);
     }, 3000);
   }
 

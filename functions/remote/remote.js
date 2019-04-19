@@ -61,6 +61,8 @@ module.exports.command = async event => {
 module.exports.tune = async event => {
   try {
     const body = getBody(event);
+    console.log(body);
+    console.log(payload);
     const { losantId, payload } = body;
     const { client, channel } = payload;
     const api = new Api(losantId);
