@@ -69,7 +69,8 @@ module.exports.create = async event => {
 
 module.exports.update = async event => {
   let reservation = getBody(event);
-  reservation.userId = getAuthBearerToken(event);
+  const userId = getAuthBearerToken(event);
+  reservation.userId = userId;
   const { id } = getPathParameters(event);
 
   // "errorMessage": "Invalid UpdateExpression: Two document paths overlap with each other; must remove or rewrite one
