@@ -47,7 +47,6 @@ module.exports.health = async => {
 
 module.exports.command = async event => {
   try {
-    const { command } = getPathParameters(event);
     const body = getBody(event);
     // TODO why body.body?
     console.log(body);
