@@ -55,10 +55,10 @@ module.exports.create = async event => {
   await Reservation.create(reservation);
 
   // TODO - this should change channel - need to test
-  const { losantId } = reservation.location;
+  const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
   const { channel } = reservation.program;
-  const payload = { client, channel };
+  const payload = { client, channel, ip };
   console.log('new reservation, change channel');
   console.log(`remote-${process.env.stage}-tune`, { losantId, payload });
   await invokeFunction(`remote-${process.env.stage}-tune`, { losantId, payload });

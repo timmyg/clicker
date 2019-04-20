@@ -48,9 +48,12 @@ module.exports.health = async => {
 module.exports.command = async event => {
   try {
     const body = getBody(event);
-    const { losantId, name, payload } = body;
-    const api = new Api(losantId);
-    await api.sendCommand(name, losantId, payload);
+    // TODO why body.body?
+    const { losantId, name, payload } = body.body;
+    const { client, channel, ip } = payload;
+    const api = new Api(losantId, ip);
+
+    await api.sendCommand(name, losantId, { client, channel });
     return respond();
   } catch (e) {
     console.error(e);
@@ -61,14 +64,10 @@ module.exports.command = async event => {
 module.exports.tune = async event => {
   try {
     const body = getBody(event);
-    // console.log(body);
-    // TODO why body.body
+    // TODO why body.body?
     const { losantId, payload } = body.body;
-    // console.log(losantId);
-    // console.log(payload);
-    const { client, channel } = payload;
-    // console.log(client, channel);
-    const api = new Api(losantId);
+    const { client, channel, ip } = payload;
+    const api = new Api(losantId, ip);
 
     await api.sendCommand('tune', losantId, { client, channel });
     return respond();
