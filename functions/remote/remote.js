@@ -70,7 +70,7 @@ module.exports.tune = async event => {
     const { losantId, client, channel, ip } = payload;
     const api = new Api(losantId, ip);
 
-    await api.sendCommand('tune', losantId, { client, channel });
+    await api.sendCommand('tune', losantId, { client, channel, ip });
     return respond();
   } catch (e) {
     console.error(e);
