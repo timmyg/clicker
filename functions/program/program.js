@@ -124,7 +124,7 @@ module.exports.getAll = async event => {
     { channel: 209, channelTitle: 'ESPN2' },
     { channel: 213, channelTitle: 'MLB' },
     { channel: 219, channelTitle: 'FS1' },
-    { channel: 660, channelTitle: 'FSOH' },
+    { channel: 661 - 1, channelTitle: 'FSOH' },
   ];
   return respond(200, programs);
 };

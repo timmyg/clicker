@@ -38,13 +38,6 @@ functions:
     handler: remote.command
     events:
       - http:
-          path: command
-          method: post
-          cors: true
-  tune:
-    handler: remote.tune
-    events:
-      - http:
-          path: tune
+          path: '/command'
           method: post
           cors: true

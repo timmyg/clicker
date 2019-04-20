@@ -47,22 +47,7 @@ module.exports.health = async => {
 
 module.exports.command = async event => {
   try {
-    const body = getBody(event);
-    // TODO why body.body?
-    const { name, payload } = body.body;
-    const { losantId, client, channel, ip } = payload;
-    const api = new Api(losantId, ip);
-
-    await api.sendCommand(name, losantId, { client, channel });
-    return respond();
-  } catch (e) {
-    console.error(e);
-    return respond(400, `Could not send command: ${e.stack}`);
-  }
-};
-
-module.exports.tune = async event => {
-  try {
+    const { command } = getPathParameters(event);
     const body = getBody(event);
     // TODO why body.body?
     console.log(body);
@@ -70,7 +55,7 @@ module.exports.tune = async event => {
     const { losantId, client, channel, ip } = payload;
     const api = new Api(losantId, ip);
 
-    await api.sendCommand('tune', losantId, { client, channel, ip });
+    await api.sendCommand(command, losantId, { client, channel, ip });
     return respond();
   } catch (e) {
     console.error(e);
