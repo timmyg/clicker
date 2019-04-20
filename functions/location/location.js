@@ -96,7 +96,7 @@ module.exports.addBoxes = async event => {
   // if boxes already exist, don't overwrite
   // TODO but maybe we should update if different (without overwriting labels)?
   if (location.boxes && location.boxes.length) {
-    return respond(204, updatedBoxes);
+    return respond(204);
   }
 
   boxes.forEach(b => {

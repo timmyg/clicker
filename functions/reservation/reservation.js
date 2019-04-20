@@ -58,10 +58,12 @@ module.exports.create = async event => {
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
   const { channel } = reservation.program;
-  const payload = { client, channel, ip };
+  const payload = { client, channel, losantId, ip };
   console.log('new reservation, change channel');
-  console.log(`remote-${process.env.stage}-tune`, { losantId, payload });
-  await invokeFunction(`remote-${process.env.stage}-tune`, { losantId, payload });
+  console.log(reservation);
+  // console.log(payload);
+  console.log(`remote-${process.env.stage}-tune`, { payload });
+  await invokeFunction(`remote-${process.env.stage}-tune`, { payload });
 
   return respond(201, reservation);
 };
@@ -120,13 +122,13 @@ module.exports.update = async event => {
   await Reservation.update({ id, userId }, reservation);
 
   // TODO - this should change channel - need to test
-  const { losantId } = reservation.location;
+  const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
   const { channel } = reservation.program;
-  const payload = { client, channel };
+  const payload = { client, channel, losantId, ip };
   console.log('update reservation, change channel');
-  console.log(`remote-${process.env.stage}-tune`, { losantId, payload });
-  invokeFunction(`remote-${process.env.stage}-tune`, { losantId, payload });
+  console.log(`remote-${process.env.stage}-tune`, { payload });
+  invokeFunction(`remote-${process.env.stage}-tune`, { payload });
 
   return respond(200, `hello`);
 };
