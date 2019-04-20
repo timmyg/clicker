@@ -60,8 +60,8 @@ export class ConfirmationComponent implements OnInit {
       if (reservation.id) {
         this.isEditMode = true;
       }
-      reservation.location.name;
-      reservation.location.neighborhood;
+      // reservation.location.name;
+      // reservation.location.neighborhood;
     });
   }
 

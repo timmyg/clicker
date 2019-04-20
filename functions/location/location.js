@@ -88,6 +88,15 @@ module.exports.addBoxes = async event => {
   const boxes = getBody(event);
   const params = getPathParameters(event);
   const { id } = params;
+
+  const location = await Location.queryOne('id')
+    .eq(id)
+    .exec();
+
+  if (location.boxes && location.boxes.length) {
+    return respond(204, updatedBoxes);
+  }
+
   boxes.forEach(b => {
     b.clientAddress = b.clientAddr;
   });

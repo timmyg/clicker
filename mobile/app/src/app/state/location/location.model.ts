@@ -7,5 +7,7 @@ export interface Location {
   neighborhood: string;
   boxes: TV[];
   distance?: number;
-  img?: string;
+  img: string;
+  ip: string;
+  zip: number;
 }

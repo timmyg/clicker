@@ -15,6 +15,11 @@ const Reservation = dynamoose.model(
     location: {
       id: { type: String, required: true },
       losantId: { type: String, required: true },
+      name: { type: String, required: true },
+      neighborhood: { type: String, required: true },
+      zip: { type: Number, required: true },
+      ip: { type: String, required: true },
+      img: { type: String, required: true },
     },
     box: {
       clientAddress: { type: String, required: true },
