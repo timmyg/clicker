@@ -3,7 +3,11 @@
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
   <ng-template #ready>
-    <ion-card *ngFor="let location of (locations$ | async)" (click)="onLocationClick(location)">
+    <ion-card
+      *ngFor="let location of (locations$ | async)"
+      [ngClass]="{ inactive: !location.active }"
+      (click)="location.active && onLocationClick(location)"
+    >
       <ion-card-header>
         <ion-card-subtitle>
           <span>{{ location.neighborhood }}</span>

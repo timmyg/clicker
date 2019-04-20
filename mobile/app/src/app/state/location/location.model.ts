@@ -10,4 +10,5 @@ export interface Location {
   img: string;
   ip: string;
   zip: number;
+  active?: boolean;
 }
