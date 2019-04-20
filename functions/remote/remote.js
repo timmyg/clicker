@@ -49,8 +49,8 @@ module.exports.command = async event => {
   try {
     const body = getBody(event);
     // TODO why body.body?
-    const { losantId, name, payload } = body.body;
-    const { client, channel, ip } = payload;
+    const { name, payload } = body.body;
+    const { losantId, client, channel, ip } = payload;
     const api = new Api(losantId, ip);
 
     await api.sendCommand(name, losantId, { client, channel });
@@ -66,8 +66,8 @@ module.exports.tune = async event => {
     const body = getBody(event);
     // TODO why body.body?
     console.log(body);
-    const { losantId, payload } = body.body;
-    const { client, channel, ip } = payload;
+    const { payload } = body.body;
+    const { losantId, client, channel, ip } = payload;
     const api = new Api(losantId, ip);
 
     await api.sendCommand('tune', losantId, { client, channel });
