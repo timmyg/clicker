@@ -54,7 +54,11 @@ module.exports.get = async event => {
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();
-  location.boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
+  location.boxes = location.boxes.sort((a, b) => {
+    const labelA = a.label || a.locationName;
+    const labelB = b.label || b.locationName;
+    return labelA.localeCompare(labelB);
+  });
 
   return respond(200, location);
 };
