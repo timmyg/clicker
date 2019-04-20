@@ -54,7 +54,6 @@ module.exports.create = async event => {
   reservation = calculateReservationTimes(reservation);
   await Reservation.create(reservation);
 
-  // TODO - this should change channel - need to test
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
   const { channel } = reservation.program;
@@ -66,6 +65,30 @@ module.exports.create = async event => {
   await invokeFunction(`remote-${process.env.stage}-tune`, { payload });
 
   return respond(201, reservation);
+};
+
+module.exports.update = async event => {
+  let reservation = getBody(event);
+  reservation.userId = getAuthBearerToken(event);
+  const { id } = getPathParameters(event);
+
+  // "errorMessage": "Invalid UpdateExpression: Two document paths overlap with each other; must remove or rewrite one
+  // of these paths; path one: [createdAt], path two: [cost]"
+  delete reservation.cost;
+  delete reservation.createdAt;
+  reservation = calculateReservationTimes(reservation);
+  await Reservation.update({ id, userId }, reservation);
+
+  // TODO - this should change channel - need to test
+  const { losantId, ip } = reservation.location;
+  const { clientAddress: client } = reservation.box;
+  const { channel } = reservation.program;
+  const payload = { client, channel, losantId, ip };
+  console.log('update reservation, change channel');
+  console.log(`remote-${process.env.stage}-tune`, { payload });
+  await invokeFunction(`remote-${process.env.stage}-tune`, { payload });
+
+  return respond(200, `hello`);
 };
 
 module.exports.all = async event => {
@@ -103,33 +126,6 @@ module.exports.cancel = async event => {
   const { id } = params;
 
   await Reservation.update({ id, userId }, { cancelled: true });
-  return respond(200, `hello`);
-};
-
-module.exports.update = async event => {
-  console.log('resrvation update', event);
-  // TODO ensure user owns tv
-  const userId = getAuthBearerToken(event);
-  let reservation = getBody(event);
-  const params = getPathParameters(event);
-  const { id } = params;
-
-  // "errorMessage": "Invalid UpdateExpression: Two document paths overlap with each other; must remove or rewrite one
-  // of these paths; path one: [createdAt], path two: [cost]"
-  delete reservation.cost;
-  delete reservation.createdAt;
-  reservation = calculateReservationTimes(reservation);
-  await Reservation.update({ id, userId }, reservation);
-
-  // TODO - this should change channel - need to test
-  const { losantId, ip } = reservation.location;
-  const { clientAddress: client } = reservation.box;
-  const { channel } = reservation.program;
-  const payload = { client, channel, losantId, ip };
-  console.log('update reservation, change channel');
-  console.log(`remote-${process.env.stage}-tune`, { payload });
-  invokeFunction(`remote-${process.env.stage}-tune`, { payload });
-
   return respond(200, `hello`);
 };
 
