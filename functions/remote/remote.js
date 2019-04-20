@@ -51,7 +51,7 @@ module.exports.command = async event => {
     // TODO why body.body?
     console.log(body);
     const { payload } = body.body;
-    const { losantId, client, channel, ip } = payload;
+    const { losantId, client, channel, ip, command } = payload;
     const api = new Api(losantId, ip);
 
     await api.sendCommand(command, losantId, { client, channel, ip });
