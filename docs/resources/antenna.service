@@ -1,6 +1,6 @@
-# https://www.freedesktop.org/software/systemd/man/systemd.service.html
 [Unit]
 Description=antenna service
+Before=copy-env-vars.service
 After=network.target
 
 [Service]
