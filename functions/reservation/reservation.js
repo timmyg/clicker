@@ -1,7 +1,8 @@
+const analytics = new (require('analytics-node'))(process.env.segmentWriteKey);
 const dynamoose = require('dynamoose');
+const moment = require('moment');
 const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
 const uuid = require('uuid/v1');
-const moment = require('moment');
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
@@ -64,6 +65,18 @@ module.exports.create = async event => {
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
+  analytics.track({
+    userId: reservation.userId,
+    event: 'Reservation Created',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
+
   return respond(201, reservation);
 };
 
@@ -88,6 +101,18 @@ module.exports.update = async event => {
   console.log('update reservation, change channel');
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
+
+  analytics.track({
+    userId: reservation.userId,
+    event: 'Reservation Updated',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
 
   return respond(200, `hello`);
 };
@@ -127,6 +152,12 @@ module.exports.cancel = async event => {
   const { id } = params;
 
   await Reservation.update({ id, userId }, { cancelled: true });
+
+  analytics.track({
+    userId: userId,
+    event: 'Reservation Cancelled',
+  });
+
   return respond(200, `hello`);
 };
 
