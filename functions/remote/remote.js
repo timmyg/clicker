@@ -25,12 +25,6 @@ class Api {
         deviceId: losantId,
         deviceCommand: { name, payload },
       };
-      console.log('send command -------->');
-      console.log({
-        applicationId: process.env.losantAppId,
-        deviceId: losantId,
-        deviceCommand: { name, payload },
-      });
       return await this.client.device
         .sendCommand(params)
         .then(console.info)
@@ -51,10 +45,10 @@ module.exports.command = async event => {
     // TODO why body.body?
     console.log(body);
     const { payload } = body.body;
-    const { losantId, client, channel, key, ip, command } = payload;
+    const { losantId, client, channel, channelMinor, key, ip, command } = payload;
     const api = new Api(losantId, ip);
 
-    await api.sendCommand(command, losantId, { client, channel, key, ip });
+    await api.sendCommand(command, losantId, { client, channel, channelMinor, key, ip });
     return respond();
   } catch (e) {
     console.error(e);

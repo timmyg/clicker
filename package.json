@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "directv-remote": "git+https://github.com/timmyg/directv-remote.git",
     "http-server": "^0.11.1"
   },
   "devDependencies": {

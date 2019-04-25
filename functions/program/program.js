@@ -18,6 +18,7 @@ function init() {
       },
       expires: Number,
       channel: Number,
+      channelMinor: Number,
       channelTitle: String,
       title: String, // "Oklahoma State @ Kansas"
       episodeTitle: String, // "Oklahoma State at Kansas"
@@ -124,7 +125,7 @@ module.exports.getAll = async event => {
     { channel: 209, channelTitle: 'ESPN2' },
     { channel: 213, channelTitle: 'MLB' },
     { channel: 219, channelTitle: 'FS1' },
-    { channel: 661 - 1, channelTitle: 'FSOH' },
+    { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
   ];
   return respond(200, programs);
 };
