@@ -37,9 +37,9 @@ custom:
     endpointType: 'edge'
   tableReservation: reservations-${self:custom.stage}
   segmentKey:
-    prod: ${self:custom.SEGMENT_WRITE_KEY}
-    release: ${self:custom.SEGMENT_WRITE_KEY_DEV}
-    dev: ${self:custom.SEGMENT_WRITE_KEY_DEV}
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    dev: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     ReservationTable:
