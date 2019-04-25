@@ -1,6 +1,6 @@
 [Unit]
 Description=antenna service
-Before=copy-env-vars.service
+Requires=copy-env-vars.service
 After=network.target
 
 [Service]
