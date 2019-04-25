@@ -69,7 +69,7 @@ class Widget {
         this.remote = new DirecTV.Remote(ip);
         switch (name) {
           case 'tune':
-            this.remote.tune(payload.channel, payload.client, err => {
+            this.remote.tune(payload.channel, payload.channelMinor, payload.client, err => {
               if (err) return logger.error(err);
               return logger.info('tuned');
             });
@@ -87,10 +87,16 @@ class Widget {
             });
             break;
           case 'channel.info':
-            this.remote.getProgInfo(payload.channel, payload.start, payload.client, (err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('channel.info', response);
-            });
+            this.remote.getProgInfo(
+              payload.channel,
+              payload.channelMinor,
+              payload.start,
+              payload.client,
+              (err, response) => {
+                if (err) return logger.error(err);
+                return logger.info('channel.info', response);
+              },
+            );
             break;
           case 'info.current':
             this.remote.getTuned(payload.client, (err, response) => {

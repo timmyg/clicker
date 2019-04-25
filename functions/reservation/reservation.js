@@ -29,6 +29,7 @@ const Reservation = dynamoose.model(
     program: {
       id: { type: String, required: true },
       channel: { type: Number, required: true },
+      channelMinor: { type: Number },
       channelTitle: { type: String, required: true },
       title: { type: String, required: true },
     },
@@ -56,8 +57,8 @@ module.exports.create = async event => {
 
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
-  const { channel } = reservation.program;
-  const payload = { client, channel, losantId, ip, command: 'tune' };
+  const { channel, channelMinor } = reservation.program;
+  const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
   console.log('new reservation, change channel');
   console.log(reservation);
   // console.log(payload);
@@ -83,8 +84,8 @@ module.exports.update = async event => {
   // TODO - this should change channel - need to test
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
-  const { channel } = reservation.program;
-  const payload = { client, channel, losantId, ip, command: 'tune' };
+  const { channel, channelMinor } = reservation.program;
+  const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
   console.log('update reservation, change channel');
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });

@@ -9,7 +9,7 @@ export class ProgramService {
   private prefix = `programs`;
   constructor(private httpClient: HttpClient) {}
 
-  getPrograms(): Observable<Array<Program>> {
+  getPrograms(): Observable<Program[]> {
     return this.httpClient.get<Program[]>(this.prefix);
   }
 }

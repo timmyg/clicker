@@ -5,4 +5,5 @@ export interface Program {
   type: string;
   channelTitle: string;
   channel: number;
+  channelMinor: number;
 }
