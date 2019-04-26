@@ -50,6 +50,7 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
+  console.log('segmentWriteKey', process.env.segmentWriteKey);
   let reservation = getBody(event);
   reservation.userId = getAuthBearerToken(event);
 
