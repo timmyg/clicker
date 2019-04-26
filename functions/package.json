@@ -9,6 +9,6 @@
     "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
   },
   "dependencies": {
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.4"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.7"
   }
 }

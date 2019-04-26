@@ -1,7 +1,13 @@
-const analytics = new (require('analytics-node'))(process.env.segmentWriteKey);
 const dynamoose = require('dynamoose');
 const moment = require('moment');
-const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
+const {
+  getAuthBearerToken,
+  getBody,
+  getPathParameters,
+  invokeFunction,
+  respond,
+  track,
+} = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
@@ -46,10 +52,24 @@ const Reservation = dynamoose.model(
 );
 
 module.exports.health = async event => {
+  const reservation = {};
+  console.log(track);
+  await track({
+    userId: 'reservation.userId',
+    event: 'Reservation Created',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
   return respond(200, `hello`);
 };
 
 module.exports.create = async event => {
+  console.log('segmentWriteKey', process.env.segmentWriteKey);
   let reservation = getBody(event);
   reservation.userId = getAuthBearerToken(event);
 
@@ -66,7 +86,7 @@ module.exports.create = async event => {
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
-  analytics.track({
+  await track({
     userId: reservation.userId,
     event: 'Reservation Created',
     properties: {
@@ -77,7 +97,6 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
-
   return respond(201, reservation);
 };
 
@@ -103,7 +122,7 @@ module.exports.update = async event => {
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
-  analytics.track({
+  await track({
     userId: reservation.userId,
     event: 'Reservation Updated',
     properties: {
@@ -154,7 +173,7 @@ module.exports.cancel = async event => {
 
   await Reservation.update({ id, userId }, { cancelled: true });
 
-  analytics.track({
+  track({
     userId: userId,
     event: 'Reservation Cancelled',
   });

@@ -9,6 +9,6 @@
   </ion-card-header>
   <ion-card-content class="ion-text-right">
     <div>{{ reservation.programTitle }}</div>
-    <div><a (click)="modify()">Modify</a></div>
+    <div><a (click)="!disableModify && modify()">Modify</a></div>
   </ion-card-content>
 </ion-card>
