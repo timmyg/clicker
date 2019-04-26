@@ -1,4 +1,4 @@
-const analytics = new (require('analytics-node'))('VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ');
+const analytics = new (require('analytics-node'))(process.env.segmentWriteKey);
 const { promisify } = require('util');
 const [identify, track] = [analytics.identify.bind(analytics), analytics.track.bind(analytics)].map(promisify);
 const dynamoose = require('dynamoose');
@@ -48,6 +48,18 @@ const Reservation = dynamoose.model(
 );
 
 module.exports.health = async event => {
+  const reservation = {};
+  await track({
+    userId: 'reservation.userId',
+    event: 'Reservation Created',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
   return respond(200, `hello`);
 };
 
@@ -69,7 +81,7 @@ module.exports.create = async event => {
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
-  const x = await track({
+  await track({
     userId: reservation.userId,
     event: 'Reservation Created',
     properties: {
@@ -80,7 +92,6 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
-  console.log({ x });
   return respond(201, reservation);
 };
 
