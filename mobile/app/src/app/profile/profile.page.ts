@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading } from '../state/reservation';
 import { getUser } from '../state/user';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
@@ -46,6 +46,7 @@ export class ProfilePage {
     private router: Router,
     private route: ActivatedRoute,
     public intercom: Intercom,
+    public toastController: ToastController,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
@@ -92,15 +93,16 @@ export class ProfilePage {
   }
 
   processLogin(fragment: string) {
-    auth.parseHash({ hash: window.location.hash }, function(err, authResult) {
+    const context = this;
+    auth.parseHash({ hash: window.location.hash }, async (err, authResult) => {
       console.log(authResult);
-      const jwt = authResult.idToken;
-      const jwtPayload = authResult.idTokenPayload;
       if (err) {
         return console.log(err);
       } else if (authResult) {
+        const jwt = authResult.idToken;
+        const jwtPayload = authResult.idTokenPayload;
         // localStorage.setItem('accessToken', authResult.accessToken);
-        auth.client.userInfo(authResult.accessToken, function(err, user) {
+        auth.client.userInfo(authResult.accessToken, async (err, user) => {
           if (err) {
             console.log('err', err);
             alert('There was an error retrieving your profile: ' + err.message);
@@ -109,6 +111,12 @@ export class ProfilePage {
             console.log(user);
           }
         });
+        const toast = await context.toastController.create({
+          message: `Successfully logged in.`,
+          duration: 2000,
+          cssClass: 'ion-text-center',
+        });
+        toast.present();
       }
     });
   }

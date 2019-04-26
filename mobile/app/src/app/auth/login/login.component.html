@@ -8,13 +8,15 @@
 </ion-header>
 <ion-content padding>
   <section *ngIf="!codeSent">
-    <ion-input placeholder="Phone Number" type="tel" maxlength="10" [(ngModel)]="phone" autofocus></ion-input>
-    <ion-button expand="block" (click)="onNext()" margin-top [disabled]="!phone || phone.length !== 10"
+    <ion-input placeholder="Phone Number" type="tel" maxlength="10" [(ngModel)]="phone"></ion-input>
+    <ion-button expand="block" (click)="onNext()" margin-top [disabled]="!phone || phone.length !== 10 || waiting"
       >Next</ion-button
     >
   </section>
   <section *ngIf="codeSent">
-    <ion-input placeholder="Code" type="number" maxlength="8" [(ngModel)]="code" autofocus></ion-input>
-    <ion-button expand="block" (click)="onLogin()" margin-top [disabled]="!code || code.length >= 3">Login</ion-button>
+    <ion-input placeholder="Code" type="tel" maxlength="8" [(ngModel)]="code"></ion-input>
+    <ion-button expand="block" (click)="onLogin()" margin-top [disabled]="!isEligibleCode() || waiting"
+      >Login</ion-button
+    >
   </section>
 </ion-content>
