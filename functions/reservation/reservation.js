@@ -1,7 +1,6 @@
-const analytics = new (require('analytics-node'))(process.env.segmentWriteKey, {
-  flushAfter: 1,
-  flushInterval: 0.000000000001,
-});
+const analytics = new (require('analytics-node'))('VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ');
+const { promisify } = require('util');
+const [identify, track] = [analytics.identify.bind(analytics), analytics.track.bind(analytics)].map(promisify);
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
@@ -70,7 +69,7 @@ module.exports.create = async event => {
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
-  analytics.track({
+  await track({
     userId: reservation.userId,
     event: 'Reservation Created',
     properties: {
@@ -81,9 +80,7 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
-  analytics.flush((err, result) => {
-    return respond(201, reservation);
-  });
+  return respond(201, reservation);
 };
 
 module.exports.update = async event => {
@@ -108,7 +105,7 @@ module.exports.update = async event => {
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
-  analytics.track({
+  await track({
     userId: reservation.userId,
     event: 'Reservation Updated',
     properties: {
