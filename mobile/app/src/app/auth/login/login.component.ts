@@ -4,7 +4,7 @@ import auth0 from 'auth0-js';
 const auth = new auth0.WebAuth({
   domain: 'clikr.auth0.com',
   clientID: 'w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc',
-  redirectUri: 'http://local.tryclicker.com:4100/tabs/profile',
+  redirectUri: `${window.location.origin}/tabs/profile`,
   responseType: 'token id_token',
 });
 
