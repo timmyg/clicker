@@ -1,4 +1,4 @@
-const analytics = new (require('analytics-node'))(process.env.segmentWriteKey);
+const analytics = new (require('analytics-node'))(process.env.segmentWriteKey. { flushAfter: 1 });
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
