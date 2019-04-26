@@ -13,6 +13,7 @@
       <ion-button size="small" color="light" (click)="openFeedback()">Give Feedback</ion-button>
     </ion-row>
     <ion-row margin-bottom> <b>Phone:&nbsp;</b><span>513-843-3209</span> </ion-row>
+    <ion-row margin-bottom> <a (click)="login()">Login</a> </ion-row>
     <ion-row margin-bottom align-items-center>
       <b>Wallet:&nbsp;</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
       <span>&nbsp;{{ (user$ | async)?.tokens }}</span>
