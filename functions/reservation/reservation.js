@@ -69,7 +69,7 @@ module.exports.create = async event => {
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
-  await track({
+  const x = await track({
     userId: reservation.userId,
     event: 'Reservation Created',
     properties: {
@@ -80,6 +80,7 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
+  console.log({ x });
   return respond(201, reservation);
 };
 
