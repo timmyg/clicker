@@ -1,4 +1,7 @@
-const analytics = new (require('analytics-node'))(process.env.segmentWriteKey. { flushAfter: 1 });
+const analytics = new (require('analytics-node'))(process.env.segmentWriteKey, {
+  flushAfter: 1,
+  flushInterval: 0.000000000001,
+});
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
@@ -6,7 +9,7 @@ const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
-  { 
+  {
     userId: { type: String, hashKey: true, required: true },
     id: {
       type: String,
