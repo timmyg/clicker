@@ -1,9 +1,13 @@
-const analytics = new (require('analytics-node'))(process.env.segmentWriteKey);
-const { promisify } = require('util');
-const [identify, track] = [analytics.identify.bind(analytics), analytics.track.bind(analytics)].map(promisify);
 const dynamoose = require('dynamoose');
 const moment = require('moment');
-const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
+const {
+  getAuthBearerToken,
+  getBody,
+  getPathParameters,
+  invokeFunction,
+  respond,
+  track,
+} = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
@@ -49,6 +53,7 @@ const Reservation = dynamoose.model(
 
 module.exports.health = async event => {
   const reservation = {};
+  console.log(track);
   await track({
     userId: 'reservation.userId',
     event: 'Reservation Created',
@@ -168,7 +173,7 @@ module.exports.cancel = async event => {
 
   await Reservation.update({ id, userId }, { cancelled: true });
 
-  analytics.track({
+  track({
     userId: userId,
     event: 'Reservation Cancelled',
   });

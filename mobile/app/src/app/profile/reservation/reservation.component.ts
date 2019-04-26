@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
   minutesFromNow$: Observable<string>;
+  disableModify: boolean;
   editChannelModal;
   editTimeModal;
 
@@ -44,6 +45,7 @@ export class ReservationComponent implements OnInit {
   }
 
   async showModify() {
+    this.disableModify = true;
     const actionSheet = await this.actionSheetController.create({
       header: 'Modify Reservation',
       buttons: [
@@ -73,6 +75,7 @@ export class ReservationComponent implements OnInit {
         },
       ],
     });
+    actionSheet.onDidDismiss().then(() => (this.disableModify = false));
     await actionSheet.present();
   }
 
