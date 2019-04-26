@@ -81,6 +81,7 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
+  analytics.flush();
 
   return respond(201, reservation);
 };
