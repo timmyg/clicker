@@ -1,7 +1,8 @@
+const analytics = new (require('analytics-node'))(process.env.segmentWriteKey);
 const dynamoose = require('dynamoose');
+const moment = require('moment');
 const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
 const uuid = require('uuid/v1');
-const moment = require('moment');
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
@@ -29,6 +30,7 @@ const Reservation = dynamoose.model(
     program: {
       id: { type: String, required: true },
       channel: { type: Number, required: true },
+      channelMinor: { type: Number },
       channelTitle: { type: String, required: true },
       title: { type: String, required: true },
     },
@@ -56,13 +58,25 @@ module.exports.create = async event => {
 
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
-  const { channel } = reservation.program;
-  const payload = { client, channel, losantId, ip, command: 'tune' };
+  const { channel, channelMinor } = reservation.program;
+  const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
   console.log('new reservation, change channel');
   console.log(reservation);
   // console.log(payload);
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
+
+  analytics.track({
+    userId: reservation.userId,
+    event: 'Reservation Created',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
 
   return respond(201, reservation);
 };
@@ -83,11 +97,23 @@ module.exports.update = async event => {
   // TODO - this should change channel - need to test
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
-  const { channel } = reservation.program;
-  const payload = { client, channel, losantId, ip, command: 'tune' };
+  const { channel, channelMinor } = reservation.program;
+  const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
   console.log('update reservation, change channel');
   console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
+
+  analytics.track({
+    userId: reservation.userId,
+    event: 'Reservation Updated',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
 
   return respond(200, `hello`);
 };
@@ -127,6 +153,12 @@ module.exports.cancel = async event => {
   const { id } = params;
 
   await Reservation.update({ id, userId }, { cancelled: true });
+
+  analytics.track({
+    userId: userId,
+    event: 'Reservation Cancelled',
+  });
+
   return respond(200, `hello`);
 };
 
