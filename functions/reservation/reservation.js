@@ -6,7 +6,7 @@ const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
-  {
+  { 
     userId: { type: String, hashKey: true, required: true },
     id: {
       type: String,
