@@ -37,6 +37,9 @@ export default {
     onSubmit() {
       this.submitting = true;
       const { email } = this;
+      console.log("$analytics")
+      console.log(this.$analytics)
+      console.log(email)
       this.$analytics.alias(email);
       this.$http
         .post('/leads', { email })
