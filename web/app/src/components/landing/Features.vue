@@ -26,7 +26,7 @@
             <h3 class="feature-title">Increase Dwell Time</h3>
             <p
               class="text-sm"
-            >Improve ticket sizes while your patrons stick around and enjoy the game.</p>
+            >Improve ticket sizes while your guests stick around and enjoy the game.</p>
           </div>
         </div>
         <div class="feature">
