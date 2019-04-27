@@ -6,6 +6,7 @@ provider:
   environment:
     tableWallet: ${self:custom.tableWallet}
     stage: ${self:custom.stage}
+    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -35,6 +36,10 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
   tableWallet: wallets-${self:custom.stage}
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    dev: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     Walletable:

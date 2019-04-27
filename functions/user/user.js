@@ -27,7 +27,7 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  const body = getBody(event);
+  // const body = getBody(event);
   const initialTokens = 2;
   const userId = uuid();
   await Wallet.create({ userId, tokens: initialTokens });
