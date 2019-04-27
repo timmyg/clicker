@@ -29,10 +29,11 @@ module.exports.health = async event => {
 module.exports.create = async event => {
   const body = getBody(event);
   const initialTokens = 2;
-  const user = await User.create({ tokens: initialTokens });
-  const token = jwt.sign({ sub: user.id, guest: true }, 'clikr');
+  const userId = uuid();
+  await Wallet.create({ userId, tokens: initialTokens });
+  const token = jwt.sign({ sub: userId, guest: true }, 'clikr');
 
-  return respond(201, token);
+  return respond(201, { token });
 };
 
 module.exports.getWallet = async event => {

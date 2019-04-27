@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   environment:
-    tableUser: ${self:custom.tableUser}
+    tableWallet: ${self:custom.tableWallet}
     stage: ${self:custom.stage}
   iamRoleStatements:
     - Effect: 'Allow'
