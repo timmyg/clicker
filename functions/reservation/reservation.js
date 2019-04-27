@@ -187,3 +187,4 @@ function calculateReservationTimes(reservation) {
   reservation.end = initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
   return reservation;
 }
+
