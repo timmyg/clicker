@@ -15,20 +15,20 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: fromUser.UserActions): State {
   switch (action.type) {
-    case fromUser.GET:
+    case fromUser.LOAD:
       return {
         ...state,
         loading: true,
       };
 
-    case fromUser.GET_SUCCESS:
+    case fromUser.LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
         me: action.payload,
       };
 
-    case fromUser.GET_FAIL:
+    case fromUser.LOAD_FAIL:
       return {
         ...state,
         loading: false,
@@ -42,5 +42,6 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
 }
 
 export const getUser = (state: State) => state.me;
+export const getUserTokens = (state: State) => state.me.tokens;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

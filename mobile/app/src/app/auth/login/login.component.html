@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Login </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <section *ngIf="!codeSent">
+    <ion-input placeholder="Phone Number" type="tel" maxlength="10" [(ngModel)]="phone"></ion-input>
+    <ion-button expand="block" (click)="onNext()" margin-top [disabled]="!phone || phone.length !== 10 || waiting"
+      >Next</ion-button
+    >
+  </section>
+  <section *ngIf="codeSent">
+    <ion-input placeholder="Code" type="tel" maxlength="8" [(ngModel)]="code"></ion-input>
+    <ion-button expand="block" (click)="onLogin()" margin-top [disabled]="!isEligibleCode() || waiting"
+      >Login</ion-button
+    >
+  </section>
+</ion-content>

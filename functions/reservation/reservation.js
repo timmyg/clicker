@@ -52,24 +52,10 @@ const Reservation = dynamoose.model(
 );
 
 module.exports.health = async event => {
-  const reservation = {};
-  console.log(track);
-  await track({
-    userId: 'reservation.userId',
-    event: 'Reservation Created',
-    properties: {
-      program: reservation.program,
-      box: reservation.box,
-      location: reservation.location,
-      cost: reservation.cost,
-      minutes: reservation.minutes,
-    },
-  });
   return respond(200, `hello`);
 };
 
 module.exports.create = async event => {
-  console.log('segmentWriteKey', process.env.segmentWriteKey);
   let reservation = getBody(event);
   reservation.userId = getAuthBearerToken(event);
 
@@ -80,10 +66,6 @@ module.exports.create = async event => {
   const { clientAddress: client } = reservation.box;
   const { channel, channelMinor } = reservation.program;
   const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
-  console.log('new reservation, change channel');
-  console.log(reservation);
-  // console.log(payload);
-  console.log(`remote-${process.env.stage}-command`, { payload });
   await invokeFunction(`remote-${process.env.stage}-command`, { payload });
 
   await track({

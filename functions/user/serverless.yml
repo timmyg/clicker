@@ -34,22 +34,39 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  tableUser: users-${self:custom.stage}
+  tableWallet: wallets-${self:custom.stage}
 resources:
   Resources:
-    UsersTable:
+    Walletable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: ${self:custom.tableUser}
+        TableName: ${self:custom.tableWallet}
         AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
           - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: userId
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
+    # UsersTable:
+    #   Type: 'AWS::DynamoDB::Table'
+    #   Properties:
+    #     TableName: ${self:custom.tableUser}
+    #     AttributeDefinitions:
+    #       - AttributeName: id
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: id
+    #         KeyType: HASH
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: ${self:custom.tableThroughput}
+    #       WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
@@ -66,11 +83,11 @@ functions:
           path: ''
           method: post
           cors: true
-  get:
-    handler: user.get
+  getWallet:
+    handler: user.getWallet
     events:
       - http:
-          path: '{id}'
+          path: '{id}/wallet'
           method: get
           cors: true
   addTokens:

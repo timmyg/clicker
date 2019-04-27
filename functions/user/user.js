@@ -1,17 +1,16 @@
 const dynamoose = require('dynamoose');
 const { respond, getBody, getAuthBearerToken, getPathParameters } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+const jwt = require('jsonwebtoken');
 
-const User = dynamoose.model(
-  process.env.tableUser,
+const Wallet = dynamoose.model(
+  process.env.tableWallet,
   {
+    userId: { type: String, hashKey: true, required: true },
     id: {
       type: String,
-      hashKey: true,
+      rangeKey: true,
       default: uuid,
-    },
-    name: {
-      type: String,
     },
     tokens: {
       type: Number,
@@ -29,27 +28,23 @@ module.exports.health = async event => {
 
 module.exports.create = async event => {
   const body = getBody(event);
-  const { name } = body;
-  // const userId = getAuthBearerToken(event);
-
   const initialTokens = 2;
-  const user = await User.create({ name, tokens: initialTokens });
-  return respond(201, user);
+  const user = await User.create({ tokens: initialTokens });
+  const token = jwt.sign({ sub: user.id, guest: true }, 'clikr');
+
+  return respond(201, token);
 };
 
-module.exports.get = async event => {
-  const params = getPathParameters(event);
-  const { id } = params;
-
-  const user = await User.queryOne('id')
+module.exports.getWallet = async event => {
+  const userId = getAuthBearerToken(event);
+  const user = await Wallet.queryOne('userId')
     .eq(id)
     .exec();
-
   return respond(200, user);
 };
 
 module.exports.addTokens = async event => {
-  const body = getBody(event);
+  // const body = getBody(event);
   const { tokens } = body;
   const { userid: id } = event.headers;
 
