@@ -42,7 +42,7 @@ import { takeUntil } from 'rxjs/operators';
         return () =>
           new Promise(resolve => {
             const loaded$ = new Subject();
-            store.dispatch(new fromUser.Get());
+            store.dispatch(new fromUser.Load());
             store
               .select((state: AppState) => state.user.me)
               .pipe(takeUntil(loaded$))

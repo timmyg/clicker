@@ -94,7 +94,7 @@ export class ProfilePage {
 
   processLogin(fragment: string) {
     const context = this;
-    auth.parseHash({ hash: window.location.hash }, async (err, authResult) => {
+    auth.parseHash({ hash: fragment }, async (err, authResult) => {
       console.log(authResult);
       if (err) {
         return console.log(err);

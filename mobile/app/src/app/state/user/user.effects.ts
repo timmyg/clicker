@@ -11,15 +11,14 @@ import { UserService } from 'src/app/core/services/user.service';
 @Injectable()
 export class UserEffects {
   @Effect()
-  get$: Observable<Action> = this.actions$.pipe(
-    ofType(UserActions.GET),
+  load$: Observable<Action> = this.actions$.pipe(
+    ofType(UserActions.LOAD),
     switchMap(() =>
       this.userService.get().pipe(
         map((user: User) => {
-          this.userService.set(user);
-          return new UserActions.GetSuccess(user);
+          return new UserActions.LoadSuccess(user);
         }),
-        catchError(err => of(new UserActions.GetFail(err))),
+        catchError(err => of(new UserActions.LoadFail(err))),
       ),
     ),
   );
