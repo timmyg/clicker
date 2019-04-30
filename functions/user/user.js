@@ -9,7 +9,7 @@ const Wallet = dynamoose.model(
     userId: { type: String, hashKey: true, required: true },
     id: {
       type: String,
-      rangeKey: true,
+      // rangeKey: true,
       default: uuid,
     },
     tokens: {
