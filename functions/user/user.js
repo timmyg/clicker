@@ -50,7 +50,7 @@ module.exports.addTokens = async event => {
   console.log({ userId });
   const { tokens } = getBody(event);
 
-  const updatedUser = await User.update({ id: userOd }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  const updatedUser = await Wallet.update({ id: userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
   return respond(200, updatedUser);
 };
