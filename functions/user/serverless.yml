@@ -92,7 +92,7 @@ functions:
     handler: user.getWallet
     events:
       - http:
-          path: 'wallet'
+          path: wallet
           method: get
           cors: true
   addTokens:

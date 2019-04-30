@@ -48,7 +48,7 @@ module.exports.getWallet = async event => {
 module.exports.addTokens = async event => {
   const userId = getUserId(event);
   console.log({ userId });
-  const { tokens } = body;
+  const { tokens } = getBody(event);
 
   const updatedUser = await User.update({ id: userOd }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
