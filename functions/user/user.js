@@ -50,7 +50,10 @@ module.exports.addTokens = async event => {
   const { tokens } = getBody(event);
   console.log({ userId }, { tokens });
 
-  const updatedUser = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  // const wallet = await Wallet.queryOne('userId')
+  //   .eq(userId)
+  //   .exec();
 
-  return respond(200, updatedUser);
+  return respond(200, updatedWallet);
 };
