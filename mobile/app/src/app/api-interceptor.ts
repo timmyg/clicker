@@ -35,10 +35,10 @@ export class ApiInterceptor implements HttpInterceptor {
       select(getUser),
       first(),
       mergeMap((user: User) => {
-        if (user && user.id) {
+        if (user && user.sub) {
           request = request.clone({
             url: `${environment.apiBaseUrl}/${request.url}`,
-            headers: request.headers.set('Authorization', `Bearer ${user.id}`),
+            headers: request.headers.set('Authorization', `Bearer ${user.sub}`),
           });
         } else {
           console.warn(`Null user!!! ${user}".`);

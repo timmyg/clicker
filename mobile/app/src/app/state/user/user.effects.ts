@@ -16,6 +16,7 @@ export class UserEffects {
     switchMap(() =>
       this.userService.get().pipe(
         map((user: User) => {
+          console.log(user);
           return new UserActions.LoadSuccess(user);
         }),
         catchError(err => of(new UserActions.LoadFail(err))),

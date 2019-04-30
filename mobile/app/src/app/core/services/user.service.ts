@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from 'src/app/state/user/user.model';
 import { Storage } from '@ionic/storage';
 import { mergeMap } from 'rxjs/operators';
 import * as decode from 'jwt-decode';
-import { v4 as uuid } from 'uuid';
 const storage = {
   token: 'token',
   anonymous: 'anonymous',
@@ -22,14 +21,14 @@ export class UserService {
     return from(this.storage.get(storage.token)).pipe(
       mergeMap(token => {
         if (token) {
-          return decode(token);
+          return of(decode(token));
         } else {
-          const user: Partial<User> = {
-            sub: uuid(),
-          };
-          // const token = encode(user, 'clicker');
-          this.setAnonymous(token);
-          return user;
+          return new Observable(observer => {
+            this.httpClient.post<any>(this.prefix, {}).subscribe(result => {
+              this.set(result.token);
+              return observer.next(decode(result.token));
+            });
+          });
         }
       }),
     );
@@ -37,9 +36,5 @@ export class UserService {
 
   set(token: string) {
     this.storage.set(storage.token, token);
-  }
-
-  setAnonymous(token: string) {
-    this.storage.set(storage.anonymous, token);
   }
 }
