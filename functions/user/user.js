@@ -38,18 +38,19 @@ module.exports.create = async event => {
 
 module.exports.getWallet = async event => {
   const userId = getUserId(event);
+  console.log({ userId });
   const user = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
-  return respond(200, user);
+  return respond(200, { tokens: user.tokens });
 };
 
 module.exports.addTokens = async event => {
-  // const body = getBody(event);
+  const userId = getUserId(event);
+  console.log({ userId });
   const { tokens } = body;
-  const { userid: id } = event.headers;
 
-  const updatedUser = await User.update({ id }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  const updatedUser = await User.update({ id: userOd }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
   return respond(200, updatedUser);
 };
