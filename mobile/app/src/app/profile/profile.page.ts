@@ -58,8 +58,12 @@ export class ProfilePage {
     this.user$.subscribe(user => {
       this.user = user;
     });
+    // TODO move this out of profile page
+    //   lands here after auth0 login
     this.route.fragment.subscribe((fragment: string) => {
-      this.processLogin(fragment);
+      if (fragment) {
+        this.processLogin(fragment);
+      }
     });
   }
 
@@ -94,6 +98,7 @@ export class ProfilePage {
 
   processLogin(fragment: string) {
     const context = this;
+    console.log(fragment);
     auth.parseHash({ hash: fragment }, async (err, authResult) => {
       console.log(authResult);
       if (err) {

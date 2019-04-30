@@ -1,5 +1,5 @@
 const dynamoose = require('dynamoose');
-const { respond, getBody, getAuthBearerToken, getPathParameters } = require('serverless-helpers');
+const { respond, getBody, getAuthBearerToken, getPathParameters, getUserId } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 
@@ -37,9 +37,9 @@ module.exports.create = async event => {
 };
 
 module.exports.getWallet = async event => {
-  const userId = getAuthBearerToken(event);
+  const userId = getUserId(event);
   const user = await Wallet.queryOne('userId')
-    .eq(id)
+    .eq(userId)
     .exec();
   return respond(200, user);
 };
