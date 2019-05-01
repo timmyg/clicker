@@ -6,10 +6,17 @@ const jwt = require('jsonwebtoken');
 const Wallet = dynamoose.model(
   process.env.tableWallet,
   {
-    userId: { type: String, hashKey: true, required: true },
+    userId: { 
+      type: String,
+      hashKey: true,
+      required: true,
+      set: (val) => {
+        return decodeURI(val).replace("sms|", "");
+      } 
+    } 
+  },
     id: {
       type: String,
-      // rangeKey: true,
       default: uuid,
     },
     tokens: {

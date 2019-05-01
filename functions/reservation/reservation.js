@@ -13,7 +13,14 @@ const uuid = require('uuid/v1');
 const Reservation = dynamoose.model(
   process.env.tableReservation,
   {
-    userId: { type: String, hashKey: true, required: true },
+    userId: {
+      type: String,
+      hashKey: true,
+      required: true,
+      set: val => {
+        return decodeURI(val).replace('sms|', '');
+      },
+    },
     id: {
       type: String,
       rangeKey: true,
