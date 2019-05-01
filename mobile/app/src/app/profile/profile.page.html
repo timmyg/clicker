@@ -4,7 +4,7 @@
     <ion-buttons slot="end">
       <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
     </ion-buttons>
-    <ng-template #loggedOut> <a (click)="login()">Login</a> </ng-template>
+    <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>
   </ion-toolbar>
 </ion-header>
 
@@ -19,7 +19,7 @@
     <ion-row margin-bottom> </ion-row>
     <ion-row margin-bottom align-items-center>
       <b>Wallet:&nbsp;</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
-      <span>&nbsp;{{ (user$ | async)?.tokens }}</span>
+      <span>&nbsp;{{ tokenCount$ | async }}</span>
     </ion-row>
     <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
 

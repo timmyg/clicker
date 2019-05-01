@@ -3,12 +3,16 @@ import { User } from './user.model';
 
 export interface State {
   me: User;
+  tokens: number;
+  authToken: string;
   loading: boolean;
   error: string;
 }
 
 export const initialState: State = {
   me: null,
+  tokens: null,
+  authToken: null,
   loading: false,
   error: null,
 };
@@ -16,6 +20,7 @@ export const initialState: State = {
 export function reducer(state = initialState, action: fromUser.UserActions): State {
   switch (action.type) {
     case fromUser.LOAD:
+    case fromUser.LOAD_WALLET:
       return {
         ...state,
         loading: true,
@@ -27,8 +32,21 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
         loading: false,
         me: action.payload,
       };
+    case fromUser.LOAD_WALLET_SUCCESS:
+      state.tokens = action.payload;
+      return {
+        ...state,
+        loading: false,
+      };
+    case fromUser.SET_AUTH_TOKEN:
+      state.authToken = action.payload;
+      console.log('set auth token state', state);
+      return {
+        ...state,
+      };
 
     case fromUser.LOAD_FAIL:
+    case fromUser.LOAD_WALLET_FAIL:
       return {
         ...state,
         loading: false,
@@ -42,6 +60,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
 }
 
 export const getUser = (state: State) => state.me;
-export const getUserTokens = (state: State) => state.me.tokens;
+export const getUserTokenCount = (state: State) => state.tokens;
+export const getUserAuthToken = (state: State) => state.authToken;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

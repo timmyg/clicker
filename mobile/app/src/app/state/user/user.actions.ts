@@ -7,6 +7,7 @@ export const LOAD_FAIL = '[USER] Load Fail';
 export const LOAD_WALLET = '[USER] Load Wallet';
 export const LOAD_WALLET_SUCCESS = '[USER] Load Wallet Success';
 export const LOAD_WALLET_FAIL = '[USER] Load Wallet Fail';
+export const SET_AUTH_TOKEN = '[USER] Set Auth Token';
 
 export class Load implements Action {
   readonly type = LOAD;
@@ -28,7 +29,7 @@ export class LoadWallet implements Action {
 
 export class LoadWalletSuccess implements Action {
   readonly type = LOAD_WALLET_SUCCESS;
-  constructor(public payload: User) {}
+  constructor(public payload: number) {}
 }
 
 export class LoadWalletFail implements Action {
@@ -36,4 +37,16 @@ export class LoadWalletFail implements Action {
   constructor(public payload: any) {}
 }
 
-export type UserActions = Load | LoadSuccess | LoadFail | LoadWallet | LoadWalletSuccess | LoadWalletFail;
+export class SetAuthToken implements Action {
+  readonly type = SET_AUTH_TOKEN;
+  constructor(public payload: string) {}
+}
+
+export type UserActions =
+  | Load
+  | LoadSuccess
+  | LoadFail
+  | LoadWallet
+  | LoadWalletSuccess
+  | LoadWalletFail
+  | SetAuthToken;

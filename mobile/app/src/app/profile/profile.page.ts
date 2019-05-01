@@ -4,19 +4,20 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading } from '../state/reservation';
-import { getUser } from '../state/user';
+import { getUser, getUserTokenCount } from '../state/user';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
-import { FeedbackPage } from './feedback/feedback.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
+import * as fromUser from '../state/user/user.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
 import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import auth0 from 'auth0-js';
+import { UserService } from '../core/services/user.service';
 const auth = new auth0.WebAuth({
   domain: 'clikr.auth0.com',
   clientID: 'w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc',
@@ -31,7 +32,8 @@ const auth = new auth0.WebAuth({
 export class ProfilePage {
   reservations$: Observable<Reservation[]>;
   user$: Observable<User>;
-  user: User;
+  tokenCount$: Observable<number>;
+  // user: User;
   isReservationsLoading$: Observable<boolean>;
   faCopyright = faCopyright;
   walletModal;
@@ -47,17 +49,20 @@ export class ProfilePage {
     private route: ActivatedRoute,
     public intercom: Intercom,
     public toastController: ToastController,
+    public userService: UserService,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
+    this.tokenCount$ = this.store.select(getUserTokenCount);
     this.isReservationsLoading$ = this.store.select(getLoading);
   }
 
   ngOnInit() {
     this.store.dispatch(new fromReservation.GetAll());
-    this.user$.subscribe(user => {
-      this.user = user;
-    });
+    // this.user$.subscribe(user => {
+    //   console.log(user);
+    //   this.user = user;
+    // });
     // TODO move this out of profile page
     //   lands here after auth0 login
     this.route.fragment.subscribe((fragment: string) => {
@@ -70,7 +75,7 @@ export class ProfilePage {
   async login() {
     this.loginModal = await this.modalController.create({
       component: LoginComponent,
-      componentProps: { monies: this.user.tokens },
+      // componentProps: { monies: this.user.tokens },
     });
     return await this.loginModal.present();
   }
@@ -78,7 +83,7 @@ export class ProfilePage {
   async openWallet() {
     this.walletModal = await this.modalController.create({
       component: WalletPage,
-      componentProps: { monies: this.user.tokens },
+      // componentProps: { monies: this.user.tokens },
     });
     return await this.walletModal.present();
   }
@@ -105,17 +110,19 @@ export class ProfilePage {
         return console.log(err);
       } else if (authResult) {
         const jwt = authResult.idToken;
-        const jwtPayload = authResult.idTokenPayload;
+        this.userService.set(jwt);
+        this.store.dispatch(new fromUser.Load());
+        // const jwtPayload = authResult.idTokenPayload;
         // localStorage.setItem('accessToken', authResult.accessToken);
-        auth.client.userInfo(authResult.accessToken, async (err, user) => {
-          if (err) {
-            console.log('err', err);
-            alert('There was an error retrieving your profile: ' + err.message);
-          } else {
-            // Hide the login UI, show a user profile element with name and image
-            console.log(user);
-          }
-        });
+        // auth.client.userInfo(authResult.accessToken, async (err, user) => {
+        //   if (err) {
+        //     console.log('err', err);
+        //     alert('There was an error retrieving your profile: ' + err.message);
+        //   } else {
+        //     // Hide the login UI, show a user profile element with name and image
+        //     console.log(user);
+        //   }
+        // });
         const toast = await context.toastController.create({
           message: `Successfully logged in.`,
           duration: 2000,

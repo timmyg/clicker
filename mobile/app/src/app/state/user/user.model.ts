@@ -1,4 +1,5 @@
 export interface User {
   sub: string;
-  tokens: number;
+  // tokens: number;
+  // authToken: string;
 }

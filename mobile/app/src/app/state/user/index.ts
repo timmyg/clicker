@@ -9,6 +9,16 @@ export const getUser = createSelector(
   fromUser.getUser,
 );
 
+export const getUserAuthToken = createSelector(
+  getUserState,
+  fromUser.getUserAuthToken,
+);
+
+export const getUserTokenCount = createSelector(
+  getUserState,
+  fromUser.getUserTokenCount,
+);
+
 export const getLoading = createSelector(
   getUserState,
   fromUser.getLoading,
