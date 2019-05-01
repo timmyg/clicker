@@ -2,11 +2,14 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import auth0 from 'auth0-js';
 import { UserService } from '../core/services/user.service';
+import { getUser, getUserId } from '../state/user';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import * as fromUser from '../state/user/user.actions';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { User } from '../state/user/user.model';
 
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
@@ -19,12 +22,16 @@ const auth = new auth0.WebAuth({
     '<ion-row class="ion-justify-content-center" margin-top><ion-spinner name="crescent"></ion-spinner></ion-row>',
 })
 export class LoggingInComponent {
+  userId$: Observable<string>;
+
   constructor(
     private store: Store<fromStore.AppState>,
     public userService: UserService,
     public toastController: ToastController,
     private route: ActivatedRoute,
-  ) {}
+  ) {
+    this.userId$ = this.store.select(getUserId);
+  }
 
   ngOnInit() {
     this.route.fragment.subscribe((fragment: string) => {
@@ -42,9 +49,20 @@ export class LoggingInComponent {
       if (err) {
         return console.log(err);
       } else if (authResult) {
+        // alias user (move tokens to new user)
         const jwt = authResult.idToken;
+        const newUserId = authResult.idTokenPayload.sub;
+        this.userId$.subscribe(oldUserId => {
+          console.log('alias', oldUserId, newUserId);
+          this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
+        });
+        // this.userId$.pipe(filter(id => !!id)
+        // this.store$.pipe(
+        //   select(getUserAuthToken),
+        //   filter(authToken => authToken && authToken.length > 0),
+
         this.userService.set(jwt);
-        this.store.dispatch(new fromUser.Load());
+        // this.store.dispatch(new fromUser.Load());
         // const jwtPayload = authResult.idTokenPayload;
         // localStorage.setItem('accessToken', authResult.accessToken);
         // auth.client.userInfo(authResult.accessToken, async (err, user) => {

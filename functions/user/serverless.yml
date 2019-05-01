@@ -102,7 +102,7 @@ functions:
           path: 'tokens'
           method: post
           cors: true
-  merge:
+  alias:
     handler: user.alias
     events:
       - http:

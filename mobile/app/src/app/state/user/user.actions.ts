@@ -8,6 +8,9 @@ export const LOAD_WALLET = '[USER] Load Wallet';
 export const LOAD_WALLET_SUCCESS = '[USER] Load Wallet Success';
 export const LOAD_WALLET_FAIL = '[USER] Load Wallet Fail';
 export const SET_AUTH_TOKEN = '[USER] Set Auth Token';
+export const ALIAS = '[USER] Alias';
+export const ALIAS_SUCCESS = '[USER] Alias Success';
+export const ALIAS_FAIL = '[USER] Alias Fail';
 
 export class Load implements Action {
   readonly type = LOAD;
@@ -40,6 +43,21 @@ export class LoadWalletFail implements Action {
 export class SetAuthToken implements Action {
   readonly type = SET_AUTH_TOKEN;
   constructor(public payload: string) {}
+}
+
+export class Alias implements Action {
+  readonly type = ALIAS;
+  constructor(public fromId: string, public toId: string) {}
+}
+
+export class AliasSuccess implements Action {
+  readonly type = ALIAS_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class AliasFail implements Action {
+  readonly type = ALIAS_FAIL;
+  constructor(public payload: any) {}
 }
 
 export type UserActions =

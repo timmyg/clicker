@@ -39,5 +39,16 @@ export class UserEffects {
     ),
   );
 
+  @Effect()
+  alias$: Observable<Action> = this.actions$.pipe(
+    ofType(UserActions.ALIAS),
+    switchMap((action: UserActions.Alias) =>
+      this.userService.alias(action.fromId, action.toId).pipe(
+        switchMap((result: any) => [new UserActions.AliasSuccess(result), new UserActions.Load()]),
+        catchError(err => of(new UserActions.LoadFail(err))),
+      ),
+    ),
+  );
+
   constructor(private actions$: Actions, private userService: UserService) {}
 }

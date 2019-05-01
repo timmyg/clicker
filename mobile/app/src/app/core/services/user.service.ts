@@ -44,6 +44,10 @@ export class UserService {
     });
   }
 
+  alias(fromId: string, toId: string): Observable<any> {
+    return this.httpClient.get<any>(`${this.prefix}/alias/${fromId}/${toId}`, {});
+  }
+
   set(token: string) {
     this.storage.set(storage.token, token);
   }

@@ -60,6 +60,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
 }
 
 export const getUser = (state: State) => state.me;
+export const getUserId = (state: State) => state.me.sub;
 export const getUserTokenCount = (state: State) => state.tokens;
 export const getUserAuthToken = (state: State) => state.authToken;
 export const getLoading = (state: State) => state.loading;

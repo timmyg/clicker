@@ -56,26 +56,28 @@ module.exports.addTokens = async event => {
 
 module.exports.alias = async event => {
   const { fromId, toId } = getPathParameters(event);
-  console.log(fromId);
-  console.log(toId);
 
-  console.log(1);
+  // get existing users
   const fromUser = await Wallet.queryOne('userId')
     .eq(fromId)
     .exec();
-  console.log(2);
   const toUser = await Wallet.queryOne('userId')
     .eq(toId)
     .exec();
-  console.log(3);
+
+  // count up new token total
   let tokens = fromUser.tokens;
   if (toUser) {
     tokens += toUser.tokens;
   }
-  console.log({ tokens });
-  const updatedWallet = await Wallet.create({ userId: toId, tokens });
-  console.log('4');
+
+  // create or update wallet
+  if (toUser) {
+    await Wallet.update({ userId: toId }, { tokens });
+  } else {
+    const updatedWallet = await Wallet.create({ userId: toId, tokens });
+  }
+
   await Wallet.update({ userId: fromId }, { aliasedTo: toId });
-  console.log('5');
   return respond(201, updatedWallet);
 };
