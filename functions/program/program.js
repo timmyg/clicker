@@ -127,7 +127,7 @@ module.exports.getAll = async event => {
     { channel: 219, channelTitle: 'FS1' },
     { channel: 245, channelTitle: 'TNT' },
     { channel: 247, channelTitle: 'TBS' },
-    { channel: 220, channelTitle: 'NBCS' },
+    { channel: 220, channelTitle: 'NBCSN' },
     { channel: 212, channelTitle: 'NFL' },
     { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
   ];

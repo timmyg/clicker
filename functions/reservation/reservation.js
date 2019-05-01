@@ -1,7 +1,7 @@
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const {
-  getAuthBearerToken,
+  getUserId,
   getBody,
   getPathParameters,
   invokeFunction,
@@ -64,7 +64,7 @@ module.exports.health = async event => {
 
 module.exports.create = async event => {
   let reservation = getBody(event);
-  reservation.userId = getAuthBearerToken(event);
+  reservation.userId = const userId = getUserId(event);
 
   reservation = calculateReservationTimes(reservation);
   await Reservation.create(reservation);
@@ -91,7 +91,7 @@ module.exports.create = async event => {
 
 module.exports.update = async event => {
   let reservation = getBody(event);
-  const userId = getAuthBearerToken(event);
+  const userId = getUserId(event);
   reservation.userId = userId;
   const { id } = getPathParameters(event);
 
@@ -127,7 +127,7 @@ module.exports.update = async event => {
 };
 
 module.exports.all = async event => {
-  const userId = getAuthBearerToken(event);
+  const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
@@ -137,7 +137,7 @@ module.exports.all = async event => {
 };
 
 module.exports.active = async event => {
-  const userId = getAuthBearerToken(event);
+  const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
@@ -147,7 +147,7 @@ module.exports.active = async event => {
 };
 
 module.exports.get = async event => {
-  const userId = getAuthBearerToken(event);
+  const userId = getUserId(event);
   const params = getPathParameters(event);
   const { id } = params;
 
@@ -156,7 +156,7 @@ module.exports.get = async event => {
 };
 
 module.exports.cancel = async event => {
-  const userId = getAuthBearerToken(event);
+  const userId = getUserId(event);
   const { id } = getPathParameters(event);
 
   await Reservation.update({ id, userId }, { cancelled: true });

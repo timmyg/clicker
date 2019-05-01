@@ -1,5 +1,5 @@
 const dynamoose = require('dynamoose');
-const { respond, getBody, getAuthBearerToken, getPathParameters, getUserId } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, getUserId } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 
@@ -22,7 +22,12 @@ const Wallet = dynamoose.model(
       type: Number,
       required: true,
     },
-    aliasedTo: String,
+    aliasedTo: {
+      type: String,
+      set: val => {
+        return decodeURI(val).replace('sms|', '');
+      },
+    },
   },
   {
     timestamps: true,

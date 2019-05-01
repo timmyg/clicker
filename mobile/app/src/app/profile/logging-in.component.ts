@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import auth0 from 'auth0-js';
 import { UserService } from '../core/services/user.service';
 import { getUser, getUserId } from '../state/user';
@@ -29,6 +29,7 @@ export class LoggingInComponent {
     public userService: UserService,
     public toastController: ToastController,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.userId$ = this.store.select(getUserId);
   }
@@ -55,6 +56,9 @@ export class LoggingInComponent {
         this.userId$.subscribe(oldUserId => {
           console.log('alias', oldUserId, newUserId);
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
+          setTimeout(() => {
+            this.router.navigate(['/tabs/profile']);
+          }, 3000);
         });
         // this.userId$.pipe(filter(id => !!id)
         // this.store$.pipe(
