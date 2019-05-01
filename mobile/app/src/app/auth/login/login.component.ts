@@ -56,7 +56,7 @@ export class LoginComponent {
         this.codeSent = true;
         this.waiting = false;
         const toast = await this.toastController.create({
-          message: `We sent you a text. Please input code above.`,
+          message: `Text sent.`,
           duration: 4000,
           cssClass: 'ion-text-center',
         });

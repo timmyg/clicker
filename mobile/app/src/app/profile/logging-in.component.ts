@@ -58,6 +58,7 @@ export class LoggingInComponent {
         // });
 
         // TODO merge/update user
+        console.error('TODO send off merge request');
         const toast = await context.toastController.create({
           message: `Successfully logged in.`,
           duration: 2000,

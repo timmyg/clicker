@@ -106,6 +106,6 @@ functions:
     handler: user.alias
     events:
       - http:
-          path: 'merge/{fromId}/{toId}'
+          path: 'alias/{fromId}/{toId}'
           method: post
           cors: true
