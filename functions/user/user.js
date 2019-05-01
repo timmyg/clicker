@@ -72,12 +72,13 @@ module.exports.alias = async event => {
   }
 
   // create or update wallet
+  let wallet;
   if (toUser) {
-    await Wallet.update({ userId: toId }, { tokens });
+    wallet = await Wallet.update({ userId: toId }, { tokens });
   } else {
-    const updatedWallet = await Wallet.create({ userId: toId, tokens });
+    wallet = await Wallet.create({ userId: toId, tokens });
   }
 
   await Wallet.update({ userId: fromId }, { aliasedTo: toId });
-  return respond(201, updatedWallet);
+  return respond(201, wallet);
 };
