@@ -150,8 +150,7 @@ module.exports.get = async event => {
 
 module.exports.cancel = async event => {
   const userId = getAuthBearerToken(event);
-  const params = getPathParameters(event);
-  const { id } = params;
+  const { id } = getPathParameters(event);
 
   await Reservation.update({ id, userId }, { cancelled: true });
 
@@ -169,4 +168,3 @@ function calculateReservationTimes(reservation) {
   reservation.end = initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
   return reservation;
 }
-

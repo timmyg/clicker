@@ -10,19 +10,12 @@ import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
-import * as fromUser from '../state/user/user.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
 import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
-import auth0 from 'auth0-js';
 import { UserService } from '../core/services/user.service';
-const auth = new auth0.WebAuth({
-  domain: 'clikr.auth0.com',
-  clientID: 'w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc',
-  responseType: 'token id_token',
-});
 
 @Component({
   selector: 'app-profile',
@@ -59,17 +52,6 @@ export class ProfilePage {
 
   ngOnInit() {
     this.store.dispatch(new fromReservation.GetAll());
-    // this.user$.subscribe(user => {
-    //   console.log(user);
-    //   this.user = user;
-    // });
-    // TODO move this out of profile page
-    //   lands here after auth0 login
-    this.route.fragment.subscribe((fragment: string) => {
-      if (fragment) {
-        this.processLogin(fragment);
-      }
-    });
   }
 
   async login() {
@@ -98,38 +80,6 @@ export class ProfilePage {
     this.intercom.onHide(() => {
       console.log('hide!');
       this.intercom.shutdown();
-    });
-  }
-
-  processLogin(fragment: string) {
-    const context = this;
-    console.log(fragment);
-    auth.parseHash({ hash: fragment }, async (err, authResult) => {
-      console.log(authResult);
-      if (err) {
-        return console.log(err);
-      } else if (authResult) {
-        const jwt = authResult.idToken;
-        this.userService.set(jwt);
-        this.store.dispatch(new fromUser.Load());
-        // const jwtPayload = authResult.idTokenPayload;
-        // localStorage.setItem('accessToken', authResult.accessToken);
-        // auth.client.userInfo(authResult.accessToken, async (err, user) => {
-        //   if (err) {
-        //     console.log('err', err);
-        //     alert('There was an error retrieving your profile: ' + err.message);
-        //   } else {
-        //     // Hide the login UI, show a user profile element with name and image
-        //     console.log(user);
-        //   }
-        // });
-        const toast = await context.toastController.create({
-          message: `Successfully logged in.`,
-          duration: 2000,
-          cssClass: 'ion-text-center',
-        });
-        toast.present();
-      }
     });
   }
 

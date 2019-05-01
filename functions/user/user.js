@@ -16,6 +16,7 @@ const Wallet = dynamoose.model(
       type: Number,
       required: true,
     },
+    aliasedTo: String,
   },
   {
     timestamps: true,
@@ -48,12 +49,19 @@ module.exports.getWallet = async event => {
 module.exports.addTokens = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
-  console.log({ userId }, { tokens });
-
   const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
-  // const wallet = await Wallet.queryOne('userId')
-  //   .eq(userId)
-  //   .exec();
 
   return respond(200, updatedWallet);
+};
+
+module.exports.alias = async event => {
+  const { fromId, toId } = getPathParameters(event);
+
+  const fromUser = await Wallet.queryOne('userId')
+    .eq(fromId)
+    .exec();
+  const updatedWallet = await Wallet.create({ userId: toId, tokens: fromUser.tokens }, { returnValues: 'ALL_NEW' });
+  await Wallet.update({ userId: fromId }, { aliasedTo: toId });
+
+  return respond(201, updatedWallet);
 };

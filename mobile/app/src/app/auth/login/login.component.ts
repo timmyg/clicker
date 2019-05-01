@@ -1,10 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import auth0 from 'auth0-js';
+import { environment } from 'src/environments/environment';
 const auth = new auth0.WebAuth({
-  domain: 'clikr.auth0.com',
-  clientID: 'w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc',
-  redirectUri: `${window.location.origin}/tabs/profile`,
+  domain: environment.auth0.domain,
+  clientID: environment.auth0.clientId,
+  redirectUri: `${window.location.origin}/tabs/profile/logging-in`,
   responseType: 'token id_token',
 });
 
@@ -30,7 +31,7 @@ export class LoginComponent {
     this.modalController.dismiss();
   }
 
-  async onNext() {
+  async onPhoneSubmit(x) {
     console.log(`+1${this.phone}`);
     this.waiting = true;
     auth.passwordlessStart(
@@ -64,7 +65,7 @@ export class LoginComponent {
     );
   }
 
-  onLogin() {
+  onCodeSubmit() {
     console.log(`+1${this.phone}`, this.code);
     this.waiting = true;
     auth.passwordlessLogin(

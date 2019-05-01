@@ -26,6 +26,7 @@ export class UserService {
         } else {
           return new Observable(observer => {
             this.httpClient.post<any>(this.prefix, {}).subscribe(result => {
+              console.log({ result });
               this.set(result.token);
               return observer.next(result.token);
             });

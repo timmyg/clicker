@@ -11,7 +11,7 @@ export class ApiInterceptor implements HttpInterceptor {
   constructor(private store$: Store<any>) {}
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('intercept');
+    console.log('intercept', request.url);
     return this.addToken(request).pipe(
       first(),
       mergeMap((requestWithToken: HttpRequest<any>) => next.handle(requestWithToken)),
@@ -22,6 +22,13 @@ export class ApiInterceptor implements HttpInterceptor {
    * Adds the JWT token to the request's header.
    */
   private addToken(request: HttpRequest<any>): Observable<HttpRequest<any>> {
+    if (request.url === 'users' && request.method === 'POST') {
+      return of(
+        request.clone({
+          url: `${environment.apiBaseUrl}/${request.url}`,
+        }),
+      );
+    }
     return this.store$.pipe(
       select(getUserAuthToken),
       filter(authToken => authToken && authToken.length > 0),

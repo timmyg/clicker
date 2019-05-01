@@ -7,16 +7,36 @@
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <section *ngIf="!codeSent">
-    <ion-input placeholder="Phone Number" type="tel" maxlength="10" [(ngModel)]="phone"></ion-input>
-    <ion-button expand="block" (click)="onNext()" margin-top [disabled]="!phone || phone.length !== 10 || waiting"
-      >Next</ion-button
-    >
-  </section>
-  <section *ngIf="codeSent">
-    <ion-input placeholder="Code" type="tel" maxlength="8" [(ngModel)]="code"></ion-input>
-    <ion-button expand="block" (click)="onLogin()" margin-top [disabled]="!isEligibleCode() || waiting"
-      >Login</ion-button
-    >
-  </section>
+  <form #phoneForm="ngForm" (ngSubmit)="onPhoneSubmit(phoneForm.form)" *ngIf="!codeSent">
+    <p class="ion-text-center">Input your phone number below to login.</p>
+    <section>
+      <ion-input
+        placeholder="Phone Number"
+        type="tel"
+        maxlength="10"
+        [(ngModel)]="phone"
+        name="phone"
+        [disabled]="waiting"
+      ></ion-input>
+      <ion-button expand="block" type="submit" margin-top [disabled]="!phone || phone.length !== 10 || waiting"
+        >Next</ion-button
+      >
+    </section>
+  </form>
+  <form #codeForm="ngForm" (ngSubmit)="onCodeSubmit()" *ngIf="codeSent">
+    <p class="ion-text-center">
+      We have sent you an access code via text message for verification. Please enter it below.
+    </p>
+    <section>
+      <ion-input
+        placeholder="Code"
+        type="tel"
+        maxlength="8"
+        [(ngModel)]="code"
+        name="code"
+        [disabled]="waiting"
+      ></ion-input>
+      <ion-button expand="block" type="submit" margin-top [disabled]="!isEligibleCode() || waiting">Login</ion-button>
+    </section>
+  </form>
 </ion-content>

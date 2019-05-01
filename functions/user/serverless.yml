@@ -102,3 +102,10 @@ functions:
           path: 'tokens'
           method: post
           cors: true
+  merge:
+    handler: user.alias
+    events:
+      - http:
+          path: 'merge/{fromId}/{toId}'
+          method: post
+          cors: true
