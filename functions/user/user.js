@@ -1,21 +1,32 @@
 const dynamoose = require('dynamoose');
-const { respond, getBody, getAuthBearerToken, getPathParameters } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, getUserId } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+const jwt = require('jsonwebtoken');
 
-const User = dynamoose.model(
-  process.env.tableUser,
+const Wallet = dynamoose.model(
+  process.env.tableWallet,
   {
-    id: {
+    userId: {
       type: String,
       hashKey: true,
-      default: uuid,
+      required: true,
+      set: val => {
+        return decodeURI(val).replace('sms|', '');
+      },
     },
-    name: {
+    id: {
       type: String,
+      default: uuid,
     },
     tokens: {
       type: Number,
       required: true,
+    },
+    aliasedTo: {
+      type: String,
+      set: val => {
+        return decodeURI(val).replace('sms|', '');
+      },
     },
   },
   {
@@ -28,32 +39,57 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  const body = getBody(event);
-  const { name } = body;
-  // const userId = getAuthBearerToken(event);
-
+  // const body = getBody(event);
   const initialTokens = 2;
-  const user = await User.create({ name, tokens: initialTokens });
-  return respond(201, user);
+  const userId = uuid();
+  await Wallet.create({ userId, tokens: initialTokens });
+  const token = jwt.sign({ sub: userId, guest: true }, 'clikr');
+
+  return respond(201, { token });
 };
 
-module.exports.get = async event => {
-  const params = getPathParameters(event);
-  const { id } = params;
-
-  const user = await User.queryOne('id')
-    .eq(id)
+module.exports.getWallet = async event => {
+  const userId = getUserId(event);
+  console.log({ userId });
+  const user = await Wallet.queryOne('userId')
+    .eq(userId)
     .exec();
-
-  return respond(200, user);
+  return respond(200, { tokens: user.tokens });
 };
 
 module.exports.addTokens = async event => {
-  const body = getBody(event);
-  const { tokens } = body;
-  const { userid: id } = event.headers;
+  const userId = getUserId(event);
+  const { tokens } = getBody(event);
+  const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
-  const updatedUser = await User.update({ id }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  return respond(200, updatedWallet);
+};
 
-  return respond(200, updatedUser);
+module.exports.alias = async event => {
+  const { fromId, toId } = getPathParameters(event);
+
+  // get existing users
+  const fromUser = await Wallet.queryOne('userId')
+    .eq(fromId)
+    .exec();
+  const toUser = await Wallet.queryOne('userId')
+    .eq(toId)
+    .exec();
+
+  // count up new token total
+  let tokens = fromUser.tokens;
+  if (toUser) {
+    tokens += toUser.tokens;
+  }
+
+  // create or update wallet
+  let wallet;
+  if (toUser) {
+    wallet = await Wallet.update({ userId: toId }, { tokens });
+  } else {
+    wallet = await Wallet.create({ userId: toId, tokens });
+  }
+
+  await Wallet.update({ userId: fromId }, { aliasedTo: toId });
+  return respond(201, wallet);
 };

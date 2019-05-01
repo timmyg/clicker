@@ -1,6 +1,6 @@
 {
   "headers": {
-    "userid": "1926fd60-4c49-11e9-a14d-793fbe38ca56"
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MzIzNTNmMC02YWU1LTExZTktYTg2ZS01YmNiZTAzMjk5YjgiLCJndWVzdCI6dHJ1ZSwiaWF0IjoxNTU2NTg2ODc4fQ.0aIUUISZcnQtkI9LV9eVSGnvIqy7lBzTi_xKTygaYoI"
   },
   "body": {
     "tokens": 4

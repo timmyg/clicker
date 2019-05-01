@@ -7,6 +7,7 @@ provider:
     tableProgram: ${self:custom.tableProgram}
     tableProgrammingArea: ${self:custom.tableProgrammingArea}
     serviceName: ${self:service}
+    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -37,6 +38,10 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    dev: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     ProgramTable:

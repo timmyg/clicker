@@ -8,7 +8,7 @@ provider:
     losantKey: ${env:LOSANT_KEY}
     losantSecret: ${env:LOSANT_SECRET}
     losantAppId: ${env:LOSANT_APP_ID}
-
+    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
 plugins:
   - serverless-domain-manager
 
@@ -25,7 +25,10 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    dev: ${env:SEGMENT_WRITE_KEY_DEV}
 functions:
   health:
     handler: remote.health

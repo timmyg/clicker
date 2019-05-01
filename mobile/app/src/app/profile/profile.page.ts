@@ -4,17 +4,18 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading } from '../state/reservation';
-import { getUser } from '../state/user';
-import { ModalController, AlertController } from '@ionic/angular';
+import { getUser, getUserTokenCount } from '../state/user';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
-import { FeedbackPage } from './feedback/feedback.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
 import { Intercom } from 'ng-intercom';
+import { LoginComponent } from '../auth/login/login.component';
+import { UserService } from '../core/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -24,11 +25,13 @@ import { Intercom } from 'ng-intercom';
 export class ProfilePage {
   reservations$: Observable<Reservation[]>;
   user$: Observable<User>;
-  user: User;
+  tokenCount$: Observable<number>;
+  // user: User;
   isReservationsLoading$: Observable<boolean>;
   faCopyright = faCopyright;
   walletModal;
   feedbackModal;
+  loginModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -38,23 +41,31 @@ export class ProfilePage {
     private router: Router,
     private route: ActivatedRoute,
     public intercom: Intercom,
+    public toastController: ToastController,
+    public userService: UserService,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
+    this.tokenCount$ = this.store.select(getUserTokenCount);
     this.isReservationsLoading$ = this.store.select(getLoading);
   }
 
   ngOnInit() {
     this.store.dispatch(new fromReservation.GetAll());
-    this.user$.subscribe(user => {
-      this.user = user;
+  }
+
+  async login() {
+    this.loginModal = await this.modalController.create({
+      component: LoginComponent,
+      // componentProps: { monies: this.user.tokens },
     });
+    return await this.loginModal.present();
   }
 
   async openWallet() {
     this.walletModal = await this.modalController.create({
       component: WalletPage,
-      componentProps: { monies: this.user.tokens },
+      // componentProps: { monies: this.user.tokens },
     });
     return await this.walletModal.present();
   }

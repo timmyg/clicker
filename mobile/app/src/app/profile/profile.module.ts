@@ -12,11 +12,18 @@ import { WalletPage } from './wallet/wallet.page';
 import { SharedModule } from '../shared/shared.module';
 import { ReservationComponent } from './reservation/reservation.component';
 import { FeedbackPage } from './feedback/feedback.page';
+import { AuthModule } from '../auth/auth.module';
+import { LoginComponent } from '../auth/login/login.component';
+import { LoggingInComponent } from './logging-in.component';
 
 const routes: Routes = [
   {
     path: '',
     component: ProfilePage,
+  },
+  {
+    path: 'logging-in',
+    component: LoggingInComponent,
   },
 ];
 
@@ -28,9 +35,10 @@ const routes: Routes = [
     IonicModule,
     MomentModule,
     FontAwesomeModule,
+    AuthModule,
     RouterModule.forChild(routes),
   ],
-  declarations: [ProfilePage, WalletPage, FeedbackPage, ReservationComponent],
-  entryComponents: [WalletPage, FeedbackPage],
+  declarations: [ProfilePage, WalletPage, FeedbackPage, ReservationComponent, LoggingInComponent],
+  entryComponents: [WalletPage, FeedbackPage, LoginComponent],
 })
 export class ProfilePageModule {}

@@ -16,9 +16,24 @@ import { ApiInterceptor } from './api-interceptor';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.reducer';
 import * as fromUser from './state/user/user.actions';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 
+export function initApplication(store: Store<AppState>): Function {
+  return () =>
+    new Promise(resolve => {
+      console.log('promise');
+      store.dispatch(new fromUser.Load());
+      store
+        .select((state: any) => state.user)
+        .pipe(
+          filter(user => user.authToken && user.authToken.length),
+          take(1),
+        )
+        .subscribe(authToken => {
+          resolve(true);
+        });
+    });
+}
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -38,22 +53,43 @@ import { takeUntil } from 'rxjs/operators';
       // load user on startup
       // TODO i dont think its waiting until its actually loaded...
       provide: APP_INITIALIZER,
-      useFactory: (store: Store<AppState>) => {
-        return () =>
-          new Promise(resolve => {
-            const loaded$ = new Subject();
-            store.dispatch(new fromUser.Get());
-            store
-              .select((state: AppState) => state.user.me)
-              .pipe(takeUntil(loaded$))
-              .subscribe(loaded => {
-                if (loaded) {
-                  loaded$.next();
-                  resolve();
-                }
-              });
-          });
-      },
+      useFactory: initApplication,
+      // return () =>
+      // new Promise(resolve => {
+      //   console.log('promise...');
+      //   const loaded$ = new Subject();
+      //   store.dispatch(new fromUser.Load());
+      //   store
+      //     .select((state: AppState) => state.user.me)
+      //     // .select((state: AppState) => state.user.authToken && state.user.authToken.length)
+      //     // .select((state: AppState) => false)
+      //     .pipe(takeUntil(loaded$))
+      //     .subscribe(loaded => {
+      //       console.log('returned...');
+      //       if (loaded) {
+      //         console.log('resolved');
+      //         loaded$.next();
+      //         resolve();
+      //       }
+      //     });
+      // });
+      // new Promise(resolve => {
+      //   console.log('promise');
+      //   store.dispatch(new fromUser.Load());
+      //   // store.dispatch(new LoadUsers());
+      //   store
+      //     .select((state: any) => state.user)
+      //     .pipe(
+      //       filter(user => user.authToken && user.authToken.length),
+      //       take(1),
+      //     )
+      //     .subscribe(users => {
+      //       console.log('resolve', users);
+      //       //  store.dispatch(new FinishAppInitializer());
+      //       // resolve(true);
+      //     });
+      // });
+      // },
       multi: true,
       deps: [Store],
     },
