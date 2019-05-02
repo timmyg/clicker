@@ -71,7 +71,7 @@ module.exports.transaction = async event => {
     .eq(userId)
     .exec();
 
-  if (wallet && wallet.tokens > tokens) {
+  if (wallet && wallet.tokens >= tokens) {
     // TODO audit
     wallet = await Wallet.update({ userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
     return respond(200, wallet);

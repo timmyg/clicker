@@ -64,13 +64,15 @@ module.exports.create = async event => {
   await Reservation.create(reservation);
 
   // deduct from user
+  const result = await invokeFunction(`user-${process.env.stage}-transaction`, { tokens: cost });
+  console.log({ result });
 
   // change the channel
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
   const { channel, channelMinor } = reservation.program;
   const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
-  await invokeFunction(`remote-${process.env.stage}-command`, { payload });
+  await invokeFunction(`remote-${process.env.stage}-command`, payload);
 
   await track({
     userId: reservation.userId,
@@ -99,14 +101,13 @@ module.exports.update = async event => {
   reservation = calculateReservationTimes(reservation);
   await Reservation.update({ id, userId }, reservation);
 
-  // TODO - this should change channel - need to test
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
   const { channel, channelMinor } = reservation.program;
   const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
   console.log('update reservation, change channel');
-  console.log(`remote-${process.env.stage}-command`, { payload });
-  await invokeFunction(`remote-${process.env.stage}-command`, { payload });
+  console.log(`remote-${process.env.stage}-command`, payload);
+  await invokeFunction(`remote-${process.env.stage}-command`, payload);
 
   await track({
     userId: reservation.userId,
