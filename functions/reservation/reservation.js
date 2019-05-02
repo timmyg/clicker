@@ -57,11 +57,15 @@ module.exports.health = async event => {
 
 module.exports.create = async event => {
   let reservation = getBody(event);
+  const { cost } = reservation;
   reservation.userId = getUserId(event);
 
   reservation = calculateReservationTimes(reservation);
   await Reservation.create(reservation);
 
+  // deduct from user
+
+  // change the channel
   const { losantId, ip } = reservation.location;
   const { clientAddress: client } = reservation.box;
   const { channel, channelMinor } = reservation.program;

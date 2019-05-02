@@ -88,18 +88,25 @@ functions:
           path: ''
           method: post
           cors: true
-  getWallet:
-    handler: user.getWallet
+  wallet:
+    handler: user.wallet
     events:
       - http:
           path: wallet
           method: get
           cors: true
-  addTokens:
-    handler: user.addTokens
+  replenish:
+    handler: user.replenish
     events:
       - http:
           path: 'tokens'
+          method: post
+          cors: true
+  transaction:
+    handler: user.transaction
+    events:
+      - http:
+          path: 'transaction'
           method: post
           cors: true
   alias:

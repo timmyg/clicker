@@ -48,21 +48,36 @@ module.exports.create = async event => {
   return respond(201, { token });
 };
 
-module.exports.getWallet = async event => {
+module.exports.wallet = async event => {
   const userId = getUserId(event);
-  console.log({ userId });
-  const user = await Wallet.queryOne('userId')
+  const wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
-  return respond(200, { tokens: user.tokens });
+  return respond(200, { tokens: wallet.tokens });
 };
 
-module.exports.addTokens = async event => {
+module.exports.replenish = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
   const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
   return respond(200, updatedWallet);
+};
+
+module.exports.transaction = async event => {
+  const userId = getUserId(event);
+  const { tokens } = getBody(event);
+  let wallet = await Wallet.queryOne('userId')
+    .eq(userId)
+    .exec();
+
+  if (wallet && wallet.tokens > tokens) {
+    // TODO audit
+    wallet = await Wallet.update({ userId }, { $DELETE: { tokens } }, { returnValues: 'ALL_NEW' });
+    return respond(200, wallet);
+  } else {
+    return respond(400, 'Insufficient Funds');
+  }
 };
 
 module.exports.alias = async event => {
@@ -94,6 +109,8 @@ module.exports.alias = async event => {
 
   // update for tracking purposes
   await Wallet.update({ userId: fromId }, { aliasedTo: toId });
+
+  // TODO audit transaction
 
   return respond(201, wallet);
 };
