@@ -1,6 +1,14 @@
 const dynamoose = require('dynamoose');
 const moment = require('moment');
-const { getUserId, getBody, getPathParameters, invokeFunction, respond, track } = require('serverless-helpers');
+const {
+  getUserId,
+  getBody,
+  getPathParameters,
+  invokeFunction,
+  invokeFunctionSync,
+  respond,
+  track,
+} = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
@@ -64,7 +72,12 @@ module.exports.create = async event => {
   await Reservation.create(reservation);
 
   // deduct from user
-  const result = await invokeFunction(`user-${process.env.stage}-transaction`, { tokens: cost }, null, event.headers);
+  const result = await invokeFunctionSync(
+    `user-${process.env.stage}-transaction`,
+    { tokens: cost },
+    null,
+    event.headers,
+  );
   console.log({ result });
   if (result.StatusCode >= 400) {
     return respond(result.StatusCode, result.Payload);
