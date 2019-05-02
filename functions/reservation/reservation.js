@@ -64,7 +64,7 @@ module.exports.create = async event => {
   await Reservation.create(reservation);
 
   // deduct from user
-  const result = await invokeFunction(`user-${process.env.stage}-transaction`, { tokens: cost });
+  const result = await invokeFunction(`user-${process.env.stage}-transaction`, { tokens: cost }, null, event.headers);
   console.log({ result });
 
   // change the channel
