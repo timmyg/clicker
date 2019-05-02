@@ -1,13 +1,6 @@
 const dynamoose = require('dynamoose');
 const moment = require('moment');
-const {
-  getUserId,
-  getBody,
-  getPathParameters,
-  invokeFunction,
-  respond,
-  track,
-} = require('serverless-helpers');
+const { getUserId, getBody, getPathParameters, invokeFunction, respond, track } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
@@ -64,7 +57,7 @@ module.exports.health = async event => {
 
 module.exports.create = async event => {
   let reservation = getBody(event);
-  reservation.userId = const userId = getUserId(event);
+  reservation.userId = getUserId(event);
 
   reservation = calculateReservationTimes(reservation);
   await Reservation.create(reservation);
@@ -146,7 +139,7 @@ module.exports.active = async event => {
     const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
     return respond(200, sorted);
   }
-  return response(200, [])
+  return response(200, []);
 };
 
 module.exports.get = async event => {

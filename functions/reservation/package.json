@@ -5,6 +5,7 @@
   "main": "reservation.js",
   "scripts": {
     "test": "jest --coverage",
+    "invoke:active": "serverless invoke local --function active --path ../.resources/data/reservation.json",
     "invoke:all": "serverless invoke local --function all --path ../.resources/data/reservation.json",
     "invoke:create": "serverless invoke local --function create --path ../.resources/data/reservation.json",
     "invoke:cancel": "serverless invoke local --function cancel --path ../.resources/data/reservation.json",
