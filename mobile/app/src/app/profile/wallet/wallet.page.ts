@@ -61,6 +61,7 @@ export class WalletPage {
           message: `Card successfully added`,
           duration: 3000,
           cssClass: 'ion-text-center',
+          
         });
         toast.present();
       } else if (result.error) {
