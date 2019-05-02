@@ -73,7 +73,7 @@ module.exports.transaction = async event => {
 
   if (wallet && wallet.tokens > tokens) {
     // TODO audit
-    wallet = await Wallet.update({ userId }, { $DELETE: { tokens } }, { returnValues: 'ALL_NEW' });
+    wallet = await Wallet.update({ userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
     return respond(200, wallet);
   } else {
     return respond(400, 'Insufficient Funds');
