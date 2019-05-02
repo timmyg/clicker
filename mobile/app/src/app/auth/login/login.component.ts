@@ -53,12 +53,6 @@ export class LoginComponent {
         }
         this.codeSent = true;
         this.waiting = false;
-        const toast = await this.toastController.create({
-          message: `Text sent.`,
-          duration: 4000,
-          cssClass: 'ion-text-center',
-        });
-        toast.present();
       },
     );
   }
