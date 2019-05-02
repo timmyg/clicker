@@ -32,7 +32,6 @@ export class LoginComponent {
   }
 
   async onPhoneSubmit(x) {
-    console.log(`+1${this.phone}`);
     this.waiting = true;
     auth.passwordlessStart(
       {
@@ -52,7 +51,6 @@ export class LoginComponent {
           this.waiting = false;
           return console.error(err);
         }
-        console.log(res);
         this.codeSent = true;
         this.waiting = false;
         const toast = await this.toastController.create({
@@ -66,7 +64,6 @@ export class LoginComponent {
   }
 
   onCodeSubmit() {
-    console.log(`+1${this.phone}`, this.code);
     this.waiting = true;
     auth.passwordlessLogin(
       {

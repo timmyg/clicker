@@ -45,17 +45,13 @@ export class LoggingInComponent {
 
   private processLogin(fragment: string) {
     const context = this;
-    console.log(fragment);
     auth.parseHash({ hash: fragment }, async (err, authResult) => {
-      console.log(1);
       if (err) {
-        return console.log(err);
       } else if (authResult) {
         // alias user (move tokens to new user)
         const jwt = authResult.idToken;
         const newUserId = authResult.idTokenPayload.sub;
         this.userId$.pipe(first(val => !!val)).subscribe(oldUserId => {
-          console.log(2);
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
           this.userService.setToken(jwt);
           setTimeout(async () => {

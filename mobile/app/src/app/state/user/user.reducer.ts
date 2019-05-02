@@ -40,7 +40,6 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       };
     case fromUser.SET_AUTH_TOKEN:
       state.authToken = action.payload;
-      console.log('set auth token state', state);
       return {
         ...state,
       };

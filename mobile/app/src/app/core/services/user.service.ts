@@ -21,13 +21,11 @@ export class UserService {
   get(): Observable<string> {
     return from(this.storage.get(storage.token)).pipe(
       mergeMap(token => {
-        console.log({ token });
         if (token) {
           return of(token);
         } else {
           return new Observable(observer => {
             this.httpClient.post<any>(this.prefix, {}).subscribe(result => {
-              console.log({ result });
               this.setOriginalToken(result.token);
               this.setToken(result.token);
               return observer.next(result.token);

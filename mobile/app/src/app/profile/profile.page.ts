@@ -78,7 +78,6 @@ export class ProfilePage {
     this.intercom.boot({ app_id: 'lp9l5d9l' });
     this.intercom.showNewMessage();
     this.intercom.onHide(() => {
-      console.log('hide!');
       this.intercom.shutdown();
     });
   }

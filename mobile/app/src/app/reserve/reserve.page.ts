@@ -33,11 +33,6 @@ export class ReservePage {
   // 2. channel
   // 3. tv
 
-  // ngOnInit() {
-  //   // this.store.dispatch(new fromReservation.Start());
-  //   console.log(this.route.snapshot);
-  // }
-
   goBack() {
     this.navCtrl.back();
   }

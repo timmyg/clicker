@@ -11,7 +11,6 @@ export class ApiInterceptor implements HttpInterceptor {
   constructor(private store$: Store<any>) {}
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('intercept', request.url);
     return this.addToken(request).pipe(
       first(),
       mergeMap((requestWithToken: HttpRequest<any>) => next.handle(requestWithToken)),

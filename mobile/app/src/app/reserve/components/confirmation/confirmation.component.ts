@@ -79,11 +79,6 @@ export class ConfirmationComponent implements OnInit {
     // const endTimeInitial = this.reservation.end ? moment(this.reservation.end) : moment();
     this.reservation.minutes = plan.minutes;
     this.reservation.reserve = plan.reserve;
-    console.log(
-      this.getInitialEndTime()
-        .clone()
-        .toDate(),
-    );
     this.reservationEnd$ = interval(15 * 1000).pipe(
       startWith(
         this.getInitialEndTime()
@@ -92,7 +87,6 @@ export class ConfirmationComponent implements OnInit {
           .toDate(),
       ), // this sets inital value
       map(() => {
-        console.log(this.getInitialEndTime().toDate());
         return this.getInitialEndTime()
           .clone()
           .add(plan.minutes, 'm')
