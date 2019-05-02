@@ -62,5 +62,6 @@ export const getUser = (state: State) => state.me;
 export const getUserId = (state: State) => state.me.sub;
 export const getUserTokenCount = (state: State) => state.tokens;
 export const getUserAuthToken = (state: State) => state.authToken;
+export const isLoggedIn = (state: State) => state.me && !state.me.guest;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

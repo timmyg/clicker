@@ -9,6 +9,11 @@ export const getUser = createSelector(
   fromUser.getUser,
 );
 
+export const isLoggedIn = createSelector(
+  getUserState,
+  fromUser.isLoggedIn,
+);
+
 export const getUserId = createSelector(
   getUserState,
   fromUser.getUserId,

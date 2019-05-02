@@ -1,4 +1,7 @@
+import { commonEnvironment } from './environment.common';
+
 export const environment = {
+  ...commonEnvironment,
   production: true,
   apiBaseUrl: 'https://api-release.tryclicker.com',
   auth0: {

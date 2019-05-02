@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
+import { environment } from 'src/environments/environment.production';
 
 @Component({
   selector: 'app-profile',
@@ -26,7 +27,6 @@ export class ProfilePage {
   reservations$: Observable<Reservation[]>;
   user$: Observable<User>;
   tokenCount$: Observable<number>;
-  // user: User;
   isReservationsLoading$: Observable<boolean>;
   faCopyright = faCopyright;
   walletModal;
@@ -75,7 +75,7 @@ export class ProfilePage {
     //   component: FeedbackPage,
     // });
     // return await this.feedbackModal.present();
-    this.intercom.boot({ app_id: 'lp9l5d9l' });
+    this.intercom.boot({ app_id: environment.intercom.appId });
     this.intercom.showNewMessage();
     this.intercom.onHide(() => {
       this.intercom.shutdown();

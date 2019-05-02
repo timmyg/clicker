@@ -9,7 +9,8 @@ import * as fromReservation from '../../../state/reservation/reservation.actions
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
-import { startWith, map, distinctUntilChanged } from 'rxjs/operators';
+import { startWith, map, distinctUntilChanged, first } from 'rxjs/operators';
+import { isLoggedIn, getUserTokenCount } from 'src/app/state/user';
 
 @Component({
   selector: 'app-confirmation',
@@ -19,10 +20,15 @@ import { startWith, map, distinctUntilChanged } from 'rxjs/operators';
 export class ConfirmationComponent implements OnInit {
   reservation$: Observable<Partial<Reservation>>;
   reservationEnd$: Observable<Date>;
+  tokenCount$: Observable<number>;
+  tokenCount: number;
+  isLoggedIn$: Observable<boolean>;
   reservation: Partial<Reservation>;
   title = 'Confirmation';
+  isLoggedIn: boolean;
   saving: boolean;
   isEditMode: boolean;
+  sufficientFunds: boolean;
   private reservationPlans = [
     {
       tokens: 1,
@@ -51,17 +57,23 @@ export class ConfirmationComponent implements OnInit {
   ) {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
+    this.tokenCount$ = this.store.select(getUserTokenCount);
+    this.isLoggedIn$ = this.store.select(isLoggedIn);
   }
 
   ngOnInit() {
-    this.reservation$.subscribe(reservation => {
-      // this.initialEndTime = reservation.end;
+    this.reservation$.pipe(first()).subscribe(reservation => {
       this.reservation = reservation;
       if (reservation.id) {
         this.isEditMode = true;
       }
-      // reservation.location.name;
-      // reservation.location.neighborhood;
+    });
+    this.tokenCount$.pipe(first()).subscribe(tokens => {
+      this.tokenCount = tokens;
+    });
+    this.isLoggedIn$.pipe(first()).subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+      console.log(isLoggedIn);
     });
   }
 
@@ -79,6 +91,7 @@ export class ConfirmationComponent implements OnInit {
     // const endTimeInitial = this.reservation.end ? moment(this.reservation.end) : moment();
     this.reservation.minutes = plan.minutes;
     this.reservation.reserve = plan.reserve;
+    this.checkWallet();
     this.reservationEnd$ = interval(15 * 1000).pipe(
       startWith(
         this.getInitialEndTime()
@@ -94,6 +107,10 @@ export class ConfirmationComponent implements OnInit {
       }),
       distinctUntilChanged(),
     );
+  }
+
+  checkWallet() {
+    this.tokenCount >= this.reservation.cost ? (this.sufficientFunds = true) : (this.sufficientFunds = false);
   }
 
   getInitialEndTime() {
