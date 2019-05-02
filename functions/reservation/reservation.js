@@ -78,9 +78,10 @@ module.exports.create = async event => {
     null,
     event.headers,
   );
-  console.log({ result });
-  if (result.StatusCode >= 400) {
-    return respond(result.StatusCode, result.Payload);
+  const statusCode = JSON.parse(result.Payload).statusCode;
+  if (statusCode >= 400) {
+    const message = JSON.parse(JSON.parse(result.Payload).body).message;
+    return respond(statusCode, message);
   }
 
   // change the channel

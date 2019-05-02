@@ -77,6 +77,7 @@ module.exports.transaction = async event => {
     wallet = await Wallet.update({ userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
     return respond(200, wallet);
   } else {
+    console.error('Insufficient Funds');
     return respond(400, 'Insufficient Funds');
   }
 };
