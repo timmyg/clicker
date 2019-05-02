@@ -141,9 +141,12 @@ module.exports.active = async event => {
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
-  const filtered = userReservations.filter(r => r.cancelled != true && r.end > new Date());
-  const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
-  return respond(200, sorted);
+  if (userReservations && userReservations.length) {
+    const filtered = userReservations.filter(r => r.cancelled != true && r.end > new Date());
+    const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
+    return respond(200, sorted);
+  }
+  return response(200, [])
 };
 
 module.exports.get = async event => {

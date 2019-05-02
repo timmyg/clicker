@@ -10,6 +10,7 @@ import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../state/user/user.model';
+import { first } from 'rxjs/operators';
 
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
@@ -46,26 +47,27 @@ export class LoggingInComponent {
     const context = this;
     console.log(fragment);
     auth.parseHash({ hash: fragment }, async (err, authResult) => {
+      console.log(1);
       if (err) {
         return console.log(err);
       } else if (authResult) {
         // alias user (move tokens to new user)
         const jwt = authResult.idToken;
         const newUserId = authResult.idTokenPayload.sub;
-        this.userService.setToken(jwt);
-        this.userId$.subscribe(oldUserId => {
+        this.userId$.pipe(first(val => !!val)).subscribe(oldUserId => {
+          console.log(2);
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
-          setTimeout(() => {
+          this.userService.setToken(jwt);
+          setTimeout(async () => {
             this.router.navigate(['/tabs/profile']);
+            const toast = await context.toastController.create({
+              message: `Successfully logged in.`,
+              duration: 6000,
+              cssClass: 'ion-text-center',
+            });
+            toast.present();
           }, 3000);
         });
-
-        const toast = await context.toastController.create({
-          message: `Successfully logged in.`,
-          duration: 6000,
-          cssClass: 'ion-text-center',
-        });
-        toast.present();
       }
     });
   }
