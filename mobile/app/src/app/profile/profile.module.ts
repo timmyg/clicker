@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
+import { NgxStripeModule } from 'ngx-stripe';
 
 import { ProfilePage } from './profile.page';
 import { MomentModule } from 'ngx-moment';
@@ -15,6 +16,7 @@ import { FeedbackPage } from './feedback/feedback.page';
 import { AuthModule } from '../auth/auth.module';
 import { LoginComponent } from '../auth/login/login.component';
 import { LoggingInComponent } from './logging-in.component';
+import { environment } from 'src/environments/environment';
 
 const routes: Routes = [
   {
@@ -36,6 +38,8 @@ const routes: Routes = [
     MomentModule,
     FontAwesomeModule,
     AuthModule,
+    ReactiveFormsModule,
+    NgxStripeModule.forRoot(environment.stripe.publishableKey),
     RouterModule.forChild(routes),
   ],
   declarations: [ProfilePage, WalletPage, FeedbackPage, ReservationComponent, LoggingInComponent],
