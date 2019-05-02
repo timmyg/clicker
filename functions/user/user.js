@@ -89,7 +89,11 @@ module.exports.alias = async event => {
   } else {
     wallet = await Wallet.create({ userId: toId, tokens });
   }
+  // remove tokens from old account
+  await Wallet.update({ userId: fromId }, { tokens: 0 });
 
+  // update for tracking purposes
   await Wallet.update({ userId: fromId }, { aliasedTo: toId });
+
   return respond(201, wallet);
 };

@@ -46,44 +46,23 @@ export class LoggingInComponent {
     const context = this;
     console.log(fragment);
     auth.parseHash({ hash: fragment }, async (err, authResult) => {
-      console.log(authResult);
       if (err) {
         return console.log(err);
       } else if (authResult) {
         // alias user (move tokens to new user)
         const jwt = authResult.idToken;
         const newUserId = authResult.idTokenPayload.sub;
+        this.userService.setToken(jwt);
         this.userId$.subscribe(oldUserId => {
-          console.log('alias', oldUserId, newUserId);
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
           setTimeout(() => {
             this.router.navigate(['/tabs/profile']);
           }, 3000);
         });
-        // this.userId$.pipe(filter(id => !!id)
-        // this.store$.pipe(
-        //   select(getUserAuthToken),
-        //   filter(authToken => authToken && authToken.length > 0),
 
-        this.userService.set(jwt);
-        // this.store.dispatch(new fromUser.Load());
-        // const jwtPayload = authResult.idTokenPayload;
-        // localStorage.setItem('accessToken', authResult.accessToken);
-        // auth.client.userInfo(authResult.accessToken, async (err, user) => {
-        //   if (err) {
-        //     console.log('err', err);
-        //     alert('There was an error retrieving your profile: ' + err.message);
-        //   } else {
-        //     // Hide the login UI, show a user profile element with name and image
-        //     console.log(user);
-        //   }
-        // });
-
-        // TODO merge/update user
-        console.error('TODO send off merge request');
         const toast = await context.toastController.create({
           message: `Successfully logged in.`,
-          duration: 2000,
+          duration: 6000,
           cssClass: 'ion-text-center',
         });
         toast.present();

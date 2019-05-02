@@ -7,6 +7,7 @@ import { mergeMap } from 'rxjs/operators';
 // import * as decode from 'jwt-decode';
 const storage = {
   token: 'token',
+  originalToken: 'originalToken',
   anonymous: 'anonymous',
 };
 
@@ -27,7 +28,8 @@ export class UserService {
           return new Observable(observer => {
             this.httpClient.post<any>(this.prefix, {}).subscribe(result => {
               console.log({ result });
-              this.set(result.token);
+              this.setOriginalToken(result.token);
+              this.setToken(result.token);
               return observer.next(result.token);
             });
           });
@@ -48,7 +50,11 @@ export class UserService {
     return this.httpClient.post<any>(`${this.prefix}/alias/${fromId}/${toId}`, {});
   }
 
-  set(token: string) {
+  setToken(token: string) {
     this.storage.set(storage.token, token);
+  }
+
+  setOriginalToken(token: string) {
+    this.storage.set(storage.originalToken, token);
   }
 }
