@@ -139,7 +139,7 @@ module.exports.active = async event => {
     const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
     return respond(200, sorted);
   }
-  return response(200, []);
+  return respond(200, []);
 };
 
 module.exports.get = async event => {
