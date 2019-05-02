@@ -66,6 +66,9 @@ module.exports.create = async event => {
   // deduct from user
   const result = await invokeFunction(`user-${process.env.stage}-transaction`, { tokens: cost }, null, event.headers);
   console.log({ result });
+  if (result.StatusCode >= 400) {
+    return respond(result.StatusCode, result.Payload);
+  }
 
   // change the channel
   const { losantId, ip } = reservation.location;

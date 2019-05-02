@@ -6,6 +6,7 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 
 import { Reservation } from './reservation.model';
 import * as ReservationActions from './reservation.actions';
+import * as UserActions from '../user/user.actions';
 import { ReservationService } from '../../core/services/reservation.service';
 import { LocationService } from 'src/app/core/services/location.service';
 import { Location } from '../location/location.model';
@@ -30,6 +31,7 @@ export class ReservationsEffects {
       this.reservationService.create(action.payload).pipe(
         switchMap((reservation: Reservation) => [
           new ReservationActions.CreateSuccess(reservation),
+          new UserActions.LoadWallet(),
           new ReservationActions.GetAll(),
         ]),
         catchError(err => of(new ReservationActions.CreateFail(err))),
