@@ -56,7 +56,7 @@ module.exports.wallet = async event => {
   const wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
-  return respond(200, { tokens: wallet.tokens });
+  return respond(200, wallet);
 };
 
 module.exports.updateCard = async event => {

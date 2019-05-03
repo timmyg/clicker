@@ -11,6 +11,12 @@ export const SET_AUTH_TOKEN = '[USER] Set Auth Token';
 export const ALIAS = '[USER] Alias';
 export const ALIAS_SUCCESS = '[USER] Alias Success';
 export const ALIAS_FAIL = '[USER] Alias Fail';
+export const UPDATE_CARD = '[USER] Update Card';
+export const UPDATE_CARD_SUCCESS = '[USER] Update Card Success';
+export const UPDATE_CARD_FAIL = '[USER] Update Card Fail';
+export const ADD_FUNDS = '[USER] Add Funds';
+export const ADD_FUNDS_SUCCESS = '[USER] Add Funds Success';
+export const ADD_FUNDS_FAIL = '[USER] Add Funds Fail';
 
 export class Load implements Action {
   readonly type = LOAD;
@@ -60,6 +66,36 @@ export class AliasFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class UpdateCard implements Action {
+  readonly type = UPDATE_CARD;
+  constructor(public token: string) {}
+}
+
+export class UpdateCardSuccess implements Action {
+  readonly type = UPDATE_CARD_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class UpdateCardFail implements Action {
+  readonly type = UPDATE_CARD_FAIL;
+  constructor(public payload: any) {}
+}
+
+export class AddFunds implements Action {
+  readonly type = ADD_FUNDS;
+  constructor(public tokens: number) {}
+}
+
+export class AddFundsSuccess implements Action {
+  readonly type = ADD_FUNDS_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class AddFundsFail implements Action {
+  readonly type = ADD_FUNDS_FAIL;
+  constructor(public payload: any) {}
+}
+
 export type UserActions =
   | Load
   | LoadSuccess
@@ -67,4 +103,10 @@ export type UserActions =
   | LoadWallet
   | LoadWalletSuccess
   | LoadWalletFail
-  | SetAuthToken;
+  | SetAuthToken
+  | UpdateCard
+  | UpdateCardSuccess
+  | UpdateCardFail
+  | AddFunds
+  | AddFundsSuccess
+  | AddFundsFail;

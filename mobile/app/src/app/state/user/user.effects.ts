@@ -50,5 +50,27 @@ export class UserEffects {
     ),
   );
 
+  @Effect()
+  updateCard$: Observable<Action> = this.actions$.pipe(
+    ofType(UserActions.UPDATE_CARD),
+    switchMap((action: UserActions.UpdateCard) =>
+      this.userService.updateCard(action.token).pipe(
+        switchMap((result: any) => [new UserActions.UpdateCardSuccess(result), new UserActions.Load()]),
+        catchError(err => of(new UserActions.UpdateCardFail(err))),
+      ),
+    ),
+  );
+
+  @Effect()
+  addFunds$: Observable<Action> = this.actions$.pipe(
+    ofType(UserActions.ADD_FUNDS),
+    switchMap((action: UserActions.AddFunds) =>
+      this.userService.addFunds(action.tokens).pipe(
+        switchMap((result: any) => [new UserActions.AddFundsSuccess(result), new UserActions.Load()]),
+        catchError(err => of(new UserActions.LoadFail(err))),
+      ),
+    ),
+  );
+
   constructor(private actions$: Actions, private userService: UserService) {}
 }

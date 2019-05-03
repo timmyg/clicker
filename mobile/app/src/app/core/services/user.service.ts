@@ -48,6 +48,14 @@ export class UserService {
     return this.httpClient.post<any>(`${this.prefix}/alias/${fromId}/${toId}`, {});
   }
 
+  updateCard(token: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.prefix}/stripe/card`, { token });
+  }
+
+  addFunds(tokens: number): Observable<any> {
+    return this.httpClient.post<any>(`${this.prefix}/replenish`, { tokens });
+  }
+
   setToken(token: string) {
     this.storage.set(storage.token, token);
   }
