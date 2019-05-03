@@ -37,11 +37,12 @@ export class UserService {
   }
 
   getWallet(): Observable<Number> {
-    return new Observable(observer => {
-      this.httpClient.get<any>(`${this.prefix}/wallet`, {}).subscribe(result => {
-        return observer.next(result.tokens);
-      });
-    });
+    return this.httpClient.get<any>(`${this.prefix}/wallet`, {});
+    // return new Observable(observer => {
+    // this.httpClient.get<any>(`${this.prefix}/wallet`, {}).subscribe(result => {
+    //   return observer.next(result.tokens);
+    // });
+    // });
   }
 
   alias(fromId: string, toId: string): Observable<any> {

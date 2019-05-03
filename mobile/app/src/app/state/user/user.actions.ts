@@ -38,7 +38,7 @@ export class LoadWallet implements Action {
 
 export class LoadWalletSuccess implements Action {
   readonly type = LOAD_WALLET_SUCCESS;
-  constructor(public payload: number) {}
+  constructor(public payload: any) {}
 }
 
 export class LoadWalletFail implements Action {

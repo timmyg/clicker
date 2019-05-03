@@ -21,6 +21,7 @@ const Wallet = dynamoose.model(
       default: uuid,
     },
     stripeCustomer: String,
+    card: Object, // set in api
     tokens: {
       type: Number,
       required: true,
@@ -56,6 +57,13 @@ module.exports.wallet = async event => {
   const wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
+
+  if (wallet.stripeCustomer) {
+    const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
+    if (customer.sources.data.length) {
+      wallet.card = customer.sources.data[0];
+    }
+  }
   return respond(200, wallet);
 };
 
@@ -83,19 +91,19 @@ module.exports.updateCard = async event => {
   }
 };
 
-module.exports.getStripeCustomer = async event => {
-  const userId = getUserId(event);
-  const wallet = await Wallet.queryOne('userId')
-    .eq(userId)
-    .exec();
+// module.exports.getStripeCustomer = async event => {
+//   const userId = getUserId(event);
+//   const wallet = await Wallet.queryOne('userId')
+//     .eq(userId)
+//     .exec();
 
-  if (wallet.stripeCustomer) {
-    const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
-    return respond(200, customer);
-  }
+//   if (wallet.stripeCustomer) {
+//     const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
+//     return respond(200, customer);
+//   }
 
-  return respond(200);
-};
+//   return respond(200);
+// };
 
 module.exports.replenish = async event => {
   const userId = getUserId(event);

@@ -31,8 +31,9 @@ export class UserEffects {
     ofType(UserActions.LOAD_WALLET),
     switchMap(() =>
       this.userService.getWallet().pipe(
-        map((tokens: number) => {
-          return new UserActions.LoadWalletSuccess(tokens);
+        map((user: any) => {
+          console.log(user);
+          return new UserActions.LoadWalletSuccess(user);
         }),
         catchError(err => of(new UserActions.LoadWalletFail(err))),
       ),
