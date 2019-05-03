@@ -34,6 +34,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       };
     case fromUser.LOAD_WALLET_SUCCESS:
       // state.tokens = action.payload;
+      console.log(state, action);
       return {
         ...state,
         loading: false,
