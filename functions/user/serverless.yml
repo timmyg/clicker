@@ -118,7 +118,7 @@ functions:
     handler: user.replenish
     events:
       - http:
-          path: 'tokens'
+          path: 'replenish'
           method: post
           cors: true
   transaction:
