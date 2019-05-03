@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-wallet',
@@ -19,7 +19,11 @@ export class WalletPage {
 
   stripeFormGroup: FormGroup;
 
-  constructor(private toastController: ToastController, private stripeService: StripeService) {}
+  constructor(
+    private toastController: ToastController,
+    private stripeService: StripeService,
+    private modalController: ModalController,
+  ) {}
 
   ngOnInit() {
     // this.stripeFormGroup = this.fb.group({
@@ -61,7 +65,6 @@ export class WalletPage {
           message: `Card successfully added`,
           duration: 3000,
           cssClass: 'ion-text-center',
-          
         });
         toast.present();
       } else if (result.error) {
@@ -76,5 +79,8 @@ export class WalletPage {
         toast.present();
       }
     });
+  }
+  onCloseClick() {
+    this.modalController.dismiss();
   }
 }
