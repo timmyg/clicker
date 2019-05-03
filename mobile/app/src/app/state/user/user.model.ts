@@ -1,4 +1,6 @@
 export interface User {
-  id: string;
-  tokens: number;
+  sub: string;
+  guest?: boolean;
+  // tokens: number;
+  // authToken: string;
 }

@@ -7,15 +7,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <section>
-    <ion-row align-items-center>
-      <b margin-end>Wallet:</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
-      <span>&nbsp;</span> <span>{{ monies }}</span>
-    </ion-row>
-    <ion-row padding-top>
-      <b margin-end>Buy More:</b>
-      <fa-icon [icon]="faCreditCard" size="2x" margin-end></fa-icon>
-      <fa-icon [icon]="faCcApplePay" size="2x"></fa-icon>
-    </ion-row>
-  </section>
+  <p class="ion-text-center">Please add a credit card below</p>
+  <form novalidate (ngSubmit)="buy()">
+    <div id="card-element" class="field ion-margin-vertical"></div>
+    <ion-button type="submit" expand="block" type="submit" color="success">Add</ion-button>
+  </form>
 </ion-content>

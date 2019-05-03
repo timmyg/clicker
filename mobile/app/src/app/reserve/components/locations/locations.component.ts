@@ -41,7 +41,6 @@ export class LocationsComponent implements OnInit {
     if (reservation && reservation.id) {
       // is editing
       if (!reservation.program) {
-        console.log('go to program');
         this.navCtrl.navigateForward(['../programs'], {
           relativeTo: this.route,
           queryParamsHandling: 'merge',

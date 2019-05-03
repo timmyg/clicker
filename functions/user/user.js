@@ -1,21 +1,32 @@
 const dynamoose = require('dynamoose');
-const { respond, getBody, getAuthBearerToken, getPathParameters } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, getUserId } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+const jwt = require('jsonwebtoken');
 
-const User = dynamoose.model(
-  process.env.tableUser,
+const Wallet = dynamoose.model(
+  process.env.tableWallet,
   {
-    id: {
+    userId: {
       type: String,
       hashKey: true,
-      default: uuid,
+      required: true,
+      set: val => {
+        return decodeURI(val).replace('sms|', '');
+      },
     },
-    name: {
+    id: {
       type: String,
+      default: uuid,
     },
     tokens: {
       type: Number,
       required: true,
+    },
+    aliasedTo: {
+      type: String,
+      set: val => {
+        return decodeURI(val).replace('sms|', '');
+      },
     },
   },
   {
@@ -28,32 +39,80 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  const body = getBody(event);
-  const { name } = body;
-  // const userId = getAuthBearerToken(event);
-
+  // const body = getBody(event);
   const initialTokens = 2;
-  const user = await User.create({ name, tokens: initialTokens });
-  return respond(201, user);
+  const userId = uuid();
+  await Wallet.create({ userId, tokens: initialTokens });
+  const token = jwt.sign({ sub: userId, guest: true }, 'clikr');
+
+  return respond(201, { token });
 };
 
-module.exports.get = async event => {
-  const params = getPathParameters(event);
-  const { id } = params;
+module.exports.wallet = async event => {
+  const userId = getUserId(event);
+  const wallet = await Wallet.queryOne('userId')
+    .eq(userId)
+    .exec();
+  return respond(200, { tokens: wallet.tokens });
+};
 
-  const user = await User.queryOne('id')
-    .eq(id)
+module.exports.replenish = async event => {
+  const userId = getUserId(event);
+  const { tokens } = getBody(event);
+  const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+
+  return respond(200, updatedWallet);
+};
+
+module.exports.transaction = async event => {
+  const userId = getUserId(event);
+  const { tokens } = getBody(event);
+  let wallet = await Wallet.queryOne('userId')
+    .eq(userId)
     .exec();
 
-  return respond(200, user);
+  console.log(wallet.tokens, tokens);
+  if (wallet && wallet.tokens >= tokens) {
+    // TODO audit
+    wallet = await Wallet.update({ userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
+    return respond(200, wallet);
+  } else {
+    console.error('Insufficient Funds');
+    return respond(400, 'Insufficient Funds');
+  }
 };
 
-module.exports.addTokens = async event => {
-  const body = getBody(event);
-  const { tokens } = body;
-  const { userid: id } = event.headers;
+module.exports.alias = async event => {
+  const { fromId, toId } = getPathParameters(event);
 
-  const updatedUser = await User.update({ id }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  // get existing users
+  const fromUser = await Wallet.queryOne('userId')
+    .eq(fromId)
+    .exec();
+  const toUser = await Wallet.queryOne('userId')
+    .eq(toId)
+    .exec();
 
-  return respond(200, updatedUser);
+  // count up new token total
+  let tokens = fromUser.tokens;
+  if (toUser) {
+    tokens += toUser.tokens;
+  }
+
+  // create or update wallet
+  let wallet;
+  if (toUser) {
+    wallet = await Wallet.update({ userId: toId }, { tokens });
+  } else {
+    wallet = await Wallet.create({ userId: toId, tokens });
+  }
+  // remove tokens from old account
+  await Wallet.update({ userId: fromId }, { tokens: 0 });
+
+  // update for tracking purposes
+  await Wallet.update({ userId: fromId }, { aliasedTo: toId });
+
+  // TODO audit transaction
+
+  return respond(201, wallet);
 };
