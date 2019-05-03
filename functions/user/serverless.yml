@@ -47,7 +47,7 @@ custom:
     dev: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
-    WalletTable:
+    Walletable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableWallet}

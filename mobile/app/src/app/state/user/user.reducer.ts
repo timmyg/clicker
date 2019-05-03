@@ -1,9 +1,11 @@
 import * as fromUser from './user.actions';
 import { User } from './user.model';
+import { Card } from './card.model';
 
 export interface State {
   me: User;
   tokens: number;
+  card: Card;
   authToken: string;
   loading: boolean;
   error: string;
@@ -12,6 +14,7 @@ export interface State {
 export const initialState: State = {
   me: null,
   tokens: null,
+  card: null,
   authToken: null,
   loading: false,
   error: null,
@@ -34,6 +37,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       };
     case fromUser.LOAD_WALLET_SUCCESS:
       state.tokens = action.payload.tokens;
+      state.card = action.payload.card;
       console.log(state, action);
       return {
         ...state,
