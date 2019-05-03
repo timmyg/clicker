@@ -5,8 +5,9 @@ provider:
   runtime: nodejs8.10
   environment:
     tableWallet: ${self:custom.tableWallet}
-    stage: ${self:custom.stage}
     segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    stage: ${self:custom.stage}
+    stripeSecretKey: ${self:custom.stripeSecretKey.${self:provider.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -36,6 +37,10 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
   tableWallet: wallets-${self:custom.stage}
+  stripeSecretKey:
+    prod: ${env:STRIPE_SECRET_KEY}
+    release: ${env:STRIPE_SECRET_KEY_DEV}
+    dev: ${env:STRIPE_SECRET_KEY_DEV}
   segmentKey:
     prod: ${env:SEGMENT_WRITE_KEY}
     release: ${env:SEGMENT_WRITE_KEY_DEV}
@@ -93,6 +98,20 @@ functions:
     events:
       - http:
           path: wallet
+          method: get
+          cors: true
+  updateCard:
+    handler: user.updateCard
+    events:
+      - http:
+          path: stripe/card
+          method: post
+          cors: true
+  getStripeCustomer:
+    handler: user.getStripeCustomer
+    events:
+      - http:
+          path: stripe/customer
           method: get
           cors: true
   replenish:

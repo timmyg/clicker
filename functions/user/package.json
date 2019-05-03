@@ -16,6 +16,7 @@
     "dynamoose": "^1.7.2",
     "jsonwebtoken": "^8.5.1",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.9",
+    "stripe": "^6.31.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

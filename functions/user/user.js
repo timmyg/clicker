@@ -1,5 +1,7 @@
 const dynamoose = require('dynamoose');
 const { respond, getBody, getPathParameters, getUserId } = require('serverless-helpers');
+const { stripeSecretKey } = process.env;
+const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 
@@ -18,6 +20,7 @@ const Wallet = dynamoose.model(
       type: String,
       default: uuid,
     },
+    stripeCustomer: String,
     tokens: {
       type: Number,
       required: true,
@@ -56,9 +59,61 @@ module.exports.wallet = async event => {
   return respond(200, { tokens: wallet.tokens });
 };
 
+module.exports.updateCard = async event => {
+  const userId = getUserId(event);
+  const { token: stripeCardToken } = getBody(event);
+
+  const wallet = await Wallet.queryOne('userId')
+    .eq(userId)
+    .exec();
+
+  if (wallet.stripeCustomer) {
+    const customer = await stripe.customers.update(wallet.stripeCustomer, {
+      source: token,
+    });
+    return respond(200, customer);
+  } else {
+    const customer = await stripe.customers.create({
+      source: token,
+      description: userId,
+    });
+    // TODO audit
+    await Wallet.update({ userId }, { stripeCustomer: customer.id });
+    return respond(201, customer);
+  }
+};
+
+module.exports.getStripeCustomer = async event => {
+  const userId = getUserId(event);
+  const wallet = await Wallet.queryOne('userId')
+    .eq(userId)
+    .exec();
+
+  if (wallet.stripeCustomer) {
+    const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
+    return respond(200, customer);
+  }
+
+  return respond(200);
+};
+
 module.exports.replenish = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
+  const wallet = await Wallet.queryOne('userId')
+    .eq(userId)
+    .exec();
+
+  // charge via stripe
+  const charge = await stripe.charges.create({
+    amount: tokens * 100,
+    currency: 'usd',
+    customer: wallet.stripeCustomer,
+  });
+
+  // TODO audit
+
+  // update wallet
   const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
   return respond(200, updatedWallet);
