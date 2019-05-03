@@ -69,12 +69,12 @@ module.exports.updateCard = async event => {
 
   if (wallet.stripeCustomer) {
     const customer = await stripe.customers.update(wallet.stripeCustomer, {
-      source: token,
+      source: stripeCardToken,
     });
     return respond(200, customer);
   } else {
     const customer = await stripe.customers.create({
-      source: token,
+      source: stripeCardToken,
       description: userId,
     });
     // TODO audit

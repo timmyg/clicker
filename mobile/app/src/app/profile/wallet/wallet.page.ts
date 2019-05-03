@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastController, ModalController } from '@ionic/angular';
+import * as fromUser from '../../state/user/user.actions';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../state/app.reducer';
 
 @Component({
   selector: 'app-wallet',
@@ -20,6 +23,7 @@ export class WalletPage {
   stripeFormGroup: FormGroup;
 
   constructor(
+    private store: Store<fromStore.AppState>,
     private toastController: ToastController,
     private stripeService: StripeService,
     private modalController: ModalController,
@@ -60,7 +64,8 @@ export class WalletPage {
       if (result.token) {
         // Use the token to create a charge or a customer
         // https://stripe.com/docs/charges
-        console.log(result.token);
+        console.log(result);
+        this.store.dispatch(new fromUser.UpdateCard(result.token.id));
         const toast = await this.toastController.create({
           message: `Card successfully added`,
           duration: 3000,
