@@ -60,6 +60,7 @@ module.exports.wallet = async event => {
 
   if (wallet.stripeCustomer) {
     const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
+    console.log(customer);
     if (customer.sources.data.length) {
       wallet.card = customer.sources.data[0];
     }
