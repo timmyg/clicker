@@ -29,6 +29,11 @@ export const getUserTokenCount = createSelector(
   fromUser.getUserTokenCount,
 );
 
+export const getUserCard = createSelector(
+  getUserState,
+  fromUser.getUserCard,
+);
+
 export const getLoading = createSelector(
   getUserState,
   fromUser.getLoading,
