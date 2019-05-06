@@ -22,6 +22,7 @@ const Location = dynamoose.model(
         label: String, // physical label id on tv
         tunerBond: Boolean, // not sure what this is
         setupChannel: Number,
+        ip: String,
       },
     ],
     name: { type: String, required: true },
@@ -29,10 +30,11 @@ const Location = dynamoose.model(
     zip: { type: Number, required: true },
     // lat: { type: Number, required: true },
     // lng: { type: Number, required: true },
-    ip: String,
+    // ip: String,
     img: String,
     distance: Number,
     active: Boolean,
+    setup: Boolean,
   },
   {
     timestamps: true,
@@ -89,8 +91,8 @@ module.exports.update = async event => {
   }
 };
 
-module.exports.addBoxes = async event => {
-  const boxes = getBody(event);
+module.exports.setBoxes = async event => {
+  const { boxes, ip } = getBody(event);
   const params = getPathParameters(event);
   const { id } = params;
 
@@ -98,19 +100,23 @@ module.exports.addBoxes = async event => {
     .eq(id)
     .exec();
 
-  // if boxes already exist, don't overwrite
-  // TODO but maybe we should update if different (without overwriting labels)?
-  if (location.boxes && location.boxes.length) {
-    return respond(204);
+  if (location.setup) {
+    return respond(204, 'location has already been setup');
   }
 
-  boxes.forEach(b => {
+  let location;
+  boxes.forEach(box => {
     b.clientAddress = b.clientAddr;
+    b.ip = ip;
+    const existingBox = location.boxes.find(
+      locationBox => locationBox.ip === b.ip && locationBox.clientAddress === b.clientAddress,
+    );
+    if (!existingBox) {
+      location = await Location.update({ id }, { $ADD: { boxes } }, { returnValues: 'ALL_NEW' });
+    }
   });
 
-  // TODO do we need to add main receiver as a box?
-  const updatedBoxes = await Location.update({ id }, { boxes }, { returnValues: 'ALL_NEW' });
-  return respond(200, updatedBoxes);
+  return respond(201, location);
 };
 
 module.exports.setLabels = async event => {

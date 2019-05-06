@@ -92,8 +92,8 @@ functions:
           path: '{id}'
           method: put
           cors: true
-  addBoxes:
-    handler: location.addBoxes
+  setBoxes:
+    handler: location.setBoxes
     events:
       - http:
           path: '{id}/boxes'

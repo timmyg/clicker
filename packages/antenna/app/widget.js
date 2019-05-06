@@ -38,8 +38,8 @@ class Widget {
             return;
           }
           logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
-          context.saveBoxes(ip);
-          return context.api.updateIp(ip);
+          return context.saveBoxes(ip);
+          // return context.api.updateIp(ip);
         });
       } else if (error) {
         // logger.error(error);
@@ -56,8 +56,8 @@ class Widget {
       if (err) {
         return logger.error(err);
       }
-      logger.info({ boxes: response });
-      return this.api.setBoxes(response.locations);
+      logger.info({ boxes: response, ip });
+      return this.api.setBoxes(ip, response.locations);
     });
   }
 
@@ -155,7 +155,7 @@ class Widget {
    */
   async init() {
     // await this.api.register();
-    await this.saveIp();
+    // await this.saveIp();
     this.device.connect(error => {
       if (error) {
         logger.error(error);

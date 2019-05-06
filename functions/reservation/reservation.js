@@ -85,10 +85,11 @@ module.exports.create = async event => {
   }
 
   // change the channel
-  const { losantId, ip } = reservation.location;
-  const { clientAddress: client } = reservation.box;
+  const command = 'tune';
+  const { losantId } = reservation.location;
+  const { clientAddress: client, ip } = reservation.box;
   const { channel, channelMinor } = reservation.program;
-  const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
+  const payload = { client, channel, channelMinor, losantId, ip, command };
   await invokeFunction(`remote-${process.env.stage}-command`, payload);
 
   await track({
@@ -110,6 +111,7 @@ module.exports.update = async event => {
   const userId = getUserId(event);
   reservation.userId = userId;
   const { id } = getPathParameters(event);
+  const cost = reservation.cost;
 
   // "errorMessage": "Invalid UpdateExpression: Two document paths overlap with each other; must remove or rewrite one
   // of these paths; path one: [createdAt], path two: [cost]"
@@ -118,10 +120,25 @@ module.exports.update = async event => {
   reservation = calculateReservationTimes(reservation);
   await Reservation.update({ id, userId }, reservation);
 
-  const { losantId, ip } = reservation.location;
-  const { clientAddress: client } = reservation.box;
+  // deduct from user
+  const result = await invokeFunctionSync(
+    `user-${process.env.stage}-transaction`,
+    { tokens: cost },
+    null,
+    event.headers,
+  );
+  const statusCode = JSON.parse(result.Payload).statusCode;
+  if (statusCode >= 400) {
+    const message = JSON.parse(JSON.parse(result.Payload).body).message;
+    return respond(statusCode, message);
+  }
+
+  // change the channel
+  const command = 'tune';
+  const { losantId } = reservation.location;
+  const { clientAddress: client, ip } = reservation.box;
   const { channel, channelMinor } = reservation.program;
-  const payload = { client, channel, channelMinor, losantId, ip, command: 'tune' };
+  const payload = { client, channel, channelMinor, losantId, ip, command };
   console.log('update reservation, change channel');
   console.log(`remote-${process.env.stage}-command`, payload);
   await invokeFunction(`remote-${process.env.stage}-command`, payload);
