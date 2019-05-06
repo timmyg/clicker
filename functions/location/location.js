@@ -104,7 +104,7 @@ module.exports.setBoxes = async event => {
     return respond(204, 'location has already been setup');
   }
 
-  let location;
+  let updatedLocation;
   boxes.forEach(box => {
     b.clientAddress = b.clientAddr;
     b.ip = ip;
@@ -112,11 +112,11 @@ module.exports.setBoxes = async event => {
       locationBox => locationBox.ip === b.ip && locationBox.clientAddress === b.clientAddress,
     );
     if (!existingBox) {
-      location = await Location.update({ id }, { $ADD: { boxes } }, { returnValues: 'ALL_NEW' });
+      updatedLocation = await Location.update({ id }, { $ADD: { boxes } }, { returnValues: 'ALL_NEW' });
     }
   });
 
-  return respond(201, location);
+  return respond(201, updatedLocation);
 };
 
 module.exports.setLabels = async event => {
