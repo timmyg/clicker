@@ -108,7 +108,8 @@ module.exports.setBoxes = async event => {
   }
 
   let updatedLocation;
-  boxes.forEach(async box => {
+  location.boxes = location.boxes || [];
+  boxes.forEach(box => {
     box.clientAddress = box.clientAddr;
     box.ip = ip;
     const existingBox =
@@ -116,9 +117,11 @@ module.exports.setBoxes = async event => {
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
       console.log('add box', id, box);
-      updatedLocation = await Location.update({ id }, { $ADD: { boxes: [box] } }, { returnValues: 'ALL_NEW' });
+      location.boxes.push(box);
+      // updatedLocation = await Location.update({ id }, { $ADD: { boxes: box } }, { returnValues: 'ALL_NEW' });
     }
   });
+  await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
 
   return respond(201, updatedLocation);
 };
@@ -134,7 +137,7 @@ module.exports.setLabels = async event => {
   console.log(boxes, boxesWithLabels);
   const updatedBoxes = boxes.map(x => Object.assign(x, boxesWithLabels.find(y => y.setupChannel == x.setupChannel)));
   console.log(updatedBoxes);
-  await Location.update({ id }, { boxes: updatedBoxes });
+  await Location.update({ id }, { boxes: updatedBoxes }, { returnValues: 'ALL_NEW' });
 
   return respond(200, boxes);
 };
