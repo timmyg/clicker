@@ -14,6 +14,9 @@ export const ALIAS_FAIL = '[USER] Alias Fail';
 export const UPDATE_CARD = '[USER] Update Card';
 export const UPDATE_CARD_SUCCESS = '[USER] Update Card Success';
 export const UPDATE_CARD_FAIL = '[USER] Update Card Fail';
+export const DELETE_CARD = '[USER] Delete Card';
+export const DELETE_CARD_SUCCESS = '[USER] Delete Card Success';
+export const DELETE_CARD_FAIL = '[USER] Delete Card Fail';
 export const ADD_FUNDS = '[USER] Add Funds';
 export const ADD_FUNDS_SUCCESS = '[USER] Add Funds Success';
 export const ADD_FUNDS_FAIL = '[USER] Add Funds Fail';
@@ -81,6 +84,21 @@ export class UpdateCardFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class DeleteCard implements Action {
+  readonly type = DELETE_CARD;
+  constructor() {}
+}
+
+export class DeleteCardSuccess implements Action {
+  readonly type = DELETE_CARD_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class DeleteCardFail implements Action {
+  readonly type = DELETE_CARD_FAIL;
+  constructor(public payload: any) {}
+}
+
 export class AddFunds implements Action {
   readonly type = ADD_FUNDS;
   constructor(public tokens: number) {}
@@ -107,6 +125,9 @@ export type UserActions =
   | UpdateCard
   | UpdateCardSuccess
   | UpdateCardFail
+  | DeleteCard
+  | DeleteCardSuccess
+  | DeleteCardFail
   | AddFunds
   | AddFundsSuccess
   | AddFundsFail;

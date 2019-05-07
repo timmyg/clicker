@@ -63,6 +63,17 @@ export class UserEffects {
   );
 
   @Effect()
+  deleteCard$: Observable<Action> = this.actions$.pipe(
+    ofType(UserActions.DELETE_CARD),
+    switchMap(() =>
+      this.userService.removeCard().pipe(
+        switchMap((result: any) => [new UserActions.DeleteCardSuccess(result), new UserActions.Load()]),
+        catchError(err => of(new UserActions.UpdateCardFail(err))),
+      ),
+    ),
+  );
+
+  @Effect()
   addFunds$: Observable<Action> = this.actions$.pipe(
     ofType(UserActions.ADD_FUNDS),
     switchMap((action: UserActions.AddFunds) =>

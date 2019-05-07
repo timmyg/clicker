@@ -24,6 +24,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
   switch (action.type) {
     case fromUser.LOAD:
     case fromUser.LOAD_WALLET:
+    case fromUser.DELETE_CARD:
       return {
         ...state,
         loading: true,
@@ -48,9 +49,14 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       return {
         ...state,
       };
+    case fromUser.DELETE_CARD_SUCCESS:
+      return {
+        ...state,
+      };
 
     case fromUser.LOAD_FAIL:
     case fromUser.LOAD_WALLET_FAIL:
+    case fromUser.DELETE_CARD_FAIL:
       return {
         ...state,
         loading: false,

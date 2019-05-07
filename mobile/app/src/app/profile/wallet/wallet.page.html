@@ -24,7 +24,13 @@
       </ion-radio-group>
     </ion-list>
     <ion-button expand="block" color="success" (click)="purchase()" [disabled]="waiting">Purchase</ion-button>
-    <p class="ion-text-center">{{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }}</p>
+    <p class="ion-text-center">
+      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
+        color="danger"
+        (click)="removeCard()"
+        >Remove Card</a
+      >
+    </p>
   </section>
   <section [hidden]="userCard$ | async">
     <p class="ion-text-center ">Please add a credit card below</p>

@@ -61,7 +61,7 @@ module.exports.wallet = async event => {
   if (wallet.stripeCustomer) {
     const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
     console.log(customer);
-    if (customer.sources && customer.sources.data.length) {
+    if (customer && customer.sources && customer.sources.data.length) {
       wallet.card = customer.sources.data[0];
     }
   }
@@ -92,19 +92,19 @@ module.exports.updateCard = async event => {
   }
 };
 
-// module.exports.getStripeCustomer = async event => {
-//   const userId = getUserId(event);
-//   const wallet = await Wallet.queryOne('userId')
-//     .eq(userId)
-//     .exec();
+module.exports.removeCard = async event => {
+  const userId = getUserId(event);
 
-//   if (wallet.stripeCustomer) {
-//     const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
-//     return respond(200, customer);
-//   }
+  const { stripeCustomer } = await Wallet.queryOne('userId')
+    .eq(userId)
+    .exec();
 
-//   return respond(200);
-// };
+  const customer = await stripe.customers.retrieve(stripeCustomer);
+  const cardToken = customer.sources.data[0].id;
+  const response = await stripe.customers.deleteSource(stripeCustomer, cardToken);
+
+  return respond(200, response);
+};
 
 module.exports.replenish = async event => {
   const userId = getUserId(event);
@@ -175,6 +175,8 @@ module.exports.alias = async event => {
 
   // update for tracking purposes
   await Wallet.update({ userId: fromId }, { aliasedTo: toId });
+
+  // TODO update reservations to new user!
 
   // TODO audit transaction
 

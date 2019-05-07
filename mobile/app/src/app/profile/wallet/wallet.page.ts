@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ToastController, ModalController } from '@ionic/angular';
+import { FormGroup } from '@angular/forms';
+import { ToastController, ModalController, AlertController } from '@ionic/angular';
 import * as fromUser from '../../state/user/user.actions';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../state/app.reducer';
@@ -47,6 +47,7 @@ export class WalletPage {
     private toastController: ToastController,
     private stripeService: StripeService,
     private modalController: ModalController,
+    public alertController: AlertController,
   ) {
     this.userCard$ = this.store.select(getUserCard);
   }
@@ -123,5 +124,36 @@ export class WalletPage {
 
   onClose() {
     this.modalController.dismiss();
+  }
+
+  async removeCard() {
+    const alert = await this.alertController.create({
+      header: 'Are you sure?',
+      message: 'You will need to add a new credit card to purchase tokens.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Remove Card',
+          role: 'destructive',
+          cssClass: 'secondary',
+          handler: async () => {
+            this.store.dispatch(new fromUser.DeleteCard());
+            setTimeout(async () => {
+              const toast = await this.toastController.create({
+                message: `Card removed`,
+                duration: 3000,
+                cssClass: 'ion-text-center',
+              });
+              toast.present();
+            }, 3000);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 }

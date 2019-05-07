@@ -107,12 +107,12 @@ functions:
           path: stripe/card
           method: post
           cors: true
-  getStripeCustomer:
-    handler: user.getStripeCustomer
+  removeCard:
+    handler: user.removeCard
     events:
       - http:
-          path: stripe/customer
-          method: get
+          path: stripe/card
+          method: delete
           cors: true
   replenish:
     handler: user.replenish

@@ -38,11 +38,6 @@ export class UserService {
 
   getWallet(): Observable<Number> {
     return this.httpClient.get<any>(`${this.prefix}/wallet`, {});
-    // return new Observable(observer => {
-    // this.httpClient.get<any>(`${this.prefix}/wallet`, {}).subscribe(result => {
-    //   return observer.next(result.tokens);
-    // });
-    // });
   }
 
   alias(fromId: string, toId: string): Observable<any> {
@@ -51,6 +46,10 @@ export class UserService {
 
   updateCard(token: string): Observable<any> {
     return this.httpClient.post<any>(`${this.prefix}/stripe/card`, { token });
+  }
+
+  removeCard(): Observable<any> {
+    return this.httpClient.delete<any>(`${this.prefix}/stripe/card`);
   }
 
   addFunds(tokens: number): Observable<any> {
