@@ -17,7 +17,7 @@ class Widget {
     this.init();
   }
 
-  async saveIp() {
+  async findIpsAndBoxes() {
     const context = this;
     logger.info('about to search ips....');
     browser.browser({}, (error, device) => {
@@ -155,7 +155,7 @@ class Widget {
    */
   async init() {
     // await this.api.register();
-    await this.saveIp();
+    await this.findIpsAndBoxes();
     this.device.connect(error => {
       if (error) {
         logger.error(error);
