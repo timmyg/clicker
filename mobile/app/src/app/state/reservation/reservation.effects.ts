@@ -17,7 +17,7 @@ export class ReservationsEffects {
   getAllReservations$: Observable<Action> = this.actions$.pipe(
     ofType(ReservationActions.GET_RESERVATIONS),
     switchMap(() =>
-      this.reservationService.getActive().pipe(
+      this.reservationService.getActiveByUser().pipe(
         map((reservations: Reservation[]) => new ReservationActions.GetAllSuccess(reservations)),
         catchError(err => of(new ReservationActions.GetAllFail(err))),
       ),

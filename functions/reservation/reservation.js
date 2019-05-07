@@ -37,6 +37,7 @@ const Reservation = dynamoose.model(
       img: { type: String, required: true },
     },
     box: {
+      id: { type: String, required: true },
       clientAddress: { type: String, required: true },
       locationName: { type: String, required: true },
       label: { type: String, required: true },
@@ -50,14 +51,53 @@ const Reservation = dynamoose.model(
     },
     cost: { type: Number, required: true },
     minutes: { type: Number, required: true },
-    start: { type: Date, required: true },
-    end: { type: Date, required: true },
-    cancelled: Boolean,
+    start: { 
+      type: Date,
+      required: true
+      index: {
+        global: true,
+        rangeKey: 'location.id',
+        name: 'StartTimeByLocationIndex',
+        project: true, // ProjectionType: ALL
+        throughput: process.env.tableThroughputs
+      }
+    },
+    end: { 
+      type: Date,
+      required: true
+      index: {
+        global: true,
+        rangeKey: 'location.id',
+        name: 'EndTimeByLocationIndex',
+        project: true, // ProjectionType: ALL
+        throughput: process.env.tableThroughputs
+      }
+    },
+    cancelled: {
+      type:Boolean, 
+      index: {
+        global: true,
+        rangeKey: 'location.id',
+        name: 'CancelledByLocationIndex',
+        project: true, // ProjectionType: ALL
+        throughput: process.env.tableThroughputs
+      }
+    },
   },
   {
     timestamps: true,
   },
 );
+
+// ServiceSchema.method('getBaseFeature', async function () {
+//   var {Feature} = require("./index");
+//   var feature = await Feature.query("serviceId").eq(this.id).filter({type: "base"}).exec();
+//   if (feature.length != 0)
+//   {
+//     return feature[0];
+//   }
+//   return false;
+// });
 
 module.exports.health = async event => {
   return respond(200, `hello`);
@@ -104,6 +144,13 @@ module.exports.create = async event => {
     },
   });
   return respond(201, reservation);
+};
+
+module.exports.reservedByLocation = async event => {
+  const { locationId } = getPathParameters(event);
+  const now = moment().unix() * 1000;
+  const activeReservations = Reservation.query('locationId').eq(locationId).where('start').lt(now).and().where('end').gt(now);
+  return respond(200, activeReservations);
 };
 
 module.exports.update = async event => {
@@ -168,7 +215,7 @@ module.exports.all = async event => {
   return respond(200, sorted);
 };
 
-module.exports.active = async event => {
+module.exports.activeByUser = async event => {
   const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)

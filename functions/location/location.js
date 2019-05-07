@@ -17,12 +17,17 @@ const Location = dynamoose.model(
     },
     boxes: [
       {
+        id: {
+          type: String,
+          default: uuid,
+        }
         clientAddress: String, // dtv calls this clientAddr
         locationName: String, // dtv name
         label: String, // physical label id on tv
         tunerBond: Boolean, // not sure what this is
         setupChannel: Number,
         ip: String,
+        reserved: Boolean,
       },
     ],
     name: { type: String, required: true },
@@ -57,11 +62,18 @@ module.exports.get = async event => {
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();
+
+  // sort boxes alphabetically
   location.boxes = location.boxes.sort((a, b) => {
     const labelA = a.label || a.locationName;
     const labelB = b.label || b.locationName;
     return labelA.localeCompare(labelB);
   });
+
+  // TODO set reserved
+  // call reservations to get active ones by location
+  
+
 
   return respond(200, location);
 };
@@ -92,10 +104,7 @@ module.exports.update = async event => {
 };
 
 module.exports.setBoxes = async event => {
-  console.log('setboxes');
   const { boxes, ip } = getBody(event);
-  console.log(boxes);
-  console.log(ip);
   const params = getPathParameters(event);
   const { id } = params;
 
