@@ -57,6 +57,16 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
+        # GlobalSecondaryIndexes:
+        #   - IndexName: StartTimeByLocationIndex
+        #     KeySchema:
+        #       - AttributeName: category
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: 1
+        #       WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
