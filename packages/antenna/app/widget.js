@@ -155,7 +155,7 @@ class Widget {
    */
   async init() {
     // await this.api.register();
-    // await this.saveIp();
+    await this.saveIp();
     this.device.connect(error => {
       if (error) {
         logger.error(error);
