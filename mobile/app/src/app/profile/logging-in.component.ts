@@ -58,7 +58,7 @@ export class LoggingInComponent {
             this.router.navigate(['/tabs/profile']);
             const toast = await context.toastController.create({
               message: `Successfully logged in.`,
-              duration: 6000,
+              duration: 2000,
               cssClass: 'ion-text-center',
             });
             toast.present();

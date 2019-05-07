@@ -92,7 +92,10 @@ module.exports.update = async event => {
 };
 
 module.exports.setBoxes = async event => {
+  console.log('setboxes');
   const { boxes, ip } = getBody(event);
+  console.log(boxes);
+  console.log(ip);
   const params = getPathParameters(event);
   const { id } = params;
 
