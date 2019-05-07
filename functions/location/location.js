@@ -114,6 +114,7 @@ module.exports.setBoxes = async event => {
     const existingBox = location.boxes.find(
       locationBox => locationBox.ip === b.ip && locationBox.clientAddress === b.clientAddress,
     );
+    console.log({ existingBox });
     if (!existingBox) {
       console.log('add box');
       console.log(box);
