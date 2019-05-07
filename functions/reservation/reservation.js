@@ -51,38 +51,41 @@ const Reservation = dynamoose.model(
     },
     cost: { type: Number, required: true },
     minutes: { type: Number, required: true },
-    start: { 
-      type: Date,
-      required: true
-      index: {
-        global: true,
-        rangeKey: 'location.id',
-        name: 'StartTimeByLocationIndex',
-        project: true, // ProjectionType: ALL
-        throughput: process.env.tableThroughputs
-      }
-    },
-    end: { 
-      type: Date,
-      required: true
-      index: {
-        global: true,
-        rangeKey: 'location.id',
-        name: 'EndTimeByLocationIndex',
-        project: true, // ProjectionType: ALL
-        throughput: process.env.tableThroughputs
-      }
-    },
-    cancelled: {
-      type:Boolean, 
-      index: {
-        global: true,
-        rangeKey: 'location.id',
-        name: 'CancelledByLocationIndex',
-        project: true, // ProjectionType: ALL
-        throughput: process.env.tableThroughputs
-      }
-    },
+    start: Date,
+    end: Date,
+    cancelled: Boolean,
+    // start: {
+    //   type: Date,
+    //   required: true
+    //   index: {
+    //     global: true,
+    //     rangeKey: 'location.id',
+    //     name: 'StartTimeByLocationIndex',
+    //     project: true, // ProjectionType: ALL
+    //     throughput: process.env.tableThroughputs
+    //   }
+    // },
+    // end: {
+    //   type: Date,
+    //   required: true
+    //   index: {
+    //     global: true,
+    //     rangeKey: 'location.id',
+    //     name: 'EndTimeByLocationIndex',
+    //     project: true, // ProjectionType: ALL
+    //     throughput: process.env.tableThroughputs
+    //   }
+    // },
+    // cancelled: {
+    //   type:Boolean,
+    //   index: {
+    //     global: true,
+    //     rangeKey: 'location.id',
+    //     name: 'CancelledByLocationIndex',
+    //     project: true, // ProjectionType: ALL
+    //     throughput: process.env.tableThroughputs
+    //   }
+    // },
   },
   {
     timestamps: true,
@@ -149,7 +152,17 @@ module.exports.create = async event => {
 module.exports.reservedByLocation = async event => {
   const { locationId } = getPathParameters(event);
   const now = moment().unix() * 1000;
-  const activeReservations = Reservation.query('locationId').eq(locationId).where('start').lt(now).and().where('end').gt(now);
+  const activeReservations = Reservation.scan('locationId')
+    .eq(locationId)
+    .where('start')
+      .lt(now)
+      .and()
+    .where('end')
+      .gt(now);
+      .and()
+    .where('cancelled')
+      .not()
+      .eq(true);
   return respond(200, activeReservations);
 };
 
