@@ -63,7 +63,7 @@ export class WalletPage {
         this.card = this.elements.create('card', {
           style: {
             base: {
-              fontSize: '24px',
+              fontSize: '18px',
             },
           },
         });
@@ -81,13 +81,15 @@ export class WalletPage {
         // https://stripe.com/docs/charges
         console.log(result);
         this.store.dispatch(new fromUser.UpdateCard(result.token.id));
-        const toast = await this.toastController.create({
-          message: `Card successfully added`,
-          duration: 3000,
-          cssClass: 'ion-text-center',
-        });
-        toast.present();
-        this.waiting = false;
+        setTimeout(async () => {
+          const toast = await this.toastController.create({
+            message: `Card successfully added`,
+            duration: 3000,
+            cssClass: 'ion-text-center',
+          });
+          toast.present();
+          this.waiting = false;
+        }, 3000);
       } else if (result.error) {
         // Error creating the token
         console.error(result.error.message);
@@ -140,6 +142,7 @@ export class WalletPage {
           role: 'destructive',
           cssClass: 'secondary',
           handler: async () => {
+            this.waiting = true;
             this.store.dispatch(new fromUser.DeleteCard());
             setTimeout(async () => {
               const toast = await this.toastController.create({
@@ -148,6 +151,7 @@ export class WalletPage {
                 cssClass: 'ion-text-center',
               });
               toast.present();
+              this.waiting = false;
             }, 3000);
           },
         },

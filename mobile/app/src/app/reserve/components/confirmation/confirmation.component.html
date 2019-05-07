@@ -85,7 +85,7 @@
     <ion-row class="ion-text-center" *ngIf="!sufficientFunds" margin-top>
       <ion-text color="danger">
         Heads up! You only have {{ tokenCount }}
-        <span *ngIf="tokenCount && tokenCount > 1; else singleToken">tokens</span
+        <span *ngIf="tokenCount && tokenCount === 1; else singleToken">tokens</span
         ><ng-template #singleToken>token</ng-template> remaining. Please
         <span *ngIf="!isLoggedIn"><a [routerLink]="'/tabs/profile'">login</a> and </span>
         <a [routerLink]="'/tabs/profile'" *ngIf="isLoggedIn">add funds</a><span *ngIf="!isLoggedIn">add funds</span>.
