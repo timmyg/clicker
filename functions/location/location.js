@@ -115,7 +115,9 @@ module.exports.setBoxes = async event => {
       locationBox => locationBox.ip === b.ip && locationBox.clientAddress === b.clientAddress,
     );
     if (!existingBox) {
-      updatedLocation = await Location.update({ id }, { $ADD: { boxes } }, { returnValues: 'ALL_NEW' });
+      console.log('add box');
+      console.log(box);
+      updatedLocation = await Location.update({ id }, { $ADD: { box } }, { returnValues: 'ALL_NEW' });
     }
   });
 
