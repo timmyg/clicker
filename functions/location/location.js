@@ -108,21 +108,17 @@ module.exports.setBoxes = async event => {
   }
 
   let updatedLocation;
-  for (const b of boxes) {
-    // boxes.forEach(async box => {
+  boxes.forEach(async b => {
     b.clientAddress = b.clientAddr;
     b.ip = ip;
     const existingBox = location.boxes.find(
       locationBox => locationBox.ip === b.ip && locationBox.clientAddress === b.clientAddress,
     );
-    console.log({ existingBox });
     if (!existingBox) {
       console.log('add box');
-      console.log(box);
-      updatedLocation = await Location.update({ id }, { $ADD: { box } }, { returnValues: 'ALL_NEW' });
+      updatedLocation = await Location.update({ id }, { $ADD: { b } }, { returnValues: 'ALL_NEW' });
     }
-  }
-  // });
+  });
 
   return respond(201, updatedLocation);
 };
