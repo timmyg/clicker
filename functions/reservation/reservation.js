@@ -150,25 +150,25 @@ module.exports.create = async event => {
 };
 
 module.exports.reservedByLocation = async event => {
-  // const { locationId } = getPathParameters(event);
-  // const now = moment().unix() * 1000;
-  // const activeReservations = await Reservation.scan()
-  //   .filter('locationId')
-  //     .eq(locationId)
-  //     .and()
-  //   .filter('start')
-  //     .lt(now)
-  //     .and()
-  //   .filter('end')
-  //     .gt(now);
-  //     .and()
-  //   .filter('cancelled')
-  //     .not()
-  //     .eq(true)
-  //   .all()
-  //   .exec();
-  // return respond(200, activeReservations);
-  return respond();
+  const { locationId } = getPathParameters(event);
+  const now = moment().unix() * 1000;
+  const activeReservations = await Reservation.scan()
+    .filter('location.id')
+    .eq(locationId)
+    .and()
+    .filter('start')
+    .lt(now)
+    .and()
+    .filter('end')
+    .gt(now)
+    .and()
+    .filter('cancelled')
+    .not()
+    .eq(true)
+    .all()
+    .exec();
+  return respond(200, activeReservations);
+  // return respond();
 };
 
 module.exports.update = async event => {

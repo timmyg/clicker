@@ -11,6 +11,7 @@
     "invoke:cancel": "serverless invoke local --function cancel --path ../.resources/data/reservation.json",
     "invoke:changeChannel": "serverless invoke local --function changeChannel --path ../.resources/data/reservation.json",
     "invoke:changeTime": "serverless invoke local --function changeTime --path ../.resources/data/reservation.json",
+    "invoke:reservedByLocation": "serverless invoke local --function reservedByLocation --path ../.resources/data/reservation.json",
     "invoke:health": "serverless invoke local --function health"
   },
   "author": "",

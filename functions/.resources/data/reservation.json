@@ -1,6 +1,7 @@
 {
   "pathParameters": {
-    "id": "35aefac0-51d3-11e9-9331-17a52abe47f5"
+    "id": "35aefac0-51d3-11e9-9331-17a52abe47f5",
+    "locationId": "cfa3d190-507b-11e9-b03b-fd47a97c4034"
   },
   "headers": {
     "userid": "1926fd60-4c49-11e9-a14d-793fbe38ca56"
