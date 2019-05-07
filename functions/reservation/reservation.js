@@ -152,12 +152,14 @@ module.exports.create = async event => {
 module.exports.reservedByLocation = async event => {
   const { locationId } = getPathParameters(event);
   const now = moment().unix() * 1000;
-  const activeReservations = Reservation.scan().filter('locationId')
-    .eq(locationId)
-    .where('start')
+  const activeReservations = Reservation.scan()
+    .filter('locationId')
+      .eq(locationId)
+      .and()
+    .filter('start')
       .lt(now)
       .and()
-    .where('end')
+    .filter('end')
       .gt(now);
       .and()
     .where('cancelled')
