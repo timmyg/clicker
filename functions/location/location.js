@@ -108,8 +108,7 @@ module.exports.setBoxes = async event => {
   }
 
   let updatedLocation;
-  for (const box of boxes) {
-    console.log(box);
+  for (const b of boxes) {
     // boxes.forEach(async box => {
     b.clientAddress = b.clientAddr;
     b.ip = ip;
