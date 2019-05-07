@@ -162,9 +162,11 @@ module.exports.reservedByLocation = async event => {
     .filter('end')
       .gt(now);
       .and()
-    .where('cancelled')
+    .filter('cancelled')
       .not()
-      .eq(true);
+      .eq(true)
+    .all()
+    .exec();
   return respond(200, activeReservations);
 };
 
