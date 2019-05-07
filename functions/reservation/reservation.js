@@ -152,6 +152,9 @@ module.exports.create = async event => {
 module.exports.reservedByLocation = async event => {
   const { locationId } = getPathParameters(event);
   const now = moment().unix() * 1000;
+  console.log('reservedByLocation');
+  console.log(now);
+  console.log(locationId);
   const activeReservations = await Reservation.scan('location.id')
     // .filter('location.id')
     .eq(locationId)
