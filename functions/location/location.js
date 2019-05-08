@@ -20,6 +20,7 @@ const Location = dynamoose.model(
         id: {
           type: String,
           default: uuid,
+          forceDefault: true,
         },
         clientAddress: String, // dtv calls this clientAddr
         locationName: String, // dtv name
