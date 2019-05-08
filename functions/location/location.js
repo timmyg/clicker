@@ -17,11 +17,7 @@ const Location = dynamoose.model(
     },
     boxes: [
       {
-        id: {
-          type: String,
-          default: uuid,
-          forceDefault: true,
-        },
+        id: String,
         clientAddress: String, // dtv calls this clientAddr
         locationName: String, // dtv name
         label: String, // physical label id on tv
@@ -124,6 +120,7 @@ module.exports.setBoxes = async event => {
       location.boxes &&
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
+      box.id = uuid();
       console.log('add box', id, box);
       location.boxes.push(box);
       // updatedLocation = await Location.update({ id }, { $ADD: { boxes: box } }, { returnValues: 'ALL_NEW' });
