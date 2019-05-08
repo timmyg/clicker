@@ -164,7 +164,7 @@ module.exports.reservedByLocation = async event => {
   };
   const activeReservations = await Reservation.scan(filter)
     // .filter('location.id')
-    .eq(locationId)
+    // .eq(locationId)
     .and()
     .filter('start')
     .lt(now)
