@@ -27,6 +27,7 @@ const Reservation = dynamoose.model(
       rangeKey: true,
       default: uuid,
     },
+    locationId: String,
     location: {
       id: { type: String, required: true },
       losantId: { type: String, required: true },
@@ -108,6 +109,7 @@ module.exports.health = async event => {
 
 module.exports.create = async event => {
   let reservation = getBody(event);
+  reservation.locationId = reservation.location.id;
   const { cost } = reservation;
   reservation.userId = getUserId(event);
 
@@ -156,17 +158,17 @@ module.exports.reservedByLocation = async event => {
   console.log(now);
   console.log(locationId);
   // since nested, we have to use this FilterExpression
-  const filter = {
-    FilterExpression: 'location.id = :locationId',
-    ExpressionAttributeValues: {
-      ':locationId': locationId,
-    },
-  };
-  console.log(filter);
-  const activeReservations = await Reservation.scan(filter)
-    // .filter('location.id')
-    // .eq(locationId)
-    // .and()
+  // const filter = {
+  //   FilterExpression: 'location.id = :locationId',
+  //   ExpressionAttributeValues: {
+  //     ':locationId': locationId,
+  //   },
+  // };
+  // console.log(filter);
+  const activeReservations = await Reservation.scan()
+    .filter('locationId')
+    .eq(locationId)
+    .and()
     .filter('start')
     .lt(now)
     .and()
