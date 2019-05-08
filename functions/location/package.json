@@ -5,6 +5,7 @@
   "main": "locations.js",
   "scripts": {
     "test": "jest --coverage",
+    "invoke:location:health": "serverless invoke local --function health",
     "invoke:location:all": "serverless invoke local --function all",
     "invoke:location:add": "serverless invoke local --function create --path ../.resources/data/location-create.json",
     "invoke:location:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",

@@ -1,4 +1,8 @@
-test('add 1 + 2 to equal 3', () => {
-    expect(1 + 2).toBe(3);
-  });
-  
+require('dotenv').config({ path: '../.env' });
+const file = require('./location');
+
+test('smoke test', () => {
+  console.log(file);
+  const response = file.health();
+  expect(response).toBeTruthy;
+});
