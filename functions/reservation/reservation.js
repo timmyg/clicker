@@ -155,23 +155,28 @@ module.exports.reservedByLocation = async event => {
   console.log('reservedByLocation');
   console.log(now);
   console.log(locationId);
-  const activeReservations =
-    // await Reservation.scan('location.id')
-    await Reservation.scan('userId')
-      // .filter('location.id')
-      .eq(locationId)
-      .and()
-      .filter('start')
-      .lt(now)
-      .and()
-      .filter('end')
-      .gt(now)
-      .and()
-      .filter('cancelled')
-      .not()
-      .eq(true)
-      .all()
-      .exec();
+  // since nested, we have to use this FilterExpression
+  const filter = {
+    FilterExpression: 'location.id = :locationId',
+    ExpressionAttributeValues: {
+      ':locationId': locationId,
+    },
+  };
+  const activeReservations = await Reservation.scan(filter)
+    // .filter('location.id')
+    .eq(locationId)
+    .and()
+    .filter('start')
+    .lt(now)
+    .and()
+    .filter('end')
+    .gt(now)
+    .and()
+    .filter('cancelled')
+    .not()
+    .eq(true)
+    .all()
+    .exec();
   return respond(200, activeReservations);
   // return respond();
 };
