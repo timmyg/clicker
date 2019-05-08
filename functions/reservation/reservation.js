@@ -162,10 +162,11 @@ module.exports.reservedByLocation = async event => {
       ':locationId': locationId,
     },
   };
+  console.log(filter);
   const activeReservations = await Reservation.scan(filter)
     // .filter('location.id')
     // .eq(locationId)
-    .and()
+    // .and()
     .filter('start')
     .lt(now)
     .and()
