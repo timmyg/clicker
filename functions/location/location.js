@@ -20,7 +20,7 @@ const Location = dynamoose.model(
         id: {
           type: String,
           default: uuid,
-        }
+        },
         clientAddress: String, // dtv calls this clientAddr
         locationName: String, // dtv name
         label: String, // physical label id on tv
@@ -72,8 +72,6 @@ module.exports.get = async event => {
 
   // TODO set reserved
   // call reservations to get active ones by location
-  
-
 
   return respond(200, location);
 };
