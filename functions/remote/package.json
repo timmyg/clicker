@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.0.0",
     "losant-rest": "^2.3.5",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.9"
   },

@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "analytics-node": "^3.3.0",
+    "dotenv": "^8.0.0",
     "dynamoose": "^1.7.2",
     "moment": "^2.24.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.9"
