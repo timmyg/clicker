@@ -1,5 +1,12 @@
+require('dotenv').config({ path: '../.env.example' });
 const { build, generateId } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
+const file = require('./program');
+
+test('smoke test', () => {
+  const response = file.health();
+  expect(response).toBeTruthy;
+});
 
 test('generateId generates the same id when same program', () => {
   const program = {

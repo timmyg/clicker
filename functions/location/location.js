@@ -1,7 +1,7 @@
 const { respond, getBody, getPathParameters } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const uuid = require('uuid/v1');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: '../.env.example' });
 
 const Location = dynamoose.model(
   process.env.tableLocation,
