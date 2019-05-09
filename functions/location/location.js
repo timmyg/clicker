@@ -134,7 +134,7 @@ module.exports.setBoxReserved = async event => {
   const { end } = getBody(event);
 
   const location = await Location.queryOne('id')
-    .eq(id)
+    .eq(locationId)
     .exec();
 
   var boxIndex = location.boxes.findIndex(b => b.id === boxId);
