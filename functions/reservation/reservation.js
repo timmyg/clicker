@@ -248,6 +248,7 @@ module.exports.cancel = async event => {
   const userId = getUserId(event);
   const { id } = getPathParameters(event);
 
+  const reservation = await Reservation.get({ id, userId });
   await Reservation.update({ id, userId }, { cancelled: true });
 
   // mark box free

@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
 import { startWith, map, distinctUntilChanged, first } from 'rxjs/operators';
 import { isLoggedIn, getUserTokenCount } from 'src/app/state/user';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-confirmation',
@@ -54,6 +55,7 @@ export class ConfirmationComponent implements OnInit {
     private reserveService: ReserveService,
     private router: Router,
     public toastController: ToastController,
+    private actions$: Actions,
   ) {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
@@ -124,11 +126,33 @@ export class ConfirmationComponent implements OnInit {
       : this.store.dispatch(new fromReservation.Create(this.reservation));
     // TODO subscribe
     const reservation = this.reservation;
-    setTimeout(() => {
-      this.store.dispatch(new fromReservation.Start());
-      this.router.navigate(['/tabs/profile']);
-      this.showTunedToast(reservation.box.label || reservation.box.locationName, reservation.program.channelTitle);
-    }, 3000);
+    // setTimeout(() => {
+
+    // }, 3000);
+    console.time('resi.create');
+    this.actions$
+      .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS))
+      .pipe(first())
+      .subscribe((data: any) => {
+        console.timeEnd('resi.create');
+        console.log('resi created!!', data);
+        this.store.dispatch(new fromReservation.Start());
+        this.router.navigate(['/tabs/profile']);
+        this.showTunedToast(reservation.box.label || reservation.box.locationName, reservation.program.channelTitle);
+      });
+    // this.actions$.pipe(
+    //   ofType(fromReservation.CREATE_RESERVATION),
+    //   switchMap((action: ReservationActions.Create) =>
+    //     this.reservationService.create(action.payload).pipe(
+    //       switchMap((reservation: Reservation) => [
+    //         new ReservationActions.CreateSuccess(reservation),
+    //         new UserActions.LoadWallet(),
+    //         new ReservationActions.GetAll(),
+    //       ]),
+    //       catchError(err => of(new ReservationActions.CreateFail(err))),
+    //     ),
+    //   ),
+    // );
   }
 
   async showTunedToast(label: string, channelName: string) {
