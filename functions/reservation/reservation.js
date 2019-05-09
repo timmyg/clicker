@@ -1,14 +1,6 @@
 const dynamoose = require('dynamoose');
 const moment = require('moment');
-const {
-  getUserId,
-  getBody,
-  getPathParameters,
-  invokeFunction,
-  invokeFunctionSync,
-  respond,
-  track,
-} = require('serverless-helpers');
+const { getUserId, getBody, getPathParameters, invokeFunctionSync, respond, track } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
@@ -117,7 +109,7 @@ module.exports.create = async event => {
   await Reservation.create(reservation);
 
   // mark box reserved
-  await invokeFunction(
+  await invokeFunctionSync(
     `location-${process.env.stage}-setBoxReserved`,
     { end: reservation.end },
     { id: reservation.locationId, boxId: reservation.box.id },
@@ -143,7 +135,7 @@ module.exports.create = async event => {
   const { clientAddress: client, ip, id: boxId } = reservation.box;
   const { channel, channelMinor } = reservation.program;
   const payload = { client, channel, channelMinor, losantId, ip, command, boxId };
-  await invokeFunction(`remote-${process.env.stage}-command`, payload);
+  await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
 
   await track({
     userId: reservation.userId,
@@ -174,7 +166,7 @@ module.exports.update = async event => {
   await Reservation.update({ id, userId }, reservation);
 
   // mark box reserved
-  await invokeFunction(
+  await invokeFunctionSync(
     `location-${process.env.stage}-setBoxReserved`,
     { end: reservation.end },
     { id: reservation.locationId, boxId: reservation.box.id },
@@ -203,7 +195,7 @@ module.exports.update = async event => {
   const payload = { client, channel, channelMinor, losantId, ip, command, boxId };
   console.log('update reservation, change channel');
   console.log(`remote-${process.env.stage}-command`, payload);
-  await invokeFunction(`remote-${process.env.stage}-command`, payload);
+  await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
 
   await track({
     userId: reservation.userId,
@@ -259,7 +251,7 @@ module.exports.cancel = async event => {
   await Reservation.update({ id, userId }, { cancelled: true });
 
   // mark box free
-  await invokeFunction(
+  await invokeFunctionSync(
     `location-${process.env.stage}-setBoxFree`,
     null,
     { id: reservation.locationId, boxId: reservation.box.id },
