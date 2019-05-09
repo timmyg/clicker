@@ -130,7 +130,7 @@ module.exports.setBoxes = async event => {
 };
 
 module.exports.setBoxReserved = async event => {
-  const { locationId, boxId } = getPathParameters(event);
+  const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
 
   const location = await Location.queryOne('id')
