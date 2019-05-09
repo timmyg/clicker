@@ -25,6 +25,7 @@ const Location = dynamoose.model(
         setupChannel: Number,
         ip: String,
         reserved: Boolean,
+        end: Date,
       },
     ],
     name: { type: String, required: true },
@@ -53,8 +54,7 @@ module.exports.all = async event => {
 };
 
 module.exports.get = async event => {
-  const params = getPathParameters(event);
-  const { id } = params;
+  const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
     .eq(id)
@@ -86,9 +86,8 @@ module.exports.create = async event => {
 
 module.exports.update = async event => {
   try {
-    const params = getPathParameters(event);
+    const { id } = getPathParameters(event);
     const body = getBody(event);
-    const { id } = params;
 
     const updatedLocation = await Location.update({ id }, body, { returnValues: 'ALL_NEW' });
     return respond(200, updatedLocation);
@@ -100,8 +99,7 @@ module.exports.update = async event => {
 
 module.exports.setBoxes = async event => {
   const { boxes, ip } = getBody(event);
-  const params = getPathParameters(event);
-  const { id } = params;
+  const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
     .eq(id)
@@ -131,10 +129,25 @@ module.exports.setBoxes = async event => {
   return respond(201, updatedLocation);
 };
 
+module.exports.setBoxReserved = async event => {
+  const { locationId, boxId } = getPathParameters(event);
+  const { end } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(id)
+    .exec();
+
+  var boxIndex = location.boxes.findIndex(b => b.id === boxId);
+  location.boxes[boxIndex]['reserved'] = true;
+  location.boxes[boxIndex]['end'] = end;
+  await location.save();
+
+  return respond(200);
+};
+
 module.exports.setLabels = async event => {
-  const params = getPathParameters(event);
+  const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);
-  const { id } = params;
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();
@@ -148,8 +161,7 @@ module.exports.setLabels = async event => {
 };
 
 module.exports.identifyBoxes = async event => {
-  const params = getPathParameters(event);
-  const { id } = params;
+  const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
     .eq(id)

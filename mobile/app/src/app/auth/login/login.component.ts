@@ -42,9 +42,9 @@ export class LoginComponent {
       async (err, res) => {
         if (err) {
           const toastInvalid = await this.toastController.create({
-            message: `Invalid phone number.`,
+            message: err.description,
             color: 'danger',
-            duration: 2000,
+            duration: 4000,
             cssClass: 'ion-text-center',
           });
           toastInvalid.present();
@@ -55,6 +55,12 @@ export class LoginComponent {
         this.waiting = false;
       },
     );
+  }
+
+  getPhoneNumberErrorMessage(errCode: string) {
+    switch (errCode) {
+      case 'sms_provider_error':
+    }
   }
 
   onCodeSubmit() {
@@ -68,9 +74,9 @@ export class LoginComponent {
       async (err, res) => {
         if (err) {
           const toastInvalid = await this.toastController.create({
-            message: `Invalid code.`,
+            message: err.code === 'access_denied' ? 'Invalid code' : err.description,
             color: 'danger',
-            duration: 2000,
+            duration: 4000,
             cssClass: 'ion-text-center',
           });
           toastInvalid.present();
