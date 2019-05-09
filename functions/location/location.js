@@ -1,5 +1,6 @@
 const { respond, getBody, getPathParameters } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
+const moment = require('moment');
 const uuid = require('uuid/v1');
 require('dotenv').config({ path: '../.env.example' });
 
