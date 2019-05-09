@@ -60,6 +60,17 @@ module.exports.get = async event => {
     .eq(id)
     .exec();
 
+  // loop through boxes, and update reserved status if necessary
+  location.boxes.forEach((o, i, boxes) => {
+    // check if box is reserved and end time is in past
+    if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
+      // if so, update to not reserved
+      delete boxes[i].reserved;
+      delete boxes[i].end;
+    }
+  });
+  await location.save();
+
   // sort boxes alphabetically
   location.boxes = location.boxes.sort((a, b) => {
     const labelA = a.label || a.locationName;
