@@ -159,7 +159,6 @@ module.exports.setBoxReserved = async event => {
 
 module.exports.setBoxFree = async event => {
   const { id: locationId, boxId } = getPathParameters(event);
-  const { end } = getBody(event);
 
   const location = await Location.queryOne('id')
     .eq(locationId)
