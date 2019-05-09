@@ -102,6 +102,7 @@ functions:
           cors: true
   create:
     handler: reservation.create
+    timeout: 20
     events:
       - http:
           path: ''
@@ -116,6 +117,7 @@ functions:
           cors: true
   update:
     handler: reservation.update
+    timeout: 20
     events:
       - http:
           path: '{id}'

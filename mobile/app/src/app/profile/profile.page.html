@@ -30,9 +30,7 @@
     </ion-row>
     <ng-template #ready>
       <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
-        <div *ngFor="let r of (reservations$ | async)">
-          <app-reservation *ngIf="isActive(r)" [reservation]="r"></app-reservation>
-        </div>
+        <div *ngFor="let r of (reservations$ | async)"><app-reservation [reservation]="r"></app-reservation></div>
       </div>
       <ng-template #empty>
         <div padding-horizontal class="ion-text-center">
