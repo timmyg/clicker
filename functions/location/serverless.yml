@@ -92,6 +92,13 @@ functions:
           path: '{id}'
           method: put
           cors: true
+  setBoxReserved:
+    handler: location.setBoxReserved
+    events:
+      - http:
+          path: '{locationId}/boxes/{boxId}/reserved'
+          method: post
+          cors: true
   setBoxes:
     handler: location.setBoxes
     events:
