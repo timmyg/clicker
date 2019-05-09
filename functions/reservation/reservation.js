@@ -116,6 +116,9 @@ module.exports.create = async event => {
   reservation = calculateReservationTimes(reservation);
   await Reservation.create(reservation);
 
+  // mark box reserved
+  await invokeFunction(`location-${process.env.stage}-setBoxReserved`, { end: reservation.end }, null, event.headers);
+
   // deduct from user
   const result = await invokeFunctionSync(
     `user-${process.env.stage}-transaction`,
@@ -198,6 +201,9 @@ module.exports.update = async event => {
   reservation = calculateReservationTimes(reservation);
   await Reservation.update({ id, userId }, reservation);
 
+  // mark box reserved
+  await invokeFunction(`location-${process.env.stage}-setBoxReserved`, { end: reservation.end }, null, event.headers);
+
   // deduct from user
   const result = await invokeFunctionSync(
     `user-${process.env.stage}-transaction`,
@@ -207,6 +213,7 @@ module.exports.update = async event => {
   );
   const statusCode = JSON.parse(result.Payload).statusCode;
   if (statusCode >= 400) {
+    // TODO mark not reserved
     const message = JSON.parse(JSON.parse(result.Payload).body).message;
     return respond(statusCode, message);
   }

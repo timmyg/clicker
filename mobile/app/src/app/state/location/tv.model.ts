@@ -4,5 +4,6 @@ export interface TV {
   label: string;
   ip: string;
   reserved?: boolean;
+  end?: Date;
   locationName?: string;
 }
