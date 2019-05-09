@@ -149,9 +149,25 @@ module.exports.setBoxReserved = async event => {
     .eq(locationId)
     .exec();
 
-  var boxIndex = location.boxes.findIndex(b => b.id === boxId);
+  const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   location.boxes[boxIndex]['reserved'] = true;
   location.boxes[boxIndex]['end'] = end;
+  await location.save();
+
+  return respond(200);
+};
+
+module.exports.setBoxFree = async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+  const { end } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  const boxIndex = location.boxes.findIndex(b => b.id === boxId);
+  delete location.boxes[boxIndex]['reserved'];
+  delete location.boxes[boxIndex]['end'];
   await location.save();
 
   return respond(200);

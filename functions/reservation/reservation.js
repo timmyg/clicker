@@ -159,39 +159,6 @@ module.exports.create = async event => {
   return respond(201, reservation);
 };
 
-module.exports.reservedByLocation = async event => {
-  const { locationId } = getPathParameters(event);
-  const now = moment().unix() * 1000;
-  console.log('reservedByLocation');
-  console.log(now);
-  console.log(locationId);
-  // since nested, we have to use this FilterExpression
-  // const filter = {
-  //   FilterExpression: 'location.id = :locationId',
-  //   ExpressionAttributeValues: {
-  //     ':locationId': locationId,
-  //   },
-  // };
-  // console.log(filter);
-  const activeReservations = await Reservation.scan()
-    .filter('locationId')
-    .eq(locationId)
-    .and()
-    .filter('start')
-    .lt(now)
-    .and()
-    .filter('end')
-    .gt(now)
-    .and()
-    .filter('cancelled')
-    .not()
-    .eq(true)
-    .all()
-    .exec();
-  return respond(200, activeReservations);
-  // return respond();
-};
-
 module.exports.update = async event => {
   let reservation = getBody(event);
   const userId = getUserId(event);
@@ -290,6 +257,14 @@ module.exports.cancel = async event => {
   const { id } = getPathParameters(event);
 
   await Reservation.update({ id, userId }, { cancelled: true });
+
+  // mark box free
+  await invokeFunction(
+    `location-${process.env.stage}-setBoxFree`,
+    null,
+    { id: reservation.locationId, boxId: reservation.box.id },
+    event.headers,
+  );
 
   track({
     userId: userId,

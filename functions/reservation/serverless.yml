@@ -93,13 +93,6 @@ functions:
           path: 'active/user'
           method: get
           cors: true
-  reservedByLocation:
-    handler: reservation.reservedByLocation
-    events:
-      - http:
-          path: 'active/location/{locationId}'
-          method: get
-          cors: true
   get:
     handler: reservation.get
     events:
