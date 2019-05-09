@@ -79,7 +79,6 @@ export class WalletPage {
       if (result.token) {
         // Use the token to create a charge or a customer
         // https://stripe.com/docs/charges
-        console.log(result);
         this.store.dispatch(new fromUser.UpdateCard(result.token.id));
         setTimeout(async () => {
           const toast = await this.toastController.create({

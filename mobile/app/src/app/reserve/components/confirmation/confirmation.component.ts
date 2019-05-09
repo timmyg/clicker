@@ -75,7 +75,6 @@ export class ConfirmationComponent implements OnInit {
     });
     this.isLoggedIn$.pipe(first()).subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
-      console.log(isLoggedIn);
     });
   }
 
@@ -124,35 +123,15 @@ export class ConfirmationComponent implements OnInit {
     this.isEditMode
       ? this.store.dispatch(new fromReservation.Update(this.reservation))
       : this.store.dispatch(new fromReservation.Create(this.reservation));
-    // TODO subscribe
     const reservation = this.reservation;
-    // setTimeout(() => {
-
-    // }, 3000);
-    console.time('resi.create');
     this.actions$
       .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS))
       .pipe(first())
-      .subscribe((data: any) => {
-        console.timeEnd('resi.create');
-        console.log('resi created!!', data);
+      .subscribe(() => {
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(['/tabs/profile']);
         this.showTunedToast(reservation.box.label || reservation.box.locationName, reservation.program.channelTitle);
       });
-    // this.actions$.pipe(
-    //   ofType(fromReservation.CREATE_RESERVATION),
-    //   switchMap((action: ReservationActions.Create) =>
-    //     this.reservationService.create(action.payload).pipe(
-    //       switchMap((reservation: Reservation) => [
-    //         new ReservationActions.CreateSuccess(reservation),
-    //         new UserActions.LoadWallet(),
-    //         new ReservationActions.GetAll(),
-    //       ]),
-    //       catchError(err => of(new ReservationActions.CreateFail(err))),
-    //     ),
-    //   ),
-    // );
   }
 
   async showTunedToast(label: string, channelName: string) {

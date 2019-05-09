@@ -79,13 +79,6 @@ functions:
           path: health
           method: get
           cors: true
-  all:
-    handler: reservation.all
-    events:
-      - http:
-          path: ''
-          method: get
-          cors: true
   activeByUser:
     handler: reservation.activeByUser
     events:

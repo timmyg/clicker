@@ -212,23 +212,20 @@ module.exports.update = async event => {
   return respond(200, `hello`);
 };
 
-module.exports.all = async event => {
-  const userId = getUserId(event);
-  const userReservations = await Reservation.query('userId')
-    .eq(userId)
-    .exec();
-  const filtered = userReservations.filter(r => r.cancelled != true);
-  const sorted = filtered.sort((a, b) => (a.end > b.end ? 1 : -1));
-  return respond(200, sorted);
-};
-
 module.exports.activeByUser = async event => {
   const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
   if (userReservations && userReservations.length) {
-    const filtered = userReservations.filter(r => r.cancelled != true && r.end > new Date());
+    const filtered = userReservations.filter(
+      r =>
+        r.cancelled != true &&
+        r.end >
+          moment()
+            .subtract(30, 'm')
+            .toDate(),
+    );
     const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
     return respond(200, sorted);
   }
