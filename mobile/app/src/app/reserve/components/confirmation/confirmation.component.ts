@@ -136,7 +136,7 @@ export class ConfirmationComponent implements OnInit {
       .subscribe(() => {
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(['/tabs/profile']);
-        this.showTunedToast(reservation.box.label || reservation.box.locationName, reservation.program.channelTitle);
+        this.showTunedToast(reservation.box.label, reservation.program.channelTitle);
       });
     this.actions$
       .pipe(ofType(fromReservation.CREATE_RESERVATION_FAIL, fromReservation.UPDATE_RESERVATION_FAIL))

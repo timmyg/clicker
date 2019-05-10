@@ -3,7 +3,7 @@ import { interval, Observable, of } from 'rxjs';
 import { map, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import * as moment from 'moment';
-import { ActionSheetController, ModalController, AlertController } from '@ionic/angular';
+import { ActionSheetController, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../state/app.reducer';
 import * as fromReservation from '../../state/reservation/reservation.actions';
@@ -32,6 +32,7 @@ export class ReservationComponent implements OnInit {
     private store: Store<fromStore.AppState>,
     private router: Router,
     public modalController: ModalController,
+    public toastController: ToastController,
   ) {}
 
   ngOnInit() {
@@ -105,7 +106,17 @@ export class ReservationComponent implements OnInit {
   }
 
   modify() {
-    this.showModify();
+    if (this.isReserved()) {
+      const endTime = moment(this.reservation.end);
+      const duration = moment.duration(endTime.diff(moment())).asMilliseconds();
+      if (duration > 0) {
+        this.showModify();
+      } else {
+        this.showToast('Sorry, your reservation has expired');
+      }
+    } else {
+      this.showToast('Sorry, you did not reserve this TV for a time period');
+    }
   }
 
   isReserved() {
@@ -133,5 +144,14 @@ export class ReservationComponent implements OnInit {
     }
     // return Math.ceil(duration.asMinutes());
     return { label: `${minutes}m`, minutes };
+  }
+
+  async showToast(message) {
+    const toastInvalid = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      cssClass: 'ion-text-center',
+    });
+    toastInvalid.present();
   }
 }

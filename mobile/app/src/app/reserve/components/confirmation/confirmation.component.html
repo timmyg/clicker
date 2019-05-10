@@ -49,8 +49,7 @@
     <p class="ion-text-center" padding-top>
       <!-- show always -->
       <span
-        >You are tuning <b>TV {{ reservation.box.label || reservation.box.locationName }}</b> to
-        <b>{{ reservation.program.channelTitle }} </b></span
+        >You are tuning <b>TV {{ reservation.box.label }}</b> to <b>{{ reservation.program.channelTitle }} </b></span
       >
       <!-- show if new and reserving, or editing -->
       <span *ngIf="reservation.reserve || isEditMode; else oneTime">

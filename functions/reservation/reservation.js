@@ -19,7 +19,6 @@ const Reservation = dynamoose.model(
       rangeKey: true,
       default: uuid,
     },
-    locationId: String,
     location: {
       id: { type: String, required: true },
       losantId: { type: String, required: true },
@@ -48,38 +47,6 @@ const Reservation = dynamoose.model(
     start: Date,
     end: Date,
     cancelled: Boolean,
-    // start: {
-    //   type: Date,
-    //   required: true
-    //   index: {
-    //     global: true,
-    //     rangeKey: 'location.id',
-    //     name: 'StartTimeByLocationIndex',
-    //     project: true, // ProjectionType: ALL
-    //     throughput: process.env.tableThroughputs
-    //   }
-    // },
-    // end: {
-    //   type: Date,
-    //   required: true
-    //   index: {
-    //     global: true,
-    //     rangeKey: 'location.id',
-    //     name: 'EndTimeByLocationIndex',
-    //     project: true, // ProjectionType: ALL
-    //     throughput: process.env.tableThroughputs
-    //   }
-    // },
-    // cancelled: {
-    //   type:Boolean,
-    //   index: {
-    //     global: true,
-    //     rangeKey: 'location.id',
-    //     name: 'CancelledByLocationIndex',
-    //     project: true, // ProjectionType: ALL
-    //     throughput: process.env.tableThroughputs
-    //   }
-    // },
   },
   {
     timestamps: true,
@@ -102,18 +69,17 @@ module.exports.health = async event => {
 
 module.exports.create = async event => {
   let reservation = getBody(event);
-  reservation.locationId = reservation.location.id;
   const { cost } = reservation;
   reservation.userId = getUserId(event);
 
-  reservation = calculateReservationTimes(reservation);
+  reservation.end = calculateReservationEndTime(reservation);
   await Reservation.create(reservation);
 
   // mark box reserved
   await invokeFunctionSync(
     `location-${process.env.stage}-setBoxReserved`,
     { end: reservation.end },
-    { id: reservation.locationId, boxId: reservation.box.id },
+    { id: reservation.location.id, boxId: reservation.box.id },
     event.headers,
   );
 
@@ -133,9 +99,9 @@ module.exports.create = async event => {
   // change the channel
   const command = 'tune';
   const { losantId } = reservation.location;
-  const { clientAddress: client, ip, id: boxId } = reservation.box;
+  const { clientAddress, ip, id: boxId } = reservation.box;
   const { channel, channelMinor } = reservation.program;
-  const payload = { client, channel, channelMinor, losantId, ip, command, boxId };
+  const payload = { clientAddress, channel, channelMinor, losantId, ip, command, boxId };
   await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
 
   await track({
@@ -153,24 +119,24 @@ module.exports.create = async event => {
 };
 
 module.exports.update = async event => {
-  let reservation = getBody(event);
-  const userId = getUserId(event);
-  reservation.userId = userId;
   const { id } = getPathParameters(event);
-  const cost = reservation.cost;
-
-  // "errorMessage": "Invalid UpdateExpression: Two document paths overlap with each other; must remove or rewrite one
-  // of these paths; path one: [createdAt], path two: [cost]"
-  delete reservation.cost;
-  delete reservation.createdAt;
-  reservation = calculateReservationTimes(reservation);
-  await Reservation.update({ id, userId }, reservation);
+  let updatedReservation = getBody(event);
+  const userId = getUserId(event);
+  const originalReservation = await Reservation.get({ id, userId });
+  if (userId !== originalReservation.userId) {
+    return respond(403);
+  }
+  const updatedCost = originalReservation.cost + updatedReservation.cost;
+  const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
+  updatedReservation.end = calculateReservationEndTime(reservation);
+  const { program, end } = updatedReservation;
+  await Reservation.update({ id, userId }, { cost: updatedCost, minutes: updatedMinutes, program, end });
 
   // mark box reserved
   await invokeFunctionSync(
     `location-${process.env.stage}-setBoxReserved`,
-    { end: reservation.end },
-    { id: reservation.locationId, boxId: reservation.box.id },
+    { end: updatedReservation.end },
+    { id: originalReservation.location.id, boxId: originalReservation.box.id },
     event.headers,
   );
 
@@ -190,10 +156,10 @@ module.exports.update = async event => {
 
   // change the channel
   const command = 'tune';
-  const { losantId } = reservation.location;
-  const { clientAddress: client, ip, id: boxId } = reservation.box;
-  const { channel, channelMinor } = reservation.program;
-  const payload = { client, channel, channelMinor, losantId, ip, command, boxId };
+  const { losantId } = originalReservation.location;
+  const { clientAddress, ip, id: boxId } = originalReservation.box;
+  const { channel, channelMinor } = updatedReservation.program;
+  const payload = { clientAddress, channel, channelMinor, losantId, ip, command, boxId };
   console.log('update reservation, change channel');
   console.log(`remote-${process.env.stage}-command`, payload);
   await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
@@ -253,7 +219,7 @@ module.exports.cancel = async event => {
   await invokeFunctionSync(
     `location-${process.env.stage}-setBoxFree`,
     null,
-    { id: reservation.locationId, boxId: reservation.box.id },
+    { id: reservation.location.id, boxId: reservation.box.id },
     event.headers,
   );
 
@@ -265,9 +231,8 @@ module.exports.cancel = async event => {
   return respond(200, `hello`);
 };
 
-function calculateReservationTimes(reservation) {
+function calculateReservationEndTime(reservation) {
   reservation.start = moment().toDate();
   const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
-  reservation.end = initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
-  return reservation;
+  return initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
 }

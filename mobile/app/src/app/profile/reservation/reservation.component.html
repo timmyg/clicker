@@ -1,9 +1,7 @@
 <ion-card no-margin-horizontal>
   <ion-card-header>
     <ion-card-subtitle>
-      <span
-        >{{ reservation.program.channelTitle }} - TV #{{ reservation.box.label || reservation.box.locationName }}</span
-      >
+      <span>{{ reservation.program.channelTitle }} - TV #{{ reservation.box.label }}</span>
       <span float-right *ngIf="(timeFromNow$ | async) as timeFromNow">
         <!-- <span>{{ minutesFromNow$ | async }} left</span> -->
         <span *ngIf="isReserved() && timeFromNow.minutes > 0">{{ timeFromNow.label }} left</span>
@@ -12,8 +10,9 @@
       </span>
     </ion-card-subtitle>
   </ion-card-header>
-  <ion-card-content class="ion-text-right">
-    <div>{{ reservation.programTitle }}</div>
-    <div><a (click)="!disableModify && modify()">Modify</a></div>
+  <ion-card-content>
+    <!-- <div>{{ reservation.programTitle }}</div> -->
+    <span>Length: {{ reservation.minutes }} minutes</span>
+    <span float-right><a (click)="!disableModify && modify()">Modify</a></span>
   </ion-card-content>
 </ion-card>

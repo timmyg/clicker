@@ -42,12 +42,10 @@ module.exports.health = async => {
 module.exports.command = async event => {
   try {
     const body = getBody(event);
-    // console.log(body);
-    // const { payload } = body;
-    const { losantId, client, channel, channelMinor, key, ip, command, boxId } = body;
+    const { losantId, clientAddress, channel, channelMinor, key, ip, command, boxId } = body;
     const api = new Api(losantId, ip);
 
-    await api.sendCommand(command, losantId, { client, channel, channelMinor, key, ip });
+    await api.sendCommand(command, losantId, { clientAddress, channel, channelMinor, key, ip });
     return respond();
   } catch (e) {
     console.error(e);

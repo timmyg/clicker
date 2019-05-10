@@ -21,7 +21,7 @@ const Location = dynamoose.model(
         id: String,
         clientAddress: String, // dtv calls this clientAddr
         locationName: String, // dtv name
-        label: String, // physical label id on tv
+        label: String, // physical label id on tv (defaults to locationName)
         tunerBond: Boolean, // not sure what this is
         setupChannel: Number,
         ip: String,
@@ -131,9 +131,9 @@ module.exports.setBoxes = async event => {
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
       box.id = uuid();
+      box.label = box.locationName;
       console.log('add box', id, box);
       location.boxes.push(box);
-      // updatedLocation = await Location.update({ id }, { $ADD: { boxes: box } }, { returnValues: 'ALL_NEW' });
     }
   });
   await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });

@@ -36,7 +36,7 @@ export class TvsComponent {
   async onTvClick(tv: TV) {
     if (tv.reserved) {
       const toast = await this.toastController.create({
-        message: `${tv.label || tv.locationName} is reserved until ${moment(tv.end).format('h:mma')}`,
+        message: `${tv.label} is reserved until ${moment(tv.end).format('h:mma')}`,
         duration: 2000,
         cssClass: 'ion-text-center',
       });

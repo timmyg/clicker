@@ -19,10 +19,6 @@ export class Reservation {
     return this.box.label;
   }
 
-  get locationName() {
-    return this.location.name;
-  }
-
   get locationTown() {
     return this.location.neighborhood;
   }
