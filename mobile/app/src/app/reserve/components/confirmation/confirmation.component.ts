@@ -75,10 +75,11 @@ export class ConfirmationComponent implements OnInit {
           this.isEditMode = true;
         }
       });
-    this.tokenCount$.pipe(first()).subscribe(tokens => {
+    this.tokenCount$.subscribe(tokens => {
+      console.log(tokens);
       this.tokenCount = tokens;
     });
-    this.isLoggedIn$.pipe(first()).subscribe(isLoggedIn => {
+    this.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
     });
   }

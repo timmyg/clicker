@@ -46,6 +46,7 @@ export class ReservationsEffects {
       this.reservationService.update(action.payload).pipe(
         switchMap((reservation: Reservation) => [
           new ReservationActions.UpdateSuccess(reservation),
+          new UserActions.LoadWallet(),
           new ReservationActions.GetAll(),
         ]),
         catchError(err => of(new ReservationActions.UpdateFail(err))),
