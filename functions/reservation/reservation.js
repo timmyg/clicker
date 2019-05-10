@@ -114,7 +114,9 @@ module.exports.create = async event => {
   console.timeEnd('remote command');
 
   console.time('track event');
-  await analytics.track({
+  const sleep = require('util').promisify(setTimeout);
+  // setTimeout(() => {
+  track({
     userId: reservation.userId,
     event: 'Reservation Created',
     properties: {
@@ -125,6 +127,8 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
+  await sleep(500);
+  // }, 500);
   console.timeEnd('track event');
   return respond(201, reservation);
 };
