@@ -30,7 +30,6 @@ export class ProfilePage {
   isReservationsLoading$: Observable<boolean>;
   faCopyright = faCopyright;
   walletModal;
-  feedbackModal;
   loginModal;
 
   constructor(
@@ -71,10 +70,6 @@ export class ProfilePage {
   }
 
   async openFeedback() {
-    // this.feedbackModal = await this.modalController.create({
-    //   component: FeedbackPage,
-    // });
-    // return await this.feedbackModal.present();
     this.intercom.boot({ app_id: environment.intercom.appId });
     this.intercom.showNewMessage();
     this.intercom.onHide(() => {

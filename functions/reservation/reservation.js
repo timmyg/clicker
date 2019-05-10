@@ -2,7 +2,6 @@ const dynamoose = require('dynamoose');
 const moment = require('moment');
 const { getUserId, getBody, getPathParameters, invokeFunctionSync, respond, track } = require('serverless-helpers');
 const uuid = require('uuid/v1');
-const analytics = new (require('analytics-node'))(process.env.segmentWriteKey || process.env.SEGMENT_WRITE_KEY);
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
@@ -101,21 +100,12 @@ module.exports.create = async event => {
     return respond(statusCode, message);
   }
 
-  // change the channel
-  // const command = 'tune';
-  // const { losantId } = reservation.location;
-  // const { clientAddress, ip, id: boxId } = reservation.box;
-  // const { channel, channelMinor } = reservation.program;
-  // const payload = { clientAddress, channel, channelMinor, losantId, ip, command, boxId };
-  // await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
-  const command = 'tune';
   console.time('remote command');
+  const command = 'tune';
   await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
   console.timeEnd('remote command');
 
   console.time('track event');
-  const sleep = require('util').promisify(setTimeout);
-  // setTimeout(() => {
   await track({
     userId: reservation.userId,
     event: 'Reservation Created',
@@ -127,9 +117,8 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
-  // await sleep(500);
-  // }, 500);
   console.timeEnd('track event');
+
   return respond(201, reservation);
 };
 

@@ -16,7 +16,22 @@ import { ApiInterceptor } from './api-interceptor';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.reducer';
 import * as fromUser from './state/user/user.actions';
-import { filter, take } from 'rxjs/operators';
+import * as fromApp from './state/app/app.actions';
+import { filter, take, first } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { ofType } from '@ngrx/effects';
+
+export function checkParams(store: Store<AppState>): Function {
+  return () =>
+    new Promise(resolve => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const partner = urlParams.get('partner');
+      if (partner) {
+        store.dispatch(new fromApp.SetPartner(partner));
+      }
+      resolve(true);
+    });
+}
 
 export function initUserStuff(store: Store<AppState>): Function {
   return () =>
@@ -28,7 +43,7 @@ export function initUserStuff(store: Store<AppState>): Function {
           filter(user => user.authToken && user.authToken.length),
           take(1),
         )
-        .subscribe(authToken => {
+        .subscribe(() => {
           resolve(true);
         });
     });
@@ -43,11 +58,17 @@ export function initUserStuff(store: Store<AppState>): Function {
     StateModule.forRoot(),
     CoreModule.forRoot(),
     IntercomModule.forRoot({
-      appId: 'lp9l5d9l', // from your Intercom config
+      appId: environment.intercom.appId, // from your Intercom config
       updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
     }),
   ],
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: checkParams,
+      multi: true,
+      deps: [Store],
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: initUserStuff,

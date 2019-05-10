@@ -21,7 +21,7 @@ interface TimeLeft {
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
-  timeFromNow$: Observable<TimeLeft>;
+  // timeFromNow$: Observable<TimeLeft>;
   disableModify: boolean;
   timeLeft: TimeLeft;
   editChannelModal;

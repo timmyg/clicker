@@ -9,7 +9,7 @@ import { LocationsEffects } from './location/location.effects';
 import { UserEffects } from './user/user.effects';
 import { ProgramsEffects } from './program/program.effects';
 import { ReservationsEffects } from './reservation/reservation.effects';
-import { FeedbackEffects } from './feedback/feedback.effects';
+import { AppEffects } from './app/app.effects';
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { FeedbackEffects } from './feedback/feedback.effects';
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
     }),
-    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, ReservationsEffects, FeedbackEffects, UserEffects]),
+    EffectsModule.forRoot([LocationsEffects, ProgramsEffects, ReservationsEffects, AppEffects, UserEffects]),
   ],
   declarations: [],
 })
