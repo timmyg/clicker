@@ -4,7 +4,9 @@
       <span
         >{{ reservation.program.channelTitle }} - TV #{{ reservation.box.label || reservation.box.locationName }}</span
       >
-      <span float-right>{{ minutesFromNow$ | async }} left</span>
+      <span float-right>
+        <span>{{ minutesFromNow$ | async }} left</span>
+      </span>
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content class="ion-text-right">

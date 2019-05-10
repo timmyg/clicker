@@ -31,6 +31,7 @@ const Reservation = dynamoose.model(
     },
     box: {
       id: { type: String, required: true },
+      ip: { type: String, required: true },
       clientAddress: { type: String, required: true },
       locationName: { type: String, required: true },
       label: { type: String, required: true },

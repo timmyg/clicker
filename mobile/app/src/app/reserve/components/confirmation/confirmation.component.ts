@@ -9,7 +9,7 @@ import * as fromReservation from '../../../state/reservation/reservation.actions
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
-import { startWith, map, distinctUntilChanged, first } from 'rxjs/operators';
+import { startWith, map, distinctUntilChanged, first, filter } from 'rxjs/operators';
 import { isLoggedIn, getUserTokenCount } from 'src/app/state/user';
 import { Actions, ofType } from '@ngrx/effects';
 
@@ -64,12 +64,17 @@ export class ConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.reservation$.pipe(first()).subscribe(reservation => {
-      this.reservation = reservation;
-      if (reservation.id) {
-        this.isEditMode = true;
-      }
-    });
+    this.reservation$
+      .pipe(
+        filter(r => r !== null),
+        first(),
+      )
+      .subscribe(reservation => {
+        this.reservation = reservation;
+        if (reservation.id) {
+          this.isEditMode = true;
+        }
+      });
     this.tokenCount$.pipe(first()).subscribe(tokens => {
       this.tokenCount = tokens;
     });
@@ -125,12 +130,20 @@ export class ConfirmationComponent implements OnInit {
       : this.store.dispatch(new fromReservation.Create(this.reservation));
     const reservation = this.reservation;
     this.actions$
-      .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS))
+      .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS, fromReservation.UPDATE_RESERVATION_SUCCESS))
       .pipe(first())
       .subscribe(() => {
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(['/tabs/profile']);
         this.showTunedToast(reservation.box.label || reservation.box.locationName, reservation.program.channelTitle);
+      });
+    this.actions$
+      .pipe(ofType(fromReservation.CREATE_RESERVATION_FAIL, fromReservation.UPDATE_RESERVATION_FAIL))
+      .pipe(first())
+      .subscribe(() => {
+        // this.store.dispatch(new fromReservation.Start());
+        // this.router.navigate(['/tabs/profile']);
+        this.showErrorToast();
       });
   }
 
@@ -139,6 +152,16 @@ export class ConfirmationComponent implements OnInit {
       message: `TV ${label} successfully changed to ${channelName}`,
       duration: 2000,
       cssClass: 'ion-text-center',
+    });
+    toast.present();
+  }
+
+  async showErrorToast() {
+    const toast = await this.toastController.create({
+      message: `Something went wrong, please try again`,
+      duration: 2000,
+      cssClass: 'ion-text-center',
+      color: 'danger',
     });
     toast.present();
   }
