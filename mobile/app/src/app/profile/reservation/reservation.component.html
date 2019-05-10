@@ -4,8 +4,11 @@
       <span
         >{{ reservation.program.channelTitle }} - TV #{{ reservation.box.label || reservation.box.locationName }}</span
       >
-      <span float-right>
-        <span>{{ minutesFromNow$ | async }} left</span>
+      <span float-right *ngIf="(timeFromNow$ | async) as timeFromNow">
+        <!-- <span>{{ minutesFromNow$ | async }} left</span> -->
+        <span *ngIf="isReserved() && timeFromNow.minutes > 0">{{ timeFromNow.label }} left</span>
+        <span *ngIf="isReserved() && timeFromNow.minutes <= 0">Expired</span>
+        <!-- <span *ngIf="!isReserved()">Expired</span> -->
       </span>
     </ion-card-subtitle>
   </ion-card-header>

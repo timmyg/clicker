@@ -9,6 +9,11 @@ import * as fromStore from '../../state/app.reducer';
 import * as fromReservation from '../../state/reservation/reservation.actions';
 import { Router } from '@angular/router';
 
+interface TimeLeft {
+  label: string;
+  minutes: number;
+}
+
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -16,7 +21,7 @@ import { Router } from '@angular/router';
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
-  minutesFromNow$: Observable<string>;
+  timeFromNow$: Observable<TimeLeft>;
   disableModify: boolean;
   editChannelModal;
   editTimeModal;
@@ -35,7 +40,7 @@ export class ReservationComponent implements OnInit {
 
   private setMinutesRefresher() {
     let refreshSeconds = 30;
-    this.minutesFromNow$ = interval(refreshSeconds * 1000).pipe(
+    this.timeFromNow$ = interval(refreshSeconds * 1000).pipe(
       startWith(this.getTimeRemaining()), // this sets inital value
       map(() => {
         return this.getTimeRemaining();
@@ -103,7 +108,11 @@ export class ReservationComponent implements OnInit {
     this.showModify();
   }
 
-  private getTimeRemaining(): string {
+  isReserved() {
+    return this.reservation.minutes > 0;
+  }
+
+  private getTimeRemaining(): TimeLeft {
     const endTime = moment(this.reservation.end);
     const duration = moment.duration(endTime.diff(moment()));
     let minutes = Math.ceil(duration.asMinutes());
@@ -117,9 +126,12 @@ export class ReservationComponent implements OnInit {
       if (minutes) {
         msg = `${msg} ${minutes}m`;
       }
-      return msg;
+      return {
+        label: msg,
+        minutes,
+      };
     }
     // return Math.ceil(duration.asMinutes());
-    return `${minutes}m`;
+    return { label: `${minutes}m`, minutes };
   }
 }
