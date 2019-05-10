@@ -149,7 +149,7 @@ module.exports.update = async event => {
   // deduct from user
   const result = await invokeFunctionSync(
     `user-${process.env.stage}-transaction`,
-    { tokens: cost },
+    { tokens: updatedReservation.cost },
     null,
     event.headers,
   );

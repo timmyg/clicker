@@ -145,6 +145,7 @@ export class ConfirmationComponent implements OnInit {
         // this.store.dispatch(new fromReservation.Start());
         // this.router.navigate(['/tabs/profile']);
         this.showErrorToast();
+        this.saving = false;
       });
   }
 
