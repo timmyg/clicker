@@ -2,6 +2,7 @@ const dynamoose = require('dynamoose');
 const moment = require('moment');
 const { getUserId, getBody, getPathParameters, invokeFunctionSync, respond, track } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+const analytics = new (require('analytics-node'))(process.env.segmentWriteKey || process.env.SEGMENT_WRITE_KEY);
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
@@ -113,7 +114,7 @@ module.exports.create = async event => {
   console.timeEnd('remote command');
 
   console.time('track event');
-  track({
+  await analytics.track({
     userId: reservation.userId,
     event: 'Reservation Created',
     properties: {
