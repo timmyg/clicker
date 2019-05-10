@@ -132,7 +132,7 @@ module.exports.setBoxes = async event => {
     if (!existingBox) {
       box.id = uuid();
       box.label = box.locationName;
-      console.log('add box', id, box);
+      console.log('add box with label', id, box);
       location.boxes.push(box);
     }
   });
