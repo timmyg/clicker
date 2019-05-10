@@ -75,6 +75,7 @@ module.exports.create = async event => {
   reservation.end = calculateReservationEndTime(reservation);
   await Reservation.create(reservation);
 
+  console.time('mark box reserved');
   // mark box reserved
   await invokeFunctionSync(
     `location-${process.env.stage}-setBoxReserved`,
@@ -82,14 +83,17 @@ module.exports.create = async event => {
     { id: reservation.location.id, boxId: reservation.box.id },
     event.headers,
   );
+  console.timeEnd('mark box reserved');
 
   // deduct from user
+  console.time('deduct transaction');
   const result = await invokeFunctionSync(
     `user-${process.env.stage}-transaction`,
     { tokens: cost },
     null,
     event.headers,
   );
+  console.timeEnd('deduct transaction');
   const statusCode = JSON.parse(result.Payload).statusCode;
   if (statusCode >= 400) {
     const message = JSON.parse(JSON.parse(result.Payload).body).message;
@@ -104,8 +108,11 @@ module.exports.create = async event => {
   // const payload = { clientAddress, channel, channelMinor, losantId, ip, command, boxId };
   // await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
   const command = 'tune';
+  console.time('remote command');
   await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+  console.timeEnd('remote command');
 
+  console.time('track event');
   await track({
     userId: reservation.userId,
     event: 'Reservation Created',
@@ -117,6 +124,7 @@ module.exports.create = async event => {
       minutes: reservation.minutes,
     },
   });
+  console.timeEnd('track event');
   return respond(201, reservation);
 };
 

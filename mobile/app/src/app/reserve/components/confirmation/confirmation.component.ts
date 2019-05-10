@@ -76,7 +76,6 @@ export class ConfirmationComponent implements OnInit {
         }
       });
     this.tokenCount$.subscribe(tokens => {
-      console.log(tokens);
       this.tokenCount = tokens;
     });
     this.isLoggedIn$.subscribe(isLoggedIn => {
