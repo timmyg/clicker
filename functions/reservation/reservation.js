@@ -131,7 +131,7 @@ module.exports.update = async event => {
   }
   const updatedCost = originalReservation.cost + updatedReservation.cost;
   const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
-  updatedReservation.end = calculateReservationEndTime(reservation);
+  updatedReservation.end = calculateReservationEndTime(updatedReservation);
   const { program, end } = updatedReservation;
   const reservation = await Reservation.update(
     { id, userId },
