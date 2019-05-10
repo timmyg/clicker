@@ -125,6 +125,7 @@ module.exports.update = async event => {
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
   const originalReservation = await Reservation.get({ id, userId });
+  console.log(userId, originalReservation.userId);
   if (userId !== originalReservation.userId) {
     return respond(403);
   }
