@@ -126,8 +126,8 @@ module.exports.update = async event => {
   const userId = getUserId(event);
   const originalReservation = await Reservation.get({ id, userId });
   console.log(userId, originalReservation.userId);
-  if (userId !== originalReservation.userId) {
-    return respond(403);
+  if (userId.replace('sms|', '') !== originalReservation.userId) {
+    return respond(403 'invalid userId');
   }
   const updatedCost = originalReservation.cost + updatedReservation.cost;
   const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
