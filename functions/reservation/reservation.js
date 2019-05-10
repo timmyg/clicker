@@ -113,7 +113,7 @@ module.exports.create = async event => {
   console.timeEnd('remote command');
 
   console.time('track event');
-  await track({
+  track({
     userId: reservation.userId,
     event: 'Reservation Created',
     properties: {

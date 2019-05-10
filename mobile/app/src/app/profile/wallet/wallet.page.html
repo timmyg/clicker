@@ -19,7 +19,7 @@
               <span padding-start>{{ f.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" value="{{ f.dollars }}" checked></ion-radio>
+          <ion-radio slot="start" value="{{ f.dollars }}" [disabled]="waiting" checked></ion-radio>
         </ion-item>
       </ion-radio-group>
     </ion-list>
