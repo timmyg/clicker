@@ -1,4 +1,4 @@
 export interface User {
-  id: string;
-  tokens: number;
+  sub: string;
+  guest?: boolean;
 }

@@ -6,6 +6,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
+    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -35,6 +36,10 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
   tableLocation: locations-${self:custom.stage}
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    dev: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     LocationsTable:
@@ -87,8 +92,8 @@ functions:
           path: '{id}'
           method: put
           cors: true
-  addBoxes:
-    handler: location.addBoxes
+  setBoxes:
+    handler: location.setBoxes
     events:
       - http:
           path: '{id}/boxes'
@@ -106,5 +111,19 @@ functions:
     events:
       - http:
           path: '{id}/boxes/identify'
+          method: post
+          cors: true
+  setBoxReserved:
+    handler: location.setBoxReserved
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}/reserved'
+          method: post
+          cors: true
+  setBoxFree:
+    handler: location.setBoxFree
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}/free'
           method: post
           cors: true

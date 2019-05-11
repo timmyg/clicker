@@ -3,11 +3,16 @@ import { interval, Observable, of } from 'rxjs';
 import { map, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import * as moment from 'moment';
-import { ActionSheetController, ModalController, AlertController } from '@ionic/angular';
+import { ActionSheetController, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../state/app.reducer';
 import * as fromReservation from '../../state/reservation/reservation.actions';
 import { Router } from '@angular/router';
+
+interface TimeLeft {
+  label: string;
+  minutes: number;
+}
 
 @Component({
   selector: 'app-reservation',
@@ -16,9 +21,12 @@ import { Router } from '@angular/router';
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
-  minutesFromNow$: Observable<string>;
+  // timeFromNow$: Observable<TimeLeft>;
+  disableModify: boolean;
+  timeLeft: TimeLeft;
   editChannelModal;
   editTimeModal;
+  intervalJobId;
 
   constructor(
     public actionSheetController: ActionSheetController,
@@ -26,24 +34,17 @@ export class ReservationComponent implements OnInit {
     private store: Store<fromStore.AppState>,
     private router: Router,
     public modalController: ModalController,
+    public toastController: ToastController,
   ) {}
 
   ngOnInit() {
-    this.setMinutesRefresher();
-  }
-
-  private setMinutesRefresher() {
-    let refreshSeconds = 30;
-    this.minutesFromNow$ = interval(refreshSeconds * 1000).pipe(
-      startWith(this.getTimeRemaining()), // this sets inital value
-      map(() => {
-        return this.getTimeRemaining();
-      }),
-      distinctUntilChanged(),
-    );
+    this.setTimeLeftRefresher();
+    const secondsToRefresh = 25;
+    this.intervalJobId = setInterval(() => this.setTimeLeftRefresher(), secondsToRefresh * 1000);
   }
 
   async showModify() {
+    this.disableModify = true;
     const actionSheet = await this.actionSheetController.create({
       header: 'Modify Reservation',
       buttons: [
@@ -73,6 +74,7 @@ export class ReservationComponent implements OnInit {
         },
       ],
     });
+    actionSheet.onDidDismiss().then(() => (this.disableModify = false));
     await actionSheet.present();
   }
 
@@ -88,6 +90,7 @@ export class ReservationComponent implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             this.store.dispatch(new fromReservation.Cancel(reservation));
+            clearInterval(this.intervalJobId);
           },
         },
       ],
@@ -97,26 +100,62 @@ export class ReservationComponent implements OnInit {
   }
 
   modify() {
-    this.showModify();
+    if (this.isReserved()) {
+      const endTime = moment(this.reservation.end);
+      const duration = moment.duration(endTime.diff(moment())).asMilliseconds();
+      if (duration > 0) {
+        this.showModify();
+      } else {
+        this.showToast('Sorry, your reservation has expired');
+      }
+    } else {
+      this.showToast('Sorry, you did not reserve this TV for a time period');
+    }
   }
 
-  private getTimeRemaining(): string {
+  isReserved() {
+    return this.reservation.minutes > 0;
+  }
+
+  private setTimeLeftRefresher() {
     const endTime = moment(this.reservation.end);
     const duration = moment.duration(endTime.diff(moment()));
-    let minutes = Math.ceil(duration.asMinutes());
+    const minutes = Math.ceil(duration.asMinutes());
+    this.timeLeft = this.getTimeLeft(minutes);
+    if (minutes <= 0) {
+      clearInterval(this.intervalJobId);
+    }
+  }
+
+  getTimeLeft(minutes): TimeLeft {
+    let label;
     if (minutes >= 60) {
+      let minutesRemaining = minutes;
       let hours = 0;
-      while (minutes >= 60) {
-        minutes -= 60;
+      while (minutesRemaining >= 60) {
+        minutesRemaining -= 60;
         hours++;
       }
-      let msg = `${hours}h`;
-      if (minutes) {
-        msg = `${msg} ${minutes}m`;
+      label = `${hours}h`;
+      if (minutesRemaining) {
+        label = `${label} ${minutesRemaining}m`;
       }
-      return msg;
+    } else {
+      // this.timeLeft = { label: `${minutes}m`, minutes };
+      label = `${minutes}m`;
     }
-    // return Math.ceil(duration.asMinutes());
-    return `${minutes}m`;
+    return {
+      label,
+      minutes,
+    };
+  }
+
+  async showToast(message) {
+    const toastInvalid = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      cssClass: 'ion-text-center',
+    });
+    toastInvalid.present();
   }
 }

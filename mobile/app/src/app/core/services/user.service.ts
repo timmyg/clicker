@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { User } from 'src/app/state/user/user.model';
+// import { User } from 'src/app/state/user/user.model';
 import { Storage } from '@ionic/storage';
 import { mergeMap } from 'rxjs/operators';
+// import * as decode from 'jwt-decode';
+const storage = {
+  token: 'token',
+  originalToken: 'originalToken',
+  anonymous: 'anonymous',
+};
 
 @Injectable({
   providedIn: 'root',
@@ -12,19 +18,49 @@ export class UserService {
   private prefix = `users`;
   constructor(private httpClient: HttpClient, private storage: Storage) {}
 
-  get(): Observable<User> {
-    return from(this.storage.get('userid')).pipe(
-      mergeMap(userId => {
-        if (userId) {
-          return this.httpClient.get<User>(`${this.prefix}/${userId}`);
+  get(): Observable<string> {
+    return from(this.storage.get(storage.token)).pipe(
+      mergeMap(token => {
+        if (token) {
+          return of(token);
         } else {
-          return this.httpClient.post<User>(this.prefix, {});
+          return new Observable(observer => {
+            this.httpClient.post<any>(this.prefix, {}).subscribe(result => {
+              this.setOriginalToken(result.token);
+              this.setToken(result.token);
+              return observer.next(result.token);
+            });
+          });
         }
       }),
     );
   }
 
-  set(user: User) {
-    this.storage.set('userid', user.id);
+  getWallet(): Observable<Number> {
+    return this.httpClient.get<any>(`${this.prefix}/wallet`, {});
+  }
+
+  alias(fromId: string, toId: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.prefix}/alias/${fromId}/${toId}`, {});
+  }
+
+  updateCard(token: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.prefix}/stripe/card`, { token });
+  }
+
+  removeCard(): Observable<any> {
+    return this.httpClient.delete<any>(`${this.prefix}/stripe/card`);
+  }
+
+  addFunds(tokens: number): Observable<any> {
+    return this.httpClient.post<any>(`${this.prefix}/replenish`, { tokens });
+  }
+
+  setToken(token: string) {
+    this.storage.set(storage.token, token);
+  }
+
+  setOriginalToken(token: string) {
+    this.storage.set(storage.originalToken, token);
   }
 }

@@ -4,8 +4,10 @@ provider:
   name: aws
   runtime: nodejs8.10
   environment:
-    tableUser: ${self:custom.tableUser}
+    tableWallet: ${self:custom.tableWallet}
+    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
     stage: ${self:custom.stage}
+    stripeSecretKey: ${self:custom.stripeSecretKey.${self:provider.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -34,22 +36,47 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  tableUser: users-${self:custom.stage}
+  tableWallet: wallets-${self:custom.stage}
+  stripeSecretKey:
+    prod: ${env:STRIPE_SECRET_KEY}
+    release: ${env:STRIPE_SECRET_KEY_DEV}
+    dev: ${env:STRIPE_SECRET_KEY_DEV}
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    dev: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
-    UsersTable:
+    Walletable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: ${self:custom.tableUser}
+        TableName: ${self:custom.tableWallet}
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: userId
             AttributeType: S
+          # - AttributeName: id
+          #   AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: userId
             KeyType: HASH
+          # - AttributeName: id
+          #   KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
+    # UsersTable:
+    #   Type: 'AWS::DynamoDB::Table'
+    #   Properties:
+    #     TableName: ${self:custom.tableUser}
+    #     AttributeDefinitions:
+    #       - AttributeName: id
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: id
+    #         KeyType: HASH
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: ${self:custom.tableThroughput}
+    #       WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
@@ -66,17 +93,45 @@ functions:
           path: ''
           method: post
           cors: true
-  get:
-    handler: user.get
+  wallet:
+    handler: user.wallet
     events:
       - http:
-          path: '{id}'
+          path: wallet
           method: get
           cors: true
-  addTokens:
-    handler: user.addTokens
+  updateCard:
+    handler: user.updateCard
     events:
       - http:
-          path: 'tokens'
+          path: stripe/card
+          method: post
+          cors: true
+  removeCard:
+    handler: user.removeCard
+    events:
+      - http:
+          path: stripe/card
+          method: delete
+          cors: true
+  replenish:
+    handler: user.replenish
+    events:
+      - http:
+          path: 'replenish'
+          method: post
+          cors: true
+  transaction:
+    handler: user.transaction
+    events:
+      - http:
+          path: 'transaction'
+          method: post
+          cors: true
+  alias:
+    handler: user.alias
+    events:
+      - http:
+          path: 'alias/{fromId}/{toId}'
           method: post
           cors: true

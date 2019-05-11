@@ -49,18 +49,15 @@
     <p class="ion-text-center" padding-top>
       <!-- show always -->
       <span
-        >You are tuning <b>TV {{ reservation.box.label || reservation.box.locationName }}</b> to
-        {{ reservation.program.channelTitle }}</span
+        >You are tuning <b>TV {{ reservation.box.label }}</b> to <b>{{ reservation.program.channelTitle }} </b></span
       >
       <!-- show if new and reserving, or editing -->
       <span *ngIf="reservation.reserve || isEditMode; else oneTime">
-        and reserving until {{ reservationEnd$ | async | amDateFormat: 'h:mma' }}. You will be able to freely change the
-        channel during your reservation.
+        and reserving until <b>{{ reservationEnd$ | async | amDateFormat: 'h:mma' }}</b
+        >. You will be able to freely change the channel during your reservation.
       </span>
       <!-- show when new and not reserving -->
-      <ng-template #oneTime>
-        <span *ngIf="!editMode">&nbsp; but others will be able to change the channel</span>
-      </ng-template>
+      <ng-template #oneTime> <span *ngIf="!editMode">but others will be able to change the channel</span> </ng-template>
     </p>
     <ion-button
       color="success"
@@ -68,7 +65,7 @@
       expand="block"
       (click)="onConfirm(reservation)"
       slot="end"
-      [disabled]="saving"
+      [disabled]="saving || !sufficientFunds"
       margin-top
       align-items-center
     >
@@ -84,5 +81,13 @@
     <ion-row class="ion-text-center" *ngIf="reservation.location && reservation.location.name">
       <p class="center">{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</p></ion-row
     >
+    <ion-row class="ion-text-center" *ngIf="!sufficientFunds" margin-top>
+      <ion-text color="danger">
+        Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
+        ><ng-template #tokens>tokens</ng-template> remaining. Please
+        <span *ngIf="!isLoggedIn"><a [routerLink]="'/tabs/profile'">login</a> and </span>
+        <a [routerLink]="'/tabs/profile'" *ngIf="isLoggedIn">add funds</a><span *ngIf="!isLoggedIn">add funds</span>.
+      </ion-text>
+    </ion-row>
   </ion-card-content>
 </ion-card>

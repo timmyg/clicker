@@ -6,6 +6,7 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 
 import { Reservation } from './reservation.model';
 import * as ReservationActions from './reservation.actions';
+import * as UserActions from '../user/user.actions';
 import { ReservationService } from '../../core/services/reservation.service';
 import { LocationService } from 'src/app/core/services/location.service';
 import { Location } from '../location/location.model';
@@ -16,7 +17,7 @@ export class ReservationsEffects {
   getAllReservations$: Observable<Action> = this.actions$.pipe(
     ofType(ReservationActions.GET_RESERVATIONS),
     switchMap(() =>
-      this.reservationService.getActive().pipe(
+      this.reservationService.getActiveByUser().pipe(
         map((reservations: Reservation[]) => new ReservationActions.GetAllSuccess(reservations)),
         catchError(err => of(new ReservationActions.GetAllFail(err))),
       ),
@@ -30,6 +31,7 @@ export class ReservationsEffects {
       this.reservationService.create(action.payload).pipe(
         switchMap((reservation: Reservation) => [
           new ReservationActions.CreateSuccess(reservation),
+          new UserActions.LoadWallet(),
           new ReservationActions.GetAll(),
         ]),
         catchError(err => of(new ReservationActions.CreateFail(err))),
@@ -44,6 +46,7 @@ export class ReservationsEffects {
       this.reservationService.update(action.payload).pipe(
         switchMap((reservation: Reservation) => [
           new ReservationActions.UpdateSuccess(reservation),
+          new UserActions.LoadWallet(),
           new ReservationActions.GetAll(),
         ]),
         catchError(err => of(new ReservationActions.UpdateFail(err))),

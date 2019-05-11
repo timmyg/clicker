@@ -22,7 +22,7 @@ class Api {
   //   }
   // }
 
-  async setBoxes(boxes) {
+  async setBoxes(ip, boxes) {
     try {
       logger.info('update device boxes', { boxes });
       logger.info(`/locations/${this.locationId}/boxes`);
@@ -30,7 +30,7 @@ class Api {
       logger.info(boxes);
       logger.info(`/locations/${this.locationId}/boxes`);
 
-      return await this.axios.put(`/locations/${this.locationId}/boxes`, boxes);
+      return await this.axios.put(`/locations/${this.locationId}/boxes`, { boxes, ip });
     } catch (error) {
       return console.error(error);
     }

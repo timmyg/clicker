@@ -28,8 +28,9 @@
 
 11. add app startup/sync script
 
+- `sudo vim.tiny /etc/systemd/system/copy-env-vars.service`
 - `sudo vim.tiny /etc/systemd/system/antenna.service`
-- `sudo vim.tiny /etc/systemd/system/create-base-img.service`
+- input [copy-env-vars.service](resources/copy-env-vars.service) contents
 - input [antenna.service](resources/antenna.service) contents
 - test service: `sudo systemctl daemon-reload && sudo systemctl restart antenna`
 - enable at startup: `sudo systemctl enable antenna`

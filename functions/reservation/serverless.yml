@@ -6,6 +6,8 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableReservation: ${self:custom.tableReservation}
+    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    tableThroughputs: ${self:custom.tableThroughputs.${self:provider.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -35,6 +37,10 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
   tableReservation: reservations-${self:custom.stage}
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    dev: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     ReservationTable:
@@ -51,6 +57,16 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
+        # GlobalSecondaryIndexes:
+        #   - IndexName: StartTimeByLocationIndex
+        #     KeySchema:
+        #       - AttributeName: category
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: 1
+        #       WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
@@ -63,18 +79,11 @@ functions:
           path: health
           method: get
           cors: true
-  all:
-    handler: reservation.all
+  activeByUser:
+    handler: reservation.activeByUser
     events:
       - http:
-          path: ''
-          method: get
-          cors: true
-  active:
-    handler: reservation.active
-    events:
-      - http:
-          path: 'active'
+          path: 'active/user'
           method: get
           cors: true
   get:
@@ -86,6 +95,7 @@ functions:
           cors: true
   create:
     handler: reservation.create
+    timeout: 20
     events:
       - http:
           path: ''
@@ -100,6 +110,7 @@ functions:
           cors: true
   update:
     handler: reservation.update
+    timeout: 20
     events:
       - http:
           path: '{id}'

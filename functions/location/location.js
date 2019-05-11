@@ -1,7 +1,8 @@
 const { respond, getBody, getPathParameters } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
+const moment = require('moment');
 const uuid = require('uuid/v1');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: '../.env.example' });
 
 const Location = dynamoose.model(
   process.env.tableLocation,
@@ -17,11 +18,15 @@ const Location = dynamoose.model(
     },
     boxes: [
       {
+        id: String,
         clientAddress: String, // dtv calls this clientAddr
         locationName: String, // dtv name
-        label: String, // physical label id on tv
+        label: String, // physical label id on tv (defaults to locationName)
         tunerBond: Boolean, // not sure what this is
         setupChannel: Number,
+        ip: String,
+        reserved: Boolean,
+        end: Date,
       },
     ],
     name: { type: String, required: true },
@@ -29,10 +34,11 @@ const Location = dynamoose.model(
     zip: { type: Number, required: true },
     // lat: { type: Number, required: true },
     // lng: { type: Number, required: true },
-    ip: String,
+    // ip: String,
     img: String,
     distance: Number,
     active: Boolean,
+    setup: Boolean,
   },
   {
     timestamps: true,
@@ -49,17 +55,32 @@ module.exports.all = async event => {
 };
 
 module.exports.get = async event => {
-  const params = getPathParameters(event);
-  const { id } = params;
+  const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();
+
+  // loop through boxes, and update reserved status if necessary
+  location.boxes.forEach((o, i, boxes) => {
+    // check if box is reserved and end time is in past
+    if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
+      // if so, update to not reserved
+      delete boxes[i].reserved;
+      delete boxes[i].end;
+    }
+  });
+  await location.save();
+
+  // sort boxes alphabetically
   location.boxes = location.boxes.sort((a, b) => {
     const labelA = a.label || a.locationName;
     const labelB = b.label || b.locationName;
     return labelA.localeCompare(labelB);
   });
+
+  // TODO set reserved
+  // call reservations to get active ones by location
 
   return respond(200, location);
 };
@@ -77,9 +98,8 @@ module.exports.create = async event => {
 
 module.exports.update = async event => {
   try {
-    const params = getPathParameters(event);
+    const { id } = getPathParameters(event);
     const body = getBody(event);
-    const { id } = params;
 
     const updatedLocation = await Location.update({ id }, body, { returnValues: 'ALL_NEW' });
     return respond(200, updatedLocation);
@@ -89,34 +109,72 @@ module.exports.update = async event => {
   }
 };
 
-module.exports.addBoxes = async event => {
-  const boxes = getBody(event);
-  const params = getPathParameters(event);
-  const { id } = params;
+module.exports.setBoxes = async event => {
+  const { boxes, ip } = getBody(event);
+  const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();
 
-  // if boxes already exist, don't overwrite
-  // TODO but maybe we should update if different (without overwriting labels)?
-  if (location.boxes && location.boxes.length) {
-    return respond(204);
+  if (location.setup) {
+    return respond(204, 'location has already been setup');
   }
 
-  boxes.forEach(b => {
-    b.clientAddress = b.clientAddr;
+  let updatedLocation;
+  location.boxes = location.boxes || [];
+  boxes.forEach(box => {
+    box.clientAddress = box.clientAddr;
+    box.ip = ip;
+    const existingBox =
+      location.boxes &&
+      location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
+    if (!existingBox) {
+      box.id = uuid();
+      box.label = box.locationName;
+      console.log('add box with label', id, box);
+      location.boxes.push(box);
+    }
   });
+  await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
 
-  // TODO do we need to add main receiver as a box?
-  const updatedBoxes = await Location.update({ id }, { boxes }, { returnValues: 'ALL_NEW' });
-  return respond(200, updatedBoxes);
+  return respond(201, updatedLocation);
+};
+
+module.exports.setBoxReserved = async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+  const { end } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  const boxIndex = location.boxes.findIndex(b => b.id === boxId);
+  location.boxes[boxIndex]['reserved'] = true;
+  location.boxes[boxIndex]['end'] = end;
+  await location.save();
+
+  return respond(200);
+};
+
+module.exports.setBoxFree = async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  const boxIndex = location.boxes.findIndex(b => b.id === boxId);
+  delete location.boxes[boxIndex]['reserved'];
+  delete location.boxes[boxIndex]['end'];
+  await location.save();
+
+  return respond(200);
 };
 
 module.exports.setLabels = async event => {
-  const params = getPathParameters(event);
+  const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);
-  const { id } = params;
   const location = await Location.queryOne('id')
     .eq(id)
     .exec();
@@ -124,14 +182,13 @@ module.exports.setLabels = async event => {
   console.log(boxes, boxesWithLabels);
   const updatedBoxes = boxes.map(x => Object.assign(x, boxesWithLabels.find(y => y.setupChannel == x.setupChannel)));
   console.log(updatedBoxes);
-  await Location.update({ id }, { boxes: updatedBoxes });
+  await Location.update({ id }, { boxes: updatedBoxes }, { returnValues: 'ALL_NEW' });
 
   return respond(200, boxes);
 };
 
 module.exports.identifyBoxes = async event => {
-  const params = getPathParameters(event);
-  const { id } = params;
+  const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
     .eq(id)

@@ -2,8 +2,13 @@
   <div class="container">
     <div class="flex-grid wrapper">
       <div class="hero-copy col">
-        <h1 class="listen-up">Change the game.<br>Literally.</h1>
-        <p class="hero-paragraph">Empower guests at your bar or restaurant to change the channel easily from their phone.</p>
+        <h1 class="listen-up">
+          Change the game.
+          <br>Literally.
+        </h1>
+        <p
+          class="hero-paragraph"
+        >Empower guests at your bar or restaurant to change the channel easily from their phone.</p>
         <signup></signup>
       </div>
       <div class="hero-illustration col">
@@ -40,6 +45,7 @@ export default {
   background-repeat: no-repeat;
   background-position-y: 20px;
   height: 360px;
+  flex: 1 auto;
 }
 
 @include media('>large') {

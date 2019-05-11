@@ -17,32 +17,34 @@ class Widget {
     this.init();
   }
 
-  async saveIp() {
+  async findIpsAndBoxes() {
     const context = this;
     logger.info('about to search ips....');
     browser.browser({}, (error, device) => {
       if (device) {
-        logger.info({ device });
+        // logger.info({ device });
         let { ip } = device;
         if (
           !/^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/.test(
             ip,
           )
         ) {
-          return logger.info(`.......... invalid ip: ${ip}`);
+          // logger.info(`.......... invalid ip: ${ip}`);
+          return;
         }
         DirecTV.validateIP(ip, error => {
           if (error) {
-            return logger.info(`.......... not valid directv ip: ${ip}`);
+            // logger.info(`.......... not valid directv ip: ${ip}`);
+            return;
           }
           logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
-          context.saveBoxes(ip);
-          return context.api.updateIp(ip);
+          return context.saveBoxes(ip);
+          // return context.api.updateIp(ip);
         });
       } else if (error) {
-        logger.error(error);
+        // logger.error(error);
       } else {
-        logger.error('no ips found...');
+        // logger.error('no ips found...');
       }
     });
   }
@@ -50,10 +52,12 @@ class Widget {
   async saveBoxes(ip) {
     logger.info(`*#$&%~%*$& save boxes: ${ip}`);
     const remote = new DirecTV.Remote(ip);
-    const boxes = remote.getLocations(undefined, (err, response) => {
-      if (err) return logger.error(err);
-      logger.info({ boxes: response });
-      return this.api.setBoxes(response.locations);
+    remote.getLocations(undefined, (err, response) => {
+      if (err) {
+        return logger.error(err);
+      }
+      logger.info({ boxes: response, ip });
+      return this.api.setBoxes(ip, response.locations);
     });
   }
 
@@ -65,11 +69,14 @@ class Widget {
         // const ip = '192.168.200.221';
         const { name, payload } = command;
         const { ip } = payload;
-        console.log({ ip, name, payload });
+        // console.log({ ip, name, payload });
+        // console.log('setting ip', ip);
         this.remote = new DirecTV.Remote(ip);
         switch (name) {
           case 'tune':
-            this.remote.tune(payload.channel, payload.client, err => {
+            // console.log('tuning...');
+            // console.log(payload.channel, payload.channelMinor, payload.client);
+            this.remote.tune(payload.channel, payload.channelMinor, payload.client, err => {
               if (err) return logger.error(err);
               return logger.info('tuned');
             });
@@ -87,10 +94,16 @@ class Widget {
             });
             break;
           case 'channel.info':
-            this.remote.getProgInfo(payload.channel, payload.start, payload.client, (err, response) => {
-              if (err) return logger.error(err);
-              return logger.info('channel.info', response);
-            });
+            this.remote.getProgInfo(
+              payload.channel,
+              payload.channelMinor,
+              payload.start,
+              payload.client,
+              (err, response) => {
+                if (err) return logger.error(err);
+                return logger.info('channel.info', response);
+              },
+            );
             break;
           case 'info.current':
             this.remote.getTuned(payload.client, (err, response) => {
@@ -142,7 +155,7 @@ class Widget {
    */
   async init() {
     // await this.api.register();
-    await this.saveIp();
+    await this.findIpsAndBoxes();
     this.device.connect(error => {
       if (error) {
         logger.error(error);

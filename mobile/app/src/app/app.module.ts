@@ -16,9 +16,38 @@ import { ApiInterceptor } from './api-interceptor';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.reducer';
 import * as fromUser from './state/user/user.actions';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import * as fromApp from './state/app/app.actions';
+import { filter, take, first } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { ofType } from '@ngrx/effects';
 
+export function checkParams(store: Store<AppState>): Function {
+  return () =>
+    new Promise(resolve => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const partner = urlParams.get('partner');
+      if (partner) {
+        store.dispatch(new fromApp.SetPartner(partner));
+      }
+      resolve(true);
+    });
+}
+
+export function initUserStuff(store: Store<AppState>): Function {
+  return () =>
+    new Promise(resolve => {
+      store.dispatch(new fromUser.Load());
+      store
+        .select((state: any) => state.user)
+        .pipe(
+          filter(user => user.authToken && user.authToken.length),
+          take(1),
+        )
+        .subscribe(() => {
+          resolve(true);
+        });
+    });
+}
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -29,31 +58,20 @@ import { takeUntil } from 'rxjs/operators';
     StateModule.forRoot(),
     CoreModule.forRoot(),
     IntercomModule.forRoot({
-      appId: 'lp9l5d9l', // from your Intercom config
+      appId: environment.intercom.appId, // from your Intercom config
       updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
     }),
   ],
   providers: [
     {
-      // load user on startup
-      // TODO i dont think its waiting until its actually loaded...
       provide: APP_INITIALIZER,
-      useFactory: (store: Store<AppState>) => {
-        return () =>
-          new Promise(resolve => {
-            const loaded$ = new Subject();
-            store.dispatch(new fromUser.Get());
-            store
-              .select((state: AppState) => state.user.me)
-              .pipe(takeUntil(loaded$))
-              .subscribe(loaded => {
-                if (loaded) {
-                  loaded$.next();
-                  resolve();
-                }
-              });
-          });
-      },
+      useFactory: checkParams,
+      multi: true,
+      deps: [Store],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initUserStuff,
       multi: true,
       deps: [Store],
     },

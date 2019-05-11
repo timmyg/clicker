@@ -8,6 +8,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { getReservation, getReservationTvs } from 'src/app/state/reservation';
+import { ToastController } from '@ionic/angular';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-tvs',
@@ -24,13 +26,22 @@ export class TvsComponent {
     private reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
+    private toastController: ToastController,
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
   }
 
-  onTvClick(tv: TV) {
+  async onTvClick(tv: TV) {
+    if (tv.reserved) {
+      const toast = await this.toastController.create({
+        message: `${tv.label} is reserved until ${moment(tv.end).format('h:mma')}`,
+        duration: 2000,
+        cssClass: 'ion-text-center',
+      });
+      return toast.present();
+    }
     this.store.dispatch(new fromReservation.SetTv(tv));
     this.router.navigate(['../confirmation'], { relativeTo: this.route });
   }

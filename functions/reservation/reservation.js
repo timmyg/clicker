@@ -1,12 +1,19 @@
 const dynamoose = require('dynamoose');
-const { getAuthBearerToken, getBody, getPathParameters, invokeFunction, respond } = require('serverless-helpers');
-const uuid = require('uuid/v1');
 const moment = require('moment');
+const { getUserId, getBody, getPathParameters, invokeFunctionSync, respond, track } = require('serverless-helpers');
+const uuid = require('uuid/v1');
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
   {
-    userId: { type: String, hashKey: true, required: true },
+    userId: {
+      type: String,
+      hashKey: true,
+      required: true,
+      set: val => {
+        return decodeURI(val).replace('sms|', '');
+      },
+    },
     id: {
       type: String,
       rangeKey: true,
@@ -22,6 +29,8 @@ const Reservation = dynamoose.model(
       img: { type: String, required: true },
     },
     box: {
+      id: { type: String, required: true },
+      ip: { type: String, required: true },
       clientAddress: { type: String, required: true },
       locationName: { type: String, required: true },
       label: { type: String, required: true },
@@ -29,13 +38,14 @@ const Reservation = dynamoose.model(
     program: {
       id: { type: String, required: true },
       channel: { type: Number, required: true },
+      channelMinor: { type: Number },
       channelTitle: { type: String, required: true },
       title: { type: String, required: true },
     },
     cost: { type: Number, required: true },
     minutes: { type: Number, required: true },
-    start: { type: Date, required: true },
-    end: { type: Date, required: true },
+    start: Date,
+    end: Date,
     cancelled: Boolean,
   },
   {
@@ -43,77 +53,165 @@ const Reservation = dynamoose.model(
   },
 );
 
+// ServiceSchema.method('getBaseFeature', async function () {
+//   var {Feature} = require("./index");
+//   var feature = await Feature.query("serviceId").eq(this.id).filter({type: "base"}).exec();
+//   if (feature.length != 0)
+//   {
+//     return feature[0];
+//   }
+//   return false;
+// });
+
 module.exports.health = async event => {
   return respond(200, `hello`);
 };
 
 module.exports.create = async event => {
   let reservation = getBody(event);
-  reservation.userId = getAuthBearerToken(event);
+  const { cost } = reservation;
+  reservation.userId = getUserId(event);
 
-  reservation = calculateReservationTimes(reservation);
+  reservation.end = calculateReservationEndTime(reservation);
   await Reservation.create(reservation);
 
-  const { losantId, ip } = reservation.location;
-  const { clientAddress: client } = reservation.box;
-  const { channel } = reservation.program;
-  const payload = { client, channel, losantId, ip, command: 'tune' };
-  console.log('new reservation, change channel');
-  console.log(reservation);
-  // console.log(payload);
-  console.log(`remote-${process.env.stage}-command`, { payload });
-  await invokeFunction(`remote-${process.env.stage}-command`, { payload });
+  console.time('mark box reserved');
+  // mark box reserved
+  await invokeFunctionSync(
+    `location-${process.env.stage}-setBoxReserved`,
+    { end: reservation.end },
+    { id: reservation.location.id, boxId: reservation.box.id },
+    event.headers,
+  );
+  console.timeEnd('mark box reserved');
+
+  // deduct from user
+  console.time('deduct transaction');
+  const result = await invokeFunctionSync(
+    `user-${process.env.stage}-transaction`,
+    { tokens: cost },
+    null,
+    event.headers,
+  );
+  console.timeEnd('deduct transaction');
+  const statusCode = JSON.parse(result.Payload).statusCode;
+  if (statusCode >= 400) {
+    const message = JSON.parse(JSON.parse(result.Payload).body).message;
+    return respond(statusCode, message);
+  }
+
+  console.time('remote command');
+  const command = 'tune';
+  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+  console.timeEnd('remote command');
+
+  console.time('track event');
+  await track({
+    userId: reservation.userId,
+    event: 'Reservation Created',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
+  console.timeEnd('track event');
 
   return respond(201, reservation);
 };
 
 module.exports.update = async event => {
-  let reservation = getBody(event);
-  const userId = getAuthBearerToken(event);
-  reservation.userId = userId;
   const { id } = getPathParameters(event);
+  let updatedReservation = getBody(event);
+  const userId = getUserId(event);
+  const originalReservation = await Reservation.get({ id, userId });
+  console.log(userId, originalReservation.userId);
+  if (userId.replace('sms|', '') !== originalReservation.userId) {
+    return respond(403, 'invalid userId');
+  }
+  const updatedCost = originalReservation.cost + updatedReservation.cost;
+  const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
+  updatedReservation.end = calculateReservationEndTime(updatedReservation);
+  const { program, end } = updatedReservation;
+  const reservation = await Reservation.update(
+    { id, userId },
+    { cost: updatedCost, minutes: updatedMinutes, program, end },
+    { returnValues: 'ALL_NEW' },
+  );
 
-  // "errorMessage": "Invalid UpdateExpression: Two document paths overlap with each other; must remove or rewrite one
-  // of these paths; path one: [createdAt], path two: [cost]"
-  delete reservation.cost;
-  delete reservation.createdAt;
-  reservation = calculateReservationTimes(reservation);
-  await Reservation.update({ id, userId }, reservation);
+  // mark box reserved
+  await invokeFunctionSync(
+    `location-${process.env.stage}-setBoxReserved`,
+    { end: updatedReservation.end },
+    { id: originalReservation.location.id, boxId: originalReservation.box.id },
+    event.headers,
+  );
 
-  // TODO - this should change channel - need to test
-  const { losantId, ip } = reservation.location;
-  const { clientAddress: client } = reservation.box;
-  const { channel } = reservation.program;
-  const payload = { client, channel, losantId, ip, command: 'tune' };
-  console.log('update reservation, change channel');
-  console.log(`remote-${process.env.stage}-command`, { payload });
-  await invokeFunction(`remote-${process.env.stage}-command`, { payload });
+  // deduct from user
+  const result = await invokeFunctionSync(
+    `user-${process.env.stage}-transaction`,
+    { tokens: updatedReservation.cost },
+    null,
+    event.headers,
+  );
+  const statusCode = JSON.parse(result.Payload).statusCode;
+  if (statusCode >= 400) {
+    // TODO mark not reserved
+    const message = JSON.parse(JSON.parse(result.Payload).body).message;
+    return respond(statusCode, message);
+  }
+
+  // change the channel
+  // const command = 'tune';
+  // const { losantId } = originalReservation.location;
+  // const { clientAddress, ip, id: boxId } = originalReservation.box;
+  // const { channel, channelMinor } = updatedReservation.program;
+  // const payload = { clientAddress, channel, channelMinor, losantId, ip, command, boxId };
+  // console.log('update reservation, change channel');
+  // console.log(`remote-${process.env.stage}-command`, payload);
+  // await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
+  const command = 'tune';
+  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+
+  await track({
+    userId: reservation.userId,
+    event: 'Reservation Updated',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
+  });
 
   return respond(200, `hello`);
 };
 
-module.exports.all = async event => {
-  const userId = getAuthBearerToken(event);
+module.exports.activeByUser = async event => {
+  const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
     .exec();
-  const filtered = userReservations.filter(r => r.cancelled != true);
-  const sorted = filtered.sort((a, b) => (a.end > b.end ? 1 : -1));
-  return respond(200, sorted);
-};
-
-module.exports.active = async event => {
-  const userId = getAuthBearerToken(event);
-  const userReservations = await Reservation.query('userId')
-    .eq(userId)
-    .exec();
-  const filtered = userReservations.filter(r => r.cancelled != true && r.end > new Date());
-  const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
-  return respond(200, sorted);
+  if (userReservations && userReservations.length) {
+    const filtered = userReservations.filter(
+      r =>
+        r.cancelled != true &&
+        r.end >
+          moment()
+            .subtract(30, 'm')
+            .toDate(),
+    );
+    const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
+    return respond(200, sorted);
+  }
+  return respond(200, []);
 };
 
 module.exports.get = async event => {
-  const userId = getAuthBearerToken(event);
+  const userId = getUserId(event);
   const params = getPathParameters(event);
   const { id } = params;
 
@@ -122,17 +220,30 @@ module.exports.get = async event => {
 };
 
 module.exports.cancel = async event => {
-  const userId = getAuthBearerToken(event);
-  const params = getPathParameters(event);
-  const { id } = params;
+  const userId = getUserId(event);
+  const { id } = getPathParameters(event);
 
+  const reservation = await Reservation.get({ id, userId });
   await Reservation.update({ id, userId }, { cancelled: true });
+
+  // mark box free
+  await invokeFunctionSync(
+    `location-${process.env.stage}-setBoxFree`,
+    null,
+    { id: reservation.location.id, boxId: reservation.box.id },
+    event.headers,
+  );
+
+  track({
+    userId: userId,
+    event: 'Reservation Cancelled',
+  });
+
   return respond(200, `hello`);
 };
 
-function calculateReservationTimes(reservation) {
+function calculateReservationEndTime(reservation) {
   reservation.start = moment().toDate();
   const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
-  reservation.end = initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
-  return reservation;
+  return initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
 }

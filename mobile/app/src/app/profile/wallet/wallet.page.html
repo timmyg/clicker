@@ -2,20 +2,41 @@
   <ion-toolbar>
     <ion-title> Wallet </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+      <ion-button (click)="onClose()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <section>
-    <ion-row align-items-center>
-      <b margin-end>Wallet:</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
-      <span>&nbsp;</span> <span>{{ monies }}</span>
-    </ion-row>
-    <ion-row padding-top>
-      <b margin-end>Buy More:</b>
-      <fa-icon [icon]="faCreditCard" size="2x" margin-end></fa-icon>
-      <fa-icon [icon]="faCcApplePay" size="2x"></fa-icon>
-    </ion-row>
+  <section [hidden]="!(userCard$ | async)">
+    <ion-list id="length">
+      <ion-radio-group (ionChange)="onAmountChange($event)">
+        <ion-list-header> Choose Amount </ion-list-header>
+        <ion-item *ngFor="let f of fundingAmounts">
+          <ion-label flex ion-justify-items-end>
+            <span>${{ f.dollars }}</span>
+            <div flex ion-align-items-center float-right>
+              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+              <span padding-start>{{ f.tokens }}</span>
+            </div>
+          </ion-label>
+          <ion-radio slot="start" value="{{ f.dollars }}" [disabled]="waiting" checked></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+    <ion-button expand="block" color="success" (click)="purchase()" [disabled]="waiting">Purchase</ion-button>
+    <p class="ion-text-center">
+      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
+        color="danger"
+        (click)="removeCard()"
+        >Remove Card</a
+      >
+    </p>
+  </section>
+  <section [hidden]="userCard$ | async">
+    <p class="ion-text-center ">Please add a credit card below</p>
+    <form novalidate (ngSubmit)="addCard()">
+      <div id="card-element" class="field "></div>
+      <ion-button type="submit" expand="block" color="success" [disabled]="waiting">Add</ion-button>
+    </form>
   </section>
 </ion-content>

@@ -8,8 +8,8 @@ export class ReservationService {
   private prefix = `reservations`;
   constructor(private httpClient: HttpClient) {}
 
-  getActive(): Observable<Array<Reservation>> {
-    return this.httpClient.get<Reservation[]>(`${this.prefix}/active`);
+  getActiveByUser(): Observable<Array<Reservation>> {
+    return this.httpClient.get<Reservation[]>(`${this.prefix}/active/user`);
   }
 
   get(reservation: Reservation): Observable<Array<Reservation>> {
@@ -21,7 +21,6 @@ export class ReservationService {
   }
 
   update(reservation: Partial<Reservation>): Observable<Reservation> {
-    console.log('update', reservation);
     return this.httpClient.put<Reservation>(`${this.prefix}/${reservation.id}`, reservation);
   }
 

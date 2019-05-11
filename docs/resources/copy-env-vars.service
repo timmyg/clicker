@@ -4,13 +4,10 @@ After=network.target
 
 [Service]
 WorkingDirectory=/home/pi
-# EnvironmentFile=/home/pi/.env
-# before or after the command in ExecStart=
-ExecStart=/bin/bash -c 'cp /boot/.env /home/pi/.env && rm -rf /boot/.env'
+ExecStart=/bin/bash -c '[ -f /boot/.env ] && sudo mv /boot/.env /home/pi/.env'
 StandardOutput=inherit
 StandardError=inherit
 User=pi
-TimeoutSec=600s
 
 [Install]
 WantedBy=multi-user.target
