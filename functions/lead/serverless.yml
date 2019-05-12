@@ -29,7 +29,6 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-
 functions:
   create:
     handler: lead.create
