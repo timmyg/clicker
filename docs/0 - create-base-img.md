@@ -13,7 +13,7 @@
 
 5. eject sd card, insert card into pi, attach to computer via usb
 6. change password
-   - `ssh pi@raspberrypi.local`
+   - `ssh pi@192.168.3.120` or `ssh pi@raspberrypi.local`
    - `passwd`
 7. setup ssh computer to pi - https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
    <!-- - `ssh-keygen` -->
