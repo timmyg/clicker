@@ -44,3 +44,4 @@ functions:
           path: '/command'
           method: post
           cors: true
+

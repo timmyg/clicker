@@ -127,3 +127,4 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
           cors: true
+

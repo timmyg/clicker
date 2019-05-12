@@ -21,12 +21,12 @@
 8. install node LTS (10.15), to run app
    - `wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh | bash`
 9. install aws cli
+
    - `sudo apt-get update && sudo apt-get install awscli`
      <!-- 10. add env vars
+     <!-- - `scp .env pi@raspberrypi.local:` -->
 
-- `scp .env pi@raspberrypi.local:` -->
-
-11. add app startup/sync script
+10. add app startup/sync script
 
 - `sudo vim.tiny /etc/systemd/system/copy-env-vars.service`
 - `sudo vim.tiny /etc/systemd/system/antenna.service`

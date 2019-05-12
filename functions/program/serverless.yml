@@ -116,3 +116,4 @@ functions:
           path: 'area/{areaId}'
           method: get
           cors: true
+
