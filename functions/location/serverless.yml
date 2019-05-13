@@ -6,7 +6,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
-    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
