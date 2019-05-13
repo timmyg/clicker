@@ -38,8 +38,7 @@ custom:
   tableLocation: locations-${self:custom.stage}
   segmentKey:
     prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+    default: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     LocationsTable:
