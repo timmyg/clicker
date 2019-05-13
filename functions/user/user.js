@@ -56,12 +56,15 @@ module.exports.wallet = async event => {
   let wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
+  console.log({wallet});
 
   // this shouldnt typically happen, but could in dev environments when database cleared
   if (!wallet) {
     // const userId = uuid();
+    console.log("creating wallet", userId, initialTokens);
     wallet = await Wallet.create({ userId, tokens: initialTokens });
   }
+  console.log({wallet});
 
   if (wallet.stripeCustomer) {
     const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
