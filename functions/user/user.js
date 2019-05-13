@@ -4,6 +4,7 @@ const { stripeSecretKey } = process.env;
 const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
+const initialTokens = 2;
 
 const Wallet = dynamoose.model(
   process.env.tableWallet,
@@ -43,8 +44,6 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  // const body = getBody(event);
-  const initialTokens = 2;
   const userId = uuid();
   await Wallet.create({ userId, tokens: initialTokens });
   const token = jwt.sign({ sub: userId, guest: true }, 'clikr');
@@ -54,13 +53,18 @@ module.exports.create = async event => {
 
 module.exports.wallet = async event => {
   const userId = getUserId(event);
-  const wallet = await Wallet.queryOne('userId')
+  let wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
 
+  // this shouldnt typically happen, but could in dev environments when database cleared
+  if (!wallet) {
+    // const userId = uuid();
+    wallet = await Wallet.create({ userId, tokens: initialTokens });
+  }
+
   if (wallet.stripeCustomer) {
     const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
-    console.log(customer);
     if (customer && customer.sources && customer.sources.data.length) {
       wallet.card = customer.sources.data[0];
     }
@@ -131,11 +135,15 @@ module.exports.replenish = async event => {
 module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
-  let wallet = await Wallet.queryOne('userId')
+  let wallet 
+  
+// this shouldnt typically happen, but could in dev environments when database cleared
+if (!wallet) {
+
+}= await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
 
-  console.log(wallet.tokens, tokens);
   if (wallet && wallet.tokens >= tokens) {
     // TODO audit
     wallet = await Wallet.update({ userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
