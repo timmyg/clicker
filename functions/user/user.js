@@ -56,15 +56,15 @@ module.exports.wallet = async event => {
   let wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
-  console.log({wallet});
+  console.log({ wallet });
 
   // this shouldnt typically happen, but could in dev environments when database cleared
   if (!wallet) {
     // const userId = uuid();
-    console.log("creating wallet", userId, initialTokens);
+    console.log('creating wallet', userId, initialTokens);
     wallet = await Wallet.create({ userId, tokens: initialTokens });
   }
-  console.log({wallet});
+  console.log({ wallet });
 
   if (wallet.stripeCustomer) {
     const customer = await stripe.customers.retrieve(wallet.stripeCustomer);
@@ -138,14 +138,7 @@ module.exports.replenish = async event => {
 module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
-  let wallet 
-  
-// this shouldnt typically happen, but could in dev environments when database cleared
-if (!wallet) {
-
-}= await Wallet.queryOne('userId')
-    .eq(userId)
-    .exec();
+  const wallet = await Wallet.queryOne('userId');
 
   if (wallet && wallet.tokens >= tokens) {
     // TODO audit
