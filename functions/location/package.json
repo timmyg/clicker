@@ -5,14 +5,14 @@
   "main": "locations.js",
   "scripts": {
     "test": "jest --coverage",
-    "invoke:location:health": "serverless invoke local --function health",
-    "invoke:location:all": "serverless invoke local --function all",
-    "invoke:location:add": "serverless invoke local --function create --path ../.resources/data/location-create.json",
-    "invoke:location:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",
-    "invoke:location:boxes:add": "serverless invoke local --function addBoxes --path ../.resources/data/boxes.json",
-    "invoke:location:boxes:all": "serverless invoke local --function getBoxes --path ../.resources/data/boxes.json",
-    "invoke:location:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
-    "invoke:location:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json"
+    "invoke:health": "serverless invoke local --function health",
+    "invoke:all": "serverless invoke local --function all",
+    "invoke:add": "serverless invoke local --function create --path ../.resources/data/location-create.json",
+    "invoke:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",
+    "invoke:boxes:add": "serverless invoke local --function addBoxes --path ../.resources/data/boxes.json",
+    "invoke:boxes:all": "serverless invoke local --function getBoxes --path ../.resources/data/boxes.json",
+    "invoke:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
+    "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json"
   },
   "author": "",
   "license": "ISC",

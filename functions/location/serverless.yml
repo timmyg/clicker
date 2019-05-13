@@ -19,7 +19,7 @@ plugins:
   - serverless-domain-manager
 
 custom:
-  stage: ${opt:stage, self:provider.stage}
+  stage: ${opt:stage}
   tableThroughputs:
     prod: 5
     default: 1
@@ -127,4 +127,3 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
           cors: true
-
