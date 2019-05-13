@@ -13,6 +13,7 @@ import { MomentModule } from 'ngx-moment';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { SharedModule } from '../shared/shared.module';
 import { ProgramsFilterPipe } from './pipes/programs-filter.pipe';
+import { ReservationGuard } from '../guards/reservation.guard';
 
 const routes: Routes = [
   {
@@ -26,14 +27,17 @@ const routes: Routes = [
       {
         path: 'programs',
         component: ProgramsComponent,
+        canActivate: [ReservationGuard],
       },
       {
         path: 'tvs',
         component: TvsComponent,
+        canActivate: [ReservationGuard],
       },
       {
         path: 'confirmation',
         component: ConfirmationComponent,
+        canActivate: [ReservationGuard],
       },
       {
         path: '',

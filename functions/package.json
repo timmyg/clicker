@@ -8,8 +8,5 @@
     "invoke:widget:register": "serverless invoke local --function register --path ../.resources/data/widget.json",
     "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
   },
-  "dependencies": {
-    "jsonwebtoken": "^8.5.1",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.7"
-  }
+  "dependencies": {}
 }
