@@ -8,7 +8,7 @@ provider:
     losantKey: ${env:LOSANT_KEY}
     losantSecret: ${env:LOSANT_SECRET}
     losantAppId: ${env:LOSANT_APP_ID}
-    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
 plugins:
   - serverless-domain-manager
 
@@ -44,4 +44,3 @@ functions:
           path: '/command'
           method: post
           cors: true
-

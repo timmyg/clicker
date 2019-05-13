@@ -7,7 +7,7 @@ provider:
     tableProgram: ${self:custom.tableProgram}
     tableProgrammingArea: ${self:custom.tableProgrammingArea}
     serviceName: ${self:service}
-    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -116,4 +116,3 @@ functions:
           path: 'area/{areaId}'
           method: get
           cors: true
-

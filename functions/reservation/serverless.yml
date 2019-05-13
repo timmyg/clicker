@@ -6,7 +6,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableReservation: ${self:custom.tableReservation}
-    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     tableThroughputs: ${self:custom.tableThroughputs.${self:provider.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
@@ -116,4 +116,3 @@ functions:
           path: '{id}'
           method: put
           cors: true
-
