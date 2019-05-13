@@ -246,6 +246,13 @@ module.exports.cancel = async event => {
   track({
     userId: userId,
     event: 'Reservation Cancelled',
+    properties: {
+      program: reservation.program,
+      box: reservation.box,
+      location: reservation.location,
+      cost: reservation.cost,
+      minutes: reservation.minutes,
+    },
   });
 
   return respond(200, `hello`);
