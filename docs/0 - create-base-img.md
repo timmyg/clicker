@@ -13,28 +13,34 @@
 
 5. eject sd card, insert card into pi, attach to computer via usb
 6. change password
-   - `ssh pi@raspberrypi.local`
+   - `ssh pi@192.168.3.120` or `ssh pi@raspberrypi.local`
    - `passwd`
 7. setup ssh computer to pi - https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
    <!-- - `ssh-keygen` -->
    - `ssh-copy-id pi@raspberrypi.local`
 8. install node LTS (10.15), to run app
    - `wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh | bash`
-     <!-- 8. install yarn (1.13.0), faster dependency installs than npm
-   - `curl -o- -L https://yarnpkg.com/install.sh | bash` -->
 9. install aws cli
-   - `sudo apt-get update`
-   - `sudo apt-get install awscli`
-10. add env vars
-11. add app startup/sync script
 
+   - `sudo apt-get update && sudo apt-get install awscli`
+     <!-- 10. add env vars
+     <!-- - `scp .env pi@raspberrypi.local:` -->
+
+10. add app startup/sync script
+
+- `sudo vim.tiny /etc/systemd/system/copy-env-vars.service`
 - `sudo vim.tiny /etc/systemd/system/antenna.service`
+- input [copy-env-vars.service](resources/copy-env-vars.service) contents
 - input [antenna.service](resources/antenna.service) contents
-- need to pull first to get rsa fingerprint
 - test service: `sudo systemctl daemon-reload && sudo systemctl restart antenna`
 - enable at startup: `sudo systemctl enable antenna`
-- `systemctl status antenna.service`
-- `journalctl -xe`
+- logging debugging: `systemctl status antenna.service`
+  `journalctl -xe`
+
+12. burn image
+
+- `sudo dd if=/dev/rdisk2 | gzip > ~/Desktop/clicker-img-v0.2.0-dd.gz`
+  or diskutil
 
 resources:
 

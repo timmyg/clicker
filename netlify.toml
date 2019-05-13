@@ -19,10 +19,10 @@
   VUE_APP_SEGMENT_KEY="VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
   ENV = "release"
 [context.develop.environment]
-  VUE_APP_API_URL = "https://api-dev.tryclicker.com"
+  VUE_APP_API_URL = "https://api-develop.tryclicker.com"
   VUE_APP_SEGMENT_KEY = "VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
   ENV = "develop"
 [context.deploy-preview.environment]
-  VUE_APP_API_URL = "https://api-dev.tryclicker.com"
+  VUE_APP_API_URL = "https://api-develop.tryclicker.com"
   VUE_APP_SEGMENT_KEY = "VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
   ENV = "develop"
