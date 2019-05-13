@@ -138,7 +138,9 @@ module.exports.replenish = async event => {
 module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
-  const wallet = await Wallet.queryOne('userId');
+  const wallet = await Wallet.queryOne('userId')
+    .eq(fromId)
+    .exec();
 
   if (wallet && wallet.tokens >= tokens) {
     // TODO audit
