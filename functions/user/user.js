@@ -139,7 +139,7 @@ module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
   const wallet = await Wallet.queryOne('userId')
-    .eq(fromId)
+    .eq(userId)
     .exec();
 
   if (wallet && wallet.tokens >= tokens) {
