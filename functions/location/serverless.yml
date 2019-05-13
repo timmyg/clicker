@@ -6,7 +6,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
-    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -19,7 +19,7 @@ plugins:
   - serverless-domain-manager
 
 custom:
-  stage: ${opt:stage, self:provider.stage}
+  stage: ${opt:stage}
   tableThroughputs:
     prod: 5
     default: 1
@@ -27,7 +27,7 @@ custom:
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
-    dev: api-dev.tryclicker.com
+    develop: api-develop.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: locations
@@ -39,7 +39,7 @@ custom:
   segmentKey:
     prod: ${env:SEGMENT_WRITE_KEY}
     release: ${env:SEGMENT_WRITE_KEY_DEV}
-    dev: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     LocationsTable:

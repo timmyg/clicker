@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://api-dev.tryclicker.com",
+    "target": "https://api-develop.tryclicker.com",
     "secure": false
   }
 }

@@ -7,7 +7,7 @@ provider:
     tableProgram: ${self:custom.tableProgram}
     tableProgrammingArea: ${self:custom.tableProgrammingArea}
     serviceName: ${self:service}
-    segmentWriteKey: ${self:custom.segmentKey.${self:provider.stage}}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -30,7 +30,7 @@ custom:
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
-    dev: api-dev.tryclicker.com
+    develop: api-develop.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: programs
@@ -41,7 +41,7 @@ custom:
   segmentKey:
     prod: ${env:SEGMENT_WRITE_KEY}
     release: ${env:SEGMENT_WRITE_KEY_DEV}
-    dev: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     ProgramTable:
