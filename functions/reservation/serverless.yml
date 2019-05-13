@@ -7,7 +7,7 @@ provider:
     stage: ${self:custom.stage}
     tableReservation: ${self:custom.tableReservation}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
-    tableThroughputs: ${self:custom.tableThroughputs.${self:provider.stage}}
+    tableThroughputs: ${self:custom.tableThroughputs.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

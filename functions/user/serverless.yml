@@ -7,7 +7,7 @@ provider:
     tableWallet: ${self:custom.tableWallet}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     stage: ${self:custom.stage}
-    stripeSecretKey: ${self:custom.stripeSecretKey.${self:provider.stage}}
+    stripeSecretKey: ${self:custom.stripeSecretKey.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

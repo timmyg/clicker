@@ -42,7 +42,7 @@
               <span padding-start>{{ p.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" value="{{ p.minutes }}" checked></ion-radio>
+          <ion-radio slot="start" value="{{ p.minutes }}" [disabled]="saving" checked></ion-radio>
         </ion-item>
       </ion-radio-group>
     </ion-list>
