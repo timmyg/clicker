@@ -31,7 +31,7 @@ function init() {
       categories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
-      zip: String,
+      zip: Number,
     },
     {
       timestamps: true,
