@@ -7,7 +7,8 @@
     "test": "jest --coverage",
     "invoke:pull": "serverless invoke local --function pull",
     "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",
-    "invoke:programming:area:get": "serverless invoke local --function getAreaProgramming --path ../.resources/data/programming-area.json"
+    "invoke:programming:area:get": "serverless invoke local --function getAreaProgramming --path ../.resources/data/programming-area.json",
+    "invoke:syncNew": "serverless invoke local --function syncNew"
   },
   "author": "",
   "license": "ISC",
