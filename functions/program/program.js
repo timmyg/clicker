@@ -95,7 +95,7 @@ module.exports.getAll = async event => {
   init();
   // get all programs for right now
   const now = moment().unix() * 1000;
-  console.log(now, zip);
+  // console.log(now, zip);
   const currentPrograms = await Program.scan()
     .filter('start')
     .lt(now)
@@ -107,8 +107,13 @@ module.exports.getAll = async event => {
     .eq(zip)
     .all()
     .exec();
-  console.log({ currentPrograms });
-  return respond(200, programs);
+  console.log({ programs, currentPrograms });
+  const currentProgramsFull = currentPrograms.reduce((arr, e) => {
+    arr.push(Object.assign({}, e, programs.find(a => a.channel === e.channel)));
+    return arr;
+  }, []);
+
+  return respond(200, currentProgramsFull);
 };
 
 module.exports.syncNew = async event => {
