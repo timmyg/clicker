@@ -36,47 +36,8 @@ function init() {
       timestamps: true,
     },
   );
-  // Program = dynamoose.model(
-  //   process.env.tableProgram,
-  //   {
-  //     id: {
-  //       type: String,
-  //       hashKey: true,
-  //     },
-  //     expires: Number,
-  //     chId: String, // 206 (from channel)
-  //     chNum: String, // 206 (from channel)
-  //     chCall: String, // "ESPN" (from channel)
-  //     chHd: Boolean, // false (from channel)
-  //     chCat: [String], // ["Sports Channels"]
-  //     blackOut: Boolean, // false (from channel)
-  //     description: String, // null, populated later
-  //     progType: String, // null, populated later
-  //     title: String, // "Oklahoma State @ Kansas"
-  //     duration: Number, // 120
-  //     endTime: Date, // created
-  //     price: Number, // 0
-  //     repeat: Boolean, // false
-  //     ltd: String, // "Live"
-  //     programID: String, // "SH000296530000" - use this to get summary
-  //     blackoutCode: String,
-  //     airTime: Date, // "2019-02-06T18:00:00.000+0000"
-  //     subcategoryList: [String], // ["Basketball"]
-  //     mainCategory: String, // "Sports"
-  //     episodeTitle: String, // "Oklahoma State at Kansas"
-  //     format: String, // "HD"
-  //     mainCategory: String, // "Sports"
-  //     hd: Number, // 1
-  //     liveStreaming: String, // "B"
-  //     rating: String, // "NR (Not Rated)"
-  //   },
-  //   {
-  //     timestamps: true,
-  //   },
-  // );
-  // );
-
   ProgrammingArea = dynamoose.model(
+    process.env.tableProgrammingArea,
     {
       zip: {
         type: Number,
