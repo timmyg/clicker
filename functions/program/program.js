@@ -170,7 +170,8 @@ function build(dtvSchedule, zip) {
       program.chId = channel.chId;
       program.chNum = channel.chNum;
       program.chCall = channel.chCall;
-      program.zip = channel.zip;
+      program.durationMins = channel.duration;
+      program.zip = zip;
       program.chHd = channel.chHd;
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
