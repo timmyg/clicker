@@ -167,10 +167,11 @@ function build(dtvSchedule, zip) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
+      console.log({ channel });
       program.chId = channel.chId;
       program.chNum = channel.chNum;
       program.chCall = channel.chCall;
-      program.durationMins = channel.duration;
+      program.duration = channel.duration;
       program.zip = zip;
       program.chHd = channel.chHd;
       program.chCat = channel.chCat;
@@ -180,7 +181,7 @@ function build(dtvSchedule, zip) {
       program.end = new Date(
         parseInt(
           moment(program.airTime)
-            .add(program.durationMins, 'minutes')
+            .add(program.duration, 'minutes')
             .unix() * 1000,
         ),
       );
