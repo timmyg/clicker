@@ -5,7 +5,7 @@ const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
-let Program;
+let Program, ProgrammingArea;
 require('dotenv').config();
 
 function init() {
