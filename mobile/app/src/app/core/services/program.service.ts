@@ -31,11 +31,9 @@ export class ProgramService {
             } else if (program.subcategories.indexOf('Football') > -1) {
               icon = 'american-football';
               points += 2;
-            } else {
-              icon = 'tv';
             }
-            program.icon = icon;
           }
+          program.icon = icon || 'tv';
           // set rankings points
           if (program.title) {
             if (program.title.indexOf('vs. ') > -1) {
@@ -46,6 +44,7 @@ export class ProgramService {
           }
           program.points = points;
         });
+        console.log(programs);
         return programs.sort((a, b) => b.points - a.points);
       }),
     );
