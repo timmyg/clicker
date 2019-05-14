@@ -179,14 +179,17 @@ function build(dtvSchedule, zip) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
-      program.chId = channel.chId;
-      program.chNum = channel.chNum;
-      program.chCall = channel.chCall;
+      console.log({ channel, program });
+      // program.chId = channel.chId;
+      // program.chNum = channel.chNum;
+      program.channel = channel.chNum;
+      program.channelTitle = channel.chCall;
+      // program.chCall = channel.chCall;
       program.durationMins = program.duration;
       program.zip = zip;
-      program.chHd = channel.chHd;
-      program.chCat = channel.chCat;
-      program.blackOut = channel.blackOut;
+      // program.chHd = channel.chHd;
+      // program.chCat = channel.chCat;
+      // program.blackOut = channel.blackOut;
       program.id = generateId(program);
       program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
       program.end = new Date(
@@ -201,7 +204,6 @@ function build(dtvSchedule, zip) {
         moment(program.end)
           .add(6, 'hours')
           .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
-      console.log({ program });
       allPrograms.push(program);
     });
   });
