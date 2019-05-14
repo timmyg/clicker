@@ -180,16 +180,10 @@ function build(dtvSchedule, zip) {
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       console.log({ channel, program });
-      // program.chId = channel.chId;
-      // program.chNum = channel.chNum;
       program.channel = channel.chNum;
       program.channelTitle = channel.chCall;
-      // program.chCall = channel.chCall;
       program.durationMins = program.duration;
       program.zip = zip;
-      // program.chHd = channel.chHd;
-      // program.chCat = channel.chCat;
-      // program.blackOut = channel.blackOut;
       program.id = generateId(program);
       program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
       program.end = new Date(
@@ -213,8 +207,8 @@ function build(dtvSchedule, zip) {
 }
 
 function generateId(program) {
-  const { chNum, airTime } = program;
-  const id = chNum + airTime;
+  const { channel, airTime } = program;
+  const id = channel + airTime;
   return uuid(id, uuid.DNS);
 }
 
