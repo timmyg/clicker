@@ -190,7 +190,7 @@ function build(dtvSchedule, zip) {
       console.log({ channel, program });
       program.channel = channel.chNum;
       program.channelTitle = channel.chCall;
-      program.title = program.title !== 'Programming information not available' ? channel.chCall : null;
+      program.title = program.title !== 'Programming information not available' ? program.title : null;
       program.durationMins = program.duration;
 
       program.channelCategories = channel.chCat;
