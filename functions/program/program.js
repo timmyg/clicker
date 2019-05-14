@@ -31,6 +31,7 @@ function init() {
       categories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
+      zip: String,
     },
     {
       timestamps: true,
@@ -110,10 +111,14 @@ module.exports.syncNew = async event => {
       .toString();
     const hours = 24;
     const params = { channels: channelsToPull.join(','), startTime, hours };
+    const zip = 45202;
+    const headers = {
+      Cookie: `dtve-prospect-zip=${zip};`,
+    };
     const result = await axios.get(url, { params });
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
-    const allPrograms = build(schedule);
+    const allPrograms = build(schedule, zip);
     const transformedPrograms = transformPrograms(allPrograms);
     const dbResult = await Program.batchPut(transformedPrograms);
     return respond(201, dbResult);
@@ -158,13 +163,14 @@ function transformPrograms(programs) {
   return allPrograms;
 }
 
-function build(dtvSchedule) {
+function build(dtvSchedule, zip) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.chId = channel.chId;
       program.chNum = channel.chNum;
       program.chCall = channel.chCall;
+      program.zip = channel.zip;
       program.chHd = channel.chHd;
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
