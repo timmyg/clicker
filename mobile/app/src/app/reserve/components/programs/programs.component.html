@@ -1,4 +1,4 @@
-<ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
+<!-- <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
   <ion-spinner name="crescent" class="center"></ion-spinner>
 </ion-row>
 <ng-template #ready>
@@ -9,34 +9,43 @@
       }}</ion-button>
     </ion-col>
   </ion-row>
-</ng-template>
-<!-- 
+</ng-template> -->
+
+<ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
+  <ion-spinner name="crescent" class="center"></ion-spinner>
+</ion-row>
+<ng-template #ready>
   <ion-list>
-    <ion-card *ngFor="let program of (programs$ | async | programsFilter: searchTerm)" (click)="onProgramClick(program)">
-    <ion-card-header>
-      <ion-card-subtitle>
-        <span>{{ program.start | amDateFormat: 'h:mm a' }}</span> <span float-right>{{ program.channelTitle }}</span>
-      </ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content no-padding-top>
-      <ion-grid no-padding>
-        <ion-row align-items-center>
-          <ion-col size="1" no-padding align-items-center>
-            <ion-icon *ngIf="program.type === 'basketball'" name="basketball" class="sport" size="large"></ion-icon>
-            <ion-icon
-              *ngIf="program.type === 'football'"
-              name="american-football"
-              class="sport"
-              size="large"
-            ></ion-icon>
-            <ion-icon *ngIf="program.type === 'baseball'" name="baseball" class="sport" size="large"></ion-icon>
-            <ion-icon *ngIf="program.type === 'soccer'" name="football" class="sport" size="large"></ion-icon>
-          </ion-col>
-          <ion-col size="11" class="title">
-            <h2>{{ program.title }}</h2>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
-  </ion-list> -->
+    <ion-card
+      *ngFor="let program of (programs$ | async | programsFilter: searchTerm)"
+      (click)="onProgramClick(program)"
+    >
+      <ion-card-header>
+        <ion-card-subtitle>
+          <span>{{ program.start | amDateFormat: 'h:mm a' }}</span> <span float-right>{{ program.channelTitle }}</span>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content no-padding-top>
+        <ion-grid no-padding>
+          <ion-row align-items-center>
+            <ion-col size="1" no-padding align-items-center>
+              <!-- <ion-icon *ngIf="program.type === 'basketball'" name="basketball" class="sport" size="large"></ion-icon>
+              <ion-icon
+                *ngIf="program.type === 'football'"
+                name="american-football"
+                class="sport"
+                size="large"
+              ></ion-icon>
+              <ion-icon *ngIf="program.type === 'baseball'" name="baseball" class="sport" size="large"></ion-icon>
+              <ion-icon *ngIf="program.type === 'soccer'" name="football" class="sport" size="large"></ion-icon> -->
+              <ion-icon *ngIf="program.icon" [name]="program.icon" class="sport" size="large"></ion-icon>
+            </ion-col>
+            <ion-col size="11" class="title">
+              <h2>{{ program.title }}</h2>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ng-template>

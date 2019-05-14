@@ -58,4 +58,12 @@ export class ProgramsComponent {
       this.router.navigate(['../tvs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     }
   }
+
+  // getSportName(program: Program) {
+  //   console.log(program.subcategories);
+  //   if (program.subcategories && program.subcategories.indexOf('Baseball') > -1) {
+  //     console.log('baseball ! ! !  ! !  !');
+  //     return 'baseball';
+  //   }
+  // }
 }

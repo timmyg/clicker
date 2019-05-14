@@ -42,6 +42,7 @@ function init() {
       durationMins: Number, // mins
       start: Date,
       end: Date,
+      live: Boolean,
       // repeat: Boolean,
       programId: String, // "SH000296530000" - use this to get summary
       channelCategories: [String], // ["Sports Channels"]
@@ -189,12 +190,14 @@ function build(dtvSchedule, zip) {
       console.log({ channel, program });
       program.channel = channel.chNum;
       program.channelTitle = channel.chCall;
+      program.title = program.title !== 'Programming information not available' ? channel.chCall : null;
       program.durationMins = program.duration;
 
       program.channelCategories = channel.chCat;
       program.subcategories = program.subcategoryList;
       program.mainCategory = program.mainCategory;
 
+      program.live = program.ltd === 'Live' ? true : false;
       program.zip = zip;
       program.id = generateId(program);
       program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
