@@ -114,7 +114,7 @@ module.exports.syncNew = async event => {
     init();
     const url = `${directvEndpoint}/channelschedule`;
     // TODO dont hardcode channels, different depending on zip code!
-    const channelsToPull = channels.map(c => c.channel);
+    const channelsToPull = programs.map(c => c.channel);
     // TODO add zip code cookie
     const startTime = moment()
       .utc()
