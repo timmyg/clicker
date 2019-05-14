@@ -96,18 +96,18 @@ module.exports.getAll = async event => {
   // get all programs for right now
   const now = moment().unix() * 1000;
   console.log(now, zip);
-  const programsNow = await Program.scan()
+  const currentPrograms = await Program.scan()
     .filter('start')
-    .gt(now)
+    .lt(now)
     .and()
     .filter('end')
-    .lt(now)
+    .gt(now)
     .and()
     .filter('zip') // Zip is hardcoded!
     .eq(zip)
     .all()
     .exec();
-  console.log({ programsNow });
+  console.log({ currentPrograms });
   return respond(200, programs);
 };
 
