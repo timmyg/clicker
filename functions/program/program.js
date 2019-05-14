@@ -95,6 +95,7 @@ module.exports.getAll = async event => {
   init();
   // get all programs for right now
   const now = moment().unix() * 1000;
+  console.log(now, zip);
   const programsNow = await Program.scan()
     .filter('start')
     .gt(now)
