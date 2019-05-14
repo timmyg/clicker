@@ -7,6 +7,22 @@ const { respond } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgrammingArea;
 require('dotenv').config();
+const programs = [
+  { channel: 5, channelTitle: 'NBC' },
+  { channel: 9, channelTitle: 'ABC' },
+  { channel: 12, channelTitle: 'CBS' },
+  { channel: 19, channelTitle: 'FOX' },
+  { channel: 206, channelTitle: 'ESPN' },
+  { channel: 209, channelTitle: 'ESPN2' },
+  { channel: 213, channelTitle: 'MLB' },
+  { channel: 219, channelTitle: 'FS1' },
+  { channel: 245, channelTitle: 'TNT' },
+  { channel: 247, channelTitle: 'TBS' },
+  { channel: 220, channelTitle: 'NBCSN' },
+  { channel: 212, channelTitle: 'NFL' },
+  { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
+];
+const zip = 45202;
 
 function init() {
   Program = dynamoose.model(
@@ -77,22 +93,19 @@ module.exports.getAreaProgramming = async event => {
 // TODO
 module.exports.getAll = async event => {
   // get all programs for right now
-  // hardcoded for 45255
-  const programs = [
-    { channel: 5, channelTitle: 'NBC' },
-    { channel: 9, channelTitle: 'ABC' },
-    { channel: 12, channelTitle: 'CBS' },
-    { channel: 19, channelTitle: 'FOX' },
-    { channel: 206, channelTitle: 'ESPN' },
-    { channel: 209, channelTitle: 'ESPN2' },
-    { channel: 213, channelTitle: 'MLB' },
-    { channel: 219, channelTitle: 'FS1' },
-    { channel: 245, channelTitle: 'TNT' },
-    { channel: 247, channelTitle: 'TBS' },
-    { channel: 220, channelTitle: 'NBCSN' },
-    { channel: 212, channelTitle: 'NFL' },
-    { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
-  ];
+  const now = moment().unix() * 1000;
+  const programsNow = await Program.scan()
+    .filter('start')
+    .gt(now)
+    .and()
+    .filter('end')
+    .lt(now)
+    .and()
+    .filter('zip') // Zip is hardcoded!
+    .eq(zip)
+    .all()
+    .exec();
+  console.log({ programsNow });
   return respond(200, programs);
 };
 
@@ -101,7 +114,7 @@ module.exports.syncNew = async event => {
     init();
     const url = `${directvEndpoint}/channelschedule`;
     // TODO dont hardcode channels, different depending on zip code!
-    const channelsToPull = [206, 209, 208, 219, 9, 19, 12, 5, 611, 618, 660, 701];
+    const channelsToPull = channels.map(c => c.channel);
     // TODO add zip code cookie
     const startTime = moment()
       .utc()
@@ -111,7 +124,6 @@ module.exports.syncNew = async event => {
       .toString();
     const hours = 24;
     const params = { channels: channelsToPull.join(','), startTime, hours };
-    const zip = 45202;
     const headers = {
       Cookie: `dtve-prospect-zip=${zip};`,
     };
@@ -186,7 +198,7 @@ function build(dtvSchedule, zip) {
       );
       // expire 6 hours from end time, or 1 week
       program.expires =
-        moment(program.endTime)
+        moment(program.end)
           .add(6, 'hours')
           .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
       console.log({ program });
