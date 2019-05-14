@@ -23,9 +23,9 @@ function init() {
       title: String, // "Oklahoma State @ Kansas"
       episodeTitle: String, // "Oklahoma State at Kansas"
       description: String,
-      duration: Number, // mins
-      startTime: Date,
-      endTime: Date,
+      durationMins: Number, // mins
+      start: Date,
+      end: Date,
       repeat: Boolean,
       programId: String, // "SH000296530000" - use this to get summary
       categories: [String], // ["Sports Channels"]
@@ -169,11 +169,12 @@ function build(dtvSchedule) {
       program.chCat = channel.chCat;
       program.blackOut = channel.blackOut;
       program.id = generateId(program);
-      program.endTime = new Date(
+      program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
+      program.end = new Date(
         parseInt(
           moment(program.airTime)
-            .add(program.duration, 'minutes')
-            .unix() + '000',
+            .add(program.durationMins, 'minutes')
+            .unix() * 1000,
         ),
       );
       // expire 6 hours from end time, or 1 week
