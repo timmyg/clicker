@@ -7,7 +7,7 @@ const { respond, invokeFunction } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgrammingArea;
 require('dotenv').config();
-const allPrograms = [
+const allChannels = [
   { channel: 5, channelTitle: 'NBC' },
   { channel: 9, channelTitle: 'ABC' },
   { channel: 12, channelTitle: 'CBS' },
@@ -130,7 +130,7 @@ module.exports.getAll = async event => {
 
   // const fullProgramming = [];
 
-  allPrograms.forEach((p, index, arr) => {
+  allChannels.forEach((p, index, arr) => {
     // find if in current programming
     const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
 
@@ -146,16 +146,8 @@ module.exports.getAll = async event => {
       arr[index] = currentProgram;
     }
   });
-  // arr[index]['description'] = description;
 
-  // programs
-  // console.log({ allPrograms, currentProgramming });
-  // const currentProgramsFull = currentProgramming.reduce((arr, e) => {
-  //   arr.push(Object.assign({}, e, allPrograms.find(a => a.channel === e.channel)));
-  //   return arr;
-  // }, []);
-
-  return respond(200, allPrograms);
+  return respond(200, allChannels);
 };
 
 module.exports.syncNew = async event => {
@@ -163,7 +155,7 @@ module.exports.syncNew = async event => {
     init();
     const url = `${directvEndpoint}/channelschedule`;
     // TODO dont hardcode channels, different depending on zip code!
-    const channelsToPull = allPrograms.map(c => c.channel);
+    const channelsToPull = allChannels.map(c => c.channel);
     // TODO add zip code cookie
     const startTime = moment()
       .utc()
