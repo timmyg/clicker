@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Program } from 'src/app/state/program/program.model';
+import { ReserveService } from 'src/app/reserve/reserve.service';
 
 @Component({
   selector: 'app-program',
@@ -14,5 +15,23 @@ export class ProgramComponent {
 
   async onProgramClick() {
     this.onSelect.emit(this.program);
+  }
+
+  isReplay() {
+    if (this.title.contains(' @ ') && this.repeat) {
+      return true;
+    }
+  }
+
+  getNextProgramTitle() {
+    const maxLength = 25;
+    const { nextProgramTitle } = this.program;
+    if (nextProgramTitle) {
+      if (nextProgramTitle.length < maxLength) {
+        return nextProgramTitle;
+      } else {
+        return nextProgramTitle.substring(0, maxLength - 3) + '...';
+      }
+    }
   }
 }

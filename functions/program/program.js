@@ -43,7 +43,7 @@ function init() {
       start: Date,
       end: Date,
       live: Boolean,
-      // repeat: Boolean,
+      repeat: Boolean,
       programId: String, // "SH000296530000" - use this to get summary
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
@@ -168,6 +168,7 @@ function rank(program) {
   });
 
   program.live ? (totalPoints += 2) : null;
+  program.repeat ? (totalPoints -= 2) : null;
 
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
 
@@ -276,6 +277,7 @@ function build(dtvSchedule, zip) {
         program.mainCategory = program.mainCategory;
 
         program.live = program.ltd === 'Live' ? true : false;
+        program.repeat = program.repeat;
         program.zip = zip;
         program.id = generateId(program);
         program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));

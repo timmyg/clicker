@@ -1,11 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, Events, IonSearchbar } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../state/app.reducer';
-import * as fromReservation from '../state/reservation/reservation.actions';
-import { first } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reserve',
@@ -18,25 +14,23 @@ export class ReservePage {
   searchProgramsMode: boolean;
 
   constructor(
-    private store: Store<fromStore.AppState>,
     private reserveService: ReserveService,
     private navCtrl: NavController,
     private router: Router,
-    private route: ActivatedRoute,
     public events: Events,
   ) {
     this.reserveService.titleEmitted$.subscribe(title => {
       this.title = title;
     });
+    this.reserveService.closeSearchEmitted$.subscribe(x => {
+      this.closeSearch();
+    });
   }
+
+  ngOnInit() {}
 
   goBack() {
     this.navCtrl.back();
-  }
-
-  onStartOver() {
-    this.store.dispatch(new fromReservation.Start());
-    this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
   }
 
   showBack() {
@@ -57,7 +51,6 @@ export class ReservePage {
 
   closeSearch() {
     this.searchProgramsMode = false;
-    this.reserveService.emitCloseSearch();
   }
 
   onSearch(e) {

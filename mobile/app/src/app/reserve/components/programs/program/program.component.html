@@ -1,8 +1,8 @@
 <ion-card (click)="onProgramClick()">
   <ion-card-header>
     <ion-card-subtitle>
-      <span>{{ program.start | amDateFormat: 'h:mm a' }} - {{ program.end | amDateFormat: 'h:mm a' }}</span>
-      <span float-right>{{ program.channelTitle }}</span>
+      <span>{{ program.channelTitle }}</span>
+      <span float-right>{{ program.start | amDateFormat: 'h:mma' }} - {{ program.end | amDateFormat: 'h:mma' }}</span>
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content no-padding-top>
@@ -11,14 +11,15 @@
         <ion-col size="1" no-padding align-items-center>
           <ion-icon [name]="program.icon" class="sport {{ program.icon }}" size="large" fill="red"></ion-icon>
         </ion-col>
-        <ion-col size="11" class="title">
-          <h1>{{ program.title }}</h1>
-          <span *ngIf="program.nextProgramTitle" float-right>
-            Next: {{ program.nextProgramTitle }} ({{ program.nextProgramStart | amDateFormat: 'h:mm a' }})
+        <ion-col size="11">
+          <h1 class="title">{{ program.title }} <span class="faded" *ngIf="isReplay()">(Replay)</span></h1>
+        </ion-col>
+        <ion-col size="12">
+          <span class="faded" *ngIf="program.nextProgramTitle">
+            Next: {{ getNextProgramTitle() }} ({{ program.nextProgramStart | amDateFormat: 'h:mma' }})
           </span>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <!-- <button (click)="expand()">expand</button> -->
   </ion-card-content>
 </ion-card>

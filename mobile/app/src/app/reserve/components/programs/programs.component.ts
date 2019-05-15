@@ -68,6 +68,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   }
 
   async onProgramSelect(program: Program) {
+    this.reserveService.emitCloseSearch();
     this.store.dispatch(new fromReservation.SetProgram(program));
     // if editing, may already have a tv
     const state = await this.store.pipe(first()).toPromise();

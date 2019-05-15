@@ -1,4 +1,5 @@
 ion-icon.sport {
+  // padding: 0 10px 0 0;
   display: inline;
   &.baseball {
     color: #e53935;
@@ -18,5 +19,9 @@ ion-icon.sport {
 }
 
 .title {
-  font-size: 0.8em;
+  padding-left: 10px;
+}
+
+.faded {
+  opacity: 0.45;
 }
