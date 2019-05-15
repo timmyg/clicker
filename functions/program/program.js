@@ -159,22 +159,18 @@ function rankPrograms(programs) {
 }
 
 function rank(program) {
-  let points = 0;
-  const { title } = program;
-
   const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 5 }, { term: 'bobobobo', points: 44 }];
-
+  const { title } = program;
   const searchTarget = title;
-
   let totalPoints = 0;
   terms.forEach(({ term, points }) => {
     searchTarget.toLowercase().includes(term.toLowercase()) ? (totalPoints += points) : null;
   });
 
-  program.live ? totalPoints += 2;
-  
+  program.live ? (totalPoints += 2) : null;
+
   if (program.subcategories) {
-    program.subcategories.includes('Playoffs') ? totalPoints += 5 : null;
+    program.subcategories.includes('Playoffs') ? (totalPoints += 5) : null;
   }
 
   program.points = totalPoints;
