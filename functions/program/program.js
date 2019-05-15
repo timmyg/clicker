@@ -151,8 +151,11 @@ module.exports.syncNew = async event => {
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   init();
-  const allPrograms = await Program.query('description').null();
-  console.log('null program descriptions:', allPrograms.length);
+  const allPrograms = await Program.scan('description')
+    .null()
+    .all()
+    .exec();
+  console.log('program descriptions:', allPrograms.length);
   const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programID))];
   console.log('unique null program descriptions:', uniqueProgramIds.length);
   // call endpoint for each program
