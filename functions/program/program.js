@@ -136,12 +136,15 @@ module.exports.getAll = async event => {
 
     // find if in next programming
     const nextProgram = nextProgramming.find(np => np.channel === p.channel);
+
     // if next program is not the same as current one
-    if (nextProgram.programId !== currentProgram.programId) {
+    if (currentProgram && nextProgram && nextProgram.programId !== currentProgram.programId) {
       currentProgram.nextProgramTitle = nextProgram.title;
       currentProgram.nextProgramStart = nextProgram.start;
     }
-    arr[index] = currentProgram;
+    if (currentProgram) {
+      arr[index] = currentProgram;
+    }
   });
   // arr[index]['description'] = description;
 
