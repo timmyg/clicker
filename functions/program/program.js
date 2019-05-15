@@ -168,7 +168,6 @@ module.exports.syncNew = async event => {
     const headers = {
       Cookie: `dtve-prospect-zip=${zip};`,
     };
-    console.log(object);
     const result = await axios.get(url, { params, headers });
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
