@@ -162,9 +162,9 @@ function cleanupTitles(programs) {
 
 function cleanup(program) {
   if (program.title.toLowerCase() === 'mlb baseball') {
-    if (program.episodeTitle && (program.episodeTitle.contains(' @ ') || program.episodeTitle.contains(' at '))) {
+    if (program.episodeTitle && (program.episodeTitle.includes(' @ ') || program.episodeTitle.includes(' at '))) {
       program.title = program.episodeTitle;
-    } else if (program.description && (program.description.contains(' @ ') || program.description.contains(' at '))) {
+    } else if (program.description && (program.description.includes(' @ ') || program.description.includes(' at '))) {
       program.title = program.description;
     }
   }
