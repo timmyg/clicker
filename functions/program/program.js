@@ -155,7 +155,7 @@ function rankPrograms(programs) {
   programs.forEach((program, i) => {
     let points = 0;
     if (program.title) {
-      if (program.title.indexOf('vs. ') > -1) {
+      if (program.title.indexOf(' @ ') > -1) {
         points += 2;
       }
     } else {
@@ -237,8 +237,6 @@ module.exports.syncDescriptions = async event => {
   }
   return respond(200);
 };
-
-module.exports.assignRelevance = async event => {};
 
 function transformPrograms(programs) {
   const transformedPrograms = [];
