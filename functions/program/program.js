@@ -167,13 +167,23 @@ module.exports.syncDescriptions = async event => {
     const { description, progType } = programDetail;
     console.log({ programDetail, description, progType });
 
+    const programsToUpdate = await Program.scan()
+      .filter('programId')
+      .eq(programId)
+      .all()
+      .exec();
+
+    programsToUpdate.forEach((part, index) => {
+      this[index]['description'] = description;
+    });
     // save description for all program ids
     // await Program.update({ programID: programId }, { description, progType });
-    const programs = await Program.batchGet([{ programId: programId }]);
-    console.log('programs to update:', programs.length);
-    for (const p of programs) {
-      await Program.update({ id: p.id }, { description });
-    }
+    // const programs = await Program.batchGet([{ programId: programId }]);
+    const programs = await Program.batchPut(programsToUpdate);
+    // console.log('programs to update:', programs.length);
+    // for (const p of programs) {
+    //   await Program.update({ id: p.id }, { description });
+    // }
   }
   return respond(200);
 };
