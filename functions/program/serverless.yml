@@ -25,8 +25,8 @@ custom:
   tableProgram: programs-${self:custom.stage}
   tableProgrammingArea: programming-area-${self:custom.stage}
   tableThroughputs:
-    prod: 5
-    default: 1
+    prod: 100
+    default: 100
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
     prod: api.tryclicker.com
