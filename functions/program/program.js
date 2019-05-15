@@ -142,7 +142,7 @@ module.exports.syncNew = async event => {
     const transformedPrograms = transformPrograms(allPrograms);
     const dbResult = await Program.batchPut(transformedPrograms);
 
-    await invokeFunctionSync(`program-${process.env.stage}-syncDescriptions`);
+    await invokeFunctionSync(`programs-${process.env.stage}-syncDescriptions`);
 
     return respond(201, dbResult);
   } catch (e) {
