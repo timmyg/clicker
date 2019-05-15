@@ -150,6 +150,7 @@ module.exports.syncNew = async event => {
 
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
+  init();
   const allPrograms = await Program.query('description').null();
   console.log('null program descriptions:', allPrograms.length);
   const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programID))];
@@ -190,6 +191,7 @@ function build(dtvSchedule, zip) {
       console.log({ channel, program });
       program.channel = channel.chNum;
       program.channelTitle = channel.chCall;
+      program.programId = program.programID;
       program.title = program.title !== 'Programming information not available' ? program.title : null;
       program.durationMins = program.duration;
 
