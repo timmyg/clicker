@@ -7,7 +7,7 @@ const { respond, invokeFunction } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgrammingArea;
 require('dotenv').config();
-const programs = [
+const allPrograms = [
   { channel: 5, channelTitle: 'NBC' },
   { channel: 9, channelTitle: 'ABC' },
   { channel: 12, channelTitle: 'CBS' },
@@ -49,6 +49,9 @@ function init() {
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
       zip: Number,
+      // dynamic fields
+      nextProgramTitle: String,
+      nextProgramStart: Date,
     },
     {
       timestamps: true,
@@ -96,8 +99,12 @@ module.exports.getAll = async event => {
   init();
   // get all programs for right now
   const now = moment().unix() * 1000;
-  // console.log(now, zip);
-  const currentPrograms = await Program.scan()
+  const inFifteenMins =
+    moment()
+      .add(45, 'minutes')
+      .unix() * 1000;
+
+  const currentProgramming = await Program.scan()
     .filter('start')
     .lt(now)
     .and()
@@ -108,13 +115,44 @@ module.exports.getAll = async event => {
     .eq(zip)
     .all()
     .exec();
-  console.log({ programs, currentPrograms });
-  const currentProgramsFull = currentPrograms.reduce((arr, e) => {
-    arr.push(Object.assign({}, e, programs.find(a => a.channel === e.channel)));
-    return arr;
-  }, []);
 
-  return respond(200, currentProgramsFull);
+  const nextProgramming = await Program.scan()
+    .filter('start')
+    .lt(inFifteenMins)
+    .and()
+    .filter('end')
+    .gt(inFifteenMins)
+    .and()
+    .filter('zip') // Zip is hardcoded!
+    .eq(zip)
+    .all()
+    .exec();
+
+  // const fullProgramming = [];
+
+  allPrograms.forEach((p, index, arr) => {
+    // find if in current programming
+    const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
+
+    // find if in next programming
+    const nextProgram = nextProgramming.find(np => np.channel === p.channel);
+    // if next program is not the same as current one
+    if (nextProgram.programId !== currentProgram.programId) {
+      currentProgram.nextProgramTitle = nextProgram.title;
+      currentProgram.nextProgramStart = nextProgram.start;
+    }
+    arr[index] = currentProgram;
+  });
+  // arr[index]['description'] = description;
+
+  // programs
+  // console.log({ allPrograms, currentProgramming });
+  // const currentProgramsFull = currentProgramming.reduce((arr, e) => {
+  //   arr.push(Object.assign({}, e, allPrograms.find(a => a.channel === e.channel)));
+  //   return arr;
+  // }, []);
+
+  return respond(200, allPrograms);
 };
 
 module.exports.syncNew = async event => {
@@ -122,7 +160,7 @@ module.exports.syncNew = async event => {
     init();
     const url = `${directvEndpoint}/channelschedule`;
     // TODO dont hardcode channels, different depending on zip code!
-    const channelsToPull = programs.map(c => c.channel);
+    const channelsToPull = allPrograms.map(c => c.channel);
     // TODO add zip code cookie
     const startTime = moment()
       .utc()
@@ -154,12 +192,12 @@ module.exports.syncNew = async event => {
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   init();
-  const allPrograms = await Program.scan('description')
+  const allDescriptionlessPrograms = await Program.scan('description')
     .null()
     .all()
     .exec();
-  console.log('allPrograms:', allPrograms.length);
-  const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programId))];
+  console.log('allDescriptionlessPrograms:', allDescriptionlessPrograms.length);
+  const uniqueProgramIds = [...new Set(allDescriptionlessPrograms.map(p => p.programId))];
   console.log('uniqueProgramIds', uniqueProgramIds.length);
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {
@@ -191,15 +229,15 @@ module.exports.syncDescriptions = async event => {
 module.exports.assignRelevance = async event => {};
 
 function transformPrograms(programs) {
-  const allPrograms = [];
+  const programs = [];
   programs.forEach(p => {
-    allPrograms.push(new Program(p));
+    programs.push(new Program(p));
   });
-  return allPrograms;
+  return programs;
 }
 
 function build(dtvSchedule, zip) {
-  const allPrograms = [];
+  const programs = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
@@ -231,12 +269,12 @@ function build(dtvSchedule, zip) {
           moment(program.end)
             .add(6, 'hours')
             .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
-        allPrograms.push(program);
+        programs.push(program);
       }
     });
   });
   // filter out duplicates - happens with sd/hd channels
-  const filteredPrograms = uniqBy(allPrograms, 'id');
+  const filteredPrograms = uniqBy(programs, 'id');
   return filteredPrograms;
 }
 
