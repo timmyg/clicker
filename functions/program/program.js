@@ -159,7 +159,8 @@ module.exports.syncDescriptions = async event => {
   const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programID))];
   console.log('unique null program descriptions:', uniqueProgramIds.length);
   // call endpoint for each program
-  for (const programId of uniqueProgramIds) {
+  // for (const programId of uniqueProgramIds) {
+  uniqueProgramIds.map(programId => {
     console.log('update program', programId);
     const url = `${directvEndpoint}/program/flip/${programId}`;
     const result = await axios.get(url);
