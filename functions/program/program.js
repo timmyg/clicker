@@ -168,6 +168,7 @@ function cleanup(program) {
       program.title = program.description;
     }
   }
+  return program;
 }
 
 function rankPrograms(programs) {
