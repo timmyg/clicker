@@ -205,7 +205,7 @@ function build(dtvSchedule, zip) {
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
-      if (program.programId !== -1) {
+      if (program.programId !== '-1') {
         console.log({ channel, program });
         program.channel = channel.chNum;
         program.channelTitle = channel.chCall;
