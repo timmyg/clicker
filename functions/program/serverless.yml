@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   environment:
+    stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
     tableProgrammingArea: ${self:custom.tableProgrammingArea}
     serviceName: ${self:service}
