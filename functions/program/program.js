@@ -52,6 +52,7 @@ function init() {
       // dynamic fields
       nextProgramTitle: String,
       nextProgramStart: Date,
+      points: Number,
     },
     {
       timestamps: true,
@@ -97,6 +98,7 @@ module.exports.getAreaProgramming = async event => {
 // TODO
 module.exports.getAll = async event => {
   init();
+  const initialChannels = allChannels;
   // get all programs for right now
   const now = moment().unix() * 1000;
   const in25Mins =
@@ -128,9 +130,7 @@ module.exports.getAll = async event => {
     .all()
     .exec();
 
-  // const fullProgramming = [];
-
-  allChannels.forEach((p, index, arr) => {
+  initialChannels.forEach((p, index, arr) => {
     // find if in current programming
     const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
 
@@ -147,8 +147,25 @@ module.exports.getAll = async event => {
     }
   });
 
-  return respond(200, allChannels);
+  const rankedPrograms = rankPrograms(initialChannels);
+  return respond(200, rankedPrograms);
 };
+
+rankPrograms(programs) {
+  programs.forEach((program, i) => {
+    let points = 0;
+    if (program.title) {
+      if (program.title.indexOf('vs. ') > -1) {
+        points += 2;
+      }
+    } else {
+      points -= 10;
+    }
+    program.points = points;
+    programs[i] = program;
+  });
+  return programs.sort((a, b) => b.points - a.points);;
+}
 
 module.exports.syncNew = async event => {
   try {
