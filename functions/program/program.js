@@ -163,15 +163,16 @@ module.exports.syncDescriptions = async event => {
     console.log('update program', programId);
     const url = `${directvEndpoint}/program/flip/${programId}`;
     const result = await axios.get(url);
-    console.log('result', result);
     const { programDetail } = result.data;
     const { description, progType } = programDetail;
+    console.log({ programDetail, description, progType });
+
     // save description for all program ids
     // await Program.update({ programID: programId }, { description, progType });
-    const programs = await Program.batchGet([{ programID: programId }]);
+    const programs = await Program.batchGet([{ programId: programId }]);
     console.log('programs to update:', programs.length);
     for (const p of programs) {
-      await Program.update({ id: p.id }, { description, progType });
+      await Program.update({ id: p.id }, { description });
     }
   }
   return respond(200);
