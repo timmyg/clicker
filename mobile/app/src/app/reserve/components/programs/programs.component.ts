@@ -47,7 +47,7 @@ export class ProgramsComponent {
       .subscribe(reservation => this.store.dispatch(new fromProgram.GetAllByLocation(reservation.location)));
   }
 
-  async onProgramClick(program: Program) {
+  async onProgramSelect(program: Program) {
     this.store.dispatch(new fromReservation.SetProgram(program));
     // if editing, may already have a tv
     const state = await this.store.pipe(first()).toPromise();

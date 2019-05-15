@@ -1,0 +1,24 @@
+<ion-card (click)="onProgramClick()">
+  <ion-card-header>
+    <ion-card-subtitle>
+      <span>{{ program.start | amDateFormat: 'h:mm a' }} - {{ program.end | amDateFormat: 'h:mm a' }}</span>
+      <span float-right>{{ program.channelTitle }}</span>
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content no-padding-top>
+    <ion-grid no-padding>
+      <ion-row align-items-center>
+        <ion-col size="1" no-padding align-items-center>
+          <ion-icon [name]="program.icon" class="sport {{ program.icon }}" size="large" fill="red"></ion-icon>
+        </ion-col>
+        <ion-col size="11" class="title">
+          <h2>{{ program.title }}</h2>
+          <span *ngIf="program.nextProgramTitle" float-right>
+            Next: {{ program.nextProgramTitle }} ({{ program.nextProgramStart | amDateFormat: 'h:mm a' }})
+          </span>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- <button (click)="expand()">expand</button> -->
+  </ion-card-content>
+</ion-card>

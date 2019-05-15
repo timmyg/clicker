@@ -44,7 +44,6 @@ export class ProgramService {
           }
           program.points = points;
         });
-        console.log(programs);
         return programs.sort((a, b) => b.points - a.points);
       }),
     );

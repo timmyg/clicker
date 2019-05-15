@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProgramsComponent } from './programs.component';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ProgramsComponent', () => {
   let component: ProgramsComponent;
@@ -10,7 +9,6 @@ describe('ProgramsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ProgramsComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 

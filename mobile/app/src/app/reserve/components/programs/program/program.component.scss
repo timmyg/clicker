@@ -1,0 +1,22 @@
+ion-icon.sport {
+  display: inline;
+  &.baseball {
+    color: #e53935;
+  }
+  &.basketball {
+    color: #fb8c00;
+  }
+  &.american-football {
+    color: #795548;
+  }
+  &.football {
+    color: #212121;
+  }
+  &.tv {
+    color: #e0e0e0;
+  }
+}
+
+.title {
+  font-size: 0.8em;
+}

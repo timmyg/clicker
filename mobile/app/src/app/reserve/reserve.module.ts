@@ -14,6 +14,7 @@ import { ConfirmationComponent } from './components/confirmation/confirmation.co
 import { SharedModule } from '../shared/shared.module';
 import { ProgramsFilterPipe } from './pipes/programs-filter.pipe';
 import { ReservationGuard } from '../guards/reservation.guard';
+import { ProgramComponent } from './components/programs/program/program.component';
 
 const routes: Routes = [
   {
@@ -54,10 +55,11 @@ const routes: Routes = [
     ReservePage,
     LocationsComponent,
     ProgramsComponent,
+    ProgramComponent,
     TvsComponent,
     ConfirmationComponent,
     ProgramsFilterPipe,
   ],
-  exports: [TvsComponent],
+  // exports: [TvsComponent],
 })
 export class ReservePageModule {}

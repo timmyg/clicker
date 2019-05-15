@@ -99,9 +99,9 @@ module.exports.getAll = async event => {
   init();
   // get all programs for right now
   const now = moment().unix() * 1000;
-  const inFifteenMins =
+  const in25Mins =
     moment()
-      .add(45, 'minutes')
+      .add(25, 'minutes')
       .unix() * 1000;
 
   const currentProgramming = await Program.scan()
@@ -118,10 +118,10 @@ module.exports.getAll = async event => {
 
   const nextProgramming = await Program.scan()
     .filter('start')
-    .lt(inFifteenMins)
+    .lt(in25Mins)
     .and()
     .filter('end')
-    .gt(inFifteenMins)
+    .gt(in25Mins)
     .and()
     .filter('zip') // Zip is hardcoded!
     .eq(zip)
@@ -167,7 +167,7 @@ module.exports.syncNew = async event => {
     // TODO add zip code cookie
     const startTime = moment()
       .utc()
-      .subtract(6, 'hours')
+      .subtract(4, 'hours')
       .minutes(0)
       .seconds(0)
       .toString();
@@ -176,7 +176,8 @@ module.exports.syncNew = async event => {
     const headers = {
       Cookie: `dtve-prospect-zip=${zip};`,
     };
-    const result = await axios.get(url, { params });
+    console.log(object);
+    const result = await axios.get(url, { params, headers });
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
     const allPrograms = build(schedule, zip);
