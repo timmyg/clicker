@@ -159,7 +159,7 @@ function rankPrograms(programs) {
 }
 
 function rank(program) {
-  const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 5 }, { term: 'bobobobo', points: 44 }];
+  const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 3 }, { term: 'cincinnati', points: 5 }];
   const { title } = program;
   const searchTarget = title;
   let totalPoints = 0;
@@ -168,6 +168,8 @@ function rank(program) {
   });
 
   program.live ? (totalPoints += 2) : null;
+
+  program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
 
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') ? (totalPoints += 5) : null;
