@@ -3,8 +3,8 @@ import { Reservation } from '../state/reservation/reservation.model';
 import { Observable, combineLatest, forkJoin } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
-import { getAllReservations, getLoading } from '../state/reservation';
-import { getUser, getUserTokenCount } from '../state/user';
+import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
+import { getUser, getUserTokenCount, getLoading as getWalletLoading } from '../state/user';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
@@ -31,6 +31,7 @@ export class ProfilePage {
   user$: Observable<User>;
   tokenCount$: Observable<number>;
   isReservationsLoading$: Observable<boolean>;
+  isWalletLoading$: Observable<boolean>;
   faCopyright = faCopyright;
   walletModal;
   loginModal;
@@ -50,7 +51,8 @@ export class ProfilePage {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
     this.tokenCount$ = this.store.select(getUserTokenCount);
-    this.isReservationsLoading$ = this.store.select(getLoading);
+    this.isReservationsLoading$ = this.store.select(getReservationLoading);
+    this.isWalletLoading$ = this.store.select(getWalletLoading);
   }
 
   ngOnInit() {
@@ -94,20 +96,6 @@ export class ProfilePage {
   doRefresh(event) {
     this.store.dispatch(new fromReservation.GetAll());
     this.store.dispatch(new fromUser.LoadWallet());
-    // this.actions$
-    //   .pipe(ofType(fromReservation.GET_RESERVATIONS_SUCCESS), ofType(fromUser.LOAD_WALLET_SUCCESS))
-    //   .pipe(first())
-    //   .subscribe(() => {
-    //     event.target.complete();
-    //   });
-    // this.actions$
-    //   .pipe(
-    //     ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
-    //     combineLatest(ofType(fromUser.LOAD_WALLET_SUCCESS)),
-    //   )
-    //   .subscribe(() => {
-    //     event.target.complete();
-    //   });
     forkJoin(
       this.actions$.pipe(
         ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
