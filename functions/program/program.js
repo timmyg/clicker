@@ -153,18 +153,32 @@ module.exports.getAll = async event => {
 
 function rankPrograms(programs) {
   programs.forEach((program, i) => {
-    let points = 0;
-    if (program.title) {
-      if (program.title.indexOf(' @ ') > -1) {
-        points += 2;
-      }
-    } else {
-      points -= 10;
-    }
-    program.points = points;
-    programs[i] = program;
+    programs[i] = rank(program);
   });
   return programs.sort((a, b) => b.points - a.points);
+}
+
+function rank(program) {
+  let points = 0;
+  const { title } = program;
+
+  const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 5 }, { term: 'bobobobo', points: 44 }];
+
+  const searchTarget = title;
+
+  let totalPoints = 0;
+  terms.forEach(({ term, points }) => {
+    searchTarget.toLowercase().includes(term.toLowercase()) ? (totalPoints += points) : null;
+  });
+
+  program.live ? totalPoints += 2;
+  
+  if (program.subcategories) {
+    program.subcategories.includes('Playoffs') ? totalPoints += 5 : null;
+  }
+
+  program.points = totalPoints;
+  return program;
 }
 
 module.exports.syncNew = async event => {
