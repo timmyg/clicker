@@ -229,11 +229,11 @@ module.exports.syncDescriptions = async event => {
 module.exports.assignRelevance = async event => {};
 
 function transformPrograms(programs) {
-  const programs = [];
+  const transformedPrograms = [];
   programs.forEach(p => {
-    programs.push(new Program(p));
+    transformedPrograms.push(new Program(p));
   });
-  return programs;
+  return transformedPrograms;
 }
 
 function build(dtvSchedule, zip) {
