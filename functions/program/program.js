@@ -3,7 +3,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { respond, invokeFunctionSync } = require('serverless-helpers');
+const { respond, invokeFunction } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgrammingArea;
 require('dotenv').config();
@@ -142,7 +142,7 @@ module.exports.syncNew = async event => {
     const transformedPrograms = transformPrograms(allPrograms);
     const dbResult = await Program.batchPut(transformedPrograms);
 
-    await invokeFunctionSync(`programs-${process.env.stage}-syncDescriptions`);
+    await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
 
     return respond(201, dbResult);
   } catch (e) {
