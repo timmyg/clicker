@@ -151,7 +151,7 @@ module.exports.getAll = async event => {
   return respond(200, rankedPrograms);
 };
 
-rankPrograms(programs) {
+function rankPrograms(programs) {
   programs.forEach((program, i) => {
     let points = 0;
     if (program.title) {
@@ -164,7 +164,7 @@ rankPrograms(programs) {
     program.points = points;
     programs[i] = program;
   });
-  return programs.sort((a, b) => b.points - a.points);;
+  return programs.sort((a, b) => b.points - a.points);
 }
 
 module.exports.syncNew = async event => {
