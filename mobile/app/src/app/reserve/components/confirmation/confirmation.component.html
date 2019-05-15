@@ -1,34 +1,4 @@
 <ion-card *ngIf="(reservation$ | async) as reservation">
-  <!-- <ion-card-header>
-    <ion-card-subtitle>{{ reservation.program.channelTitle }}</ion-card-subtitle>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="1" no-padding align-items-center>
-          <ion-icon
-            *ngIf="reservation.program.type === 'basketball'"
-            name="basketball"
-            class="sport"
-            size="large"
-          ></ion-icon>
-          <ion-icon
-            *ngIf="reservation.program.type === 'football'"
-            name="american-football"
-            class="sport"
-            size="large"
-          ></ion-icon>
-          <ion-icon
-            *ngIf="reservation.program.type === 'baseball'"
-            name="baseball"
-            class="sport"
-            size="large"
-          ></ion-icon>
-          <ion-icon *ngIf="reservation.program.type === 'soccer'" name="football" class="sport" size="large"></ion-icon>
-        </ion-col>
-        <ion-col> {{ reservation.program.title }}</ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card-header> -->
-
   <ion-card-content>
     <ion-list id="length">
       <ion-radio-group (ionChange)="onLengthChange($event)">

@@ -18,7 +18,9 @@ export class ProgramComponent {
   }
 
   isReplay() {
-    if (this.program.title.indexOf(' @ ') > -1 && this.program.repeat) {
+    const isSport = this.program.title.indexOf(' @ ') > -1 || this.program.title.indexOf(' at ') > -1;
+    if (this.program.repeat && isSport) {
+      console.log('true');
       return true;
     }
   }
