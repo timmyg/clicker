@@ -173,8 +173,8 @@ module.exports.syncDescriptions = async event => {
       .all()
       .exec();
 
-    programsToUpdate.forEach((part, index) => {
-      programsToUpdate[index]['description'] = description;
+    programsToUpdate.forEach((part, index, arr) => {
+      arr[index]['description'] = description;
     });
     // save description for all program ids
     // await Program.update({ programID: programId }, { description, progType });
