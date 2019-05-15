@@ -204,34 +204,35 @@ function build(dtvSchedule, zip) {
   const allPrograms = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
-      console.log({ channel, program });
-      program.channel = channel.chNum;
-      program.channelTitle = channel.chCall;
       program.programId = program.programID;
-      program.title = program.title !== 'Programming information not available' ? program.title : null;
-      program.durationMins = program.duration;
-
-      program.channelCategories = channel.chCat;
-      program.subcategories = program.subcategoryList;
-      program.mainCategory = program.mainCategory;
-
-      program.live = program.ltd === 'Live' ? true : false;
-      program.zip = zip;
-      program.id = generateId(program);
-      program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
-      program.end = new Date(
-        parseInt(
-          moment(program.airTime)
-            .add(program.durationMins, 'minutes')
-            .unix() * 1000,
-        ),
-      );
-      // expire 6 hours from end time, or 1 week
-      program.expires =
-        moment(program.end)
-          .add(6, 'hours')
-          .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
       if (program.programId !== -1) {
+        console.log({ channel, program });
+        program.channel = channel.chNum;
+        program.channelTitle = channel.chCall;
+
+        program.title = program.title !== 'Programming information not available' ? program.title : null;
+        program.durationMins = program.duration;
+
+        program.channelCategories = channel.chCat;
+        program.subcategories = program.subcategoryList;
+        program.mainCategory = program.mainCategory;
+
+        program.live = program.ltd === 'Live' ? true : false;
+        program.zip = zip;
+        program.id = generateId(program);
+        program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
+        program.end = new Date(
+          parseInt(
+            moment(program.airTime)
+              .add(program.durationMins, 'minutes')
+              .unix() * 1000,
+          ),
+        );
+        // expire 6 hours from end time, or 1 week
+        program.expires =
+          moment(program.end)
+            .add(6, 'hours')
+            .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
         allPrograms.push(program);
       }
     });
