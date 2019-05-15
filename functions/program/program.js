@@ -231,7 +231,9 @@ function build(dtvSchedule, zip) {
         moment(program.end)
           .add(6, 'hours')
           .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
-      allPrograms.push(program);
+      if (program.programId !== -1) {
+        allPrograms.push(program);
+      }
     });
   });
   // filter out duplicates - happens with sd/hd channels
