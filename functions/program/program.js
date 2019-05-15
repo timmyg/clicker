@@ -156,7 +156,7 @@ module.exports.syncDescriptions = async event => {
     .all()
     .exec();
   console.log('allPrograms:', allPrograms.length);
-  const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programID))];
+  const uniqueProgramIds = [...new Set(allPrograms.map(p => p.programId))];
   console.log('uniqueProgramIds', uniqueProgramIds.length);
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {
