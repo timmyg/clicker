@@ -9,6 +9,16 @@
 </ion-header>
 
 <ion-content margin-top>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Pull to refresh"
+      refreshingSpinner=""
+      refreshingText=""
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-grid padding-horizontal padding-top size="12">
     <ion-row margin-bottom>
       <ion-button size="small" color="primary" (click)="createNewReservation()">New Reservation</ion-button>
@@ -20,8 +30,14 @@
     <!-- <ion-row margin-bottom> <b>Phone:&nbsp;</b><span>513-843-3209</span> </ion-row> -->
     <ion-row margin-bottom> </ion-row>
     <ion-row margin-bottom align-items-center>
-      <b>Wallet:&nbsp;</b> <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
-      <span>&nbsp;{{ tokenCount$ | async }}</span>
+      <b>Wallet:&nbsp;</b>
+      <span *ngIf="(isReservationsLoading$ | async); else walletReady" margin-vertical>
+        <ion-spinner name="crescent" class="center"></ion-spinner>
+      </span>
+      <ng-template #walletReady>
+        <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
+        <span>&nbsp;{{ tokenCount$ | async }}</span>
+      </ng-template>
     </ion-row>
     <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
 

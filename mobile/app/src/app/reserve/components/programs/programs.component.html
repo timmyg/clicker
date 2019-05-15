@@ -1,16 +1,3 @@
-<!-- <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
-  <ion-spinner name="crescent" class="center"></ion-spinner>
-</ion-row>
-<ng-template #ready>
-  <ion-row
-    ><ion-col *ngFor="let program of (programs$ | async | programsFilter: searchTerm)" size="4">
-      <ion-button color="light" size="large" expand="block" (click)="onProgramClick(program)">{{
-        program.channelTitle
-      }}</ion-button>
-    </ion-col>
-  </ion-row>
-</ng-template> -->
-
 <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
   <ion-spinner name="crescent" class="center"></ion-spinner>
 </ion-row>

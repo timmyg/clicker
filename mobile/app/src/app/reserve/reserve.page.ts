@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import * as fromReservation from '../state/reservation/reservation.actions';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reserve',
@@ -29,10 +30,6 @@ export class ReservePage {
     });
   }
 
-  // 1. location
-  // 2. channel
-  // 3. tv
-
   goBack() {
     this.navCtrl.back();
   }
@@ -46,9 +43,9 @@ export class ReservePage {
     return this.router.url != '/tabs/reserve/locations';
   }
 
-  // showStartOver() {
-  //   return this.router.url != '/tabs/reserve/locations';
-  // }
+  disableRefresher() {
+    return this.router.url === '/tabs/reserve/confirmation';
+  }
 
   isProgramsPage() {
     return this.router.url.includes('programs');
@@ -65,5 +62,12 @@ export class ReservePage {
 
   onSearch(e) {
     this.reserveService.emitSearch(e.detail.value);
+  }
+
+  doRefresh(event) {
+    this.reserveService.emitRefresh();
+    this.reserveService.refreshedEmitted$.pipe().subscribe(() => {
+      event.target.complete();
+    });
   }
 }

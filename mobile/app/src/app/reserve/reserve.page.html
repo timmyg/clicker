@@ -26,4 +26,15 @@
     ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
-<ion-content> <router-outlet></router-outlet> </ion-content>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" [disabled]="disableRefresher()">
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Pull to refresh"
+      refreshingSpinner=""
+      refreshingText=""
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <router-outlet></router-outlet>
+</ion-content>

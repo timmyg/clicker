@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Reservation } from '../state/reservation/reservation.model';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, forkJoin } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading } from '../state/reservation';
@@ -10,6 +10,7 @@ import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import { WalletPage } from './wallet/wallet.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
+import * as fromUser from '../state/user/user.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
@@ -17,6 +18,8 @@ import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
 import { environment } from 'src/environments/environment.production';
+import { first, take } from 'rxjs/operators';
+import { ofType, Actions } from '@ngrx/effects';
 
 @Component({
   selector: 'app-profile',
@@ -42,6 +45,7 @@ export class ProfilePage {
     public intercom: Intercom,
     public toastController: ToastController,
     public userService: UserService,
+    private actions$: Actions,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
@@ -56,7 +60,6 @@ export class ProfilePage {
   async login() {
     this.loginModal = await this.modalController.create({
       component: LoginComponent,
-      // componentProps: { monies: this.user.tokens },
     });
     return await this.loginModal.present();
   }
@@ -64,7 +67,6 @@ export class ProfilePage {
   async openWallet() {
     this.walletModal = await this.modalController.create({
       component: WalletPage,
-      // componentProps: { monies: this.user.tokens },
     });
     return await this.walletModal.present();
   }
@@ -87,6 +89,37 @@ export class ProfilePage {
   isActive(reservation: Reservation) {
     const remaining = moment.duration(moment(reservation.end).diff(moment())).asSeconds();
     return remaining > 0;
+  }
+
+  doRefresh(event) {
+    this.store.dispatch(new fromReservation.GetAll());
+    this.store.dispatch(new fromUser.LoadWallet());
+    // this.actions$
+    //   .pipe(ofType(fromReservation.GET_RESERVATIONS_SUCCESS), ofType(fromUser.LOAD_WALLET_SUCCESS))
+    //   .pipe(first())
+    //   .subscribe(() => {
+    //     event.target.complete();
+    //   });
+    // this.actions$
+    //   .pipe(
+    //     ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
+    //     combineLatest(ofType(fromUser.LOAD_WALLET_SUCCESS)),
+    //   )
+    //   .subscribe(() => {
+    //     event.target.complete();
+    //   });
+    forkJoin(
+      this.actions$.pipe(
+        ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
+        take(1),
+      ),
+      this.actions$.pipe(
+        ofType(fromUser.LOAD_WALLET_SUCCESS),
+        take(1),
+      ),
+    ).subscribe(() => {
+      event.target.complete();
+    });
   }
 
   async onLogout() {

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { getAllLocations, getLoading } from 'src/app/state/location';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
@@ -11,14 +11,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { first } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
+import { ofType, Actions } from '@ngrx/effects';
 @Component({
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss'],
 })
-export class LocationsComponent implements OnInit {
+export class LocationsComponent implements OnDestroy, OnInit {
   locations$: Observable<Location[]>;
   title = 'Choose Location';
   isLoading$: Observable<boolean>;
+  refreshSubscription: Subscription;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -26,9 +28,11 @@ export class LocationsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute, // private navCtrl: NavController,
     private navCtrl: NavController,
+    private actions$: Actions,
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
+    this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
   }
 
   async ngOnInit() {
@@ -56,6 +60,20 @@ export class LocationsComponent implements OnInit {
     } else {
       this.store.dispatch(new fromReservation.Start());
     }
+  }
+
+  ngOnDestroy() {
+    this.refreshSubscription.unsubscribe();
+  }
+
+  refresh() {
+    this.store.dispatch(new fromLocation.GetAll());
+    this.actions$
+      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
+      .pipe(first())
+      .subscribe(() => {
+        this.reserveService.emitRefreshed();
+      });
   }
 
   onLocationClick(location: Location) {

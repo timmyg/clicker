@@ -12,6 +12,11 @@ export class ReserveService {
   private emitCloseSearchSource = new Subject<any>();
   closeSearchEmitted$ = this.emitCloseSearchSource.asObservable();
 
+  private emitRefreshSource = new Subject<any>();
+  refreshEmitted$ = this.emitRefreshSource.asObservable();
+  private emitRefreshedSource = new Subject<any>();
+  refreshedEmitted$ = this.emitRefreshedSource.asObservable();
+
   emitTitle(title: any) {
     this.emitTitleSource.next(title);
   }
@@ -22,5 +27,13 @@ export class ReserveService {
 
   emitCloseSearch() {
     this.emitCloseSearchSource.next();
+  }
+
+  emitRefresh() {
+    this.emitRefreshSource.next();
+  }
+
+  emitRefreshed() {
+    this.emitRefreshedSource.next();
   }
 }
