@@ -164,31 +164,26 @@ module.exports.syncDescriptions = async event => {
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {
     console.log('update program', programId);
-    const url = `${directvEndpoint}/program/flip/${programId}`;
-    const result = await axios.get(url);
-    const { programDetail } = result.data;
-    // const { description, title, episodeTitle } = programDetail;
-    const { description } = programDetail;
-    // console.log({ programDetail, description, progType });
+    try {
+      const url = `${directvEndpoint}/program/flip/${programId}`;
+      const result = await axios.get(url);
+      const { programDetail } = result.data;
+      const { description } = programDetail;
 
-    const programsToUpdate = await Program.scan()
-      .filter('programId')
-      .eq(programId)
-      .all()
-      .exec();
+      const programsToUpdate = await Program.scan()
+        .filter('programId')
+        .eq(programId)
+        .all()
+        .exec();
 
-    programsToUpdate.forEach((part, index, arr) => {
-      arr[index]['description'] = description;
-    });
-    // save description for all program ids
-    // await Program.update({ programID: programId }, { description, progType });
-    // const programs = await Program.batchGet([{ programId: programId }]);
-    console.log('programsToUpdate', programsToUpdate.length, programsToUpdate[0]);
-    await Program.batchPut(programsToUpdate);
-    // console.log('programs to update:', programs.length);
-    // for (const p of programs) {
-    //   await Program.update({ id: p.id }, { description });
-    // }
+      programsToUpdate.forEach((part, index, arr) => {
+        arr[index]['description'] = description;
+      });
+      console.log('programsToUpdate', programsToUpdate.length, programsToUpdate[0]);
+      await Program.batchPut(programsToUpdate);
+    } catch (e) {
+      console.error(e);
+    }
   }
   return respond(200);
 };
