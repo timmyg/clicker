@@ -141,6 +141,9 @@ module.exports.syncNew = async event => {
     const allPrograms = build(schedule, zip);
     const transformedPrograms = transformPrograms(allPrograms);
     const dbResult = await Program.batchPut(transformedPrograms);
+
+    await invokeFunctionSync(`program-${process.env.stage}-syncDescriptions`);
+
     return respond(201, dbResult);
   } catch (e) {
     console.error(e);

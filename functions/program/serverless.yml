@@ -93,15 +93,16 @@ functions:
           path: new
           method: post
           cors: true
-      - schedule: cron(0 2 * * ? *)
+      - schedule: rate(2 hours)
   syncDescriptions:
     handler: program.syncDescriptions
+    timeout: 30
     events:
       - http:
           path: descriptions
           method: post
           cors: true
-      - schedule: cron(1 2 * * ? *)
+      - schedule: rate(30 minutes)
   createAreaProgramming:
     handler: program.createAreaProgramming
     events:
