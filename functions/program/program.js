@@ -164,7 +164,7 @@ function rank(program) {
   const searchTarget = title;
   let totalPoints = 0;
   terms.forEach(({ term, points }) => {
-    searchTarget.toLowercase().includes(term.toLowercase()) ? (totalPoints += points) : null;
+    searchTarget.toLowerCase().includes(term.toLowerCase()) ? (totalPoints += points) : null;
   });
 
   program.live ? (totalPoints += 2) : null;
