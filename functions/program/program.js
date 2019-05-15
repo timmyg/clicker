@@ -130,6 +130,7 @@ module.exports.getAll = async event => {
     .all()
     .exec();
 
+  // add in next program if within 15 mins
   initialChannels.forEach((p, index, arr) => {
     // find if in current programming
     const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
@@ -147,9 +148,27 @@ module.exports.getAll = async event => {
     }
   });
 
-  const rankedPrograms = rankPrograms(initialChannels);
+  const cleanPrograms = cleanupTitles(initialChannels);
+  const rankedPrograms = rankPrograms(cleanPrograms);
   return respond(200, rankedPrograms);
 };
+
+function cleanupTitles(programs) {
+  programs.forEach((program, i) => {
+    programs[i] = cleanup(program);
+  });
+  return programs;
+}
+
+function cleanup(program) {
+  if (program.title.toLowerCase() === 'mlb baseball') {
+    if (program.episodeTitle && (program.episodeTitle.contains(' @ ') || program.episodeTitle.contains(' at '))) {
+      program.title = program.episodeTitle;
+    } else if (program.description && (program.description.contains(' @ ') || program.description.contains(' at '))) {
+      program.title = program.description;
+    }
+  }
+}
 
 function rankPrograms(programs) {
   programs.forEach((program, i) => {

@@ -18,7 +18,7 @@ export class ProgramComponent {
   }
 
   isReplay() {
-    if (this.title.contains(' @ ') && this.repeat) {
+    if (this.program.title.indexOf(' @ ') > -1 && this.program.repeat) {
       return true;
     }
   }

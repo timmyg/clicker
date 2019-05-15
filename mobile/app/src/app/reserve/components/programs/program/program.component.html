@@ -2,7 +2,7 @@
   <ion-card-header>
     <ion-card-subtitle>
       <span>{{ program.channelTitle }}</span>
-      <span float-right>{{ program.start | amDateFormat: 'h:mma' }} - {{ program.end | amDateFormat: 'h:mma' }}</span>
+      <span float-right>{{ program.start | amDateFormat: 'h:mma' }} - {{ program.end | amDateFormat: 'h:ma' }}</span>
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content no-padding-top>
@@ -16,7 +16,7 @@
         </ion-col>
         <ion-col size="12">
           <span class="faded" *ngIf="program.nextProgramTitle">
-            Next: {{ getNextProgramTitle() }} ({{ program.nextProgramStart | amDateFormat: 'h:mma' }})
+            Next: {{ getNextProgramTitle() }} at {{ program.nextProgramStart | amDateFormat: 'h:mma' }}
           </span>
         </ion-col>
       </ion-row>

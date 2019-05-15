@@ -12,5 +12,7 @@ export interface Program {
   subcategories: [string]; // ["Basketball"] or Cycling, Racing, Football, Baseball
   mainCategory: string; // "Sports" or "TV" or "Movies"
   points: number; // ranking points
+  live: boolean;
+  repeat: boolean;
   icon: string;
 }
