@@ -75,9 +75,7 @@ module.exports.get = async event => {
 
   // sort boxes alphabetically
   location.boxes = location.boxes.sort((a, b) => {
-    const labelA = a.label || a.locationName;
-    const labelB = b.label || b.locationName;
-    return labelA.localeCompare(labelB);
+    return a.label.localeCompare(b.label);
   });
 
   // TODO set reserved
@@ -132,7 +130,12 @@ module.exports.setBoxes = async event => {
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
       box.id = uuid();
-      box.label = box.locationName;
+      // set label to locationName or random 2 alphanumeric characters
+      box.label =
+        box.locationName ||
+        Math.random()
+          .toString(36)
+          .substr(2, 2);
       console.log('add box with label', id, box);
       location.boxes.push(box);
     }
