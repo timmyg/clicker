@@ -213,6 +213,12 @@ module.exports.identifyBoxes = async event => {
   return respond(200, `hello`);
 };
 
+module.exports.disconnect = async event => {
+  const { id } = getPathParameters(event);
+  console.log('disconnect', id);
+  return respond(200, 'ok');
+};
+
 module.exports.health = async event => {
   return respond(200, 'ok');
 };
