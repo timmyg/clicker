@@ -169,14 +169,6 @@ module.exports.update = async event => {
   }
 
   // change the channel
-  // const command = 'tune';
-  // const { losantId } = originalReservation.location;
-  // const { clientAddress, ip, id: boxId } = originalReservation.box;
-  // const { channel, channelMinor } = updatedReservation.program;
-  // const payload = { clientAddress, channel, channelMinor, losantId, ip, command, boxId };
-  // console.log('update reservation, change channel');
-  // console.log(`remote-${process.env.stage}-command`, payload);
-  // await invokeFunctionSync(`remote-${process.env.stage}-command`, payload);
   console.time('remote command');
   const command = 'tune';
   await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });

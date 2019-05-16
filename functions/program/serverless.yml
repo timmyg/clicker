@@ -23,10 +23,10 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage}
   tableProgram: programs-${self:custom.stage}
-  tableProgrammingArea: programming-area-${self:custom.stage}
+  # tableProgrammingArea: programming-area-${self:custom.stage}
   tableThroughputs:
-    prod: 100
-    default: 100
+    prod: 25
+    default: 25
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
     prod: api.tryclicker.com
@@ -58,19 +58,19 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-    ProgammingAreaTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableProgrammingArea}
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
+    # ProgammingAreaTable:
+    #   Type: 'AWS::DynamoDB::Table'
+    #   Properties:
+    #     TableName: ${self:custom.tableProgrammingArea}
+    #     AttributeDefinitions:
+    #       - AttributeName: id
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: id
+    #         KeyType: HASH
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: ${self:custom.tableThroughput}
+    #       WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
@@ -103,7 +103,7 @@ functions:
           path: descriptions
           method: post
           cors: true
-      - schedule: rate(30 minutes)
+      - schedule: rate(10 minutes)
   createAreaProgramming:
     handler: program.createAreaProgramming
     events:

@@ -2,25 +2,23 @@
   <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
-  <ng-template #ready>
-    <ion-card
-      *ngFor="let location of (locations$ | async)"
-      [ngClass]="{ inactive: !location.active }"
-      (click)="location.active && onLocationClick(location)"
-    >
-      <ion-card-header>
-        <ion-card-subtitle>
-          <span>{{ location.neighborhood }} <span *ngIf="!location.active">(inactive)</span></span>
-          <span float-right>
-            <span *ngIf="location.distance > 0.1; else near"> {{ location.distance }} miles </span>
-            <ng-template #near> Near </ng-template>
-          </span>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content no-padding-top>
-        <img [src]="location.img" class="logo" />
-        <h1>{{ location.name }}</h1>
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
+  <ion-card
+    *ngFor="let location of (locations$ | async)"
+    [ngClass]="{ inactive: !location.active }"
+    (click)="location.active && onLocationClick(location)"
+  >
+    <ion-card-header>
+      <ion-card-subtitle>
+        <span>{{ location.neighborhood }} <span *ngIf="!location.active">(inactive)</span></span>
+        <span float-right>
+          <span *ngIf="location.distance > 0.1; else near"> {{ location.distance }} miles </span>
+          <ng-template #near> Near </ng-template>
+        </span>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content no-padding-top>
+      <img [src]="location.img" class="logo" />
+      <h1>{{ location.name }}</h1>
+    </ion-card-content>
+  </ion-card>
 </ion-list>

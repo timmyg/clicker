@@ -1,10 +1,8 @@
 <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
   <ion-spinner name="crescent" class="center"></ion-spinner>
 </ion-row>
-<ng-template #ready>
-  <ion-list>
-    <div *ngFor="let program of (programs$ | async | programsFilter: searchTerm)">
-      <app-program (onSelect)="onProgramSelect($event)" [program]="program"></app-program>
-    </div>
-  </ion-list>
-</ng-template>
+<ion-list>
+  <div *ngFor="let program of (programs$ | async | programsFilter: searchTerm)">
+    <app-program (onSelect)="onProgramSelect($event)" [program]="program"></app-program>
+  </div>
+</ion-list>

@@ -26,7 +26,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" [disabled]="disableRefresher()">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" [pullMax]="300" [disabled]="disableRefresher()">
     <ion-refresher-content
       pullingIcon="arrow-down"
       pullingText="Pull to refresh"

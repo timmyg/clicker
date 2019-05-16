@@ -1,4 +1,4 @@
-const { respond, getBody, getPathParameters } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const uuid = require('uuid/v1');
@@ -195,10 +195,19 @@ module.exports.identifyBoxes = async event => {
     .exec();
   const { boxes } = location;
   let setupChannel = 801; // first music channel
-  for (const b of boxes) {
-    b.setupChannel = setupChannel;
+  for (const box of boxes) {
+    box.setupChannel = setupChannel;
     setupChannel++;
     // TODO actually change channel with REMOTE
+    const command = 'tune';
+    const reservation = {
+      location,
+      box,
+      program: {
+        channel: box.setupChannel,
+      },
+    };
+    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
   }
   await Location.update({ id }, { boxes });
   return respond(200, `hello`);

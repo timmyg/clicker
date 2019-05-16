@@ -58,20 +58,20 @@ function init() {
       timestamps: true,
     },
   );
-  ProgrammingArea = dynamoose.model(
-    process.env.tableProgrammingArea,
-    {
-      zip: {
-        type: Number,
-        hashKey: true,
-      },
-      localChannels: [Number],
-      localSportsChannels: [Number],
-    },
-    {
-      timestamps: true,
-    },
-  );
+  // ProgrammingArea = dynamoose.model(
+  //   process.env.tableProgrammingArea,
+  //   {
+  //     zip: {
+  //       type: Number,
+  //       hashKey: true,
+  //     },
+  //     localChannels: [Number],
+  //     localSportsChannels: [Number],
+  //   },
+  //   {
+  //     timestamps: true,
+  //   },
+  // );
 }
 
 module.exports.health = async event => {
@@ -213,7 +213,7 @@ module.exports.syncNew = async event => {
       .minutes(0)
       .seconds(0)
       .toString();
-    const hours = 24;
+    const hours = 8;
     const params = { channels: channelsToPull.join(','), startTime, hours };
     const headers = {
       Cookie: `dtve-prospect-zip=${zip};`,
@@ -237,10 +237,15 @@ module.exports.syncNew = async event => {
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   init();
-  const allDescriptionlessPrograms = await Program.scan('description')
+  let allDescriptionlessPrograms = await Program.scan('description')
     .null()
     .all()
     .exec();
+
+  allDescriptionlessPrograms = allDescriptionlessPrograms.sort((a, b) => {
+    return a.start - b.start;
+  });
+
   console.log('allDescriptionlessPrograms:', allDescriptionlessPrograms.length);
   const uniqueProgramIds = [...new Set(allDescriptionlessPrograms.map(p => p.programId))];
   console.log('uniqueProgramIds', uniqueProgramIds.length);

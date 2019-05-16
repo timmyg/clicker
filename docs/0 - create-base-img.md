@@ -39,7 +39,7 @@
 
 12. burn image
 
-- `sudo dd if=/dev/rdisk2 | gzip > ~/Desktop/clicker-img-v0.2.0-dd.gz`
+- `sudo dd if=/dev/rdisk2 | gzip > ~/Desktop/clicker-img-v0.1.0-dd.gz`
   or diskutil
 
 resources:
