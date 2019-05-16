@@ -264,6 +264,7 @@ module.exports.syncDescriptions = async event => {
         .all()
         .exec();
 
+
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;
       });

@@ -39,6 +39,7 @@ module.exports.health = async => {
   return respond();
 };
 
+
 module.exports.command = async event => {
   try {
     const { command, reservation } = getBody(event);
