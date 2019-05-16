@@ -1,5 +1,5 @@
 <ion-list>
-  <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
+  <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
   <ion-card
