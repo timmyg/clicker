@@ -29,8 +29,6 @@ const Location = dynamoose.model(
         end: Date,
         active: {
           type: Boolean,
-          required: true,
-          default: true,
         },
       },
     ],
@@ -77,6 +75,13 @@ module.exports.get = async event => {
     }
   });
   await location.save();
+
+  // filter out inactive boxes
+  location.boxes.forEach((o, i, boxes) => {
+    if (!boxes[i].active) {
+      boxes.splice(i, 1);
+    }
+  });
 
   // sort boxes alphabetically
   location.boxes = location.boxes.sort((a, b) => {
@@ -135,6 +140,7 @@ module.exports.setBoxes = async event => {
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
       box.id = uuid();
+      box.active = true;
       // set label to locationName or random 2 alphanumeric characters
       box.label =
         box.locationName ||
