@@ -84,14 +84,14 @@ functions:
           path: ''
           method: post
           cors: true
-  connect:
+  connected:
     handler: location.connected
     events:
       - http:
           path: 'device/{losantId}/connected'
           method: post
           cors: true
-  disconnect:
+  disconnected:
     handler: location.disconnected
     events:
       - http:
