@@ -47,6 +47,7 @@ module.exports.command = async event => {
     const { channel, channelMinor } = reservation.program;
     const api = new Api(losantId, ip);
 
+    console.log(command, losantId, clientAddress, channel, channelMinor, ip, key);
     await api.sendCommand(command, losantId, { clientAddress, channel, channelMinor, ip, key });
     return respond();
   } catch (e) {
