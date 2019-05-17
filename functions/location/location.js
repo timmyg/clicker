@@ -236,6 +236,7 @@ module.exports.connected = async event => {
     .exec();
   const location = locations[0];
   location.connected = true;
+  await location.save();
   return respond(200, 'ok');
 };
 
@@ -247,6 +248,7 @@ module.exports.disconnected = async event => {
     .exec();
   const location = locations[0];
   location.connected = false;
+  await location.save();
   return respond(200, 'ok');
 };
 
