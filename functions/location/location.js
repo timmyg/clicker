@@ -228,17 +228,25 @@ module.exports.identifyBoxes = async event => {
   return respond(200, `hello`);
 };
 
-module.exports.connect = async event => {
-  const { id } = getPathParameters(event);
-  console.log('connect', id);
-  await Location.update({ id }, { connected: true });
+module.exports.connected = async event => {
+  const { losantId } = getPathParameters(event);
+  const locations = await Location.scan('losantId')
+    .eq(losantId)
+    .all()
+    .exec();
+  const location = locations[0];
+  location.connected = true;
   return respond(200, 'ok');
 };
 
-module.exports.disconnect = async event => {
-  const { id } = getPathParameters(event);
-  console.log('disconnect', id);
-  await Location.update({ id }, { connected: false });
+module.exports.disconnected = async event => {
+  const { losantId } = getPathParameters(event);
+  const locations = await Location.scan('losantId')
+    .eq(losantId)
+    .all()
+    .exec();
+  const location = locations[0];
+  location.connected = false;
   return respond(200, 'ok');
 };
 
