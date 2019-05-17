@@ -6,7 +6,7 @@
 #   - copy-env-vars.service
 #   - antenna.service
 
-# setup.sh 
+# setup.sh  
 
 echo "move copy-env-vars.service, antenna.service to /etc/systemd/system folder"
 mv /boot/copy-env-vars.service /boot/antenna.service /etc/systemd/system
