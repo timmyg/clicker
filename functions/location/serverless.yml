@@ -84,6 +84,20 @@ functions:
           path: ''
           method: post
           cors: true
+  connect:
+    handler: location.connect
+    events:
+      - http:
+          path: '{id}/connect'
+          method: post
+          cors: true
+  disconnect:
+    handler: location.disconnect
+    events:
+      - http:
+          path: '{id}/disconnect'
+          method: post
+          cors: true
   update:
     handler: location.update
     events:

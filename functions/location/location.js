@@ -27,6 +27,9 @@ const Location = dynamoose.model(
         ip: String,
         reserved: Boolean,
         end: Date,
+        active: {
+          type: Boolean,
+        },
       },
     ],
     name: { type: String, required: true },
@@ -38,6 +41,7 @@ const Location = dynamoose.model(
     img: String,
     distance: Number,
     active: Boolean,
+    connected: Boolean,
     setup: Boolean,
   },
   {
@@ -72,11 +76,16 @@ module.exports.get = async event => {
   });
   await location.save();
 
+  // filter out inactive boxes
+  location.boxes.forEach((o, i, boxes) => {
+    if (!boxes[i].active) {
+      boxes.splice(i, 1);
+    }
+  });
+
   // sort boxes alphabetically
   location.boxes = location.boxes.sort((a, b) => {
-    const labelA = a.label || a.locationName;
-    const labelB = b.label || b.locationName;
-    return labelA.localeCompare(labelB);
+    return a.label.localeCompare(b.label);
   });
 
   // TODO set reserved
@@ -131,7 +140,13 @@ module.exports.setBoxes = async event => {
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
       box.id = uuid();
-      box.label = box.locationName;
+      box.active = true;
+      // set label to locationName or random 2 alphanumeric characters
+      box.label =
+        box.locationName ||
+        Math.random()
+          .toString(36)
+          .substr(2, 2);
       console.log('add box with label', id, box);
       location.boxes.push(box);
     }
@@ -211,6 +226,20 @@ module.exports.identifyBoxes = async event => {
   }
   await Location.update({ id }, { boxes });
   return respond(200, `hello`);
+};
+
+module.exports.connect = async event => {
+  const { id } = getPathParameters(event);
+  console.log('connect', id);
+  await Location.update({ id }, { connected: true });
+  return respond(200, 'ok');
+};
+
+module.exports.disconnect = async event => {
+  const { id } = getPathParameters(event);
+  console.log('disconnect', id);
+  await Location.update({ id }, { connected: false });
+  return respond(200, 'ok');
 };
 
 module.exports.health = async event => {

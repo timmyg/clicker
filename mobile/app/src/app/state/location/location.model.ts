@@ -11,4 +11,5 @@ export interface Location {
   ip: string;
   zip: number;
   active?: boolean;
+  connected?: boolean;
 }

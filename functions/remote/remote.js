@@ -39,16 +39,16 @@ module.exports.health = async => {
   return respond();
 };
 
-
 module.exports.command = async event => {
   try {
-    const { command, reservation } = getBody(event);
+    const { command, key, reservation } = getBody(event);
     const { losantId } = reservation.location;
     const { ip, clientAddress } = reservation.box;
     const { channel, channelMinor } = reservation.program;
     const api = new Api(losantId, ip);
 
-    await api.sendCommand(command, losantId, { clientAddress, channel, channelMinor, ip });
+    console.log(command, losantId, clientAddress, channel, channelMinor, ip, key);
+    await api.sendCommand(command, losantId, { clientAddress, channel, channelMinor, ip, key });
     return respond();
   } catch (e) {
     console.error(e);
