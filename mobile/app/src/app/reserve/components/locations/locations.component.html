@@ -10,7 +10,7 @@
     <ion-card-header>
       <ion-card-subtitle>
         <span>{{ location.neighborhood }} <span *ngIf="!location.active">(inactive)</span></span>
-        <ion-icon *ngIf="location.connected" name="checkmark"></ion-icon>
+        <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
         <span float-right>
           <span *ngIf="location.distance > 0.1; else near"> {{ location.distance }} miles </span>
           <ng-template #near> Near </ng-template>

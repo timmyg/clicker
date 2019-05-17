@@ -8,3 +8,7 @@ img.logo {
 .inactive {
   opacity: 0.4;
 }
+
+ion-icon.disconnected {
+  color: var(--danger);
+}
