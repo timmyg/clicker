@@ -22,19 +22,19 @@ class Widget {
     logger.info('about to search ips....');
     browser.browser({}, (error, device) => {
       if (device) {
-        // logger.info({ device });
+        logger.info({ device });
         let { ip } = device;
         if (
           !/^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/.test(
             ip,
           )
         ) {
-          // logger.info(`.......... invalid ip: ${ip}`);
+          logger.info(`.......... invalid ip: ${ip}`);
           return;
         }
         DirecTV.validateIP(ip, error => {
           if (error) {
-            // logger.info(`.......... not valid directv ip: ${ip}`);
+            logger.info(`.......... not valid directv ip: ${ip}`);
             return;
           }
           logger.info(`*#$&%~%*$& valid directv ip: ${ip}`);
@@ -42,9 +42,9 @@ class Widget {
           // return context.api.updateIp(ip);
         });
       } else if (error) {
-        // logger.error(error);
+        logger.error(error);
       } else {
-        // logger.error('no ips found...');
+        logger.error('no ips found...');
       }
     });
   }

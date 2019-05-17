@@ -85,17 +85,17 @@ functions:
           method: post
           cors: true
   connect:
-    handler: location.connect
+    handler: location.connected
     events:
       - http:
-          path: '{id}/connect'
+          path: 'device/{losantId}/connected'
           method: post
           cors: true
   disconnect:
-    handler: location.disconnect
+    handler: location.disconnected
     events:
       - http:
-          path: '{id}/disconnect'
+          path: 'device/{losantId}/disconnected'
           method: post
           cors: true
   update:
