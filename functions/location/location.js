@@ -1,5 +1,6 @@
 const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
+const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
 require('dotenv').config({ path: '../.env.example' });
@@ -50,6 +51,8 @@ const Location = dynamoose.model(
 );
 
 module.exports.all = async event => {
+  const { latitude, longitude } = getPathParameters(event);
+  console.log(latitude, longitude);
   const allLocations = await Location.scan().exec();
   allLocations.forEach(l => {
     delete l.boxes;
