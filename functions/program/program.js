@@ -194,6 +194,11 @@ function rank(program) {
 
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') ? (totalPoints += 5) : null;
+    if (program.subcategories.includes('Golf')) {
+      if (program.title.includes('PGA Championship') && program.live) {
+        totalPoints += 5;
+      }
+    }
   }
 
   program.points = totalPoints;
@@ -263,7 +268,6 @@ module.exports.syncDescriptions = async event => {
         .eq(programId)
         .all()
         .exec();
-
 
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;
