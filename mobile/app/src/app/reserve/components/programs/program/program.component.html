@@ -13,6 +13,7 @@
         </ion-col>
         <ion-col size="11">
           <h1 class="title">{{ program.title }} <span class="faded" *ngIf="isReplay()">(Replay)</span></h1>
+          <ion-icon *ngIf="program.points >= 5" name="flame" class="trending"></ion-icon>
         </ion-col>
         <ion-col size="12">
           <span class="faded" *ngIf="program.nextProgramTitle">
