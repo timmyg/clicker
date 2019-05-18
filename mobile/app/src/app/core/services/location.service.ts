@@ -10,9 +10,13 @@ export class LocationService {
   private prefix = `locations`;
   constructor(private httpClient: HttpClient) {}
 
-  getAll(geolocation: Geolocation): Observable<Location[]> {
-    const { latitude, longitude } = geolocation;
-    return this.httpClient.get<Location[]>(`${this.prefix}/${latitude}/${longitude}`);
+  getAll(geolocation?: Geolocation): Observable<Location[]> {
+    let url = this.prefix;
+    const { latitude, longitude } = { ...geolocation };
+    if (latitude && longitude) {
+      url += `/${latitude}/${longitude}`;
+    }
+    return this.httpClient.get<Location[]>(url);
   }
 
   get(locationId: string): Observable<Location> {
