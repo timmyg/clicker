@@ -1,25 +1,42 @@
-<ion-list>
-  <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
-    <ion-spinner name="crescent" class="center"></ion-spinner>
-  </ion-row>
-  <ion-card
-    *ngFor="let location of (locations$ | async)"
-    [ngClass]="{ inactive: !location.active || !location.connected }"
-    (click)="location.active && location.connected && onLocationClick(location)"
-  >
-    <ion-card-header>
-      <ion-card-subtitle>
-        <span>{{ location.neighborhood }} <span *ngIf="!location.active || !location.connected">(inactive)</span></span>
-        <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
-        <span float-right>
-          <span *ngIf="location.distance > 0.1; else near"> {{ location.distance }} miles </span>
-          <ng-template #near> Near </ng-template>
-        </span>
-      </ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content no-padding-top>
-      <img [src]="location.img" class="logo" />
-      <h1>{{ location.name }}</h1>
-    </ion-card-content>
-  </ion-card>
-</ion-list>
+<ion-row *ngIf="(isLoading$ | async) || evaluatingGeolocation; else loaded" margin-vertical>
+  <ion-spinner name="crescent" class="center"></ion-spinner>
+</ion-row>
+
+<ng-template #loaded>
+  <section class="ion-text-center" padding *ngIf="(askForGeolocation$ | async); else showLocations">
+    <ion-icon name="pin" class="location"></ion-icon>
+    <p>
+      Clicker would like to access your general location for more accurate location details. This data is only used for
+      this purpose and is not stored anywhere.
+    </p>
+    <div><ion-button margin-top (click)="allowLocation()">Allow Location Access </ion-button></div>
+    <div><ion-button fill="clear" (click)="denyLocation()">No Thanks </ion-button></div>
+  </section>
+
+  <ng-template #showLocations>
+    <ion-list>
+      <ion-card
+        *ngFor="let location of (locations$ | async)"
+        [ngClass]="{ inactive: !location.active || !location.connected }"
+        (click)="location.active && location.connected && onLocationClick(location)"
+      >
+        <ion-card-header>
+          <ion-card-subtitle>
+            <span
+              >{{ location.neighborhood }} <span *ngIf="!location.active || !location.connected">(inactive)</span></span
+            >
+            <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
+            <span float-right>
+              <span *ngIf="location.distance > 0.1; else near"> {{ location.distance }} miles </span>
+              <ng-template #near> Near </ng-template>
+            </span>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content no-padding-top>
+          <img [src]="location.img" class="logo" />
+          <h1>{{ location.name }}</h1>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </ng-template>
+</ng-template>
