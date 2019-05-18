@@ -13,8 +13,8 @@ export class LocationsEffects {
   @Effect()
   getAllLocations$: Observable<Action> = this.actions$.pipe(
     ofType(LocationActions.GET_ALL_LOCATIONS),
-    switchMap(() =>
-      this.locationService.getAll().pipe(
+    switchMap((action: LocationActions.GetAll) =>
+      this.locationService.getAll(action.geolocation).pipe(
         map((locations: Location[]) => new LocationActions.GetAllSuccess(locations)),
         catchError(err => of(new LocationActions.GetAllFail(err))),
       ),
