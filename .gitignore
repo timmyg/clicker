@@ -6,3 +6,4 @@ coverage
 .netlify
 *.tar.gz
 tmp
+.pwd
