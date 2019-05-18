@@ -20,6 +20,8 @@ import * as fromApp from './state/app/app.actions';
 import { filter, take, first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ofType } from '@ngrx/effects';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 export function checkParams(store: Store<AppState>): Function {
   return () =>
@@ -83,6 +85,8 @@ export function initUserStuff(store: Store<AppState>): Function {
       useClass: ApiInterceptor,
       multi: true,
     },
+    Geolocation,
+    Diagnostic,
   ],
   bootstrap: [AppComponent],
 })

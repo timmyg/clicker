@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
 import { Observable, Subscription } from 'rxjs';
-import { getAllLocations, getLoading } from 'src/app/state/location';
+import { getAllLocations, getLoading, getLocationsState } from 'src/app/state/location';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
@@ -12,6 +12,9 @@ import { NavController } from '@ionic/angular';
 import { first } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { ofType, Actions } from '@ngrx/effects';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+
 @Component({
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss'],
@@ -29,6 +32,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private route: ActivatedRoute, // private navCtrl: NavController,
     private navCtrl: NavController,
     private actions$: Actions,
+    private geolocation: Geolocation,
+    private diagnostic: Diagnostic,
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
@@ -41,6 +46,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     // TODO should be a better way to get reservation
     const state = await this.store.pipe(first()).toPromise();
     const reservation: Partial<Reservation> = state.reservation.reservation;
+    this.getUserLocation();
     // check if editing existing reservation
     if (reservation && reservation.id) {
       // is editing
@@ -80,5 +86,27 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.store.dispatch(new fromReservation.SetLocation(location));
     this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     // this.navCtrl.navigateForward(['../programs'], { relativeTo: this.route });
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad');
+  }
+
+  private async getUserLocation() {
+    const x = this.diagnostic.isLocationAvailable();
+    console.log(x);
+    //   let options = {
+    //     enableHighAccuracy: true,
+    //     timeout: 25000,
+    //   };
+    //   this.geolocation
+    //     .getCurrentPosition(options)
+    //     .then(resp => {
+    //       // resp.coords.latitude
+    //       // resp.coords.longitude
+    //     })
+    //     .catch(error => {
+    //       console.log('Error getting location', error);
+    //     });
   }
 }
