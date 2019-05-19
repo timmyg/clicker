@@ -51,8 +51,8 @@ const Location = dynamoose.model(
 );
 
 module.exports.all = async event => {
-  const { latitude, longitude } = getPathParameters(event);
-  console.log(latitude, longitude);
+  // const { latitude, longitude } = getPathParameters(event);
+  // console.log(latitude, longitude);
   const allLocations = await Location.scan().exec();
   allLocations.forEach(l => {
     delete l.boxes;
