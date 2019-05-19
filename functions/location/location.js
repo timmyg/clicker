@@ -54,12 +54,12 @@ const Location = dynamoose.model(
 
 module.exports.all = async event => {
   const { latitude, longitude } = getPathParameters(event);
-  // console.log(latitude, longitude);
+  console.log(latitude, longitude);
   const allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     if (latitude && longitude) {
-      const meters = geolib.getDistanceSimple({ latitide, longitude }, { l.latitide, l.longitude });
+      const meters = geolib.getDistanceSimple({ latitude, longitude }, { l.latitude, l.longitude });
       const miles = geolib.convertUnit('mi', meters2);
       const roundedMiles = Math.round(10 * miles2) / 10;
       locations[i].distance = roundedMiles;
