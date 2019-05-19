@@ -74,7 +74,7 @@ functions:
     handler: location.all
     events:
       - http:
-          path: '/geolocation/{latitude}/{longitude}'
+          path: '/geo/{latitude}/{longitude}'
           method: get
           cors: true
   get:

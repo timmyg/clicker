@@ -36,14 +36,16 @@ const Location = dynamoose.model(
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
     zip: { type: Number, required: true },
-    // lat: { type: Number, required: true },
-    // lng: { type: Number, required: true },
-    // ip: String,
+    geo: {
+      latitude: { type: Number, required: true },
+      longitude: { type: Number, required: true },
+    },
     img: String,
-    distance: Number,
     active: Boolean,
     connected: Boolean,
     setup: Boolean,
+    // calculated fields
+    distance: Number,
   },
   {
     timestamps: true,

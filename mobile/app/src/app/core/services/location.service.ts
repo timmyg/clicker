@@ -14,7 +14,7 @@ export class LocationService {
     let url = this.prefix;
     const { latitude, longitude } = { ...geolocation };
     if (latitude && longitude) {
-      url += `/geolocation/${latitude}/${longitude}`;
+      url += `/geo/${latitude}/${longitude}`;
     }
     return this.httpClient.get<Location[]>(url);
   }
