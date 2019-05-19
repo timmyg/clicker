@@ -59,7 +59,7 @@ module.exports.all = async event => {
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     if (latitude && longitude) {
-      const { latitude: locationLatitude, longitude: locationLongitude } = l;
+      const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
       const meters = geolib.getDistanceSimple(
         { latitude, longitude },
         { latitude: locationLatitude, longitude: locationLongitude },
