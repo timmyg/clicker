@@ -27,7 +27,7 @@
             >
             <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
             <span float-right>
-              <span *ngIf="location.distance > 0.1; else near"> {{ location.distance }} miles </span>
+              <span *ngIf="location.distance >= 0.2; else near"> {{ location.distance }} miles </span>
               <ng-template #near> Near </ng-template>
             </span>
           </ion-card-subtitle>
