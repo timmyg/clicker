@@ -59,7 +59,11 @@ module.exports.all = async event => {
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     if (latitude && longitude) {
-      const meters = geolib.getDistanceSimple({ latitude, longitude }, { l.latitude, l.longitude });
+      const { latitude: locationLatitude, longitude: locationLongitude } = l;
+      const meters = geolib.getDistanceSimple(
+        { latitude, longitude },
+        { latitude: locationLatitude, longitude: locationLongitude },
+      );
       const miles = geolib.convertUnit('mi', meters2);
       const roundedMiles = Math.round(10 * miles2) / 10;
       locations[i].distance = roundedMiles;
