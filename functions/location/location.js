@@ -64,8 +64,8 @@ module.exports.all = async event => {
         { latitude, longitude },
         { latitude: locationLatitude, longitude: locationLongitude },
       );
-      const miles = geolib.convertUnit('mi', meters2);
-      const roundedMiles = Math.round(10 * miles2) / 10;
+      const miles = geolib.convertUnit('mi', meters);
+      const roundedMiles = Math.round(10 * miles) / 10;
       locations[i].distance = roundedMiles;
     }
   });
