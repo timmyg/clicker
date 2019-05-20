@@ -188,7 +188,7 @@ function rank(program) {
   });
 
   program.live ? (totalPoints += 2) : null;
-  program.repeat ? (totalPoints -= 2) : null;
+  program.repeat ? (totalPoints -= 4) : null;
 
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
 

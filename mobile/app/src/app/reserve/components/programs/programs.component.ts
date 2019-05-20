@@ -24,6 +24,8 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   title = 'Choose Channel';
   searchTerm: string;
   refreshSubscription: Subscription;
+  searchSubscription: Subscription;
+  closeSearchSubscription: Subscription;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -35,10 +37,11 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.programs$ = this.store.select(getAllPrograms);
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
-    this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
+    this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
+      console.log({ searchTerm });
       this.searchTerm = searchTerm;
     });
-    this.reserveService.closeSearchEmitted$.subscribe(() => {
+    this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
       this.searchTerm = null;
     });
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
@@ -65,6 +68,8 @@ export class ProgramsComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.refreshSubscription.unsubscribe();
+    this.searchSubscription.unsubscribe();
+    this.closeSearchSubscription.unsubscribe();
   }
 
   async onProgramSelect(program: Program) {

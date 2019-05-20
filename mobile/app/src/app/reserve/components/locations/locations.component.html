@@ -1,9 +1,13 @@
-<ion-row *ngIf="(isLoading$ | async) || evaluatingGeolocation; else loaded" margin-vertical>
+<ion-row *ngIf="(isLoading$ | async) || evaluatingGeolocation" margin-vertical>
   <ion-spinner name="crescent" class="center"></ion-spinner>
 </ion-row>
 
-<ng-template #loaded>
-  <section class="ion-text-center" padding *ngIf="(askForGeolocation$ | async); else showLocations">
+<section>
+  <section
+    class="ion-text-center"
+    padding
+    *ngIf="(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations"
+  >
     <ion-icon name="pin" class="location"></ion-icon>
     <p>
       Clicker would like to access your general location for more accurate location details. This data is only used for
@@ -15,8 +19,11 @@
 
   <ng-template #showLocations>
     <ion-list>
+      <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
+        Find locations around you by <a (click)="allowLocation()">allowing geolocation</a>
+      </p>
       <ion-card
-        *ngFor="let location of (locations$ | async)"
+        *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)"
         [ngClass]="{ inactive: !location.active || !location.connected }"
         (click)="location.active && location.connected && onLocationClick(location)"
       >
@@ -26,7 +33,7 @@
               >{{ location.neighborhood }} <span *ngIf="!location.active || !location.connected">(inactive)</span></span
             >
             <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
-            <span float-right>
+            <span float-right *ngIf="location.distance">
               <span *ngIf="location.distance >= 0.2; else near"> {{ location.distance }} miles </span>
               <ng-template #near> Near </ng-template>
             </span>
@@ -39,4 +46,4 @@
       </ion-card>
     </ion-list>
   </ng-template>
-</ng-template>
+</section>

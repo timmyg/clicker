@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class ReservePage {
   @ViewChild(IonSearchbar) searchbar: IonSearchbar;
   title: String;
-  searchProgramsMode: boolean;
+  searchMode: boolean;
 
   constructor(
     private reserveService: ReserveService,
@@ -29,6 +29,10 @@ export class ReservePage {
 
   ngOnInit() {}
 
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad');
+  }
+
   goBack() {
     this.navCtrl.back();
   }
@@ -41,16 +45,16 @@ export class ReservePage {
     return this.router.url === '/tabs/reserve/confirmation';
   }
 
-  isProgramsPage() {
-    return this.router.url.includes('programs');
+  isSearchablePage() {
+    return this.router.url.includes('programs') || this.router.url.includes('locations');
   }
 
   openSearch() {
-    this.searchProgramsMode = true;
+    this.searchMode = true;
   }
 
   closeSearch() {
-    this.searchProgramsMode = false;
+    this.searchMode = false;
   }
 
   onSearch(e) {

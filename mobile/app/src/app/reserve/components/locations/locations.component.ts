@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
-import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
-import { getAllLocations, getLoading, getLocationsState } from 'src/app/state/location';
+import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { getAllLocations, getLoading } from 'src/app/state/location';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
@@ -11,6 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
 import { first } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
+import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
 import { ofType, Actions } from '@ngrx/effects';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
@@ -32,15 +33,20 @@ export class LocationsComponent implements OnDestroy, OnInit {
   locations$: Observable<Location[]>;
   title = 'Choose Location';
   isLoading$: Observable<boolean>;
+  searchTerm: string;
   refreshSubscription: Subscription;
+  searchSubscription: Subscription;
+  closeSearchSubscription: Subscription;
   askForGeolocation$ = new BehaviorSubject<boolean>(true);
+  userGeolocation: Geo;
   evaluatingGeolocation = true;
+  geolocationDeclined = true;
 
   constructor(
     private store: Store<fromStore.AppState>,
     private reserveService: ReserveService,
     private router: Router,
-    private route: ActivatedRoute, // private navCtrl: NavController,
+    private route: ActivatedRoute,
     private navCtrl: NavController,
     private actions$: Actions,
     private geolocation: Geolocation,
@@ -57,10 +63,20 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.redirectIfUpdating();
     this.evaluateGeolocation();
     this.isLoading$ = this.store.select(getLoading);
+    this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
+      console.log({ searchTerm });
+      this.searchTerm = searchTerm;
+    });
+    this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
+      console.log('close');
+      this.searchTerm = null;
+    });
   }
 
   ngOnDestroy() {
     this.refreshSubscription.unsubscribe();
+    this.searchSubscription.unsubscribe();
+    this.closeSearchSubscription.unsubscribe();
   }
 
   private async redirectIfUpdating() {
@@ -89,7 +105,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   refresh() {
-    this.store.dispatch(new fromLocation.GetAll());
+    this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
     this.actions$
       .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
       .pipe(first())
@@ -99,26 +115,20 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   onLocationClick(location: Location) {
+    this.reserveService.emitCloseSearch();
     this.store.dispatch(new fromReservation.SetLocation(location));
     this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
-    // this.navCtrl.navigateForward(['../programs'], { relativeTo: this.route });
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad');
   }
 
   async allowLocation() {
-    console.log('setting cookie', permissionGeolocation.name, permissionGeolocation.values.probably);
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.probably);
     this.evaluateGeolocation();
   }
 
   async denyLocation() {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.denied);
-    // this.askForGeolocation$ = false;
     this.askForGeolocation$.next(false);
-    // TODO load all locations
+    this.evaluateGeolocation();
   }
 
   private async evaluateGeolocation() {
@@ -133,10 +143,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
     } else {
       // web
       const permissionStatus = await this.storage.get(permissionGeolocation.name);
-      console.log({ permissionStatus });
       if (
         permissionStatus &&
-        (permissionStatus === permissionGeolocation.values.allowed || permissionGeolocation.values.probably)
+        (permissionStatus === permissionGeolocation.values.allowed ||
+          permissionStatus === permissionGeolocation.values.probably)
       ) {
         //   let options = {
         //     enableHighAccuracy: true,
@@ -147,20 +157,19 @@ export class LocationsComponent implements OnDestroy, OnInit {
           .then(response => {
             this.askForGeolocation$.next(false);
             this.evaluatingGeolocation = false;
+            this.geolocationDeclined = false;
             this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
-            console.log(response);
-            console.log(this.askForGeolocation$);
             const { latitude, longitude } = response.coords;
-            this.store.dispatch(new fromLocation.GetAll({ latitude, longitude }));
-            // resp.coords.latitude
-            // resp.coords.longitude
+            this.userGeolocation = { latitude, longitude };
+            this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
           })
           .catch(error => {
-            console.log('Error getting location', error);
+            this.evaluatingGeolocation = false;
+            this.askForGeolocation$.next(false);
+            console.error('Error getting location', error);
           });
       } else {
-        // no permission
-        // this.noGeolocationPermission = true;
+        this.askForGeolocation$.next(true);
         this.evaluatingGeolocation = false;
         this.store.dispatch(new fromLocation.GetAll());
       }
