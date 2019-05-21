@@ -10,8 +10,7 @@
   >
     <ion-icon name="pin" class="location"></ion-icon>
     <p>
-      Clicker would like to access your general location for more accurate location details. This data is only used for
-      this purpose and is not stored anywhere.
+      Clicker would like to access your location for more accurate location details. This data is not stored anywhere.
     </p>
     <div><ion-button margin-top (click)="allowLocation()">Allow Location Access </ion-button></div>
     <div><ion-button fill="clear" (click)="denyLocation()">No Thanks </ion-button></div>
@@ -20,7 +19,7 @@
   <ng-template #showLocations>
     <ion-list>
       <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
-        Find locations around you by <a (click)="allowLocation()">allowing geolocation</a>
+        Find locations around you by allowing location services in your settings</a>
       </p>
       <ion-card
         *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)"

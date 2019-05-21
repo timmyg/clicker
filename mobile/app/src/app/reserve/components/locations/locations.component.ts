@@ -136,43 +136,37 @@ export class LocationsComponent implements OnDestroy, OnInit {
     // if have location permission, get coords and send to backend with getlocation
     // if no permission, set a flag and show a explainer + button in ui
 
-    if (this.platform.is('cordova')) {
-      // TODO
-      const x = this.diagnostic.isLocationAvailable();
-      console.log(x);
+    // web
+    const permissionStatus = await this.storage.get(permissionGeolocation.name);
+    if (
+      permissionStatus &&
+      (permissionStatus === permissionGeolocation.values.allowed ||
+        permissionStatus === permissionGeolocation.values.probably)
+    ) {
+      //   let options = {
+      //     enableHighAccuracy: true,
+      //     timeout: 25000,
+      //   };
+      await this.geolocation
+        .getCurrentPosition()
+        .then(response => {
+          this.askForGeolocation$.next(false);
+          this.evaluatingGeolocation = false;
+          this.geolocationDeclined = false;
+          this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
+          const { latitude, longitude } = response.coords;
+          this.userGeolocation = { latitude, longitude };
+          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+        })
+        .catch(error => {
+          this.evaluatingGeolocation = false;
+          this.askForGeolocation$.next(false);
+          console.error('Error getting location', error);
+        });
     } else {
-      // web
-      const permissionStatus = await this.storage.get(permissionGeolocation.name);
-      if (
-        permissionStatus &&
-        (permissionStatus === permissionGeolocation.values.allowed ||
-          permissionStatus === permissionGeolocation.values.probably)
-      ) {
-        //   let options = {
-        //     enableHighAccuracy: true,
-        //     timeout: 25000,
-        //   };
-        await this.geolocation
-          .getCurrentPosition()
-          .then(response => {
-            this.askForGeolocation$.next(false);
-            this.evaluatingGeolocation = false;
-            this.geolocationDeclined = false;
-            this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
-            const { latitude, longitude } = response.coords;
-            this.userGeolocation = { latitude, longitude };
-            this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
-          })
-          .catch(error => {
-            this.evaluatingGeolocation = false;
-            this.askForGeolocation$.next(false);
-            console.error('Error getting location', error);
-          });
-      } else {
-        this.askForGeolocation$.next(true);
-        this.evaluatingGeolocation = false;
-        this.store.dispatch(new fromLocation.GetAll());
-      }
+      this.askForGeolocation$.next(true);
+      this.evaluatingGeolocation = false;
+      this.store.dispatch(new fromLocation.GetAll());
     }
   }
 }
