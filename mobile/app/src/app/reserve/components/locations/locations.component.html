@@ -19,7 +19,7 @@
   <ng-template #showLocations>
     <ion-list>
       <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
-        Find locations around you by allowing location services in your settings</a>
+        Find locations around you by allowing location services in your settings
       </p>
       <ion-card
         *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)"
