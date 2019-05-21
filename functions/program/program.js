@@ -150,6 +150,7 @@ module.exports.getAll = async event => {
       arr[index] = currentProgram;
     }
   });
+  
 
   const cleanPrograms = cleanupTitles(initialChannels);
   const rankedPrograms = rankPrograms(cleanPrograms);
