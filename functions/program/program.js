@@ -135,6 +135,9 @@ module.exports.getAll = async event => {
     // find if in current programming
     const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
 
+    // keep minor channel if has one
+    currentProgram.channelMinor = p.channelMinor;
+
     // find if in next programming
     const nextProgram = nextProgramming.find(np => np.channel === p.channel);
 

@@ -1,7 +1,0 @@
-{
-  "appId": "com.clicker.app",
-  "appName": "Clicker",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www"
-}
