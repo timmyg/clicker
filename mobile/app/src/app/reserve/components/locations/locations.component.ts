@@ -132,21 +132,17 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   private async evaluateGeolocation() {
-    // check if have location permission
-    // if have location permission, get coords and send to backend with getlocation
-    // if no permission, set a flag and show a explainer + button in ui
-
-    // web
     const permissionStatus = await this.storage.get(permissionGeolocation.name);
     if (
       permissionStatus &&
       (permissionStatus === permissionGeolocation.values.allowed ||
         permissionStatus === permissionGeolocation.values.probably)
     ) {
-      //   let options = {
-      //     enableHighAccuracy: true,
-      //     timeout: 25000,
-      //   };
+      //   if (this.platform.is('cordova')) {
+      //   // TODO
+      //   const x = this.diagnostic.isLocationAvailable();
+      //   console.log(x);
+      // } else {
       await this.geolocation
         .getCurrentPosition()
         .then(response => {
