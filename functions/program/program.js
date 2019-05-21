@@ -135,6 +135,9 @@ module.exports.getAll = async event => {
     // find if in current programming
     const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
 
+    // keep minor channel if has one
+    currentProgram.channelMinor = p.channelMinor;
+
     // find if in next programming
     const nextProgram = nextProgramming.find(np => np.channel === p.channel);
 
@@ -147,6 +150,7 @@ module.exports.getAll = async event => {
       arr[index] = currentProgram;
     }
   });
+  
 
   const cleanPrograms = cleanupTitles(initialChannels);
   const rankedPrograms = rankPrograms(cleanPrograms);
@@ -188,12 +192,17 @@ function rank(program) {
   });
 
   program.live ? (totalPoints += 2) : null;
-  program.repeat ? (totalPoints -= 2) : null;
+  program.repeat ? (totalPoints -= 4) : null;
 
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
 
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') ? (totalPoints += 5) : null;
+    if (program.subcategories.includes('Golf')) {
+      if (program.title.includes('PGA Championship') && program.live) {
+        totalPoints += 5;
+      }
+    }
   }
 
   program.points = totalPoints;
@@ -263,7 +272,6 @@ module.exports.syncDescriptions = async event => {
         .eq(programId)
         .all()
         .exec();
-
 
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;

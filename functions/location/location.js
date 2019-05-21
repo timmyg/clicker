@@ -1,5 +1,6 @@
 const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
+const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
 require('dotenv').config({ path: '../.env.example' });
@@ -35,14 +36,16 @@ const Location = dynamoose.model(
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
     zip: { type: Number, required: true },
-    // lat: { type: Number, required: true },
-    // lng: { type: Number, required: true },
-    // ip: String,
+    geo: {
+      latitude: { type: Number, required: true },
+      longitude: { type: Number, required: true },
+    },
     img: String,
-    distance: Number,
     active: Boolean,
     connected: Boolean,
     setup: Boolean,
+    // calculated fields
+    distance: Number,
   },
   {
     timestamps: true,
@@ -50,9 +53,24 @@ const Location = dynamoose.model(
 );
 
 module.exports.all = async event => {
+  let latitude, longitude;
+  if (getPathParameters(event)) {
+    latitude = getPathParameters(event).latitude;
+    longitude = getPathParameters(event).longitude;
+  }
   const allLocations = await Location.scan().exec();
-  allLocations.forEach(l => {
+  allLocations.forEach((l, i, locations) => {
     delete l.boxes;
+    if (latitude && longitude) {
+      const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
+      const meters = geolib.getDistanceSimple(
+        { latitude, longitude },
+        { latitude: locationLatitude, longitude: locationLongitude },
+      );
+      const miles = geolib.convertUnit('mi', meters);
+      const roundedMiles = Math.round(10 * miles) / 10;
+      locations[i].distance = roundedMiles;
+    }
   });
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);

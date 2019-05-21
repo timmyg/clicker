@@ -15,6 +15,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ProgramsFilterPipe } from './pipes/programs-filter.pipe';
 import { ReservationGuard } from '../guards/reservation.guard';
 import { ProgramComponent } from './components/programs/program/program.component';
+import { LocationsFilterPipe } from './pipes/locations-filter.pipe';
 
 const routes: Routes = [
   {
@@ -59,6 +60,7 @@ const routes: Routes = [
     TvsComponent,
     ConfirmationComponent,
     ProgramsFilterPipe,
+    LocationsFilterPipe,
   ],
   // exports: [TvsComponent],
 })

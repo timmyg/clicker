@@ -70,6 +70,13 @@ functions:
           path: ''
           method: get
           cors: true
+  allByGeolocation:
+    handler: location.all
+    events:
+      - http:
+          path: '/geo/{latitude}/{longitude}'
+          method: get
+          cors: true
   get:
     handler: location.get
     events:

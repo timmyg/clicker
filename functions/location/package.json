@@ -19,6 +19,7 @@
   "dependencies": {
     "dotenv": "^7.0.0",
     "dynamoose": "^1.7.2",
+    "geolib": "^2.0.24",
     "moment": "^2.24.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.10"
   },
