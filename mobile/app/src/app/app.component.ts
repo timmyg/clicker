@@ -30,11 +30,15 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    this.platform.ready().then(() => {
-      StatusBar.setStyle({
-        style: StatusBarStyle.Light,
-      });
-      SplashScreen.hide();
+    this.platform.ready().then(async () => {
+      try {
+        // StatusBar.setStyle({
+        //   style: StatusBarStyle.Light,
+        // });
+        await SplashScreen.hide();
+      } catch (e) {
+        console.log(e);
+      }
       console.log('initializeApp');
     });
   }

@@ -31,9 +31,12 @@ export class UserService {
   refresh(): Observable<any> {
     return new Observable(observer => {
       auth.checkSession({}, async (err, result) => {
-        console.log('set new token', result.idToken);
-        await this.setToken(result.idToken);
-        console.log('new token set');
+        if (result) {
+          await this.setToken(result.idToken);
+          console.log('new token set');
+        } else {
+          console.error(err);
+        }
         observer.next();
       });
     });

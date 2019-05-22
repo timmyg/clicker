@@ -51,7 +51,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private actions$: Actions,
-    private geolocation: Geolocation,
+    // private geolocation: Geolocation,
     private diagnostic: Diagnostic,
     private platform: Platform,
     private storage: Storage,
