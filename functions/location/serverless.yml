@@ -147,3 +147,17 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
           cors: true
+  allOff:
+    handler: location.allOff
+    events:
+      - http:
+          path: '{id}/boxes/off'
+          method: post
+          cors: true
+  allOn:
+    handler: location.allOn
+    events:
+      - http:
+          path: '{id}/boxes/on'
+          method: post
+          cors: true

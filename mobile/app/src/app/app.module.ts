@@ -26,13 +26,11 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 export function checkParams(store: Store<AppState>): Function {
   return () =>
     new Promise(resolve => {
-      console.log('checkparams');
       const urlParams = new URLSearchParams(window.location.search);
       const partner = urlParams.get('partner');
       if (partner) {
         store.dispatch(new fromApp.SetPartner(partner));
       }
-      console.log('params checked');
       resolve(true);
     });
 }
@@ -40,7 +38,6 @@ export function checkParams(store: Store<AppState>): Function {
 export function initUserStuff(store: Store<AppState>): Function {
   return () =>
     new Promise(resolve => {
-      console.log('initUserStuff');
       store.dispatch(new fromUser.Load()); // TODO should this be refresh?
       store
         .select((state: any) => state.user)
@@ -49,7 +46,6 @@ export function initUserStuff(store: Store<AppState>): Function {
           take(1),
         )
         .subscribe(() => {
-          console.log('user stuff inited');
           resolve(true);
         });
     });

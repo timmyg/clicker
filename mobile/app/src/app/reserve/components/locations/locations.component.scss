@@ -17,3 +17,20 @@ ion-icon.location {
   color: var(--ion-color-primary);
   font-size: 64px;
 }
+
+ion-card {
+  width: 100%;
+}
+
+// ::ng-deep .action-sheet-button {
+//   &.danger {
+//     ion-icon {
+//       color: var(--ion-color-danger) !important;
+//     }
+//   }
+//   &.success {
+//     ion-icon {
+//       color: var(--ion-color-success) !important;
+//     }
+//   }
+// }

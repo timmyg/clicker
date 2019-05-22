@@ -33,7 +33,6 @@ export class UserService {
       auth.checkSession({}, async (err, result) => {
         if (result) {
           await this.setToken(result.idToken);
-          console.log('new token set');
         } else {
           console.error(err);
         }
@@ -45,7 +44,6 @@ export class UserService {
   get(): Observable<string> {
     return from(this.storage.get(storage.token)).pipe(
       mergeMap(token => {
-        console.log(token);
         if (token) {
           return of(token);
         } else {

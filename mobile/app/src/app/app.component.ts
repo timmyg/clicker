@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-// import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Plugins, StatusBarStyle } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
+import * as fromUser from './state/user/user.actions';
 
 const { SplashScreen, StatusBar } = Plugins;
 import { Store } from '@ngrx/store';
@@ -25,18 +24,14 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    console.log('initializeApp');
-    // clg
     this.platform.ready().then(async () => {
       try {
-        console.log('platform ready');
-        // StatusBar.setStyle({
-        //   style: StatusBarStyle.Light,
-        // });
         await SplashScreen.hide();
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
+    });
+    this.platform.resume.subscribe(result => {
+      console.log('resuming...');
+      this.store.dispatch(new fromUser.Refresh());
     });
   }
 }

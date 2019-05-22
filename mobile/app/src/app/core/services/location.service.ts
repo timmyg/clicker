@@ -22,4 +22,12 @@ export class LocationService {
   get(locationId: string): Observable<Location> {
     return this.httpClient.get<Location>(`${this.prefix}/${locationId}`);
   }
+
+  turnOn(locationId: string): Observable<any> {
+    return this.httpClient.get<Location>(`${this.prefix}/${locationId}/boxes/on`);
+  }
+
+  turnOff(locationId: string): Observable<any> {
+    return this.httpClient.get<Location>(`${this.prefix}/${locationId}/boxes/off`);
+  }
 }

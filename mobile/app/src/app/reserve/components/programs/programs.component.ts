@@ -38,7 +38,6 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
-      console.log({ searchTerm });
       this.searchTerm = searchTerm;
     });
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {

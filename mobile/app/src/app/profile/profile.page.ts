@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Reservation } from '../state/reservation/reservation.model';
-import { Observable, combineLatest, forkJoin } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
@@ -18,7 +18,7 @@ import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
 import { environment } from 'src/environments/environment.production';
-import { first, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 
 @Component({

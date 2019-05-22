@@ -231,7 +231,6 @@ module.exports.identifyBoxes = async event => {
   for (const box of boxes) {
     box.setupChannel = setupChannel;
     setupChannel++;
-    // TODO actually change channel with REMOTE
     const command = 'tune';
     const reservation = {
       location,
@@ -268,6 +267,48 @@ module.exports.disconnected = async event => {
   location.connected = false;
   await location.save();
   return respond(200, 'ok');
+};
+
+module.exports.allOff = async event => {
+  const { id } = getPathParameters(event);
+
+  const location = await Location.queryOne('id')
+    .eq(id)
+    .exec();
+  const { boxes } = location;
+  for (const box of boxes) {
+    const command = 'key';
+    const key = 'poweroff';
+    const reservation = {
+      location,
+      box,
+      program: {
+        // channel: box.setupChannel,
+      },
+    };
+    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+  }
+};
+
+module.exports.allOn = async event => {
+  const { id } = getPathParameters(event);
+
+  const location = await Location.queryOne('id')
+    .eq(id)
+    .exec();
+  const { boxes } = location;
+  for (const box of boxes) {
+    const command = 'key';
+    const key = 'poweron';
+    const reservation = {
+      location,
+      box,
+      program: {
+        // channel: box.setupChannel,
+      },
+    };
+    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+  }
 };
 
 module.exports.health = async event => {

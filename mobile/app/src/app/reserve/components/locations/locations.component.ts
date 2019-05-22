@@ -1,22 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject, forkJoin } from 'rxjs';
 import { getAllLocations, getLoading } from 'src/app/state/location';
+import { getUserLocations, getUserRoles } from 'src/app/state/user';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
+import * as fromUser from '../../../state/user/user.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, Platform } from '@ionic/angular';
-import { first } from 'rxjs/operators';
+import { NavController, ActionSheetController } from '@ionic/angular';
+import { first, take } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
 import { ofType, Actions } from '@ngrx/effects';
-// import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Plugins } from '@capacitor/core';
 const { Geolocation } = Plugins;
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Storage } from '@ionic/storage';
 const permissionGeolocation = {
   name: 'permission.geolocation',
@@ -35,6 +35,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
   locations$: Observable<Location[]>;
   title = 'Choose Location';
   isLoading$: Observable<boolean>;
+  userLocations$: Observable<string[]>;
+  userLocations: string[];
+  userRoles$: Observable<string[]>;
+  userRoles: string[];
   searchTerm: string;
   refreshSubscription: Subscription;
   searchSubscription: Subscription;
@@ -46,14 +50,12 @@ export class LocationsComponent implements OnDestroy, OnInit {
 
   constructor(
     private store: Store<fromStore.AppState>,
+    public actionSheetController: ActionSheetController,
     private reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private actions$: Actions,
-    // private geolocation: Geolocation,
-    private diagnostic: Diagnostic,
-    private platform: Platform,
     private storage: Storage,
   ) {
     this.locations$ = this.store.select(getAllLocations);
@@ -65,12 +67,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.redirectIfUpdating();
     this.evaluateGeolocation();
     this.isLoading$ = this.store.select(getLoading);
+    this.userLocations$ = this.store.select(getUserLocations);
+    this.userLocations$.pipe().subscribe(userLocations => {
+      this.userLocations = userLocations;
+    });
+    this.userRoles$ = this.store.select(getUserRoles);
+    this.userRoles$.pipe().subscribe(userRoles => {
+      this.userRoles = userRoles;
+    });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
-      console.log({ searchTerm });
       this.searchTerm = searchTerm;
     });
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
-      console.log('close');
       this.searchTerm = null;
     });
   }
@@ -79,6 +87,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.refreshSubscription.unsubscribe();
     this.searchSubscription.unsubscribe();
     this.closeSearchSubscription.unsubscribe();
+  }
+
+  isManager(location: Location) {
+    const { userLocations, userRoles } = this;
+    if (userLocations && userRoles) {
+      return userLocations.indexOf(location.id) > -1 || userRoles.indexOf('superman') > -1;
+    }
   }
 
   private async redirectIfUpdating() {
@@ -108,12 +123,23 @@ export class LocationsComponent implements OnDestroy, OnInit {
 
   refresh() {
     this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
-    this.actions$
-      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
-      .pipe(first())
-      .subscribe(() => {
-        this.reserveService.emitRefreshed();
-      });
+    this.store.dispatch(new fromUser.Refresh());
+    // this.actions$
+    //   .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
+    //   .pipe(ofType(fromUser.REFRESH_SUCCESS))
+    //   .pipe(first())
+    forkJoin(
+      this.actions$.pipe(
+        ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
+        take(1),
+      ),
+      this.actions$.pipe(
+        ofType(fromUser.REFRESH_SUCCESS),
+        take(1),
+      ),
+    ).subscribe(() => {
+      this.reserveService.emitRefreshed();
+    });
   }
 
   onLocationClick(location: Location) {
@@ -131,6 +157,41 @@ export class LocationsComponent implements OnDestroy, OnInit {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.denied);
     this.askForGeolocation$.next(false);
     this.evaluateGeolocation();
+  }
+
+  isAvailable(location: Location) {
+    return location.active && location.connected;
+  }
+
+  async onManage(location: Location) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Manage Location',
+      buttons: [
+        {
+          text: 'Turn off all TVs',
+          icon: 'power',
+          cssClass: 'color-danger',
+          handler: () => {
+            this.store.dispatch(new fromLocation.TurnOff(location));
+          },
+        },
+        {
+          text: 'Turn on all TVs',
+          icon: 'power',
+          cssClass: 'color-success',
+          handler: () => {
+            this.store.dispatch(new fromLocation.TurnOn(location));
+          },
+        },
+        // {
+        //   text: 'Turn on all TVs + autotune',
+        //   handler: () => {
+        //     this.store.dispatch(new fromLocation.TurnOn(location));
+        //   },
+        // },
+      ],
+    });
+    await actionSheet.present();
   }
 
   private async evaluateGeolocation() {

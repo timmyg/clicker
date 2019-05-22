@@ -49,7 +49,6 @@ export class LoggingInComponent {
       if (err) {
       } else if (authResult) {
         // alias user (move tokens to new user)
-        console.log(authResult);
         const jwt = authResult.idToken;
         const newUserId = authResult.idTokenPayload.sub;
 

@@ -27,12 +27,6 @@ export class ReservePage {
     });
   }
 
-  ngOnInit() {}
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad');
-  }
-
   goBack() {
     this.navCtrl.back();
   }
