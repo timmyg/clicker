@@ -1023,10 +1023,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
-/* harmony import */ var _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic-native/splash-screen/ngx */ "./node_modules/@ionic-native/splash-screen/ngx/index.js");
-/* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ "./node_modules/@ionic-native/status-bar/ngx/index.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _state_app__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./state/app */ "./src/app/state/app/index.ts");
+/* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @capacitor/core */ "./node_modules/@capacitor/core/dist/esm/index.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _state_app__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./state/app */ "./src/app/state/app/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1038,24 +1037,28 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+// import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-
+var SplashScreen = _capacitor_core__WEBPACK_IMPORTED_MODULE_2__["Plugins"].SplashScreen, StatusBar = _capacitor_core__WEBPACK_IMPORTED_MODULE_2__["Plugins"].StatusBar;
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent(platform, splashScreen, statusBar, store) {
+    function AppComponent(platform, 
+    // private splashScreen: SplashScreen,
+    // private statusBar: StatusBar,
+    store) {
         this.platform = platform;
-        this.splashScreen = splashScreen;
-        this.statusBar = statusBar;
         this.store = store;
-        this.partner$ = this.store.select(_state_app__WEBPACK_IMPORTED_MODULE_5__["getPartner"]);
+        this.partner$ = this.store.select(_state_app__WEBPACK_IMPORTED_MODULE_4__["getPartner"]);
         this.initializeApp();
     }
     AppComponent.prototype.initializeApp = function () {
-        var _this = this;
         this.platform.ready().then(function () {
-            _this.statusBar.styleDefault();
-            _this.splashScreen.hide();
+            StatusBar.setStyle({
+                style: _capacitor_core__WEBPACK_IMPORTED_MODULE_2__["StatusBarStyle"].Light,
+            });
+            SplashScreen.hide();
             console.log('initializeApp');
         });
     };
@@ -1065,9 +1068,7 @@ var AppComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
         }),
         __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["Platform"],
-            _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_2__["SplashScreen"],
-            _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_3__["StatusBar"],
-            _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"]])
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"]])
     ], AppComponent);
     return AppComponent;
 }());

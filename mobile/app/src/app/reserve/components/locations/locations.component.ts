@@ -13,7 +13,9 @@ import { first } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
 import { ofType, Actions } from '@ngrx/effects';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+// import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Plugins } from '@capacitor/core';
+const { Geolocation } = Plugins;
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Storage } from '@ionic/storage';
 const permissionGeolocation = {
@@ -138,8 +140,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       (permissionStatus === permissionGeolocation.values.allowed ||
         permissionStatus === permissionGeolocation.values.probably)
     ) {
-      await this.geolocation
-        .getCurrentPosition()
+      await Geolocation.getCurrentPosition()
         .then(response => {
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;

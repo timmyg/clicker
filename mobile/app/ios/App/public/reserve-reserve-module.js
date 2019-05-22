@@ -369,7 +369,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
-/* harmony import */ var _ionic_native_geolocation_ngx__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @ionic-native/geolocation/ngx */ "./node_modules/@ionic-native/geolocation/ngx/index.js");
+/* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @capacitor/core */ "./node_modules/@capacitor/core/dist/esm/index.js");
 /* harmony import */ var _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ionic-native/diagnostic/ngx */ "./node_modules/@ionic-native/diagnostic/ngx/index.js");
 /* harmony import */ var _ionic_storage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @ionic/storage */ "./node_modules/@ionic/storage/fesm5/ionic-storage.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -427,7 +427,9 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+// import { Geolocation } from '@ionic-native/geolocation/ngx';
 
+var Geolocation = _capacitor_core__WEBPACK_IMPORTED_MODULE_11__["Plugins"].Geolocation;
 
 
 var permissionGeolocation = {
@@ -570,8 +572,7 @@ var LocationsComponent = /** @class */ (function () {
                         if (!(permissionStatus &&
                             (permissionStatus === permissionGeolocation.values.allowed ||
                                 permissionStatus === permissionGeolocation.values.probably))) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.geolocation
-                                .getCurrentPosition()
+                        return [4 /*yield*/, Geolocation.getCurrentPosition()
                                 .then(function (response) {
                                 _this.askForGeolocation$.next(false);
                                 _this.evaluatingGeolocation = false;
@@ -616,9 +617,7 @@ var LocationsComponent = /** @class */ (function () {
             _angular_router__WEBPACK_IMPORTED_MODULE_7__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_7__["ActivatedRoute"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["NavController"],
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_10__["Actions"],
-            _ionic_native_geolocation_ngx__WEBPACK_IMPORTED_MODULE_11__["Geolocation"],
-            _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_12__["Diagnostic"],
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_10__["Actions"], Object, _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_12__["Diagnostic"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["Platform"],
             _ionic_storage__WEBPACK_IMPORTED_MODULE_13__["Storage"]])
     ], LocationsComponent);
