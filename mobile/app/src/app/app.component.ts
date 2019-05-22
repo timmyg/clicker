@@ -29,7 +29,7 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  initializeApp() {
+  async initializeApp() {
     this.platform.ready().then(() => {
       StatusBar.setStyle({
         style: StatusBarStyle.Light,

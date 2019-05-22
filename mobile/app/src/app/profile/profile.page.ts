@@ -95,7 +95,7 @@ export class ProfilePage {
 
   doRefresh(event) {
     this.store.dispatch(new fromReservation.GetAll());
-    this.store.dispatch(new fromUser.LoadWallet());
+    this.store.dispatch(new fromUser.Refresh());
     forkJoin(
       this.actions$.pipe(
         ofType(fromReservation.GET_RESERVATIONS_SUCCESS),

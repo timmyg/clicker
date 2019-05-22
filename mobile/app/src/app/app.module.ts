@@ -38,7 +38,7 @@ export function checkParams(store: Store<AppState>): Function {
 export function initUserStuff(store: Store<AppState>): Function {
   return () =>
     new Promise(resolve => {
-      store.dispatch(new fromUser.Load());
+      store.dispatch(new fromUser.Refresh());
       store
         .select((state: any) => state.user)
         .pipe(
