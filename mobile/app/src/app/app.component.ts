@@ -19,19 +19,17 @@ import { getPartner } from './state/app';
 export class AppComponent {
   partner$: Observable<string>;
 
-  constructor(
-    private platform: Platform,
-    // private splashScreen: SplashScreen,
-    // private statusBar: StatusBar,
-    private store: Store<fromStore.AppState>,
-  ) {
+  constructor(private platform: Platform, private store: Store<fromStore.AppState>) {
     this.partner$ = this.store.select(getPartner);
     this.initializeApp();
   }
 
   async initializeApp() {
+    console.log('initializeApp');
+    // clg
     this.platform.ready().then(async () => {
       try {
+        console.log('platform ready');
         // StatusBar.setStyle({
         //   style: StatusBarStyle.Light,
         // });
@@ -39,7 +37,6 @@ export class AppComponent {
       } catch (e) {
         console.log(e);
       }
-      console.log('initializeApp');
     });
   }
 }

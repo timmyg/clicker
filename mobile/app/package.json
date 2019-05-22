@@ -8,9 +8,12 @@
     "start": "ng serve --port 4100 --host local.tryclicker.com",
     "build": "ng build --configuration=$ENV",
     "build:ios": "ionic cordova build ios",
+    "build:android": "ionic cordova build android",
     "copy": "npx cap copy",
     "open:ios": "npx cap open ios",
+    "open:android": "npx cap open android",
     "ios:all": "npm run build && npx cap sync && npm run open:ios",
+    "android:all": "npm run build && npx cap sync && npm run open:android",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

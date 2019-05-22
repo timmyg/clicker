@@ -1946,6 +1946,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var auth = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["default"].WebAuth({
     domain: src_environments_environment__WEBPACK_IMPORTED_MODULE_8__["environment"].auth0.domain,
     clientID: src_environments_environment__WEBPACK_IMPORTED_MODULE_8__["environment"].auth0.clientId,
+    scope: 'read:current_user',
     responseType: 'token id_token',
 });
 var LoggingInComponent = /** @class */ (function () {
@@ -1975,6 +1976,8 @@ var LoggingInComponent = /** @class */ (function () {
                 if (err) {
                 }
                 else if (authResult) {
+                    // alias user (move tokens to new user)
+                    console.log(authResult);
                     jwt_1 = authResult.idToken;
                     newUserId_1 = authResult.idTokenPayload.sub;
                     this.userId$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["first"])(function (val) { return !!val; })).subscribe(function (oldUserId) {
@@ -2305,7 +2308,7 @@ var ProfilePage = /** @class */ (function () {
     };
     ProfilePage.prototype.doRefresh = function (event) {
         this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_9__["GetAll"]());
-        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_10__["LoadWallet"]());
+        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_10__["Refresh"]());
         Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["forkJoin"])(this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_18__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_9__["GET_RESERVATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["take"])(1)), this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_18__["ofType"])(_state_user_user_actions__WEBPACK_IMPORTED_MODULE_10__["LOAD_WALLET_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["take"])(1))).subscribe(function () {
             event.target.complete();
         });

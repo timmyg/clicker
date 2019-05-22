@@ -441,7 +441,9 @@ var permissionGeolocation = {
     },
 };
 var LocationsComponent = /** @class */ (function () {
-    function LocationsComponent(store, reserveService, router, route, navCtrl, actions$, geolocation, diagnostic, platform, storage) {
+    function LocationsComponent(store, reserveService, router, route, navCtrl, actions$, 
+    // private geolocation: Geolocation,
+    diagnostic, platform, storage) {
         var _this = this;
         this.store = store;
         this.reserveService = reserveService;
@@ -449,7 +451,6 @@ var LocationsComponent = /** @class */ (function () {
         this.route = route;
         this.navCtrl = navCtrl;
         this.actions$ = actions$;
-        this.geolocation = geolocation;
         this.diagnostic = diagnostic;
         this.platform = platform;
         this.storage = storage;
@@ -617,7 +618,8 @@ var LocationsComponent = /** @class */ (function () {
             _angular_router__WEBPACK_IMPORTED_MODULE_7__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_7__["ActivatedRoute"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["NavController"],
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_10__["Actions"], Object, _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_12__["Diagnostic"],
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_10__["Actions"],
+            _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_12__["Diagnostic"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["Platform"],
             _ionic_storage__WEBPACK_IMPORTED_MODULE_13__["Storage"]])
     ], LocationsComponent);
