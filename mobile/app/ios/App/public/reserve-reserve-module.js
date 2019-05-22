@@ -570,11 +570,6 @@ var LocationsComponent = /** @class */ (function () {
                         if (!(permissionStatus &&
                             (permissionStatus === permissionGeolocation.values.allowed ||
                                 permissionStatus === permissionGeolocation.values.probably))) return [3 /*break*/, 3];
-                        //   if (this.platform.is('cordova')) {
-                        //   // TODO
-                        //   const x = this.diagnostic.isLocationAvailable();
-                        //   console.log(x);
-                        // } else {
                         return [4 /*yield*/, this.geolocation
                                 .getCurrentPosition()
                                 .then(function (response) {
@@ -589,20 +584,22 @@ var LocationsComponent = /** @class */ (function () {
                                 .catch(function (error) {
                                 _this.evaluatingGeolocation = false;
                                 _this.askForGeolocation$.next(false);
+                                _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GetAll"](_this.userGeolocation));
                                 console.error('Error getting location', error);
                             })];
                     case 2:
-                        //   if (this.platform.is('cordova')) {
-                        //   // TODO
-                        //   const x = this.diagnostic.isLocationAvailable();
-                        //   console.log(x);
-                        // } else {
                         _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        this.askForGeolocation$.next(true);
-                        this.evaluatingGeolocation = false;
-                        this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GetAll"]());
+                        if (permissionStatus === permissionGeolocation.values.denied) {
+                            this.askForGeolocation$.next(false);
+                            this.evaluatingGeolocation = false;
+                            this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GetAll"]());
+                        }
+                        else {
+                            this.askForGeolocation$.next(true);
+                            this.evaluatingGeolocation = false;
+                        }
                         _a.label = 4;
                     case 4: return [2 /*return*/];
                 }

@@ -1056,6 +1056,7 @@ var AppComponent = /** @class */ (function () {
         this.platform.ready().then(function () {
             _this.statusBar.styleDefault();
             _this.splashScreen.hide();
+            console.log('initializeApp');
         });
     };
     AppComponent = __decorate([
@@ -1153,6 +1154,7 @@ function initUserStuff(store) {
                 .select(function (state) { return state.user; })
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_16__["filter"])(function (user) { return user.authToken && user.authToken.length; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_16__["take"])(1))
                 .subscribe(function () {
+                console.log('user stuff inited');
                 resolve(true);
             });
         });

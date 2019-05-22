@@ -138,11 +138,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
       (permissionStatus === permissionGeolocation.values.allowed ||
         permissionStatus === permissionGeolocation.values.probably)
     ) {
-      //   if (this.platform.is('cordova')) {
-      //   // TODO
-      //   const x = this.diagnostic.isLocationAvailable();
-      //   console.log(x);
-      // } else {
       await this.geolocation
         .getCurrentPosition()
         .then(response => {
@@ -160,10 +155,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
           console.error('Error getting location', error);
         });
-    } else {
+    } else if (permissionStatus === permissionGeolocation.values.denied) {
       this.askForGeolocation$.next(false);
       this.evaluatingGeolocation = false;
       this.store.dispatch(new fromLocation.GetAll());
+    } else {
+      this.askForGeolocation$.next(true);
+      this.evaluatingGeolocation = false;
     }
   }
 }
