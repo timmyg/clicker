@@ -157,10 +157,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
         .catch(error => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
+          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
           console.error('Error getting location', error);
         });
     } else {
-      this.askForGeolocation$.next(true);
+      this.askForGeolocation$.next(false);
       this.evaluatingGeolocation = false;
       this.store.dispatch(new fromLocation.GetAll());
     }
