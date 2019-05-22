@@ -46,6 +46,7 @@ export function initUserStuff(store: Store<AppState>): Function {
           take(1),
         )
         .subscribe(() => {
+          console.log('user stuff inited');
           resolve(true);
         });
     });
