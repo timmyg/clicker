@@ -288,6 +288,7 @@ module.exports.allOff = async event => {
     };
     await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
   }
+  return respond(200, 'ok');
 };
 
 module.exports.allOn = async event => {
@@ -309,6 +310,7 @@ module.exports.allOn = async event => {
     };
     await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
   }
+  return respond(200, 'ok');
 };
 
 module.exports.health = async event => {

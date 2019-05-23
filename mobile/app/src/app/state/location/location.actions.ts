@@ -30,7 +30,7 @@ export class GetAllFail implements Action {
 
 export class TurnOn implements Action {
   readonly type = TURN_ON;
-  constructor(public location: Location) {}
+  constructor(public location: Location, public autotune?: boolean) {}
 }
 
 export class TurnOnSuccess implements Action {

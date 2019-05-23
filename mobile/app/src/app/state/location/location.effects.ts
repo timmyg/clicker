@@ -25,7 +25,7 @@ export class LocationsEffects {
   turnOn$: Observable<Action> = this.actions$.pipe(
     ofType(LocationActions.TURN_ON),
     switchMap((action: LocationActions.TurnOn) =>
-      this.locationService.turnOn(action.location.id).pipe(
+      this.locationService.turnOn(action.location.id, action.autotune).pipe(
         map(() => new LocationActions.TurnOnSuccess()),
         catchError(err => of(new LocationActions.TurnOnFail(err))),
       ),

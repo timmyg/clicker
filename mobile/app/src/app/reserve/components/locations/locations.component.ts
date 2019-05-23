@@ -183,12 +183,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
             this.store.dispatch(new fromLocation.TurnOn(location));
           },
         },
-        // {
-        //   text: 'Turn on all TVs + autotune',
-        //   handler: () => {
-        //     this.store.dispatch(new fromLocation.TurnOn(location));
-        //   },
-        // },
+        {
+          text: 'Turn on all TVs + autotune',
+          icon: 'power',
+          cssClass: 'color-success',
+          handler: () => {
+            this.store.dispatch(new fromLocation.TurnOn(location, true));
+          },
+        },
       ],
     });
     await actionSheet.present();

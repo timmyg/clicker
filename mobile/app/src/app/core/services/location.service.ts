@@ -23,8 +23,8 @@ export class LocationService {
     return this.httpClient.get<Location>(`${this.prefix}/${locationId}`);
   }
 
-  turnOn(locationId: string): Observable<any> {
-    return this.httpClient.post<Location>(`${this.prefix}/${locationId}/boxes/on`, {});
+  turnOn(locationId: string, autotune: boolean): Observable<any> {
+    return this.httpClient.post<Location>(`${this.prefix}/${locationId}/boxes/on`, { autotune });
   }
 
   turnOff(locationId: string): Observable<any> {
