@@ -286,7 +286,9 @@ module.exports.allOff = async event => {
         // channel: box.setupChannel,
       },
     };
+    console.log('turning off box', box);
     await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+    console.log('turned off box', box);
   }
   return respond(200, 'ok');
 };
@@ -308,7 +310,9 @@ module.exports.allOn = async event => {
         // channel: box.setupChannel,
       },
     };
+    console.log('turning on box', box);
     await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+    console.log('turned on', box);
   }
   return respond(200, 'ok');
 };
