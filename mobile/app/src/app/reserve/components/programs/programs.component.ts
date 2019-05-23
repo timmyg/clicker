@@ -61,6 +61,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
       .pipe(ofType(fromProgram.GET_PROGRAMS_SUCCESS))
       .pipe(first())
       .subscribe(() => {
+        console.log('refreshed');
         this.reserveService.emitRefreshed();
       });
   }

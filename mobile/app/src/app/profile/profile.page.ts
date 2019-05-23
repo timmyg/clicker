@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Reservation } from '../state/reservation/reservation.model';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, zip } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
@@ -96,18 +96,19 @@ export class ProfilePage {
   doRefresh(event) {
     this.store.dispatch(new fromReservation.GetAll());
     this.store.dispatch(new fromUser.Refresh());
-    forkJoin(
-      this.actions$.pipe(
+    // zip(
+    this.actions$
+      .pipe(
         ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
         take(1),
-      ),
-      this.actions$.pipe(
-        ofType(fromUser.LOAD_WALLET_SUCCESS),
-        take(1),
-      ),
-    ).subscribe(() => {
-      event.target.complete();
-    });
+      )
+      // this.actions$.pipe(
+      //   ofType(fromUser.LOAD_WALLET_SUCCESS),
+      //   take(1),
+      // ),
+      .subscribe(() => {
+        event.target.complete();
+      });
   }
 
   async onLogout() {

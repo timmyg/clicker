@@ -106,6 +106,7 @@ module.exports.getAll = async event => {
       .add(25, 'minutes')
       .unix() * 1000;
 
+  console.time('currentProgramming');
   const currentProgramming = await Program.scan()
     .filter('start')
     .lt(now)
@@ -117,7 +118,9 @@ module.exports.getAll = async event => {
     .eq(zip)
     .all()
     .exec();
+  console.timeEnd('currentProgramming');
 
+  console.time('nextProgramming');
   const nextProgramming = await Program.scan()
     .filter('start')
     .lt(in25Mins)
@@ -129,7 +132,9 @@ module.exports.getAll = async event => {
     .eq(zip)
     .all()
     .exec();
+  console.timeEnd('nextProgramming');
 
+  console.time('nextProgram');
   // add in next program if within 15 mins
   initialChannels.forEach((p, index, arr) => {
     // find if in current programming
@@ -150,10 +155,14 @@ module.exports.getAll = async event => {
       arr[index] = currentProgram;
     }
   });
-  
+  console.timeEnd('nextProgram');
 
+  console.time('cleanup');
   const cleanPrograms = cleanupTitles(initialChannels);
+  console.timeEnd('cleanup');
+  console.time('rank');
   const rankedPrograms = rankPrograms(cleanPrograms);
+  console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };
 

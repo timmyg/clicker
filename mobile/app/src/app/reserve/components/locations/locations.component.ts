@@ -124,22 +124,15 @@ export class LocationsComponent implements OnDestroy, OnInit {
   refresh() {
     this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
     this.store.dispatch(new fromUser.Refresh());
-    // this.actions$
-    //   .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
-    //   .pipe(ofType(fromUser.REFRESH_SUCCESS))
-    //   .pipe(first())
-    forkJoin(
-      this.actions$.pipe(
+    this.actions$
+      .pipe(
         ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
         take(1),
-      ),
-      this.actions$.pipe(
-        ofType(fromUser.REFRESH_SUCCESS),
-        take(1),
-      ),
-    ).subscribe(() => {
-      this.reserveService.emitRefreshed();
-    });
+      )
+      .subscribe(() => {
+        console.log('refreshed');
+        this.reserveService.emitRefreshed();
+      });
   }
 
   onLocationClick(location: Location) {
