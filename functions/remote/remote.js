@@ -7,14 +7,15 @@ class Api {
   }
 
   async setAuth(deviceId) {
-    const response = await this.client.auth.authenticateDevice({
-      credentials: {
-        deviceId,
-        key: process.env.losantKey,
-        secret: process.env.losantSecret,
-      },
-    });
-    this.client.setOption('accessToken', response.token);
+    // const response = await this.client.auth.authenticateDevice({
+    //   credentials: {
+    //     deviceId,
+    //     key: process.env.losantKey,
+    //     secret: process.env.losantSecret,
+    //   },
+    // });
+    // this.client.setOption('accessToken', response.token);
+    this.client = api.createClient({ accessToken: process.env.losantAccessToken });
   }
 
   async sendCommand(name, losantId, payload) {

@@ -5,9 +5,10 @@ provider:
   runtime: nodejs8.10
   environment:
     stage: ${self:custom.stage}
-    losantKey: ${env:LOSANT_KEY}
-    losantSecret: ${env:LOSANT_SECRET}
+    # losantKey: ${env:LOSANT_KEY}
+    # losantSecret: ${env:LOSANT_SECRET}
     losantAppId: ${env:LOSANT_APP_ID}
+    losantAccessToken: ${env:LOSANT_ACCESS_TOKEN}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
 plugins:
   - serverless-domain-manager
