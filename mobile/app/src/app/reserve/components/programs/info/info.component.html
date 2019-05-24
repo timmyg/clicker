@@ -6,4 +6,10 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content padding> {{ program.description }} </ion-content>
+<ion-content padding>
+  <label>Description</label>
+  <div>
+    <span *ngIf="program.description; else noDescription"> {{ program.description }}</span>
+    <ng-template #noDescription>No description available</ng-template>
+  </div>
+</ion-content>

@@ -31,7 +31,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
 
   constructor(
     private store: Store<fromStore.AppState>,
-    private reserveService: ReserveService,
+    public reserveService: ReserveService,
     private modalController: ModalController,
     private router: Router,
     private route: ActivatedRoute,

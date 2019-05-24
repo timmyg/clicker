@@ -1,9 +1,7 @@
 <ion-item-sliding [disabled]="false">
-  <ion-item-options side="start">
-    <ion-item-option (click)="onMoreInfo(location)">Info</ion-item-option>
-  </ion-item-options>
+  <ion-item-options side="start"> <ion-item-option (click)="onMoreInfo()">Info</ion-item-option> </ion-item-options>
   <ion-item>
-    <ion-card (click)="onProgramClick()">
+    <ion-card (click)="onProgramClick()" no-margin>
       <ion-card-header>
         <ion-card-subtitle>
           <span>{{ program.channelTitle }}</span>

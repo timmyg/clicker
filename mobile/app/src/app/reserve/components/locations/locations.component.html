@@ -23,35 +23,15 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
         Find locations around you by allowing location services in your settings
       </p>
-      <ion-item-sliding
-        *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)"
-        [ngClass]="{ inactive: !isAvailable(location) }"
-        [disabled]="!isAvailable(location) || !isManager(location)"
-      >
-        <ion-item-options side="start">
-          <ion-item-option (click)="onManage(location)">Manage</ion-item-option>
-        </ion-item-options>
-        <ion-item>
-          <ion-card (click)="isAvailable(location) && onLocationClick(location)">
-            <ion-card-header>
-              <ion-card-subtitle>
-                <span>{{ location.neighborhood }} <span *ngIf="!isAvailable(location)">(inactive)</span></span>
-                <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
-                <ion-icon *ngIf="isManager(location)" name="star" class="manage"></ion-icon>
-
-                <span float-right *ngIf="location.distance">
-                  <span *ngIf="location.distance >= 0.2; else near"> {{ location.distance }} miles </span>
-                  <ng-template #near> Near </ng-template>
-                </span>
-              </ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content no-padding-top>
-              <img [src]="location.img" class="logo" />
-              <h1>{{ location.name }}</h1>
-            </ion-card-content>
-          </ion-card>
-        </ion-item>
-      </ion-item-sliding>
+      <ng-container *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)">
+        <app-location
+          [location]="location"
+          [userRoles]="userRoles"
+          [userLocations]="userLocations"
+          (onClick)="onLocationClick($event)"
+          (onManage)="onLocationManage($event)"
+        ></app-location>
+      </ng-container>
     </ion-list>
   </ng-template>
 </section>

@@ -29,7 +29,7 @@ export class TvsComponent implements OnDestroy {
 
   constructor(
     private store: Store<fromStore.AppState>,
-    private reserveService: ReserveService,
+    public reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
     private toastController: ToastController,

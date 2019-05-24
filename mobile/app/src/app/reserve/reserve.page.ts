@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavController, Events, IonSearchbar } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-reserve',
   templateUrl: './reserve.page.html',
   styleUrls: ['./reserve.page.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ReservePage {
   @ViewChild(IonSearchbar) searchbar: IonSearchbar;

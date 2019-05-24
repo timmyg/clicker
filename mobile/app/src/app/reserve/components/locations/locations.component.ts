@@ -89,13 +89,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.closeSearchSubscription.unsubscribe();
   }
 
-  isManager(location: Location) {
-    const { userLocations, userRoles } = this;
-    if (userLocations && userRoles) {
-      return userLocations.indexOf(location.id) > -1 || userRoles.indexOf('superman') > -1;
-    }
-  }
-
   private async redirectIfUpdating() {
     // TODO should be a better way to get reservation
     const state = await this.store.pipe(first()).toPromise();
@@ -135,12 +128,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
       });
   }
 
-  onLocationClick(location: Location) {
-    this.reserveService.emitCloseSearch();
-    this.store.dispatch(new fromReservation.SetLocation(location));
-    this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
-  }
-
   async allowLocation() {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.probably);
     this.evaluateGeolocation();
@@ -152,11 +139,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.evaluateGeolocation();
   }
 
-  isAvailable(location: Location) {
-    return location.active && location.connected;
-  }
-
-  async onManage(location: Location) {
+  async onLocationManage(location: Location) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Manage Location',
       buttons: [
@@ -220,5 +203,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
       this.askForGeolocation$.next(true);
       this.evaluatingGeolocation = false;
     }
+  }
+
+  onLocationClick(location: Location) {
+    this.reserveService.emitCloseSearch();
+    this.store.dispatch(new fromReservation.SetLocation(location));
+    this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
   }
 }

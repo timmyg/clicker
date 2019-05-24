@@ -262,7 +262,9 @@ module.exports.syncDescriptions = async event => {
   init();
   let allDescriptionlessPrograms = await Program.scan('description')
     .null()
-    .all()
+    .filter('end')
+    .gt(moment().unix() * 1000)
+    .limit(10)
     .exec();
 
   allDescriptionlessPrograms = allDescriptionlessPrograms.sort((a, b) => {
