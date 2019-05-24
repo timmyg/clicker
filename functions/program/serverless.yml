@@ -103,7 +103,7 @@ functions:
           path: descriptions
           method: post
           cors: true
-      - schedule: rate(2 minutes)
+      - schedule: rate(1 minute)
   createAreaProgramming:
     handler: program.createAreaProgramming
     events:

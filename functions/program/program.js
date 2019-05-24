@@ -265,9 +265,11 @@ module.exports.syncDescriptions = async event => {
     .and()
     .filter('end')
     .gt(moment().unix() * 1000)
-    .limit(10)
+    // .limit(10)
     .all()
     .exec();
+
+  console.log('count', allDescriptionlessPrograms.length);
 
   allDescriptionlessPrograms = allDescriptionlessPrograms.sort((a, b) => {
     return a.start - b.start;
