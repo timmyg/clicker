@@ -17,9 +17,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from './state/app.reducer';
 import * as fromUser from './state/user/user.actions';
 import * as fromApp from './state/app/app.actions';
-import { filter, take, first } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ofType } from '@ngrx/effects';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
@@ -38,7 +37,7 @@ export function checkParams(store: Store<AppState>): Function {
 export function initUserStuff(store: Store<AppState>): Function {
   return () =>
     new Promise(resolve => {
-      store.dispatch(new fromUser.Load());
+      store.dispatch(new fromUser.Load()); // TODO should this be refresh?
       store
         .select((state: any) => state.user)
         .pipe(

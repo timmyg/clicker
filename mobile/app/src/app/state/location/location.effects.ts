@@ -21,5 +21,27 @@ export class LocationsEffects {
     ),
   );
 
+  @Effect()
+  turnOn$: Observable<Action> = this.actions$.pipe(
+    ofType(LocationActions.TURN_ON),
+    switchMap((action: LocationActions.TurnOn) =>
+      this.locationService.turnOn(action.location.id, action.autotune).pipe(
+        map(() => new LocationActions.TurnOnSuccess()),
+        catchError(err => of(new LocationActions.TurnOnFail(err))),
+      ),
+    ),
+  );
+
+  @Effect()
+  turnOff$: Observable<Action> = this.actions$.pipe(
+    ofType(LocationActions.TURN_OFF),
+    switchMap((action: LocationActions.TurnOff) =>
+      this.locationService.turnOff(action.location.id).pipe(
+        map(() => new LocationActions.TurnOffSuccess()),
+        catchError(err => of(new LocationActions.TurnOffFail(err))),
+      ),
+    ),
+  );
+
   constructor(private actions$: Actions, private locationService: LocationService) {}
 }

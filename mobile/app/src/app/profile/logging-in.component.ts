@@ -2,19 +2,19 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import auth0 from 'auth0-js';
 import { UserService } from '../core/services/user.service';
-import { getUser, getUserId } from '../state/user';
+import { getUserId } from '../state/user';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import * as fromUser from '../state/user/user.actions';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { User } from '../state/user/user.model';
 import { first } from 'rxjs/operators';
 
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
   clientID: environment.auth0.clientId,
+  scope: 'read:current_user',
   responseType: 'token id_token',
 });
 
@@ -51,6 +51,7 @@ export class LoggingInComponent {
         // alias user (move tokens to new user)
         const jwt = authResult.idToken;
         const newUserId = authResult.idTokenPayload.sub;
+
         this.userId$.pipe(first(val => !!val)).subscribe(oldUserId => {
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
           this.userService.setToken(jwt);

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Plugins } from '@capacitor/core';
+import * as fromUser from './state/user/user.actions';
+
+const { SplashScreen, StatusBar } = Plugins;
 import { Store } from '@ngrx/store';
 
 import * as fromStore from './state/app.reducer';
@@ -16,20 +18,20 @@ import { getPartner } from './state/app';
 export class AppComponent {
   partner$: Observable<string>;
 
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private store: Store<fromStore.AppState>,
-  ) {
+  constructor(private platform: Platform, private store: Store<fromStore.AppState>) {
     this.partner$ = this.store.select(getPartner);
     this.initializeApp();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+  async initializeApp() {
+    this.platform.ready().then(async () => {
+      try {
+        await SplashScreen.hide();
+      } catch (e) {}
+    });
+    this.platform.resume.subscribe(result => {
+      console.log('resuming...');
+      this.store.dispatch(new fromUser.Refresh());
     });
   }
 }

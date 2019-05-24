@@ -17,6 +17,8 @@ export class ReserveService {
   private emitRefreshedSource = new Subject<any>();
   refreshedEmitted$ = this.emitRefreshedSource.asObservable();
 
+  public isRefreshing: boolean;
+
   emitTitle(title: any) {
     this.emitTitleSource.next(title);
   }
@@ -31,9 +33,11 @@ export class ReserveService {
 
   emitRefresh() {
     this.emitRefreshSource.next();
+    this.isRefreshing = true;
   }
 
   emitRefreshed() {
     this.emitRefreshedSource.next();
+    this.isRefreshing = false;
   }
 }

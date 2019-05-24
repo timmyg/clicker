@@ -13,6 +13,6 @@
   <ion-card-content>
     <!-- <div>{{ reservation.programTitle }}</div> -->
     <span>Length: {{ getTimeLeft(reservation.minutes).label }}</span>
-    <span float-right><a (click)="!disableModify && modify()">Modify</a></span>
+    <ion-button fill="clear" (click)="!disableModify && modify()" float-right>Modify</ion-button>
   </ion-card-content>
 </ion-card>

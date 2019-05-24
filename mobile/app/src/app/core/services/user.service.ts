@@ -11,12 +11,35 @@ const storage = {
   anonymous: 'anonymous',
 };
 
+import auth0 from 'auth0-js';
+import { environment } from 'src/environments/environment';
+
+const auth = new auth0.WebAuth({
+  domain: environment.auth0.domain,
+  clientID: environment.auth0.clientId,
+  responseType: 'token id_token',
+  redirectUri: window.location.origin + '/silent',
+});
+
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private prefix = `users`;
   constructor(private httpClient: HttpClient, private storage: Storage) {}
+
+  refresh(): Observable<any> {
+    return new Observable(observer => {
+      auth.checkSession({}, async (err, result) => {
+        if (result) {
+          await this.setToken(result.idToken);
+        } else {
+          console.error(err);
+        }
+        observer.next();
+      });
+    });
+  }
 
   get(): Observable<string> {
     return from(this.storage.get(storage.token)).pipe(
@@ -56,8 +79,8 @@ export class UserService {
     return this.httpClient.post<any>(`${this.prefix}/replenish`, { tokens });
   }
 
-  setToken(token: string) {
-    this.storage.set(storage.token, token);
+  async setToken(token: string) {
+    return await this.storage.set(storage.token, token);
   }
 
   setOriginalToken(token: string) {

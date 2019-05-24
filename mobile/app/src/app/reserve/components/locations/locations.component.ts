@@ -1,20 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject, forkJoin } from 'rxjs';
 import { getAllLocations, getLoading } from 'src/app/state/location';
+import { getUserLocations, getUserRoles } from 'src/app/state/user';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
+import * as fromUser from '../../../state/user/user.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, Platform } from '@ionic/angular';
-import { first } from 'rxjs/operators';
+import { NavController, ActionSheetController, ToastController } from '@ionic/angular';
+import { first, take } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
 import { ofType, Actions } from '@ngrx/effects';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Plugins } from '@capacitor/core';
+const { Geolocation } = Plugins;
 import { Storage } from '@ionic/storage';
 const permissionGeolocation = {
   name: 'permission.geolocation',
@@ -33,6 +35,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
   locations$: Observable<Location[]>;
   title = 'Choose Location';
   isLoading$: Observable<boolean>;
+  userLocations$: Observable<string[]>;
+  userLocations: string[];
+  userRoles$: Observable<string[]>;
+  userRoles: string[];
   searchTerm: string;
   refreshSubscription: Subscription;
   searchSubscription: Subscription;
@@ -44,14 +50,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
 
   constructor(
     private store: Store<fromStore.AppState>,
-    private reserveService: ReserveService,
+    public actionSheetController: ActionSheetController,
+    public toastController: ToastController,
+    public reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private actions$: Actions,
-    private geolocation: Geolocation,
-    private diagnostic: Diagnostic,
-    private platform: Platform,
     private storage: Storage,
   ) {
     this.locations$ = this.store.select(getAllLocations);
@@ -63,12 +68,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.redirectIfUpdating();
     this.evaluateGeolocation();
     this.isLoading$ = this.store.select(getLoading);
+    this.userLocations$ = this.store.select(getUserLocations);
+    this.userLocations$.pipe().subscribe(userLocations => {
+      this.userLocations = userLocations;
+    });
+    this.userRoles$ = this.store.select(getUserRoles);
+    this.userRoles$.pipe().subscribe(userRoles => {
+      this.userRoles = userRoles;
+    });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
-      console.log({ searchTerm });
       this.searchTerm = searchTerm;
     });
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
-      console.log('close');
       this.searchTerm = null;
     });
   }
@@ -106,18 +117,28 @@ export class LocationsComponent implements OnDestroy, OnInit {
 
   refresh() {
     this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+    this.store.dispatch(new fromUser.Refresh());
     this.actions$
-      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
-      .pipe(first())
+      .pipe(
+        ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
+        take(1),
+      )
       .subscribe(() => {
         this.reserveService.emitRefreshed();
       });
-  }
-
-  onLocationClick(location: Location) {
-    this.reserveService.emitCloseSearch();
-    this.store.dispatch(new fromReservation.SetLocation(location));
-    this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+    this.actions$
+      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_FAIL))
+      .pipe(first())
+      .subscribe(async () => {
+        const whoops = await this.toastController.create({
+          message: 'Something went wrong. Please try again.',
+          color: 'danger',
+          duration: 4000,
+          cssClass: 'ion-text-center',
+        });
+        whoops.present();
+        this.reserveService.emitRefreshed();
+      });
   }
 
   async allowLocation() {
@@ -131,6 +152,39 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.evaluateGeolocation();
   }
 
+  async onLocationManage(location: Location) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Manage Location',
+      buttons: [
+        {
+          text: 'Turn off all TVs',
+          icon: 'power',
+          cssClass: 'color-danger',
+          handler: () => {
+            this.store.dispatch(new fromLocation.TurnOff(location));
+          },
+        },
+        {
+          text: 'Turn on all TVs',
+          icon: 'power',
+          cssClass: 'color-success',
+          handler: () => {
+            this.store.dispatch(new fromLocation.TurnOn(location));
+          },
+        },
+        {
+          text: 'Turn on all TVs + autotune',
+          icon: 'power',
+          cssClass: 'color-success',
+          handler: () => {
+            this.store.dispatch(new fromLocation.TurnOn(location, true));
+          },
+        },
+      ],
+    });
+    await actionSheet.present();
+  }
+
   private async evaluateGeolocation() {
     const permissionStatus = await this.storage.get(permissionGeolocation.name);
     if (
@@ -138,13 +192,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       (permissionStatus === permissionGeolocation.values.allowed ||
         permissionStatus === permissionGeolocation.values.probably)
     ) {
-      //   if (this.platform.is('cordova')) {
-      //   // TODO
-      //   const x = this.diagnostic.isLocationAvailable();
-      //   console.log(x);
-      // } else {
-      await this.geolocation
-        .getCurrentPosition()
+      await Geolocation.getCurrentPosition()
         .then(response => {
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;
@@ -157,12 +205,22 @@ export class LocationsComponent implements OnDestroy, OnInit {
         .catch(error => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
+          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
           console.error('Error getting location', error);
         });
+    } else if (permissionStatus === permissionGeolocation.values.denied) {
+      this.askForGeolocation$.next(false);
+      this.evaluatingGeolocation = false;
+      this.store.dispatch(new fromLocation.GetAll());
     } else {
       this.askForGeolocation$.next(true);
       this.evaluatingGeolocation = false;
-      this.store.dispatch(new fromLocation.GetAll());
     }
+  }
+
+  onLocationClick(location: Location) {
+    this.reserveService.emitCloseSearch();
+    this.store.dispatch(new fromReservation.SetLocation(location));
+    this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
   }
 }

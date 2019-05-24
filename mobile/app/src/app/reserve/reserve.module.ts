@@ -16,6 +16,8 @@ import { ProgramsFilterPipe } from './pipes/programs-filter.pipe';
 import { ReservationGuard } from '../guards/reservation.guard';
 import { ProgramComponent } from './components/programs/program/program.component';
 import { LocationsFilterPipe } from './pipes/locations-filter.pipe';
+import { InfoComponent } from './components/programs/info/info.component';
+import { LocationComponent } from './components/locations/location/location.component';
 
 const routes: Routes = [
   {
@@ -61,7 +63,9 @@ const routes: Routes = [
     ConfirmationComponent,
     ProgramsFilterPipe,
     LocationsFilterPipe,
+    InfoComponent,
+    LocationComponent,
   ],
-  // exports: [TvsComponent],
+  entryComponents: [InfoComponent],
 })
 export class ReservePageModule {}

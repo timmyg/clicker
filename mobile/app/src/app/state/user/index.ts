@@ -14,6 +14,16 @@ export const isLoggedIn = createSelector(
   fromUser.isLoggedIn,
 );
 
+export const getUserLocations = createSelector(
+  getUserState,
+  fromUser.getUserLocations,
+);
+
+export const getUserRoles = createSelector(
+  getUserState,
+  fromUser.getUserRoles,
+);
+
 export const getUserId = createSelector(
   getUserState,
   fromUser.getUserId,

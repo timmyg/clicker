@@ -53,9 +53,16 @@ function init() {
       nextProgramTitle: String,
       nextProgramStart: Date,
       points: Number,
+      synced: Boolean, // synced with description from separate endpoint
     },
     {
       timestamps: true,
+      expires: {
+        // ttl (time to live) set in seconds
+        ttl: 86400, // 1 day
+        // This is the name of our attribute to be stored in DynamoDB
+        attribute: 'expires',
+      },
     },
   );
   // ProgrammingArea = dynamoose.model(
@@ -95,7 +102,6 @@ module.exports.getAreaProgramming = async event => {
   return respond(200, programmingArea);
 };
 
-// TODO
 module.exports.getAll = async event => {
   init();
   const initialChannels = allChannels;
@@ -106,30 +112,41 @@ module.exports.getAll = async event => {
       .add(25, 'minutes')
       .unix() * 1000;
 
-  const currentProgramming = await Program.scan()
-    .filter('start')
-    .lt(now)
-    .and()
-    .filter('end')
-    .gt(now)
-    .and()
-    .filter('zip') // Zip is hardcoded!
-    .eq(zip)
-    .all()
-    .exec();
+  console.time('current + next Programming');
+  // run in parallel
+  [currentProgramming, nextProgramming] = await Promise.all([
+    Program.scan()
+      .filter('start')
+      .lt(now)
+      .and()
+      .filter('end')
+      .gt(now)
+      .and()
+      .filter('zip') // Zip is hardcoded!
+      .eq(zip)
+      .all()
+      .exec(),
+    Program.scan()
+      .filter('start')
+      .lt(in25Mins)
+      .and()
+      .filter('end')
+      .gt(in25Mins)
+      .and()
+      .filter('zip') // Zip is hardcoded!
+      .eq(zip)
+      .all()
+      .exec(),
+  ]);
+  console.timeEnd('current + next Programming');
+  console.log({ currentProgramming });
+  console.log({ nextProgramming });
 
-  const nextProgramming = await Program.scan()
-    .filter('start')
-    .lt(in25Mins)
-    .and()
-    .filter('end')
-    .gt(in25Mins)
-    .and()
-    .filter('zip') // Zip is hardcoded!
-    .eq(zip)
-    .all()
-    .exec();
+  // console.time('nextProgramming');
+  // const nextProgramming =
+  // console.timeEnd('nextProgramming');
 
+  console.time('nextProgram');
   // add in next program if within 15 mins
   initialChannels.forEach((p, index, arr) => {
     // find if in current programming
@@ -150,10 +167,14 @@ module.exports.getAll = async event => {
       arr[index] = currentProgram;
     }
   });
-  
+  console.timeEnd('nextProgram');
 
+  console.time('cleanup');
   const cleanPrograms = cleanupTitles(initialChannels);
+  console.timeEnd('cleanup');
+  console.time('rank');
   const rankedPrograms = rankPrograms(cleanPrograms);
+  console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };
 
@@ -234,7 +255,7 @@ module.exports.syncNew = async event => {
     const transformedPrograms = transformPrograms(allPrograms);
     const dbResult = await Program.batchPut(transformedPrograms);
 
-    await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
+    // await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
 
     return respond(201, dbResult);
   } catch (e) {
@@ -246,17 +267,33 @@ module.exports.syncNew = async event => {
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   init();
-  let allDescriptionlessPrograms = await Program.scan('description')
+  const maxPrograms = 5;
+  let descriptionlessPrograms = await Program.scan('description')
     .null()
+    .and()
+    .filter('end')
+    .gt(moment().unix() * 1000)
+    .filter('synced')
+    .not()
+    .eq(true)
     .all()
     .exec();
+  console.log('count', descriptionlessPrograms.length);
 
-  allDescriptionlessPrograms = allDescriptionlessPrograms.sort((a, b) => {
+  if (!descriptionlessPrograms.length) {
+    return respond(204);
+  }
+
+  descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
     return a.start - b.start;
   });
 
-  console.log('allDescriptionlessPrograms:', allDescriptionlessPrograms.length);
-  const uniqueProgramIds = [...new Set(allDescriptionlessPrograms.map(p => p.programId))];
+  descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
+
+  console.log('sliced count', descriptionlessPrograms.length);
+
+  console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
+  const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
   console.log('uniqueProgramIds', uniqueProgramIds.length);
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {
@@ -267,17 +304,23 @@ module.exports.syncDescriptions = async event => {
       const { programDetail } = result.data;
       const { description } = programDetail;
 
-      const programsToUpdate = await Program.scan()
-        .filter('programId')
-        .eq(programId)
-        .all()
-        .exec();
+      // const programsToUpdate = await Program.scan()
+      //   .filter('programId')
+      //   .eq(programId)
+      //   .all()
+      //   .exec();
+      const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
 
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;
+        arr[index]['synced'] = true;
       });
       console.log('programsToUpdate', programsToUpdate.length, programsToUpdate[0]);
-      await Program.batchPut(programsToUpdate);
+      const response = await Program.batchPut(programsToUpdate);
+      // for(p of programsToUpdate) {
+      //   p.
+      // }
+      console.log({ response });
     } catch (e) {
       console.error(e);
     }
@@ -322,11 +365,10 @@ function build(dtvSchedule, zip) {
               .unix() * 1000,
           ),
         );
-        // expire 6 hours from end time, or 1 week
-        program.expires =
-          moment(program.end)
-            .add(6, 'hours')
-            .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
+        // expire 30 minutes after end time
+        program.expires = moment(program.end)
+          .add(30, 'minutes')
+          .diff(moment(), 'seconds');
         programs.push(program);
       }
     });

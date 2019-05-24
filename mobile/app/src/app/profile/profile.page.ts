@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Reservation } from '../state/reservation/reservation.model';
-import { Observable, combineLatest, forkJoin } from 'rxjs';
+import { Observable, forkJoin, zip } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
@@ -18,7 +18,7 @@ import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
 import { environment } from 'src/environments/environment.production';
-import { first, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 
 @Component({
@@ -95,19 +95,20 @@ export class ProfilePage {
 
   doRefresh(event) {
     this.store.dispatch(new fromReservation.GetAll());
-    this.store.dispatch(new fromUser.LoadWallet());
-    forkJoin(
-      this.actions$.pipe(
+    this.store.dispatch(new fromUser.Refresh());
+    // zip(
+    this.actions$
+      .pipe(
         ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
         take(1),
-      ),
-      this.actions$.pipe(
-        ofType(fromUser.LOAD_WALLET_SUCCESS),
-        take(1),
-      ),
-    ).subscribe(() => {
-      event.target.complete();
-    });
+      )
+      // this.actions$.pipe(
+      //   ofType(fromUser.LOAD_WALLET_SUCCESS),
+      //   take(1),
+      // ),
+      .subscribe(() => {
+        event.target.complete();
+      });
   }
 
   async onLogout() {

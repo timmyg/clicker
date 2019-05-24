@@ -1,25 +1,13 @@
-const api = require('losant-rest');
+const losantApi = require('losant-rest');
 const { respond, getBody } = require('serverless-helpers');
 
-class Api {
+class LosantApi {
   constructor() {
-    this.client = api.createClient();
-  }
-
-  async setAuth(deviceId) {
-    const response = await this.client.auth.authenticateDevice({
-      credentials: {
-        deviceId,
-        key: process.env.losantKey,
-        secret: process.env.losantSecret,
-      },
-    });
-    this.client.setOption('accessToken', response.token);
+    this.client = losantApi.createClient({ accessToken: process.env.losantAccessToken });
   }
 
   async sendCommand(name, losantId, payload) {
     try {
-      await this.setAuth(losantId);
       const params = {
         applicationId: process.env.losantAppId,
         deviceId: losantId,
@@ -45,7 +33,7 @@ module.exports.command = async event => {
     const { losantId } = reservation.location;
     const { ip, clientAddress: client } = reservation.box;
     const { channel, channelMinor } = reservation.program;
-    const api = new Api(losantId, ip);
+    const api = new LosantApi();
 
     console.log(command, losantId, client, channel, channelMinor, ip, key);
     await api.sendCommand(command, losantId, { client, channel, channelMinor, ip, key });

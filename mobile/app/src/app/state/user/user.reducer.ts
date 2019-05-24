@@ -73,6 +73,11 @@ export const getUserId = (state: State) => state.me.sub;
 export const getUserTokenCount = (state: State) => state.tokens;
 export const getUserAuthToken = (state: State) => state.authToken;
 export const getUserCard = (state: State) => state.card;
+export const getUserLocations = (state: State) =>
+  state.me &&
+  state.me['https://mobile.tryclicker.com/app_metadata'] &&
+  state.me['https://mobile.tryclicker.com/app_metadata'].locations;
+export const getUserRoles = (state: State) => state.me && state.me['https://mobile.tryclicker.com/roles'];
 export const isLoggedIn = (state: State) => state.me && !state.me.guest;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

@@ -4,6 +4,9 @@ import { User } from './user.model';
 export const LOAD = '[USER] Load';
 export const LOAD_SUCCESS = '[USER] Load Success';
 export const LOAD_FAIL = '[USER] Load Fail';
+export const REFRESH = '[USER] Refresh';
+export const REFRESH_SUCCESS = '[USER] Refresh Success';
+export const REFRESH_FAIL = '[USER] Refresh Fail';
 export const LOAD_WALLET = '[USER] Load Wallet';
 export const LOAD_WALLET_SUCCESS = '[USER] Load Wallet Success';
 export const LOAD_WALLET_FAIL = '[USER] Load Wallet Fail';
@@ -32,6 +35,20 @@ export class LoadSuccess implements Action {
 
 export class LoadFail implements Action {
   readonly type = LOAD_FAIL;
+  constructor(public payload: any) {}
+}
+
+export class Refresh implements Action {
+  readonly type = REFRESH;
+}
+
+export class RefreshSuccess implements Action {
+  readonly type = REFRESH_SUCCESS;
+  constructor() {}
+}
+
+export class RefreshFail implements Action {
+  readonly type = REFRESH_FAIL;
   constructor(public payload: any) {}
 }
 

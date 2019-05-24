@@ -1,6 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Program } from 'src/app/state/program/program.model';
-import { ReserveService } from 'src/app/reserve/reserve.service';
 
 @Component({
   selector: 'app-program',
@@ -10,6 +9,7 @@ import { ReserveService } from 'src/app/reserve/reserve.service';
 export class ProgramComponent {
   @Input() program: Program;
   @Output() onSelect = new EventEmitter<Program>();
+  @Output() onInfo = new EventEmitter<Program>();
 
   constructor() {}
 
@@ -34,5 +34,10 @@ export class ProgramComponent {
         return nextProgramTitle.substring(0, maxLength - 3) + '...';
       }
     }
+  }
+
+  onMoreInfo(slidingItem) {
+    this.onInfo.emit(this.program);
+    slidingItem.close();
   }
 }
