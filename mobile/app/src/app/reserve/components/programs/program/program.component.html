@@ -1,5 +1,7 @@
-<ion-item-sliding [disabled]="false">
-  <ion-item-options side="start"> <ion-item-option (click)="onMoreInfo()">Info</ion-item-option> </ion-item-options>
+<ion-item-sliding [disabled]="false" #slidingItem>
+  <ion-item-options side="start">
+    <ion-item-option (click)="onMoreInfo(slidingItem)">Info</ion-item-option>
+  </ion-item-options>
   <ion-item>
     <ion-card (click)="onProgramClick()" no-margin>
       <ion-card-header>

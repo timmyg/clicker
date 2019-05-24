@@ -36,7 +36,8 @@ export class ProgramComponent {
     }
   }
 
-  onMoreInfo() {
+  onMoreInfo(slidingItem) {
     this.onInfo.emit(this.program);
+    slidingItem.close();
   }
 }

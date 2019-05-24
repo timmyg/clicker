@@ -1,12 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ program.title }} </ion-title>
+    <ion-title> Program Info </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
+  <label>Title</label>
+  <div>
+    <span> {{ program.title }}</span>
+  </div>
+  <br />
   <label>Description</label>
   <div>
     <span *ngIf="program.description; else noDescription"> {{ program.description }}</span>
