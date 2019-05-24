@@ -51,7 +51,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   constructor(
     private store: Store<fromStore.AppState>,
     public actionSheetController: ActionSheetController,
-    private reserveService: ReserveService,
+    public reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
     private navCtrl: NavController,
@@ -130,7 +130,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
         take(1),
       )
       .subscribe(() => {
-        console.log('refreshed');
+        console.log('refreshed!');
         this.reserveService.emitRefreshed();
       });
   }

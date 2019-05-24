@@ -23,12 +23,7 @@
 </ion-header>
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" [pullMax]="300" [disabled]="disableRefresher()">
-    <ion-refresher-content
-      pullingIcon="arrow-down"
-      pullingText="Pull to refresh"
-      refreshingSpinner=""
-      refreshingText=""
-    >
+    <ion-refresher-content pullingIcon="arrow-down" pullingText="Pull to refresh" refreshingSpinner="crescent">
     </ion-refresher-content>
   </ion-refresher>
   <router-outlet></router-outlet>

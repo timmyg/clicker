@@ -1,6 +1,6 @@
-<!-- <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
+<ion-row *ngIf="(isLoading$ | async) && !reserveService.isRefreshing" margin-vertical>
   <ion-spinner name="crescent" class="center"></ion-spinner>
-</ion-row> -->
+</ion-row>
 <ion-list>
   <div *ngFor="let program of (programs$ | async | programsFilter: searchTerm)">
     <app-program (onSelect)="onProgramSelect($event)" [program]="program"></app-program>
