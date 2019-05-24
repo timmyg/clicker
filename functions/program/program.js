@@ -107,8 +107,8 @@ module.exports.getAll = async event => {
 
   console.time('current + next Programming');
   // run in parallel
-  [currentProgramming, nextProgramming] = Promise.all([
-    await Program.scan()
+  [currentProgramming, nextProgramming] = await Promise.all([
+    Program.scan()
       .filter('start')
       .lt(now)
       .and()
@@ -119,7 +119,7 @@ module.exports.getAll = async event => {
       .eq(zip)
       .all()
       .exec(),
-    await Program.scan()
+    Program.scan()
       .filter('start')
       .lt(in25Mins)
       .and()
