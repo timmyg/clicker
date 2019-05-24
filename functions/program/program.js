@@ -365,11 +365,10 @@ function build(dtvSchedule, zip) {
               .unix() * 1000,
           ),
         );
-        // expire 6 hours from end time, or 1 week
-        program.expires =
-          moment(program.end)
-            .add(6, 'hours')
-            .diff(moment(), 'seconds') || 60 * 60 * 24 * 7;
+        // expire 30 minutes after end time
+        program.expires = moment(program.end)
+          .add(30, 'minutes')
+          .diff(moment(), 'seconds');
         programs.push(program);
       }
     });
