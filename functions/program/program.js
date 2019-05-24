@@ -290,11 +290,12 @@ module.exports.syncDescriptions = async event => {
       const { programDetail } = result.data;
       const { description } = programDetail;
 
-      const programsToUpdate = await Program.scan()
-        .filter('programId')
-        .eq(programId)
-        .all()
-        .exec();
+      // const programsToUpdate = await Program.scan()
+      //   .filter('programId')
+      //   .eq(programId)
+      //   .all()
+      //   .exec();
+      const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
 
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;
