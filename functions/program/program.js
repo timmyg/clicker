@@ -95,7 +95,6 @@ module.exports.getAreaProgramming = async event => {
   return respond(200, programmingArea);
 };
 
-// TODO
 module.exports.getAll = async event => {
   init();
   const initialChannels = allChannels;
@@ -106,33 +105,39 @@ module.exports.getAll = async event => {
       .add(25, 'minutes')
       .unix() * 1000;
 
-  console.time('currentProgramming');
-  const currentProgramming = await Program.scan()
-    .filter('start')
-    .lt(now)
-    .and()
-    .filter('end')
-    .gt(now)
-    .and()
-    .filter('zip') // Zip is hardcoded!
-    .eq(zip)
-    .all()
-    .exec();
-  console.timeEnd('currentProgramming');
+  console.time('current + next Programming');
+  // run in parallel
+  [currentProgramming, nextProgramming] = Promise.all([
+    await Program.scan()
+      .filter('start')
+      .lt(now)
+      .and()
+      .filter('end')
+      .gt(now)
+      .and()
+      .filter('zip') // Zip is hardcoded!
+      .eq(zip)
+      .all()
+      .exec(),
+    await Program.scan()
+      .filter('start')
+      .lt(in25Mins)
+      .and()
+      .filter('end')
+      .gt(in25Mins)
+      .and()
+      .filter('zip') // Zip is hardcoded!
+      .eq(zip)
+      .all()
+      .exec(),
+  ]);
+  console.timeEnd('current + next Programming');
+  console.log({ currentProgramming });
+  console.log({ nextProgramming });
 
-  console.time('nextProgramming');
-  const nextProgramming = await Program.scan()
-    .filter('start')
-    .lt(in25Mins)
-    .and()
-    .filter('end')
-    .gt(in25Mins)
-    .and()
-    .filter('zip') // Zip is hardcoded!
-    .eq(zip)
-    .all()
-    .exec();
-  console.timeEnd('nextProgramming');
+  // console.time('nextProgramming');
+  // const nextProgramming =
+  // console.timeEnd('nextProgramming');
 
   console.time('nextProgram');
   // add in next program if within 15 mins

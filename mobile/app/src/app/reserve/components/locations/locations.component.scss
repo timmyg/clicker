@@ -22,15 +22,12 @@ ion-card {
   width: 100%;
 }
 
-// ::ng-deep .action-sheet-button {
-//   &.danger {
-//     ion-icon {
-//       color: var(--ion-color-danger) !important;
-//     }
-//   }
-//   &.success {
-//     ion-icon {
-//       color: var(--ion-color-success) !important;
-//     }
-//   }
-// }
+// .item-native,
+.item-inner {
+  padding-right: 0 !important;
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}

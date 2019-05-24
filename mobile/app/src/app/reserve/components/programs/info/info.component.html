@@ -1,0 +1,9 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> {{ program.title }} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding> {{ program.description }} </ion-content>

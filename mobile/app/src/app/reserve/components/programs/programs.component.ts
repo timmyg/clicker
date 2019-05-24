@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Program } from 'src/app/state/program/program.model';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,8 @@ import { ReserveService } from '../../reserve.service';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { first, take } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
+import { InfoComponent } from './info/info.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   templateUrl: './programs.component.html',
@@ -30,6 +32,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   constructor(
     private store: Store<fromStore.AppState>,
     private reserveService: ReserveService,
+    private modalController: ModalController,
     private router: Router,
     private route: ActivatedRoute,
     private actions$: Actions,
@@ -83,5 +86,14 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     } else {
       this.router.navigate(['../tvs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     }
+  }
+
+  async onProgramInfo(program: Program) {
+    console.log({ program });
+    const modal = await this.modalController.create({
+      component: InfoComponent,
+      componentProps: { program },
+    });
+    modal.present();
   }
 }
