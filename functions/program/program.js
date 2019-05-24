@@ -260,23 +260,26 @@ module.exports.syncNew = async event => {
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   init();
-  let allDescriptionlessPrograms = await Program.scan('description')
+  let descriptionlessPrograms = await Program.scan('description')
     .null()
     .and()
     .filter('end')
     .gt(moment().unix() * 1000)
-    .limit(10)
-    // .all()
+    // .limit(10)
+    .all()
     .exec();
 
-  console.log('count', allDescriptionlessPrograms.length);
+  console.log('count', descriptionlessPrograms.length);
+  descriptionlessPrograms.slice(0, 10);
 
-  allDescriptionlessPrograms = allDescriptionlessPrograms.sort((a, b) => {
+  console.log('sliced count', descriptionlessPrograms.length);
+
+  descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
     return a.start - b.start;
   });
 
-  console.log('allDescriptionlessPrograms:', allDescriptionlessPrograms.length);
-  const uniqueProgramIds = [...new Set(allDescriptionlessPrograms.map(p => p.programId))];
+  console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
+  const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
   console.log('uniqueProgramIds', uniqueProgramIds.length);
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {
