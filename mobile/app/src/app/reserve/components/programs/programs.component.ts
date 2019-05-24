@@ -102,7 +102,6 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   }
 
   async onProgramInfo(program: Program) {
-    console.log({ program });
     const modal = await this.modalController.create({
       component: InfoComponent,
       componentProps: { program },

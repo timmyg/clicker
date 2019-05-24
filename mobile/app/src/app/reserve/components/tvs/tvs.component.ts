@@ -23,6 +23,7 @@ import { getLoading } from 'src/app/state/location';
 export class TvsComponent implements OnDestroy {
   tvs$: Observable<TV[]>;
   reservation$: Observable<Partial<Reservation>>;
+  reservation: Partial<Reservation>;
   refreshSubscription: Subscription;
   title = 'Choose TV';
   isLoading$: Observable<boolean>;
@@ -37,6 +38,7 @@ export class TvsComponent implements OnDestroy {
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
     this.reservation$ = this.store.select(getReservation);
+    this.reservation$.subscribe(r => (this.reservation = r));
     this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
   }
@@ -63,9 +65,9 @@ export class TvsComponent implements OnDestroy {
   }
 
   refresh() {
-    this.store.dispatch(new fromLocation.GetAll());
+    this.store.dispatch(new fromReservation.SetLocation(this.reservation.location));
     this.actions$
-      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
+      .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())
       .subscribe(() => {
         this.reserveService.emitRefreshed();

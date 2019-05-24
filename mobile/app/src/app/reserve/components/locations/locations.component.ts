@@ -124,7 +124,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
         take(1),
       )
       .subscribe(() => {
-        console.log('refreshed!');
         this.reserveService.emitRefreshed();
       });
     this.actions$
