@@ -270,7 +270,7 @@ module.exports.syncDescriptions = async event => {
     .exec();
 
   console.log('count', descriptionlessPrograms.length);
-  descriptionlessPrograms.slice(0, 10);
+  descriptionlessPrograms = descriptionlessPrograms.slice(0, 10);
 
   console.log('sliced count', descriptionlessPrograms.length);
 
