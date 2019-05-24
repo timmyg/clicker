@@ -56,6 +56,12 @@ function init() {
     },
     {
       timestamps: true,
+      expires: {
+        // ttl (time to live) set in seconds
+        ttl: 86400, // 1 day
+        // This is the name of our attribute to be stored in DynamoDB
+        attribute: 'expires',
+      },
     },
   );
   // ProgrammingArea = dynamoose.model(
@@ -303,6 +309,9 @@ module.exports.syncDescriptions = async event => {
       });
       console.log('programsToUpdate', programsToUpdate.length, programsToUpdate[0]);
       const response = await Program.batchPut(programsToUpdate);
+      // for(p of programsToUpdate) {
+      //   p.
+      // }
       console.log({ response });
     } catch (e) {
       console.error(e);
