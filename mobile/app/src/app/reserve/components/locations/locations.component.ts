@@ -10,7 +10,7 @@ import * as fromLocation from '../../../state/location/location.actions';
 import * as fromUser from '../../../state/user/user.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, ActionSheetController } from '@ionic/angular';
+import { NavController, ActionSheetController, ToastController } from '@ionic/angular';
 import { first, take } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
@@ -51,6 +51,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   constructor(
     private store: Store<fromStore.AppState>,
     public actionSheetController: ActionSheetController,
+    public toastController: ToastController,
     public reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
@@ -124,6 +125,19 @@ export class LocationsComponent implements OnDestroy, OnInit {
       )
       .subscribe(() => {
         console.log('refreshed!');
+        this.reserveService.emitRefreshed();
+      });
+    this.actions$
+      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_FAIL))
+      .pipe(first())
+      .subscribe(async () => {
+        const whoops = await this.toastController.create({
+          message: 'Something went wrong. Please try again.',
+          color: 'danger',
+          duration: 4000,
+          cssClass: 'ion-text-center',
+        });
+        whoops.present();
         this.reserveService.emitRefreshed();
       });
   }

@@ -13,7 +13,7 @@ import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { first, take } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 import { InfoComponent } from './info/info.component';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   templateUrl: './programs.component.html',
@@ -33,6 +33,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     private store: Store<fromStore.AppState>,
     public reserveService: ReserveService,
     private modalController: ModalController,
+    public toastController: ToastController,
     private router: Router,
     private route: ActivatedRoute,
     private actions$: Actions,
@@ -64,7 +65,19 @@ export class ProgramsComponent implements OnDestroy, OnInit {
       .pipe(ofType(fromProgram.GET_PROGRAMS_SUCCESS))
       .pipe(first())
       .subscribe(() => {
-        console.log('refreshed');
+        this.reserveService.emitRefreshed();
+      });
+    this.actions$
+      .pipe(ofType(fromProgram.GET_PROGRAMS_FAIL))
+      .pipe(first())
+      .subscribe(async () => {
+        const whoops = await this.toastController.create({
+          message: 'Something went wrong. Please try again.',
+          color: 'danger',
+          duration: 4000,
+          cssClass: 'ion-text-center',
+        });
+        whoops.present();
         this.reserveService.emitRefreshed();
       });
   }
