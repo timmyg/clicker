@@ -53,6 +53,7 @@ function init() {
       nextProgramTitle: String,
       nextProgramStart: Date,
       points: Number,
+      synced: Boolean, // synced with description from separate endpoint
     },
     {
       timestamps: true,
@@ -254,7 +255,7 @@ module.exports.syncNew = async event => {
     const transformedPrograms = transformPrograms(allPrograms);
     const dbResult = await Program.batchPut(transformedPrograms);
 
-    await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
+    // await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
 
     return respond(201, dbResult);
   } catch (e) {
@@ -272,18 +273,20 @@ module.exports.syncDescriptions = async event => {
     .and()
     .filter('end')
     .gt(moment().unix() * 1000)
-    // .limit(10)
+    .filter('synced')
+    .not()
+    .eq(true)
     .all()
     .exec();
+
+  descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
+    return a.start - b.start;
+  });
 
   console.log('count', descriptionlessPrograms.length);
   descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
 
   console.log('sliced count', descriptionlessPrograms.length);
-
-  descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
-    return a.start - b.start;
-  });
 
   console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
   const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
@@ -306,6 +309,7 @@ module.exports.syncDescriptions = async event => {
 
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;
+        arr[index]['synced'] = true;
       });
       console.log('programsToUpdate', programsToUpdate.length, programsToUpdate[0]);
       const response = await Program.batchPut(programsToUpdate);
