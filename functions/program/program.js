@@ -278,12 +278,16 @@ module.exports.syncDescriptions = async event => {
     .eq(true)
     .all()
     .exec();
+  console.log('count', descriptionlessPrograms.length);
+
+  if (!descriptionlessPrograms.length) {
+    return respond(204);
+  }
 
   descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
     return a.start - b.start;
   });
 
-  console.log('count', descriptionlessPrograms.length);
   descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
 
   console.log('sliced count', descriptionlessPrograms.length);

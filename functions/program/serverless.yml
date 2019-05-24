@@ -94,7 +94,7 @@ functions:
           path: new
           method: post
           cors: true
-      - schedule: rate(2 hours)
+      - schedule: rate(30 minutes)
   syncDescriptions:
     handler: program.syncDescriptions
     # timeout: 10
