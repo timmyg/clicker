@@ -2,12 +2,10 @@
   <ion-spinner name="crescent" class="center"></ion-spinner>
 </ion-row>
 <ion-list lines="none">
-  <div>
-    <app-program
-      *ngFor="let program of (programs$ | async | programsFilter: searchTerm)"
-      (onSelect)="onProgramSelect($event)"
-      (onInfo)="onProgramInfo($event)"
-      [program]="program"
-    ></app-program>
-  </div>
+  <app-program
+    *ngFor="let program of (programs$ | async | programsFilter: searchTerm)"
+    (onSelect)="onProgramSelect($event)"
+    (onInfo)="onProgramInfo($event)"
+    [program]="program"
+  ></app-program>
 </ion-list>

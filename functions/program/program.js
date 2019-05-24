@@ -302,7 +302,8 @@ module.exports.syncDescriptions = async event => {
         arr[index]['description'] = description;
       });
       console.log('programsToUpdate', programsToUpdate.length, programsToUpdate[0]);
-      await Program.batchPut(programsToUpdate);
+      const response = await Program.batchPut(programsToUpdate);
+      console.log({ response });
     } catch (e) {
       console.error(e);
     }
