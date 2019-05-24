@@ -260,6 +260,7 @@ module.exports.syncNew = async event => {
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   init();
+  const maxPrograms = 5;
   let descriptionlessPrograms = await Program.scan('description')
     .null()
     .and()
@@ -270,7 +271,7 @@ module.exports.syncDescriptions = async event => {
     .exec();
 
   console.log('count', descriptionlessPrograms.length);
-  descriptionlessPrograms = descriptionlessPrograms.slice(0, 10);
+  descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
 
   console.log('sliced count', descriptionlessPrograms.length);
 
