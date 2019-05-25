@@ -1,13 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <!-- <ion-buttons slot="end">
-      <ion-icon
-        slot="icon-only"
-        name="search"
-        *ngIf="!searchMode && isSearchablePage()"
-        (click)="openSearch()"
-      ></ion-icon>
-    </ion-buttons> -->
+    <ion-buttons slot="end" padding-end>
+      <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
+      <span>&nbsp;{{ tokenCount$ | async }}</span>
+    </ion-buttons>
     <ion-buttons slot="start">
       <ion-back-button class="show-back-button" *ngIf="showBack() && !searchMode" (click)="goBack()"></ion-back-button>
     </ion-buttons>

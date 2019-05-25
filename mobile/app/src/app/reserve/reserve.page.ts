@@ -2,6 +2,10 @@ import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavController, Events, IonSearchbar } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../state/app.reducer';
+import { getUserTokenCount } from '../state/user';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-reserve',
@@ -13,8 +17,10 @@ export class ReservePage {
   @ViewChild('searchbar') searchbar: IonSearchbar;
   title: String;
   searchMode: boolean;
+  tokenCount$: Observable<number>;
 
   constructor(
+    private store: Store<fromStore.AppState>,
     private reserveService: ReserveService,
     private navCtrl: NavController,
     private router: Router,
@@ -26,6 +32,7 @@ export class ReservePage {
     this.reserveService.closeSearchEmitted$.subscribe(x => {
       this.closeSearch();
     });
+    this.tokenCount$ = this.store.select(getUserTokenCount);
   }
 
   goBack() {
