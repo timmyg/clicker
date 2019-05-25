@@ -1024,8 +1024,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 /* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @capacitor/core */ "./node_modules/@capacitor/core/dist/esm/index.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _state_app__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./state/app */ "./src/app/state/app/index.ts");
+/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./state/user/user.actions */ "./src/app/state/user/user.actions.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _state_app__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./state/app */ "./src/app/state/app/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1072,8 +1073,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 };
 
 
-// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-// import { StatusBar } from '@ionic-native/status-bar/ngx';
+
 
 var SplashScreen = _capacitor_core__WEBPACK_IMPORTED_MODULE_2__["Plugins"].SplashScreen, StatusBar = _capacitor_core__WEBPACK_IMPORTED_MODULE_2__["Plugins"].StatusBar;
 
@@ -1082,40 +1082,34 @@ var AppComponent = /** @class */ (function () {
     function AppComponent(platform, store) {
         this.platform = platform;
         this.store = store;
-        this.partner$ = this.store.select(_state_app__WEBPACK_IMPORTED_MODULE_4__["getPartner"]);
+        this.partner$ = this.store.select(_state_app__WEBPACK_IMPORTED_MODULE_5__["getPartner"]);
         this.initializeApp();
     }
     AppComponent.prototype.initializeApp = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                console.log('initializeApp');
-                // clg
                 this.platform.ready().then(function () { return __awaiter(_this, void 0, void 0, function () {
                     var e_1;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
                                 _a.trys.push([0, 2, , 3]);
-                                console.log('platform ready');
-                                // StatusBar.setStyle({
-                                //   style: StatusBarStyle.Light,
-                                // });
                                 return [4 /*yield*/, SplashScreen.hide()];
                             case 1:
-                                // StatusBar.setStyle({
-                                //   style: StatusBarStyle.Light,
-                                // });
                                 _a.sent();
                                 return [3 /*break*/, 3];
                             case 2:
                                 e_1 = _a.sent();
-                                console.log(e_1);
                                 return [3 /*break*/, 3];
                             case 3: return [2 /*return*/];
                         }
                     });
                 }); });
+                this.platform.resume.subscribe(function (result) {
+                    console.log('resuming...');
+                    _this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["Refresh"]());
+                });
                 return [2 /*return*/];
             });
         });
@@ -1125,7 +1119,7 @@ var AppComponent = /** @class */ (function () {
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
         }),
-        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["Platform"], _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"]])
+        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["Platform"], _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -1195,13 +1189,11 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 function checkParams(store) {
     return function () {
         return new Promise(function (resolve) {
-            console.log('checkparams');
             var urlParams = new URLSearchParams(window.location.search);
             var partner = urlParams.get('partner');
             if (partner) {
                 store.dispatch(new _state_app_app_actions__WEBPACK_IMPORTED_MODULE_15__["SetPartner"](partner));
             }
-            console.log('params checked');
             resolve(true);
         });
     };
@@ -1209,13 +1201,11 @@ function checkParams(store) {
 function initUserStuff(store) {
     return function () {
         return new Promise(function (resolve) {
-            console.log('initUserStuff');
-            store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_14__["Load"]());
+            store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_14__["Load"]()); // TODO should this be refresh?
             store
                 .select(function (state) { return state.user; })
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_16__["filter"])(function (user) { return user.authToken && user.authToken.length; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_16__["take"])(1))
                 .subscribe(function () {
-                console.log('user stuff inited');
                 resolve(true);
             });
         });
@@ -1388,6 +1378,12 @@ var LocationService = /** @class */ (function () {
     };
     LocationService.prototype.get = function (locationId) {
         return this.httpClient.get(this.prefix + "/" + locationId);
+    };
+    LocationService.prototype.turnOn = function (locationId) {
+        return this.httpClient.get(this.prefix + "/" + locationId + "/boxes/on");
+    };
+    LocationService.prototype.turnOff = function (locationId) {
+        return this.httpClient.get(this.prefix + "/" + locationId + "/boxes/off");
     };
     LocationService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -1617,7 +1613,6 @@ var UserService = /** @class */ (function () {
                             return [4 /*yield*/, this.setToken(result.idToken)];
                         case 1:
                             _a.sent();
-                            console.log('new token set');
                             return [3 /*break*/, 3];
                         case 2:
                             console.error(err);
@@ -1633,7 +1628,6 @@ var UserService = /** @class */ (function () {
     UserService.prototype.get = function () {
         var _this = this;
         return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["from"])(this.storage.get(storage.token)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["mergeMap"])(function (token) {
-            console.log(token);
             if (token) {
                 return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(token);
             }
@@ -1867,7 +1861,7 @@ var getPartner = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector
 /*!****************************************************!*\
   !*** ./src/app/state/location/location.actions.ts ***!
   \****************************************************/
-/*! exports provided: GET_ALL_LOCATIONS, GET_ALL_LOCATIONS_SUCCESS, GET_ALL_LOCATIONS_FAIL, GetAll, GetAllSuccess, GetAllFail */
+/*! exports provided: GET_ALL_LOCATIONS, GET_ALL_LOCATIONS_SUCCESS, GET_ALL_LOCATIONS_FAIL, TURN_ON, TURN_ON_SUCCESS, TURN_ON_FAIL, TURN_OFF, TURN_OFF_SUCCESS, TURN_OFF_FAIL, GetAll, GetAllSuccess, GetAllFail, TurnOn, TurnOnSuccess, TurnOnFail, TurnOff, TurnOffSuccess, TurnOffFail */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1875,12 +1869,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_ALL_LOCATIONS", function() { return GET_ALL_LOCATIONS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_ALL_LOCATIONS_SUCCESS", function() { return GET_ALL_LOCATIONS_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_ALL_LOCATIONS_FAIL", function() { return GET_ALL_LOCATIONS_FAIL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TURN_ON", function() { return TURN_ON; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TURN_ON_SUCCESS", function() { return TURN_ON_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TURN_ON_FAIL", function() { return TURN_ON_FAIL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TURN_OFF", function() { return TURN_OFF; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TURN_OFF_SUCCESS", function() { return TURN_OFF_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TURN_OFF_FAIL", function() { return TURN_OFF_FAIL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetAll", function() { return GetAll; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetAllSuccess", function() { return GetAllSuccess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetAllFail", function() { return GetAllFail; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurnOn", function() { return TurnOn; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurnOnSuccess", function() { return TurnOnSuccess; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurnOnFail", function() { return TurnOnFail; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurnOff", function() { return TurnOff; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurnOffSuccess", function() { return TurnOffSuccess; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurnOffFail", function() { return TurnOffFail; });
 var GET_ALL_LOCATIONS = '[LOCATION] Get All Locations';
 var GET_ALL_LOCATIONS_SUCCESS = '[LOCATION] Get All Locations Success';
 var GET_ALL_LOCATIONS_FAIL = '[LOCATION] Get All Locations Fail';
+var TURN_ON = '[LOCATION] Turn On Locations';
+var TURN_ON_SUCCESS = '[LOCATION] Turn On Locations Success';
+var TURN_ON_FAIL = '[LOCATION] Turn On Locations Fail';
+var TURN_OFF = '[LOCATION] Turn Off';
+var TURN_OFF_SUCCESS = '[LOCATION] Turn Off Success';
+var TURN_OFF_FAIL = '[LOCATION] Turn Off Fail';
 // Get Location List
 var GetAll = /** @class */ (function () {
     function GetAll(geolocation) {
@@ -1904,6 +1916,52 @@ var GetAllFail = /** @class */ (function () {
         this.type = GET_ALL_LOCATIONS_FAIL;
     }
     return GetAllFail;
+}());
+
+var TurnOn = /** @class */ (function () {
+    function TurnOn(location) {
+        this.location = location;
+        this.type = TURN_ON;
+    }
+    return TurnOn;
+}());
+
+var TurnOnSuccess = /** @class */ (function () {
+    function TurnOnSuccess() {
+        this.type = TURN_ON_SUCCESS;
+    }
+    return TurnOnSuccess;
+}());
+
+var TurnOnFail = /** @class */ (function () {
+    function TurnOnFail(payload) {
+        this.payload = payload;
+        this.type = TURN_ON_FAIL;
+    }
+    return TurnOnFail;
+}());
+
+var TurnOff = /** @class */ (function () {
+    function TurnOff(location) {
+        this.location = location;
+        this.type = TURN_OFF;
+    }
+    return TurnOff;
+}());
+
+var TurnOffSuccess = /** @class */ (function () {
+    function TurnOffSuccess() {
+        this.type = TURN_OFF_SUCCESS;
+    }
+    return TurnOffSuccess;
+}());
+
+var TurnOffFail = /** @class */ (function () {
+    function TurnOffFail(payload) {
+        this.payload = payload;
+        this.type = TURN_OFF_FAIL;
+    }
+    return TurnOffFail;
 }());
 
 
@@ -1949,11 +2007,25 @@ var LocationsEffects = /** @class */ (function () {
         this.getAllLocations$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["ofType"])(_location_actions__WEBPACK_IMPORTED_MODULE_4__["GET_ALL_LOCATIONS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (action) {
             return _this.locationService.getAll(action.geolocation).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (locations) { return new _location_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllSuccess"](locations); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _location_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllFail"](err)); }));
         }));
+        this.turnOn$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["ofType"])(_location_actions__WEBPACK_IMPORTED_MODULE_4__["TURN_ON"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (action) {
+            return _this.locationService.turnOn(action.location.id).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function () { return new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOnSuccess"](); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOnFail"](err)); }));
+        }));
+        this.turnOff$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["ofType"])(_location_actions__WEBPACK_IMPORTED_MODULE_4__["TURN_OFF"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (action) {
+            return _this.locationService.turnOff(action.location.id).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function () { return new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOffSuccess"](); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOffFail"](err)); }));
+        }));
     }
     __decorate([
         Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["Effect"])(),
         __metadata("design:type", rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"])
     ], LocationsEffects.prototype, "getAllLocations$", void 0);
+    __decorate([
+        Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["Effect"])(),
+        __metadata("design:type", rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"])
+    ], LocationsEffects.prototype, "turnOn$", void 0);
+    __decorate([
+        Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["Effect"])(),
+        __metadata("design:type", rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"])
+    ], LocationsEffects.prototype, "turnOff$", void 0);
     LocationsEffects = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
         __metadata("design:paramtypes", [_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["Actions"], _core_services_location_service__WEBPACK_IMPORTED_MODULE_5__["LocationService"]])
@@ -2709,7 +2781,7 @@ var StateModule = /** @class */ (function () {
 /*!*************************************!*\
   !*** ./src/app/state/user/index.ts ***!
   \*************************************/
-/*! exports provided: getUserState, getUser, isLoggedIn, getUserId, getUserAuthToken, getUserTokenCount, getUserCard, getLoading, getError */
+/*! exports provided: getUserState, getUser, isLoggedIn, getUserLocations, getUserRoles, getUserId, getUserAuthToken, getUserTokenCount, getUserCard, getLoading, getError */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2717,6 +2789,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserState", function() { return getUserState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUser", function() { return getUser; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLoggedIn", function() { return isLoggedIn; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserLocations", function() { return getUserLocations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserRoles", function() { return getUserRoles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserId", function() { return getUserId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserAuthToken", function() { return getUserAuthToken; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserTokenCount", function() { return getUserTokenCount; });
@@ -2730,6 +2804,8 @@ __webpack_require__.r(__webpack_exports__);
 var getUserState = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createFeatureSelector"])('user');
 var getUser = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getUserState, _user_reducer__WEBPACK_IMPORTED_MODULE_1__["getUser"]);
 var isLoggedIn = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getUserState, _user_reducer__WEBPACK_IMPORTED_MODULE_1__["isLoggedIn"]);
+var getUserLocations = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getUserState, _user_reducer__WEBPACK_IMPORTED_MODULE_1__["getUserLocations"]);
+var getUserRoles = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getUserState, _user_reducer__WEBPACK_IMPORTED_MODULE_1__["getUserRoles"]);
 var getUserId = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getUserState, _user_reducer__WEBPACK_IMPORTED_MODULE_1__["getUserId"]);
 var getUserAuthToken = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getUserState, _user_reducer__WEBPACK_IMPORTED_MODULE_1__["getUserAuthToken"]);
 var getUserTokenCount = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getUserState, _user_reducer__WEBPACK_IMPORTED_MODULE_1__["getUserTokenCount"]);
@@ -3102,7 +3178,7 @@ var UserEffects = /** @class */ (function () {
 /*!********************************************!*\
   !*** ./src/app/state/user/user.reducer.ts ***!
   \********************************************/
-/*! exports provided: initialState, reducer, getUser, getUserId, getUserTokenCount, getUserAuthToken, getUserCard, isLoggedIn, getLoading, getError */
+/*! exports provided: initialState, reducer, getUser, getUserId, getUserTokenCount, getUserAuthToken, getUserCard, getUserLocations, getUserRoles, isLoggedIn, getLoading, getError */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3114,6 +3190,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserTokenCount", function() { return getUserTokenCount; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserAuthToken", function() { return getUserAuthToken; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserCard", function() { return getUserCard; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserLocations", function() { return getUserLocations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserRoles", function() { return getUserRoles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLoggedIn", function() { return isLoggedIn; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLoading", function() { return getLoading; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getError", function() { return getError; });
@@ -3170,6 +3248,12 @@ var getUserId = function (state) { return state.me.sub; };
 var getUserTokenCount = function (state) { return state.tokens; };
 var getUserAuthToken = function (state) { return state.authToken; };
 var getUserCard = function (state) { return state.card; };
+var getUserLocations = function (state) {
+    return state.me &&
+        state.me['https://mobile.tryclicker.com/app_metadata'] &&
+        state.me['https://mobile.tryclicker.com/app_metadata'].locations;
+};
+var getUserRoles = function (state) { return state.me && state.me['https://mobile.tryclicker.com/roles']; };
 var isLoggedIn = function (state) { return state.me && !state.me.guest; };
 var getLoading = function (state) { return state.loading; };
 var getError = function (state) { return state.error; };

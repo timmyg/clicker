@@ -248,11 +248,13 @@ module.exports.syncNew = async event => {
     const headers = {
       Cookie: `dtve-prospect-zip=${zip};`,
     };
+    // console.log(url, { params, headers });
     const result = await axios.get(url, { params, headers });
     const { schedule } = result.data;
     console.info(`pulled ${schedule.length} channels`);
     const allPrograms = build(schedule, zip);
     const transformedPrograms = transformPrograms(allPrograms);
+    console.log('tp', transformedPrograms[0]);
     const dbResult = await Program.batchPut(transformedPrograms);
 
     // await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
@@ -342,7 +344,7 @@ function build(dtvSchedule, zip) {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
       if (program.programId !== '-1') {
-        console.log({ channel, program });
+        // console.log({ channel, program });
         program.channel = channel.chNum;
         program.channelTitle = channel.chCall;
 
@@ -369,7 +371,9 @@ function build(dtvSchedule, zip) {
         program.expires = moment(program.end)
           .add(30, 'minutes')
           .diff(moment(), 'seconds');
-        programs.push(program);
+        if (program.expires > 0) {
+          programs.push(program);
+        }
       }
     });
   });

@@ -1976,8 +1976,6 @@ var LoggingInComponent = /** @class */ (function () {
                 if (err) {
                 }
                 else if (authResult) {
-                    // alias user (move tokens to new user)
-                    console.log(authResult);
                     jwt_1 = authResult.idToken;
                     newUserId_1 = authResult.idTokenPayload.sub;
                     this.userId$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["first"])(function (val) { return !!val; })).subscribe(function (oldUserId) {

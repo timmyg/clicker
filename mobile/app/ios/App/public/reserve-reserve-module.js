@@ -333,7 +333,7 @@ var ConfirmationComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-row *ngIf=\"(isLoading$ | async) || evaluatingGeolocation\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n\n<section>\n  <section\n    class=\"ion-text-center\"\n    padding\n    *ngIf=\"(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations\"\n  >\n    <ion-icon name=\"pin\" class=\"location\"></ion-icon>\n    <p>\n      Clicker would like to access your location for more accurate location details. This data is not stored anywhere.\n    </p>\n    <div><ion-button margin-top (click)=\"allowLocation()\">Allow Location Access </ion-button></div>\n    <div><ion-button fill=\"clear\" (click)=\"denyLocation()\">No Thanks </ion-button></div>\n  </section>\n\n  <ng-template #showLocations>\n    <ion-list>\n      <p *ngIf=\"geolocationDeclined && !evaluatingGeolocation\" class=\"ion-text-center\" padding>\n        Find locations around you by allowing location services in your settings\n      </p>\n      <ion-card\n        *ngFor=\"let location of (locations$ | async | locationsFilter: searchTerm)\"\n        [ngClass]=\"{ inactive: !location.active || !location.connected }\"\n        (click)=\"location.active && location.connected && onLocationClick(location)\"\n      >\n        <ion-card-header>\n          <ion-card-subtitle>\n            <span\n              >{{ location.neighborhood }} <span *ngIf=\"!location.active || !location.connected\">(inactive)</span></span\n            >\n            <ion-icon *ngIf=\"!location.connected\" name=\"wifi\" class=\"disconnected\"></ion-icon>\n            <span float-right *ngIf=\"location.distance\">\n              <span *ngIf=\"location.distance >= 0.2; else near\"> {{ location.distance }} miles </span>\n              <ng-template #near> Near </ng-template>\n            </span>\n          </ion-card-subtitle>\n        </ion-card-header>\n        <ion-card-content no-padding-top>\n          <img [src]=\"location.img\" class=\"logo\" />\n          <h1>{{ location.name }}</h1>\n        </ion-card-content>\n      </ion-card>\n    </ion-list>\n  </ng-template>\n</section>\n"
+module.exports = "<ion-row *ngIf=\"(isLoading$ | async) || evaluatingGeolocation\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n\n<section>\n  <section\n    class=\"ion-text-center\"\n    padding\n    *ngIf=\"(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations\"\n  >\n    <ion-icon name=\"pin\" class=\"location\"></ion-icon>\n    <p>\n      Clicker would like to access your location for more accurate location details. This data is not stored anywhere.\n    </p>\n    <div><ion-button margin-top (click)=\"allowLocation()\">Allow Location Access </ion-button></div>\n    <div><ion-button fill=\"clear\" (click)=\"denyLocation()\">No Thanks </ion-button></div>\n  </section>\n\n  <ng-template #showLocations>\n    <ion-list lines=\"none\">\n      <p *ngIf=\"geolocationDeclined && !evaluatingGeolocation\" class=\"ion-text-center\" padding>\n        Find locations around you by allowing location services in your settings\n      </p>\n      <ion-item-sliding\n        *ngFor=\"let location of (locations$ | async | locationsFilter: searchTerm)\"\n        [ngClass]=\"{ inactive: !isAvailable(location) }\"\n        [disabled]=\"!isAvailable(location) || !isManager(location)\"\n      >\n        <ion-item-options side=\"start\">\n          <ion-item-option (click)=\"onManage(location)\">Manage</ion-item-option>\n        </ion-item-options>\n        <ion-item>\n          <ion-card (click)=\"isAvailable(location) && onLocationClick(location)\">\n            <ion-card-header>\n              <ion-card-subtitle>\n                <span>{{ location.neighborhood }} <span *ngIf=\"!isAvailable(location)\">(inactive)</span></span>\n                <ion-icon *ngIf=\"!location.connected\" name=\"wifi\" class=\"disconnected\"></ion-icon>\n                <ion-icon *ngIf=\"isManager(location)\" name=\"star\" class=\"manage\"></ion-icon>\n\n                <span float-right *ngIf=\"location.distance\">\n                  <span *ngIf=\"location.distance >= 0.2; else near\"> {{ location.distance }} miles </span>\n                  <ng-template #near> Near </ng-template>\n                </span>\n              </ion-card-subtitle>\n            </ion-card-header>\n            <ion-card-content no-padding-top>\n              <img [src]=\"location.img\" class=\"logo\" />\n              <h1>{{ location.name }}</h1>\n            </ion-card-content>\n          </ion-card>\n        </ion-item>\n      </ion-item-sliding>\n    </ion-list>\n  </ng-template>\n</section>\n"
 
 /***/ }),
 
@@ -344,7 +344,7 @@ module.exports = "<ion-row *ngIf=\"(isLoading$ | async) || evaluatingGeolocation
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "img.logo {\n  height: 40px;\n  width: inherit;\n  float: left;\n  padding: 0 10px 10px 0; }\n\n.inactive {\n  opacity: 0.4; }\n\nion-icon.disconnected {\n  color: var(--ion-color-danger); }\n\nion-icon.location {\n  color: var(--ion-color-primary);\n  font-size: 64px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9ucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLFlBQVk7RUFDWixjQUFjO0VBQ2QsV0FBVztFQUNYLHNCQUFzQixFQUFBOztBQUd4QjtFQUNFLFlBQVksRUFBQTs7QUFHZDtFQUNFLDhCQUE4QixFQUFBOztBQUdoQztFQUNFLCtCQUErQjtFQUMvQixlQUFlLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9ucy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbImltZy5sb2dvIHtcbiAgaGVpZ2h0OiA0MHB4O1xuICB3aWR0aDogaW5oZXJpdDtcbiAgZmxvYXQ6IGxlZnQ7XG4gIHBhZGRpbmc6IDAgMTBweCAxMHB4IDA7XG59XG5cbi5pbmFjdGl2ZSB7XG4gIG9wYWNpdHk6IDAuNDtcbn1cblxuaW9uLWljb24uZGlzY29ubmVjdGVkIHtcbiAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYW5nZXIpO1xufVxuXG5pb24taWNvbi5sb2NhdGlvbiB7XG4gIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeSk7XG4gIGZvbnQtc2l6ZTogNjRweDtcbn1cbiJdfQ== */"
+module.exports = "img.logo {\n  height: 40px;\n  width: inherit;\n  float: left;\n  padding: 0 10px 10px 0; }\n\n.inactive {\n  opacity: 0.4; }\n\nion-icon.disconnected {\n  color: var(--ion-color-danger); }\n\nion-icon.location {\n  color: var(--ion-color-primary);\n  font-size: 64px; }\n\nion-card {\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9ucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLFlBQVk7RUFDWixjQUFjO0VBQ2QsV0FBVztFQUNYLHNCQUFzQixFQUFBOztBQUd4QjtFQUNFLFlBQVksRUFBQTs7QUFHZDtFQUNFLDhCQUE4QixFQUFBOztBQUdoQztFQUNFLCtCQUErQjtFQUMvQixlQUFlLEVBQUE7O0FBR2pCO0VBQ0UsV0FBVyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvcmVzZXJ2ZS9jb21wb25lbnRzL2xvY2F0aW9ucy9sb2NhdGlvbnMuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJpbWcubG9nbyB7XG4gIGhlaWdodDogNDBweDtcbiAgd2lkdGg6IGluaGVyaXQ7XG4gIGZsb2F0OiBsZWZ0O1xuICBwYWRkaW5nOiAwIDEwcHggMTBweCAwO1xufVxuXG4uaW5hY3RpdmUge1xuICBvcGFjaXR5OiAwLjQ7XG59XG5cbmlvbi1pY29uLmRpc2Nvbm5lY3RlZCB7XG4gIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFuZ2VyKTtcbn1cblxuaW9uLWljb24ubG9jYXRpb24ge1xuICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnkpO1xuICBmb250LXNpemU6IDY0cHg7XG59XG5cbmlvbi1jYXJkIHtcbiAgd2lkdGg6IDEwMCU7XG59XG5cbi8vIDo6bmctZGVlcCAuYWN0aW9uLXNoZWV0LWJ1dHRvbiB7XG4vLyAgICYuZGFuZ2VyIHtcbi8vICAgICBpb24taWNvbiB7XG4vLyAgICAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLWRhbmdlcikgIWltcG9ydGFudDtcbi8vICAgICB9XG4vLyAgIH1cbi8vICAgJi5zdWNjZXNzIHtcbi8vICAgICBpb24taWNvbiB7XG4vLyAgICAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXN1Y2Nlc3MpICFpbXBvcnRhbnQ7XG4vLyAgICAgfVxuLy8gICB9XG4vLyB9XG4iXX0= */"
 
 /***/ }),
 
@@ -362,16 +362,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reserve_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../reserve.service */ "./src/app/reserve/reserve.service.ts");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var src_app_state_location__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/state/location */ "./src/app/state/location/index.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../state/location/location.actions */ "./src/app/state/location/location.actions.ts");
-/* harmony import */ var _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../state/reservation/reservation.actions */ "./src/app/state/reservation/reservation.actions.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
-/* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @capacitor/core */ "./node_modules/@capacitor/core/dist/esm/index.js");
-/* harmony import */ var _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ionic-native/diagnostic/ngx */ "./node_modules/@ionic-native/diagnostic/ngx/index.js");
-/* harmony import */ var _ionic_storage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @ionic/storage */ "./node_modules/@ionic/storage/fesm5/ionic-storage.js");
+/* harmony import */ var src_app_state_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/state/user */ "./src/app/state/user/index.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../state/location/location.actions */ "./src/app/state/location/location.actions.ts");
+/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../state/user/user.actions */ "./src/app/state/user/user.actions.ts");
+/* harmony import */ var _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../state/reservation/reservation.actions */ "./src/app/state/reservation/reservation.actions.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+/* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @capacitor/core */ "./node_modules/@capacitor/core/dist/esm/index.js");
+/* harmony import */ var _ionic_storage__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @ionic/storage */ "./node_modules/@ionic/storage/fesm5/ionic-storage.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -427,10 +428,10 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-// import { Geolocation } from '@ionic-native/geolocation/ngx';
 
-var Geolocation = _capacitor_core__WEBPACK_IMPORTED_MODULE_11__["Plugins"].Geolocation;
 
+
+var Geolocation = _capacitor_core__WEBPACK_IMPORTED_MODULE_13__["Plugins"].Geolocation;
 
 var permissionGeolocation = {
     name: 'permission.geolocation',
@@ -441,18 +442,15 @@ var permissionGeolocation = {
     },
 };
 var LocationsComponent = /** @class */ (function () {
-    function LocationsComponent(store, reserveService, router, route, navCtrl, actions$, 
-    // private geolocation: Geolocation,
-    diagnostic, platform, storage) {
+    function LocationsComponent(store, actionSheetController, reserveService, router, route, navCtrl, actions$, storage) {
         var _this = this;
         this.store = store;
+        this.actionSheetController = actionSheetController;
         this.reserveService = reserveService;
         this.router = router;
         this.route = route;
         this.navCtrl = navCtrl;
         this.actions$ = actions$;
-        this.diagnostic = diagnostic;
-        this.platform = platform;
         this.storage = storage;
         this.title = 'Choose Location';
         this.askForGeolocation$ = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](true);
@@ -469,12 +467,18 @@ var LocationsComponent = /** @class */ (function () {
                 this.redirectIfUpdating();
                 this.evaluateGeolocation();
                 this.isLoading$ = this.store.select(src_app_state_location__WEBPACK_IMPORTED_MODULE_3__["getLoading"]);
+                this.userLocations$ = this.store.select(src_app_state_user__WEBPACK_IMPORTED_MODULE_4__["getUserLocations"]);
+                this.userLocations$.pipe().subscribe(function (userLocations) {
+                    _this.userLocations = userLocations;
+                });
+                this.userRoles$ = this.store.select(src_app_state_user__WEBPACK_IMPORTED_MODULE_4__["getUserRoles"]);
+                this.userRoles$.pipe().subscribe(function (userRoles) {
+                    _this.userRoles = userRoles;
+                });
                 this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(function (searchTerm) {
-                    console.log({ searchTerm: searchTerm });
                     _this.searchTerm = searchTerm;
                 });
                 this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(function () {
-                    console.log('close');
                     _this.searchTerm = null;
                 });
                 return [2 /*return*/];
@@ -486,12 +490,18 @@ var LocationsComponent = /** @class */ (function () {
         this.searchSubscription.unsubscribe();
         this.closeSearchSubscription.unsubscribe();
     };
+    LocationsComponent.prototype.isManager = function (location) {
+        var _a = this, userLocations = _a.userLocations, userRoles = _a.userRoles;
+        if (userLocations && userRoles) {
+            return userLocations.indexOf(location.id) > -1 || userRoles.indexOf('superman') > -1;
+        }
+    };
     LocationsComponent.prototype.redirectIfUpdating = function () {
         return __awaiter(this, void 0, void 0, function () {
             var state, reservation;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.store.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["first"])()).toPromise()];
+                    case 0: return [4 /*yield*/, this.store.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["first"])()).toPromise()];
                     case 1:
                         state = _a.sent();
                         reservation = state.reservation.reservation;
@@ -512,7 +522,7 @@ var LocationsComponent = /** @class */ (function () {
                             }
                         }
                         else {
-                            this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_6__["Start"]());
+                            this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__["Start"]());
                         }
                         return [2 /*return*/];
                 }
@@ -521,17 +531,19 @@ var LocationsComponent = /** @class */ (function () {
     };
     LocationsComponent.prototype.refresh = function () {
         var _this = this;
-        this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GetAll"](this.userGeolocation));
-        this.actions$
-            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_10__["ofType"])(_state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GET_ALL_LOCATIONS_SUCCESS"]))
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["first"])())
-            .subscribe(function () {
+        this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"](this.userGeolocation));
+        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_7__["Refresh"]());
+        // this.actions$
+        //   .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
+        //   .pipe(ofType(fromUser.REFRESH_SUCCESS))
+        //   .pipe(first())
+        Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["forkJoin"])(this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["ofType"])(_state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GET_ALL_LOCATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["take"])(1)), this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["ofType"])(_state_user_user_actions__WEBPACK_IMPORTED_MODULE_7__["REFRESH_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["take"])(1))).subscribe(function () {
             _this.reserveService.emitRefreshed();
         });
     };
     LocationsComponent.prototype.onLocationClick = function (location) {
         this.reserveService.emitCloseSearch();
-        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_6__["SetLocation"](location));
+        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__["SetLocation"](location));
         this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     };
     LocationsComponent.prototype.allowLocation = function () {
@@ -561,6 +573,46 @@ var LocationsComponent = /** @class */ (function () {
             });
         });
     };
+    LocationsComponent.prototype.isAvailable = function (location) {
+        return location.active && location.connected;
+    };
+    LocationsComponent.prototype.onManage = function (location) {
+        return __awaiter(this, void 0, void 0, function () {
+            var actionSheet;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.actionSheetController.create({
+                            header: 'Manage Location',
+                            buttons: [
+                                {
+                                    text: 'Turn off all TVs',
+                                    icon: 'power',
+                                    cssClass: 'color-danger',
+                                    handler: function () {
+                                        _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["TurnOff"](location));
+                                    },
+                                },
+                                {
+                                    text: 'Turn on all TVs',
+                                    icon: 'power',
+                                    cssClass: 'color-success',
+                                    handler: function () {
+                                        _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["TurnOn"](location));
+                                    },
+                                },
+                            ],
+                        })];
+                    case 1:
+                        actionSheet = _a.sent();
+                        return [4 /*yield*/, actionSheet.present()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     LocationsComponent.prototype.evaluateGeolocation = function () {
         return __awaiter(this, void 0, void 0, function () {
             var permissionStatus;
@@ -581,12 +633,12 @@ var LocationsComponent = /** @class */ (function () {
                                 _this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
                                 var _a = response.coords, latitude = _a.latitude, longitude = _a.longitude;
                                 _this.userGeolocation = { latitude: latitude, longitude: longitude };
-                                _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GetAll"](_this.userGeolocation));
+                                _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"](_this.userGeolocation));
                             })
                                 .catch(function (error) {
                                 _this.evaluatingGeolocation = false;
                                 _this.askForGeolocation$.next(false);
-                                _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GetAll"](_this.userGeolocation));
+                                _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"](_this.userGeolocation));
                                 console.error('Error getting location', error);
                             })];
                     case 2:
@@ -596,7 +648,7 @@ var LocationsComponent = /** @class */ (function () {
                         if (permissionStatus === permissionGeolocation.values.denied) {
                             this.askForGeolocation$.next(false);
                             this.evaluatingGeolocation = false;
-                            this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_5__["GetAll"]());
+                            this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"]());
                         }
                         else {
                             this.askForGeolocation$.next(true);
@@ -613,15 +665,14 @@ var LocationsComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./locations.component.html */ "./src/app/reserve/components/locations/locations.component.html"),
             styles: [__webpack_require__(/*! ./locations.component.scss */ "./src/app/reserve/components/locations/locations.component.scss")]
         }),
-        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
+        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_5__["Store"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_10__["ActionSheetController"],
             _reserve_service__WEBPACK_IMPORTED_MODULE_1__["ReserveService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_7__["Router"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_7__["ActivatedRoute"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["NavController"],
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_10__["Actions"],
-            _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_12__["Diagnostic"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["Platform"],
-            _ionic_storage__WEBPACK_IMPORTED_MODULE_13__["Storage"]])
+            _angular_router__WEBPACK_IMPORTED_MODULE_9__["Router"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_9__["ActivatedRoute"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_10__["NavController"],
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["Actions"],
+            _ionic_storage__WEBPACK_IMPORTED_MODULE_14__["Storage"]])
     ], LocationsComponent);
     return LocationsComponent;
 }());
@@ -870,7 +921,6 @@ var ProgramsComponent = /** @class */ (function () {
         this.reservation$ = this.store.select(src_app_state_reservation__WEBPACK_IMPORTED_MODULE_3__["getReservation"]);
         this.reserveService.emitTitle(this.title);
         this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(function (searchTerm) {
-            console.log({ searchTerm: searchTerm });
             _this.searchTerm = searchTerm;
         });
         this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(function () {
@@ -1372,10 +1422,6 @@ var ReservePage = /** @class */ (function () {
             _this.closeSearch();
         });
     }
-    ReservePage.prototype.ngOnInit = function () { };
-    ReservePage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad');
-    };
     ReservePage.prototype.goBack = function () {
         this.navCtrl.back();
     };
