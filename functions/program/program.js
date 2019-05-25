@@ -32,7 +32,7 @@ function init() {
         type: String,
         hashKey: true,
       },
-      expires: Number,
+      // expires: Number,
       channel: Number,
       channelMinor: Number,
       channelTitle: String,
@@ -58,10 +58,14 @@ function init() {
     {
       timestamps: true,
       expires: {
-        // ttl (time to live) set in seconds
-        ttl: 86400, // 1 day
-        // This is the name of our attribute to be stored in DynamoDB
+        ttl: 86400,
         attribute: 'expires',
+        defaultExpires: x => {
+          // expire 30 minutes after end
+          return moment(x.end)
+            .add(30, 'minutes')
+            .toDate();
+        },
       },
     },
   );
@@ -368,13 +372,16 @@ function build(dtvSchedule, zip) {
           ),
         );
         // expire 30 minutes after end time
-        // const expireFromNowSeconds = moment(program.end)
-        //   .add(30, 'minutes')
-        //   .diff(moment(), 'seconds');
-        // if (expireFromNowSeconds > 0) {
-        //   program.expires = moment().unix() + expireFromNowSeconds;
-        programs.push(program);
-        // }
+        const expireFromNowSeconds = moment(program.end)
+          .add(30, 'minutes')
+          .diff(moment(), 'seconds');
+        if (expireFromNowSeconds > 0) {
+          // program.expires = (moment().unix() + expireFromNowSeconds) * 1000;
+          // program.expires = 1000;
+          // program.expires = 1558885353;
+          console.log('program', program);
+          programs.push(program);
+        }
       }
     });
   });
