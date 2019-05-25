@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   encapsulation: ViewEncapsulation.None,
 })
 export class ReservePage {
-  @ViewChild(IonSearchbar) searchbar: IonSearchbar;
+  @ViewChild('searchbar') searchbar: IonSearchbar;
   title: String;
   searchMode: boolean;
 
@@ -44,8 +44,13 @@ export class ReservePage {
     return this.router.url.includes('programs') || this.router.url.includes('locations');
   }
 
-  openSearch() {
-    this.searchMode = true;
+  // openSearch() {
+  //   this.searchMode = true;
+  // }
+
+  toggleSearch() {
+    this.searchMode = !this.searchMode;
+    setTimeout(() => this.searchbar.setFocus(), 100);
   }
 
   closeSearch() {

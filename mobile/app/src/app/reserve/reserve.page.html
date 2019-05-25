@@ -1,18 +1,19 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="end">
+    <!-- <ion-buttons slot="end">
       <ion-icon
         slot="icon-only"
         name="search"
         *ngIf="!searchMode && isSearchablePage()"
         (click)="openSearch()"
       ></ion-icon>
-    </ion-buttons>
+    </ion-buttons> -->
     <ion-buttons slot="start">
       <ion-back-button class="show-back-button" *ngIf="showBack() && !searchMode" (click)="goBack()"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="!searchMode"> {{ title }} </ion-title>
     <ion-searchbar
+      #searchbar
       *ngIf="searchMode"
       (ionCancel)="closeSearch()"
       (ionChange)="onSearch($event)"
@@ -26,5 +27,8 @@
     <ion-refresher-content pullingIcon="arrow-down" pullingText="Pull to refresh" refreshingSpinner="crescent">
     </ion-refresher-content>
   </ion-refresher>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isSearchablePage() && !searchMode">
+    <ion-fab-button> <ion-icon name="search" (click)="toggleSearch()"></ion-icon> </ion-fab-button>
+  </ion-fab>
   <router-outlet></router-outlet>
 </ion-content>
