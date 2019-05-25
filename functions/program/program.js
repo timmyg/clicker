@@ -60,6 +60,7 @@ function init() {
       expires: {
         ttl: 86400,
         attribute: 'expires',
+        returnExpiredItems: false,
         defaultExpires: x => {
           // expire 30 minutes after end
           return moment(x.end)
