@@ -368,12 +368,13 @@ function build(dtvSchedule, zip) {
           ),
         );
         // expire 30 minutes after end time
-        program.expires = moment(program.end)
-          .add(30, 'minutes')
-          .diff(moment(), 'seconds');
-        if (program.expires > 0) {
-          programs.push(program);
-        }
+        // const expireFromNowSeconds = moment(program.end)
+        //   .add(30, 'minutes')
+        //   .diff(moment(), 'seconds');
+        // if (expireFromNowSeconds > 0) {
+        //   program.expires = moment().unix() + expireFromNowSeconds;
+        programs.push(program);
+        // }
       }
     });
   });
