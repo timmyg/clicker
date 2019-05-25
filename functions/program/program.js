@@ -258,7 +258,7 @@ module.exports.syncNew = async event => {
     console.info(`pulled ${schedule.length} channels`);
     const allPrograms = build(schedule, zip);
     const transformedPrograms = transformPrograms(allPrograms);
-    console.log('tp', transformedPrograms[0]);
+    // console.log('tp', transformedPrograms[0]);
     const dbResult = await Program.batchPut(transformedPrograms);
 
     // await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
@@ -372,16 +372,17 @@ function build(dtvSchedule, zip) {
           ),
         );
         // expire 30 minutes after end time
-        const expireFromNowSeconds = moment(program.end)
-          .add(30, 'minutes')
-          .diff(moment(), 'seconds');
-        if (expireFromNowSeconds > 0) {
-          // program.expires = (moment().unix() + expireFromNowSeconds) * 1000;
-          // program.expires = 1000;
-          // program.expires = 1558885353;
-          console.log('program', program);
-          programs.push(program);
-        }
+        // const expireFromNowSeconds = moment(program.end)
+        //   .add(30, 'minutes')
+        //   .diff(moment(), 'seconds');
+        // if (expireFromNowSeconds > 0) {
+        // program.expires = (moment().unix() + expireFromNowSeconds) * 1000;
+        // program.expires = 1000;
+        // program.expires = 1558885353;
+        // console.log('program', program);
+        // console.log('pushing');
+        programs.push(program);
+        // }
       }
     });
   });
