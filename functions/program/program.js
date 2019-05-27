@@ -70,6 +70,7 @@ function init() {
       },
     },
   );
+  
   // ProgrammingArea = dynamoose.model(
   //   process.env.tableProgrammingArea,
   //   {
