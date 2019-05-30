@@ -7,7 +7,6 @@ const trello = new Trello(process.env.trelloApiKey, process.env.trelloAuthToken)
 const stage = process.env.stage;
 const webSignupsListId = '5ca63bbb28858a47be1b5f9a';
 
-// TODO test
 module.exports.create = async event => {
   const body = getBody(event);
   const { email } = body;
