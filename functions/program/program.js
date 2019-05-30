@@ -374,6 +374,7 @@ function build(dtvSchedule, zip) {
               .unix() * 1000,
           ),
         );
+        
         // expire 30 minutes after end time
         // const expireFromNowSeconds = moment(program.end)
         //   .add(30, 'minutes')
