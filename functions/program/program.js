@@ -70,6 +70,7 @@ function init() {
       },
     },
   );
+  
   // ProgrammingArea = dynamoose.model(
   //   process.env.tableProgrammingArea,
   //   {
@@ -360,6 +361,7 @@ function build(dtvSchedule, zip) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
+
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.zip = zip;
@@ -372,6 +374,7 @@ function build(dtvSchedule, zip) {
               .unix() * 1000,
           ),
         );
+        
         // expire 30 minutes after end time
         // const expireFromNowSeconds = moment(program.end)
         //   .add(30, 'minutes')
