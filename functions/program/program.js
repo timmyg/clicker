@@ -361,6 +361,7 @@ function build(dtvSchedule, zip) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
+
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.zip = zip;
