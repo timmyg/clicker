@@ -16,6 +16,7 @@ import { AuthModule } from '../auth/auth.module';
 import { LoginComponent } from '../auth/login/login.component';
 import { LoggingInComponent } from './logging-in.component';
 import { environment } from 'src/environments/environment';
+import { FeatureFlag } from '../directives/feature-flag.directive';
 
 const routes: Routes = [
   {
@@ -41,7 +42,7 @@ const routes: Routes = [
     NgxStripeModule.forRoot(environment.stripe.publishableKey),
     RouterModule.forChild(routes),
   ],
-  declarations: [ProfilePage, WalletPage, ReservationComponent, LoggingInComponent],
+  declarations: [ProfilePage, WalletPage, ReservationComponent, LoggingInComponent, FeatureFlag],
   entryComponents: [WalletPage, LoginComponent],
 })
 export class ProfilePageModule {}
