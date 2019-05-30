@@ -6,6 +6,7 @@ const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 const initialTokens = 2;
 
+
 const Wallet = dynamoose.model(
   process.env.tableWallet,
   {

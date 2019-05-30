@@ -22,7 +22,12 @@
   <ion-grid padding-horizontal padding-top size="12">
     <ion-row margin-bottom>
       <ion-button size="small" color="primary" (click)="createNewReservation()">New Reservation</ion-button>
-      <ion-button size="small" color="success" (click)="openWallet()" *ngIf="(user$ | async)?.guest !== true"
+      <ion-button
+        size="small"
+        color="success"
+        (click)="openWallet()"
+        *ngIf="(user$ | async)?.guest !== true"
+        [feature]="'money'"
         >Add Tokens</ion-button
       >
       <ion-button size="small" color="light" (click)="openFeedback()">Give Feedback</ion-button>
