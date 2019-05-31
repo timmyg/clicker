@@ -213,6 +213,9 @@ function rankPrograms(programs) {
 }
 
 function rank(program) {
+  if (!program || !program.title) {
+    return program;
+  }
   const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 3 }, { term: 'cincinnati', points: 5 }];
   const { title } = program;
   const searchTarget = title;
@@ -228,11 +231,11 @@ function rank(program) {
 
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;
-    if (program.subcategories.includes('Golf')) {
-      if (program.title.includes('PGA Championship') && program.live) {
-        totalPoints += 5;
-      }
+    // if (program.subcategories.includes('Golf')) {
+    if (program.title.includes('PGA Championship') && program.live) {
+      totalPoints += 5;
     }
+    // }
   }
 
   program.points = totalPoints;
