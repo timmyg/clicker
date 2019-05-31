@@ -17,6 +17,9 @@ export class ReserveService {
   private emitRefreshedSource = new Subject<any>();
   refreshedEmitted$ = this.emitRefreshedSource.asObservable();
 
+  private emitShowingLocationsSource = new Subject<boolean>();
+  showingLocationsEmitted$ = this.emitShowingLocationsSource.asObservable();
+
   public isRefreshing: boolean;
 
   emitTitle(title: any) {
@@ -29,6 +32,10 @@ export class ReserveService {
 
   emitCloseSearch() {
     this.emitCloseSearchSource.next();
+  }
+
+  emitShowingLocations() {
+    this.emitShowingLocationsSource.next();
   }
 
   emitRefresh() {

@@ -17,11 +17,12 @@ export class ReservePage {
   @ViewChild('searchbar') searchbar: IonSearchbar;
   title: String;
   searchMode: boolean;
+  showingLocations: boolean;
   tokenCount$: Observable<number>;
 
   constructor(
     private store: Store<fromStore.AppState>,
-    private reserveService: ReserveService,
+    public reserveService: ReserveService,
     private navCtrl: NavController,
     private router: Router,
     public events: Events,
@@ -29,8 +30,11 @@ export class ReservePage {
     this.reserveService.titleEmitted$.subscribe(title => {
       this.title = title;
     });
-    this.reserveService.closeSearchEmitted$.subscribe(x => {
+    this.reserveService.closeSearchEmitted$.subscribe(() => {
       this.closeSearch();
+    });
+    this.reserveService.showingLocationsEmitted$.subscribe(() => {
+      this.showingLocations = true;
     });
     this.tokenCount$ = this.store.select(getUserTokenCount);
   }
@@ -48,12 +52,8 @@ export class ReservePage {
   }
 
   isSearchablePage() {
-    return this.router.url.includes('programs') || this.router.url.includes('locations');
+    return this.router.url.includes('programs') || (this.router.url.includes('locations') && this.showingLocations);
   }
-
-  // openSearch() {
-  //   this.searchMode = true;
-  // }
 
   toggleSearch() {
     this.searchMode = !this.searchMode;

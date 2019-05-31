@@ -1,35 +1,35 @@
 <ion-slides pager="true" [options]="options" align-items-center *ngIf="ready && !onboarded">
-  <ion-slide>
+  <ion-slide class="what">
     <ion-card>
-      <ion-icon name="tv"></ion-icon>
+      <ion-icon class="header" name="tv"></ion-icon>
       <ion-card-header> <ion-card-title>What is Clicker?</ion-card-title> </ion-card-header>
       <ion-card-content>
-        <span> Clicker allows you to change the channel at your favorite places with just a few clicks</span>
+        <span> Clicker allows you to change the channel at your favorite places in just a few clicks</span>
       </ion-card-content>
-      <span class="swipe">&#60;&#60; Swipe</span>
+      <span class="swipe"><ion-icon class="arrow" name="arrow-back"></ion-icon> Swipe</span>
     </ion-card>
   </ion-slide>
-  <ion-slide>
+  <ion-slide class="how">
     <ion-card>
-      <ion-icon name="wifi"></ion-icon>
+      <ion-icon class="header" name="wifi"></ion-icon>
       <ion-card-header> <ion-card-title>How's it work?</ion-card-title> </ion-card-header>
       <ion-card-content>
-        <span>If you're at a Clicker enabled location, it's simple:</span>
-        <ul text-left>
-          <li>Choose your location so we know where you're at</li>
-          <li>Choose the channel from our live guide</li>
-          <li>Choose the TV - all TVs have a label</li>
-        </ul>
+        <span>If you're at a Clicker enabled location, simply:</span>
+        <ol text-left>
+          <li>Choose the location you're at</li>
+          <li>Use live guide to choose a channel</li>
+          <li>Choose the TV by it's label</li>
+        </ol>
       </ion-card-content>
-      <span class="swipe">&#60;&#60; Swipe</span>
+      <span class="swipe"><ion-icon class="arrow" name="arrow-back"></ion-icon> Swipe</span>
     </ion-card>
   </ion-slide>
-  <ion-slide>
+  <ion-slide class="do">
     <ion-card>
       <ion-icon name="basketball"></ion-icon>
       <ion-card-header> <ion-card-title>Let's Do It.</ion-card-title> </ion-card-header>
       <ion-card-content>
-        <span> We put two tokens in your account to get you started.</span>
+        <span> We put a few tokens in your account to get you started!</span>
         <div margin-top><ion-button color="success" (click)="onGetStarted()" size="large">Get Started</ion-button></div>
       </ion-card-content>
     </ion-card>

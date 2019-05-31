@@ -16,6 +16,7 @@ const allChannels = [
   { channel: 209, channelTitle: 'ESPN2' },
   { channel: 213, channelTitle: 'MLB' },
   { channel: 219, channelTitle: 'FS1' },
+  { channel: 618, channelTitle: 'FS2' },
   { channel: 245, channelTitle: 'TNT' },
   { channel: 247, channelTitle: 'TBS' },
   { channel: 220, channelTitle: 'NBCSN' },
@@ -70,7 +71,7 @@ function init() {
       },
     },
   );
-  
+
   // ProgrammingArea = dynamoose.model(
   //   process.env.tableProgrammingArea,
   //   {
@@ -157,20 +158,22 @@ module.exports.getAll = async event => {
   initialChannels.forEach((p, index, arr) => {
     // find if in current programming
     const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
-
-    // keep minor channel if has one
-    currentProgram.channelMinor = p.channelMinor;
-
-    // find if in next programming
-    const nextProgram = nextProgramming.find(np => np.channel === p.channel);
-
-    // if next program is not the same as current one
-    if (currentProgram && nextProgram && nextProgram.programId !== currentProgram.programId) {
-      currentProgram.nextProgramTitle = nextProgram.title;
-      currentProgram.nextProgramStart = nextProgram.start;
-    }
+    // program may not be in guide yet
     if (currentProgram) {
-      arr[index] = currentProgram;
+      // keep minor channel if has one
+      currentProgram.channelMinor = p.channelMinor;
+
+      // find if in next programming
+      const nextProgram = nextProgramming.find(np => np.channel === p.channel);
+
+      // if next program is not the same as current one
+      if (currentProgram && nextProgram && nextProgram.programId !== currentProgram.programId) {
+        currentProgram.nextProgramTitle = nextProgram.title;
+        currentProgram.nextProgramStart = nextProgram.start;
+      }
+      if (currentProgram) {
+        arr[index] = currentProgram;
+      }
     }
   });
   console.timeEnd('nextProgram');
@@ -192,7 +195,7 @@ function cleanupTitles(programs) {
 }
 
 function cleanup(program) {
-  if (program.title.toLowerCase() === 'mlb baseball') {
+  if (program) {
     if (program.episodeTitle && (program.episodeTitle.includes(' @ ') || program.episodeTitle.includes(' at '))) {
       program.title = program.episodeTitle;
     } else if (program.description && (program.description.includes(' @ ') || program.description.includes(' at '))) {
@@ -210,6 +213,9 @@ function rankPrograms(programs) {
 }
 
 function rank(program) {
+  if (!program || !program.title) {
+    return program;
+  }
   const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 3 }, { term: 'cincinnati', points: 5 }];
   const { title } = program;
   const searchTarget = title;
@@ -224,12 +230,12 @@ function rank(program) {
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
 
   if (program.subcategories) {
-    program.subcategories.includes('Playoffs') ? (totalPoints += 5) : null;
-    if (program.subcategories.includes('Golf')) {
-      if (program.title.includes('PGA Championship') && program.live) {
-        totalPoints += 5;
-      }
+    program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;
+    // if (program.subcategories.includes('Golf')) {
+    if (program.title.includes('PGA Championship') && program.live) {
+      totalPoints += 5;
     }
+    // }
   }
 
   program.points = totalPoints;
@@ -361,7 +367,6 @@ function build(dtvSchedule, zip) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
-
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.zip = zip;
@@ -374,7 +379,7 @@ function build(dtvSchedule, zip) {
               .unix() * 1000,
           ),
         );
-        
+
         // expire 30 minutes after end time
         // const expireFromNowSeconds = moment(program.end)
         //   .add(30, 'minutes')
