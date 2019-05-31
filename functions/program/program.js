@@ -158,20 +158,22 @@ module.exports.getAll = async event => {
   initialChannels.forEach((p, index, arr) => {
     // find if in current programming
     const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
-
-    // keep minor channel if has one
-    currentProgram.channelMinor = p.channelMinor;
-
-    // find if in next programming
-    const nextProgram = nextProgramming.find(np => np.channel === p.channel);
-
-    // if next program is not the same as current one
-    if (currentProgram && nextProgram && nextProgram.programId !== currentProgram.programId) {
-      currentProgram.nextProgramTitle = nextProgram.title;
-      currentProgram.nextProgramStart = nextProgram.start;
-    }
+    // program may not be in guide yet
     if (currentProgram) {
-      arr[index] = currentProgram;
+      // keep minor channel if has one
+      currentProgram.channelMinor = p.channelMinor;
+
+      // find if in next programming
+      const nextProgram = nextProgramming.find(np => np.channel === p.channel);
+
+      // if next program is not the same as current one
+      if (currentProgram && nextProgram && nextProgram.programId !== currentProgram.programId) {
+        currentProgram.nextProgramTitle = nextProgram.title;
+        currentProgram.nextProgramStart = nextProgram.start;
+      }
+      if (currentProgram) {
+        arr[index] = currentProgram;
+      }
     }
   });
   console.timeEnd('nextProgram');
