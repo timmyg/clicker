@@ -101,13 +101,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
         this.navCtrl.navigateForward(['../programs'], {
           relativeTo: this.route,
           queryParamsHandling: 'merge',
-          // skipLocationChange: true,
         });
       } else {
         this.navCtrl.navigateForward(['../confirmation'], {
           relativeTo: this.route,
           queryParamsHandling: 'merge',
-          // skipLocationChange: true,
         });
       }
     } else {
@@ -201,16 +199,19 @@ export class LocationsComponent implements OnDestroy, OnInit {
           const { latitude, longitude } = response.coords;
           this.userGeolocation = { latitude, longitude };
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+          this.reserveService.emitShowingLocations();
         })
         .catch(error => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+          this.reserveService.emitShowingLocations();
           console.error('Error getting location', error);
         });
     } else if (permissionStatus === permissionGeolocation.values.denied) {
       this.askForGeolocation$.next(false);
       this.evaluatingGeolocation = false;
+      this.reserveService.emitShowingLocations();
       this.store.dispatch(new fromLocation.GetAll());
     } else {
       this.askForGeolocation$.next(true);

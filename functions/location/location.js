@@ -95,11 +95,12 @@ module.exports.get = async event => {
   await location.save();
 
   // filter out inactive boxes
-  location.boxes.forEach((o, i, boxes) => {
-    if (!boxes[i].active) {
-      boxes.splice(i, 1);
-    }
-  });
+  // location.boxes.forEach((o, i, boxes) => {
+  //   if (!boxes[i].active) {
+  //     boxes.splice(i, 1);
+  //   }
+  // });
+  location.boxes = location.boxes.filter(b => b.active);
 
   // sort boxes alphabetically
   location.boxes = location.boxes.sort((a, b) => {
