@@ -195,7 +195,7 @@ function cleanupTitles(programs) {
 }
 
 function cleanup(program) {
-  if (program.title.toLowerCase() === 'mlb baseball') {
+  if (program) {
     if (program.episodeTitle && (program.episodeTitle.includes(' @ ') || program.episodeTitle.includes(' at '))) {
       program.title = program.episodeTitle;
     } else if (program.description && (program.description.includes(' @ ') || program.description.includes(' at '))) {
