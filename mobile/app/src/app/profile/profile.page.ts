@@ -126,8 +126,9 @@ export class ProfilePage {
           cssClass: 'secondary',
           handler: async () => {
             const originalToken = await this.storage.get('originalToken');
-            // await this.storage.clear();
+            await this.storage.clear();
             // await this.storage.remove(items[i].id);
+            await this.storage.set('originalToken', originalToken);
             await this.storage.set('token', originalToken);
             return location.reload();
           },

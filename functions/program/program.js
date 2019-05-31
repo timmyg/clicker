@@ -70,7 +70,7 @@ function init() {
       },
     },
   );
-  
+
   // ProgrammingArea = dynamoose.model(
   //   process.env.tableProgrammingArea,
   //   {
@@ -224,7 +224,7 @@ function rank(program) {
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
 
   if (program.subcategories) {
-    program.subcategories.includes('Playoffs') ? (totalPoints += 5) : null;
+    program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;
     if (program.subcategories.includes('Golf')) {
       if (program.title.includes('PGA Championship') && program.live) {
         totalPoints += 5;
@@ -361,7 +361,6 @@ function build(dtvSchedule, zip) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
-
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.zip = zip;
@@ -374,7 +373,7 @@ function build(dtvSchedule, zip) {
               .unix() * 1000,
           ),
         );
-        
+
         // expire 30 minutes after end time
         // const expireFromNowSeconds = moment(program.end)
         //   .add(30, 'minutes')
