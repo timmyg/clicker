@@ -16,6 +16,7 @@ const allChannels = [
   { channel: 209, channelTitle: 'ESPN2' },
   { channel: 213, channelTitle: 'MLB' },
   { channel: 219, channelTitle: 'FS1' },
+  { channel: 618, channelTitle: 'FS2' },
   { channel: 245, channelTitle: 'TNT' },
   { channel: 247, channelTitle: 'TBS' },
   { channel: 220, channelTitle: 'NBCSN' },
