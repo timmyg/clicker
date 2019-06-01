@@ -56,7 +56,7 @@ import Faq from './landing/Faq';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
 
-Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
+// Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
 Vue.use(VueScrollReveal);
 Vue.use(VueBrowserUpdate, {
   options: {
