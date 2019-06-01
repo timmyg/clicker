@@ -14,6 +14,8 @@ const allChannels = [
   { channel: 19, channelTitle: 'FOX' },
   { channel: 206, channelTitle: 'ESPN' },
   { channel: 209, channelTitle: 'ESPN2' },
+  { channel: 208, channelTitle: 'ESPNU' },
+  { channel: 207, channelTitle: 'ESPNN' },
   { channel: 213, channelTitle: 'MLB' },
   { channel: 219, channelTitle: 'FS1' },
   { channel: 618, channelTitle: 'FS2' },
