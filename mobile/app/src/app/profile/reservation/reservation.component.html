@@ -4,8 +4,8 @@
       <span>{{ reservation.program.channelTitle }} - TV #{{ reservation.box.label }}</span>
       <span float-right>
         <!-- <span>{{ minutesFromNow$ | async }} left</span> -->
-        <span *ngIf="isReserved() && timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>
-        <span *ngIf="isReserved() && timeLeft?.minutes <= 0">Expired</span>
+        <span *ngIf="timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>
+        <span *ngIf="timeLeft?.minutes <= 0">Expired</span>
         <!-- <span *ngIf="!isReserved()">Expired</span> -->
       </span>
     </ion-card-subtitle>
@@ -13,6 +13,6 @@
   <ion-card-content>
     <!-- <div>{{ reservation.programTitle }}</div> -->
     <span>Length: {{ getTimeLeft(reservation.minutes).label }}</span>
-    <ion-button fill="clear" (click)="!disableModify && modify()" float-right>Modify</ion-button>
+    <ion-button fill="clear" (click)="modify()" float-right>Modify</ion-button>
   </ion-card-content>
 </ion-card>

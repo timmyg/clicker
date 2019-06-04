@@ -17,19 +17,16 @@ export class ReservationGuard implements CanActivate {
     this.reservation$ = this.store.select(getReservation);
   }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.reservation$.pipe(
-      take(1),
       map(r => {
-        const isValidReservation = r && r.location !== null;
+        console.log(r);
+        const isValidReservation = r && r.location !== undefined;
         if (!isValidReservation) {
           console.info('bad reservation, starting over');
           this.router.navigate(['/tabs/reserve']);
         }
-        return isValidReservation;
+        return true;
       }),
     );
   }

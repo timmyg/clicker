@@ -23,6 +23,7 @@ export class LocationComponent {
   isAvailable() {
     return this.location.active && this.location.connected;
   }
+
   onLocationClick() {
     this.onClick.emit(this.location);
   }

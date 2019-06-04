@@ -1,6 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { interval, Observable, of } from 'rxjs';
-import { map, distinctUntilChanged, startWith } from 'rxjs/operators';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import * as moment from 'moment';
 import { ActionSheetController, ModalController, AlertController, ToastController } from '@ionic/angular';
@@ -21,15 +19,13 @@ interface TimeLeft {
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
-  // timeFromNow$: Observable<TimeLeft>;
-  disableModify: boolean;
+  @Output() onModify = new EventEmitter<Reservation>();
   timeLeft: TimeLeft;
   editChannelModal;
   editTimeModal;
   intervalJobId;
 
   constructor(
-    public actionSheetController: ActionSheetController,
     public alertController: AlertController,
     private store: Store<fromStore.AppState>,
     private router: Router,
@@ -43,78 +39,8 @@ export class ReservationComponent implements OnInit {
     this.intervalJobId = setInterval(() => this.setTimeLeftRefresher(), secondsToRefresh * 1000);
   }
 
-  async showModify() {
-    this.disableModify = true;
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Modify Reservation',
-      buttons: [
-        {
-          text: 'Cancel Reservation',
-          role: 'destructive',
-          handler: () => {
-            this.onReservationCancel(this.reservation);
-          },
-        },
-        {
-          text: 'Change Channel',
-          handler: () => {
-            const reservationToUpdate = Object.assign({}, this.reservation);
-            delete reservationToUpdate.program;
-            this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
-            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'channel' }, skipLocationChange: true });
-          },
-        },
-        {
-          text: 'Add Time',
-          handler: () => {
-            const reservationToUpdate = Object.assign({}, this.reservation);
-            this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
-            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'time' }, skipLocationChange: true });
-          },
-        },
-      ],
-    });
-    actionSheet.onDidDismiss().then(() => (this.disableModify = false));
-    await actionSheet.present();
-  }
-
-  async onReservationCancel(reservation: Reservation) {
-    const alert = await this.alertController.create({
-      header: 'Are you sure?',
-      message:
-        'You will not be refunded any tokens, but you will be freeing up a TV for other patrons, which is appreciated ✌️',
-      buttons: [
-        {
-          text: 'Cancel Reservation',
-          role: 'destructive',
-          cssClass: 'secondary',
-          handler: () => {
-            this.store.dispatch(new fromReservation.Cancel(reservation));
-            clearInterval(this.intervalJobId);
-          },
-        },
-      ],
-    });
-
-    await alert.present();
-  }
-
-  modify() {
-    if (this.isReserved()) {
-      const endTime = moment(this.reservation.end);
-      const duration = moment.duration(endTime.diff(moment())).asMilliseconds();
-      if (duration > 0) {
-        this.showModify();
-      } else {
-        this.showToast('Sorry, your reservation has expired');
-      }
-    } else {
-      this.showToast('Sorry, you did not reserve this TV for a time period');
-    }
-  }
-
-  isReserved() {
-    return this.reservation.minutes > 0;
+  ngOnDestroy(): void {
+    clearInterval(this.intervalJobId);
   }
 
   private setTimeLeftRefresher() {
@@ -125,6 +51,10 @@ export class ReservationComponent implements OnInit {
     if (minutes <= 0) {
       clearInterval(this.intervalJobId);
     }
+  }
+
+  modify() {
+    this.onModify.emit(this.reservation);
   }
 
   getTimeLeft(minutes): TimeLeft {
@@ -148,14 +78,5 @@ export class ReservationComponent implements OnInit {
       label,
       minutes,
     };
-  }
-
-  async showToast(message) {
-    const toastInvalid = await this.toastController.create({
-      message: message,
-      duration: 2000,
-      cssClass: 'ion-text-center',
-    });
-    toastInvalid.present();
   }
 }
