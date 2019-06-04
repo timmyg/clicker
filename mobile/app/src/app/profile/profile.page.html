@@ -1,9 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Home</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="start">
       <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
     </ion-buttons>
+    <ion-buttons slot="end"> coins </ion-buttons>
     <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>
   </ion-toolbar>
 </ion-header>
@@ -51,7 +52,9 @@
     </ion-row>
     <ng-template #ready>
       <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
-        <div *ngFor="let r of (reservations$ | async)"><app-reservation [reservation]="r"></app-reservation></div>
+        <div *ngFor="let r of (reservations$ | async)">
+          <app-reservation [reservation]="r" (onModify)="onModify($event)"></app-reservation>
+        </div>
       </div>
       <ng-template #empty>
         <div padding-horizontal class="ion-text-center">

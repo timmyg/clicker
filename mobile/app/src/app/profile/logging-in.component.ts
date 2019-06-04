@@ -10,6 +10,7 @@ import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { Location } from '@angular/common';
 
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
@@ -31,6 +32,7 @@ export class LoggingInComponent {
     public toastController: ToastController,
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
   ) {
     this.userId$ = this.store.select(getUserId);
   }
@@ -47,6 +49,7 @@ export class LoggingInComponent {
     const context = this;
     auth.parseHash({ hash: fragment }, async (err, authResult) => {
       if (err) {
+        console.error(err);
       } else if (authResult) {
         // alias user (move tokens to new user)
         const jwt = authResult.idToken;
@@ -56,7 +59,7 @@ export class LoggingInComponent {
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
           this.userService.setToken(jwt);
           setTimeout(async () => {
-            this.router.navigate(['/tabs/profile']);
+            this.router.navigateByUrl('/tabs/profile', { skipLocationChange: true });
             const toast = await context.toastController.create({
               message: `Successfully logged in.`,
               duration: 2000,
