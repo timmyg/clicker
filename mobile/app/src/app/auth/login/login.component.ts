@@ -31,7 +31,7 @@ export class LoginComponent {
     this.modalController.dismiss();
   }
 
-  async onPhoneSubmit(x) {
+  async onPhoneSubmit() {
     this.waiting = true;
     auth.passwordlessStart(
       {

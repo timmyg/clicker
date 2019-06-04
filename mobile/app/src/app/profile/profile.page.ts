@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { Reservation } from '../state/reservation/reservation.model';
-import { Observable, forkJoin, zip } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
-import { getUser, getUserTokenCount, getLoading as getWalletLoading } from '../state/user';
+import { getUser, getLoading as getWalletLoading } from '../state/user';
 import { ModalController, AlertController, ToastController, Platform, ActionSheetController } from '@ionic/angular';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
-import { WalletPage } from './wallet/wallet.page';
+// import { WalletPage } from './wallet/wallet.page';
 import * as fromReservation from '../state/reservation/reservation.actions';
 import * as fromUser from '../state/user/user.actions';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -20,6 +20,7 @@ import { UserService } from '../core/services/user.service';
 import { environment } from 'src/environments/environment.production';
 import { take } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
+import { WalletPage } from '../wallet/wallet.page';
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +30,6 @@ import { ofType, Actions } from '@ngrx/effects';
 export class ProfilePage {
   reservations$: Observable<Reservation[]>;
   user$: Observable<User>;
-  tokenCount$: Observable<number>;
   isReservationsLoading$: Observable<boolean>;
   isWalletLoading$: Observable<boolean>;
   faCopyright = faCopyright;
@@ -52,7 +52,6 @@ export class ProfilePage {
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
-    this.tokenCount$ = this.store.select(getUserTokenCount);
     this.isReservationsLoading$ = this.store.select(getReservationLoading);
     this.isWalletLoading$ = this.store.select(getWalletLoading);
   }
@@ -71,13 +70,6 @@ export class ProfilePage {
       component: LoginComponent,
     });
     return await this.loginModal.present();
-  }
-
-  async openWallet() {
-    this.walletModal = await this.modalController.create({
-      component: WalletPage,
-    });
-    return await this.walletModal.present();
   }
 
   async openFeedback() {

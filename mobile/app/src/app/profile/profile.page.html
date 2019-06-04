@@ -4,12 +4,20 @@
     <ion-buttons slot="start">
       <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end"> coins </ion-buttons>
+    <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
     <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>
   </ion-toolbar>
 </ion-header>
 
 <ion-content margin-top>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="success" (click)="createNewReservation()"> <ion-icon name="add"></ion-icon> </ion-fab-button>
+  </ion-fab>
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button color="primary" (click)="openFeedback()"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button>
+  </ion-fab>
+  <!-- <ion-button size="small" color="light" (click)="openFeedback()">Contact Us</ion-button> -->
+
   <ion-refresher slot="fixed" [pullMax]="300" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
       pullingIcon="arrow-down"
@@ -21,31 +29,7 @@
   </ion-refresher>
 
   <ion-grid padding-horizontal padding-top size="12">
-    <ion-row margin-bottom>
-      <ion-button size="small" color="primary" (click)="createNewReservation()">New Reservation</ion-button>
-      <ion-button
-        size="small"
-        color="success"
-        (click)="openWallet()"
-        *ngIf="(user$ | async)?.guest !== true"
-        [feature]="'money'"
-        >Add Tokens</ion-button
-      >
-      <ion-button size="small" color="light" (click)="openFeedback()">Give Feedback</ion-button>
-    </ion-row>
-    <!-- <ion-row margin-bottom> <b>Phone:&nbsp;</b><span>513-843-3209</span> </ion-row> -->
-    <ion-row margin-bottom> </ion-row>
-    <ion-row margin-bottom align-items-center>
-      <b>Wallet:&nbsp;</b>
-      <span *ngIf="(isReservationsLoading$ | async); else walletReady" margin-vertical>
-        <ion-spinner name="crescent" class="center"></ion-spinner>
-      </span>
-      <ng-template #walletReady>
-        <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
-        <span>&nbsp;{{ tokenCount$ | async }}</span>
-      </ng-template>
-    </ion-row>
-    <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>
+    <ion-row margin-bottom> <b>My Reservations</b> </ion-row>
 
     <ion-row *ngIf="(isReservationsLoading$ | async); else ready" margin-vertical>
       <ion-spinner name="crescent" class="center"></ion-spinner>

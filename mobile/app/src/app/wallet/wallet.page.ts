@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { FormGroup } from '@angular/forms';
 import { ToastController, ModalController, AlertController } from '@ionic/angular';
-import * as fromUser from '../../state/user/user.actions';
+import * as fromUser from '../state/user/user.actions';
 import { Store } from '@ngrx/store';
-import * as fromStore from '../../state/app.reducer';
+import * as fromStore from '../state/app.reducer';
 import { Observable } from 'rxjs';
 import { Card } from 'src/app/state/user/card.model';
 import { getUserCard } from 'src/app/state/user';
+import { getUserTokenCount } from '../state/user';
 
 @Component({
   selector: 'app-wallet',
@@ -158,5 +159,9 @@ export class WalletPage {
     });
 
     await alert.present();
+  }
+
+  getCoinCount(): Observable<number> {
+    return this.store.select(getUserTokenCount);
   }
 }

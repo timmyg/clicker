@@ -50,6 +50,7 @@ export class LoggingInComponent {
     auth.parseHash({ hash: fragment }, async (err, authResult) => {
       if (err) {
         console.error(err);
+        this.router.navigate(['/tabs/profile'], { replaceUrl: true });
       } else if (authResult) {
         // alias user (move tokens to new user)
         const jwt = authResult.idToken;
@@ -59,7 +60,7 @@ export class LoggingInComponent {
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
           this.userService.setToken(jwt);
           setTimeout(async () => {
-            this.router.navigateByUrl('/tabs/profile', { skipLocationChange: true });
+            this.router.navigate(['/tabs/profile'], { replaceUrl: true });
             const toast = await context.toastController.create({
               message: `Successfully logged in.`,
               duration: 2000,

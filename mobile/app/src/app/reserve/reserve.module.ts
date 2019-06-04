@@ -18,6 +18,8 @@ import { ProgramComponent } from './components/programs/program/program.componen
 import { LocationsFilterPipe } from './pipes/locations-filter.pipe';
 import { InfoComponent } from './components/programs/info/info.component';
 import { LocationComponent } from './components/locations/location/location.component';
+import { WalletModule } from '../wallet/wallet.module';
+import { WalletPage } from '../wallet/wallet.page';
 
 const routes: Routes = [
   {
@@ -53,7 +55,15 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [SharedModule, CommonModule, FormsModule, IonicModule, MomentModule, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    WalletModule,
+    MomentModule,
+    RouterModule.forChild(routes),
+  ],
   declarations: [
     ReservePage,
     LocationsComponent,
@@ -66,6 +76,6 @@ const routes: Routes = [
     InfoComponent,
     LocationComponent,
   ],
-  entryComponents: [InfoComponent],
+  entryComponents: [InfoComponent, WalletPage],
 })
 export class ReservePageModule {}
