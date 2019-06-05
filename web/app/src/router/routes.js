@@ -22,6 +22,12 @@ export default [
     component: Login,
   },
   {
+    path: '/app',
+    beforeEnter() {
+      window.location = process.env.VUE_APP_MOBILE_URL;
+    },
+  },
+  {
     path: '/404',
     name: '404',
     component: 404,
