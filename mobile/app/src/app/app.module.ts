@@ -21,7 +21,6 @@ import { filter, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { CoinsComponent } from './src/app/wallet/coins/coins.component';
 
 export function checkParams(store: Store<AppState>): Function {
   return () =>
@@ -51,7 +50,7 @@ export function initUserStuff(store: Store<AppState>): Function {
     });
 }
 @NgModule({
-  declarations: [AppComponent, CoinsComponent],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
