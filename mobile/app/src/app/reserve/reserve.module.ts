@@ -33,7 +33,7 @@ const routes: Routes = [
       {
         path: 'programs',
         component: ProgramsComponent,
-        canActivate: [ReservationGuard],
+        // canActivate: [ReservationGuard],
       },
       {
         path: 'tvs',

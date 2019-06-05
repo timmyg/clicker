@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Home</ion-title>
+    <ion-title>My Reservations</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
     </ion-buttons>
@@ -13,9 +13,9 @@
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="success" (click)="createNewReservation()"> <ion-icon name="add"></ion-icon> </ion-fab-button>
   </ion-fab>
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="openFeedback()"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
   <!-- <ion-button size="small" color="light" (click)="openFeedback()">Contact Us</ion-button> -->
 
   <ion-refresher slot="fixed" [pullMax]="300" (ionRefresh)="doRefresh($event)">
@@ -29,8 +29,7 @@
   </ion-refresher>
 
   <ion-grid padding-horizontal padding-top size="12">
-    <ion-row margin-bottom> <b>My Reservations</b> </ion-row>
-
+    <!-- <ion-row margin-bottom> <b>My Reservations</b> </ion-row> -->
     <ion-row *ngIf="(isReservationsLoading$ | async); else ready" margin-vertical>
       <ion-spinner name="crescent" class="center"></ion-spinner>
     </ion-row>
@@ -43,7 +42,7 @@
       <ng-template #empty>
         <div padding-horizontal class="ion-text-center">
           <p>No active reservations.</p>
-          <p><a (click)="createNewReservation()">Change the channel now.</a></p>
+          <p><a (click)="createNewReservation()">Change the channel</a></p>
         </div>
       </ng-template>
     </ng-template>
