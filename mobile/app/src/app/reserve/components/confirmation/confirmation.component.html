@@ -12,7 +12,7 @@
               <span padding-start>{{ p.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" value="{{ p.minutes }}" [disabled]="saving" checked></ion-radio>
+          <ion-radio slot="start" value="{{ p.minutes }}" [disabled]="saving || p.disabled" checked></ion-radio>
         </ion-item>
       </ion-radio-group>
     </ion-list>
@@ -28,6 +28,9 @@
       </span>
       <!-- show when new and not reserving -->
       <ng-template #oneTime> <span *ngIf="!editMode">but others will be able to change the channel</span> </ng-template>
+      <br />
+      <br />
+      <em>Reservation periods are disabled during today's pilot</em>
     </p>
     <ion-button
       color="success"

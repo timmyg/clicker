@@ -23,14 +23,10 @@ export class FeatureFlag implements OnInit {
       const roles = u['https://mobile.tryclicker.com/roles'];
 
       const element = this.el.nativeElement;
-      console.log(element);
-      console.log(roles);
       if (this.featureNameOn) {
         if (!roles.includes(this.featureNameOn)) {
-          console.log('remove');
           this.renderer.addClass(element, 'hide');
         } else {
-          console.log('show');
           this.renderer.removeClass(element, 'hide');
         }
       } else if (this.featureNameOff) {

@@ -4,19 +4,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-import { NgxStripeModule } from 'ngx-stripe';
 
 import { ProfilePage } from './profile.page';
 import { MomentModule } from 'ngx-moment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { WalletPage } from './wallet/wallet.page';
 import { SharedModule } from '../shared/shared.module';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AuthModule } from '../auth/auth.module';
 import { LoginComponent } from '../auth/login/login.component';
 import { LoggingInComponent } from './logging-in.component';
-import { environment } from 'src/environments/environment';
 import { FeatureFlag } from '../directives/feature-flag.directive';
+import { WalletModule } from '../wallet/wallet.module';
+import { WalletPage } from '../wallet/wallet.page';
+import { CoinsComponent } from '../wallet/coins/coins.component';
 
 const routes: Routes = [
   {
@@ -36,13 +36,13 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     MomentModule,
+    WalletModule,
     FontAwesomeModule,
     AuthModule,
     ReactiveFormsModule,
-    NgxStripeModule.forRoot(environment.stripe.publishableKey),
     RouterModule.forChild(routes),
   ],
-  declarations: [ProfilePage, WalletPage, ReservationComponent, LoggingInComponent, FeatureFlag],
-  entryComponents: [WalletPage, LoginComponent],
+  declarations: [ProfilePage, ReservationComponent, LoggingInComponent, FeatureFlag],
+  entryComponents: [LoginComponent, WalletPage, CoinsComponent],
 })
 export class ProfilePageModule {}

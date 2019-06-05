@@ -222,6 +222,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
   onLocationClick(location: Location) {
     this.reserveService.emitCloseSearch();
     this.store.dispatch(new fromReservation.SetLocation(location));
+    // this.actions$
+    //   .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
+    //   .pipe(first())
+    //   .subscribe(async () => {
     this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+    // });
   }
 }

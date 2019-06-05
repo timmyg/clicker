@@ -12,17 +12,21 @@
 
 [context.production.environment]
   VUE_APP_API_URL = "https://api.tryclicker.com"
+  VUE_APP_MOBILE_URL = "https://mobile.tryclicker.com"
   VUE_APP_SEGMENT_KEY = "Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I"
   ENV = "production"
 [context.release.environment]
   VUE_APP_API_URL = "https://api-release.tryclicker.com"
+  VUE_APP_MOBILE_URL = "https://release.mobile.tryclicker.com"
   VUE_APP_SEGMENT_KEY="VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
   ENV = "release"
 [context.develop.environment]
   VUE_APP_API_URL = "https://api-develop.tryclicker.com"
+  VUE_APP_MOBILE_URL = "https://develop.mobile.tryclicker.com"
   VUE_APP_SEGMENT_KEY = "VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
   ENV = "develop"
 [context.deploy-preview.environment]
   VUE_APP_API_URL = "https://api-develop.tryclicker.com"
+  VUE_APP_MOBILE_URL = "https://develop.mobile.tryclicker.com"
   VUE_APP_SEGMENT_KEY = "VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
   ENV = "develop"

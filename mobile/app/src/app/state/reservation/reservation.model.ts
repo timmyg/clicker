@@ -15,27 +15,27 @@ export class Reservation {
   cost: Number;
   reserve: boolean;
 
-  get tvTag() {
-    return this.box.label;
-  }
+  // get tvTag() {
+  //   return this.box.label;
+  // }
 
-  get locationTown() {
-    return this.location.neighborhood;
-  }
+  // get locationTown() {
+  //   return this.location.neighborhood;
+  // }
 
-  get programTitle() {
-    return this.program.title;
-  }
+  // get programTitle() {
+  //   return this.program.title;
+  // }
 
-  hasLocation() {
-    return this.location && this.location.id;
-  }
+  // hasLocation() {
+  //   return this.location && this.location.id;
+  // }
 
-  hasChannel() {
-    return this.program && this.program.channel;
-  }
+  // hasChannel() {
+  //   return this.program && this.program.channel;
+  // }
 
-  hasTV() {
-    return this.box && this.box.label;
-  }
+  // hasTV() {
+  //   return this.box && this.box.label;
+  // }
 }

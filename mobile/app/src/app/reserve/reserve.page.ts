@@ -1,11 +1,11 @@
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
-import { NavController, Events, IonSearchbar } from '@ionic/angular';
+import { NavController, Events, IonSearchbar, ModalController } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
-import { getUserTokenCount } from '../state/user';
 import { Observable } from 'rxjs';
+import { WalletPage } from '../wallet/wallet.page';
 
 @Component({
   selector: 'app-reserve',
@@ -19,6 +19,7 @@ export class ReservePage {
   searchMode: boolean;
   showingLocations: boolean;
   tokenCount$: Observable<number>;
+  walletModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -26,6 +27,8 @@ export class ReservePage {
     private navCtrl: NavController,
     private router: Router,
     public events: Events,
+    public modalController: ModalController,
+    private walletPage: WalletPage,
   ) {
     this.reserveService.titleEmitted$.subscribe(title => {
       this.title = title;
@@ -36,7 +39,7 @@ export class ReservePage {
     this.reserveService.showingLocationsEmitted$.subscribe(() => {
       this.showingLocations = true;
     });
-    this.tokenCount$ = this.store.select(getUserTokenCount);
+    this.tokenCount$ = this.walletPage.getCoinCount();
   }
 
   goBack() {
@@ -49,6 +52,13 @@ export class ReservePage {
 
   disableRefresher() {
     return this.router.url === '/tabs/reserve/confirmation';
+  }
+
+  async onCoinsClick() {
+    this.walletModal = await this.modalController.create({
+      component: WalletPage,
+    });
+    return await this.walletModal.present();
   }
 
   isSearchablePage() {

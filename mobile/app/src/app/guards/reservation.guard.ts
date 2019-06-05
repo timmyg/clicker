@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getReservation } from 'src/app/state/reservation';
 import { Reservation } from '../state/reservation/reservation.model';
-import { take, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -17,19 +17,16 @@ export class ReservationGuard implements CanActivate {
     this.reservation$ = this.store.select(getReservation);
   }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.reservation$.pipe(
-      take(1),
       map(r => {
-        const isValidReservation = r && r.location !== null;
+        console.log(r);
+        const isValidReservation = r && r.location !== undefined;
         if (!isValidReservation) {
           console.info('bad reservation, starting over');
           this.router.navigate(['/tabs/reserve']);
         }
-        return isValidReservation;
+        return true;
       }),
     );
   }
