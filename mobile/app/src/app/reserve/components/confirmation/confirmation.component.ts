@@ -41,12 +41,14 @@ export class ConfirmationComponent implements OnInit {
       title: '30 minutes',
       minutes: 30,
       reserve: true,
+      disabled: true,
     },
     {
       tokens: 4,
       title: '1 hour',
       minutes: 60,
       reserve: true,
+      disabled: true,
     },
   ];
 

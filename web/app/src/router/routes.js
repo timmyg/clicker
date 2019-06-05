@@ -16,7 +16,7 @@ export default [
       authRequired: true,
     },
   },
-  {
+  {Î
     path: '/dev/login',
     name: 'login',
     component: Login,

@@ -2,7 +2,9 @@
   <ion-toolbar>
     <ion-title>My Reservations</ion-title>
     <ion-buttons slot="start">
-      <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
+      <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut">
+        <ion-icon name="person"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
     <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>
@@ -41,7 +43,7 @@
       </div>
       <ng-template #empty>
         <div padding-horizontal class="ion-text-center">
-          <p>No active reservations.</p>
+          <p>No active reservations</p>
           <p><a (click)="createNewReservation()">Change the channel</a></p>
         </div>
       </ng-template>
