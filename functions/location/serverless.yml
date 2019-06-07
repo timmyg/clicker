@@ -76,6 +76,7 @@ functions:
             origin: '*'
             headers:
               - partner
+              - authorization
   allByGeolocation:
     handler: location.all
     events:
