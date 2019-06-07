@@ -76,9 +76,6 @@ functions:
             origin: '*'
             headers:
               - partner
-            origin: '*'
-            headers:
-              - partner
   allByGeolocation:
     handler: location.all
     events:
