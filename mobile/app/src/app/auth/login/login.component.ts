@@ -86,7 +86,6 @@ export class LoginComponent {
           this.waiting = false;
           return console.error(err);
         }
-        this.segment.track(this.globals.events.login.completed);
         this.waiting = false;
       },
     );

@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from '../globals';
 
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
@@ -33,6 +34,7 @@ export class LoggingInComponent {
     private route: ActivatedRoute,
     private router: Router,
     private segment: SegmentService,
+    private globals: Globals,
   ) {
     this.userId$ = this.store.select(getUserId);
   }
@@ -59,6 +61,7 @@ export class LoggingInComponent {
         this.userId$.pipe(first(val => !!val)).subscribe(oldUserId => {
           this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
           this.segment.alias(newUserId, oldUserId);
+          this.segment.track(this.globals.events.login.completed);
           this.userService.setToken(jwt);
           setTimeout(async () => {
             this.router.navigate(['/tabs/profile'], { replaceUrl: true });
