@@ -62,7 +62,10 @@ functions:
       - http:
           path: health
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   all:
     handler: location.all
     events:
@@ -73,94 +76,136 @@ functions:
             origin: '*'
             headers:
               - partner
+            origin: '*'
+            headers:
+              - partner
   allByGeolocation:
     handler: location.all
     events:
       - http:
           path: '/geo/{latitude}/{longitude}'
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   get:
     handler: location.get
     events:
       - http:
           path: '{id}'
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   create:
     handler: location.create
     events:
       - http:
           path: ''
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   connected:
     handler: location.connected
     events:
       - http:
           path: 'device/{losantId}/connected'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   disconnected:
     handler: location.disconnected
     events:
       - http:
           path: 'device/{losantId}/disconnected'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   update:
     handler: location.update
     events:
       - http:
           path: '{id}'
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   setBoxes:
     handler: location.setBoxes
     events:
       - http:
           path: '{id}/boxes'
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   setLabels:
     handler: location.setLabels
     events:
       - http:
           path: '{id}/boxes/labels'
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   identifyBoxes:
     handler: location.identifyBoxes
     events:
       - http:
           path: '{id}/boxes/identify'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   setBoxReserved:
     handler: location.setBoxReserved
     events:
       - http:
           path: '{id}/boxes/{boxId}/reserved'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   setBoxFree:
     handler: location.setBoxFree
     events:
       - http:
           path: '{id}/boxes/{boxId}/free'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   allOff:
     handler: location.allOff
     events:
       - http:
           path: '{id}/boxes/off'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   allOn:
     handler: location.allOn
     events:
       - http:
           path: '{id}/boxes/on'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true

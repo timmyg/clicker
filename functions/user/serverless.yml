@@ -85,53 +85,77 @@ functions:
       - http:
           path: health
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   create:
     handler: user.create
     events:
       - http:
           path: ''
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   wallet:
     handler: user.wallet
     events:
       - http:
           path: wallet
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   updateCard:
     handler: user.updateCard
     events:
       - http:
           path: stripe/card
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   removeCard:
     handler: user.removeCard
     events:
       - http:
           path: stripe/card
           method: delete
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   replenish:
     handler: user.replenish
     events:
       - http:
           path: 'replenish'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   transaction:
     handler: user.transaction
     events:
       - http:
           path: 'transaction'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true
   alias:
     handler: user.alias
     events:
       - http:
           path: 'alias/{fromId}/{toId}'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner true

@@ -53,8 +53,7 @@ export class ApiInterceptor implements HttpInterceptor {
 
         request = request.clone({
           url: `${environment.apiBaseUrl}/${request.url}`,
-          headers: request.headers.set('Authorization', `Bearer ${authToken}`),
-          // .set('partner', partner),
+          headers: request.headers.set('Authorization', `Bearer ${authToken}`).set('partner', partner),
         });
         observer.next(request);
         observer.complete();
