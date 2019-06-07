@@ -48,10 +48,10 @@ export class ApiInterceptor implements HttpInterceptor {
       const authToken$ = this.store$.pipe(select(getUserAuthToken));
       const partner$ = this.store$.pipe(select(getPartner));
       combineLatest(authToken$, partner$).subscribe(([authToken, partner]) => {
-        console.log('hi');
+        // TODO figure out why lambda dies when no partner so we dont have to pass in none
         request = request.clone({
           url: `${environment.apiBaseUrl}/${request.url}`,
-          headers: request.headers.set('Authorization', `Bearer ${authToken}`).set('partner', partner),
+          headers: request.headers.set('Authorization', `Bearer ${authToken}`).set('partner', partner || 'none'),
         });
         console.log(request);
         observer.next(request);
