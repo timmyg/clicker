@@ -20,7 +20,6 @@ export class ReservationGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.reservation$.pipe(
       map(r => {
-        console.log(r);
         const isValidReservation = r && r.location !== undefined;
         if (!isValidReservation) {
           console.info('bad reservation, starting over');
