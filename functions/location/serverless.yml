@@ -69,7 +69,10 @@ functions:
       - http:
           path: ''
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
   allByGeolocation:
     handler: location.all
     events:

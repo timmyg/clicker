@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { Observable, of, combineLatest } from 'rxjs';
 import { mergeMap, first, filter } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Store, select } from '@ngrx/store';
 import { getUserAuthToken } from './state/user';
+import { getPartner } from './state/app';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
@@ -28,20 +29,36 @@ export class ApiInterceptor implements HttpInterceptor {
         }),
       );
     }
-    return this.store$.pipe(
-      select(getUserAuthToken),
-      filter(authToken => authToken && authToken.length > 0),
-      mergeMap((authToken: string) => {
-        if (authToken) {
-          request = request.clone({
-            url: `${environment.apiBaseUrl}/${request.url}`,
-            headers: request.headers.set('Authorization', `Bearer ${authToken}`),
-          });
-        } else {
-          console.warn(`Bad Token: ${authToken}`);
-        }
-        return of(request);
-      }),
-    );
+    // return this.store$.pipe(
+    //   select(getUserAuthToken),
+    //   filter(authToken => authToken && authToken.length > 0),
+    //   mergeMap((authToken: string) => {
+    //     if (authToken) {
+    //       request = request.clone({
+    //         url: `${environment.apiBaseUrl}/${request.url}`,
+    //         headers: request.headers.set('Authorization', `Bearer ${authToken}`),
+    //       });
+    //     } else {
+    //       console.warn(`Bad Token: ${authToken}`);
+    //     }
+    //     return of(request);
+    //   }),
+    // );
+    return Observable.create(observer => {
+      const authToken$ = this.store$.pipe(select(getUserAuthToken));
+      const partner$ = this.store$.pipe(select(getPartner));
+      combineLatest(authToken$, partner$).subscribe(([authToken, partner]) => {
+        // let headers =
+        // console.log(headers);
+
+        request = request.clone({
+          url: `${environment.apiBaseUrl}/${request.url}`,
+          headers: request.headers.set('Authorization', `Bearer ${authToken}`),
+          // .set('partner', partner),
+        });
+        observer.next(request);
+        observer.complete();
+      });
+    });
   }
 }

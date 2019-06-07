@@ -37,7 +37,6 @@ export class AppComponent {
       try {
         this.store.select(getUserId).subscribe(userId => {
           this.segment.identify(userId.replace('sms|', ''));
-          console.log(this.globals.events.opened);
           this.segment.track(this.globals.events.opened);
         });
         await SplashScreen.hide();

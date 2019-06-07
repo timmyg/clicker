@@ -33,7 +33,6 @@ export class CoinsComponent implements OnInit {
   ngOnInit() {}
 
   async onClick() {
-    console.log('onclick', this.userRoles);
     if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
       this.walletModal = await this.modalController.create({
         component: WalletPage,

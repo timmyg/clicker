@@ -140,7 +140,6 @@ export class ConfirmationComponent implements OnInit {
       .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS, fromReservation.UPDATE_RESERVATION_SUCCESS))
       .pipe(first())
       .subscribe(() => {
-        console.log('hey');
         if (this.isEditMode) {
           this.segment.track(this.globals.events.reservation.updated, {
             minutes: r.minutes,
