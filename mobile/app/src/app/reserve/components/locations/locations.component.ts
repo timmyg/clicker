@@ -18,6 +18,8 @@ import { ofType, Actions } from '@ngrx/effects';
 import { Plugins } from '@capacitor/core';
 const { Geolocation } = Plugins;
 import { Storage } from '@ionic/storage';
+import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from 'src/app/globals';
 const permissionGeolocation = {
   name: 'permission.geolocation',
   values: {
@@ -58,6 +60,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private navCtrl: NavController,
     private actions$: Actions,
     private storage: Storage,
+    private segment: SegmentService,
+    private globals: Globals,
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
@@ -110,6 +114,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       }
     } else {
       this.store.dispatch(new fromReservation.Start());
+      this.segment.track(this.globals.events.reservation.started);
     }
   }
 

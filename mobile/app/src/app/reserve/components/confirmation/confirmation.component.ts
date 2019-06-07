@@ -12,6 +12,8 @@ import { ToastController } from '@ionic/angular';
 import { startWith, map, distinctUntilChanged, first, filter } from 'rxjs/operators';
 import { isLoggedIn, getUserTokenCount } from 'src/app/state/user';
 import { Actions, ofType } from '@ngrx/effects';
+import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from 'src/app/globals';
 
 @Component({
   selector: 'app-confirmation',
@@ -58,6 +60,8 @@ export class ConfirmationComponent implements OnInit {
     private router: Router,
     public toastController: ToastController,
     private actions$: Actions,
+    private segment: SegmentService,
+    private globals: Globals,
   ) {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
@@ -126,15 +130,38 @@ export class ConfirmationComponent implements OnInit {
   }
 
   onConfirm() {
+    const { reservation: r } = this;
     this.saving = true;
     this.isEditMode
-      ? this.store.dispatch(new fromReservation.Update(this.reservation))
-      : this.store.dispatch(new fromReservation.Create(this.reservation));
-    const reservation = this.reservation;
+      ? this.store.dispatch(new fromReservation.Update(r))
+      : this.store.dispatch(new fromReservation.Create(r));
+    const reservation = r;
     this.actions$
       .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS, fromReservation.UPDATE_RESERVATION_SUCCESS))
       .pipe(first())
       .subscribe(() => {
+        console.log('hey');
+        if (this.isEditMode) {
+          this.segment.track(this.globals.events.reservation.updated, {
+            minutes: r.minutes,
+            locationName: r.location.name,
+            locationNeighborhood: r.location.neighborhood,
+            channelName: r.program.channelTitle,
+            channelNumber: r.program.channel,
+            programName: r.program.title,
+            programDescription: r.program.description,
+          });
+        } else {
+          this.segment.track(this.globals.events.reservation.created, {
+            minutes: r.minutes,
+            locationName: r.location.name,
+            locationNeighborhood: r.location.neighborhood,
+            channelName: r.program.channelTitle,
+            channelNumber: r.program.channel,
+            programName: r.program.title,
+            programDescription: r.program.description,
+          });
+        }
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(['/tabs/profile']);
         this.showTunedToast(reservation.box.label, reservation.program.channelTitle);

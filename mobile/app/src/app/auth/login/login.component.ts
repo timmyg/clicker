@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import auth0 from 'auth0-js';
 import { environment } from 'src/environments/environment';
+import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from 'src/app/globals';
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
   clientID: environment.auth0.clientId,
@@ -15,17 +17,17 @@ const auth = new auth0.WebAuth({
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  // @ViewChild('phoneElem') phoneElem;
   phone: string;
   code: string;
   codeSent: boolean;
   waiting: boolean;
 
-  constructor(public modalController: ModalController, public toastController: ToastController) {}
-
-  // ngAfterViewChecked() {
-  //   this.phoneElem.setFocus();
-  // }
+  constructor(
+    public modalController: ModalController,
+    public toastController: ToastController,
+    private segment: SegmentService,
+    private globals: Globals,
+  ) {}
 
   onCloseClick() {
     this.modalController.dismiss();
@@ -51,6 +53,7 @@ export class LoginComponent {
           this.waiting = false;
           return console.error(err);
         }
+        this.segment.track(this.globals.events.login.started);
         this.codeSent = true;
         this.waiting = false;
       },
@@ -83,6 +86,7 @@ export class LoginComponent {
           this.waiting = false;
           return console.error(err);
         }
+        this.segment.track(this.globals.events.login.completed);
         this.waiting = false;
       },
     );

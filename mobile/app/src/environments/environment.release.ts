@@ -11,4 +11,7 @@ export const environment = {
   stripe: {
     publishableKey: 'pk_test_myi1Ch7YjdY7EVMDFWZpfG7g00UYpg47m9',
   },
+  segment: {
+    writeKey: 'VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ',
+  },
 };

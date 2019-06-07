@@ -20,7 +20,8 @@ import { UserService } from '../core/services/user.service';
 import { environment } from 'src/environments/environment.production';
 import { take } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
-import { WalletPage } from '../wallet/wallet.page';
+import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from '../globals';
 
 @Component({
   selector: 'app-profile',
@@ -49,6 +50,8 @@ export class ProfilePage {
     private actions$: Actions,
     private platform: Platform,
     public actionSheetController: ActionSheetController,
+    private segment: SegmentService,
+    private globals: Globals,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
@@ -161,6 +164,7 @@ export class ProfilePage {
           cssClass: 'secondary',
           handler: () => {
             this.store.dispatch(new fromReservation.Cancel(reservation));
+            this.segment.track(this.globals.events.reservation.cancelled);
             // clearInterval(this.intervalJobId);
           },
         },
