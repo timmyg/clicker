@@ -21,6 +21,8 @@ import { filter, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { SegmentModule } from 'ngx-segment-analytics';
+import { Globals } from './globals';
 
 export function checkParams(store: Store<AppState>): Function {
   return () =>
@@ -54,6 +56,11 @@ export function initUserStuff(store: Store<AppState>): Function {
   entryComponents: [],
   imports: [
     BrowserModule,
+    SegmentModule.forRoot({
+      apiKey: environment.segment.writeKey,
+      debug: !environment.production,
+      loadOnInitialization: true,
+    }),
     IonicModule.forRoot(),
     AppRoutingModule,
     StateModule.forRoot(),
@@ -64,6 +71,7 @@ export function initUserStuff(store: Store<AppState>): Function {
     }),
   ],
   providers: [
+    Globals,
     {
       provide: APP_INITIALIZER,
       useFactory: checkParams,

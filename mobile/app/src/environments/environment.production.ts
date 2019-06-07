@@ -11,4 +11,7 @@ export const environment = {
   stripe: {
     publishableKey: '', // TODO
   },
+  segment: {
+    writeKey: 'Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I',
+  },
 };

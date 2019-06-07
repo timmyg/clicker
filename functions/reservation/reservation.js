@@ -105,19 +105,19 @@ module.exports.create = async event => {
   await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
   console.timeEnd('remote command');
 
-  console.time('track event');
-  await track({
-    userId: reservation.userId,
-    event: 'Reservation Created',
-    properties: {
-      program: reservation.program,
-      box: reservation.box,
-      location: reservation.location,
-      cost: reservation.cost,
-      minutes: reservation.minutes,
-    },
-  });
-  console.timeEnd('track event');
+  // console.time('track event');
+  // await track({
+  //   userId: reservation.userId,
+  //   event: 'Reservation Created',
+  //   properties: {
+  //     program: reservation.program,
+  //     box: reservation.box,
+  //     location: reservation.location,
+  //     cost: reservation.cost,
+  //     minutes: reservation.minutes,
+  //   },
+  // });
+  // console.timeEnd('track event');
 
   return respond(201, reservation);
 };
@@ -174,19 +174,19 @@ module.exports.update = async event => {
   await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
   console.timeEnd('remote command');
 
-  console.time('track event');
-  await track({
-    userId: reservation.userId,
-    event: 'Reservation Updated',
-    properties: {
-      program: reservation.program,
-      box: reservation.box,
-      location: reservation.location,
-      cost: reservation.cost,
-      minutes: reservation.minutes,
-    },
-  });
-  console.timeEnd('track event');
+  // console.time('track event');
+  // await track({
+  //   userId: reservation.userId,
+  //   event: 'Reservation Updated',
+  //   properties: {
+  //     program: reservation.program,
+  //     box: reservation.box,
+  //     location: reservation.location,
+  //     cost: reservation.cost,
+  //     minutes: reservation.minutes,
+  //   },
+  // });
+  // console.timeEnd('track event');
 
   return respond(200, `hello`);
 };
@@ -235,17 +235,17 @@ module.exports.cancel = async event => {
     event.headers,
   );
 
-  track({
-    userId: userId,
-    event: 'Reservation Cancelled',
-    properties: {
-      program: reservation.program,
-      box: reservation.box,
-      location: reservation.location,
-      cost: reservation.cost,
-      minutes: reservation.minutes,
-    },
-  });
+  // track({
+  //   userId: userId,
+  //   event: 'Reservation Cancelled',
+  //   properties: {
+  //     program: reservation.program,
+  //     box: reservation.box,
+  //     location: reservation.location,
+  //     cost: reservation.cost,
+  //     minutes: reservation.minutes,
+  //   },
+  // });
 
   return respond(200, `hello`);
 };

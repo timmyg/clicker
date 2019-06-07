@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { Card } from 'src/app/state/user/card.model';
 import { getUserCard } from 'src/app/state/user';
 import { getUserTokenCount } from '../state/user';
+import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from '../globals';
 
 @Component({
   selector: 'app-wallet',
@@ -49,6 +51,8 @@ export class WalletPage {
     private stripeService: StripeService,
     private modalController: ModalController,
     public alertController: AlertController,
+    private segment: SegmentService,
+    private globals: Globals,
   ) {
     this.userCard$ = this.store.select(getUserCard);
   }
@@ -89,6 +93,9 @@ export class WalletPage {
           });
           toast.present();
           this.waiting = false;
+          this.segment.track(this.globals.events.payment.sourceAdded, {
+            type: 'Credit Card',
+          });
         }, 3000);
       } else if (result.error) {
         // Error creating the token
@@ -117,6 +124,9 @@ export class WalletPage {
       });
       toast.present();
       this.onClose();
+      this.segment.track(this.globals.events.payment.fundsAdded, {
+        amount: this.selectedAmount.dollars,
+      });
     }, 3000);
   }
 

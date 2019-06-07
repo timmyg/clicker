@@ -1,5 +1,7 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from '../globals';
 
 @Component({
   selector: 'app-onboarding',
@@ -14,7 +16,7 @@ export class OnboardingComponent implements OnInit {
     effect: 'flip',
   };
 
-  constructor(private storage: Storage) {}
+  constructor(private storage: Storage, private segment: SegmentService, private globals: Globals) {}
 
   ngOnInit() {
     this.checkOnboarded();
@@ -31,5 +33,6 @@ export class OnboardingComponent implements OnInit {
   onGetStarted() {
     this.storage.set('onboarded', true);
     this.onboarded = true;
+    this.segment.track(this.globals.events.onboarding.completed);
   }
 }

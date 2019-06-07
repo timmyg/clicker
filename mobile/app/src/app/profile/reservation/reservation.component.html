@@ -5,14 +5,13 @@
       <span float-right>
         <!-- <span>{{ minutesFromNow$ | async }} left</span> -->
         <span *ngIf="timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>
-        <span *ngIf="timeLeft?.minutes <= 0">Expired</span>
+        <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes">Expired</span>
         <!-- <span *ngIf="!isReserved()">Expired</span> -->
       </span>
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
     <!-- <div>{{ reservation.programTitle }}</div> -->
-    <span>Length: {{ getTimeLeft(reservation.minutes).label }}</span>
-    <ion-button fill="clear" (click)="modify()" float-right>Modify</ion-button>
+    <span>Length: {{ getTimeLeft(reservation.minutes).label }}</span> <a (click)="modify()" float-right>Modify</a>
   </ion-card-content>
 </ion-card>

@@ -1,13 +1,21 @@
 <template>
   <div class="container load-hidden">
     <div class="site-header-inner">
-      <div class="brand header-brand">
-        <span class="logo" v-scroll-reveal.reset="{ duration: 400, delay: 650, origin: 'right', distance: '10px', easing: 'cubic-bezier(.17,.67,.83,.67)'}">
-            <Logo />
+      <div
+        class="brand header-brand"
+        v-scroll-reveal.reset="{ duration: 400, delay: 650, origin: 'right', distance: '10px', easing: 'cubic-bezier(.17,.67,.83,.67)'}"
+      >
+        <!-- <span
+          class="logo"
+          
+        >
+          <Logo/>
         </span>
-        <span class="name brand-font" v-scroll-reveal.reset="{ duration: 200, delay: 250, origin: 'left', distance: '10px', easing: 'cubic-bezier(.17,.67,.83,.67)'}">
-          Clicker
-        </span>
+        <span
+          class="name brand-font"
+          v-scroll-reveal.reset="{ duration: 200, delay: 250, origin: 'left', distance: '10px', easing: 'cubic-bezier(.17,.67,.83,.67)'}"
+        >Clicker</span>-->
+        <img src="/img/logo.png" alt="Clicker logo">
       </div>
     </div>
   </div>
@@ -34,6 +42,9 @@ export default {
   }
   .logo svg {
     height: 60px;
+  }
+  img {
+    height: 50px;
   }
 }
 </style>
