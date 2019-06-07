@@ -76,8 +76,8 @@ module.exports.all = async event => {
     }
   });
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
-  // return respond(200, sorted);
-  return respond(200, { ...sorted, partner });
+  console.log({ partner });
+  return respond(200, sorted);
 };
 
 module.exports.get = async event => {
