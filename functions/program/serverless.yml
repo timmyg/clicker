@@ -82,7 +82,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   getAll:
     handler: program.getAll
     events:
@@ -92,7 +93,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   syncNew:
     handler: program.syncNew
     events:
@@ -102,7 +104,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
       - schedule: rate(30 minutes)
   syncDescriptions:
     handler: program.syncDescriptions
@@ -114,7 +117,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
       - schedule: rate(10 minutes)
   createAreaProgramming:
     handler: program.createAreaProgramming
@@ -125,7 +129,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   getAreaProgramming:
     handler: program.getAreaProgramming
     events:
@@ -135,4 +140,5 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization

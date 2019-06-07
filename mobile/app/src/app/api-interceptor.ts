@@ -49,13 +49,9 @@ export class ApiInterceptor implements HttpInterceptor {
       const partner$ = this.store$.pipe(select(getPartner));
       combineLatest(authToken$, partner$).subscribe(([authToken, partner]) => {
         console.log('hi');
-        let headers: HttpHeaders = new HttpHeaders();
-        headers = headers.append('Authorization', `Bearer ${authToken}`);
-        headers = headers.append('partner', partner);
         request = request.clone({
           url: `${environment.apiBaseUrl}/${request.url}`,
-          // headers,
-          headers,
+          headers: request.headers.set('Authorization', `Bearer ${authToken}`).set('partner', partner),
         });
         console.log(request);
         observer.next(request);

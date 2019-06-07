@@ -88,7 +88,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   create:
     handler: user.create
     events:
@@ -98,7 +99,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   wallet:
     handler: user.wallet
     events:
@@ -108,7 +110,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   updateCard:
     handler: user.updateCard
     events:
@@ -118,7 +121,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   removeCard:
     handler: user.removeCard
     events:
@@ -128,7 +132,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   replenish:
     handler: user.replenish
     events:
@@ -138,7 +143,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   transaction:
     handler: user.transaction
     events:
@@ -148,7 +154,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   alias:
     handler: user.alias
     events:
@@ -158,4 +165,5 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization

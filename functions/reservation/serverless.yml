@@ -81,7 +81,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   activeByUser:
     handler: reservation.activeByUser
     events:
@@ -91,7 +92,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   get:
     handler: reservation.get
     events:
@@ -101,7 +103,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   create:
     handler: reservation.create
     timeout: 20
@@ -112,7 +115,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   cancel:
     handler: reservation.cancel
     events:
@@ -122,7 +126,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   update:
     handler: reservation.update
     timeout: 20
@@ -133,4 +138,5 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization

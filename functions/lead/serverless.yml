@@ -43,7 +43,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   health:
     handler: lead.health
     events:
@@ -53,4 +54,5 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization

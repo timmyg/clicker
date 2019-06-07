@@ -65,7 +65,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   all:
     handler: location.all
     events:
@@ -86,7 +87,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   get:
     handler: location.get
     events:
@@ -96,7 +98,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   create:
     handler: location.create
     events:
@@ -106,7 +109,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   connected:
     handler: location.connected
     events:
@@ -116,7 +120,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   disconnected:
     handler: location.disconnected
     events:
@@ -126,7 +131,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   update:
     handler: location.update
     events:
@@ -136,7 +142,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   setBoxes:
     handler: location.setBoxes
     events:
@@ -146,7 +153,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   setLabels:
     handler: location.setLabels
     events:
@@ -156,7 +164,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   identifyBoxes:
     handler: location.identifyBoxes
     events:
@@ -166,7 +175,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   setBoxReserved:
     handler: location.setBoxReserved
     events:
@@ -176,7 +186,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   setBoxFree:
     handler: location.setBoxFree
     events:
@@ -186,7 +197,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   allOff:
     handler: location.allOff
     events:
@@ -196,7 +208,8 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
   allOn:
     handler: location.allOn
     events:
@@ -206,4 +219,5 @@ functions:
           cors:
             origin: '*'
             headers:
-              - partner true
+              - partner
+              - authorization
