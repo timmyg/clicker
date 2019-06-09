@@ -39,9 +39,9 @@ functions:
           method: get
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization
   command:
     handler: remote.command
     events:
@@ -50,6 +50,6 @@ functions:
           method: post
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization

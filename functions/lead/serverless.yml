@@ -42,9 +42,9 @@ functions:
           method: post
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization
   health:
     handler: lead.health
     events:
@@ -53,6 +53,6 @@ functions:
           method: get
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization

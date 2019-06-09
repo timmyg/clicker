@@ -80,9 +80,9 @@ functions:
           method: get
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization
   activeByUser:
     handler: reservation.activeByUser
     events:
@@ -91,9 +91,9 @@ functions:
           method: get
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization
   get:
     handler: reservation.get
     events:
@@ -102,9 +102,9 @@ functions:
           method: get
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization
   create:
     handler: reservation.create
     timeout: 20
@@ -114,9 +114,9 @@ functions:
           method: post
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization
   cancel:
     handler: reservation.cancel
     events:
@@ -125,9 +125,9 @@ functions:
           method: delete
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization
   update:
     handler: reservation.update
     timeout: 20
@@ -137,6 +137,6 @@ functions:
           method: put
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+             # headers:
+            #   - partner
+            #   - authorization

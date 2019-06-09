@@ -63,10 +63,11 @@ functions:
           path: health
           method: get
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   all:
     handler: location.all
     events:
@@ -74,10 +75,11 @@ functions:
           path: ''
           method: get
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   allByGeolocation:
     handler: location.all
     events:
@@ -85,10 +87,11 @@ functions:
           path: '/geo/{latitude}/{longitude}'
           method: get
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   get:
     handler: location.get
     events:
@@ -96,10 +99,11 @@ functions:
           path: '{id}'
           method: get
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   create:
     handler: location.create
     events:
@@ -107,10 +111,11 @@ functions:
           path: ''
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   connected:
     handler: location.connected
     events:
@@ -118,10 +123,11 @@ functions:
           path: 'device/{losantId}/connected'
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   disconnected:
     handler: location.disconnected
     events:
@@ -129,10 +135,11 @@ functions:
           path: 'device/{losantId}/disconnected'
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   update:
     handler: location.update
     events:
@@ -140,10 +147,11 @@ functions:
           path: '{id}'
           method: put
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   setBoxes:
     handler: location.setBoxes
     events:
@@ -152,9 +160,9 @@ functions:
           method: put
           cors:
             origin: '*'
-            headers:
-              - partner
-              - authorization
+            # headers:
+            #   - partner
+            #   - authorization
   setLabels:
     handler: location.setLabels
     events:
@@ -162,10 +170,11 @@ functions:
           path: '{id}/boxes/labels'
           method: put
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   identifyBoxes:
     handler: location.identifyBoxes
     events:
@@ -173,10 +182,11 @@ functions:
           path: '{id}/boxes/identify'
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   setBoxReserved:
     handler: location.setBoxReserved
     events:
@@ -184,10 +194,11 @@ functions:
           path: '{id}/boxes/{boxId}/reserved'
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   setBoxFree:
     handler: location.setBoxFree
     events:
@@ -195,10 +206,11 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   allOff:
     handler: location.allOff
     events:
@@ -206,10 +218,11 @@ functions:
           path: '{id}/boxes/off'
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
   allOn:
     handler: location.allOn
     events:
@@ -217,7 +230,8 @@ functions:
           path: '{id}/boxes/on'
           method: post
           cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
+            origin:
+              '*'
+              # headers:
+            #   - partner
+            #   - authorization
