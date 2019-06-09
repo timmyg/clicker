@@ -79,8 +79,9 @@ functions:
           path: health
           method: get
           cors:
-            origin: '*'
-             # headers:
+            origin:
+              '*'
+              # headers:
             #   - partner
             #   - authorization
   activeByUser:
@@ -90,8 +91,9 @@ functions:
           path: 'active/user'
           method: get
           cors:
-            origin: '*'
-             # headers:
+            origin:
+              '*'
+              # headers:
             #   - partner
             #   - authorization
   get:
@@ -101,8 +103,9 @@ functions:
           path: '{id}'
           method: get
           cors:
-            origin: '*'
-             # headers:
+            origin:
+              '*'
+              # headers:
             #   - partner
             #   - authorization
   create:
@@ -114,7 +117,7 @@ functions:
           method: post
           cors:
             origin: '*'
-             headers:
+            headers:
               - partner
               - authorization
               - content-type
@@ -125,8 +128,9 @@ functions:
           path: '{id}'
           method: delete
           cors:
-            origin: '*'
-             # headers:
+            origin:
+              '*'
+              # headers:
             #   - partner
             #   - authorization
   update:
@@ -137,7 +141,8 @@ functions:
           path: '{id}'
           method: put
           cors:
-            origin: '*'
-             # headers:
+            origin:
+              '*'
+              # headers:
             #   - partner
             #   - authorization
