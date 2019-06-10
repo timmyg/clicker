@@ -63,9 +63,8 @@ functions:
           path: health
           method: get
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -76,9 +75,8 @@ functions:
           path: ''
           method: get
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -89,9 +87,8 @@ functions:
           path: '/geo/{latitude}/{longitude}'
           method: get
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -102,9 +99,8 @@ functions:
           path: '{id}'
           method: get
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -115,9 +111,8 @@ functions:
           path: ''
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -128,9 +123,8 @@ functions:
           path: 'device/{losantId}/connected'
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -141,9 +135,8 @@ functions:
           path: 'device/{losantId}/disconnected'
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -154,9 +147,8 @@ functions:
           path: '{id}'
           method: put
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -178,9 +170,8 @@ functions:
           path: '{id}/boxes/labels'
           method: put
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -191,9 +182,8 @@ functions:
           path: '{id}/boxes/identify'
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -204,9 +194,8 @@ functions:
           path: '{id}/boxes/{boxId}/reserved'
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -217,9 +206,8 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -230,9 +218,8 @@ functions:
           path: '{id}/boxes/off'
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
@@ -243,9 +230,8 @@ functions:
           path: '{id}/boxes/on'
           method: post
           cors:
-            origin:
-              '*'
-             headers:
+            origin: '*'
+            headers:
               - partner
               - authorization
               - content-type
