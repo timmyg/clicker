@@ -62,102 +62,176 @@ functions:
       - http:
           path: health
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   all:
     handler: location.all
     events:
       - http:
           path: ''
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   allByGeolocation:
     handler: location.all
     events:
       - http:
           path: '/geo/{latitude}/{longitude}'
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   get:
     handler: location.get
     events:
       - http:
           path: '{id}'
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   create:
     handler: location.create
     events:
       - http:
           path: ''
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   connected:
     handler: location.connected
     events:
       - http:
           path: 'device/{losantId}/connected'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   disconnected:
     handler: location.disconnected
     events:
       - http:
           path: 'device/{losantId}/disconnected'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   update:
     handler: location.update
     events:
       - http:
           path: '{id}'
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   setBoxes:
     handler: location.setBoxes
     events:
       - http:
           path: '{id}/boxes'
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            # headers:
+            #   - partner
+            #   - authorization
   setLabels:
     handler: location.setLabels
     events:
       - http:
           path: '{id}/boxes/labels'
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   identifyBoxes:
     handler: location.identifyBoxes
     events:
       - http:
           path: '{id}/boxes/identify'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   setBoxReserved:
     handler: location.setBoxReserved
     events:
       - http:
           path: '{id}/boxes/{boxId}/reserved'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   setBoxFree:
     handler: location.setBoxFree
     events:
       - http:
           path: '{id}/boxes/{boxId}/free'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   allOff:
     handler: location.allOff
     events:
       - http:
           path: '{id}/boxes/off'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   allOn:
     handler: location.allOn
     events:
       - http:
           path: '{id}/boxes/on'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

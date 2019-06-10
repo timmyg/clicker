@@ -180,32 +180,11 @@ module.exports.getAll = async event => {
   });
   console.timeEnd('nextProgram');
 
-  console.time('cleanup');
-  const cleanPrograms = cleanupTitles(initialChannels);
-  console.timeEnd('cleanup');
   console.time('rank');
-  const rankedPrograms = rankPrograms(cleanPrograms);
+  const rankedPrograms = rankPrograms(initialChannels);
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };
-
-function cleanupTitles(programs) {
-  programs.forEach((program, i) => {
-    programs[i] = cleanup(program);
-  });
-  return programs;
-}
-
-function cleanup(program) {
-  if (program) {
-    if (program.episodeTitle && (program.episodeTitle.includes(' @ ') || program.episodeTitle.includes(' at '))) {
-      program.title = program.episodeTitle;
-    } else if (program.description && (program.description.includes(' @ ') || program.description.includes(' at '))) {
-      program.title = program.description;
-    }
-  }
-  return program;
-}
 
 function rankPrograms(programs) {
   programs.forEach((program, i) => {

@@ -54,9 +54,12 @@ const Location = dynamoose.model(
 
 module.exports.all = async event => {
   let latitude, longitude;
-  if (getPathParameters(event)) {
-    latitude = getPathParameters(event).latitude;
-    longitude = getPathParameters(event).longitude;
+  const pathParams = getPathParameters(event);
+  const { partner } = event.headers;
+
+  if (pathParams) {
+    latitude = pathParams.latitude;
+    longitude = pathParams.longitude;
   }
   const allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
@@ -73,6 +76,7 @@ module.exports.all = async event => {
     }
   });
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+  console.log({ partner });
   return respond(200, sorted);
 };
 

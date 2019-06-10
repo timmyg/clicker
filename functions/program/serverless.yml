@@ -79,21 +79,36 @@ functions:
       - http:
           path: health
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   getAll:
     handler: program.getAll
     events:
       - http:
           path: ''
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   syncNew:
     handler: program.syncNew
     events:
       - http:
           path: new
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
       - schedule: rate(30 minutes)
   syncDescriptions:
     handler: program.syncDescriptions
@@ -102,7 +117,12 @@ functions:
       - http:
           path: descriptions
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
       - schedule: rate(10 minutes)
   createAreaProgramming:
     handler: program.createAreaProgramming
@@ -110,11 +130,21 @@ functions:
       - http:
           path: 'area/{areaId}'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   getAreaProgramming:
     handler: program.getAreaProgramming
     events:
       - http:
           path: 'area/{areaId}'
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

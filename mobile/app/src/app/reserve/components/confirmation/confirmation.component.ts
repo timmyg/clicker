@@ -43,7 +43,7 @@ export class ConfirmationComponent implements OnInit {
       title: '30 minutes',
       minutes: 30,
       reserve: true,
-      // disabled: true,
+      disabled: true,
     },
     {
       tokens: 4,
@@ -140,7 +140,6 @@ export class ConfirmationComponent implements OnInit {
       .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS, fromReservation.UPDATE_RESERVATION_SUCCESS))
       .pipe(first())
       .subscribe(() => {
-        console.log('hey');
         if (this.isEditMode) {
           this.segment.track(this.globals.events.reservation.updated, {
             minutes: r.minutes,

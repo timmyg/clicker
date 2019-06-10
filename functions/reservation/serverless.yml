@@ -78,21 +78,36 @@ functions:
       - http:
           path: health
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   activeByUser:
     handler: reservation.activeByUser
     events:
       - http:
           path: 'active/user'
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   get:
     handler: reservation.get
     events:
       - http:
           path: '{id}'
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   create:
     handler: reservation.create
     timeout: 20
@@ -100,14 +115,24 @@ functions:
       - http:
           path: ''
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   cancel:
     handler: reservation.cancel
     events:
       - http:
           path: '{id}'
           method: delete
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   update:
     handler: reservation.update
     timeout: 20
@@ -115,4 +140,9 @@ functions:
       - http:
           path: '{id}'
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

@@ -37,11 +37,21 @@ functions:
       - http:
           path: health
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   command:
     handler: remote.command
     events:
       - http:
           path: '/command'
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

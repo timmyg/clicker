@@ -40,11 +40,21 @@ functions:
       - http:
           path: ''
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   health:
     handler: lead.health
     events:
       - http:
           path: health
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
