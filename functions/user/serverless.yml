@@ -87,9 +87,10 @@ functions:
           method: get
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   create:
     handler: user.create
     events:
@@ -98,9 +99,10 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   wallet:
     handler: user.wallet
     events:
@@ -109,9 +111,10 @@ functions:
           method: get
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   updateCard:
     handler: user.updateCard
     events:
@@ -120,9 +123,10 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   removeCard:
     handler: user.removeCard
     events:
@@ -131,9 +135,10 @@ functions:
           method: delete
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   replenish:
     handler: user.replenish
     events:
@@ -142,9 +147,10 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   transaction:
     handler: user.transaction
     events:
@@ -153,9 +159,10 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   alias:
     handler: user.alias
     events:
@@ -164,6 +171,7 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type

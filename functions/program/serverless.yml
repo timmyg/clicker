@@ -81,9 +81,10 @@ functions:
           method: get
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   getAll:
     handler: program.getAll
     events:
@@ -92,9 +93,10 @@ functions:
           method: get
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   syncNew:
     handler: program.syncNew
     events:
@@ -103,9 +105,10 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
       - schedule: rate(30 minutes)
   syncDescriptions:
     handler: program.syncDescriptions
@@ -116,9 +119,10 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
       - schedule: rate(10 minutes)
   createAreaProgramming:
     handler: program.createAreaProgramming
@@ -128,9 +132,10 @@ functions:
           method: post
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type
   getAreaProgramming:
     handler: program.getAreaProgramming
     events:
@@ -139,6 +144,7 @@ functions:
           method: get
           cors:
             origin: '*'
-             # headers:
-            #   - partner
-            #   - authorization
+            headers:
+              - partner
+              - authorization
+              - content-type

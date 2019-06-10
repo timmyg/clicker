@@ -81,9 +81,10 @@ functions:
           cors:
             origin:
               '*'
-              # headers:
-            #   - partner
-            #   - authorization
+             headers:
+              - partner
+              - authorization
+              - content-type
   activeByUser:
     handler: reservation.activeByUser
     events:
@@ -93,9 +94,10 @@ functions:
           cors:
             origin:
               '*'
-              # headers:
-            #   - partner
-            #   - authorization
+             headers:
+              - partner
+              - authorization
+              - content-type
   get:
     handler: reservation.get
     events:
@@ -105,9 +107,10 @@ functions:
           cors:
             origin:
               '*'
-              # headers:
-            #   - partner
-            #   - authorization
+             headers:
+              - partner
+              - authorization
+              - content-type
   create:
     handler: reservation.create
     timeout: 20
@@ -130,9 +133,10 @@ functions:
           cors:
             origin:
               '*'
-              # headers:
-            #   - partner
-            #   - authorization
+             headers:
+              - partner
+              - authorization
+              - content-type
   update:
     handler: reservation.update
     timeout: 20
@@ -143,6 +147,7 @@ functions:
           cors:
             origin:
               '*'
-              # headers:
-            #   - partner
-            #   - authorization
+             headers:
+              - partner
+              - authorization
+              - content-type
