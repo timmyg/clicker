@@ -84,7 +84,6 @@ export class ProfilePage {
   }
 
   onModify(reservation: Reservation) {
-    console.log('reservation');
     if (reservation.minutes > 0) {
       const endTime = moment(reservation.end);
       const duration = moment.duration(endTime.diff(moment())).asMilliseconds();
