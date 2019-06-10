@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable, of, combineLatest } from 'rxjs';
-import { mergeMap, first, filter } from 'rxjs/operators';
+import { mergeMap, first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Store, select } from '@ngrx/store';
 import { getUserAuthToken } from './state/user';
@@ -47,13 +47,16 @@ export class ApiInterceptor implements HttpInterceptor {
     return Observable.create(observer => {
       const authToken$ = this.store$.pipe(select(getUserAuthToken));
       const partner$ = this.store$.pipe(select(getPartner));
+
       combineLatest(authToken$, partner$).subscribe(([authToken, partner]) => {
-        // TODO figure out why lambda dies when no partner so we dont have to pass in none
+        let headers = request.headers.append('Authorization', `Bearer ${authToken}`);
+        if (partner) {
+          headers = headers.append('partner', partner);
+        }
         request = request.clone({
           url: `${environment.apiBaseUrl}/${request.url}`,
-          headers: request.headers.set('Authorization', `Bearer ${authToken}`).set('partner', partner || 'none'),
+          headers,
         });
-        console.log(request);
         observer.next(request);
         observer.complete();
       });
