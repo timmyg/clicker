@@ -904,6 +904,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _state_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./state/user */ "./src/app/state/user/index.ts");
+/* harmony import */ var _state_app__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./state/app */ "./src/app/state/app/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -913,6 +914,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -930,23 +932,44 @@ var ApiInterceptor = /** @class */ (function () {
      * Adds the JWT token to the request's header.
      */
     ApiInterceptor.prototype.addToken = function (request) {
+        var _this = this;
         if (request.url === 'users' && request.method === 'POST') {
             return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(request.clone({
                 url: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiBaseUrl + "/" + request.url,
             }));
         }
-        return this.store$.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["select"])(_state_user__WEBPACK_IMPORTED_MODULE_5__["getUserAuthToken"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["filter"])(function (authToken) { return authToken && authToken.length > 0; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["mergeMap"])(function (authToken) {
-            if (authToken) {
+        // return this.store$.pipe(
+        //   select(getUserAuthToken),
+        //   filter(authToken => authToken && authToken.length > 0),
+        //   mergeMap((authToken: string) => {
+        //     if (authToken) {
+        //       request = request.clone({
+        //         url: `${environment.apiBaseUrl}/${request.url}`,
+        //         headers: request.headers.set('Authorization', `Bearer ${authToken}`),
+        //       });
+        //     } else {
+        //       console.warn(`Bad Token: ${authToken}`);
+        //     }
+        //     return of(request);
+        //   }),
+        // );
+        return rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"].create(function (observer) {
+            var authToken$ = _this.store$.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["select"])(_state_user__WEBPACK_IMPORTED_MODULE_5__["getUserAuthToken"]));
+            var partner$ = _this.store$.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["select"])(_state_app__WEBPACK_IMPORTED_MODULE_6__["getPartner"]));
+            Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["combineLatest"])(authToken$, partner$).subscribe(function (_a) {
+                var authToken = _a[0], partner = _a[1];
+                var headers = request.headers.append('Authorization', "Bearer " + authToken);
+                if (partner) {
+                    headers = headers.append('partner', partner);
+                }
                 request = request.clone({
                     url: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiBaseUrl + "/" + request.url,
-                    headers: request.headers.set('Authorization', "Bearer " + authToken),
+                    headers: headers,
                 });
-            }
-            else {
-                console.warn("Bad Token: " + authToken);
-            }
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(request);
-        }));
+                observer.next(request);
+                observer.complete();
+            });
+        });
     };
     ApiInterceptor = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -1007,7 +1030,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<section *ngIf=\"(partner$ | async) as partner; else normal\">\n  <ion-card>\n    <ion-card-header>\n      <ion-card-subtitle>Coming Soon</ion-card-subtitle>\n      <ion-card-title>Change the Channel</ion-card-title>\n    </ion-card-header>\n\n    <ion-card-content>\n      <span [ngSwitch]=\"partner\">\n        <span *ngSwitchCase=\"'bwr'\"\n          >Ever wanted to change the channel from your seat? Clicker gives you that ability - and is coming soon to\n          Buffalo Wings &amp; Rings</span\n        >\n        <span *ngSwitchDefault>\n          Ever wanted to change the channel from your seat? Clicker gives you that ability - check back soon.\n        </span>\n      </span>\n    </ion-card-content>\n  </ion-card>\n</section>\n<ng-template #normal\n  ><ion-app> <ion-router-outlet></ion-router-outlet> </ion-app\n></ng-template>\n"
+module.exports = "<!-- <section *ngIf=\"(partner$ | async) as partner; else normal\">\n  <ion-card>\n    <ion-card-header>\n      <ion-card-subtitle>Coming Soon</ion-card-subtitle>\n      <ion-card-title>Change the Channel</ion-card-title>\n    </ion-card-header>\n\n    <ion-card-content>\n      <span [ngSwitch]=\"partner\">\n        <span *ngSwitchCase=\"'bwr'\"\n          >Ever wanted to change the channel from your seat? Clicker gives you that ability - and is coming soon to\n          Buffalo Wings &amp; Rings</span\n        >\n        <span *ngSwitchDefault>\n          Ever wanted to change the channel from your seat? Clicker gives you that ability - check back soon.\n        </span>\n      </span>\n    </ion-card-content>\n  </ion-card>\n</section>\n<ng-template #normal\n  ><ion-app> <ion-router-outlet></ion-router-outlet> </ion-app\n></ng-template> -->\n\n<ion-app> <ion-router-outlet></ion-router-outlet> </ion-app>\n"
 
 /***/ }),
 
@@ -1027,6 +1050,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./state/user/user.actions */ "./src/app/state/user/user.actions.ts");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _state_app__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./state/app */ "./src/app/state/app/index.ts");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var _state_user__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./state/user */ "./src/app/state/user/index.ts");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1078,10 +1104,15 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var SplashScreen = _capacitor_core__WEBPACK_IMPORTED_MODULE_2__["Plugins"].SplashScreen, StatusBar = _capacitor_core__WEBPACK_IMPORTED_MODULE_2__["Plugins"].StatusBar;
 
 
+
+
+
 var AppComponent = /** @class */ (function () {
-    function AppComponent(platform, store) {
+    function AppComponent(platform, store, segment, globals) {
         this.platform = platform;
         this.store = store;
+        this.segment = segment;
+        this.globals = globals;
         this.partner$ = this.store.select(_state_app__WEBPACK_IMPORTED_MODULE_5__["getPartner"]);
         this.initializeApp();
     }
@@ -1091,10 +1122,15 @@ var AppComponent = /** @class */ (function () {
             return __generator(this, function (_a) {
                 this.platform.ready().then(function () { return __awaiter(_this, void 0, void 0, function () {
                     var e_1;
+                    var _this = this;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
                                 _a.trys.push([0, 2, , 3]);
+                                this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_7__["getUserId"]).subscribe(function (userId) {
+                                    _this.segment.identify(userId.replace('sms|', ''));
+                                    _this.segment.track(_this.globals.events.opened);
+                                });
                                 return [4 /*yield*/, SplashScreen.hide()];
                             case 1:
                                 _a.sent();
@@ -1106,8 +1142,8 @@ var AppComponent = /** @class */ (function () {
                         }
                     });
                 }); });
-                this.platform.resume.subscribe(function (result) {
-                    console.log('resuming...');
+                this.platform.resume.subscribe(function () {
+                    _this.segment.track(_this.globals.events.opened);
                     _this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["Refresh"]());
                 });
                 return [2 /*return*/];
@@ -1119,7 +1155,10 @@ var AppComponent = /** @class */ (function () {
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
         }),
-        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["Platform"], _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"]])
+        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["Platform"],
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_6__["SegmentService"],
+            _globals__WEBPACK_IMPORTED_MODULE_8__["Globals"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -1160,12 +1199,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
 /* harmony import */ var _ionic_native_geolocation_ngx__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic-native/geolocation/ngx */ "./node_modules/@ionic-native/geolocation/ngx/index.js");
 /* harmony import */ var _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @ionic-native/diagnostic/ngx */ "./node_modules/@ionic-native/diagnostic/ngx/index.js");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -1220,6 +1263,11 @@ var AppModule = /** @class */ (function () {
             entryComponents: [],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
+                ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_20__["SegmentModule"].forRoot({
+                    apiKey: src_environments_environment__WEBPACK_IMPORTED_MODULE_17__["environment"].segment.writeKey,
+                    debug: !src_environments_environment__WEBPACK_IMPORTED_MODULE_17__["environment"].production,
+                    loadOnInitialization: true,
+                }),
                 _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["IonicModule"].forRoot(),
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"],
                 _state_state_module__WEBPACK_IMPORTED_MODULE_9__["StateModule"].forRoot(),
@@ -1230,6 +1278,7 @@ var AppModule = /** @class */ (function () {
                 }),
             ],
             providers: [
+                _globals__WEBPACK_IMPORTED_MODULE_21__["Globals"],
                 {
                     provide: _angular_core__WEBPACK_IMPORTED_MODULE_0__["APP_INITIALIZER"],
                     useFactory: checkParams,
@@ -1379,11 +1428,11 @@ var LocationService = /** @class */ (function () {
     LocationService.prototype.get = function (locationId) {
         return this.httpClient.get(this.prefix + "/" + locationId);
     };
-    LocationService.prototype.turnOn = function (locationId) {
-        return this.httpClient.get(this.prefix + "/" + locationId + "/boxes/on");
+    LocationService.prototype.turnOn = function (locationId, autotune) {
+        return this.httpClient.post(this.prefix + "/" + locationId + "/boxes/on", { autotune: autotune });
     };
     LocationService.prototype.turnOff = function (locationId) {
-        return this.httpClient.get(this.prefix + "/" + locationId + "/boxes/off");
+        return this.httpClient.post(this.prefix + "/" + locationId + "/boxes/off", {});
     };
     LocationService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -1683,6 +1732,63 @@ var UserService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/globals.ts":
+/*!****************************!*\
+  !*** ./src/app/globals.ts ***!
+  \****************************/
+/*! exports provided: Globals */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Globals", function() { return Globals; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var Globals = /** @class */ (function () {
+    function Globals() {
+    }
+    Object.defineProperty(Globals.prototype, "events", {
+        get: function () {
+            return {
+                opened: 'Opened',
+                onboarding: {
+                    completed: 'Onboarding Completed',
+                },
+                reservation: {
+                    started: 'Reservation Started',
+                    created: 'Reservation Created',
+                    updated: 'Reservation Updated',
+                    cancelled: 'Reservation Cancelled',
+                },
+                login: {
+                    started: 'Login Started',
+                    completed: 'Login Completed',
+                },
+                payment: {
+                    sourceAdded: 'Payment Source Added',
+                    fundsAdded: 'Funds Added',
+                },
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Globals = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])()
+    ], Globals);
+    return Globals;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/state/app.reducer.ts":
 /*!**************************************!*\
   !*** ./src/app/state/app.reducer.ts ***!
@@ -1919,8 +2025,9 @@ var GetAllFail = /** @class */ (function () {
 }());
 
 var TurnOn = /** @class */ (function () {
-    function TurnOn(location) {
+    function TurnOn(location, autotune) {
         this.location = location;
+        this.autotune = autotune;
         this.type = TURN_ON;
     }
     return TurnOn;
@@ -2008,7 +2115,7 @@ var LocationsEffects = /** @class */ (function () {
             return _this.locationService.getAll(action.geolocation).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (locations) { return new _location_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllSuccess"](locations); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _location_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllFail"](err)); }));
         }));
         this.turnOn$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["ofType"])(_location_actions__WEBPACK_IMPORTED_MODULE_4__["TURN_ON"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (action) {
-            return _this.locationService.turnOn(action.location.id).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function () { return new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOnSuccess"](); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOnFail"](err)); }));
+            return _this.locationService.turnOn(action.location.id, action.autotune).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function () { return new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOnSuccess"](); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOnFail"](err)); }));
         }));
         this.turnOff$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["ofType"])(_location_actions__WEBPACK_IMPORTED_MODULE_4__["TURN_OFF"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (action) {
             return _this.locationService.turnOff(action.location.id).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function () { return new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOffSuccess"](); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _location_actions__WEBPACK_IMPORTED_MODULE_4__["TurnOffFail"](err)); }));
@@ -2578,36 +2685,6 @@ __webpack_require__.r(__webpack_exports__);
 var Reservation = /** @class */ (function () {
     function Reservation() {
     }
-    Object.defineProperty(Reservation.prototype, "tvTag", {
-        get: function () {
-            return this.box.label;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Reservation.prototype, "locationTown", {
-        get: function () {
-            return this.location.neighborhood;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Reservation.prototype, "programTitle", {
-        get: function () {
-            return this.program.title;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Reservation.prototype.hasLocation = function () {
-        return this.location && this.location.id;
-    };
-    Reservation.prototype.hasChannel = function () {
-        return this.program && this.program.channel;
-    };
-    Reservation.prototype.hasTV = function () {
-        return this.box && this.box.label;
-    };
     return Reservation;
 }());
 
@@ -3286,6 +3363,9 @@ var environment = {
     },
     stripe: {
         publishableKey: 'pk_test_myi1Ch7YjdY7EVMDFWZpfG7g00UYpg47m9',
+    },
+    segment: {
+        writeKey: 'VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ',
     },
 };
 /*
