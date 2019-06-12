@@ -93,7 +93,7 @@ export class ProfilePage {
         this.showToast('Sorry, your reservation has expired');
       }
     } else {
-      this.showToast('Sorry, you did not reserve this TV for a time period');
+      this.showToast('Sorry, you did not reserve this TV for a time period. Please create new reservation.');
     }
   }
 
