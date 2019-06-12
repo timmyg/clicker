@@ -1,7 +1,8 @@
 <ion-slides pager="true" [options]="options" align-items-center *ngIf="ready && !onboarded">
   <ion-slide class="what">
     <ion-card>
-      <ion-icon class="header" name="tv"></ion-icon>
+      <!-- <ion-icon class="header" name="tv"></ion-icon> -->
+      <img src="https://clicker-brand.s3.amazonaws.com/logo-tv.png" class="logo" />
       <ion-card-header> <ion-card-title>What is Clicker?</ion-card-title> </ion-card-header>
       <ion-card-content>
         <span>
@@ -17,11 +18,12 @@
       <ion-icon class="header" name="wifi"></ion-icon>
       <ion-card-header> <ion-card-title>How does it work?</ion-card-title> </ion-card-header>
       <ion-card-content>
-        <span>If you're at a Clicker enabled location, simply:</span>
+        <!-- <span>If you're at a Clicker enabled location, simply:</span> -->
         <ol text-left>
-          <li>Choose the location you're at</li>
-          <li>Use live guide to choose a channel</li>
-          <li>Choose the TV by its label</li>
+          <li>Choose location</li>
+          <li>Use live guide to choose channel</li>
+          <li>Select TV by its label</li>
+          <li>Watch as TV channel is changed</li>
         </ol>
       </ion-card-content>
       <span class="swipe"><ion-icon class="arrow" name="arrow-back"></ion-icon> Swipe</span>
@@ -36,7 +38,7 @@
           We put some tokens in your account<br />
           to get you started!</span
         >
-        <div margin-top><ion-button color="success" (click)="onGetStarted()" size="large">Get Started</ion-button></div>
+        <div margin-top><ion-button color="success" (click)="onGetStarted()" size="large">Go</ion-button></div>
       </ion-card-content>
     </ion-card>
   </ion-slide>

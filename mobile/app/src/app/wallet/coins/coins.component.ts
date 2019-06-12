@@ -40,7 +40,7 @@ export class CoinsComponent implements OnInit {
       return await this.walletModal.present();
     } else {
       const toast = await this.toastController.create({
-        message: `Adding tokens is not available.`,
+        message: `Adding tokens is not available today.`,
         duration: 2000,
         cssClass: 'ion-text-center',
       });

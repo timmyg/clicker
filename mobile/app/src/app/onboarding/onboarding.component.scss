@@ -5,6 +5,10 @@ ion-slides {
   ion-slide {
     min-height: 300px;
     &.what {
+      img.logo {
+        height: 45px;
+        margin: 0 auto;
+      }
       ion-icon.header {
         color: var(--ion-color-primary);
       }
@@ -13,12 +17,12 @@ ion-slides {
       ion-icon.header {
         color: var(--ion-color-secondary);
       }
-      ol {
-        padding-left: 20px;
-        li {
-          margin-bottom: 8px;
-        }
-      }
+      // ol {
+      //   padding-left: 20px;
+      //   li {
+      //     margin-bottom: 8px;
+      //   }
+      // }
     }
     &.do {
       ion-icon {

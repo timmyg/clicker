@@ -21,7 +21,7 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isSearchablePage() && !searchMode">
-    <ion-fab-button> <ion-icon name="search" (click)="toggleSearch()"></ion-icon> </ion-fab-button>
+    <ion-fab-button color="primary" (click)="toggleSearch()"> <ion-icon name="search"></ion-icon> </ion-fab-button>
   </ion-fab>
   <router-outlet></router-outlet>
 </ion-content>

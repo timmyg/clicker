@@ -35,7 +35,7 @@ export class ConfirmationComponent implements OnInit {
   private reservationPlans = [
     {
       tokens: 1,
-      title: "Don't reserve",
+      title: 'Change Channel',
       minutes: 0,
     },
     {
@@ -47,7 +47,7 @@ export class ConfirmationComponent implements OnInit {
     },
     {
       tokens: 4,
-      title: '1 hour',
+      title: '60 minutes',
       minutes: 60,
       reserve: true,
       disabled: true,

@@ -21,6 +21,7 @@
       <ion-button expand="block" type="submit" margin-top [disabled]="!phone || phone.length !== 10 || waiting"
         >Next</ion-button
       >
+      <p class="ion-text-center"><em> Your number is only used for authentication and is never shared.</em></p>
     </section>
   </form>
   <form #codeForm="ngForm" (ngSubmit)="onCodeSubmit()" *ngIf="codeSent">
