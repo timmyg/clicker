@@ -79,6 +79,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 /* harmony import */ var auth0_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! auth0-js */ "./node_modules/auth0-js/dist/auth0.min.esm.js");
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var src_app_globals__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -127,6 +129,8 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
+
 var auth = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["default"].WebAuth({
     domain: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.domain,
     clientID: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.clientId,
@@ -134,17 +138,16 @@ var auth = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["default"].WebAuth({
     responseType: 'token id_token',
 });
 var LoginComponent = /** @class */ (function () {
-    function LoginComponent(modalController, toastController) {
+    function LoginComponent(modalController, toastController, segment, globals) {
         this.modalController = modalController;
         this.toastController = toastController;
+        this.segment = segment;
+        this.globals = globals;
     }
-    // ngAfterViewChecked() {
-    //   this.phoneElem.setFocus();
-    // }
     LoginComponent.prototype.onCloseClick = function () {
         this.modalController.dismiss();
     };
-    LoginComponent.prototype.onPhoneSubmit = function (x) {
+    LoginComponent.prototype.onPhoneSubmit = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -171,6 +174,7 @@ var LoginComponent = /** @class */ (function () {
                                 this.waiting = false;
                                 return [2 /*return*/, console.error(err)];
                             case 2:
+                                this.segment.track(this.globals.events.login.started);
                                 this.codeSent = true;
                                 this.waiting = false;
                                 return [2 /*return*/];
@@ -226,7 +230,10 @@ var LoginComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./login.component.html */ "./src/app/auth/login/login.component.html"),
             styles: [__webpack_require__(/*! ./login.component.scss */ "./src/app/auth/login/login.component.scss")]
         }),
-        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ModalController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ToastController"]])
+        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ModalController"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ToastController"],
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_4__["SegmentService"],
+            src_app_globals__WEBPACK_IMPORTED_MODULE_5__["Globals"]])
     ], LoginComponent);
     return LoginComponent;
 }());

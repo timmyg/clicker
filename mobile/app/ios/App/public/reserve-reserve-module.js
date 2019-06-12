@@ -37,13 +37,13 @@ var ReservationGuard = /** @class */ (function () {
     }
     ReservationGuard.prototype.canActivate = function (next, state) {
         var _this = this;
-        return this.reservation$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (r) {
-            var isValidReservation = r && r.location !== null;
+        return this.reservation$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (r) {
+            var isValidReservation = r && r.location !== undefined;
             if (!isValidReservation) {
                 console.info('bad reservation, starting over');
                 _this.router.navigate(['/tabs/reserve']);
             }
-            return isValidReservation;
+            return true;
         }));
     };
     ReservationGuard = __decorate([
@@ -66,7 +66,7 @@ var ReservationGuard = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-card *ngIf=\"(reservation$ | async) as reservation\">\n  <ion-card-content>\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onLengthChange($event)\">\n        <ion-list-header *ngIf=\"!isEditMode\"> Reservation Length </ion-list-header>\n        <ion-list-header *ngIf=\"isEditMode\"> Extend Reservation Length </ion-list-header>\n        <ion-item *ngFor=\"let p of availablePlans\">\n          <ion-label flex ion-justify-items-end>\n            <span>{{ p.title }}</span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span padding-start>{{ p.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ p.minutes }}\" [disabled]=\"saving\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <p class=\"ion-text-center\" padding-top>\n      <!-- show always -->\n      <span\n        >You are tuning <b>TV {{ reservation.box.label }}</b> to <b>{{ reservation.program.channelTitle }} </b></span\n      >\n      <!-- show if new and reserving, or editing -->\n      <span *ngIf=\"reservation.reserve || isEditMode; else oneTime\">\n        and reserving until <b>{{ reservationEnd$ | async | amDateFormat: 'h:mma' }}</b\n        >. You will be able to freely change the channel during your reservation.\n      </span>\n      <!-- show when new and not reserving -->\n      <ng-template #oneTime> <span *ngIf=\"!editMode\">but others will be able to change the channel</span> </ng-template>\n    </p>\n    <ion-button\n      color=\"success\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onConfirm(reservation)\"\n      slot=\"end\"\n      [disabled]=\"saving || !sufficientFunds\"\n      margin-top\n      align-items-center\n    >\n      <ion-row *ngIf=\"!saving; else isSaving\">\n        <span>Confirm</span> <img class=\"coin\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" padding-start />\n        <span>{{ reservation.cost }}</span>\n      </ion-row>\n      <ng-template #isSaving>\n        Tuning\n        <ion-spinner name=\"crescent\" margin-start></ion-spinner>\n      </ng-template>\n    </ion-button>\n    <ion-row class=\"ion-text-center\" *ngIf=\"reservation.location && reservation.location.name\">\n      <p class=\"center\">{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</p></ion-row\n    >\n    <ion-row class=\"ion-text-center\" *ngIf=\"!sufficientFunds\" margin-top>\n      <ion-text color=\"danger\">\n        Heads up! You only have {{ tokenCount }} <span *ngIf=\"tokenCount && tokenCount === 1; else tokens\">token</span\n        ><ng-template #tokens>tokens</ng-template> remaining. Please\n        <span *ngIf=\"!isLoggedIn\"><a [routerLink]=\"'/tabs/profile'\">login</a> and </span>\n        <a [routerLink]=\"'/tabs/profile'\" *ngIf=\"isLoggedIn\">add funds</a><span *ngIf=\"!isLoggedIn\">add funds</span>.\n      </ion-text>\n    </ion-row>\n  </ion-card-content>\n</ion-card>\n"
+module.exports = "<ion-card *ngIf=\"(reservation$ | async) as reservation\">\n  <ion-card-content>\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onLengthChange($event)\">\n        <ion-list-header *ngIf=\"!isEditMode\"> Reservation Length </ion-list-header>\n        <ion-list-header *ngIf=\"isEditMode\"> Extend Reservation Length </ion-list-header>\n        <ion-item *ngFor=\"let p of availablePlans\">\n          <ion-label flex ion-justify-items-end>\n            <span>{{ p.title }}</span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span padding-start>{{ p.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ p.minutes }}\" [disabled]=\"saving || p.disabled\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <p class=\"ion-text-center\" padding-top>\n      <!-- show always -->\n      <span\n        >You are tuning <b>TV {{ reservation.box.label }}</b> to <b>{{ reservation.program.channelTitle }} </b></span\n      >\n      <!-- show if new and reserving, or editing -->\n      <span *ngIf=\"reservation.reserve || isEditMode; else oneTime\">\n        and reserving until <b>{{ reservationEnd$ | async | amDateFormat: 'h:mma' }}</b\n        >. You will be able to freely change the channel during your reservation.\n      </span>\n      <!-- show when new and not reserving -->\n      <ng-template #oneTime> <span *ngIf=\"!editMode\">but others will be able to change the channel</span> </ng-template>\n      <br />\n      <br />\n      <em>Reservation periods are disabled during today's pilot</em>\n    </p>\n    <ion-button\n      color=\"success\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onConfirm(reservation)\"\n      slot=\"end\"\n      [disabled]=\"saving || !sufficientFunds\"\n      margin-top\n      align-items-center\n    >\n      <ion-row *ngIf=\"!saving; else isSaving\">\n        <span>Confirm</span> <img class=\"coin\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" padding-start />\n        <span>{{ reservation.cost }}</span>\n      </ion-row>\n      <ng-template #isSaving>\n        Tuning\n        <ion-spinner name=\"crescent\" margin-start></ion-spinner>\n      </ng-template>\n    </ion-button>\n    <ion-row class=\"ion-text-center\" *ngIf=\"reservation.location && reservation.location.name\">\n      <p class=\"center\">{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</p></ion-row\n    >\n    <ion-row class=\"ion-text-center\" *ngIf=\"!sufficientFunds\" margin-top>\n      <ion-text color=\"danger\">\n        Heads up! You only have {{ tokenCount }} <span *ngIf=\"tokenCount && tokenCount === 1; else tokens\">token</span\n        ><ng-template #tokens>tokens</ng-template> remaining. Please\n        <span *ngIf=\"!isLoggedIn\"><a [routerLink]=\"'/tabs/profile'\">login</a> and </span>\n        <a [routerLink]=\"'/tabs/profile'\" *ngIf=\"isLoggedIn\">add funds</a><span *ngIf=\"!isLoggedIn\">add funds</span>.\n      </ion-text>\n    </ion-row>\n  </ion-card-content>\n</ion-card>\n"
 
 /***/ }),
 
@@ -104,6 +104,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var src_app_state_user__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! src/app/state/user */ "./src/app/state/user/index.ts");
 /* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var src_app_globals__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! src/app/globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -160,13 +162,17 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
+
 var ConfirmationComponent = /** @class */ (function () {
-    function ConfirmationComponent(store, reserveService, router, toastController, actions$) {
+    function ConfirmationComponent(store, reserveService, router, toastController, actions$, segment, globals) {
         this.store = store;
         this.reserveService = reserveService;
         this.router = router;
         this.toastController = toastController;
         this.actions$ = actions$;
+        this.segment = segment;
+        this.globals = globals;
         this.title = 'Confirmation';
         this.reservationPlans = [
             {
@@ -179,12 +185,14 @@ var ConfirmationComponent = /** @class */ (function () {
                 title: '30 minutes',
                 minutes: 30,
                 reserve: true,
+                disabled: true,
             },
             {
                 tokens: 4,
                 title: '1 hour',
                 minutes: 60,
                 reserve: true,
+                disabled: true,
             },
         ];
         this.reservation$ = this.store.select(src_app_state_reservation__WEBPACK_IMPORTED_MODULE_4__["getReservation"]);
@@ -247,15 +255,38 @@ var ConfirmationComponent = /** @class */ (function () {
     };
     ConfirmationComponent.prototype.onConfirm = function () {
         var _this = this;
+        var r = this.reservation;
         this.saving = true;
         this.isEditMode
-            ? this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["Update"](this.reservation))
-            : this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["Create"](this.reservation));
-        var reservation = this.reservation;
+            ? this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["Update"](r))
+            : this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["Create"](r));
+        var reservation = r;
         this.actions$
             .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_11__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["CREATE_RESERVATION_SUCCESS"], _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["UPDATE_RESERVATION_SUCCESS"]))
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["first"])())
             .subscribe(function () {
+            if (_this.isEditMode) {
+                _this.segment.track(_this.globals.events.reservation.updated, {
+                    minutes: r.minutes,
+                    locationName: r.location.name,
+                    locationNeighborhood: r.location.neighborhood,
+                    channelName: r.program.channelTitle,
+                    channelNumber: r.program.channel,
+                    programName: r.program.title,
+                    programDescription: r.program.description,
+                });
+            }
+            else {
+                _this.segment.track(_this.globals.events.reservation.created, {
+                    minutes: r.minutes,
+                    locationName: r.location.name,
+                    locationNeighborhood: r.location.neighborhood,
+                    channelName: r.program.channelTitle,
+                    channelNumber: r.program.channel,
+                    programName: r.program.title,
+                    programDescription: r.program.description,
+                });
+            }
             _this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["Start"]());
             _this.router.navigate(['/tabs/profile']);
             _this.showTunedToast(reservation.box.label, reservation.program.channelTitle);
@@ -317,9 +348,109 @@ var ConfirmationComponent = /** @class */ (function () {
             _reserve_service__WEBPACK_IMPORTED_MODULE_1__["ReserveService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["ToastController"],
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_11__["Actions"]])
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_11__["Actions"],
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_12__["SegmentService"],
+            src_app_globals__WEBPACK_IMPORTED_MODULE_13__["Globals"]])
     ], ConfirmationComponent);
     return ConfirmationComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/reserve/components/locations/location/location.component.html":
+/*!*******************************************************************************!*\
+  !*** ./src/app/reserve/components/locations/location/location.component.html ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ion-item-sliding [ngClass]=\"{ inactive: !isAvailable() }\" [disabled]=\"!isAvailable() || !isManager()\" #slidingItem>\n  <ion-item-options side=\"start\">\n    <ion-item-option (click)=\"onManageClick(slidingItem)\">Manage</ion-item-option>\n  </ion-item-options>\n  <ion-item>\n    <ion-card (click)=\"isAvailable() && onLocationClick()\" no-margin>\n      <ion-card-header>\n        <ion-card-subtitle>\n          <span>{{ location.neighborhood }} <span *ngIf=\"!isAvailable()\">(inactive)</span></span>\n          <ion-icon *ngIf=\"!location.connected\" name=\"wifi\" class=\"disconnected\"></ion-icon>\n          <ion-icon *ngIf=\"isManager()\" name=\"star\" class=\"manage\"></ion-icon>\n\n          <span float-right *ngIf=\"location.distance\">\n            <span *ngIf=\"location.distance >= 0.2; else near\"> {{ location.distance }} miles </span>\n            <ng-template #near> Near </ng-template>\n          </span>\n        </ion-card-subtitle>\n      </ion-card-header>\n      <ion-card-content no-padding-top>\n        <img [src]=\"location.img\" class=\"logo\" />\n        <h1>{{ location.name }}</h1>\n      </ion-card-content>\n    </ion-card>\n  </ion-item>\n</ion-item-sliding>\n"
+
+/***/ }),
+
+/***/ "./src/app/reserve/components/locations/location/location.component.scss":
+/*!*******************************************************************************!*\
+  !*** ./src/app/reserve/components/locations/location/location.component.scss ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "img.logo {\n  height: 40px;\n  width: inherit;\n  float: left;\n  padding: 0 10px 10px 0; }\n\n.inactive {\n  opacity: 0.4; }\n\nion-icon.disconnected {\n  color: var(--ion-color-danger); }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9uL2xvY2F0aW9uLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsWUFBWTtFQUNaLGNBQWM7RUFDZCxXQUFXO0VBQ1gsc0JBQXNCLEVBQUE7O0FBR3hCO0VBQ0UsWUFBWSxFQUFBOztBQUdkO0VBQ0UsOEJBQThCLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9uL2xvY2F0aW9uLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaW1nLmxvZ28ge1xuICBoZWlnaHQ6IDQwcHg7XG4gIHdpZHRoOiBpbmhlcml0O1xuICBmbG9hdDogbGVmdDtcbiAgcGFkZGluZzogMCAxMHB4IDEwcHggMDtcbn1cblxuLmluYWN0aXZlIHtcbiAgb3BhY2l0eTogMC40O1xufVxuXG5pb24taWNvbi5kaXNjb25uZWN0ZWQge1xuICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLWRhbmdlcik7XG59XG4iXX0= */"
+
+/***/ }),
+
+/***/ "./src/app/reserve/components/locations/location/location.component.ts":
+/*!*****************************************************************************!*\
+  !*** ./src/app/reserve/components/locations/location/location.component.ts ***!
+  \*****************************************************************************/
+/*! exports provided: LocationComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LocationComponent", function() { return LocationComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var LocationComponent = /** @class */ (function () {
+    function LocationComponent() {
+        this.onClick = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.onManage = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+    }
+    LocationComponent.prototype.isManager = function () {
+        var _a = this, userLocations = _a.userLocations, userRoles = _a.userRoles;
+        if (userLocations && userRoles) {
+            return userLocations.indexOf(this.location.id) > -1 || userRoles.indexOf('superman') > -1;
+        }
+    };
+    LocationComponent.prototype.isAvailable = function () {
+        return this.location.active && this.location.connected;
+    };
+    LocationComponent.prototype.onLocationClick = function () {
+        this.onClick.emit(this.location);
+    };
+    LocationComponent.prototype.onManageClick = function (slidingItem) {
+        this.onManage.emit(this.location);
+        slidingItem.close();
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], LocationComponent.prototype, "location", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Array)
+    ], LocationComponent.prototype, "userLocations", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Array)
+    ], LocationComponent.prototype, "userRoles", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], LocationComponent.prototype, "onClick", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], LocationComponent.prototype, "onManage", void 0);
+    LocationComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-location',
+            template: __webpack_require__(/*! ./location.component.html */ "./src/app/reserve/components/locations/location/location.component.html"),
+            styles: [__webpack_require__(/*! ./location.component.scss */ "./src/app/reserve/components/locations/location/location.component.scss")]
+        })
+    ], LocationComponent);
+    return LocationComponent;
 }());
 
 
@@ -333,7 +464,7 @@ var ConfirmationComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-row *ngIf=\"(isLoading$ | async) || evaluatingGeolocation\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n\n<section>\n  <section\n    class=\"ion-text-center\"\n    padding\n    *ngIf=\"(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations\"\n  >\n    <ion-icon name=\"pin\" class=\"location\"></ion-icon>\n    <p>\n      Clicker would like to access your location for more accurate location details. This data is not stored anywhere.\n    </p>\n    <div><ion-button margin-top (click)=\"allowLocation()\">Allow Location Access </ion-button></div>\n    <div><ion-button fill=\"clear\" (click)=\"denyLocation()\">No Thanks </ion-button></div>\n  </section>\n\n  <ng-template #showLocations>\n    <ion-list lines=\"none\">\n      <p *ngIf=\"geolocationDeclined && !evaluatingGeolocation\" class=\"ion-text-center\" padding>\n        Find locations around you by allowing location services in your settings\n      </p>\n      <ion-item-sliding\n        *ngFor=\"let location of (locations$ | async | locationsFilter: searchTerm)\"\n        [ngClass]=\"{ inactive: !isAvailable(location) }\"\n        [disabled]=\"!isAvailable(location) || !isManager(location)\"\n      >\n        <ion-item-options side=\"start\">\n          <ion-item-option (click)=\"onManage(location)\">Manage</ion-item-option>\n        </ion-item-options>\n        <ion-item>\n          <ion-card (click)=\"isAvailable(location) && onLocationClick(location)\">\n            <ion-card-header>\n              <ion-card-subtitle>\n                <span>{{ location.neighborhood }} <span *ngIf=\"!isAvailable(location)\">(inactive)</span></span>\n                <ion-icon *ngIf=\"!location.connected\" name=\"wifi\" class=\"disconnected\"></ion-icon>\n                <ion-icon *ngIf=\"isManager(location)\" name=\"star\" class=\"manage\"></ion-icon>\n\n                <span float-right *ngIf=\"location.distance\">\n                  <span *ngIf=\"location.distance >= 0.2; else near\"> {{ location.distance }} miles </span>\n                  <ng-template #near> Near </ng-template>\n                </span>\n              </ion-card-subtitle>\n            </ion-card-header>\n            <ion-card-content no-padding-top>\n              <img [src]=\"location.img\" class=\"logo\" />\n              <h1>{{ location.name }}</h1>\n            </ion-card-content>\n          </ion-card>\n        </ion-item>\n      </ion-item-sliding>\n    </ion-list>\n  </ng-template>\n</section>\n"
+module.exports = "<!-- show if data loading initally or evaluating geolocationDeclined\nunless pulling to refresh (so we don't show duplicate spinners) -->\n<ion-row *ngIf=\"((isLoading$ | async) || evaluatingGeolocation) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n\n<section>\n  <section\n    class=\"ion-text-center\"\n    padding\n    *ngIf=\"(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations\"\n  >\n    <ion-icon name=\"pin\" class=\"location\"></ion-icon>\n    <p>\n      Clicker would like to access your location for more accurate location details. This data is not stored anywhere.\n    </p>\n    <div><ion-button margin-top (click)=\"allowLocation()\">Allow Location Access </ion-button></div>\n    <div><ion-button fill=\"clear\" (click)=\"denyLocation()\">No Thanks </ion-button></div>\n  </section>\n\n  <ng-template #showLocations>\n    <ion-list lines=\"none\">\n      <p *ngIf=\"geolocationDeclined && !evaluatingGeolocation\" class=\"ion-text-center\" padding>\n        Find locations around you by allowing location services in your settings\n      </p>\n      <ng-container *ngFor=\"let location of (locations$ | async | locationsFilter: searchTerm)\">\n        <app-location\n          [location]=\"location\"\n          [userRoles]=\"userRoles\"\n          [userLocations]=\"userLocations\"\n          (onClick)=\"onLocationClick($event)\"\n          (onManage)=\"onLocationManage($event)\"\n        ></app-location>\n      </ng-container>\n    </ion-list>\n  </ng-template>\n</section>\n"
 
 /***/ }),
 
@@ -344,7 +475,7 @@ module.exports = "<ion-row *ngIf=\"(isLoading$ | async) || evaluatingGeolocation
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "img.logo {\n  height: 40px;\n  width: inherit;\n  float: left;\n  padding: 0 10px 10px 0; }\n\n.inactive {\n  opacity: 0.4; }\n\nion-icon.disconnected {\n  color: var(--ion-color-danger); }\n\nion-icon.location {\n  color: var(--ion-color-primary);\n  font-size: 64px; }\n\nion-card {\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9ucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLFlBQVk7RUFDWixjQUFjO0VBQ2QsV0FBVztFQUNYLHNCQUFzQixFQUFBOztBQUd4QjtFQUNFLFlBQVksRUFBQTs7QUFHZDtFQUNFLDhCQUE4QixFQUFBOztBQUdoQztFQUNFLCtCQUErQjtFQUMvQixlQUFlLEVBQUE7O0FBR2pCO0VBQ0UsV0FBVyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvcmVzZXJ2ZS9jb21wb25lbnRzL2xvY2F0aW9ucy9sb2NhdGlvbnMuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJpbWcubG9nbyB7XG4gIGhlaWdodDogNDBweDtcbiAgd2lkdGg6IGluaGVyaXQ7XG4gIGZsb2F0OiBsZWZ0O1xuICBwYWRkaW5nOiAwIDEwcHggMTBweCAwO1xufVxuXG4uaW5hY3RpdmUge1xuICBvcGFjaXR5OiAwLjQ7XG59XG5cbmlvbi1pY29uLmRpc2Nvbm5lY3RlZCB7XG4gIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFuZ2VyKTtcbn1cblxuaW9uLWljb24ubG9jYXRpb24ge1xuICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnkpO1xuICBmb250LXNpemU6IDY0cHg7XG59XG5cbmlvbi1jYXJkIHtcbiAgd2lkdGg6IDEwMCU7XG59XG5cbi8vIDo6bmctZGVlcCAuYWN0aW9uLXNoZWV0LWJ1dHRvbiB7XG4vLyAgICYuZGFuZ2VyIHtcbi8vICAgICBpb24taWNvbiB7XG4vLyAgICAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLWRhbmdlcikgIWltcG9ydGFudDtcbi8vICAgICB9XG4vLyAgIH1cbi8vICAgJi5zdWNjZXNzIHtcbi8vICAgICBpb24taWNvbiB7XG4vLyAgICAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXN1Y2Nlc3MpICFpbXBvcnRhbnQ7XG4vLyAgICAgfVxuLy8gICB9XG4vLyB9XG4iXX0= */"
+module.exports = "ion-icon.location {\n  color: var(--ion-color-primary);\n  font-size: 64px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9ucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLCtCQUErQjtFQUMvQixlQUFlLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvbG9jYXRpb25zL2xvY2F0aW9ucy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbImlvbi1pY29uLmxvY2F0aW9uIHtcbiAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5KTtcbiAgZm9udC1zaXplOiA2NHB4O1xufVxuIl19 */"
 
 /***/ }),
 
@@ -373,6 +504,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
 /* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @capacitor/core */ "./node_modules/@capacitor/core/dist/esm/index.js");
 /* harmony import */ var _ionic_storage__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @ionic/storage */ "./node_modules/@ionic/storage/fesm5/ionic-storage.js");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var src_app_globals__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! src/app/globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -433,6 +566,8 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 var Geolocation = _capacitor_core__WEBPACK_IMPORTED_MODULE_13__["Plugins"].Geolocation;
 
+
+
 var permissionGeolocation = {
     name: 'permission.geolocation',
     values: {
@@ -442,16 +577,19 @@ var permissionGeolocation = {
     },
 };
 var LocationsComponent = /** @class */ (function () {
-    function LocationsComponent(store, actionSheetController, reserveService, router, route, navCtrl, actions$, storage) {
+    function LocationsComponent(store, actionSheetController, toastController, reserveService, router, route, navCtrl, actions$, storage, segment, globals) {
         var _this = this;
         this.store = store;
         this.actionSheetController = actionSheetController;
+        this.toastController = toastController;
         this.reserveService = reserveService;
         this.router = router;
         this.route = route;
         this.navCtrl = navCtrl;
         this.actions$ = actions$;
         this.storage = storage;
+        this.segment = segment;
+        this.globals = globals;
         this.title = 'Choose Location';
         this.askForGeolocation$ = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](true);
         this.evaluatingGeolocation = true;
@@ -490,12 +628,6 @@ var LocationsComponent = /** @class */ (function () {
         this.searchSubscription.unsubscribe();
         this.closeSearchSubscription.unsubscribe();
     };
-    LocationsComponent.prototype.isManager = function (location) {
-        var _a = this, userLocations = _a.userLocations, userRoles = _a.userRoles;
-        if (userLocations && userRoles) {
-            return userLocations.indexOf(location.id) > -1 || userRoles.indexOf('superman') > -1;
-        }
-    };
     LocationsComponent.prototype.redirectIfUpdating = function () {
         return __awaiter(this, void 0, void 0, function () {
             var state, reservation;
@@ -523,6 +655,7 @@ var LocationsComponent = /** @class */ (function () {
                         }
                         else {
                             this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__["Start"]());
+                            this.segment.track(this.globals.events.reservation.started);
                         }
                         return [2 /*return*/];
                 }
@@ -533,18 +666,32 @@ var LocationsComponent = /** @class */ (function () {
         var _this = this;
         this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"](this.userGeolocation));
         this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_7__["Refresh"]());
-        // this.actions$
-        //   .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS))
-        //   .pipe(ofType(fromUser.REFRESH_SUCCESS))
-        //   .pipe(first())
-        Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["forkJoin"])(this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["ofType"])(_state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GET_ALL_LOCATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["take"])(1)), this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["ofType"])(_state_user_user_actions__WEBPACK_IMPORTED_MODULE_7__["REFRESH_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["take"])(1))).subscribe(function () {
+        this.actions$
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["ofType"])(_state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GET_ALL_LOCATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["take"])(1))
+            .subscribe(function () {
             _this.reserveService.emitRefreshed();
         });
-    };
-    LocationsComponent.prototype.onLocationClick = function (location) {
-        this.reserveService.emitCloseSearch();
-        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__["SetLocation"](location));
-        this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+        this.actions$
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["ofType"])(_state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GET_ALL_LOCATIONS_FAIL"]))
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["first"])())
+            .subscribe(function () { return __awaiter(_this, void 0, void 0, function () {
+            var whoops;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.toastController.create({
+                            message: 'Something went wrong. Please try again.',
+                            color: 'danger',
+                            duration: 4000,
+                            cssClass: 'ion-text-center',
+                        })];
+                    case 1:
+                        whoops = _a.sent();
+                        whoops.present();
+                        this.reserveService.emitRefreshed();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
     };
     LocationsComponent.prototype.allowLocation = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -573,10 +720,7 @@ var LocationsComponent = /** @class */ (function () {
             });
         });
     };
-    LocationsComponent.prototype.isAvailable = function (location) {
-        return location.active && location.connected;
-    };
-    LocationsComponent.prototype.onManage = function (location) {
+    LocationsComponent.prototype.onLocationManage = function (location) {
         return __awaiter(this, void 0, void 0, function () {
             var actionSheet;
             var _this = this;
@@ -599,6 +743,14 @@ var LocationsComponent = /** @class */ (function () {
                                     cssClass: 'color-success',
                                     handler: function () {
                                         _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["TurnOn"](location));
+                                    },
+                                },
+                                {
+                                    text: 'Turn on all TVs + autotune',
+                                    icon: 'power',
+                                    cssClass: 'color-success',
+                                    handler: function () {
+                                        _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["TurnOn"](location, true));
                                     },
                                 },
                             ],
@@ -634,11 +786,13 @@ var LocationsComponent = /** @class */ (function () {
                                 var _a = response.coords, latitude = _a.latitude, longitude = _a.longitude;
                                 _this.userGeolocation = { latitude: latitude, longitude: longitude };
                                 _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"](_this.userGeolocation));
+                                _this.reserveService.emitShowingLocations();
                             })
                                 .catch(function (error) {
                                 _this.evaluatingGeolocation = false;
                                 _this.askForGeolocation$.next(false);
                                 _this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"](_this.userGeolocation));
+                                _this.reserveService.emitShowingLocations();
                                 console.error('Error getting location', error);
                             })];
                     case 2:
@@ -648,6 +802,7 @@ var LocationsComponent = /** @class */ (function () {
                         if (permissionStatus === permissionGeolocation.values.denied) {
                             this.askForGeolocation$.next(false);
                             this.evaluatingGeolocation = false;
+                            this.reserveService.emitShowingLocations();
                             this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"]());
                         }
                         else {
@@ -660,6 +815,16 @@ var LocationsComponent = /** @class */ (function () {
             });
         });
     };
+    LocationsComponent.prototype.onLocationClick = function (location) {
+        this.reserveService.emitCloseSearch();
+        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__["SetLocation"](location));
+        // this.actions$
+        //   .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
+        //   .pipe(first())
+        //   .subscribe(async () => {
+        this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+        // });
+    };
     LocationsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             template: __webpack_require__(/*! ./locations.component.html */ "./src/app/reserve/components/locations/locations.component.html"),
@@ -667,14 +832,88 @@ var LocationsComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_5__["Store"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_10__["ActionSheetController"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_10__["ToastController"],
             _reserve_service__WEBPACK_IMPORTED_MODULE_1__["ReserveService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_9__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_9__["ActivatedRoute"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_10__["NavController"],
             _ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["Actions"],
-            _ionic_storage__WEBPACK_IMPORTED_MODULE_14__["Storage"]])
+            _ionic_storage__WEBPACK_IMPORTED_MODULE_14__["Storage"],
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_15__["SegmentService"],
+            src_app_globals__WEBPACK_IMPORTED_MODULE_16__["Globals"]])
     ], LocationsComponent);
     return LocationsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/reserve/components/programs/info/info.component.html":
+/*!**********************************************************************!*\
+  !*** ./src/app/reserve/components/programs/info/info.component.html ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title> Program Info </ion-title>\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"onCloseClick()\"> <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon> </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n<ion-content padding>\n  <label>Title</label>\n  <div>\n    <span> {{ program.title }}</span>\n  </div>\n  <br />\n  <label>Description</label>\n  <div>\n    <span *ngIf=\"program.description; else noDescription\"> {{ program.description }}</span>\n    <ng-template #noDescription>No description available</ng-template>\n  </div>\n</ion-content>\n"
+
+/***/ }),
+
+/***/ "./src/app/reserve/components/programs/info/info.component.scss":
+/*!**********************************************************************!*\
+  !*** ./src/app/reserve/components/programs/info/info.component.scss ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "label {\n  font-weight: bold; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvcHJvZ3JhbXMvaW5mby9pbmZvLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsaUJBQWlCLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvcHJvZ3JhbXMvaW5mby9pbmZvLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsibGFiZWwge1xuICBmb250LXdlaWdodDogYm9sZDtcbn1cbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/reserve/components/programs/info/info.component.ts":
+/*!********************************************************************!*\
+  !*** ./src/app/reserve/components/programs/info/info.component.ts ***!
+  \********************************************************************/
+/*! exports provided: InfoComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InfoComponent", function() { return InfoComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var InfoComponent = /** @class */ (function () {
+    function InfoComponent(modalController) {
+        this.modalController = modalController;
+    }
+    InfoComponent.prototype.onCloseClick = function () {
+        this.modalController.dismiss();
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], InfoComponent.prototype, "program", void 0);
+    InfoComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-info',
+            template: __webpack_require__(/*! ./info.component.html */ "./src/app/reserve/components/programs/info/info.component.html"),
+            styles: [__webpack_require__(/*! ./info.component.scss */ "./src/app/reserve/components/programs/info/info.component.scss")]
+        }),
+        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ModalController"]])
+    ], InfoComponent);
+    return InfoComponent;
 }());
 
 
@@ -688,7 +927,7 @@ var LocationsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-card (click)=\"onProgramClick()\">\n  <ion-card-header>\n    <ion-card-subtitle>\n      <span>{{ program.channelTitle }}</span>\n      <span float-right>{{ program.start | amDateFormat: 'h:mma' }} - {{ program.end | amDateFormat: 'h:mma' }}</span>\n    </ion-card-subtitle>\n  </ion-card-header>\n  <ion-card-content no-padding-top>\n    <ion-grid no-padding>\n      <ion-row align-items-center>\n        <ion-col size=\"1\" no-padding align-items-center>\n          <ion-icon [name]=\"program.icon\" class=\"sport {{ program.icon }}\" size=\"large\" fill=\"red\"></ion-icon>\n        </ion-col>\n        <ion-col size=\"11\">\n          <h1 class=\"title\">{{ program.title }} <span class=\"faded\" *ngIf=\"isReplay()\">(Replay)</span><ion-icon *ngIf=\"program.points >= 5\" name=\"flame\" class=\"trending\"></ion-icon>\n          </h1>\n        </ion-col>\n        <ion-col size=\"12\">\n          <span class=\"faded\" *ngIf=\"program.nextProgramTitle\">\n            Next: {{ getNextProgramTitle() }} at {{ program.nextProgramStart | amDateFormat: 'h:mma' }}\n          </span>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-card-content>\n</ion-card>\n"
+module.exports = "<ion-item-sliding [disabled]=\"false\" #slidingItem>\n  <ion-item-options side=\"start\">\n    <ion-item-option (click)=\"onMoreInfo(slidingItem)\">Info</ion-item-option>\n  </ion-item-options>\n  <ion-item>\n    <ion-card (click)=\"onProgramClick()\" no-margin>\n      <ion-card-header>\n        <ion-card-subtitle>\n          <span>{{ program.channelTitle }}</span>\n          <span float-right\n            >{{ program.start | amDateFormat: 'h:mma' }} - {{ program.end | amDateFormat: 'h:mma' }}</span\n          >\n        </ion-card-subtitle>\n      </ion-card-header>\n      <ion-card-content no-padding-top>\n        <ion-grid no-padding>\n          <ion-row align-items-center>\n            <ng-container *ngIf=\"program.start; else noProgram\">\n              <ion-col size=\"1\" no-padding align-items-center>\n                <ion-icon [name]=\"program.icon\" class=\"sport {{ program.icon }}\" size=\"large\" fill=\"red\"></ion-icon>\n              </ion-col>\n              <ion-col size=\"11\">\n                <h1 class=\"title\">\n                  {{ program.title }} <span class=\"faded\" *ngIf=\"isReplay()\">(Replay)</span\n                  ><ion-icon *ngIf=\"program.points >= 5\" name=\"flame\" class=\"trending\"></ion-icon>\n                </h1>\n              </ion-col>\n\n              <ion-col size=\"12\">\n                <span class=\"faded\" *ngIf=\"program.nextProgramTitle\">\n                  Next: {{ getNextProgramTitle() }} at {{ program.nextProgramStart | amDateFormat: 'h:mma' }}\n                </span>\n              </ion-col>\n            </ng-container>\n            <ng-template #noProgram> &nbsp;</ng-template>\n          </ion-row>\n        </ion-grid>\n      </ion-card-content>\n    </ion-card>\n  </ion-item>\n</ion-item-sliding>\n"
 
 /***/ }),
 
@@ -762,6 +1001,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var ProgramComponent = /** @class */ (function () {
     function ProgramComponent() {
         this.onSelect = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.onInfo = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
     }
     ProgramComponent.prototype.onProgramClick = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -789,6 +1029,10 @@ var ProgramComponent = /** @class */ (function () {
             }
         }
     };
+    ProgramComponent.prototype.onMoreInfo = function (slidingItem) {
+        this.onInfo.emit(this.program);
+        slidingItem.close();
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
@@ -797,6 +1041,10 @@ var ProgramComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
     ], ProgramComponent.prototype, "onSelect", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], ProgramComponent.prototype, "onInfo", void 0);
     ProgramComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-program',
@@ -819,7 +1067,7 @@ var ProgramComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-row *ngIf=\"(isLoading$ | async)\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-list>\n  <div *ngFor=\"let program of (programs$ | async | programsFilter: searchTerm)\">\n    <app-program (onSelect)=\"onProgramSelect($event)\" [program]=\"program\"></app-program>\n  </div>\n</ion-list>\n"
+module.exports = "<ion-row *ngIf=\"(isLoading$ | async) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-list lines=\"none\">\n  <app-program\n    *ngFor=\"let program of (programs$ | async | programsFilter: searchTerm)\"\n    (onSelect)=\"onProgramSelect($event)\"\n    (onInfo)=\"onProgramInfo($event)\"\n    [program]=\"program\"\n  ></app-program>\n</ion-list>\n"
 
 /***/ }),
 
@@ -854,6 +1102,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reserve_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../reserve.service */ "./src/app/reserve/reserve.service.ts");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+/* harmony import */ var _info_info_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./info/info.component */ "./src/app/reserve/components/programs/info/info.component.ts");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -908,11 +1158,15 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
+
 var ProgramsComponent = /** @class */ (function () {
-    function ProgramsComponent(store, reserveService, router, route, actions$) {
+    function ProgramsComponent(store, reserveService, modalController, toastController, router, route, actions$) {
         var _this = this;
         this.store = store;
         this.reserveService = reserveService;
+        this.modalController = modalController;
+        this.toastController = toastController;
         this.router = router;
         this.route = route;
         this.actions$ = actions$;
@@ -946,6 +1200,27 @@ var ProgramsComponent = /** @class */ (function () {
             .subscribe(function () {
             _this.reserveService.emitRefreshed();
         });
+        this.actions$
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_9__["ofType"])(_state_program_program_actions__WEBPACK_IMPORTED_MODULE_4__["GET_PROGRAMS_FAIL"]))
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_8__["first"])())
+            .subscribe(function () { return __awaiter(_this, void 0, void 0, function () {
+            var whoops;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.toastController.create({
+                            message: 'Something went wrong. Please try again.',
+                            color: 'danger',
+                            duration: 4000,
+                            cssClass: 'ion-text-center',
+                        })];
+                    case 1:
+                        whoops = _a.sent();
+                        whoops.present();
+                        this.reserveService.emitRefreshed();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
     };
     ProgramsComponent.prototype.ngOnDestroy = function () {
         this.refreshSubscription.unsubscribe();
@@ -975,6 +1250,23 @@ var ProgramsComponent = /** @class */ (function () {
             });
         });
     };
+    ProgramsComponent.prototype.onProgramInfo = function (program) {
+        return __awaiter(this, void 0, void 0, function () {
+            var modal;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.modalController.create({
+                            component: _info_info_component__WEBPACK_IMPORTED_MODULE_10__["InfoComponent"],
+                            componentProps: { program: program },
+                        })];
+                    case 1:
+                        modal = _a.sent();
+                        modal.present();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     ProgramsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             template: __webpack_require__(/*! ./programs.component.html */ "./src/app/reserve/components/programs/programs.component.html"),
@@ -982,6 +1274,8 @@ var ProgramsComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"],
             _reserve_service__WEBPACK_IMPORTED_MODULE_7__["ReserveService"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_11__["ModalController"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_11__["ToastController"],
             _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"],
             _ngrx_effects__WEBPACK_IMPORTED_MODULE_9__["Actions"]])
@@ -1000,7 +1294,7 @@ var ProgramsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-row *ngIf=\"(isLoading$ | async)\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-row>\n  <ion-col *ngFor=\"let tv of (tvs$ | async)\" size=\"4\">\n    <ion-button\n      color=\"light\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onTvClick(tv)\"\n      [ngClass]=\"{ reserved: tv.reserved }\"\n      >{{ tv.label }}</ion-button\n    >\n  </ion-col>\n</ion-row>\n\n"
+module.exports = "<ion-row *ngIf=\"(isLoading$ | async) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-row>\n  <ion-col *ngFor=\"let tv of (tvs$ | async)\" size=\"4\">\n    <ion-button\n      color=\"light\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onTvClick(tv)\"\n      [ngClass]=\"{ reserved: tv.reserved }\"\n      >{{ tv.label }}</ion-button\n    >\n  </ion-col>\n</ion-row>\n"
 
 /***/ }),
 
@@ -1031,13 +1325,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../state/reservation/reservation.actions */ "./src/app/state/reservation/reservation.actions.ts");
 /* harmony import */ var src_app_state_reservation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/state/reservation */ "./src/app/state/reservation/index.ts");
-/* harmony import */ var _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../state/location/location.actions */ "./src/app/state/location/location.actions.ts");
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var src_app_state_location__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! src/app/state/location */ "./src/app/state/location/index.ts");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var src_app_state_location__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! src/app/state/location */ "./src/app/state/location/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1093,7 +1386,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
 var TvsComponent = /** @class */ (function () {
     function TvsComponent(store, reserveService, router, route, toastController, actions$) {
         var _this = this;
@@ -1106,11 +1398,12 @@ var TvsComponent = /** @class */ (function () {
         this.title = 'Choose TV';
         this.tvs$ = this.store.select(src_app_state_reservation__WEBPACK_IMPORTED_MODULE_5__["getReservationTvs"]);
         this.reservation$ = this.store.select(src_app_state_reservation__WEBPACK_IMPORTED_MODULE_5__["getReservation"]);
+        this.reservation$.subscribe(function (r) { return (_this.reservation = r); });
         this.reserveService.emitTitle(this.title);
         this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(function () { return _this.refresh(); });
     }
     TvsComponent.prototype.ngOnInit = function () {
-        this.isLoading$ = this.store.select(src_app_state_location__WEBPACK_IMPORTED_MODULE_11__["getLoading"]);
+        this.isLoading$ = this.store.select(src_app_state_location__WEBPACK_IMPORTED_MODULE_10__["getLoading"]);
     };
     TvsComponent.prototype.ngOnDestroy = function () {
         this.refreshSubscription.unsubscribe();
@@ -1123,7 +1416,7 @@ var TvsComponent = /** @class */ (function () {
                     case 0:
                         if (!tv.reserved) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.toastController.create({
-                                message: tv.label + " is reserved until " + moment__WEBPACK_IMPORTED_MODULE_8__(tv.end).format('h:mma'),
+                                message: tv.label + " is reserved until " + moment__WEBPACK_IMPORTED_MODULE_7__(tv.end).format('h:mma'),
                                 duration: 2000,
                                 cssClass: 'ion-text-center',
                             })];
@@ -1140,10 +1433,10 @@ var TvsComponent = /** @class */ (function () {
     };
     TvsComponent.prototype.refresh = function () {
         var _this = this;
-        this.store.dispatch(new _state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GetAll"]());
+        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_4__["SetLocation"](this.reservation.location));
         this.actions$
-            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_9__["ofType"])(_state_location_location_actions__WEBPACK_IMPORTED_MODULE_6__["GET_ALL_LOCATIONS_SUCCESS"]))
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["first"])())
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_8__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_4__["SET_RESERVATION_LOCATION_SUCCESS"]))
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["first"])())
             .subscribe(function () {
             _this.reserveService.emitRefreshed();
         });
@@ -1158,8 +1451,8 @@ var TvsComponent = /** @class */ (function () {
             _reserve_service__WEBPACK_IMPORTED_MODULE_2__["ReserveService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["ToastController"],
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_9__["Actions"]])
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_6__["ToastController"],
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_8__["Actions"]])
     ], TvsComponent);
     return TvsComponent;
 }());
@@ -1280,12 +1573,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _guards_reservation_guard__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../guards/reservation.guard */ "./src/app/guards/reservation.guard.ts");
 /* harmony import */ var _components_programs_program_program_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/programs/program/program.component */ "./src/app/reserve/components/programs/program/program.component.ts");
 /* harmony import */ var _pipes_locations_filter_pipe__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./pipes/locations-filter.pipe */ "./src/app/reserve/pipes/locations-filter.pipe.ts");
+/* harmony import */ var _components_programs_info_info_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/programs/info/info.component */ "./src/app/reserve/components/programs/info/info.component.ts");
+/* harmony import */ var _components_locations_location_location_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/locations/location/location.component */ "./src/app/reserve/components/locations/location/location.component.ts");
+/* harmony import */ var _wallet_wallet_module__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../wallet/wallet.module */ "./src/app/wallet/wallet.module.ts");
+/* harmony import */ var _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../wallet/wallet.page */ "./src/app/wallet/wallet.page.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
 
 
 
@@ -1314,7 +1615,6 @@ var routes = [
             {
                 path: 'programs',
                 component: _components_programs_programs_component__WEBPACK_IMPORTED_MODULE_7__["ProgramsComponent"],
-                canActivate: [_guards_reservation_guard__WEBPACK_IMPORTED_MODULE_13__["ReservationGuard"]],
             },
             {
                 path: 'tvs',
@@ -1339,7 +1639,15 @@ var ReservePageModule = /** @class */ (function () {
     }
     ReservePageModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
-            imports: [_shared_shared_module__WEBPACK_IMPORTED_MODULE_11__["SharedModule"], _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"], ngx_moment__WEBPACK_IMPORTED_MODULE_9__["MomentModule"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterModule"].forChild(routes)],
+            imports: [
+                _shared_shared_module__WEBPACK_IMPORTED_MODULE_11__["SharedModule"],
+                _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
+                _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"],
+                _wallet_wallet_module__WEBPACK_IMPORTED_MODULE_18__["WalletModule"],
+                ngx_moment__WEBPACK_IMPORTED_MODULE_9__["MomentModule"],
+                _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterModule"].forChild(routes),
+            ],
             declarations: [
                 _reserve_page__WEBPACK_IMPORTED_MODULE_5__["ReservePage"],
                 _components_locations_locations_component__WEBPACK_IMPORTED_MODULE_6__["LocationsComponent"],
@@ -1349,7 +1657,10 @@ var ReservePageModule = /** @class */ (function () {
                 _components_confirmation_confirmation_component__WEBPACK_IMPORTED_MODULE_10__["ConfirmationComponent"],
                 _pipes_programs_filter_pipe__WEBPACK_IMPORTED_MODULE_12__["ProgramsFilterPipe"],
                 _pipes_locations_filter_pipe__WEBPACK_IMPORTED_MODULE_15__["LocationsFilterPipe"],
+                _components_programs_info_info_component__WEBPACK_IMPORTED_MODULE_16__["InfoComponent"],
+                _components_locations_location_location_component__WEBPACK_IMPORTED_MODULE_17__["LocationComponent"],
             ],
+            entryComponents: [_components_programs_info_info_component__WEBPACK_IMPORTED_MODULE_16__["InfoComponent"], _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_19__["WalletPage"]],
         })
     ], ReservePageModule);
     return ReservePageModule;
@@ -1366,7 +1677,7 @@ var ReservePageModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"end\">\n      <ion-icon\n        slot=\"icon-only\"\n        name=\"search\"\n        *ngIf=\"!searchMode && isSearchablePage()\"\n        (click)=\"openSearch()\"\n      ></ion-icon>\n    </ion-buttons>\n    <ion-buttons slot=\"start\">\n      <ion-back-button class=\"show-back-button\" *ngIf=\"showBack() && !searchMode\" (click)=\"goBack()\"></ion-back-button>\n    </ion-buttons>\n    <ion-title *ngIf=\"!searchMode\"> {{ title }} </ion-title>\n    <ion-searchbar\n      *ngIf=\"searchMode\"\n      (ionCancel)=\"closeSearch()\"\n      (ionChange)=\"onSearch($event)\"\n      showCancelButton\n      animated\n    ></ion-searchbar>\n  </ion-toolbar>\n</ion-header>\n<ion-content>\n  <ion-refresher slot=\"fixed\" (ionRefresh)=\"doRefresh($event)\" [pullMax]=\"300\" [disabled]=\"disableRefresher()\">\n    <ion-refresher-content\n      pullingIcon=\"arrow-down\"\n      pullingText=\"Pull to refresh\"\n      refreshingSpinner=\"\"\n      refreshingText=\"\"\n    >\n    </ion-refresher-content>\n  </ion-refresher>\n  <router-outlet></router-outlet>\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button class=\"show-back-button\" *ngIf=\"showBack() && !searchMode\" (click)=\"goBack()\"></ion-back-button>\n    </ion-buttons>\n    <ion-buttons *ngIf=\"!searchMode\" slot=\"end\" padding-end> <app-coins></app-coins> </ion-buttons>\n    <ion-title *ngIf=\"!searchMode\"> {{ title }} </ion-title>\n    <ion-searchbar\n      #searchbar\n      *ngIf=\"searchMode\"\n      (ionCancel)=\"closeSearch()\"\n      (ionChange)=\"onSearch($event)\"\n      showCancelButton\n      animated\n    ></ion-searchbar>\n  </ion-toolbar>\n</ion-header>\n<ion-content>\n  <ion-refresher slot=\"fixed\" (ionRefresh)=\"doRefresh($event)\" [pullMax]=\"300\" [disabled]=\"disableRefresher()\">\n    <ion-refresher-content pullingIcon=\"arrow-down\" pullingText=\"Pull to refresh\" refreshingSpinner=\"crescent\">\n    </ion-refresher-content>\n  </ion-refresher>\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" *ngIf=\"isSearchablePage() && !searchMode\">\n    <ion-fab-button> <ion-icon name=\"search\" (click)=\"toggleSearch()\"></ion-icon> </ion-fab-button>\n  </ion-fab>\n  <router-outlet></router-outlet>\n</ion-content>\n"
 
 /***/ }),
 
@@ -1377,7 +1688,7 @@ module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"end\">\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Jlc2VydmUvcmVzZXJ2ZS5wYWdlLnNjc3MifQ== */"
+module.exports = "ion-item {\n  --padding-start: 0;\n  --inner-padding-end: 0; }\n  ion-item ion-card {\n    width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL3Jlc2VydmUucGFnZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0Usa0JBQWdCO0VBQ2hCLHNCQUFvQixFQUFBO0VBRnRCO0lBS0ksV0FBVyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvcmVzZXJ2ZS9yZXNlcnZlLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbImlvbi1pdGVtIHtcbiAgLS1wYWRkaW5nLXN0YXJ0OiAwO1xuICAtLWlubmVyLXBhZGRpbmctZW5kOiAwO1xuXG4gIGlvbi1jYXJkIHtcbiAgICB3aWR0aDogMTAwJTtcbiAgICAvLyBtYXJnaW4tdG9wOiAxNnB4ICFpbXBvcnRhbnQ7XG4gICAgLy8gbWFyZ2luLWJvdHRvbTogMTZweCAhaW1wb3J0YW50O1xuICB9XG59XG4iXX0= */"
 
 /***/ }),
 
@@ -1395,6 +1706,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 /* harmony import */ var _reserve_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reserve.service */ "./src/app/reserve/reserve.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../wallet/wallet.page */ "./src/app/wallet/wallet.page.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1404,23 +1717,67 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
 
 
 
 
 var ReservePage = /** @class */ (function () {
-    function ReservePage(reserveService, navCtrl, router, events) {
+    function ReservePage(store, reserveService, navCtrl, router, events, modalController, walletPage) {
         var _this = this;
+        this.store = store;
         this.reserveService = reserveService;
         this.navCtrl = navCtrl;
         this.router = router;
         this.events = events;
+        this.modalController = modalController;
+        this.walletPage = walletPage;
         this.reserveService.titleEmitted$.subscribe(function (title) {
             _this.title = title;
         });
-        this.reserveService.closeSearchEmitted$.subscribe(function (x) {
+        this.reserveService.closeSearchEmitted$.subscribe(function () {
             _this.closeSearch();
         });
+        this.reserveService.showingLocationsEmitted$.subscribe(function () {
+            _this.showingLocations = true;
+        });
+        this.tokenCount$ = this.walletPage.getCoinCount();
     }
     ReservePage.prototype.goBack = function () {
         this.navCtrl.back();
@@ -1431,11 +1788,31 @@ var ReservePage = /** @class */ (function () {
     ReservePage.prototype.disableRefresher = function () {
         return this.router.url === '/tabs/reserve/confirmation';
     };
-    ReservePage.prototype.isSearchablePage = function () {
-        return this.router.url.includes('programs') || this.router.url.includes('locations');
+    ReservePage.prototype.onCoinsClick = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, this.modalController.create({
+                                component: _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_5__["WalletPage"],
+                            })];
+                    case 1:
+                        _a.walletModal = _b.sent();
+                        return [4 /*yield*/, this.walletModal.present()];
+                    case 2: return [2 /*return*/, _b.sent()];
+                }
+            });
+        });
     };
-    ReservePage.prototype.openSearch = function () {
-        this.searchMode = true;
+    ReservePage.prototype.isSearchablePage = function () {
+        return this.router.url.includes('programs') || (this.router.url.includes('locations') && this.showingLocations);
+    };
+    ReservePage.prototype.toggleSearch = function () {
+        var _this = this;
+        this.searchMode = !this.searchMode;
+        setTimeout(function () { return _this.searchbar.setFocus(); }, 100);
     };
     ReservePage.prototype.closeSearch = function () {
         this.searchMode = false;
@@ -1450,19 +1827,23 @@ var ReservePage = /** @class */ (function () {
         });
     };
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])(_ionic_angular__WEBPACK_IMPORTED_MODULE_1__["IonSearchbar"]),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('searchbar'),
         __metadata("design:type", _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["IonSearchbar"])
     ], ReservePage.prototype, "searchbar", void 0);
     ReservePage = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-reserve',
             template: __webpack_require__(/*! ./reserve.page.html */ "./src/app/reserve/reserve.page.html"),
+            encapsulation: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewEncapsulation"].None,
             styles: [__webpack_require__(/*! ./reserve.page.scss */ "./src/app/reserve/reserve.page.scss")]
         }),
-        __metadata("design:paramtypes", [_reserve_service__WEBPACK_IMPORTED_MODULE_2__["ReserveService"],
+        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
+            _reserve_service__WEBPACK_IMPORTED_MODULE_2__["ReserveService"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["NavController"],
             _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["Events"]])
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["Events"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ModalController"],
+            _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_5__["WalletPage"]])
     ], ReservePage);
     return ReservePage;
 }());
@@ -1503,6 +1884,8 @@ var ReserveService = /** @class */ (function () {
         this.refreshEmitted$ = this.emitRefreshSource.asObservable();
         this.emitRefreshedSource = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
         this.refreshedEmitted$ = this.emitRefreshedSource.asObservable();
+        this.emitShowingLocationsSource = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
+        this.showingLocationsEmitted$ = this.emitShowingLocationsSource.asObservable();
     }
     ReserveService.prototype.emitTitle = function (title) {
         this.emitTitleSource.next(title);
@@ -1513,11 +1896,16 @@ var ReserveService = /** @class */ (function () {
     ReserveService.prototype.emitCloseSearch = function () {
         this.emitCloseSearchSource.next();
     };
+    ReserveService.prototype.emitShowingLocations = function () {
+        this.emitShowingLocationsSource.next();
+    };
     ReserveService.prototype.emitRefresh = function () {
         this.emitRefreshSource.next();
+        this.isRefreshing = true;
     };
     ReserveService.prototype.emitRefreshed = function () {
         this.emitRefreshedSource.next();
+        this.isRefreshing = false;
     };
     ReserveService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({

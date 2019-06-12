@@ -21303,6 +21303,791 @@ var MomentModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./node_modules/ngx-stripe/fesm5/ngx-stripe.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/ngx-stripe/fesm5/ngx-stripe.js ***!
+  \*****************************************************/
+/*! exports provided: NgxStripeModule, StripeCardComponent, StripeService, StripeFactoryService, StripeInstance, LazyStripeAPILoader, WindowRef, DocumentRef, isSourceData, STRIPE_PUBLISHABLE_KEY, STRIPE_OPTIONS, isBankAccount, isBankAccountData, isPii, isPiiData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NgxStripeModule", function() { return NgxStripeModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeCardComponent", function() { return StripeCardComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeService", function() { return StripeService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeFactoryService", function() { return StripeFactoryService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeInstance", function() { return StripeInstance; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LazyStripeAPILoader", function() { return LazyStripeAPILoader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WindowRef", function() { return WindowRef; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DocumentRef", function() { return DocumentRef; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSourceData", function() { return isSourceData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STRIPE_PUBLISHABLE_KEY", function() { return STRIPE_PUBLISHABLE_KEY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STRIPE_OPTIONS", function() { return STRIPE_OPTIONS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBankAccount", function() { return isBankAccount; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBankAccountData", function() { return isBankAccountData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPii", function() { return isPii; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPiiData", function() { return isPiiData; });
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+
+
+
+
+
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var WindowRef = /** @class */ (function () {
+    function WindowRef(platformId) {
+        this.platformId = platformId;
+    }
+    /**
+     * @return {?}
+     */
+    WindowRef.prototype.getNativeWindow = /**
+     * @return {?}
+     */
+    function () {
+        if (Object(_angular_common__WEBPACK_IMPORTED_MODULE_0__["isPlatformBrowser"])(this.platformId)) {
+            return window;
+        }
+        return (/** @type {?} */ ({}));
+    };
+    WindowRef.decorators = [
+        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
+    ];
+    /** @nocollapse */
+    WindowRef.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["PLATFORM_ID"],] }] }
+    ]; };
+    return WindowRef;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var DocumentRef = /** @class */ (function () {
+    function DocumentRef(platformId) {
+        this.platformId = platformId;
+    }
+    /**
+     * @return {?}
+     */
+    DocumentRef.prototype.getNativeDocument = /**
+     * @return {?}
+     */
+    function () {
+        if (Object(_angular_common__WEBPACK_IMPORTED_MODULE_0__["isPlatformBrowser"])(this.platformId)) {
+            return document;
+        }
+        return (/** @type {?} */ ({}));
+    };
+    DocumentRef.decorators = [
+        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
+    ];
+    /** @nocollapse */
+    DocumentRef.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["PLATFORM_ID"],] }] }
+    ]; };
+    return DocumentRef;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var LazyStripeAPILoader = /** @class */ (function () {
+    function LazyStripeAPILoader(platformId, window, document) {
+        this.platformId = platformId;
+        this.window = window;
+        this.document = document;
+        this.status = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({
+            error: false,
+            loaded: false,
+            loading: false
+        });
+    }
+    /**
+     * @return {?}
+     */
+    LazyStripeAPILoader.prototype.asStream = /**
+     * @return {?}
+     */
+    function () {
+        this.load();
+        return this.status.asObservable();
+    };
+    /**
+     * @return {?}
+     */
+    LazyStripeAPILoader.prototype.isReady = /**
+     * @return {?}
+     */
+    function () {
+        return this.status.getValue().loaded;
+    };
+    /**
+     * @return {?}
+     */
+    LazyStripeAPILoader.prototype.load = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (Object(_angular_common__WEBPACK_IMPORTED_MODULE_0__["isPlatformServer"])(this.platformId)) {
+            return;
+        }
+        /** @type {?} */
+        var status = this.status.getValue();
+        if (this.window.getNativeWindow().hasOwnProperty('Stripe')) {
+            this.status.next({
+                error: false,
+                loaded: true,
+                loading: false
+            });
+        }
+        else if (!status.loaded && !status.loading) {
+            this.status.next(Object(tslib__WEBPACK_IMPORTED_MODULE_1__["__assign"])({}, status, { loading: true }));
+            /** @type {?} */
+            var script = this.document.getNativeDocument().createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.defer = true;
+            script.src = 'https://js.stripe.com/v3/';
+            script.onload = function () {
+                _this.status.next({
+                    error: false,
+                    loaded: true,
+                    loading: false
+                });
+            };
+            script.onerror = function () {
+                _this.status.next({
+                    error: true,
+                    loaded: false,
+                    loading: false
+                });
+            };
+            this.document.getNativeDocument().body.appendChild(script);
+        }
+    };
+    LazyStripeAPILoader.decorators = [
+        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
+    ];
+    /** @nocollapse */
+    LazyStripeAPILoader.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["PLATFORM_ID"],] }] },
+        { type: WindowRef },
+        { type: DocumentRef }
+    ]; };
+    return LazyStripeAPILoader;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var STRIPE_PUBLISHABLE_KEY = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["InjectionToken"]('Stripe Publishable Key');
+/** @type {?} */
+var STRIPE_OPTIONS = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["InjectionToken"]('Stripe Options');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?} sourceData
+ * @return {?}
+ */
+function isSourceData(sourceData) {
+    return 'type' in sourceData;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?} account
+ * @return {?}
+ */
+function isAccount(account) {
+    return account === 'account';
+}
+/**
+ * @param {?} accountData
+ * @return {?}
+ */
+function isAccountData(accountData) {
+    return accountData.legal_entity || accountData.tos_shown_and_accepted;
+}
+/**
+ * @param {?} account
+ * @return {?}
+ */
+function isBankAccount(account) {
+    return account === 'bank_account';
+}
+/**
+ * @param {?} bankAccountData
+ * @return {?}
+ */
+function isBankAccountData(bankAccountData) {
+    return ('country' in bankAccountData &&
+        'currency' in bankAccountData &&
+        'routing_number' in bankAccountData &&
+        'account_number' in bankAccountData &&
+        'account_holder_name' in bankAccountData &&
+        'account_holder_type' in bankAccountData &&
+        (bankAccountData.account_holder_type === 'individual' ||
+            bankAccountData.account_holder_type === 'company'));
+}
+/**
+ * @param {?} pii
+ * @return {?}
+ */
+function isPii(pii) {
+    return pii === 'pii';
+}
+/**
+ * @param {?} piiData
+ * @return {?}
+ */
+function isPiiData(piiData) {
+    return 'personal_id_number' in piiData;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var StripeInstance = /** @class */ (function () {
+    function StripeInstance(loader, window, key, options) {
+        var _this = this;
+        this.loader = loader;
+        this.window = window;
+        this.key = key;
+        this.options = options;
+        this.stripe$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](undefined);
+        this.loader
+            .asStream()
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (status) { return status.loaded === true; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])(), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function () { return ((/** @type {?} */ (_this.window.getNativeWindow()))).Stripe; }))
+            .subscribe(function (Stripe) {
+            /** @type {?} */
+            var stripe = _this.options
+                ? ((/** @type {?} */ (Stripe(_this.key, _this.options))))
+                : ((/** @type {?} */ (Stripe(_this.key))));
+            _this.stripe$.next(stripe);
+        });
+    }
+    /**
+     * @return {?}
+     */
+    StripeInstance.prototype.getInstance = /**
+     * @return {?}
+     */
+    function () {
+        return this.stripe$.getValue();
+    };
+    /**
+     * @param {?=} options
+     * @return {?}
+     */
+    StripeInstance.prototype.elements = /**
+     * @param {?=} options
+     * @return {?}
+     */
+    function (options) {
+        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (stripe) { return ((/** @type {?} */ (stripe))).elements(options); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
+    };
+    /**
+     * @param {?} a
+     * @param {?} b
+     * @return {?}
+     */
+    StripeInstance.prototype.createToken = /**
+     * @param {?} a
+     * @param {?} b
+     * @return {?}
+     */
+    function (a, b) {
+        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (s) {
+            /** @type {?} */
+            var stripe = (/** @type {?} */ (s));
+            if (isAccount(a) && isAccountData(b)) {
+                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken(a, b));
+            }
+            else if (isBankAccount(a) && isBankAccountData(b)) {
+                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken(a, b));
+            }
+            else if (isPii(a) && isPiiData(b)) {
+                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken(a, b));
+            }
+            else {
+                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken((/** @type {?} */ (a)), (/** @type {?} */ (b))));
+            }
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
+    };
+    /**
+     * @param {?} a
+     * @param {?=} b
+     * @return {?}
+     */
+    StripeInstance.prototype.createSource = /**
+     * @param {?} a
+     * @param {?=} b
+     * @return {?}
+     */
+    function (a, b) {
+        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (s) {
+            /** @type {?} */
+            var stripe = (/** @type {?} */ (s));
+            if (isSourceData(a)) {
+                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createSource((/** @type {?} */ (a))));
+            }
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createSource((/** @type {?} */ (a)), b));
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
+    };
+    /**
+     * @param {?} source
+     * @return {?}
+     */
+    StripeInstance.prototype.retrieveSource = /**
+     * @param {?} source
+     * @return {?}
+     */
+    function (source) {
+        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (s) {
+            /** @type {?} */
+            var stripe = (/** @type {?} */ (s));
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.retrieveSource(source));
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
+    };
+    /**
+     * @param {?} options
+     * @return {?}
+     */
+    StripeInstance.prototype.paymentRequest = /**
+     * @param {?} options
+     * @return {?}
+     */
+    function (options) {
+        /** @type {?} */
+        var stripe = this.getInstance();
+        if (stripe) {
+            return stripe.paymentRequest(options);
+        }
+        return undefined;
+    };
+    return StripeInstance;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var StripeService = /** @class */ (function () {
+    function StripeService(key, options, loader, window) {
+        this.key = key;
+        this.options = options;
+        this.loader = loader;
+        this.window = window;
+        if (key) {
+            this.stripe = new StripeInstance(this.loader, this.window, key, options);
+        }
+    }
+    /**
+     * @return {?}
+     */
+    StripeService.prototype.getStripeReference = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        return this.loader.asStream().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (status) { return status.loaded === true; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function () { return ((/** @type {?} */ (_this.window.getNativeWindow()))).Stripe; }));
+    };
+    /**
+     * @return {?}
+     */
+    StripeService.prototype.getInstance = /**
+     * @return {?}
+     */
+    function () {
+        return this.stripe.getInstance();
+    };
+    /**
+     * @param {?} key
+     * @param {?=} options
+     * @return {?}
+     */
+    StripeService.prototype.setKey = /**
+     * @param {?} key
+     * @param {?=} options
+     * @return {?}
+     */
+    function (key, options) {
+        return this.changeKey(key, options);
+    };
+    /**
+     * @param {?} key
+     * @param {?=} options
+     * @return {?}
+     */
+    StripeService.prototype.changeKey = /**
+     * @param {?} key
+     * @param {?=} options
+     * @return {?}
+     */
+    function (key, options) {
+        this.stripe = new StripeInstance(this.loader, this.window, key, options);
+        return this.stripe;
+    };
+    /**
+     * @param {?=} options
+     * @return {?}
+     */
+    StripeService.prototype.elements = /**
+     * @param {?=} options
+     * @return {?}
+     */
+    function (options) {
+        return this.stripe.elements(options);
+    };
+    /**
+     * @param {?} a
+     * @param {?} b
+     * @return {?}
+     */
+    StripeService.prototype.createToken = /**
+     * @param {?} a
+     * @param {?} b
+     * @return {?}
+     */
+    function (a, b) {
+        return this.stripe.createToken(a, b);
+    };
+    /**
+     * @param {?} a
+     * @param {?=} b
+     * @return {?}
+     */
+    StripeService.prototype.createSource = /**
+     * @param {?} a
+     * @param {?=} b
+     * @return {?}
+     */
+    function (a, b) {
+        return this.stripe.createSource(a, b);
+    };
+    /**
+     * @param {?} source
+     * @return {?}
+     */
+    StripeService.prototype.retrieveSource = /**
+     * @param {?} source
+     * @return {?}
+     */
+    function (source) {
+        return this.stripe.retrieveSource(source);
+    };
+    /**
+     * @param {?} options
+     * @return {?}
+     */
+    StripeService.prototype.paymentRequest = /**
+     * @param {?} options
+     * @return {?}
+     */
+    function (options) {
+        return this.stripe.paymentRequest(options);
+    };
+    StripeService.decorators = [
+        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
+    ];
+    /** @nocollapse */
+    StripeService.ctorParameters = function () { return [
+        { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_PUBLISHABLE_KEY,] }] },
+        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_OPTIONS,] }] },
+        { type: LazyStripeAPILoader },
+        { type: WindowRef }
+    ]; };
+    return StripeService;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var StripeFactoryService = /** @class */ (function () {
+    function StripeFactoryService(baseKey, baseOptions, loader, window) {
+        this.baseKey = baseKey;
+        this.baseOptions = baseOptions;
+        this.loader = loader;
+        this.window = window;
+    }
+    /**
+     * @param {?} key
+     * @param {?=} options
+     * @return {?}
+     */
+    StripeFactoryService.prototype.create = /**
+     * @param {?} key
+     * @param {?=} options
+     * @return {?}
+     */
+    function (key, options) {
+        return new StripeInstance(this.loader, this.window, key, options);
+    };
+    StripeFactoryService.decorators = [
+        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
+    ];
+    /** @nocollapse */
+    StripeFactoryService.ctorParameters = function () { return [
+        { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_PUBLISHABLE_KEY,] }] },
+        { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_OPTIONS,] }] },
+        { type: LazyStripeAPILoader },
+        { type: WindowRef }
+    ]; };
+    return StripeFactoryService;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var StripeCardComponent = /** @class */ (function () {
+    function StripeCardComponent(stripeService) {
+        this.stripeService = stripeService;
+        this.card = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["EventEmitter"]();
+        // tslint:disable-next-line:no-output-on-prefix
+        this.on = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["EventEmitter"]();
+        this.options$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({});
+        this.elementsOptions$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({});
+        this.stripe$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](null);
+    }
+    Object.defineProperty(StripeCardComponent.prototype, "options", {
+        set: /**
+         * @param {?} optionsIn
+         * @return {?}
+         */
+        function (optionsIn) {
+            this.options$.next(optionsIn);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(StripeCardComponent.prototype, "elementsOptions", {
+        set: /**
+         * @param {?} optionsIn
+         * @return {?}
+         */
+        function (optionsIn) {
+            this.elementsOptions$.next(optionsIn);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(StripeCardComponent.prototype, "stripe", {
+        set: /**
+         * @param {?} stripeIn
+         * @return {?}
+         */
+        function (stripeIn) {
+            this.stripe$.next(stripeIn);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @return {?}
+     */
+    StripeCardComponent.prototype.ngOnInit = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        /** @type {?} */
+        var elements$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["combineLatest"])(this.elementsOptions$.asObservable(), this.stripe$.asObservable()).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (_a) {
+            var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_1__["__read"])(_a, 2), options = _b[0], stripe = _b[1];
+            if (stripe) {
+                if (Object.keys(options).length > 0) {
+                    return stripe.elements(options);
+                }
+                return stripe.elements();
+            }
+            else {
+                if (Object.keys(options).length > 0) {
+                    return _this.stripeService.elements(options);
+                }
+                return _this.stripeService.elements();
+            }
+        }));
+        Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["combineLatest"])(elements$, this.options$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (options) { return Boolean(options); }))).subscribe(function (_a) {
+            var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_1__["__read"])(_a, 2), elements = _b[0], options = _b[1];
+            _this.element = elements.create('card', options);
+            _this.element.on('blur', function (ev) {
+                return _this.on.emit({
+                    event: ev,
+                    type: 'blur'
+                });
+            });
+            _this.element.on('change', function (ev) {
+                return _this.on.emit({
+                    event: ev,
+                    type: 'change'
+                });
+            });
+            _this.element.on('click', function (ev) {
+                return _this.on.emit({
+                    event: ev,
+                    type: 'click'
+                });
+            });
+            _this.element.on('focus', function (ev) {
+                return _this.on.emit({
+                    event: ev,
+                    type: 'focus'
+                });
+            });
+            _this.element.on('ready', function (ev) {
+                return _this.on.emit({
+                    event: ev,
+                    type: 'ready'
+                });
+            });
+            _this.element.mount(_this.stripeCard.nativeElement);
+            _this.card.emit(_this.element);
+        });
+    };
+    /**
+     * @return {?}
+     */
+    StripeCardComponent.prototype.getCard = /**
+     * @return {?}
+     */
+    function () {
+        return this.element;
+    };
+    StripeCardComponent.decorators = [
+        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"], args: [{
+                    selector: 'ngx-stripe-card',
+                    template: "\n    <div class=\"field\" #stripeCard></div>\n  "
+                }] }
+    ];
+    /** @nocollapse */
+    StripeCardComponent.ctorParameters = function () { return [
+        { type: StripeService }
+    ]; };
+    StripeCardComponent.propDecorators = {
+        card: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Output"] }],
+        on: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Output"] }],
+        stripeCard: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["ViewChild"], args: ['stripeCard',] }],
+        options: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Input"] }],
+        elementsOptions: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Input"] }],
+        stripe: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Input"] }]
+    };
+    return StripeCardComponent;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var NgxStripeModule = /** @class */ (function () {
+    function NgxStripeModule() {
+    }
+    /**
+     * @param {?=} publishableKey
+     * @param {?=} options
+     * @return {?}
+     */
+    NgxStripeModule.forRoot = /**
+     * @param {?=} publishableKey
+     * @param {?=} options
+     * @return {?}
+     */
+    function (publishableKey, options) {
+        return {
+            ngModule: NgxStripeModule,
+            providers: [
+                LazyStripeAPILoader,
+                StripeService,
+                StripeFactoryService,
+                WindowRef,
+                DocumentRef,
+                {
+                    provide: STRIPE_PUBLISHABLE_KEY,
+                    useValue: publishableKey
+                },
+                {
+                    provide: STRIPE_OPTIONS,
+                    useValue: options
+                }
+            ]
+        };
+    };
+    /**
+     * @param {?=} publishableKey
+     * @param {?=} options
+     * @return {?}
+     */
+    NgxStripeModule.forChild = /**
+     * @param {?=} publishableKey
+     * @param {?=} options
+     * @return {?}
+     */
+    function (publishableKey, options) {
+        return {
+            ngModule: NgxStripeModule,
+            providers: [
+                LazyStripeAPILoader,
+                StripeService,
+                StripeFactoryService,
+                WindowRef,
+                DocumentRef,
+                {
+                    provide: STRIPE_PUBLISHABLE_KEY,
+                    useValue: publishableKey
+                },
+                {
+                    provide: STRIPE_OPTIONS,
+                    useValue: options
+                }
+            ]
+        };
+    };
+    NgxStripeModule.decorators = [
+        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"], args: [{
+                    declarations: [StripeCardComponent],
+                    exports: [StripeCardComponent]
+                },] }
+    ];
+    return NgxStripeModule;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+
+
+//# sourceMappingURL=ngx-stripe.js.map
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/module.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/module.js ***!
@@ -21400,6 +22185,518 @@ var getReservationTvs = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createS
 var getAllReservations = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getReservationsState, _reservation_reducer__WEBPACK_IMPORTED_MODULE_1__["getAllReservations"]);
 var getLoading = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getReservationsState, _reservation_reducer__WEBPACK_IMPORTED_MODULE_1__["getLoading"]);
 var getError = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getReservationsState, _reservation_reducer__WEBPACK_IMPORTED_MODULE_1__["getError"]);
+
+
+/***/ }),
+
+/***/ "./src/app/wallet/coins/coins.component.html":
+/*!***************************************************!*\
+  !*** ./src/app/wallet/coins/coins.component.html ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"wrapper\" (click)=\"onClick()\">\n  <img class=\"title-image\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n  <span>&nbsp;{{ tokenCount$ | async }}</span>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/wallet/coins/coins.component.scss":
+/*!***************************************************!*\
+  !*** ./src/app/wallet/coins/coins.component.scss ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".wrapper {\n  display: flex;\n  align-items: center; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC93YWxsZXQvY29pbnMvY29pbnMuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxhQUFhO0VBQ2IsbUJBQW1CLEVBQUEiLCJmaWxlIjoic3JjL2FwcC93YWxsZXQvY29pbnMvY29pbnMuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIud3JhcHBlciB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG59XG4iXX0= */"
+
+/***/ }),
+
+/***/ "./src/app/wallet/coins/coins.component.ts":
+/*!*************************************************!*\
+  !*** ./src/app/wallet/coins/coins.component.ts ***!
+  \*************************************************/
+/*! exports provided: CoinsComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CoinsComponent", function() { return CoinsComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _wallet_page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../wallet.page */ "./src/app/wallet/wallet.page.ts");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var src_app_state_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/state/user */ "./src/app/state/user/index.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+var CoinsComponent = /** @class */ (function () {
+    function CoinsComponent(store, walletPage, modalController, toastController) {
+        var _this = this;
+        this.store = store;
+        this.walletPage = walletPage;
+        this.modalController = modalController;
+        this.toastController = toastController;
+        this.tokenCount$ = this.walletPage.getCoinCount();
+        this.userRoles$ = this.store.select(src_app_state_user__WEBPACK_IMPORTED_MODULE_4__["getUserRoles"]);
+        this.userRoles$.subscribe(function (userRoles) {
+            _this.userRoles = userRoles;
+        });
+    }
+    CoinsComponent.prototype.ngOnInit = function () { };
+    CoinsComponent.prototype.onClick = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, toast;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman')))) return [3 /*break*/, 3];
+                        _a = this;
+                        return [4 /*yield*/, this.modalController.create({
+                                component: _wallet_page__WEBPACK_IMPORTED_MODULE_1__["WalletPage"],
+                            })];
+                    case 1:
+                        _a.walletModal = _b.sent();
+                        return [4 /*yield*/, this.walletModal.present()];
+                    case 2: return [2 /*return*/, _b.sent()];
+                    case 3: return [4 /*yield*/, this.toastController.create({
+                            message: "Adding tokens is not available.",
+                            duration: 2000,
+                            cssClass: 'ion-text-center',
+                        })];
+                    case 4:
+                        toast = _b.sent();
+                        toast.present();
+                        _b.label = 5;
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    CoinsComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-coins',
+            template: __webpack_require__(/*! ./coins.component.html */ "./src/app/wallet/coins/coins.component.html"),
+            styles: [__webpack_require__(/*! ./coins.component.scss */ "./src/app/wallet/coins/coins.component.scss")]
+        }),
+        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"],
+            _wallet_page__WEBPACK_IMPORTED_MODULE_1__["WalletPage"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ModalController"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])
+    ], CoinsComponent);
+    return CoinsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/wallet/wallet.module.ts":
+/*!*****************************************!*\
+  !*** ./src/app/wallet/wallet.module.ts ***!
+  \*****************************************/
+/*! exports provided: WalletModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WalletModule", function() { return WalletModule; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _wallet_page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./wallet.page */ "./src/app/wallet/wallet.page.ts");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var ngx_stripe__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-stripe */ "./node_modules/ngx-stripe/fesm5/ngx-stripe.js");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _coins_coins_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./coins/coins.component */ "./src/app/wallet/coins/coins.component.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+
+
+
+var WalletModule = /** @class */ (function () {
+    function WalletModule() {
+    }
+    WalletModule = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
+            declarations: [_wallet_page__WEBPACK_IMPORTED_MODULE_2__["WalletPage"], _coins_coins_component__WEBPACK_IMPORTED_MODULE_7__["CoinsComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["IonicModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"], ngx_stripe__WEBPACK_IMPORTED_MODULE_5__["NgxStripeModule"].forRoot(src_environments_environment__WEBPACK_IMPORTED_MODULE_6__["environment"].stripe.publishableKey)],
+            exports: [_coins_coins_component__WEBPACK_IMPORTED_MODULE_7__["CoinsComponent"]],
+            providers: [_wallet_page__WEBPACK_IMPORTED_MODULE_2__["WalletPage"], _coins_coins_component__WEBPACK_IMPORTED_MODULE_7__["CoinsComponent"]],
+        })
+    ], WalletModule);
+    return WalletModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/wallet/wallet.page.html":
+/*!*****************************************!*\
+  !*** ./src/app/wallet/wallet.page.html ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title> Wallet </ion-title>\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"onClose()\"> <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon> </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n<ion-content padding>\n  <section [hidden]=\"!(userCard$ | async)\">\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onAmountChange($event)\">\n        <ion-list-header> Choose Amount </ion-list-header>\n        <ion-item *ngFor=\"let f of fundingAmounts\">\n          <ion-label flex ion-justify-items-end>\n            <span>${{ f.dollars }}</span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span padding-start>{{ f.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ f.dollars }}\" [disabled]=\"waiting\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <ion-button expand=\"block\" color=\"success\" (click)=\"purchase()\" [disabled]=\"waiting\">Purchase</ion-button>\n    <p class=\"ion-text-center\">\n      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a\n        color=\"danger\"\n        (click)=\"removeCard()\"\n        >Remove Card</a\n      >\n    </p>\n  </section>\n  <section [hidden]=\"userCard$ | async\">\n    <p class=\"ion-text-center \">Please add a credit card below</p>\n    <form novalidate (ngSubmit)=\"addCard()\">\n      <div id=\"card-element\" class=\"field \"></div>\n      <ion-button type=\"submit\" expand=\"block\" color=\"success\" [disabled]=\"waiting\">Add</ion-button>\n    </form>\n  </section>\n</ion-content>\n"
+
+/***/ }),
+
+/***/ "./src/app/wallet/wallet.page.scss":
+/*!*****************************************!*\
+  !*** ./src/app/wallet/wallet.page.scss ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "#card-element {\n  margin: 24px 0; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC93YWxsZXQvd2FsbGV0LnBhZ2Uuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGNBQWMsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3dhbGxldC93YWxsZXQucGFnZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI2NhcmQtZWxlbWVudCB7XG4gIG1hcmdpbjogMjRweCAwO1xufVxuIl19 */"
+
+/***/ }),
+
+/***/ "./src/app/wallet/wallet.page.ts":
+/*!***************************************!*\
+  !*** ./src/app/wallet/wallet.page.ts ***!
+  \***************************************/
+/*! exports provided: WalletPage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WalletPage", function() { return WalletPage; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var ngx_stripe__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ngx-stripe */ "./node_modules/ngx-stripe/fesm5/ngx-stripe.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../state/user/user.actions */ "./src/app/state/user/user.actions.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var src_app_state_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/state/user */ "./src/app/state/user/index.ts");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../globals */ "./src/app/globals.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
+
+
+var WalletPage = /** @class */ (function () {
+    function WalletPage(store, toastController, stripeService, modalController, alertController, segment, globals) {
+        this.store = store;
+        this.toastController = toastController;
+        this.stripeService = stripeService;
+        this.modalController = modalController;
+        this.alertController = alertController;
+        this.segment = segment;
+        this.globals = globals;
+        // optional parameters
+        this.elementsOptions = {
+            locale: 'en',
+        };
+        this.fundingAmounts = [
+            {
+                tokens: 5,
+                dollars: 5,
+            },
+            {
+                tokens: 10,
+                dollars: 10,
+            },
+            {
+                tokens: 25,
+                dollars: 25,
+            },
+        ];
+        this.userCard$ = this.store.select(src_app_state_user__WEBPACK_IMPORTED_MODULE_5__["getUserCard"]);
+    }
+    WalletPage.prototype.ngOnInit = function () {
+        var _this = this;
+        // this.stripeFormGroup = this.fb.group({
+        //   name: ['', [Validators.required]],
+        // });
+        this.stripeService.elements(this.elementsOptions).subscribe(function (elements) {
+            _this.elements = elements;
+            // Only mount the element the first time
+            if (!_this.card) {
+                _this.card = _this.elements.create('card', {
+                    style: {
+                        base: {
+                            fontSize: '18px',
+                        },
+                    },
+                });
+                _this.card.mount('#card-element');
+            }
+        });
+    };
+    WalletPage.prototype.addCard = function () {
+        var _this = this;
+        // const name = this.stripeFormGroup.get('name').value;
+        this.waiting = true;
+        this.stripeService.createToken(this.card, {}).subscribe(function (result) { return __awaiter(_this, void 0, void 0, function () {
+            var toast;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!result.token) return [3 /*break*/, 1];
+                        // Use the token to create a charge or a customer
+                        // https://stripe.com/docs/charges
+                        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["UpdateCard"](result.token.id));
+                        setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                            var toast;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, this.toastController.create({
+                                            message: "Card successfully added",
+                                            duration: 3000,
+                                            cssClass: 'ion-text-center',
+                                        })];
+                                    case 1:
+                                        toast = _a.sent();
+                                        toast.present();
+                                        this.waiting = false;
+                                        this.segment.track(this.globals.events.payment.sourceAdded, {
+                                            type: 'Credit Card',
+                                        });
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); }, 3000);
+                        return [3 /*break*/, 3];
+                    case 1:
+                        if (!result.error) return [3 /*break*/, 3];
+                        // Error creating the token
+                        console.error(result.error.message);
+                        return [4 /*yield*/, this.toastController.create({
+                                message: result.error.message,
+                                duration: 3000,
+                                color: 'danger',
+                                cssClass: 'ion-text-center',
+                            })];
+                    case 2:
+                        toast = _a.sent();
+                        toast.present();
+                        this.waiting = false;
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+    };
+    WalletPage.prototype.purchase = function () {
+        var _this = this;
+        this.waiting = true;
+        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["AddFunds"](this.selectedAmount.dollars));
+        setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+            var toast;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.waiting = false;
+                        return [4 /*yield*/, this.toastController.create({
+                                message: "Successfully purchased " + this.selectedAmount.tokens + " tokens",
+                                duration: 3000,
+                                cssClass: 'ion-text-center',
+                            })];
+                    case 1:
+                        toast = _a.sent();
+                        toast.present();
+                        this.onClose();
+                        this.segment.track(this.globals.events.payment.fundsAdded, {
+                            amount: this.selectedAmount.dollars,
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); }, 3000);
+    };
+    WalletPage.prototype.onAmountChange = function (e) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.selectedAmount = this.fundingAmounts.find(function (f) { return f.dollars === +e.detail.value; });
+                return [2 /*return*/];
+            });
+        });
+    };
+    WalletPage.prototype.onClose = function () {
+        this.modalController.dismiss();
+    };
+    WalletPage.prototype.removeCard = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var alert;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.alertController.create({
+                            header: 'Are you sure?',
+                            message: 'You will need to add a new credit card to purchase tokens.',
+                            buttons: [
+                                {
+                                    text: 'Cancel',
+                                    role: 'cancel',
+                                },
+                                {
+                                    text: 'Remove Card',
+                                    role: 'destructive',
+                                    cssClass: 'secondary',
+                                    handler: function () { return __awaiter(_this, void 0, void 0, function () {
+                                        var _this = this;
+                                        return __generator(this, function (_a) {
+                                            this.waiting = true;
+                                            this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["DeleteCard"]());
+                                            setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                                                var toast;
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0: return [4 /*yield*/, this.toastController.create({
+                                                                message: "Card removed",
+                                                                duration: 3000,
+                                                                cssClass: 'ion-text-center',
+                                                            })];
+                                                        case 1:
+                                                            toast = _a.sent();
+                                                            toast.present();
+                                                            this.waiting = false;
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); }, 3000);
+                                            return [2 /*return*/];
+                                        });
+                                    }); },
+                                },
+                            ],
+                        })];
+                    case 1:
+                        alert = _a.sent();
+                        return [4 /*yield*/, alert.present()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    WalletPage.prototype.getCoinCount = function () {
+        return this.store.select(src_app_state_user__WEBPACK_IMPORTED_MODULE_5__["getUserTokenCount"]);
+    };
+    WalletPage = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-wallet',
+            template: __webpack_require__(/*! ./wallet.page.html */ "./src/app/wallet/wallet.page.html"),
+            styles: [__webpack_require__(/*! ./wallet.page.scss */ "./src/app/wallet/wallet.page.scss")]
+        }),
+        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"],
+            ngx_stripe__WEBPACK_IMPORTED_MODULE_1__["StripeService"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ModalController"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"],
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_6__["SegmentService"],
+            _globals__WEBPACK_IMPORTED_MODULE_7__["Globals"]])
+    ], WalletPage);
+    return WalletPage;
+}());
+
 
 
 /***/ })
