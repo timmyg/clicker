@@ -1084,788 +1084,79 @@ var _iconsCache = {
 
 /***/ }),
 
-/***/ "./node_modules/ngx-stripe/fesm5/ngx-stripe.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/ngx-stripe/fesm5/ngx-stripe.js ***!
-  \*****************************************************/
-/*! exports provided: NgxStripeModule, StripeCardComponent, StripeService, StripeFactoryService, StripeInstance, LazyStripeAPILoader, WindowRef, DocumentRef, isSourceData, STRIPE_PUBLISHABLE_KEY, STRIPE_OPTIONS, isBankAccount, isBankAccountData, isPii, isPiiData */
+/***/ "./src/app/directives/feature-flag.directive.ts":
+/*!******************************************************!*\
+  !*** ./src/app/directives/feature-flag.directive.ts ***!
+  \******************************************************/
+/*! exports provided: FeatureFlag */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NgxStripeModule", function() { return NgxStripeModule; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeCardComponent", function() { return StripeCardComponent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeService", function() { return StripeService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeFactoryService", function() { return StripeFactoryService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripeInstance", function() { return StripeInstance; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LazyStripeAPILoader", function() { return LazyStripeAPILoader; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WindowRef", function() { return WindowRef; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DocumentRef", function() { return DocumentRef; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSourceData", function() { return isSourceData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STRIPE_PUBLISHABLE_KEY", function() { return STRIPE_PUBLISHABLE_KEY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STRIPE_OPTIONS", function() { return STRIPE_OPTIONS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBankAccount", function() { return isBankAccount; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBankAccountData", function() { return isBankAccountData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPii", function() { return isPii; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPiiData", function() { return isPiiData; });
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FeatureFlag", function() { return FeatureFlag; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _state_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../state/user */ "./src/app/state/user/index.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 
 
 
-
-
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var WindowRef = /** @class */ (function () {
-    function WindowRef(platformId) {
-        this.platformId = platformId;
+var FeatureFlag = /** @class */ (function () {
+    function FeatureFlag(renderer, store, el) {
+        this.renderer = renderer;
+        this.store = store;
+        this.el = el;
+        this.user$ = this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_2__["getUser"]);
     }
-    /**
-     * @return {?}
-     */
-    WindowRef.prototype.getNativeWindow = /**
-     * @return {?}
-     */
-    function () {
-        if (Object(_angular_common__WEBPACK_IMPORTED_MODULE_0__["isPlatformBrowser"])(this.platformId)) {
-            return window;
-        }
-        return (/** @type {?} */ ({}));
-    };
-    WindowRef.decorators = [
-        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
-    ];
-    /** @nocollapse */
-    WindowRef.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["PLATFORM_ID"],] }] }
-    ]; };
-    return WindowRef;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var DocumentRef = /** @class */ (function () {
-    function DocumentRef(platformId) {
-        this.platformId = platformId;
-    }
-    /**
-     * @return {?}
-     */
-    DocumentRef.prototype.getNativeDocument = /**
-     * @return {?}
-     */
-    function () {
-        if (Object(_angular_common__WEBPACK_IMPORTED_MODULE_0__["isPlatformBrowser"])(this.platformId)) {
-            return document;
-        }
-        return (/** @type {?} */ ({}));
-    };
-    DocumentRef.decorators = [
-        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
-    ];
-    /** @nocollapse */
-    DocumentRef.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["PLATFORM_ID"],] }] }
-    ]; };
-    return DocumentRef;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var LazyStripeAPILoader = /** @class */ (function () {
-    function LazyStripeAPILoader(platformId, window, document) {
-        this.platformId = platformId;
-        this.window = window;
-        this.document = document;
-        this.status = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({
-            error: false,
-            loaded: false,
-            loading: false
-        });
-    }
-    /**
-     * @return {?}
-     */
-    LazyStripeAPILoader.prototype.asStream = /**
-     * @return {?}
-     */
-    function () {
-        this.load();
-        return this.status.asObservable();
-    };
-    /**
-     * @return {?}
-     */
-    LazyStripeAPILoader.prototype.isReady = /**
-     * @return {?}
-     */
-    function () {
-        return this.status.getValue().loaded;
-    };
-    /**
-     * @return {?}
-     */
-    LazyStripeAPILoader.prototype.load = /**
-     * @return {?}
-     */
-    function () {
+    FeatureFlag.prototype.ngOnInit = function () {
         var _this = this;
-        if (Object(_angular_common__WEBPACK_IMPORTED_MODULE_0__["isPlatformServer"])(this.platformId)) {
-            return;
-        }
-        /** @type {?} */
-        var status = this.status.getValue();
-        if (this.window.getNativeWindow().hasOwnProperty('Stripe')) {
-            this.status.next({
-                error: false,
-                loaded: true,
-                loading: false
-            });
-        }
-        else if (!status.loaded && !status.loading) {
-            this.status.next(Object(tslib__WEBPACK_IMPORTED_MODULE_1__["__assign"])({}, status, { loading: true }));
-            /** @type {?} */
-            var script = this.document.getNativeDocument().createElement('script');
-            script.type = 'text/javascript';
-            script.async = true;
-            script.defer = true;
-            script.src = 'https://js.stripe.com/v3/';
-            script.onload = function () {
-                _this.status.next({
-                    error: false,
-                    loaded: true,
-                    loading: false
-                });
-            };
-            script.onerror = function () {
-                _this.status.next({
-                    error: true,
-                    loaded: false,
-                    loading: false
-                });
-            };
-            this.document.getNativeDocument().body.appendChild(script);
-        }
-    };
-    LazyStripeAPILoader.decorators = [
-        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
-    ];
-    /** @nocollapse */
-    LazyStripeAPILoader.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["PLATFORM_ID"],] }] },
-        { type: WindowRef },
-        { type: DocumentRef }
-    ]; };
-    return LazyStripeAPILoader;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/** @type {?} */
-var STRIPE_PUBLISHABLE_KEY = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["InjectionToken"]('Stripe Publishable Key');
-/** @type {?} */
-var STRIPE_OPTIONS = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["InjectionToken"]('Stripe Options');
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} sourceData
- * @return {?}
- */
-function isSourceData(sourceData) {
-    return 'type' in sourceData;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} account
- * @return {?}
- */
-function isAccount(account) {
-    return account === 'account';
-}
-/**
- * @param {?} accountData
- * @return {?}
- */
-function isAccountData(accountData) {
-    return accountData.legal_entity || accountData.tos_shown_and_accepted;
-}
-/**
- * @param {?} account
- * @return {?}
- */
-function isBankAccount(account) {
-    return account === 'bank_account';
-}
-/**
- * @param {?} bankAccountData
- * @return {?}
- */
-function isBankAccountData(bankAccountData) {
-    return ('country' in bankAccountData &&
-        'currency' in bankAccountData &&
-        'routing_number' in bankAccountData &&
-        'account_number' in bankAccountData &&
-        'account_holder_name' in bankAccountData &&
-        'account_holder_type' in bankAccountData &&
-        (bankAccountData.account_holder_type === 'individual' ||
-            bankAccountData.account_holder_type === 'company'));
-}
-/**
- * @param {?} pii
- * @return {?}
- */
-function isPii(pii) {
-    return pii === 'pii';
-}
-/**
- * @param {?} piiData
- * @return {?}
- */
-function isPiiData(piiData) {
-    return 'personal_id_number' in piiData;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var StripeInstance = /** @class */ (function () {
-    function StripeInstance(loader, window, key, options) {
-        var _this = this;
-        this.loader = loader;
-        this.window = window;
-        this.key = key;
-        this.options = options;
-        this.stripe$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](undefined);
-        this.loader
-            .asStream()
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (status) { return status.loaded === true; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])(), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function () { return ((/** @type {?} */ (_this.window.getNativeWindow()))).Stripe; }))
-            .subscribe(function (Stripe) {
-            /** @type {?} */
-            var stripe = _this.options
-                ? ((/** @type {?} */ (Stripe(_this.key, _this.options))))
-                : ((/** @type {?} */ (Stripe(_this.key))));
-            _this.stripe$.next(stripe);
-        });
-    }
-    /**
-     * @return {?}
-     */
-    StripeInstance.prototype.getInstance = /**
-     * @return {?}
-     */
-    function () {
-        return this.stripe$.getValue();
-    };
-    /**
-     * @param {?=} options
-     * @return {?}
-     */
-    StripeInstance.prototype.elements = /**
-     * @param {?=} options
-     * @return {?}
-     */
-    function (options) {
-        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (stripe) { return ((/** @type {?} */ (stripe))).elements(options); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
-    };
-    /**
-     * @param {?} a
-     * @param {?} b
-     * @return {?}
-     */
-    StripeInstance.prototype.createToken = /**
-     * @param {?} a
-     * @param {?} b
-     * @return {?}
-     */
-    function (a, b) {
-        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (s) {
-            /** @type {?} */
-            var stripe = (/** @type {?} */ (s));
-            if (isAccount(a) && isAccountData(b)) {
-                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken(a, b));
-            }
-            else if (isBankAccount(a) && isBankAccountData(b)) {
-                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken(a, b));
-            }
-            else if (isPii(a) && isPiiData(b)) {
-                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken(a, b));
-            }
-            else {
-                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createToken((/** @type {?} */ (a)), (/** @type {?} */ (b))));
-            }
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
-    };
-    /**
-     * @param {?} a
-     * @param {?=} b
-     * @return {?}
-     */
-    StripeInstance.prototype.createSource = /**
-     * @param {?} a
-     * @param {?=} b
-     * @return {?}
-     */
-    function (a, b) {
-        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (s) {
-            /** @type {?} */
-            var stripe = (/** @type {?} */ (s));
-            if (isSourceData(a)) {
-                return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createSource((/** @type {?} */ (a))));
-            }
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.createSource((/** @type {?} */ (a)), b));
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
-    };
-    /**
-     * @param {?} source
-     * @return {?}
-     */
-    StripeInstance.prototype.retrieveSource = /**
-     * @param {?} source
-     * @return {?}
-     */
-    function (source) {
-        return this.stripe$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (stripe) { return Boolean(stripe); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (s) {
-            /** @type {?} */
-            var stripe = (/** @type {?} */ (s));
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["from"])(stripe.retrieveSource(source));
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])());
-    };
-    /**
-     * @param {?} options
-     * @return {?}
-     */
-    StripeInstance.prototype.paymentRequest = /**
-     * @param {?} options
-     * @return {?}
-     */
-    function (options) {
-        /** @type {?} */
-        var stripe = this.getInstance();
-        if (stripe) {
-            return stripe.paymentRequest(options);
-        }
-        return undefined;
-    };
-    return StripeInstance;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var StripeService = /** @class */ (function () {
-    function StripeService(key, options, loader, window) {
-        this.key = key;
-        this.options = options;
-        this.loader = loader;
-        this.window = window;
-        if (key) {
-            this.stripe = new StripeInstance(this.loader, this.window, key, options);
-        }
-    }
-    /**
-     * @return {?}
-     */
-    StripeService.prototype.getStripeReference = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        return this.loader.asStream().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (status) { return status.loaded === true; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function () { return ((/** @type {?} */ (_this.window.getNativeWindow()))).Stripe; }));
-    };
-    /**
-     * @return {?}
-     */
-    StripeService.prototype.getInstance = /**
-     * @return {?}
-     */
-    function () {
-        return this.stripe.getInstance();
-    };
-    /**
-     * @param {?} key
-     * @param {?=} options
-     * @return {?}
-     */
-    StripeService.prototype.setKey = /**
-     * @param {?} key
-     * @param {?=} options
-     * @return {?}
-     */
-    function (key, options) {
-        return this.changeKey(key, options);
-    };
-    /**
-     * @param {?} key
-     * @param {?=} options
-     * @return {?}
-     */
-    StripeService.prototype.changeKey = /**
-     * @param {?} key
-     * @param {?=} options
-     * @return {?}
-     */
-    function (key, options) {
-        this.stripe = new StripeInstance(this.loader, this.window, key, options);
-        return this.stripe;
-    };
-    /**
-     * @param {?=} options
-     * @return {?}
-     */
-    StripeService.prototype.elements = /**
-     * @param {?=} options
-     * @return {?}
-     */
-    function (options) {
-        return this.stripe.elements(options);
-    };
-    /**
-     * @param {?} a
-     * @param {?} b
-     * @return {?}
-     */
-    StripeService.prototype.createToken = /**
-     * @param {?} a
-     * @param {?} b
-     * @return {?}
-     */
-    function (a, b) {
-        return this.stripe.createToken(a, b);
-    };
-    /**
-     * @param {?} a
-     * @param {?=} b
-     * @return {?}
-     */
-    StripeService.prototype.createSource = /**
-     * @param {?} a
-     * @param {?=} b
-     * @return {?}
-     */
-    function (a, b) {
-        return this.stripe.createSource(a, b);
-    };
-    /**
-     * @param {?} source
-     * @return {?}
-     */
-    StripeService.prototype.retrieveSource = /**
-     * @param {?} source
-     * @return {?}
-     */
-    function (source) {
-        return this.stripe.retrieveSource(source);
-    };
-    /**
-     * @param {?} options
-     * @return {?}
-     */
-    StripeService.prototype.paymentRequest = /**
-     * @param {?} options
-     * @return {?}
-     */
-    function (options) {
-        return this.stripe.paymentRequest(options);
-    };
-    StripeService.decorators = [
-        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
-    ];
-    /** @nocollapse */
-    StripeService.ctorParameters = function () { return [
-        { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_PUBLISHABLE_KEY,] }] },
-        { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_OPTIONS,] }] },
-        { type: LazyStripeAPILoader },
-        { type: WindowRef }
-    ]; };
-    return StripeService;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var StripeFactoryService = /** @class */ (function () {
-    function StripeFactoryService(baseKey, baseOptions, loader, window) {
-        this.baseKey = baseKey;
-        this.baseOptions = baseOptions;
-        this.loader = loader;
-        this.window = window;
-    }
-    /**
-     * @param {?} key
-     * @param {?=} options
-     * @return {?}
-     */
-    StripeFactoryService.prototype.create = /**
-     * @param {?} key
-     * @param {?=} options
-     * @return {?}
-     */
-    function (key, options) {
-        return new StripeInstance(this.loader, this.window, key, options);
-    };
-    StripeFactoryService.decorators = [
-        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"] }
-    ];
-    /** @nocollapse */
-    StripeFactoryService.ctorParameters = function () { return [
-        { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_PUBLISHABLE_KEY,] }] },
-        { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"], args: [STRIPE_OPTIONS,] }] },
-        { type: LazyStripeAPILoader },
-        { type: WindowRef }
-    ]; };
-    return StripeFactoryService;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var StripeCardComponent = /** @class */ (function () {
-    function StripeCardComponent(stripeService) {
-        this.stripeService = stripeService;
-        this.card = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["EventEmitter"]();
-        // tslint:disable-next-line:no-output-on-prefix
-        this.on = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["EventEmitter"]();
-        this.options$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({});
-        this.elementsOptions$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]({});
-        this.stripe$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](null);
-    }
-    Object.defineProperty(StripeCardComponent.prototype, "options", {
-        set: /**
-         * @param {?} optionsIn
-         * @return {?}
-         */
-        function (optionsIn) {
-            this.options$.next(optionsIn);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(StripeCardComponent.prototype, "elementsOptions", {
-        set: /**
-         * @param {?} optionsIn
-         * @return {?}
-         */
-        function (optionsIn) {
-            this.elementsOptions$.next(optionsIn);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(StripeCardComponent.prototype, "stripe", {
-        set: /**
-         * @param {?} stripeIn
-         * @return {?}
-         */
-        function (stripeIn) {
-            this.stripe$.next(stripeIn);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * @return {?}
-     */
-    StripeCardComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        /** @type {?} */
-        var elements$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["combineLatest"])(this.elementsOptions$.asObservable(), this.stripe$.asObservable()).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function (_a) {
-            var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_1__["__read"])(_a, 2), options = _b[0], stripe = _b[1];
-            if (stripe) {
-                if (Object.keys(options).length > 0) {
-                    return stripe.elements(options);
+        this.user$.subscribe(function (u) {
+            var roles = u['https://mobile.tryclicker.com/roles'];
+            var element = _this.el.nativeElement;
+            if (_this.featureNameOn) {
+                if (!roles.includes(_this.featureNameOn)) {
+                    _this.renderer.addClass(element, 'hide');
                 }
-                return stripe.elements();
-            }
-            else {
-                if (Object.keys(options).length > 0) {
-                    return _this.stripeService.elements(options);
+                else {
+                    _this.renderer.removeClass(element, 'hide');
                 }
-                return _this.stripeService.elements();
             }
-        }));
-        Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["combineLatest"])(elements$, this.options$.asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["filter"])(function (options) { return Boolean(options); }))).subscribe(function (_a) {
-            var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_1__["__read"])(_a, 2), elements = _b[0], options = _b[1];
-            _this.element = elements.create('card', options);
-            _this.element.on('blur', function (ev) {
-                return _this.on.emit({
-                    event: ev,
-                    type: 'blur'
-                });
-            });
-            _this.element.on('change', function (ev) {
-                return _this.on.emit({
-                    event: ev,
-                    type: 'change'
-                });
-            });
-            _this.element.on('click', function (ev) {
-                return _this.on.emit({
-                    event: ev,
-                    type: 'click'
-                });
-            });
-            _this.element.on('focus', function (ev) {
-                return _this.on.emit({
-                    event: ev,
-                    type: 'focus'
-                });
-            });
-            _this.element.on('ready', function (ev) {
-                return _this.on.emit({
-                    event: ev,
-                    type: 'ready'
-                });
-            });
-            _this.element.mount(_this.stripeCard.nativeElement);
-            _this.card.emit(_this.element);
+            else if (_this.featureNameOff) {
+                if (roles.includes(_this.featureNameOff)) {
+                    _this.renderer.addClass(element, 'hide');
+                }
+                else {
+                    _this.renderer.removeClass(element, 'hide');
+                }
+            }
         });
     };
-    /**
-     * @return {?}
-     */
-    StripeCardComponent.prototype.getCard = /**
-     * @return {?}
-     */
-    function () {
-        return this.element;
-    };
-    StripeCardComponent.decorators = [
-        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"], args: [{
-                    selector: 'ngx-stripe-card',
-                    template: "\n    <div class=\"field\" #stripeCard></div>\n  "
-                }] }
-    ];
-    /** @nocollapse */
-    StripeCardComponent.ctorParameters = function () { return [
-        { type: StripeService }
-    ]; };
-    StripeCardComponent.propDecorators = {
-        card: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Output"] }],
-        on: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Output"] }],
-        stripeCard: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["ViewChild"], args: ['stripeCard',] }],
-        options: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Input"] }],
-        elementsOptions: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Input"] }],
-        stripe: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Input"] }]
-    };
-    return StripeCardComponent;
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])('featureOff'),
+        __metadata("design:type", Object)
+    ], FeatureFlag.prototype, "featureNameOff", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])('feature'),
+        __metadata("design:type", Object)
+    ], FeatureFlag.prototype, "featureNameOn", void 0);
+    FeatureFlag = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Directive"])({
+            selector: '[feature], [featureOff]',
+        }),
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Renderer2"], _ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
+    ], FeatureFlag);
+    return FeatureFlag;
 }());
 
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var NgxStripeModule = /** @class */ (function () {
-    function NgxStripeModule() {
-    }
-    /**
-     * @param {?=} publishableKey
-     * @param {?=} options
-     * @return {?}
-     */
-    NgxStripeModule.forRoot = /**
-     * @param {?=} publishableKey
-     * @param {?=} options
-     * @return {?}
-     */
-    function (publishableKey, options) {
-        return {
-            ngModule: NgxStripeModule,
-            providers: [
-                LazyStripeAPILoader,
-                StripeService,
-                StripeFactoryService,
-                WindowRef,
-                DocumentRef,
-                {
-                    provide: STRIPE_PUBLISHABLE_KEY,
-                    useValue: publishableKey
-                },
-                {
-                    provide: STRIPE_OPTIONS,
-                    useValue: options
-                }
-            ]
-        };
-    };
-    /**
-     * @param {?=} publishableKey
-     * @param {?=} options
-     * @return {?}
-     */
-    NgxStripeModule.forChild = /**
-     * @param {?=} publishableKey
-     * @param {?=} options
-     * @return {?}
-     */
-    function (publishableKey, options) {
-        return {
-            ngModule: NgxStripeModule,
-            providers: [
-                LazyStripeAPILoader,
-                StripeService,
-                StripeFactoryService,
-                WindowRef,
-                DocumentRef,
-                {
-                    provide: STRIPE_PUBLISHABLE_KEY,
-                    useValue: publishableKey
-                },
-                {
-                    provide: STRIPE_OPTIONS,
-                    useValue: options
-                }
-            ]
-        };
-    };
-    NgxStripeModule.decorators = [
-        { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"], args: [{
-                    declarations: [StripeCardComponent],
-                    exports: [StripeCardComponent]
-                },] }
-    ];
-    return NgxStripeModule;
-}());
 
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-
-
-//# sourceMappingURL=ngx-stripe.js.map
 
 /***/ }),
 
@@ -1889,6 +1180,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1943,6 +1236,8 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
+
 var auth = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["default"].WebAuth({
     domain: src_environments_environment__WEBPACK_IMPORTED_MODULE_8__["environment"].auth0.domain,
     clientID: src_environments_environment__WEBPACK_IMPORTED_MODULE_8__["environment"].auth0.clientId,
@@ -1950,12 +1245,14 @@ var auth = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["default"].WebAuth({
     responseType: 'token id_token',
 });
 var LoggingInComponent = /** @class */ (function () {
-    function LoggingInComponent(store, userService, toastController, route, router) {
+    function LoggingInComponent(store, userService, toastController, route, router, segment, globals) {
         this.store = store;
         this.userService = userService;
         this.toastController = toastController;
         this.route = route;
         this.router = router;
+        this.segment = segment;
+        this.globals = globals;
         this.userId$ = this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_4__["getUserId"]);
     }
     LoggingInComponent.prototype.ngOnInit = function () {
@@ -1974,19 +1271,23 @@ var LoggingInComponent = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 if (err) {
+                    console.error(err);
+                    this.router.navigate(['/tabs/profile'], { replaceUrl: true });
                 }
                 else if (authResult) {
                     jwt_1 = authResult.idToken;
-                    newUserId_1 = authResult.idTokenPayload.sub;
+                    newUserId_1 = authResult.idTokenPayload.sub.replace('sms|', '');
                     this.userId$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["first"])(function (val) { return !!val; })).subscribe(function (oldUserId) {
                         _this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_6__["Alias"](oldUserId, newUserId_1));
+                        _this.segment.alias(newUserId_1, oldUserId);
+                        _this.segment.track(_this.globals.events.login.completed);
                         _this.userService.setToken(jwt_1);
                         setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
                             var toast;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        this.router.navigate(['/tabs/profile']);
+                                        this.router.navigate(['/tabs/profile'], { replaceUrl: true });
                                         return [4 /*yield*/, context.toastController.create({
                                                 message: "Successfully logged in.",
                                                 duration: 2000,
@@ -2013,7 +1314,9 @@ var LoggingInComponent = /** @class */ (function () {
             _core_services_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["ToastController"],
             _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+            _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_10__["SegmentService"],
+            _globals__WEBPACK_IMPORTED_MODULE_11__["Globals"]])
     ], LoggingInComponent);
     return LoggingInComponent;
 }());
@@ -2037,17 +1340,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
-/* harmony import */ var ngx_stripe__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-stripe */ "./node_modules/ngx-stripe/fesm5/ngx-stripe.js");
-/* harmony import */ var _profile_page__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./profile.page */ "./src/app/profile/profile.page.ts");
-/* harmony import */ var ngx_moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-moment */ "./node_modules/ngx-moment/fesm5/ngx-moment.js");
-/* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
-/* harmony import */ var _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./wallet/wallet.page */ "./src/app/profile/wallet/wallet.page.ts");
-/* harmony import */ var _shared_shared_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../shared/shared.module */ "./src/app/shared/shared.module.ts");
-/* harmony import */ var _reservation_reservation_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./reservation/reservation.component */ "./src/app/profile/reservation/reservation.component.ts");
-/* harmony import */ var _auth_auth_module__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../auth/auth.module */ "./src/app/auth/auth.module.ts");
-/* harmony import */ var _auth_login_login_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../auth/login/login.component */ "./src/app/auth/login/login.component.ts");
-/* harmony import */ var _logging_in_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./logging-in.component */ "./src/app/profile/logging-in.component.ts");
-/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _profile_page__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./profile.page */ "./src/app/profile/profile.page.ts");
+/* harmony import */ var ngx_moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ngx-moment */ "./node_modules/ngx-moment/fesm5/ngx-moment.js");
+/* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
+/* harmony import */ var _shared_shared_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../shared/shared.module */ "./src/app/shared/shared.module.ts");
+/* harmony import */ var _reservation_reservation_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./reservation/reservation.component */ "./src/app/profile/reservation/reservation.component.ts");
+/* harmony import */ var _auth_auth_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../auth/auth.module */ "./src/app/auth/auth.module.ts");
+/* harmony import */ var _auth_login_login_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../auth/login/login.component */ "./src/app/auth/login/login.component.ts");
+/* harmony import */ var _logging_in_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./logging-in.component */ "./src/app/profile/logging-in.component.ts");
+/* harmony import */ var _directives_feature_flag_directive__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../directives/feature-flag.directive */ "./src/app/directives/feature-flag.directive.ts");
+/* harmony import */ var _wallet_wallet_module__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../wallet/wallet.module */ "./src/app/wallet/wallet.module.ts");
+/* harmony import */ var _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../wallet/wallet.page */ "./src/app/wallet/wallet.page.ts");
+/* harmony import */ var _wallet_coins_coins_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../wallet/coins/coins.component */ "./src/app/wallet/coins/coins.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2070,14 +1374,15 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
 var routes = [
     {
         path: '',
-        component: _profile_page__WEBPACK_IMPORTED_MODULE_6__["ProfilePage"],
+        component: _profile_page__WEBPACK_IMPORTED_MODULE_5__["ProfilePage"],
     },
     {
         path: 'logging-in',
-        component: _logging_in_component__WEBPACK_IMPORTED_MODULE_14__["LoggingInComponent"],
+        component: _logging_in_component__WEBPACK_IMPORTED_MODULE_12__["LoggingInComponent"],
     },
 ];
 var ProfilePageModule = /** @class */ (function () {
@@ -2086,19 +1391,19 @@ var ProfilePageModule = /** @class */ (function () {
     ProfilePageModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
             imports: [
-                _shared_shared_module__WEBPACK_IMPORTED_MODULE_10__["SharedModule"],
+                _shared_shared_module__WEBPACK_IMPORTED_MODULE_8__["SharedModule"],
                 _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
                 _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"],
-                ngx_moment__WEBPACK_IMPORTED_MODULE_7__["MomentModule"],
-                _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_8__["FontAwesomeModule"],
-                _auth_auth_module__WEBPACK_IMPORTED_MODULE_12__["AuthModule"],
+                ngx_moment__WEBPACK_IMPORTED_MODULE_6__["MomentModule"],
+                _wallet_wallet_module__WEBPACK_IMPORTED_MODULE_14__["WalletModule"],
+                _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_7__["FontAwesomeModule"],
+                _auth_auth_module__WEBPACK_IMPORTED_MODULE_10__["AuthModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
-                ngx_stripe__WEBPACK_IMPORTED_MODULE_5__["NgxStripeModule"].forRoot(src_environments_environment__WEBPACK_IMPORTED_MODULE_15__["environment"].stripe.publishableKey),
                 _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterModule"].forChild(routes),
             ],
-            declarations: [_profile_page__WEBPACK_IMPORTED_MODULE_6__["ProfilePage"], _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_9__["WalletPage"], _reservation_reservation_component__WEBPACK_IMPORTED_MODULE_11__["ReservationComponent"], _logging_in_component__WEBPACK_IMPORTED_MODULE_14__["LoggingInComponent"]],
-            entryComponents: [_wallet_wallet_page__WEBPACK_IMPORTED_MODULE_9__["WalletPage"], _auth_login_login_component__WEBPACK_IMPORTED_MODULE_13__["LoginComponent"]],
+            declarations: [_profile_page__WEBPACK_IMPORTED_MODULE_5__["ProfilePage"], _reservation_reservation_component__WEBPACK_IMPORTED_MODULE_9__["ReservationComponent"], _logging_in_component__WEBPACK_IMPORTED_MODULE_12__["LoggingInComponent"], _directives_feature_flag_directive__WEBPACK_IMPORTED_MODULE_13__["FeatureFlag"]],
+            entryComponents: [_auth_login_login_component__WEBPACK_IMPORTED_MODULE_11__["LoginComponent"], _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_15__["WalletPage"], _wallet_coins_coins_component__WEBPACK_IMPORTED_MODULE_16__["CoinsComponent"]],
         })
     ], ProfilePageModule);
     return ProfilePageModule;
@@ -2115,7 +1420,7 @@ var ProfilePageModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>Home</ion-title>\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"onLogout()\" *ngIf=\"(user$ | async)?.guest !== true; else loggedOut\"> Logout </ion-button>\n    </ion-buttons>\n    <ng-template #loggedOut> <ion-button (click)=\"login()\">Login</ion-button> </ng-template>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content margin-top>\n  <ion-refresher slot=\"fixed\" [pullMax]=\"300\" (ionRefresh)=\"doRefresh($event)\">\n    <ion-refresher-content\n      pullingIcon=\"arrow-down\"\n      pullingText=\"Pull to refresh\"\n      refreshingSpinner=\"\"\n      refreshingText=\"\"\n    >\n    </ion-refresher-content>\n  </ion-refresher>\n\n  <ion-grid padding-horizontal padding-top size=\"12\">\n    <ion-row margin-bottom>\n      <ion-button size=\"small\" color=\"primary\" (click)=\"createNewReservation()\">New Reservation</ion-button>\n      <ion-button size=\"small\" color=\"success\" (click)=\"openWallet()\" *ngIf=\"(user$ | async)?.guest !== true\"\n        >Add Tokens</ion-button\n      >\n      <ion-button size=\"small\" color=\"light\" (click)=\"openFeedback()\">Give Feedback</ion-button>\n    </ion-row>\n    <!-- <ion-row margin-bottom> <b>Phone:&nbsp;</b><span>513-843-3209</span> </ion-row> -->\n    <ion-row margin-bottom> </ion-row>\n    <ion-row margin-bottom align-items-center>\n      <b>Wallet:&nbsp;</b>\n      <span *ngIf=\"(isReservationsLoading$ | async); else walletReady\" margin-vertical>\n        <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n      </span>\n      <ng-template #walletReady>\n        <img class=\"title-image\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n        <span>&nbsp;{{ tokenCount$ | async }}</span>\n      </ng-template>\n    </ion-row>\n    <ion-row margin-bottom> <b>My Reservations:</b> </ion-row>\n\n    <ion-row *ngIf=\"(isReservationsLoading$ | async); else ready\" margin-vertical>\n      <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n    </ion-row>\n    <ng-template #ready>\n      <div margin-bottom *ngIf=\"(reservations$ | async).length > 0; else empty\">\n        <div *ngFor=\"let r of (reservations$ | async)\"><app-reservation [reservation]=\"r\"></app-reservation></div>\n      </div>\n      <ng-template #empty>\n        <div padding-horizontal class=\"ion-text-center\">\n          <p>No active reservations.</p>\n          <p><a (click)=\"createNewReservation()\">Change the channel now.</a></p>\n        </div>\n      </ng-template>\n    </ng-template>\n  </ion-grid>\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>My Reservations</ion-title>\n    <ion-buttons slot=\"start\">\n      <ion-button (click)=\"onLogout()\" *ngIf=\"(user$ | async)?.guest !== true; else loggedOut\">\n        <ion-icon name=\"person\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n    <ion-buttons slot=\"end\" padding-end> <app-coins></app-coins> </ion-buttons>\n    <ng-template #loggedOut> <ion-button (click)=\"login()\">Login</ion-button> </ng-template>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content margin-top>\n  <ion-row class=\"ion-justify-content-center\" margin-top>\n    <img src=\"/assets/logos/logo.png\" alt=\"Clicker logo\" class=\"logo\" />\n  </ion-row>\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\">\n    <ion-fab-button color=\"success\" (click)=\"createNewReservation()\"> <ion-icon name=\"add\"></ion-icon> </ion-fab-button>\n  </ion-fab>\n  <!-- <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\">\n    <ion-fab-button color=\"primary\" (click)=\"openFeedback()\"> <ion-icon name=\"chatbubbles\"></ion-icon> </ion-fab-button>\n  </ion-fab> -->\n  <!-- <ion-button size=\"small\" color=\"light\" (click)=\"openFeedback()\">Contact Us</ion-button> -->\n\n  <ion-refresher slot=\"fixed\" [pullMax]=\"300\" (ionRefresh)=\"doRefresh($event)\">\n    <ion-refresher-content\n      pullingIcon=\"arrow-down\"\n      pullingText=\"Pull to refresh\"\n      refreshingSpinner=\"crescent\"\n      refreshingText=\"\"\n    >\n    </ion-refresher-content>\n  </ion-refresher>\n\n  <ion-grid padding-horizontal padding-top size=\"12\">\n    <!-- <ion-row margin-bottom> <b>My Reservations</b> </ion-row> -->\n    <ion-row *ngIf=\"(isReservationsLoading$ | async); else ready\" margin-vertical>\n      <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n    </ion-row>\n    <ng-template #ready>\n      <div margin-bottom *ngIf=\"(reservations$ | async).length > 0; else empty\">\n        <div *ngFor=\"let r of (reservations$ | async)\">\n          <app-reservation [reservation]=\"r\" (onModify)=\"onModify($event)\"></app-reservation>\n        </div>\n      </div>\n      <ng-template #empty>\n        <div padding-horizontal class=\"ion-text-center\">\n          <p>No active reservations</p>\n          <p><a (click)=\"createNewReservation()\">Change the channel</a></p>\n        </div>\n      </ng-template>\n    </ng-template>\n  </ion-grid>\n</ion-content>\n"
 
 /***/ }),
 
@@ -2126,7 +1431,7 @@ module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>Home</ion-title>
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".inline {\n  display: inline; }\n\n.center {\n  margin: 0 auto; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9wcm9maWxlL3Byb2ZpbGUucGFnZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsZUFBZSxFQUFBOztBQUdqQjtFQUNFLGNBQWMsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3Byb2ZpbGUvcHJvZmlsZS5wYWdlLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuaW5saW5lIHtcbiAgZGlzcGxheTogaW5saW5lO1xufVxuXG4uY2VudGVyIHtcbiAgbWFyZ2luOiAwIGF1dG87XG59XG4iXX0= */"
+module.exports = ".inline {\n  display: inline; }\n\n.center {\n  margin: 0 auto; }\n\n.logo {\n  height: 40px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9wcm9maWxlL3Byb2ZpbGUucGFnZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsZUFBZSxFQUFBOztBQUdqQjtFQUNFLGNBQWMsRUFBQTs7QUFHaEI7RUFDRSxZQUFZLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9wcm9maWxlL3Byb2ZpbGUucGFnZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmlubGluZSB7XG4gIGRpc3BsYXk6IGlubGluZTtcbn1cblxuLmNlbnRlciB7XG4gIG1hcmdpbjogMCBhdXRvO1xufVxuXG4ubG9nbyB7XG4gIGhlaWdodDogNDBweDtcbn1cbiJdfQ== */"
 
 /***/ }),
 
@@ -2141,25 +1446,25 @@ module.exports = ".inline {\n  display: inline; }\n\n.center {\n  margin: 0 auto
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProfilePage", function() { return ProfilePage; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _state_reservation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../state/reservation */ "./src/app/state/reservation/index.ts");
-/* harmony import */ var _state_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../state/user */ "./src/app/state/user/index.ts");
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
-/* harmony import */ var _fortawesome_free_regular_svg_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @fortawesome/free-regular-svg-icons */ "./node_modules/@fortawesome/free-regular-svg-icons/index.es.js");
-/* harmony import */ var _ionic_storage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic/storage */ "./node_modules/@ionic/storage/fesm5/ionic-storage.js");
-/* harmony import */ var _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./wallet/wallet.page */ "./src/app/profile/wallet/wallet.page.ts");
-/* harmony import */ var _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../state/reservation/reservation.actions */ "./src/app/state/reservation/reservation.actions.ts");
-/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../state/user/user.actions */ "./src/app/state/user/user.actions.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var ng_intercom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ng-intercom */ "./node_modules/ng-intercom/fesm5/ng-intercom.js");
-/* harmony import */ var _auth_login_login_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../auth/login/login.component */ "./src/app/auth/login/login.component.ts");
-/* harmony import */ var _core_services_user_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../core/services/user.service */ "./src/app/core/services/user.service.ts");
-/* harmony import */ var src_environments_environment_production__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! src/environments/environment.production */ "./src/environments/environment.production.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _state_reservation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../state/reservation */ "./src/app/state/reservation/index.ts");
+/* harmony import */ var _state_user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../state/user */ "./src/app/state/user/index.ts");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var _fortawesome_free_regular_svg_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/free-regular-svg-icons */ "./node_modules/@fortawesome/free-regular-svg-icons/index.es.js");
+/* harmony import */ var _ionic_storage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic/storage */ "./node_modules/@ionic/storage/fesm5/ionic-storage.js");
+/* harmony import */ var _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../state/reservation/reservation.actions */ "./src/app/state/reservation/reservation.actions.ts");
+/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../state/user/user.actions */ "./src/app/state/user/user.actions.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var ng_intercom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ng-intercom */ "./node_modules/ng-intercom/fesm5/ng-intercom.js");
+/* harmony import */ var _auth_login_login_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../auth/login/login.component */ "./src/app/auth/login/login.component.ts");
+/* harmony import */ var _core_services_user_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../core/services/user.service */ "./src/app/core/services/user.service.ts");
+/* harmony import */ var src_environments_environment_production__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! src/environments/environment.production */ "./src/environments/environment.production.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2211,6 +1516,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+// import { WalletPage } from './wallet/wallet.page';
 
 
 
@@ -2224,7 +1530,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var ProfilePage = /** @class */ (function () {
-    function ProfilePage(store, modalController, alertController, storage, router, route, intercom, toastController, userService, actions$) {
+    function ProfilePage(store, modalController, alertController, storage, router, route, intercom, toastController, userService, actions$, platform, actionSheetController, segment, globals) {
         this.store = store;
         this.modalController = modalController;
         this.alertController = alertController;
@@ -2235,15 +1541,26 @@ var ProfilePage = /** @class */ (function () {
         this.toastController = toastController;
         this.userService = userService;
         this.actions$ = actions$;
-        this.faCopyright = _fortawesome_free_regular_svg_icons__WEBPACK_IMPORTED_MODULE_6__["faCopyright"];
-        this.reservations$ = this.store.select(_state_reservation__WEBPACK_IMPORTED_MODULE_3__["getAllReservations"]);
-        this.user$ = this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_4__["getUser"]);
-        this.tokenCount$ = this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_4__["getUserTokenCount"]);
-        this.isReservationsLoading$ = this.store.select(_state_reservation__WEBPACK_IMPORTED_MODULE_3__["getLoading"]);
-        this.isWalletLoading$ = this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_4__["getLoading"]);
+        this.platform = platform;
+        this.actionSheetController = actionSheetController;
+        this.segment = segment;
+        this.globals = globals;
+        this.faCopyright = _fortawesome_free_regular_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faCopyright"];
+        this.reservations$ = this.store.select(_state_reservation__WEBPACK_IMPORTED_MODULE_2__["getAllReservations"]);
+        this.user$ = this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_3__["getUser"]);
+        this.isReservationsLoading$ = this.store.select(_state_reservation__WEBPACK_IMPORTED_MODULE_2__["getLoading"]);
+        this.isWalletLoading$ = this.store.select(_state_user__WEBPACK_IMPORTED_MODULE_3__["getLoading"]);
     }
     ProfilePage.prototype.ngOnInit = function () {
-        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_9__["GetAll"]());
+        var _this = this;
+        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["GetAll"]());
+        this.platform.backButton.subscribe(function () {
+            // might just work with android
+            if (_this.loginModal)
+                _this.loginModal.close();
+            if (_this.walletModal)
+                _this.walletModal.close();
+        });
     };
     ProfilePage.prototype.login = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -2253,7 +1570,7 @@ var ProfilePage = /** @class */ (function () {
                     case 0:
                         _a = this;
                         return [4 /*yield*/, this.modalController.create({
-                                component: _auth_login_login_component__WEBPACK_IMPORTED_MODULE_14__["LoginComponent"],
+                                component: _auth_login_login_component__WEBPACK_IMPORTED_MODULE_12__["LoginComponent"],
                             })];
                     case 1:
                         _a.loginModal = _b.sent();
@@ -2263,29 +1580,11 @@ var ProfilePage = /** @class */ (function () {
             });
         });
     };
-    ProfilePage.prototype.openWallet = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this;
-                        return [4 /*yield*/, this.modalController.create({
-                                component: _wallet_wallet_page__WEBPACK_IMPORTED_MODULE_8__["WalletPage"],
-                            })];
-                    case 1:
-                        _a.walletModal = _b.sent();
-                        return [4 /*yield*/, this.walletModal.present()];
-                    case 2: return [2 /*return*/, _b.sent()];
-                }
-            });
-        });
-    };
     ProfilePage.prototype.openFeedback = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                this.intercom.boot({ app_id: src_environments_environment_production__WEBPACK_IMPORTED_MODULE_16__["environment"].intercom.appId });
+                this.intercom.boot({ app_id: src_environments_environment_production__WEBPACK_IMPORTED_MODULE_14__["environment"].intercom.appId });
                 this.intercom.showNewMessage();
                 this.intercom.onHide(function () {
                     _this.intercom.shutdown();
@@ -2294,20 +1593,133 @@ var ProfilePage = /** @class */ (function () {
             });
         });
     };
+    ProfilePage.prototype.onModify = function (reservation) {
+        if (reservation.minutes > 0) {
+            var endTime = moment__WEBPACK_IMPORTED_MODULE_10__(reservation.end);
+            var duration = moment__WEBPACK_IMPORTED_MODULE_10__["duration"](endTime.diff(moment__WEBPACK_IMPORTED_MODULE_10__())).asMilliseconds();
+            if (duration > 0) {
+                this.showModify(reservation);
+            }
+            else {
+                this.showToast('Sorry, your reservation has expired');
+            }
+        }
+        else {
+            this.showToast('Sorry, you did not reserve this TV for a time period');
+        }
+    };
+    ProfilePage.prototype.showToast = function (message) {
+        return __awaiter(this, void 0, void 0, function () {
+            var toastInvalid;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.toastController.create({
+                            message: message,
+                            duration: 2000,
+                            cssClass: 'ion-text-center',
+                        })];
+                    case 1:
+                        toastInvalid = _a.sent();
+                        toastInvalid.present();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     ProfilePage.prototype.createNewReservation = function () {
-        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_9__["Start"]());
+        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["Start"]());
         this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
     };
     // this will make sure it disappears from screen if you stay on screen
     // ... definitely a better way to do this
     ProfilePage.prototype.isActive = function (reservation) {
-        var remaining = moment__WEBPACK_IMPORTED_MODULE_12__["duration"](moment__WEBPACK_IMPORTED_MODULE_12__(reservation.end).diff(moment__WEBPACK_IMPORTED_MODULE_12__())).asSeconds();
+        var remaining = moment__WEBPACK_IMPORTED_MODULE_10__["duration"](moment__WEBPACK_IMPORTED_MODULE_10__(reservation.end).diff(moment__WEBPACK_IMPORTED_MODULE_10__())).asSeconds();
         return remaining > 0;
     };
+    ProfilePage.prototype.showModify = function (reservation) {
+        return __awaiter(this, void 0, void 0, function () {
+            var actionSheet;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.actionSheetController.create({
+                            header: 'Modify Reservation',
+                            buttons: [
+                                {
+                                    text: 'Cancel Reservation',
+                                    role: 'destructive',
+                                    handler: function () {
+                                        _this.onReservationCancel(reservation);
+                                    },
+                                },
+                                {
+                                    text: 'Change Channel',
+                                    handler: function () {
+                                        var reservationToUpdate = Object.assign({}, reservation);
+                                        delete reservationToUpdate.program;
+                                        _this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["SetForUpdate"](reservationToUpdate));
+                                        _this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'channel' }, skipLocationChange: true });
+                                    },
+                                },
+                                {
+                                    text: 'Add Time',
+                                    handler: function () {
+                                        var reservationToUpdate = Object.assign({}, reservation);
+                                        _this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["SetForUpdate"](reservationToUpdate));
+                                        _this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'time' }, skipLocationChange: true });
+                                    },
+                                },
+                            ],
+                        })];
+                    case 1:
+                        actionSheet = _a.sent();
+                        return [4 /*yield*/, actionSheet.present()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ProfilePage.prototype.onReservationCancel = function (reservation) {
+        return __awaiter(this, void 0, void 0, function () {
+            var alert;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.alertController.create({
+                            header: 'Are you sure?',
+                            message: 'You will not be refunded any tokens, but you will be freeing up a TV for other patrons, which is appreciated ✌️',
+                            buttons: [
+                                {
+                                    text: 'Cancel Reservation',
+                                    role: 'destructive',
+                                    cssClass: 'secondary',
+                                    handler: function () {
+                                        _this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["Cancel"](reservation));
+                                        _this.segment.track(_this.globals.events.reservation.cancelled);
+                                        // clearInterval(this.intervalJobId);
+                                    },
+                                },
+                            ],
+                        })];
+                    case 1:
+                        alert = _a.sent();
+                        return [4 /*yield*/, alert.present()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     ProfilePage.prototype.doRefresh = function (event) {
-        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_9__["GetAll"]());
-        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_10__["Refresh"]());
-        Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["forkJoin"])(this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_18__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_9__["GET_RESERVATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["take"])(1)), this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_18__["ofType"])(_state_user_user_actions__WEBPACK_IMPORTED_MODULE_10__["LOAD_WALLET_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["take"])(1))).subscribe(function () {
+        this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["GetAll"]());
+        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_8__["Refresh"]());
+        // zip(
+        this.actions$
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_16__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["GET_RESERVATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["take"])(1))
+            .subscribe(function () {
             event.target.complete();
         });
     };
@@ -2336,12 +1748,16 @@ var ProfilePage = /** @class */ (function () {
                                                 case 0: return [4 /*yield*/, this.storage.get('originalToken')];
                                                 case 1:
                                                     originalToken = _a.sent();
-                                                    // await this.storage.clear();
-                                                    // await this.storage.remove(items[i].id);
-                                                    return [4 /*yield*/, this.storage.set('token', originalToken)];
+                                                    return [4 /*yield*/, this.storage.clear()];
                                                 case 2:
-                                                    // await this.storage.clear();
+                                                    _a.sent();
                                                     // await this.storage.remove(items[i].id);
+                                                    return [4 /*yield*/, this.storage.set('originalToken', originalToken)];
+                                                case 3:
+                                                    // await this.storage.remove(items[i].id);
+                                                    _a.sent();
+                                                    return [4 /*yield*/, this.storage.set('token', originalToken)];
+                                                case 4:
                                                     _a.sent();
                                                     return [2 /*return*/, location.reload()];
                                             }
@@ -2366,16 +1782,20 @@ var ProfilePage = /** @class */ (function () {
             template: __webpack_require__(/*! ./profile.page.html */ "./src/app/profile/profile.page.html"),
             styles: [__webpack_require__(/*! ./profile.page.scss */ "./src/app/profile/profile.page.scss")]
         }),
-        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_5__["ModalController"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_5__["AlertController"],
-            _ionic_storage__WEBPACK_IMPORTED_MODULE_7__["Storage"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_11__["Router"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_11__["ActivatedRoute"],
-            ng_intercom__WEBPACK_IMPORTED_MODULE_13__["Intercom"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_5__["ToastController"],
-            _core_services_user_service__WEBPACK_IMPORTED_MODULE_15__["UserService"],
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_18__["Actions"]])
+        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["ModalController"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["AlertController"],
+            _ionic_storage__WEBPACK_IMPORTED_MODULE_6__["Storage"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_9__["Router"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_9__["ActivatedRoute"],
+            ng_intercom__WEBPACK_IMPORTED_MODULE_11__["Intercom"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["ToastController"],
+            _core_services_user_service__WEBPACK_IMPORTED_MODULE_13__["UserService"],
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_16__["Actions"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["Platform"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["ActionSheetController"],
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_17__["SegmentService"],
+            _globals__WEBPACK_IMPORTED_MODULE_18__["Globals"]])
     ], ProfilePage);
     return ProfilePage;
 }());
@@ -2391,7 +1811,7 @@ var ProfilePage = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-card no-margin-horizontal>\n  <ion-card-header>\n    <ion-card-subtitle>\n      <span>{{ reservation.program.channelTitle }} - TV #{{ reservation.box.label }}</span>\n      <span float-right>\n        <!-- <span>{{ minutesFromNow$ | async }} left</span> -->\n        <span *ngIf=\"isReserved() && timeLeft?.minutes > 0\">{{ timeLeft?.label }} left</span>\n        <span *ngIf=\"isReserved() && timeLeft?.minutes <= 0\">Expired</span>\n        <!-- <span *ngIf=\"!isReserved()\">Expired</span> -->\n      </span>\n    </ion-card-subtitle>\n  </ion-card-header>\n  <ion-card-content>\n    <!-- <div>{{ reservation.programTitle }}</div> -->\n    <span>Length: {{ getTimeLeft(reservation.minutes).label }}</span>\n    <ion-button fill=\"clear\" (click)=\"!disableModify && modify()\" float-right>Modify</ion-button>\n  </ion-card-content>\n</ion-card>\n"
+module.exports = "<ion-card no-margin-horizontal>\n  <ion-card-header>\n    <ion-card-subtitle>\n      <span>{{ reservation.program.channelTitle }} - TV #{{ reservation.box.label }}</span>\n      <span float-right>\n        <!-- <span>{{ minutesFromNow$ | async }} left</span> -->\n        <span *ngIf=\"timeLeft?.minutes > 0\">{{ timeLeft?.label }} left</span>\n        <span *ngIf=\"timeLeft?.minutes <= 0 && reservation.minutes\">Expired</span>\n        <!-- <span *ngIf=\"!isReserved()\">Expired</span> -->\n      </span>\n    </ion-card-subtitle>\n  </ion-card-header>\n  <ion-card-content>\n    <!-- <div>{{ reservation.programTitle }}</div> -->\n    <span>Length: {{ getTimeLeft(reservation.minutes).label }}</span> <a (click)=\"modify()\" float-right>Modify</a>\n  </ion-card-content>\n</ion-card>\n"
 
 /***/ }),
 
@@ -2422,8 +1842,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../state/reservation/reservation.actions */ "./src/app/state/reservation/reservation.actions.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2433,42 +1852,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
 
 
 
@@ -2476,13 +1859,13 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var ReservationComponent = /** @class */ (function () {
-    function ReservationComponent(actionSheetController, alertController, store, router, modalController, toastController) {
-        this.actionSheetController = actionSheetController;
+    function ReservationComponent(alertController, store, router, modalController, toastController) {
         this.alertController = alertController;
         this.store = store;
         this.router = router;
         this.modalController = modalController;
         this.toastController = toastController;
+        this.onModify = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
     }
     ReservationComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -2490,102 +1873,8 @@ var ReservationComponent = /** @class */ (function () {
         var secondsToRefresh = 25;
         this.intervalJobId = setInterval(function () { return _this.setTimeLeftRefresher(); }, secondsToRefresh * 1000);
     };
-    ReservationComponent.prototype.showModify = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var actionSheet;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.disableModify = true;
-                        return [4 /*yield*/, this.actionSheetController.create({
-                                header: 'Modify Reservation',
-                                buttons: [
-                                    {
-                                        text: 'Cancel Reservation',
-                                        role: 'destructive',
-                                        handler: function () {
-                                            _this.onReservationCancel(_this.reservation);
-                                        },
-                                    },
-                                    {
-                                        text: 'Change Channel',
-                                        handler: function () {
-                                            var reservationToUpdate = Object.assign({}, _this.reservation);
-                                            delete reservationToUpdate.program;
-                                            _this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["SetForUpdate"](reservationToUpdate));
-                                            _this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'channel' }, skipLocationChange: true });
-                                        },
-                                    },
-                                    {
-                                        text: 'Add Time',
-                                        handler: function () {
-                                            var reservationToUpdate = Object.assign({}, _this.reservation);
-                                            _this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["SetForUpdate"](reservationToUpdate));
-                                            _this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'time' }, skipLocationChange: true });
-                                        },
-                                    },
-                                ],
-                            })];
-                    case 1:
-                        actionSheet = _a.sent();
-                        actionSheet.onDidDismiss().then(function () { return (_this.disableModify = false); });
-                        return [4 /*yield*/, actionSheet.present()];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    ReservationComponent.prototype.onReservationCancel = function (reservation) {
-        return __awaiter(this, void 0, void 0, function () {
-            var alert;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.alertController.create({
-                            header: 'Are you sure?',
-                            message: 'You will not be refunded any tokens, but you will be freeing up a TV for other patrons, which is appreciated ✌️',
-                            buttons: [
-                                {
-                                    text: 'Cancel Reservation',
-                                    role: 'destructive',
-                                    cssClass: 'secondary',
-                                    handler: function () {
-                                        _this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_5__["Cancel"](reservation));
-                                        clearInterval(_this.intervalJobId);
-                                    },
-                                },
-                            ],
-                        })];
-                    case 1:
-                        alert = _a.sent();
-                        return [4 /*yield*/, alert.present()];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    ReservationComponent.prototype.modify = function () {
-        if (this.isReserved()) {
-            var endTime = moment__WEBPACK_IMPORTED_MODULE_2__(this.reservation.end);
-            var duration = moment__WEBPACK_IMPORTED_MODULE_2__["duration"](endTime.diff(moment__WEBPACK_IMPORTED_MODULE_2__())).asMilliseconds();
-            if (duration > 0) {
-                this.showModify();
-            }
-            else {
-                this.showToast('Sorry, your reservation has expired');
-            }
-        }
-        else {
-            this.showToast('Sorry, you did not reserve this TV for a time period');
-        }
-    };
-    ReservationComponent.prototype.isReserved = function () {
-        return this.reservation.minutes > 0;
+    ReservationComponent.prototype.ngOnDestroy = function () {
+        clearInterval(this.intervalJobId);
     };
     ReservationComponent.prototype.setTimeLeftRefresher = function () {
         var endTime = moment__WEBPACK_IMPORTED_MODULE_2__(this.reservation.end);
@@ -2595,6 +1884,9 @@ var ReservationComponent = /** @class */ (function () {
         if (minutes <= 0) {
             clearInterval(this.intervalJobId);
         }
+    };
+    ReservationComponent.prototype.modify = function () {
+        this.onModify.emit(this.reservation);
     };
     ReservationComponent.prototype.getTimeLeft = function (minutes) {
         var label;
@@ -2619,339 +1911,27 @@ var ReservationComponent = /** @class */ (function () {
             minutes: minutes,
         };
     };
-    ReservationComponent.prototype.showToast = function (message) {
-        return __awaiter(this, void 0, void 0, function () {
-            var toastInvalid;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.toastController.create({
-                            message: message,
-                            duration: 2000,
-                            cssClass: 'ion-text-center',
-                        })];
-                    case 1:
-                        toastInvalid = _a.sent();
-                        toastInvalid.present();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", src_app_state_reservation_reservation_model__WEBPACK_IMPORTED_MODULE_1__["Reservation"])
     ], ReservationComponent.prototype, "reservation", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], ReservationComponent.prototype, "onModify", void 0);
     ReservationComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-reservation',
             template: __webpack_require__(/*! ./reservation.component.html */ "./src/app/profile/reservation/reservation.component.html"),
             styles: [__webpack_require__(/*! ./reservation.component.scss */ "./src/app/profile/reservation/reservation.component.scss")]
         }),
-        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_3__["ActionSheetController"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["AlertController"],
+        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_3__["AlertController"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["ModalController"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["ToastController"]])
     ], ReservationComponent);
     return ReservationComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/profile/wallet/wallet.page.html":
-/*!*************************************************!*\
-  !*** ./src/app/profile/wallet/wallet.page.html ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title> Wallet </ion-title>\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"onClose()\"> <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon> </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n<ion-content padding>\n  <section [hidden]=\"!(userCard$ | async)\">\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onAmountChange($event)\">\n        <ion-list-header> Choose Amount </ion-list-header>\n        <ion-item *ngFor=\"let f of fundingAmounts\">\n          <ion-label flex ion-justify-items-end>\n            <span>${{ f.dollars }}</span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span padding-start>{{ f.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ f.dollars }}\" [disabled]=\"waiting\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <ion-button expand=\"block\" color=\"success\" (click)=\"purchase()\" [disabled]=\"waiting\">Purchase</ion-button>\n    <p class=\"ion-text-center\">\n      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a\n        color=\"danger\"\n        (click)=\"removeCard()\"\n        >Remove Card</a\n      >\n    </p>\n  </section>\n  <section [hidden]=\"userCard$ | async\">\n    <p class=\"ion-text-center \">Please add a credit card below</p>\n    <form novalidate (ngSubmit)=\"addCard()\">\n      <div id=\"card-element\" class=\"field \"></div>\n      <ion-button type=\"submit\" expand=\"block\" color=\"success\" [disabled]=\"waiting\">Add</ion-button>\n    </form>\n  </section>\n</ion-content>\n"
-
-/***/ }),
-
-/***/ "./src/app/profile/wallet/wallet.page.scss":
-/*!*************************************************!*\
-  !*** ./src/app/profile/wallet/wallet.page.scss ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#card-element {\n  margin: 24px 0; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9wcm9maWxlL3dhbGxldC93YWxsZXQucGFnZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsY0FBYyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvcHJvZmlsZS93YWxsZXQvd2FsbGV0LnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIiNjYXJkLWVsZW1lbnQge1xuICBtYXJnaW46IDI0cHggMDtcbn1cbiJdfQ== */"
-
-/***/ }),
-
-/***/ "./src/app/profile/wallet/wallet.page.ts":
-/*!***********************************************!*\
-  !*** ./src/app/profile/wallet/wallet.page.ts ***!
-  \***********************************************/
-/*! exports provided: WalletPage */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WalletPage", function() { return WalletPage; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var ngx_stripe__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ngx-stripe */ "./node_modules/ngx-stripe/fesm5/ngx-stripe.js");
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
-/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../state/user/user.actions */ "./src/app/state/user/user.actions.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var src_app_state_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/state/user */ "./src/app/state/user/index.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-var WalletPage = /** @class */ (function () {
-    function WalletPage(store, toastController, stripeService, modalController, alertController) {
-        this.store = store;
-        this.toastController = toastController;
-        this.stripeService = stripeService;
-        this.modalController = modalController;
-        this.alertController = alertController;
-        // optional parameters
-        this.elementsOptions = {
-            locale: 'en',
-        };
-        this.fundingAmounts = [
-            {
-                tokens: 5,
-                dollars: 5,
-            },
-            {
-                tokens: 10,
-                dollars: 10,
-            },
-            {
-                tokens: 25,
-                dollars: 25,
-            },
-        ];
-        this.userCard$ = this.store.select(src_app_state_user__WEBPACK_IMPORTED_MODULE_5__["getUserCard"]);
-    }
-    WalletPage.prototype.ngOnInit = function () {
-        var _this = this;
-        // this.stripeFormGroup = this.fb.group({
-        //   name: ['', [Validators.required]],
-        // });
-        this.stripeService.elements(this.elementsOptions).subscribe(function (elements) {
-            _this.elements = elements;
-            // Only mount the element the first time
-            if (!_this.card) {
-                _this.card = _this.elements.create('card', {
-                    style: {
-                        base: {
-                            fontSize: '18px',
-                        },
-                    },
-                });
-                _this.card.mount('#card-element');
-            }
-        });
-    };
-    WalletPage.prototype.addCard = function () {
-        var _this = this;
-        // const name = this.stripeFormGroup.get('name').value;
-        this.waiting = true;
-        this.stripeService.createToken(this.card, {}).subscribe(function (result) { return __awaiter(_this, void 0, void 0, function () {
-            var toast;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!result.token) return [3 /*break*/, 1];
-                        // Use the token to create a charge or a customer
-                        // https://stripe.com/docs/charges
-                        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["UpdateCard"](result.token.id));
-                        setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-                            var toast;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, this.toastController.create({
-                                            message: "Card successfully added",
-                                            duration: 3000,
-                                            cssClass: 'ion-text-center',
-                                        })];
-                                    case 1:
-                                        toast = _a.sent();
-                                        toast.present();
-                                        this.waiting = false;
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); }, 3000);
-                        return [3 /*break*/, 3];
-                    case 1:
-                        if (!result.error) return [3 /*break*/, 3];
-                        // Error creating the token
-                        console.error(result.error.message);
-                        return [4 /*yield*/, this.toastController.create({
-                                message: result.error.message,
-                                duration: 3000,
-                                color: 'danger',
-                                cssClass: 'ion-text-center',
-                            })];
-                    case 2:
-                        toast = _a.sent();
-                        toast.present();
-                        this.waiting = false;
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); });
-    };
-    WalletPage.prototype.purchase = function () {
-        var _this = this;
-        this.waiting = true;
-        this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["AddFunds"](this.selectedAmount.dollars));
-        setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-            var toast;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.waiting = false;
-                        return [4 /*yield*/, this.toastController.create({
-                                message: "Successfully purchased " + this.selectedAmount.tokens + " tokens",
-                                duration: 3000,
-                                cssClass: 'ion-text-center',
-                            })];
-                    case 1:
-                        toast = _a.sent();
-                        toast.present();
-                        this.onClose();
-                        return [2 /*return*/];
-                }
-            });
-        }); }, 3000);
-    };
-    WalletPage.prototype.onAmountChange = function (e) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.selectedAmount = this.fundingAmounts.find(function (f) { return f.dollars === +e.detail.value; });
-                return [2 /*return*/];
-            });
-        });
-    };
-    WalletPage.prototype.onClose = function () {
-        this.modalController.dismiss();
-    };
-    WalletPage.prototype.removeCard = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var alert;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.alertController.create({
-                            header: 'Are you sure?',
-                            message: 'You will need to add a new credit card to purchase tokens.',
-                            buttons: [
-                                {
-                                    text: 'Cancel',
-                                    role: 'cancel',
-                                },
-                                {
-                                    text: 'Remove Card',
-                                    role: 'destructive',
-                                    cssClass: 'secondary',
-                                    handler: function () { return __awaiter(_this, void 0, void 0, function () {
-                                        var _this = this;
-                                        return __generator(this, function (_a) {
-                                            this.waiting = true;
-                                            this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_3__["DeleteCard"]());
-                                            setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-                                                var toast;
-                                                return __generator(this, function (_a) {
-                                                    switch (_a.label) {
-                                                        case 0: return [4 /*yield*/, this.toastController.create({
-                                                                message: "Card removed",
-                                                                duration: 3000,
-                                                                cssClass: 'ion-text-center',
-                                                            })];
-                                                        case 1:
-                                                            toast = _a.sent();
-                                                            toast.present();
-                                                            this.waiting = false;
-                                                            return [2 /*return*/];
-                                                    }
-                                                });
-                                            }); }, 3000);
-                                            return [2 /*return*/];
-                                        });
-                                    }); },
-                                },
-                            ],
-                        })];
-                    case 1:
-                        alert = _a.sent();
-                        return [4 /*yield*/, alert.present()];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    WalletPage = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'app-wallet',
-            template: __webpack_require__(/*! ./wallet.page.html */ "./src/app/profile/wallet/wallet.page.html"),
-            styles: [__webpack_require__(/*! ./wallet.page.scss */ "./src/app/profile/wallet/wallet.page.scss")]
-        }),
-        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"],
-            ngx_stripe__WEBPACK_IMPORTED_MODULE_1__["StripeService"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ModalController"],
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"]])
-    ], WalletPage);
-    return WalletPage;
 }());
 
 
@@ -2980,6 +1960,9 @@ var environment = {
     },
     stripe: {
         publishableKey: '',
+    },
+    segment: {
+        writeKey: 'Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I',
     },
 };
 
