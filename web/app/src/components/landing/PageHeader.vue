@@ -15,7 +15,7 @@
           class="name brand-font"
           v-scroll-reveal.reset="{ duration: 200, delay: 250, origin: 'left', distance: '10px', easing: 'cubic-bezier(.17,.67,.83,.67)'}"
         >Clicker</span>-->
-        <img src="/img/logo.png" alt="Clicker logo">
+        <img src="https://clicker-brand.s3.amazonaws.com/logo.png" alt="Clicker logo">
       </div>
     </div>
   </div>
