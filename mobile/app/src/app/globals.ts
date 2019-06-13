@@ -22,6 +22,12 @@ export class Globals {
         sourceAdded: 'Payment Source Added',
         fundsAdded: 'Funds Added',
       },
+      permissions: {
+        geolocation: {
+          denied: 'Permission Geolocation Denied',
+          allowed: 'Permission Geolocation Allowed'
+        }
+      }
     };
   }
 }
