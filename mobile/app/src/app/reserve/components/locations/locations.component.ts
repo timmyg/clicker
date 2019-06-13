@@ -147,14 +147,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async allowLocation() {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.probably);
     this.evaluateGeolocation();
-    this.segment.track(this.globals.events.permissions.geolocation.allowed)
+    this.segment.track(this.globals.events.permissions.geolocation.allowed);
   }
 
   async denyLocation() {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.denied);
     this.askForGeolocation$.next(false);
     this.evaluateGeolocation();
-    this.segment.track(this.globals.events.permissions.geolocation.denied)
+    this.segment.track(this.globals.events.permissions.geolocation.denied);
   }
 
   async onLocationManage(location: Location) {
@@ -208,12 +208,19 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
           this.reserveService.emitShowingLocations();
         })
-        .catch(error => {
+        .catch(async error => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
           this.reserveService.emitShowingLocations();
           console.error('Error getting location', error);
+          const whoops = await this.toastController.create({
+            message: 'You need to allow location services in your phone settings for this app.',
+            color: 'light',
+            duration: 6000,
+            cssClass: 'ion-text-center',
+          });
+          whoops.present();
         });
     } else if (permissionStatus === permissionGeolocation.values.denied) {
       this.askForGeolocation$.next(false);
@@ -224,6 +231,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
       this.askForGeolocation$.next(true);
       this.evaluatingGeolocation = false;
     }
+  }
+
+  async forceAllow() {
+    await this.storage.remove(permissionGeolocation.name);
+    location.reload();
   }
 
   onLocationClick(location: Location) {

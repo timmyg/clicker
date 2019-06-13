@@ -20,9 +20,6 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
 
   <ng-template #showLocations>
     <ion-list lines="none">
-      <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
-        Find locations around you by allowing location services in your phone settings
-      </p>
       <ng-container *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)">
         <app-location
           [location]="location"
@@ -32,6 +29,9 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
           (onManage)="onLocationManage($event)"
         ></app-location>
       </ng-container>
+      <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
+        Find locations around you by <a (click)="forceAllow()">allowing location services</a>
+      </p>
     </ion-list>
   </ng-template>
 </section>
