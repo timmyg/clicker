@@ -147,12 +147,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async allowLocation() {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.probably);
     this.evaluateGeolocation();
+    this.segment.track(this.globals.events.permissions.geolocation.allowed)
   }
 
   async denyLocation() {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.denied);
     this.askForGeolocation$.next(false);
     this.evaluateGeolocation();
+    this.segment.track(this.globals.events.permissions.geolocation.denied)
   }
 
   async onLocationManage(location: Location) {
