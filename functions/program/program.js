@@ -262,7 +262,7 @@ module.exports.syncNew = async event => {
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
   init();
-  const maxPrograms = 5;
+  const maxPrograms = 3;
   let descriptionlessPrograms = await Program.scan('description')
     .null()
     .and()

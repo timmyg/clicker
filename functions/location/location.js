@@ -78,7 +78,6 @@ module.exports.all = async event => {
   });
   allLocations = allLocations.filter(l => !l.hidden);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
-  console.log({ partner });
   return respond(200, sorted);
 };
 
