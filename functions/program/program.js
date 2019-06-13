@@ -24,6 +24,7 @@ const allChannels = [
   { channel: 220, channelTitle: 'NBCSN' },
   { channel: 212, channelTitle: 'NFL' },
   { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
+  { channel: 602, channelTitle: 'TVG' },
 ];
 const zip = 45202;
 
