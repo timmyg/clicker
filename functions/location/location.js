@@ -42,6 +42,7 @@ const Location = dynamoose.model(
     },
     img: String,
     active: Boolean,
+    hidden: Boolean,
     connected: Boolean,
     setup: Boolean,
     // calculated fields
@@ -61,7 +62,7 @@ module.exports.all = async event => {
     latitude = pathParams.latitude;
     longitude = pathParams.longitude;
   }
-  const allLocations = await Location.scan().exec();
+  let allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     if (latitude && longitude) {
@@ -75,8 +76,8 @@ module.exports.all = async event => {
       locations[i].distance = roundedMiles;
     }
   });
+  allLocations = allLocations.filter(l => !l.hidden);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
-  console.log({ partner });
   return respond(200, sorted);
 };
 

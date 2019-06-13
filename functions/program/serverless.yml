@@ -123,7 +123,7 @@ functions:
               - partner
               - authorization
               - content-type
-      - schedule: rate(10 minutes)
+      - schedule: rate(3 minutes)
   createAreaProgramming:
     handler: program.createAreaProgramming
     events:
