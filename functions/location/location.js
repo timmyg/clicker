@@ -62,7 +62,7 @@ module.exports.all = async event => {
     latitude = pathParams.latitude;
     longitude = pathParams.longitude;
   }
-  const allLocations = await Location.scan().exec();
+  let allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     if (latitude && longitude) {
