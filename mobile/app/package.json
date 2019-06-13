@@ -12,8 +12,8 @@
     "copy": "npx cap copy",
     "open:ios": "npx cap open ios",
     "open:android": "npx cap open android",
-    "ios:all": "npm run build && npx cap sync && npm run open:ios",
-    "android:all": "npm run build && npx cap sync && npm run open:android",
+    "ios:all": "npm run build && npx cap sync ios && npm run open:ios",
+    "android:all": "npm run build && npx cap sync android && npm run open:android",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

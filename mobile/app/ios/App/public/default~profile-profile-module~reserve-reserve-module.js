@@ -22305,7 +22305,7 @@ var CoinsComponent = /** @class */ (function () {
                         return [4 /*yield*/, this.walletModal.present()];
                     case 2: return [2 /*return*/, _b.sent()];
                     case 3: return [4 /*yield*/, this.toastController.create({
-                            message: "Adding tokens is not available.",
+                            message: "Adding tokens is not available today.",
                             duration: 2000,
                             cssClass: 'ion-text-center',
                         })];
