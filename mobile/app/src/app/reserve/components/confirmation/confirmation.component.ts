@@ -43,7 +43,7 @@ export class ConfirmationComponent implements OnInit {
       title: '30 minutes',
       minutes: 30,
       reserve: true,
-      disabled: true,
+      // disabled: true,
     },
     {
       tokens: 4,
