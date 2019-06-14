@@ -74,7 +74,12 @@ module.exports.create = async event => {
 
   // ensure location is active
   console.time('ensure location active');
-  const locationResult = await invokeFunctionSync(`location-${process.env.stage}-get`, {}, null, event.headers);
+  const locationResult = await invokeFunctionSync(
+    `location-${process.env.stage}-get`,
+    null,
+    { id: reservation.location.id },
+    event.headers,
+  );
   console.timeEnd('ensure location active');
   console.log(locationResult);
   const locationResultBody = JSON.parse(locationResult.Payload).body;
