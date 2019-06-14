@@ -18,12 +18,27 @@ const allChannels = [
   { channel: 207, channelTitle: 'ESPNN' },
   { channel: 213, channelTitle: 'MLB' },
   { channel: 219, channelTitle: 'FS1' },
-  { channel: 618, channelTitle: 'FS2' },
-  { channel: 245, channelTitle: 'TNT' },
-  { channel: 247, channelTitle: 'TBS' },
+  { channel: 618, channelTitle: 'FS2' }, // CHECK
+  // { channel: 245, channelTitle: 'TNT' },
+  // { channel: 247, channelTitle: 'TBS' },
   { channel: 220, channelTitle: 'NBCSN' },
+  { channel: 221, channelTitle: 'CBSSN' },
   { channel: 212, channelTitle: 'NFL' },
   { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
+  { channel: 602, channelTitle: 'TVG' },
+  { channel: 600, channelTitle: 'SMXHD' },
+  { channel: 611, channelTitle: 'SECHD' },
+  { channel: 217, channelTitle: 'TNNSHD' },
+  { channel: 701, channelTitle: 'USO' },
+  { channel: 702, channelTitle: 'USO' },
+  { channel: 703, channelTitle: 'USO' },
+  { channel: 704, channelTitle: 'USO' },
+  { channel: 705, channelTitle: 'USO' },
+  // { channel: 104, channelTitle: 'DTV4K' },
+  // { channel: 105, channelTitle: 'LIVE4K' },
+  // { channel: 106, channelTitle: 'LIVE4K2' },
+  // { channel: 215, channelTitle: 'NHLHD' },
+  // { channel: 216, channelTitle: 'NBAHD' },
 ];
 const zip = 45202;
 
@@ -213,7 +228,7 @@ function rank(program) {
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;
     // if (program.subcategories.includes('Golf')) {
-    if (program.title.includes('PGA Championship') && program.live) {
+    if ((program.title.includes('PGA Championship') || program.title.includes('U.S. Open')) && program.live) {
       totalPoints += 5;
     }
     // }
