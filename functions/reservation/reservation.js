@@ -86,8 +86,11 @@ module.exports.create = async event => {
   if (!locationResultBody.active) {
     return respond(400, 'Sorry, location inactive');
   }
-  // const tvToReserve = locationResultBody.boxes.find(b => b.id === reservation.box.id)
-  // if ()
+  // ensure tv isnt already reserved
+  const tv = locationResultBody.boxes.find(b => b.id === reservation.box.id);
+  if (!tv || (tv.reserved && moment(tv.end).unix() > moment().unix())) {
+    return respond(400, 'Sorry, tv is reserved');
+  }
 
   reservation.end = calculateReservationEndTime(reservation);
   await Reservation.create(reservation);
