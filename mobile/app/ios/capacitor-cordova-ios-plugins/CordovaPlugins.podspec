@@ -11,5 +11,5 @@
     s.ios.deployment_target  = '11.0'
     s.dependency 'CapacitorCordova'
     s.swift_version  = '4.0'
-    
+    s.frameworks = 'AssetsLibrary', 'MobileCoreServices'
   end

@@ -12,6 +12,7 @@ const auth = new auth0.WebAuth({
     environment.packageId
   }/tabs/profile/logging-in`,
   responseType: 'token id_token',
+  prompt: 'none'
 });
 
 @Component({
@@ -54,19 +55,13 @@ export class LoginComponent {
           });
           toastInvalid.present();
           this.waiting = false;
-          return console.error(err);
+          return console.error(err, JSON.stringify(window));
         }
         this.segment.track(this.globals.events.login.started);
         this.codeSent = true;
         this.waiting = false;
       },
     );
-  }
-
-  getPhoneNumberErrorMessage(errCode: string) {
-    switch (errCode) {
-      case 'sms_provider_error':
-    }
   }
 
   onCodeSubmit() {
@@ -87,7 +82,7 @@ export class LoginComponent {
           });
           toastInvalid.present();
           this.waiting = false;
-          return console.error(err);
+          return console.error(err, JSON.stringify(window));
         }
         this.waiting = false;
       },

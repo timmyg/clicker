@@ -135,8 +135,7 @@ var auth = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["default"].WebAuth({
     domain: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.domain,
     clientID: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.clientId,
     // redirectUri: `${window.location.origin}/tabs/profile/logging-in`,
-    // TODO UPDATE!
-    redirectUri: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].packageId + "://" + src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.domain + "/cordova/io.clickertv.app/tabs/profile/logging-in",
+    redirectUri: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].packageId + "://" + src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.domain + "/cordova/" + src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].packageId + "/tabs/profile/logging-in",
     responseType: 'token id_token',
 });
 var LoginComponent = /** @class */ (function () {
@@ -174,7 +173,7 @@ var LoginComponent = /** @class */ (function () {
                                 toastInvalid = _a.sent();
                                 toastInvalid.present();
                                 this.waiting = false;
-                                return [2 /*return*/, console.error(err)];
+                                return [2 /*return*/, console.error(err, JSON.stringify(window))];
                             case 2:
                                 this.segment.track(this.globals.events.login.started);
                                 this.codeSent = true;
@@ -186,11 +185,6 @@ var LoginComponent = /** @class */ (function () {
                 return [2 /*return*/];
             });
         });
-    };
-    LoginComponent.prototype.getPhoneNumberErrorMessage = function (errCode) {
-        switch (errCode) {
-            case 'sms_provider_error':
-        }
     };
     LoginComponent.prototype.onCodeSubmit = function () {
         var _this = this;
@@ -215,7 +209,7 @@ var LoginComponent = /** @class */ (function () {
                         toastInvalid = _a.sent();
                         toastInvalid.present();
                         this.waiting = false;
-                        return [2 /*return*/, console.error(err)];
+                        return [2 /*return*/, console.error(err, JSON.stringify(window))];
                     case 2:
                         this.waiting = false;
                         return [2 /*return*/];
