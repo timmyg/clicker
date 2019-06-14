@@ -12,8 +12,8 @@
     "copy": "npx cap copy",
     "open:ios": "npx cap open ios",
     "open:android": "npx cap open android",
-    "ios:all": "npm run build && npx cap sync && npm run open:ios",
-    "android:all": "npm run build && npx cap sync && npm run open:android",
+    "ios:all": "npm run build && npx cap sync ios && npm run open:ios",
+    "android:all": "npm run build && npx cap sync android && npm run open:android",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -50,6 +50,9 @@
     "angular-in-memory-web-api": "^0.8.0",
     "auth0-js": "^9.10.2",
     "cordova-android": "8.0.0",
+    "cordova-plugin-file": "6.0.1",
+    "cordova-plugin-file-transfer": "1.7.1",
+    "cordova-plugin-ionic": "5.3.0",
     "core-js": "^2.6.5",
     "ios": "0.0.1",
     "jwt-decode": "^2.2.0",
@@ -104,7 +107,15 @@
       "cordova-plugin-device": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova.plugins.diagnostic": {}
+      "cordova.plugins.diagnostic": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "ff3de01e",
+        "CHANNEL_NAME": "Production",
+        "UPDATE_METHOD": "background",
+        "UPDATE_API": "https://api.ionicjs.com",
+        "MAX_STORE": "2",
+        "MIN_BACKGROUND_DURATION": "30"
+      }
     }
   }
 }
