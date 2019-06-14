@@ -22,9 +22,18 @@ const allChannels = [
   { channel: 245, channelTitle: 'TNT' },
   { channel: 247, channelTitle: 'TBS' },
   { channel: 220, channelTitle: 'NBCSN' },
+  { channel: 221, channelTitle: 'CBSSN' },
   { channel: 212, channelTitle: 'NFL' },
   { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
   { channel: 602, channelTitle: 'TVG' },
+  { channel: 600, channelTitle: 'SMXHD' },
+  { channel: 611, channelTitle: 'SECHD' },
+  { channel: 217, channelTitle: 'TNNSHD' },
+  { channel: 701, channelTitle: 'USO' },
+  { channel: 702, channelTitle: 'USO' },
+  { channel: 703, channelTitle: 'USO' },
+  { channel: 704, channelTitle: 'USO' },
+  { channel: 705, channelTitle: 'USO' },
 ];
 const zip = 45202;
 
