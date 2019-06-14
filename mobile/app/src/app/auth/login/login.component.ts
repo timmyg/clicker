@@ -11,8 +11,12 @@ const auth = new auth0.WebAuth({
   redirectUri: `${environment.packageId}://${environment.auth0.domain}/cordova/${
     environment.packageId
   }/tabs/profile/logging-in`,
+  // redirectUri: `${environment.packageId}://${environment.auth0.domain}/android/${
+  //   environment.packageId
+  // }/tabs/profile/logging-in`,
   responseType: 'token id_token',
-  prompt: 'none'
+  prompt: 'none',
+  packageId: environment.packageId,
 });
 
 @Component({

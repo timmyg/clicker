@@ -1,4 +1,4 @@
-package com.clicker.app;
+package com.clickertv.app;
 
 import android.os.Bundle;
 

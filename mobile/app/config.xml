@@ -94,4 +94,5 @@
         <variable name="MAX_STORE" value="2" />
         <variable name="MIN_BACKGROUND_DURATION" value="30" />
     </plugin>
+    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
 </widget>

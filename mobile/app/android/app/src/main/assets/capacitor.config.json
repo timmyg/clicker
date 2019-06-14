@@ -1,5 +1,5 @@
 {
-  "appId": "io.clickertv.app",
+  "appId": "com.clickertv.app",
   "appName": "clicker",
   "bundledWebRuntime": false,
   "npmClient": "npm",
