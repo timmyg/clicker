@@ -62,8 +62,20 @@ module.exports.all = async event => {
     latitude = pathParams.latitude;
     longitude = pathParams.longitude;
   }
-  let allLocations = await Location.scan().exec();
-  allLocations.forEach((l, i, locations) => {
+
+  switch (partner) {
+    case 'bwr':
+      locations = await Location.scan('name')
+        .eq('Buffalo Wings & Rings')
+        .all()
+        .exec();
+      break;
+    default:
+      locations = await Location.scan().exec();
+      break;
+  }
+
+  locations.forEach((l, i, locations) => {
     delete l.boxes;
     if (latitude && longitude) {
       const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
@@ -76,8 +88,8 @@ module.exports.all = async event => {
       locations[i].distance = roundedMiles;
     }
   });
-  allLocations = allLocations.filter(l => !l.hidden);
-  const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+  locations = locations.filter(l => !l.hidden);
+  const sorted = locations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
 };
 
