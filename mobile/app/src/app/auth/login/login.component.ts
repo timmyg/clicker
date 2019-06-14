@@ -7,7 +7,9 @@ import { Globals } from 'src/app/globals';
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
   clientID: environment.auth0.clientId,
-  redirectUri: `${window.location.origin}/tabs/profile/logging-in`,
+  // redirectUri: `${window.location.origin}/tabs/profile/logging-in`,
+  // TODO UPDATE!
+  redirectUri: `${environment.packageId}://${environment.auth0.domain}/cordova/io.clickertv.app/tabs/profile/logging-in`,
   responseType: 'token id_token',
 });
 

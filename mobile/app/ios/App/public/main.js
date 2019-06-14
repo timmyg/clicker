@@ -1774,6 +1774,12 @@ var Globals = /** @class */ (function () {
                     sourceAdded: 'Payment Source Added',
                     fundsAdded: 'Funds Added',
                 },
+                permissions: {
+                    geolocation: {
+                        denied: 'Permission Geolocation Denied',
+                        allowed: 'Permission Geolocation Allowed'
+                    }
+                }
             };
         },
         enumerable: true,
@@ -3354,6 +3360,7 @@ __webpack_require__.r(__webpack_exports__);
 var environment = {
     production: false,
     apiBaseUrl: 'https://api-develop.tryclicker.com',
+    packageId: 'io.clickertv.app',
     auth0: {
         domain: 'clikr-develop.auth0.com',
         clientId: 'abgmbT4pqRZROXxn383G4Js0dMMP4bRY',
