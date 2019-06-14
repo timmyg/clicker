@@ -76,9 +76,12 @@ module.exports.create = async event => {
   console.time('ensure location active');
   const locationResult = await invokeFunctionSync(`location-${process.env.stage}-get`, {}, null, event.headers);
   console.timeEnd('ensure location active');
-  if (!JSON.parse(JSON.parse(locationResult.Payload).body).active) {
+  console.log(locationResult);
+  const locationResultBody = JSON.parse(locationResult.Payload).body;
+  if (!locationResultBody.active) {
     return respond(400, 'Sorry, location inactive');
   }
+  // TODO ensure tv not reserved
 
   reservation.end = calculateReservationEndTime(reservation);
   await Reservation.create(reservation);
