@@ -82,13 +82,14 @@ module.exports.create = async event => {
   );
   console.timeEnd('ensure location active');
   console.log(locationResult);
-  const locationResultBody = JSON.parse(locationResult.Payload).body;
+  const locationResultBody = JSON.parse(JSON.parse(result.Payload).body);
   if (!locationResultBody.active) {
     return respond(400, 'Sorry, location inactive');
   }
-  // TODO ensure tv not reserved
+  const tvToReserve =
+    // TODO ensure tv not reserved
 
-  reservation.end = calculateReservationEndTime(reservation);
+    (reservation.end = calculateReservationEndTime(reservation));
   await Reservation.create(reservation);
 
   console.time('mark box reserved');
