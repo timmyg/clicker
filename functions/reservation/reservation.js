@@ -74,9 +74,9 @@ module.exports.create = async event => {
 
   // ensure location is active
   console.time('ensure location active');
-  const result = await invokeFunctionSync(`location-${process.env.stage}-get`, {}, null, event.headers);
+  const locationResult = await invokeFunctionSync(`location-${process.env.stage}-get`, {}, null, event.headers);
   console.timeEnd('ensure location active');
-  if (!JSON.parse(JSON.parse(result.Payload).body).active) {
+  if (!JSON.parse(JSON.parse(locationResult.Payload).body).active) {
     return respond(400, 'Sorry, location inactive');
   }
 
