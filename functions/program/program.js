@@ -27,7 +27,7 @@ const allChannels = [
   { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
   { channel: 602, channelTitle: 'TVG' },
   { channel: 600, channelTitle: 'SMXHD' },
-  { channel: 611, channelTitle: 'SECHD' },
+  // { channel: 611, channelTitle: 'SECHD' },
   { channel: 217, channelTitle: 'TNNSHD' },
   { channel: 701, channelTitle: 'USO' },
   { channel: 702, channelTitle: 'USO' },
