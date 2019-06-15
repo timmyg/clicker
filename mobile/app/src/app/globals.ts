@@ -13,6 +13,8 @@ export class Globals {
         created: 'Reservation Created',
         updated: 'Reservation Updated',
         cancelled: 'Reservation Cancelled',
+        clickedButton: 'Reservation Started: Button',
+        clickedLink: 'Reservation Started: Link',
       },
       login: {
         started: 'Login Started',
@@ -25,9 +27,9 @@ export class Globals {
       permissions: {
         geolocation: {
           denied: 'Permission Geolocation Denied',
-          allowed: 'Permission Geolocation Allowed'
-        }
-      }
+          allowed: 'Permission Geolocation Allowed',
+        },
+      },
     };
   }
 }

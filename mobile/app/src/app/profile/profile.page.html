@@ -16,7 +16,9 @@
     <img src="https://clicker-brand.s3.amazonaws.com/logo.png" alt="Clicker logo" class="logo" />
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="success" (click)="createNewReservation()"> <ion-icon name="add"></ion-icon> </ion-fab-button>
+    <ion-fab-button color="success" (click)="createNewReservation('fab')">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
   <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="openFeedback()"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button>
@@ -45,11 +47,9 @@
         </div>
       </div>
       <ng-template #empty>
-        <div padding-horizontal class="ion-text-center">
-          <p>No active reservations</p>
-          <p><a (click)="createNewReservation()">Change the channel</a></p>
-        </div>
+        <div padding-horizontal class="ion-text-center"><p>No active reservations</p></div>
       </ng-template>
+      <p class="ion-text-center"><a (click)="createNewReservation('link')">Change the channel</a></p>
     </ng-template>
   </ion-grid>
 </ion-content>
