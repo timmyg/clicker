@@ -100,15 +100,20 @@ export class ProfilePage {
   async showToast(message) {
     const toastInvalid = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: 4000,
       cssClass: 'ion-text-center',
     });
     toastInvalid.present();
   }
 
-  createNewReservation() {
+  createNewReservation(source: string) {
     this.store.dispatch(new fromReservation.Start());
     this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
+    if (source === 'fab') {
+      this.segment.track(this.globals.events.reservation.clickedButton);
+    } else if (source === 'link') {
+      this.segment.track(this.globals.events.reservation.clickedLink);
+    }
   }
 
   // this will make sure it disappears from screen if you stay on screen
