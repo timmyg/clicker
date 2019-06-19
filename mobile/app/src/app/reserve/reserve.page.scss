@@ -1,10 +1,24 @@
+.breadcrumbs {
+  // padding-top: 12px;
+  span {
+    margin-right: 5px;
+    &:not(.active) {
+      opacity: .4;
+    }
+  }
+  ion-icon {
+    margin-right: 2px;
+  }
+  ion-icon, .text {
+    vertical-align: middle;
+  }
+}
+
 ion-item {
   --padding-start: 0;
   --inner-padding-end: 0;
 
   ion-card {
     width: 100%;
-    // margin-top: 16px !important;
-    // margin-bottom: 16px !important;
   }
 }

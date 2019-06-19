@@ -65,6 +65,33 @@ export class ReservePage {
     return this.router.url.includes('programs') || (this.router.url.includes('locations') && this.showingLocations);
   }
 
+  isStepActive(stepName: string) {
+    switch (stepName) {
+      case "location":
+        return this.router.url.includes('locations');
+      case "channel":
+        return this.router.url.includes('programs');
+      case "tv":
+        return this.router.url.includes('tvs');
+      case "confirm":
+        return this.router.url.includes('confirmation');
+    }
+  }
+
+
+  isStepComplete(stepName: string) {
+    switch (stepName) {
+      case "location":
+        return !this.router.url.includes('locations');
+      case "channel":
+        return !this.router.url.includes('locations') && !this.router.url.includes('programs');
+      case "tv":
+        return !this.router.url.includes('locations') && !this.router.url.includes('programs') && !this.router.url.includes('tvs');
+      case "confirm":
+        return false
+    }
+  }
+
   toggleSearch() {
     this.searchMode = !this.searchMode;
     setTimeout(() => this.searchbar.setFocus(), 100);
