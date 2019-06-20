@@ -3,7 +3,9 @@ ion-slides {
   align-items: center;
   background: #7b7b7b;
   ion-slide {
-    min-height: 300px;
+    // min-height: 300px;
+    align-items: start;
+    top: 40px;
     ion-chip {
       height: inherit;
     }
@@ -12,14 +14,13 @@ ion-slides {
         height: 45px;
         margin: 0 auto;
       }
-     
     }
-      ol {
-        padding-left: 20px;
-        // li {
-        //   margin-bottom: 8px;
-        // }
-      }
+    ol {
+      padding-left: 20px;
+      // li {
+      //   margin-bottom: 8px;
+      // }
+    }
     ion-card {
       // min-height: 250px;
       padding: 20px 0;
