@@ -23,5 +23,27 @@
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isSearchablePage() && !searchMode">
     <ion-fab-button color="primary" (click)="toggleSearch()"> <ion-icon name="search"></ion-icon> </ion-fab-button>
   </ion-fab>
+  <ion-row class="breadcrumbs ion-text-center" justify-content-center padding>
+    <span [class.active]="isStepActive('location')" [class.complete]="isStepComplete('location')">
+      <ion-icon *ngIf="!isStepComplete('location')" name="radio-button-off" color="medium"></ion-icon> 
+      <ion-icon *ngIf="isStepComplete('location')" name="checkmark-circle" color="success"></ion-icon>
+      <span class="text">Location</span>
+    </span>
+    <span [class.active]="isStepActive('channel')" [class.complete]="isStepComplete('channel')">
+      <ion-icon *ngIf="!isStepComplete('channel')" name="radio-button-off" color="medium"></ion-icon> 
+      <ion-icon *ngIf="isStepComplete('channel')" name="checkmark-circle" color="success"></ion-icon>
+      <span class="text">Channel</span>
+    </span>
+    <span [class.active]="isStepActive('tv')" [class.complete]="isStepComplete('tv')">
+      <ion-icon *ngIf="!isStepComplete('tv')" name="radio-button-off" color="medium"></ion-icon> 
+      <ion-icon *ngIf="isStepComplete('tv')" name="checkmark-circle" color="success"></ion-icon>
+      <span class="text">TV</span>
+    </span>
+    <span [class.active]="isStepActive('confirm')" [class.complete]="isStepComplete('confirm')">
+      <ion-icon *ngIf="!isStepComplete('confirm')" name="radio-button-off" color="medium"></ion-icon> 
+      <ion-icon *ngIf="isStepComplete('confirm')" name="checkmark-circle" color="success"></ion-icon>
+      <span class="text">Confirm</span>
+    </span>
+  </ion-row>
   <router-outlet></router-outlet>
 </ion-content>
