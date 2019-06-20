@@ -14,7 +14,7 @@ import * as fromUser from '../state/user/user.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
-import { Intercom } from 'ng-intercom';
+// import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
 import { environment } from 'src/environments/environment.production';
@@ -44,7 +44,7 @@ export class ProfilePage {
     private storage: Storage,
     private router: Router,
     private route: ActivatedRoute,
-    public intercom: Intercom,
+    // public intercom: Intercom,
     public toastController: ToastController,
     public userService: UserService,
     private actions$: Actions,
@@ -75,13 +75,13 @@ export class ProfilePage {
     return await this.loginModal.present();
   }
 
-  async openFeedback() {
-    this.intercom.boot({ app_id: environment.intercom.appId });
-    this.intercom.showNewMessage();
-    this.intercom.onHide(() => {
-      this.intercom.shutdown();
-    });
-  }
+  // async openFeedback() {
+  //   this.intercom.boot({ app_id: environment.intercom.appId });
+  //   this.intercom.showNewMessage();
+  //   this.intercom.onHide(() => {
+  //     this.intercom.shutdown();
+  //   });
+  // }
 
   onModify(reservation: Reservation) {
     if (reservation.minutes > 0) {

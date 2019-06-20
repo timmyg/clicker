@@ -44,7 +44,7 @@
 import Vue from 'vue';
 import VueScrollReveal from 'vue-scroll-reveal';
 import VueBrowserUpdate from 'vue-browserupdate';
-import VueIntercom from 'vue-intercom';
+// import VueIntercom from 'vue-intercom';
 import Quotes from './landing/Quotes';
 import Hero from './landing/Hero';
 import Features from './landing/Features';
@@ -82,11 +82,11 @@ export default {
     Analytics,
   },
   mounted() {
-    this.$intercom.boot({
-      // user_id: this.userId,
-      // name: this.name,
-      // email: this.email,
-    });
+    // this.$intercom.boot({
+    //   // user_id: this.userId,
+    //   // name: this.name,
+    //   // email: this.email,
+    // });
     // this.$intercom.hide();
   },
   // watch: {
