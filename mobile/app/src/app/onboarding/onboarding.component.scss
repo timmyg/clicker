@@ -3,49 +3,28 @@ ion-slides {
   align-items: center;
   background: #7b7b7b;
   ion-slide {
-    min-height: 300px;
+    // min-height: 300px;
+    align-items: start;
+    top: 40px;
+    ion-chip {
+      height: inherit;
+    }
     &.what {
       img.logo {
         height: 45px;
         margin: 0 auto;
       }
-      ion-icon.header {
-        color: var(--ion-color-primary);
-      }
     }
-    &.how {
-      ion-icon.header {
-        color: var(--ion-color-secondary);
-      }
-      // ol {
-      //   padding-left: 20px;
-      //   li {
-      //     margin-bottom: 8px;
-      //   }
+    ol {
+      padding-left: 20px;
+      // li {
+      //   margin-bottom: 8px;
       // }
     }
-    &.do {
-      ion-icon {
-        color: var(--ion-color-tertiary);
-      }
-    }
-    ion-icon {
-      font-size: 64px;
-    }
     ion-card {
-      min-height: 250px;
+      // min-height: 250px;
       padding: 20px 0;
       background: white;
-    }
-    .swipe {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      opacity: 0.5;
-      .arrow {
-        font-size: 14px;
-        vertical-align: bottom;
-      }
     }
   }
 }

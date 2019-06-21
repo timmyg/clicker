@@ -14,7 +14,7 @@ import * as fromUser from '../state/user/user.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
-import { Intercom } from 'ng-intercom';
+// import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
 import { environment } from 'src/environments/environment.production';
@@ -44,7 +44,7 @@ export class ProfilePage {
     private storage: Storage,
     private router: Router,
     private route: ActivatedRoute,
-    public intercom: Intercom,
+    // public intercom: Intercom,
     public toastController: ToastController,
     public userService: UserService,
     private actions$: Actions,
@@ -75,13 +75,13 @@ export class ProfilePage {
     return await this.loginModal.present();
   }
 
-  async openFeedback() {
-    this.intercom.boot({ app_id: environment.intercom.appId });
-    this.intercom.showNewMessage();
-    this.intercom.onHide(() => {
-      this.intercom.shutdown();
-    });
-  }
+  // async openFeedback() {
+  //   this.intercom.boot({ app_id: environment.intercom.appId });
+  //   this.intercom.showNewMessage();
+  //   this.intercom.onHide(() => {
+  //     this.intercom.shutdown();
+  //   });
+  // }
 
   onModify(reservation: Reservation) {
     if (reservation.minutes > 0) {
@@ -100,15 +100,20 @@ export class ProfilePage {
   async showToast(message) {
     const toastInvalid = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: 4000,
       cssClass: 'ion-text-center',
     });
     toastInvalid.present();
   }
 
-  createNewReservation() {
+  createNewReservation(source: string) {
     this.store.dispatch(new fromReservation.Start());
     this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
+    if (source === 'fab') {
+      this.segment.track(this.globals.events.reservation.clickedButton);
+    } else if (source === 'link') {
+      this.segment.track(this.globals.events.reservation.clickedLink);
+    }
   }
 
   // this will make sure it disappears from screen if you stay on screen

@@ -3,37 +3,26 @@
     <ion-card>
       <!-- <ion-icon class="header" name="tv"></ion-icon> -->
       <img src="https://clicker-brand.s3.amazonaws.com/logo-tv.png" class="logo" />
-      <ion-card-header> <ion-card-title>What is Clicker?</ion-card-title> </ion-card-header>
-      <ion-card-content>
-        <span> Clicker puts you in charge of the remote at your favorite sports bar in just a few clicks.</span>
-      </ion-card-content>
-      <span class="swipe"><ion-icon class="arrow" name="arrow-back"></ion-icon> Swipe</span>
-    </ion-card>
-  </ion-slide>
-  <ion-slide class="how">
-    <ion-card>
-      <ion-icon class="header" name="wifi"></ion-icon>
-      <ion-card-header> <ion-card-title>How does it work?</ion-card-title> </ion-card-header>
-      <ion-card-content>
-        <ol text-left>
-          <li>Select your location</li>
-          <li>Use live channel guide to select your game</li>
-          <li>Choose the TV by its numbered label</li>
-        </ol>
-      </ion-card-content>
-      <span class="swipe"><ion-icon class="arrow" name="arrow-back"></ion-icon> Swipe</span>
-    </ion-card>
-  </ion-slide>
-  <ion-slide class="do">
-    <ion-card>
-      <ion-icon name="basketball"></ion-icon>
-      <ion-card-header> <ion-card-title>Let's Do It.</ion-card-title> </ion-card-header>
+      <ion-card-header> <ion-card-title>Welcome to Clicker</ion-card-title> </ion-card-header>
       <ion-card-content>
         <span>
-          We put some tokens in your account<br />
-          to get you started!</span
+          Clicker puts you in charge of the remote at your favorite bars and restaurants in just a few clicks:</span
         >
-        <div margin-top><ion-button color="success" (click)="onGetStarted()" size="large">Go</ion-button></div>
+        <ol text-left>
+          <li>Select your location</li>
+          <li>Choose game with live channel guide</li>
+          <li>Identify TV by its numbered label</li>
+          <li>Click confirm &amp; watch the TV change!</li>
+        </ol>
+        <ion-chip color="primary" padding>
+          <ion-label>
+            <div>
+              We put some free tokens in your<br />
+              account to get you started!
+            </div>
+          </ion-label>
+        </ion-chip>
+        <div margin-top><ion-button color="success" (click)="onGetStarted()" size="large">Get Started</ion-button></div>
       </ion-card-content>
     </ion-card>
   </ion-slide>

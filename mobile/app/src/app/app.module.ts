@@ -65,10 +65,10 @@ export function initUserStuff(store: Store<AppState>): Function {
     AppRoutingModule,
     StateModule.forRoot(),
     CoreModule.forRoot(),
-    IntercomModule.forRoot({
-      appId: environment.intercom.appId, // from your Intercom config
-      updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
-    }),
+    // IntercomModule.forRoot({
+    //   appId: environment.intercom.appId, // from your Intercom config
+    //   updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
+    // }),
   ],
   providers: [
     Globals,

@@ -7,7 +7,9 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
-    <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>
+    <ng-template #loggedOut> 
+      <!-- <ion-button (click)="login()">Login</ion-button>  -->
+    </ng-template>
   </ion-toolbar>
 </ion-header>
 
@@ -16,11 +18,16 @@
     <img src="https://clicker-brand.s3.amazonaws.com/logo.png" alt="Clicker logo" class="logo" />
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="success" (click)="createNewReservation()"> <ion-icon name="add"></ion-icon> </ion-fab-button>
+    <ion-fab-button color="success" (click)="createNewReservation('fab')">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary" (click)="openFeedback()"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button>
-  </ion-fab> -->
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <!-- <ion-fab-button color="primary" (click)="openFeedback()"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button> -->
+    <a href="mailto:hello@tryclicker.com" >
+      <ion-fab-button color="primary"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button>
+    </a>
+  </ion-fab>
   <!-- <ion-button size="small" color="light" (click)="openFeedback()">Contact Us</ion-button> -->
 
   <ion-refresher slot="fixed" [pullMax]="300" (ionRefresh)="doRefresh($event)">
@@ -45,11 +52,9 @@
         </div>
       </div>
       <ng-template #empty>
-        <div padding-horizontal class="ion-text-center">
-          <p>No active reservations</p>
-          <p><a (click)="createNewReservation()">Change the channel</a></p>
-        </div>
+        <div padding-horizontal class="ion-text-center"><p>No active reservations</p></div>
       </ng-template>
+      <p class="ion-text-center"><a (click)="createNewReservation('link')">Change the channel</a></p>
     </ng-template>
   </ion-grid>
 </ion-content>

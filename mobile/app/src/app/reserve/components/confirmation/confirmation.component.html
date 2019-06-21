@@ -8,14 +8,14 @@
           <ion-label flex ion-justify-items-end>
             <span
               >{{ p.title }}
-              <ion-chip *ngIf="p.disabled; else enabled"> <ion-label>Disabled Today</ion-label> </ion-chip>
-              <ng-template #enabled>
-                <ion-chip color="primary"> <ion-label>Free Change</ion-label> </ion-chip>
-              </ng-template>
+              <ion-chip *ngIf="p.disabled; else enabled" outline="true"> <ion-label>Disabled Today</ion-label> </ion-chip>
+              <!-- <ng-template #enabled> -->
+                <!-- <ion-chip color="primary"> <ion-label>Free Change</ion-label> </ion-chip> -->
+              <!-- </ng-template> -->
             </span>
             <div flex ion-align-items-center float-right>
               <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-              <span padding-start>{{ p.tokens }}</span>
+              <span>{{ p.tokens }}</span>
             </div>
           </ion-label>
           <ion-radio slot="start" value="{{ p.minutes }}" [disabled]="saving || p.disabled" checked></ion-radio>

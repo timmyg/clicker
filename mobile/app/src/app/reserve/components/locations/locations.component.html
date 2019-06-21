@@ -12,10 +12,11 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
   >
     <ion-icon name="pin" class="location"></ion-icon>
     <p>
-      Clicker would like to access your location for more accurate location details. This data is not stored anywhere.
+      Clicker needs access to your location for more accurate location details. This data is not stored or shared.
     </p>
     <div><ion-button margin-top (click)="allowLocation()">Allow Location Access </ion-button></div>
-    <div><ion-button fill="clear" (click)="denyLocation()">No Thanks </ion-button></div>
+    <!-- <div><ion-button fill="clear" (click)="denyLocation()">No Thanks </ion-button></div> -->
+    
   </section>
 
   <ng-template #showLocations>
