@@ -49,6 +49,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   userGeolocation: Geo;
   evaluatingGeolocation = true;
   geolocationDeclined = true;
+  waiting: boolean;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -239,13 +240,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   onLocationClick(location: Location) {
+    this.waiting = true;
     this.reserveService.emitCloseSearch();
     this.store.dispatch(new fromReservation.SetLocation(location));
-    // this.actions$
-    //   .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
-    //   .pipe(first())
-    //   .subscribe(async () => {
-    this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
-    // });
+    this.actions$
+      .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
+      .pipe(first())
+      .subscribe(async () => {
+        this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+      });
   }
 }

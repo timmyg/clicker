@@ -10,7 +10,7 @@ import * as fromReservation from '../../../state/reservation/reservation.actions
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReserveService } from '../../reserve.service';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
-import { first, take } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 import { InfoComponent } from './info/info.component';
 import { ModalController, ToastController } from '@ionic/angular';
