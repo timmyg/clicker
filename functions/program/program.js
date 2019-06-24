@@ -274,18 +274,21 @@ module.exports.syncNew = async event => {
     const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
     console.log(locationsResult);
     for (const [zip, localChannels] of Object.entries(locationResultBody)) {
-      console.log(zip, localChannels);
+      // console.log(zip, localChannels);
+      let strippedChannels = localChannels;
       // replace dash, if there is one
-      for (let i = 0; i < localChannels.length; i++) {
-        localChannels[i] = localChannels[i].replace(/-.*$/, '');
+      for (let i = 0; i < strippedChannels.length; i++) {
+        strippedChannels[i] = strippedChannels[i].replace(/-.*$/, '');
       }
-      const localChannelsString = localChannels.join(',');
+      const strippedChannelsString = strippedChannels.join(',');
       const localHeaders = {
         Cookie: `dtve-prospect-zip=${zip};`,
       };
-      const params = { channels: localChannelsString, startTime, hours };
+      const params = { channels: strippedChannelsString, startTime, hours };
       result = await axios({ method, url, params, headers: localHeaders });
-      allPrograms = build(result.data.schedule, zip);
+
+      allPrograms = build(result.data.schedule, zip, localChannels);
+
       transformedPrograms = transformPrograms(allPrograms);
       dbResult = await Program.batchPut(transformedPrograms);
     }
@@ -352,17 +355,17 @@ function transformPrograms(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule, zip) {
+function build(dtvSchedule, zip, channels) {
   const programs = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
       if (program.programId !== '-1') {
         program.channel = channel.chNum;
-        // HACK to include channel minor number
-        if (program.channel === 661) {
-          program.channelMinor = 1;
-        }
+        // // HACK to include channel minor number
+        // // if (program.channel === 661) {
+        //   program.channelMinor = 1;
+        // // }
         program.channelTitle = channel.chCall;
 
         program.title = program.title !== 'Programming information not available' ? program.title : null;
