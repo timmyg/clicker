@@ -58,20 +58,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-    # ProgammingAreaTable:
-    #   Type: 'AWS::DynamoDB::Table'
-    #   Properties:
-    #     TableName: ${self:custom.tableProgrammingArea}
-    #     AttributeDefinitions:
-    #       - AttributeName: id
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: id
-    #         KeyType: HASH
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: ${self:custom.tableThroughput}
-    #       WriteCapacityUnits: ${self:custom.tableThroughput}
-
 functions:
   health:
     handler: program.health

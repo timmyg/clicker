@@ -3,11 +3,11 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { respond, invokeFunction } = require('serverless-helpers');
+const { respond, invokeFunction, invokeFunctionSync } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgrammingArea;
 require('dotenv').config();
-const allChannels = [
+const nationalChannels = [
   { channel: 5, channelTitle: 'NBC' },
   { channel: 9, channelTitle: 'ABC' },
   { channel: 12, channelTitle: 'CBS' },
@@ -18,7 +18,7 @@ const allChannels = [
   { channel: 207, channelTitle: 'ESPNN' },
   { channel: 213, channelTitle: 'MLB' },
   { channel: 219, channelTitle: 'FS1' },
-  { channel: 618, channelTitle: 'FS2' }, // CHECK
+  // { channel: 618, channelTitle: 'FS2' }, // CHECK
   // { channel: 245, channelTitle: 'TNT' },
   // { channel: 247, channelTitle: 'TBS' },
   { channel: 220, channelTitle: 'NBCSN' },
@@ -40,7 +40,7 @@ const allChannels = [
   // { channel: 215, channelTitle: 'NHLHD' },
   // { channel: 216, channelTitle: 'NBAHD' },
 ];
-const zip = 45202;
+const zipDefault = 45202;
 
 function init() {
   Program = dynamoose.model(
@@ -128,7 +128,7 @@ module.exports.getAreaProgramming = async event => {
 
 module.exports.getAll = async event => {
   init();
-  const initialChannels = allChannels;
+  const initialChannels = nationalChannels;
   // get all programs for right now
   const now = moment().unix() * 1000;
   const in25Mins =
@@ -147,7 +147,7 @@ module.exports.getAll = async event => {
       .gt(now)
       .and()
       .filter('zip') // Zip is hardcoded!
-      .eq(zip)
+      .eq(zipDefault)
       .all()
       .exec(),
     Program.scan()
@@ -158,7 +158,7 @@ module.exports.getAll = async event => {
       .gt(in25Mins)
       .and()
       .filter('zip') // Zip is hardcoded!
-      .eq(zip)
+      .eq(zipDefault)
       .all()
       .exec(),
   ]);
@@ -242,9 +242,6 @@ module.exports.syncNew = async event => {
   try {
     init();
     const url = `${directvEndpoint}/channelschedule`;
-    // TODO dont hardcode channels, different depending on zip code!
-    const channelsToPull = allChannels.map(c => c.channel);
-    // TODO add zip code cookie
     const startTime = moment()
       .utc()
       .subtract(4, 'hours')
@@ -252,22 +249,37 @@ module.exports.syncNew = async event => {
       .seconds(0)
       .toString();
     const hours = 8;
-    const params = { channels: channelsToPull.join(','), startTime, hours };
+
+    // sync national channels
+    const channels = nationalChannels.map(c => c.channel).join(',');
+    const params = { channels, startTime, hours };
     const headers = {
-      Cookie: `dtve-prospect-zip=${zip};`,
+      Cookie: `dtve-prospect-zip=${zipDefault};`,
     };
-    // console.log(url, { params, headers });
-    const result = await axios.get(url, { params, headers });
-    const { schedule } = result.data;
-    console.info(`pulled ${schedule.length} channels`);
-    const allPrograms = build(schedule, zip);
-    const transformedPrograms = transformPrograms(allPrograms);
-    // console.log('tp', transformedPrograms[0]);
-    const dbResult = await Program.batchPut(transformedPrograms);
+    const method = 'get';
+    let result = await axios.get({ method, url, params, headers });
+    let { schedule } = result.data;
+    let allPrograms = build(schedule, null);
+    let transformedPrograms = transformPrograms(allPrograms);
+    let dbResult = await Program.batchPut(transformedPrograms);
 
-    // await invokeFunction(`programs-${process.env.stage}-syncDescriptions`);
+    // sync local channels
+    const locationsResult = await invokeFunctionSync(`location-${process.env.stage}-getLocalChannels`, { null, null, null, event.headers });
+    console.log(locationsResult);
+    for (const [zip, localChannels] of Object.entries(locationsResult)) {
+      console.log(zip, localChannels);
+      const localChannels = localChannels.map(c => c.channel).join(',');
+      const localHeaders = {
+        Cookie: `dtve-prospect-zip=${zip};`,
+      };
+      const params = { channels: localChannels, startTime, hours };
+      result = await axios.get({ method, url, params, headers: localHeaders });
+      allPrograms = build(result.data.schedule, zip);
+      transformedPrograms = transformPrograms(allPrograms);
+      dbResult = await Program.batchPut(transformedPrograms);
+    }
 
-    return respond(201, dbResult);
+    return respond(201, locationsResult.length);
   } catch (e) {
     console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
@@ -288,7 +300,6 @@ module.exports.syncDescriptions = async event => {
     .eq(true)
     .all()
     .exec();
-  console.log('count', descriptionlessPrograms.length);
 
   if (!descriptionlessPrograms.length) {
     return respond(204);
@@ -300,37 +311,21 @@ module.exports.syncDescriptions = async event => {
 
   descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
 
-  console.log('sliced count', descriptionlessPrograms.length);
-
-  console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
   const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
-  console.log('uniqueProgramIds', uniqueProgramIds.length);
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {
-    console.log('update program', programId);
     try {
       const url = `${directvEndpoint}/program/flip/${programId}`;
       const result = await axios.get(url);
       const { programDetail } = result.data;
       const { description } = programDetail;
 
-      // const programsToUpdate = await Program.scan()
-      //   .filter('programId')
-      //   .eq(programId)
-      //   .all()
-      //   .exec();
       const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
 
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;
         arr[index]['synced'] = true;
       });
-      console.log('programsToUpdate', programsToUpdate.length, programsToUpdate[0]);
-      const response = await Program.batchPut(programsToUpdate);
-      // for(p of programsToUpdate) {
-      //   p.
-      // }
-      console.log({ response });
     } catch (e) {
       console.error(e);
     }
@@ -352,7 +347,6 @@ function build(dtvSchedule, zip) {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
       if (program.programId !== '-1') {
-        // console.log({ channel, program });
         program.channel = channel.chNum;
         program.channelTitle = channel.chCall;
 
@@ -375,19 +369,7 @@ function build(dtvSchedule, zip) {
               .unix() * 1000,
           ),
         );
-
-        // expire 30 minutes after end time
-        // const expireFromNowSeconds = moment(program.end)
-        //   .add(30, 'minutes')
-        //   .diff(moment(), 'seconds');
-        // if (expireFromNowSeconds > 0) {
-        // program.expires = (moment().unix() + expireFromNowSeconds) * 1000;
-        // program.expires = 1000;
-        // program.expires = 1558885353;
-        // console.log('program', program);
-        // console.log('pushing');
         programs.push(program);
-        // }
       }
     });
   });
@@ -397,8 +379,8 @@ function build(dtvSchedule, zip) {
 }
 
 function generateId(program) {
-  const { channel, airTime } = program;
-  const id = channel + airTime;
+  const { programId, zip } = program;
+  const id = programId + zip;
   return uuid(id, uuid.DNS);
 }
 
