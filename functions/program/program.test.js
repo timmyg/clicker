@@ -20,17 +20,15 @@ test('generateId generates the same id when same program', () => {
 });
 
 test('generateId generates different ids when different programs', () => {
-  const date1 = moment().toDate();
-  const date2 = moment()
-    .add(30, 'm')
-    .toDate();
+  const zip1 = '45212';
+  const zip2 = '45202';
   const program1 = {
     chNum: 206,
-    airTime: date1,
+    zip: zip1,
   };
   const program2 = {
     chNum: 206,
-    airTime: date2,
+    zip: zip2,
   };
   const program1Id = generateId(program1);
   const program2Id = generateId(program2);
@@ -40,18 +38,10 @@ test('generateId generates different ids when different programs', () => {
 test('build programs', () => {
   // fix dates
   data.schedule.forEach((s, i) => {
-    // console.log(s);
-    s.schedules.forEach((c, i, channels) => {
-      // console.log({ c });
-      // channels[i]['airTime'] = moment().toDate();
-      // channels[i]['end'] = moment()
-      //   .add(1, 'h')
-      //   .toDate();
-      // console.log(channels[i]);
-    });
+    s.schedules.forEach((c, i, channels) => {});
   });
   const response = build(data.schedule);
   // console.log({ response });
   expect(response[0]).toHaveProperty('id');
-  expect(response.length).toBe(183);
+  expect(response.length).toBe(129);
 });

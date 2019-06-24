@@ -385,7 +385,8 @@ function build(dtvSchedule, zip) {
 
 function generateId(program) {
   const { programId, zip } = program;
-  const id = programId + zip;
+  const id = programId + (zip || '');
+  // console.log(id, uuid.DNS);
   return uuid(id, uuid.DNS);
 }
 
