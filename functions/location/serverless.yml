@@ -235,3 +235,15 @@ functions:
               - partner
               - authorization
               - content-type
+  getLocalChannels:
+    handler: location.getLocalChannels
+    events:
+      - http:
+          path: 'local'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

@@ -85,6 +85,20 @@ module.exports.all = async event => {
   return respond(200, sorted);
 };
 
+module.exports.getLocalChannels = async event => {
+  const allLocations = await Location.scan().exec();
+  const locationsByZip;
+  allLocations.forEach(l => {
+    locations[l.zip] = locations || [];
+    locations[l.zip].push(l.channels.local)
+    // remove duplicates
+    locations[l.zip] = locations[l.zip].filter((elem, index, self) => {
+      return index === self.indexOf(elem);
+    })
+  })
+  return locationsByZip;
+}
+
 module.exports.get = async event => {
   const { id } = getPathParameters(event);
 
