@@ -87,17 +87,17 @@ module.exports.all = async event => {
 
 module.exports.getLocalChannels = async event => {
   const allLocations = await Location.scan().exec();
-  const locationsByZip;
+  let locationsByZip = {};
   allLocations.forEach(l => {
-    locations[l.zip] = locations || [];
-    locations[l.zip].push(l.channels.local)
+    locationsByZip[l.zip] = locationsByZip[l.zip] || [];
+    locationsByZip[l.zip].push(l.channels.local);
     // remove duplicates
-    locations[l.zip] = locations[l.zip].filter((elem, index, self) => {
+    locationsByZip[l.zip] = locationsByZip[l.zip].filter((elem, index, self) => {
       return index === self.indexOf(elem);
-    })
-  })
+    });
+  });
   return locationsByZip;
-}
+};
 
 module.exports.get = async event => {
   const { id } = getPathParameters(event);
