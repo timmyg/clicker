@@ -359,6 +359,9 @@ function build(dtvSchedule, zip) {
       program.programId = program.programID;
       if (program.programId !== '-1') {
         program.channel = channel.chNum;
+        if (program.channel === 661) {
+          program.channelMinor = 1;
+        }
         program.channelTitle = channel.chCall;
 
         program.title = program.title !== 'Programming information not available' ? program.title : null;
