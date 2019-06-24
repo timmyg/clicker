@@ -91,7 +91,7 @@ module.exports.getLocalChannels = async event => {
   allLocations.forEach(l => {
     locationsByZip[l.zip] = locationsByZip[l.zip] || [];
     console.log(l.zip, locationsByZip[l.zip]);
-    locationsByZip[l.zip].concat(l.channels.local);
+    locationsByZip[l.zip] = locationsByZip[l.zip].concat(l.channels.local);
     // remove duplicates
     locationsByZip[l.zip] = locationsByZip[l.zip].filter((elem, index, self) => {
       return index === self.indexOf(elem);
