@@ -264,7 +264,7 @@ module.exports.syncNew = async event => {
     let dbResult = await Program.batchPut(transformedPrograms);
 
     // sync local channels
-    const locationsResult = await invokeFunctionSync(`location-${process.env.stage}-getLocalChannels`, { null, null, null, event.headers });
+    const locationsResult = await invokeFunctionSync(`location-${process.env.stage}-getLocalChannels`, null, null, headers: event.headers);
     console.log(locationsResult);
     for (const [zip, localChannels] of Object.entries(locationsResult)) {
       console.log(zip, localChannels);
