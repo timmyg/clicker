@@ -33,10 +33,10 @@ const Location = dynamoose.model(
         },
       },
     ],
-    channels: [
+    channels: {
       local: [Number],
       premium: [Number],
-    ],
+    },
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
     zip: { type: Number, required: true },
@@ -66,20 +66,8 @@ module.exports.all = async event => {
     latitude = pathParams.latitude;
     longitude = pathParams.longitude;
   }
-
-  switch (partner) {
-    case 'bwr':
-      locations = await Location.scan('name')
-        .eq('Buffalo Wings & Rings')
-        .all()
-        .exec();
-      break;
-    default:
-      locations = await Location.scan().exec();
-      break;
-  }
-
-  locations.forEach((l, i, locations) => {
+  let allLocations = await Location.scan().exec();
+  allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     if (latitude && longitude) {
       const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
@@ -92,8 +80,8 @@ module.exports.all = async event => {
       locations[i].distance = roundedMiles;
     }
   });
-  locations = locations.filter(l => !l.hidden);
-  const sorted = locations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+  allLocations = allLocations.filter(l => !l.hidden);
+  const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
 };
 
