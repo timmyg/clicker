@@ -273,11 +273,11 @@ module.exports.syncNew = async event => {
     console.log(locationsResult);
     for (const [zip, localChannels] of Object.entries(locationsResult)) {
       console.log(zip, localChannels);
-      const localChannels = localChannels.map(c => c.channel).join(',');
+      const localChannelsString = localChannels.map(c => c.channel).join(',');
       const localHeaders = {
         Cookie: `dtve-prospect-zip=${zip};`,
       };
-      const params = { channels: localChannels, startTime, hours };
+      const params = { channels: localChannelsString, startTime, hours };
       result = await axios({ method, url, params, headers: localHeaders });
       allPrograms = build(result.data.schedule, zip);
       transformedPrograms = transformPrograms(allPrograms);
