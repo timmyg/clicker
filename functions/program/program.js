@@ -257,7 +257,7 @@ module.exports.syncNew = async event => {
       Cookie: `dtve-prospect-zip=${zipDefault};`,
     };
     const method = 'get';
-    let result = await axios.get({ method, url, params, headers });
+    let result = await axios({ method, url, params, headers });
     let { schedule } = result.data;
     let allPrograms = build(schedule, null);
     let transformedPrograms = transformPrograms(allPrograms);
@@ -278,7 +278,7 @@ module.exports.syncNew = async event => {
         Cookie: `dtve-prospect-zip=${zip};`,
       };
       const params = { channels: localChannels, startTime, hours };
-      result = await axios.get({ method, url, params, headers: localHeaders });
+      result = await axios({ method, url, params, headers: localHeaders });
       allPrograms = build(result.data.schedule, zip);
       transformedPrograms = transformPrograms(allPrograms);
       dbResult = await Program.batchPut(transformedPrograms);
