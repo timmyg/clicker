@@ -85,6 +85,7 @@ functions:
               - content-type
   syncNew:
     handler: program.syncNew
+    timeout: 20
     events:
       - http:
           path: new

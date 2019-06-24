@@ -275,6 +275,10 @@ module.exports.syncNew = async event => {
     console.log(locationsResult);
     for (const [zip, localChannels] of Object.entries(locationResultBody)) {
       console.log(zip, localChannels);
+      // replace dash, if there is one
+      for (let i = 0; i < localChannels.length; i++) {
+        localChannels[i] = localChannels[i].replace(/-.*$/, '');
+      }
       const localChannelsString = localChannels.join(',');
       const localHeaders = {
         Cookie: `dtve-prospect-zip=${zip};`,
