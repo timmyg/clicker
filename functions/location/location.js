@@ -97,7 +97,7 @@ module.exports.getLocalChannels = async event => {
       return index === self.indexOf(elem);
     });
   });
-  return locationsByZip;
+  return respond(200, locationsByZip);
 };
 
 module.exports.get = async event => {
