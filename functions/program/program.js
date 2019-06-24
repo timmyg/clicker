@@ -359,6 +359,7 @@ function build(dtvSchedule, zip) {
       program.programId = program.programID;
       if (program.programId !== '-1') {
         program.channel = channel.chNum;
+        // HACK to include channel minor number
         if (program.channel === 661) {
           program.channelMinor = 1;
         }
