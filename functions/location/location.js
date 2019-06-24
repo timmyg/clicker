@@ -34,8 +34,8 @@ const Location = dynamoose.model(
       },
     ],
     channels: {
-      local: [Number],
-      premium: [Number],
+      local: [String],
+      premium: [String],
     },
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },

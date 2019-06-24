@@ -8,10 +8,10 @@ const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgrammingArea;
 require('dotenv').config();
 const nationalChannels = [
-  { channel: 5, channelTitle: 'NBC' },
-  { channel: 9, channelTitle: 'ABC' },
-  { channel: 12, channelTitle: 'CBS' },
-  { channel: 19, channelTitle: 'FOX' },
+  // { channel: 5, channelTitle: 'NBC' },
+  // { channel: 9, channelTitle: 'ABC' },
+  // { channel: 12, channelTitle: 'CBS' },
+  // { channel: 19, channelTitle: 'FOX' },
   { channel: 206, channelTitle: 'ESPN' },
   { channel: 209, channelTitle: 'ESPN2' },
   { channel: 208, channelTitle: 'ESPNU' },
@@ -24,7 +24,7 @@ const nationalChannels = [
   { channel: 220, channelTitle: 'NBCSN' },
   { channel: 221, channelTitle: 'CBSSN' },
   { channel: 212, channelTitle: 'NFL' },
-  { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
+  // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
   { channel: 602, channelTitle: 'TVG' },
   { channel: 600, channelTitle: 'SMXHD' },
   // { channel: 611, channelTitle: 'SECHD' },
