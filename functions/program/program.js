@@ -271,9 +271,11 @@ module.exports.syncNew = async event => {
       event.headers,
     );
     console.log(locationsResult);
-    for (const [zip, localChannels] of Object.entries(locationsResult)) {
+    const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
+    console.log(locationsResult);
+    for (const [zip, localChannels] of Object.entries(locationResultBody)) {
       console.log(zip, localChannels);
-      const localChannelsString = localChannels.map(c => c.channel).join(',');
+      const localChannelsString = localChannels.join(',');
       const localHeaders = {
         Cookie: `dtve-prospect-zip=${zip};`,
       };
