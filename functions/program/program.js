@@ -256,7 +256,7 @@ module.exports.syncNew = async event => {
     const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
     for (const [zip, localChannels] of Object.entries(locationResultBody)) {
       console.log('localChannels', localChannels);
-      let strippedChannels = localChannels;
+      let strippedChannels = localChannels.slice(0);
       // replace dash, if there is one
       for (let i = 0; i < strippedChannels.length; i++) {
         strippedChannels[i] = strippedChannels[i].replace(/-.*$/, '');
