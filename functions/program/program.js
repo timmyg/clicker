@@ -244,7 +244,7 @@ module.exports.syncNew = async event => {
 
     // sync national channels
     const channels = nationalChannels.map(c => c.channel).join(',');
-    await syncChannels(channels);
+    await syncChannels(channels, null, nationalChannels);
 
     // sync local channels
     const locationsResult = await invokeFunctionSync(
@@ -261,7 +261,7 @@ module.exports.syncNew = async event => {
         strippedChannels[i] = strippedChannels[i].replace(/-.*$/, '');
       }
       const strippedChannelsString = strippedChannels.join(',');
-      await syncChannels(strippedChannelsString, zip);
+      await syncChannels(strippedChannelsString, zip, transformChannels(localChannels));
     }
 
     return respond(201, { count: locationsResult.length + 1 });
@@ -342,6 +342,7 @@ module.exports.syncDescriptions = async event => {
 };
 
 function transformChannels(channelArray) {
+  console.log('transformChannels', channelArray);
   const channels = [];
   for (var i = 0, len = channelArray.length; i < len; i++) {
     let channel, channelMinor;
@@ -349,6 +350,7 @@ function transformChannels(channelArray) {
     channelMinor = channelArray[i].split('-')[1];
     channels.push({ channel, channelMinor });
   }
+  console.log('transformedChannels', channels);
   return channels;
 }
 
@@ -360,18 +362,20 @@ function transformPrograms(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule, zip) {
+function build(dtvSchedule, zip, channels) {
+  // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
       if (program.programId !== '-1') {
         program.channel = channel.chNum;
-        // // HACK to include channel minor number
-        // // if (program.channel === 661) {
-        //   program.channelMinor = 1;
-        // // }
         program.channelTitle = channel.chCall;
+
+        const channelWithMinor = channels.find(c => c.channel === program.channel);
+        if (channelWithMinor) {
+          program.channelMinor = channelWithMinor.channelMinor;
+        }
 
         program.title = program.title !== 'Programming information not available' ? program.title : null;
         program.durationMins = program.duration;
