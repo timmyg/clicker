@@ -374,7 +374,7 @@ function build(dtvSchedule, zip, channels) {
         program.channelTitle = channel.chCall;
 
         const channelWithMinor = channels.find(c => c.channel === program.channel);
-        console.log(channelWithMinor, c.channel);
+        console.log(channelWithMinor, program.channel);
         if (channelWithMinor) {
           program.channelMinor = channelWithMinor.channelMinor;
         }
