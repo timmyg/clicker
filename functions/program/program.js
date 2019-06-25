@@ -349,7 +349,7 @@ function transformChannels(channelArray) {
     let channel, channelMinor;
     channel = channelArray[i].split('-')[0];
     channelMinor = channelArray[i].split('-')[1];
-    channels.push({ channel, channelMinor });
+    channels.push({ channel: parseInt(channel), channelMinor: channelMinor ? parseInt(channelMinor) : undefined });
   }
   console.log('transformedChannels', channels);
   return channels;
@@ -374,6 +374,7 @@ function build(dtvSchedule, zip, channels) {
         program.channelTitle = channel.chCall;
 
         const channelWithMinor = channels.find(c => c.channel === program.channel);
+        console.log(channelWithMinor, c.channel);
         if (channelWithMinor) {
           program.channelMinor = channelWithMinor.channelMinor;
         }
