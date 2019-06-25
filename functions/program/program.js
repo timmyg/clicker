@@ -289,7 +289,7 @@ async function syncChannels(channels, zip) {
   let result = await axios({ method, url, params, headers });
 
   let { schedule } = result.data;
-  let allPrograms = build(schedule, null);
+  let allPrograms = build(schedule, zip);
   let transformedPrograms = transformPrograms(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
 }
@@ -341,6 +341,17 @@ module.exports.syncDescriptions = async event => {
   return respond(200);
 };
 
+function transformChannels(channelArray) {
+  const channels = [];
+  for (var i = 0, len = channelArray.length; i < len; i++) {
+    let channel, channelMinor;
+    channel = channelArray[i].split('-')[0];
+    channelMinor = channelArray[i].split('-')[1];
+    channels.push({ channel, channelMinor });
+  }
+  return channels;
+}
+
 function transformPrograms(programs) {
   const transformedPrograms = [];
   programs.forEach(p => {
@@ -349,7 +360,7 @@ function transformPrograms(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule, zip, channels) {
+function build(dtvSchedule, zip) {
   const programs = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
