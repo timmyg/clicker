@@ -121,11 +121,15 @@ module.exports.getAll = async event => {
       .unix() * 1000;
 
   console.time('current + next Programming');
-  for (let i = 0; i < location.channels.local.length; i++) {
-    location.channels.local[i] = parseInt(location.channels.local[i].replace(/-.*$/, ''));
+  if (location.channels && location.channels.local) {
+    for (let i = 0; i < location.channels.local.length; i++) {
+      location.channels.local[i] = parseInt(location.channels.local[i].replace(/-.*$/, ''));
+    }
   }
-  for (let i = 0; i < location.channels.premium.length; i++) {
-    location.channels.premium[i] = parseInt(location.channels.premium[i].replace(/-.*$/, ''));
+  if (location.channels && location.channels.premium) {
+    for (let i = 0; i < location.channels.premium.length; i++) {
+      location.channels.premium[i] = parseInt(location.channels.premium[i].replace(/-.*$/, ''));
+    }
   }
   // run in parallel
   [currentNational, nextNational, currentPremium, nextPremium, currentLocal, nextLocal] = await Promise.all([
