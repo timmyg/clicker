@@ -214,8 +214,8 @@ module.exports.getAll = async event => {
       .exec(),
   ]);
   console.timeEnd('current + next Programming');
-  console.log({ currentProgramming });
-  console.log({ nextProgramming });
+  // console.log({ currentProgramming });
+  // console.log({ nextProgramming });
 
   // console.time('nextProgramming');
   // const nextProgramming =
@@ -247,7 +247,8 @@ module.exports.getAll = async event => {
   // console.timeEnd('nextProgram');
 
   console.time('rank');
-  const rankedPrograms = rankPrograms(currentNational.conact(currentPremium, currentLocal));
+  const rankedPrograms = rankPrograms(currentNational.conact(currentLocal));
+  // const rankedPrograms = rankPrograms(currentNational.conact(currentPremium, currentLocal));
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };
