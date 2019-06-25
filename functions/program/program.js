@@ -105,7 +105,7 @@ module.exports.getAll = async event => {
     event.headers,
   );
   console.log(locationResult);
-  const location = JSON.parse(JSON.parse(locationsResult.Payload).body);
+  const location = JSON.parse(JSON.parse(locationResult.Payload).body);
   console.log(location);
   // location.channels.local
   // location.channels.premium
