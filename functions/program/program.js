@@ -271,7 +271,7 @@ module.exports.syncNew = async event => {
   }
 };
 
-async function syncChannels(channels, zip) {
+async function syncChannels(channelsString, zip, channels) {
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()
     .utc()
@@ -281,7 +281,7 @@ async function syncChannels(channels, zip) {
     .toString();
   const hours = 8;
 
-  const params = { channels, startTime, hours };
+  const params = { channels: channelsString, startTime, hours };
   const headers = {
     Cookie: `dtve-prospect-zip=${zip || zipDefault};`,
   };
@@ -289,7 +289,7 @@ async function syncChannels(channels, zip) {
   let result = await axios({ method, url, params, headers });
 
   let { schedule } = result.data;
-  let allPrograms = build(schedule, zip);
+  let allPrograms = build(schedule, zip, channels);
   let transformedPrograms = transformPrograms(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
 }
