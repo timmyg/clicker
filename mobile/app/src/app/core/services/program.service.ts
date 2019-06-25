@@ -12,7 +12,7 @@ export class ProgramService {
   constructor(private httpClient: HttpClient) {}
 
   getPrograms(location: Location): Observable<Program[]> {
-    return this.httpClient.get<Program[]>(this.prefix).pipe(
+    return this.httpClient.get<Program[]>(`${this.prefix}/location/${location.id}`).pipe(
       map((programs: Program[]) => {
         programs.forEach(program => {
           let icon;

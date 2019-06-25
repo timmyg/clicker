@@ -13,8 +13,8 @@ export class ProgramsEffects {
   @Effect()
   getAllPrograms$: Observable<Action> = this.actions$.pipe(
     ofType(ProgramActions.GET_PROGRAMS),
-    switchMap(() =>
-      this.programService.getPrograms().pipe(
+    switchMap((action: ProgramActions.GetAllByLocation) =>
+      this.programService.getPrograms(action.payload).pipe(
         map((programs: Program[]) => new ProgramActions.GetAllByLocationSuccess(programs)),
         catchError(err => of(new ProgramActions.GetAllByLocationFail(err))),
       ),
