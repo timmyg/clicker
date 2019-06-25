@@ -134,7 +134,7 @@ module.exports.getAll = async event => {
   console.log(location);
   // run in parallel
   // [currentNational, nextNational, currentPremium, nextPremium, currentLocal, nextLocal] = await Promise.all([
-  [currentNational, nextNational, currentLocal, nextLocal] = await Promise.all([
+  [currentNational, currentLocal] = await Promise.all([
     // find all national (no zip)
     Program.scan()
       .filter('start')
@@ -147,17 +147,17 @@ module.exports.getAll = async event => {
       .null()
       .all()
       .exec(),
-    Program.scan()
-      .filter('start')
-      .lt(in25Mins)
-      .and()
-      .filter('end')
-      .gt(in25Mins)
-      .and()
-      .filter('zip')
-      .null()
-      .all()
-      .exec(),
+    // Program.scan()
+    //   .filter('start')
+    //   .lt(in25Mins)
+    //   .and()
+    //   .filter('end')
+    //   .gt(in25Mins)
+    //   .and()
+    //   .filter('zip')
+    //   .null()
+    //   .all()
+    //   .exec(),
 
     // find all premium (no zip)
     // Program.scan()
@@ -196,22 +196,26 @@ module.exports.getAll = async event => {
       .and()
       .filter('zip')
       .eq(location.zip)
+      .filter('mainCategory')
+      .eq('Sports')
       .all()
       .exec(),
-    Program.scan()
-      .filter('start')
-      .lt(in25Mins)
-      .and()
-      .filter('end')
-      .gt(in25Mins)
-      .and()
-      .filter('channel')
-      .in(location.channels.local)
-      .and()
-      .filter('zip')
-      .eq(location.zip)
-      .all()
-      .exec(),
+    // Program.scan()
+    //   .filter('start')
+    //   .lt(in25Mins)
+    //   .and()
+    //   .filter('end')
+    //   .gt(in25Mins)
+    //   .and()
+    //   .filter('channel')
+    //   .in(location.channels.local)
+    //   .and()
+    //   .filter('zip')
+    //   .eq(location.zip)
+    //   .filter('mainCategory')
+    //   .eq('Sports')
+    //   .all()
+    //   .exec(),
   ]);
   console.timeEnd('current + next Programming');
   // console.log({ currentProgramming });
