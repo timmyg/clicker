@@ -5,7 +5,7 @@ const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond, invokeFunction, invokeFunctionSync } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
-let Program, ProgrammingArea;
+let Program;
 require('dotenv').config();
 const nationalChannels = [
   // { channel: 5, channelTitle: 'NBC' },
@@ -88,45 +88,29 @@ function init() {
       },
     },
   );
-
-  // ProgrammingArea = dynamoose.model(
-  //   process.env.tableProgrammingArea,
-  //   {
-  //     zip: {
-  //       type: Number,
-  //       hashKey: true,
-  //     },
-  //     localChannels: [Number],
-  //     localSportsChannels: [Number],
-  //   },
-  //   {
-  //     timestamps: true,
-  //   },
-  // );
 }
 
 module.exports.health = async event => {
   return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
 };
 
-module.exports.createAreaProgramming = async event => {
-  const params = getPathParameters(event);
-  const body = getBody(event);
-  const { areaId } = params;
-
-  const programmingArea = await ProgrammingArea.create({ id: areaId, ...body });
-  return respond(201, programmingArea);
-};
-
-module.exports.getAreaProgramming = async event => {
-  const params = getPathParameters(event);
-  const { areaId } = params;
-
-  const programmingArea = await ProgrammingArea.get({ id: areaId });
-  return respond(200, programmingArea);
-};
-
 module.exports.getAll = async event => {
+  const params = getPathParameters(event);
+  const { locationId } = params;
+
+  const locationResult = await invokeFunctionSync(
+    `location-${process.env.stage}-get`,
+    null,
+    { id: locationId },
+    event.headers,
+  );
+  console.log(locationResult);
+  const location = JSON.parse(JSON.parse(locationsResult.Payload).body);
+  console.log(location);
+  // location.channels.local
+  // location.channels.premium
+  // location.zip
+
   init();
   const initialChannels = nationalChannels;
   // get all programs for right now
@@ -137,8 +121,15 @@ module.exports.getAll = async event => {
       .unix() * 1000;
 
   console.time('current + next Programming');
+  for (let i = 0; i < location.channels.local.length; i++) {
+    location.channels.local[i] = parseInt(location.channels.local[i].replace(/-.*$/, ''));
+  }
+  for (let i = 0; i < location.channels.premium.length; i++) {
+    location.channels.premium[i] = parseInt(location.channels.premium[i].replace(/-.*$/, ''));
+  }
   // run in parallel
-  [currentProgramming, nextProgramming] = await Promise.all([
+  [currentNational, nextNational, currentPremium, nextPremium, currentLocal, nextLocal] = await Promise.all([
+    // find all national (no zip)
     Program.scan()
       .filter('start')
       .lt(now)
@@ -146,8 +137,8 @@ module.exports.getAll = async event => {
       .filter('end')
       .gt(now)
       .and()
-      .filter('zip') // Zip is hardcoded!
-      .eq(zipDefault)
+      .filter('zip')
+      .null()
       .all()
       .exec(),
     Program.scan()
@@ -157,8 +148,62 @@ module.exports.getAll = async event => {
       .filter('end')
       .gt(in25Mins)
       .and()
-      .filter('zip') // Zip is hardcoded!
-      .eq(zipDefault)
+      .filter('zip')
+      .null()
+      .all()
+      .exec(),
+
+    // find all premium (no zip)
+    Program.scan()
+      .filter('start')
+      .lt(now)
+      .and()
+      .filter('end')
+      .gt(now)
+      .and()
+      .filter('channel')
+      .in(location.channels.premium)
+      .all()
+      .exec(),
+    Program.scan()
+      .filter('start')
+      .lt(in25Mins)
+      .and()
+      .filter('end')
+      .gt(in25Mins)
+      .and()
+      .filter('channel')
+      .in(location.channels.premium)
+      .all()
+      .exec(),
+
+    // find all local (with zip)
+    Program.scan()
+      .filter('start')
+      .lt(now)
+      .and()
+      .filter('end')
+      .gt(now)
+      .and()
+      .filter('channel')
+      .in(location.channels.local)
+      .and()
+      .filter('zip')
+      .eq(location.zip)
+      .all()
+      .exec(),
+    Program.scan()
+      .filter('start')
+      .lt(in25Mins)
+      .and()
+      .filter('end')
+      .gt(in25Mins)
+      .and()
+      .filter('channel')
+      .in(location.channels.local)
+      .and()
+      .filter('zip')
+      .eq(location.zip)
       .all()
       .exec(),
   ]);
@@ -170,33 +215,33 @@ module.exports.getAll = async event => {
   // const nextProgramming =
   // console.timeEnd('nextProgramming');
 
-  console.time('nextProgram');
-  // add in next program if within 15 mins
-  initialChannels.forEach((p, index, arr) => {
-    // find if in current programming
-    const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
-    // program may not be in guide yet
-    if (currentProgram) {
-      // keep minor channel if has one
-      currentProgram.channelMinor = p.channelMinor;
+  // console.time('nextProgram');
+  // // add in next program if within 15 mins
+  // initialChannels.forEach((p, index, arr) => {
+  //   // find if in current programming
+  //   const currentProgram = currentProgramming.find(cp => cp.channel === p.channel);
+  //   // program may not be in guide yet
+  //   if (currentProgram) {
+  //     // keep minor channel if has one
+  //     currentProgram.channelMinor = p.channelMinor;
 
-      // find if in next programming
-      const nextProgram = nextProgramming.find(np => np.channel === p.channel);
+  //     // find if in next programming
+  //     const nextProgram = nextProgramming.find(np => np.channel === p.channel);
 
-      // if next program is not the same as current one
-      if (currentProgram && nextProgram && nextProgram.programId !== currentProgram.programId) {
-        currentProgram.nextProgramTitle = nextProgram.title;
-        currentProgram.nextProgramStart = nextProgram.start;
-      }
-      if (currentProgram) {
-        arr[index] = currentProgram;
-      }
-    }
-  });
-  console.timeEnd('nextProgram');
+  //     // if next program is not the same as current one
+  //     if (currentProgram && nextProgram && nextProgram.programId !== currentProgram.programId) {
+  //       currentProgram.nextProgramTitle = nextProgram.title;
+  //       currentProgram.nextProgramStart = nextProgram.start;
+  //     }
+  //     if (currentProgram) {
+  //       arr[index] = currentProgram;
+  //     }
+  //   }
+  // });
+  // console.timeEnd('nextProgram');
 
   console.time('rank');
-  const rankedPrograms = rankPrograms(initialChannels);
+  const rankedPrograms = rankPrograms(currentNational.conact(currentPremium, currentLocal));
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };

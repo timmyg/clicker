@@ -75,7 +75,7 @@ functions:
     handler: program.getAll
     events:
       - http:
-          path: ''
+          path: 'location/{locationId}'
           method: get
           cors:
             origin: '*'

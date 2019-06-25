@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { Program } from '../../state/program/program.model';
+import { Location } from '../../state/location/location.model';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -10,8 +11,7 @@ export class ProgramService {
   private prefix = `programs`;
   constructor(private httpClient: HttpClient) {}
 
-  getPrograms(): Observable<Program[]> {
-    // return this.httpClient.get<Program[]>(this.prefix);
+  getPrograms(location: Location): Observable<Program[]> {
     return this.httpClient.get<Program[]>(this.prefix).pipe(
       map((programs: Program[]) => {
         programs.forEach(program => {
