@@ -3,7 +3,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { respond, invokeFunction, invokeFunctionSync } = require('serverless-helpers');
+const { respond, invokeFunction, invokeFunctionSync, getPathParameters } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program;
 require('dotenv').config();
