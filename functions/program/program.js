@@ -241,27 +241,10 @@ function rank(program) {
 module.exports.syncNew = async event => {
   try {
     init();
-    const url = `${directvEndpoint}/channelschedule`;
-    const startTime = moment()
-      .utc()
-      .subtract(4, 'hours')
-      .minutes(0)
-      .seconds(0)
-      .toString();
-    const hours = 8;
 
     // sync national channels
     const channels = nationalChannels.map(c => c.channel).join(',');
-    const params = { channels, startTime, hours };
-    const headers = {
-      Cookie: `dtve-prospect-zip=${zipDefault};`,
-    };
-    const method = 'get';
-    let result = await axios({ method, url, params, headers });
-    let { schedule } = result.data;
-    let allPrograms = build(schedule, null);
-    let transformedPrograms = transformPrograms(allPrograms);
-    let dbResult = await Program.batchPut(transformedPrograms);
+    await syncChannels(channels)
 
     // sync local channels
     const locationsResult = await invokeFunctionSync(
@@ -270,35 +253,46 @@ module.exports.syncNew = async event => {
       null,
       event.headers,
     );
-    console.log(locationsResult);
     const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
-    console.log(locationsResult);
     for (const [zip, localChannels] of Object.entries(locationResultBody)) {
-      // console.log(zip, localChannels);
       let strippedChannels = localChannels;
       // replace dash, if there is one
       for (let i = 0; i < strippedChannels.length; i++) {
         strippedChannels[i] = strippedChannels[i].replace(/-.*$/, '');
       }
       const strippedChannelsString = strippedChannels.join(',');
-      const localHeaders = {
-        Cookie: `dtve-prospect-zip=${zip};`,
-      };
-      const params = { channels: strippedChannelsString, startTime, hours };
-      result = await axios({ method, url, params, headers: localHeaders });
-
-      allPrograms = build(result.data.schedule, zip, localChannels);
-
-      transformedPrograms = transformPrograms(allPrograms);
-      dbResult = await Program.batchPut(transformedPrograms);
+      await syncChannels(strippedChannelsString, zip)
     }
 
-    return respond(201, locationsResult.length);
+    return respond(201, {count: locationsResult.length + 1});
   } catch (e) {
     console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
   }
 };
+
+async syncChannels(channels, zip) {
+  const url = `${directvEndpoint}/channelschedule`;
+  const startTime = moment()
+    .utc()
+    .subtract(4, 'hours')
+    .minutes(0)
+    .seconds(0)
+    .toString();
+  const hours = 8;
+
+  const params = { channels, startTime, hours };
+  const headers = {
+    Cookie: `dtve-prospect-zip=${zip || zipDefault};`,
+  };
+  const method = 'get';
+  let result = await axios({ method, url, params, headers });
+
+  let { schedule } = result.data;
+  let allPrograms = build(schedule, null);
+  let transformedPrograms = transformPrograms(allPrograms);
+  let dbResult = await Program.batchPut(transformedPrograms);
+}
 
 module.exports.syncDescriptions = async event => {
   // find programs by unique programID without descriptions
