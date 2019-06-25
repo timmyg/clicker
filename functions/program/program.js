@@ -247,8 +247,8 @@ module.exports.getAll = async event => {
   // console.timeEnd('nextProgram');
 
   console.time('rank');
-  const rankedPrograms = rankPrograms(currentNational.conact(currentLocal));
-  // const rankedPrograms = rankPrograms(currentNational.conact(currentPremium, currentLocal));
+  const rankedPrograms = rankPrograms(currentNational.concat(currentLocal));
+  // const rankedPrograms = rankPrograms(currentNational.concat(currentPremium, currentLocal));
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };
