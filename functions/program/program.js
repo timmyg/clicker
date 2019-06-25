@@ -244,7 +244,7 @@ module.exports.syncNew = async event => {
 
     // sync national channels
     const channels = nationalChannels.map(c => c.channel).join(',');
-    await syncChannels(channels)
+    await syncChannels(channels);
 
     // sync local channels
     const locationsResult = await invokeFunctionSync(
@@ -261,17 +261,17 @@ module.exports.syncNew = async event => {
         strippedChannels[i] = strippedChannels[i].replace(/-.*$/, '');
       }
       const strippedChannelsString = strippedChannels.join(',');
-      await syncChannels(strippedChannelsString, zip)
+      await syncChannels(strippedChannelsString, zip);
     }
 
-    return respond(201, {count: locationsResult.length + 1});
+    return respond(201, { count: locationsResult.length + 1 });
   } catch (e) {
     console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
   }
 };
 
-async syncChannels(channels, zip) {
+async function syncChannels(channels, zip) {
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()
     .utc()
