@@ -133,7 +133,8 @@ module.exports.getAll = async event => {
   }
   console.log(location);
   // run in parallel
-  [currentNational, nextNational, currentPremium, nextPremium, currentLocal, nextLocal] = await Promise.all([
+  // [currentNational, nextNational, currentPremium, nextPremium, currentLocal, nextLocal] = await Promise.all([
+  [currentNational, nextNational, currentLocal, nextLocal] = await Promise.all([
     // find all national (no zip)
     Program.scan()
       .filter('start')
@@ -159,28 +160,28 @@ module.exports.getAll = async event => {
       .exec(),
 
     // find all premium (no zip)
-    Program.scan()
-      .filter('start')
-      .lt(now)
-      .and()
-      .filter('end')
-      .gt(now)
-      .and()
-      .filter('channel')
-      .in(location.channels.premium)
-      .all()
-      .exec(),
-    Program.scan()
-      .filter('start')
-      .lt(in25Mins)
-      .and()
-      .filter('end')
-      .gt(in25Mins)
-      .and()
-      .filter('channel')
-      .in(location.channels.premium)
-      .all()
-      .exec(),
+    // Program.scan()
+    //   .filter('start')
+    //   .lt(now)
+    //   .and()
+    //   .filter('end')
+    //   .gt(now)
+    //   .and()
+    //   .filter('channel')
+    //   .in(location.channels.premium)
+    //   .all()
+    //   .exec(),
+    // Program.scan()
+    //   .filter('start')
+    //   .lt(in25Mins)
+    //   .and()
+    //   .filter('end')
+    //   .gt(in25Mins)
+    //   .and()
+    //   .filter('channel')
+    //   .in(location.channels.premium)
+    //   .all()
+    //   .exec(),
 
     // find all local (with zip)
     Program.scan()
