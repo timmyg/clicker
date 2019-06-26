@@ -422,8 +422,9 @@ module.exports.syncDescriptions = async event => {
     .filter('end')
     .gt(moment().unix() * 1000)
     .filter('synced')
-    .not()
-    .eq(true)
+    .null()
+    // .not()
+    // .eq(true)
     .all()
     .exec();
 
@@ -454,7 +455,13 @@ module.exports.syncDescriptions = async event => {
       });
       const response = await Program.batchPut(programsToUpdate);
     } catch (e) {
+      console.log('sync description failed');
       console.error(e);
+      programsToUpdate.forEach((part, index, arr) => {
+        // arr[index]['description'] = description;
+        arr[index]['synced'] = false;
+      });
+      const response = await Program.batchPut(programsToUpdate);
     }
   }
   return respond(200);
