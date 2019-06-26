@@ -452,6 +452,7 @@ module.exports.syncDescriptions = async event => {
         arr[index]['description'] = description;
         arr[index]['synced'] = true;
       });
+      const response = await Program.batchPut(programsToUpdate);
     } catch (e) {
       console.error(e);
     }
