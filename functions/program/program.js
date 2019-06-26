@@ -457,6 +457,8 @@ module.exports.syncDescriptions = async event => {
     } catch (e) {
       console.log('sync description failed');
       console.error(e);
+      // TODO duplicate codde
+      const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
       programsToUpdate.forEach((part, index, arr) => {
         // arr[index]['description'] = description;
         arr[index]['synced'] = false;
