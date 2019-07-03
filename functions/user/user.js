@@ -43,6 +43,11 @@ module.exports.health = async event => {
   return respond();
 };
 
+module.exports.tokenPlans = async event => {
+  const plans = [{ tokens: 2, dollars: 10 }, { tokens: 5, dollars: 20 }, { tokens: 8, dollars: 25 }];
+  return respond(200, plans);
+};
+
 module.exports.create = async event => {
   const userId = uuid();
   await Wallet.create({ userId, tokens: initialTokens });

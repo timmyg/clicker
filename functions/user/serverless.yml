@@ -91,6 +91,18 @@ functions:
               - partner
               - authorization
               - content-type
+  health:
+    handler: user.tokenPlans
+    events:
+      - http:
+          path: plans
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   create:
     handler: user.create
     events:
