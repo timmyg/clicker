@@ -91,7 +91,7 @@ functions:
               - partner
               - authorization
               - content-type
-  health:
+  tokenPlans:
     handler: user.tokenPlans
     events:
       - http:
