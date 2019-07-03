@@ -5,6 +5,11 @@ const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 const initialTokens = 10;
+const plans = [
+  { tokens: 2, dollars: 10, id: 'bb23310b-3fec-4873-8cdf-279ffcd31b32' },
+  { tokens: 5, dollars: 20, id: '40167d6a-1626-456a-8a35-f60c91c05120' },
+  { tokens: 8, dollars: 25, id: 'd25f930b-7c3a-4ea2-b41b-9ae959135c6a' },
+];
 
 const Wallet = dynamoose.model(
   process.env.tableWallet,
@@ -44,7 +49,6 @@ module.exports.health = async event => {
 };
 
 module.exports.tokenPlans = async event => {
-  const plans = [{ tokens: 2, dollars: 10 }, { tokens: 5, dollars: 20 }, { tokens: 8, dollars: 25 }];
   return respond(200, plans);
 };
 
@@ -120,14 +124,18 @@ module.exports.removeCard = async event => {
 
 module.exports.replenish = async event => {
   const userId = getUserId(event);
-  const { tokens } = getBody(event);
+  const { planId } = getPathParameters(event);
   const wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) {
+    return respond(200, `Couldn't find plan: ${planId}`);
+  }
 
   // charge via stripe
   const charge = await stripe.charges.create({
-    amount: tokens * 100,
+    amount: plan.amount * 100,
     currency: 'usd',
     customer: wallet.stripeCustomer,
   });
@@ -135,7 +143,7 @@ module.exports.replenish = async event => {
   // TODO audit
 
   // update wallet
-  const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  const updatedWallet = await Wallet.update({ userId }, { $ADD: { plan.tokens } }, { returnValues: 'ALL_NEW' });
 
   return respond(200, updatedWallet);
 };

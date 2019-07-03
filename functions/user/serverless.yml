@@ -155,7 +155,7 @@ functions:
     handler: user.replenish
     events:
       - http:
-          path: 'replenish'
+          path: 'replenish/{planId}'
           method: post
           cors:
             origin: '*'
