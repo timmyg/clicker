@@ -133,9 +133,11 @@ module.exports.replenish = async event => {
     return respond(200, `Couldn't find plan: ${planId}`);
   }
 
+  const { amount, tokens } = plan;
+
   // charge via stripe
   const charge = await stripe.charges.create({
-    amount: plan.amount * 100,
+    amount: amount * 100,
     currency: 'usd',
     customer: wallet.stripeCustomer,
   });
@@ -143,7 +145,7 @@ module.exports.replenish = async event => {
   // TODO audit
 
   // update wallet
-  const updatedWallet = await Wallet.update({ userId }, { $ADD: { plan.tokens } }, { returnValues: 'ALL_NEW' });
+  const updatedWallet = await Wallet.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
   return respond(200, updatedWallet);
 };

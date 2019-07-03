@@ -21,6 +21,7 @@ export class WalletPage {
   elements: Elements;
   card: StripeElement;
   userCard$: Observable<Card>;
+  plans$: Observable<Plan[]>;
   waiting: boolean;
 
   // optional parameters

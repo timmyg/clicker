@@ -33,18 +33,18 @@ export class CoinsComponent implements OnInit {
   ngOnInit() {}
 
   async onClick() {
-    if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
-      this.walletModal = await this.modalController.create({
-        component: WalletPage,
-      });
-      return await this.walletModal.present();
-    } else {
-      const toast = await this.toastController.create({
-        message: `Adding tokens is not available today.`,
-        duration: 2000,
-        cssClass: 'ion-text-center',
-      });
-      toast.present();
-    }
+    // if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
+    this.walletModal = await this.modalController.create({
+      component: WalletPage,
+    });
+    return await this.walletModal.present();
+    // } else {
+    //   const toast = await this.toastController.create({
+    //     message: `Adding tokens is not available today.`,
+    //     duration: 2000,
+    //     cssClass: 'ion-text-center',
+    //   });
+    //   toast.present();
+    // }
   }
 }
