@@ -189,6 +189,15 @@
         ]
       },
       {
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+          "cordova.InAppBrowser.open",
+          "window.open"
+        ]
+      },
+      {
         "id": "cordova-plugin-file.ProgressEvent",
         "file": "plugins/cordova-plugin-file/www/ProgressEvent.js",
         "pluginId": "cordova-plugin-file",
@@ -210,6 +219,7 @@
     {
       "cordova-plugin-file": "6.0.1",
       "cordova-plugin-file-transfer": "1.7.1",
+      "cordova-plugin-inappbrowser": "3.0.0",
       "cordova-plugin-ionic": "5.3.0"
     };
     // BOTTOM OF METADATA

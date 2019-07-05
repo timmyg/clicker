@@ -22291,29 +22291,20 @@ var CoinsComponent = /** @class */ (function () {
     CoinsComponent.prototype.ngOnInit = function () { };
     CoinsComponent.prototype.onClick = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, toast;
+            var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!(this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman')))) return [3 /*break*/, 3];
+                        // if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
                         _a = this;
                         return [4 /*yield*/, this.modalController.create({
                                 component: _wallet_page__WEBPACK_IMPORTED_MODULE_1__["WalletPage"],
                             })];
                     case 1:
+                        // if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
                         _a.walletModal = _b.sent();
                         return [4 /*yield*/, this.walletModal.present()];
                     case 2: return [2 /*return*/, _b.sent()];
-                    case 3: return [4 /*yield*/, this.toastController.create({
-                            message: "Adding tokens is not available today.",
-                            duration: 2000,
-                            cssClass: 'ion-text-center',
-                        })];
-                    case 4:
-                        toast = _b.sent();
-                        toast.present();
-                        _b.label = 5;
-                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -22393,7 +22384,7 @@ var WalletModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title> Wallet </ion-title>\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"onClose()\"> <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon> </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n<ion-content padding>\n  <section [hidden]=\"!(userCard$ | async)\">\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onAmountChange($event)\">\n        <ion-list-header> Choose Amount </ion-list-header>\n        <ion-item *ngFor=\"let f of fundingAmounts\">\n          <ion-label flex ion-justify-items-end>\n            <span>${{ f.dollars }}</span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span padding-start>{{ f.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ f.dollars }}\" [disabled]=\"waiting\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <ion-button expand=\"block\" color=\"success\" (click)=\"purchase()\" [disabled]=\"waiting\">Purchase</ion-button>\n    <p class=\"ion-text-center\">\n      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a\n        color=\"danger\"\n        (click)=\"removeCard()\"\n        >Remove Card</a\n      >\n    </p>\n  </section>\n  <section [hidden]=\"userCard$ | async\">\n    <p class=\"ion-text-center \">Please add a credit card below</p>\n    <form novalidate (ngSubmit)=\"addCard()\">\n      <div id=\"card-element\" class=\"field \"></div>\n      <ion-button type=\"submit\" expand=\"block\" color=\"success\" [disabled]=\"waiting\">Add</ion-button>\n    </form>\n  </section>\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title> Wallet </ion-title>\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"onClose()\"> <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon> </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n<ion-content padding>\n  <section [hidden]=\"!(userCard$ | async)\">\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onAmountChange($event)\">\n        <ion-list-header> Choose Amount </ion-list-header>\n        <ion-item *ngFor=\"let f of fundingAmounts\">\n          <ion-label flex ion-justify-items-end>\n            <span>${{ f.dollars }}</span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span padding-start>{{ f.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ f.dollars }}\" [disabled]=\"waiting\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <ion-button expand=\"block\" color=\"success\" (click)=\"purchase()\" [disabled]=\"waiting\">Purchase</ion-button>\n    <p class=\"ion-text-center\">\n      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a\n        color=\"danger\"\n        (click)=\"removeCard()\"\n        >Remove Card</a\n      >\n    </p>\n  </section>\n  <section [hidden]=\"userCard$ | async\">\n    <p class=\"ion-text-center \">To purchase tokens, you first must add a credit card</p>\n    <form novalidate (ngSubmit)=\"addCard()\">\n      <div id=\"card-element\" class=\"field \"></div>\n      <ion-button type=\"submit\" expand=\"block\" color=\"success\" [disabled]=\"waiting\">Add</ion-button>\n    </form>\n  </section>\n</ion-content>\n"
 
 /***/ }),
 

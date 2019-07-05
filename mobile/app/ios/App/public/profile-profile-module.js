@@ -1420,7 +1420,7 @@ var ProfilePageModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>My Reservations</ion-title>\n    <ion-buttons slot=\"start\">\n      <ion-button (click)=\"onLogout()\" *ngIf=\"(user$ | async)?.guest !== true; else loggedOut\">\n        <ion-icon name=\"person\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n    <ion-buttons slot=\"end\" padding-end> <app-coins></app-coins> </ion-buttons>\n    <ng-template #loggedOut> <ion-button (click)=\"login()\">Login</ion-button> </ng-template>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content margin-top>\n  <ion-row class=\"ion-justify-content-center\" margin-top>\n    <img src=\"https://clicker-brand.s3.amazonaws.com/logo.png\" alt=\"Clicker logo\" class=\"logo\" />\n  </ion-row>\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\">\n    <ion-fab-button color=\"success\" (click)=\"createNewReservation()\"> <ion-icon name=\"add\"></ion-icon> </ion-fab-button>\n  </ion-fab>\n  <!-- <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\">\n    <ion-fab-button color=\"primary\" (click)=\"openFeedback()\"> <ion-icon name=\"chatbubbles\"></ion-icon> </ion-fab-button>\n  </ion-fab> -->\n  <!-- <ion-button size=\"small\" color=\"light\" (click)=\"openFeedback()\">Contact Us</ion-button> -->\n\n  <ion-refresher slot=\"fixed\" [pullMax]=\"300\" (ionRefresh)=\"doRefresh($event)\">\n    <ion-refresher-content\n      pullingIcon=\"arrow-down\"\n      pullingText=\"Pull to refresh\"\n      refreshingSpinner=\"crescent\"\n      refreshingText=\"\"\n    >\n    </ion-refresher-content>\n  </ion-refresher>\n\n  <ion-grid padding-horizontal padding-top size=\"12\">\n    <!-- <ion-row margin-bottom> <b>My Reservations</b> </ion-row> -->\n    <ion-row *ngIf=\"(isReservationsLoading$ | async); else ready\" margin-vertical>\n      <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n    </ion-row>\n    <ng-template #ready>\n      <div margin-bottom *ngIf=\"(reservations$ | async).length > 0; else empty\">\n        <div *ngFor=\"let r of (reservations$ | async)\">\n          <app-reservation [reservation]=\"r\" (onModify)=\"onModify($event)\"></app-reservation>\n        </div>\n      </div>\n      <ng-template #empty>\n        <div padding-horizontal class=\"ion-text-center\">\n          <p>No active reservations</p>\n          <p><a (click)=\"createNewReservation()\">Change the channel</a></p>\n        </div>\n      </ng-template>\n    </ng-template>\n  </ion-grid>\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>My Reservations</ion-title>\n    <!-- <ion-buttons slot=\"start\">\n      <ion-button (click)=\"onLogout()\" *ngIf=\"(user$ | async)?.guest !== true; else loggedOut\">\n        <ion-icon name=\"person\"></ion-icon>\n      </ion-button>\n    </ion-buttons> -->\n    <ion-buttons slot=\"end\" padding-end> <app-coins></app-coins> </ion-buttons>\n    <ng-template #loggedOut> <!-- <ion-button (click)=\"login()\">Login</ion-button>  --> </ng-template>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content margin-top>\n  <ion-row class=\"ion-justify-content-center\" margin-top>\n    <img src=\"https://clicker-brand.s3.amazonaws.com/logo.png\" alt=\"Clicker logo\" class=\"logo\" />\n  </ion-row>\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\">\n    <ion-fab-button color=\"success\" (click)=\"createNewReservation('fab')\">\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n  <ion-fab vertical=\"bottom\" horizontal=\"start\" slot=\"fixed\">\n    <!-- <ion-fab-button color=\"primary\" (click)=\"openFeedback()\"> <ion-icon name=\"chatbubbles\"></ion-icon> </ion-fab-button> -->\n    <a href=\"mailto:hello@tryclicker.com\">\n      <ion-fab-button color=\"primary\"> <ion-icon name=\"chatbubbles\"></ion-icon> </ion-fab-button>\n    </a>\n  </ion-fab>\n  <!-- <ion-button size=\"small\" color=\"light\" (click)=\"openFeedback()\">Contact Us</ion-button> -->\n\n  <ion-refresher slot=\"fixed\" [pullMax]=\"300\" (ionRefresh)=\"doRefresh($event)\">\n    <ion-refresher-content\n      pullingIcon=\"arrow-down\"\n      pullingText=\"Pull to refresh\"\n      refreshingSpinner=\"crescent\"\n      refreshingText=\"\"\n    >\n    </ion-refresher-content>\n  </ion-refresher>\n\n  <ion-grid padding-horizontal padding-top size=\"12\">\n    <!-- <ion-row margin-bottom> <b>My Reservations</b> </ion-row> -->\n    <ion-row *ngIf=\"(isReservationsLoading$ | async); else ready\" margin-vertical>\n      <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n    </ion-row>\n    <ng-template #ready>\n      <div margin-bottom *ngIf=\"(reservations$ | async).length > 0; else empty\">\n        <div *ngFor=\"let r of (reservations$ | async)\">\n          <app-reservation [reservation]=\"r\" (onModify)=\"onModify($event)\"></app-reservation>\n        </div>\n      </div>\n      <ng-template #empty>\n        <div padding-horizontal class=\"ion-text-center\"><p>No active reservations</p></div>\n      </ng-template>\n      <p class=\"ion-text-center\"><a (click)=\"createNewReservation('link')\">Change the channel</a></p>\n    </ng-template>\n  </ion-grid>\n</ion-content>\n"
 
 /***/ }),
 
@@ -1457,14 +1457,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var ng_intercom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ng-intercom */ "./node_modules/ng-intercom/fesm5/ng-intercom.js");
-/* harmony import */ var _auth_login_login_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../auth/login/login.component */ "./src/app/auth/login/login.component.ts");
-/* harmony import */ var _core_services_user_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../core/services/user.service */ "./src/app/core/services/user.service.ts");
-/* harmony import */ var src_environments_environment_production__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! src/environments/environment.production */ "./src/environments/environment.production.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
-/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
-/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../globals */ "./src/app/globals.ts");
+/* harmony import */ var _auth_login_login_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../auth/login/login.component */ "./src/app/auth/login/login.component.ts");
+/* harmony import */ var _core_services_user_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../core/services/user.service */ "./src/app/core/services/user.service.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1521,8 +1519,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
-
+// import { Intercom } from 'ng-intercom';
 
 
 
@@ -1530,14 +1527,15 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var ProfilePage = /** @class */ (function () {
-    function ProfilePage(store, modalController, alertController, storage, router, route, intercom, toastController, userService, actions$, platform, actionSheetController, segment, globals) {
+    function ProfilePage(store, modalController, alertController, storage, router, route, 
+    // public intercom: Intercom,
+    toastController, userService, actions$, platform, actionSheetController, segment, globals) {
         this.store = store;
         this.modalController = modalController;
         this.alertController = alertController;
         this.storage = storage;
         this.router = router;
         this.route = route;
-        this.intercom = intercom;
         this.toastController = toastController;
         this.userService = userService;
         this.actions$ = actions$;
@@ -1570,7 +1568,7 @@ var ProfilePage = /** @class */ (function () {
                     case 0:
                         _a = this;
                         return [4 /*yield*/, this.modalController.create({
-                                component: _auth_login_login_component__WEBPACK_IMPORTED_MODULE_12__["LoginComponent"],
+                                component: _auth_login_login_component__WEBPACK_IMPORTED_MODULE_11__["LoginComponent"],
                             })];
                     case 1:
                         _a.loginModal = _b.sent();
@@ -1580,19 +1578,13 @@ var ProfilePage = /** @class */ (function () {
             });
         });
     };
-    ProfilePage.prototype.openFeedback = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                this.intercom.boot({ app_id: src_environments_environment_production__WEBPACK_IMPORTED_MODULE_14__["environment"].intercom.appId });
-                this.intercom.showNewMessage();
-                this.intercom.onHide(function () {
-                    _this.intercom.shutdown();
-                });
-                return [2 /*return*/];
-            });
-        });
-    };
+    // async openFeedback() {
+    //   this.intercom.boot({ app_id: environment.intercom.appId });
+    //   this.intercom.showNewMessage();
+    //   this.intercom.onHide(() => {
+    //     this.intercom.shutdown();
+    //   });
+    // }
     ProfilePage.prototype.onModify = function (reservation) {
         if (reservation.minutes > 0) {
             var endTime = moment__WEBPACK_IMPORTED_MODULE_10__(reservation.end);
@@ -1615,7 +1607,7 @@ var ProfilePage = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.toastController.create({
                             message: message,
-                            duration: 2000,
+                            duration: 4000,
                             cssClass: 'ion-text-center',
                         })];
                     case 1:
@@ -1626,9 +1618,15 @@ var ProfilePage = /** @class */ (function () {
             });
         });
     };
-    ProfilePage.prototype.createNewReservation = function () {
+    ProfilePage.prototype.createNewReservation = function (source) {
         this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["Start"]());
         this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
+        if (source === 'fab') {
+            this.segment.track(this.globals.events.reservation.clickedButton);
+        }
+        else if (source === 'link') {
+            this.segment.track(this.globals.events.reservation.clickedLink);
+        }
     };
     // this will make sure it disappears from screen if you stay on screen
     // ... definitely a better way to do this
@@ -1718,7 +1716,7 @@ var ProfilePage = /** @class */ (function () {
         this.store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_8__["Refresh"]());
         // zip(
         this.actions$
-            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_16__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["GET_RESERVATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["take"])(1))
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_14__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_7__["GET_RESERVATIONS_SUCCESS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_13__["take"])(1))
             .subscribe(function () {
             event.target.complete();
         });
@@ -1788,14 +1786,13 @@ var ProfilePage = /** @class */ (function () {
             _ionic_storage__WEBPACK_IMPORTED_MODULE_6__["Storage"],
             _angular_router__WEBPACK_IMPORTED_MODULE_9__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_9__["ActivatedRoute"],
-            ng_intercom__WEBPACK_IMPORTED_MODULE_11__["Intercom"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["ToastController"],
-            _core_services_user_service__WEBPACK_IMPORTED_MODULE_13__["UserService"],
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_16__["Actions"],
+            _core_services_user_service__WEBPACK_IMPORTED_MODULE_12__["UserService"],
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_14__["Actions"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["Platform"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["ActionSheetController"],
-            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_17__["SegmentService"],
-            _globals__WEBPACK_IMPORTED_MODULE_18__["Globals"]])
+            ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_15__["SegmentService"],
+            _globals__WEBPACK_IMPORTED_MODULE_16__["Globals"]])
     ], ProfilePage);
     return ProfilePage;
 }());
@@ -1934,38 +1931,6 @@ var ReservationComponent = /** @class */ (function () {
     return ReservationComponent;
 }());
 
-
-
-/***/ }),
-
-/***/ "./src/environments/environment.production.ts":
-/*!****************************************************!*\
-  !*** ./src/environments/environment.production.ts ***!
-  \****************************************************/
-/*! exports provided: environment */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
-var environment = {
-    production: true,
-    apiBaseUrl: 'https://api.tryclicker.com',
-    packageId: 'io.clickertv.app',
-    auth0: {
-        domain: 'clikr.auth0.com',
-        clientId: 'w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc',
-    },
-    intercom: {
-        appId: 'lp9l5d9l',
-    },
-    stripe: {
-        publishableKey: '',
-    },
-    segment: {
-        writeKey: 'Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I',
-    },
-};
 
 
 /***/ })

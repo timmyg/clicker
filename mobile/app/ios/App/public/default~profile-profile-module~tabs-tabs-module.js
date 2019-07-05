@@ -136,7 +136,12 @@ var auth = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["default"].WebAuth({
     clientID: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.clientId,
     // redirectUri: `${window.location.origin}/tabs/profile/logging-in`,
     redirectUri: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].packageId + "://" + src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].auth0.domain + "/cordova/" + src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].packageId + "/tabs/profile/logging-in",
+    // redirectUri: `${environment.packageId}://${environment.auth0.domain}/android/${
+    //   environment.packageId
+    // }/tabs/profile/logging-in`,
     responseType: 'token id_token',
+    prompt: 'none',
+    packageId: src_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].packageId,
 });
 var LoginComponent = /** @class */ (function () {
     function LoginComponent(modalController, toastController, segment, globals) {

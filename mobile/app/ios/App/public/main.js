@@ -1030,7 +1030,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <section *ngIf=\"(partner$ | async) as partner; else normal\">\n  <ion-card>\n    <ion-card-header>\n      <ion-card-subtitle>Coming Soon</ion-card-subtitle>\n      <ion-card-title>Change the Channel</ion-card-title>\n    </ion-card-header>\n\n    <ion-card-content>\n      <span [ngSwitch]=\"partner\">\n        <span *ngSwitchCase=\"'bwr'\"\n          >Ever wanted to change the channel from your seat? Clicker gives you that ability - and is coming soon to\n          Buffalo Wings &amp; Rings</span\n        >\n        <span *ngSwitchDefault>\n          Ever wanted to change the channel from your seat? Clicker gives you that ability - check back soon.\n        </span>\n      </span>\n    </ion-card-content>\n  </ion-card>\n</section>\n<ng-template #normal\n  ><ion-app> <ion-router-outlet></ion-router-outlet> </ion-app\n></ng-template> -->\n\n<ion-app> <ion-router-outlet></ion-router-outlet> </ion-app>\n"
+module.exports = "<section *ngIf=\"(partner$ | async) as partner; else normal\">\n  <ion-card>\n    <ion-card-header>\n      <ion-card-subtitle>Coming Soon</ion-card-subtitle>\n      <ion-card-title>Change the Channel</ion-card-title>\n    </ion-card-header>\n\n    <ion-card-content>\n      <span [ngSwitch]=\"partner\">\n        <span *ngSwitchCase=\"'bwr'\"\n          >Ever wanted to change the channel from your seat? Clicker gives you that ability - and is coming soon to\n          Buffalo Wings &amp; Rings</span\n        >\n        <span *ngSwitchDefault>\n          Ever wanted to change the channel from your seat? Clicker gives you that ability - check back soon.\n        </span>\n      </span>\n    </ion-card-content>\n  </ion-card>\n</section>\n<ng-template #normal\n  ><ion-app> <ion-router-outlet></ion-router-outlet> </ion-app\n></ng-template>\n"
 
 /***/ }),
 
@@ -1185,22 +1185,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
 /* harmony import */ var _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic-native/splash-screen/ngx */ "./node_modules/@ionic-native/splash-screen/ngx/index.js");
 /* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ "./node_modules/@ionic-native/status-bar/ngx/index.js");
-/* harmony import */ var ng_intercom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ng-intercom */ "./node_modules/ng-intercom/fesm5/ng-intercom.js");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _state_state_module__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./state/state.module */ "./src/app/state/state.module.ts");
-/* harmony import */ var _core_core_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./core/core.module */ "./src/app/core/core.module.ts");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _api_interceptor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./api-interceptor */ "./src/app/api-interceptor.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./state/user/user.actions */ "./src/app/state/user/user.actions.ts");
-/* harmony import */ var _state_app_app_actions__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./state/app/app.actions */ "./src/app/state/app/app.actions.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _ionic_native_geolocation_ngx__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic-native/geolocation/ngx */ "./node_modules/@ionic-native/geolocation/ngx/index.js");
-/* harmony import */ var _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @ionic-native/diagnostic/ngx */ "./node_modules/@ionic-native/diagnostic/ngx/index.js");
-/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
-/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./globals */ "./src/app/globals.ts");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _state_state_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./state/state.module */ "./src/app/state/state.module.ts");
+/* harmony import */ var _core_core_module__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./core/core.module */ "./src/app/core/core.module.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _api_interceptor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./api-interceptor */ "./src/app/api-interceptor.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _state_user_user_actions__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./state/user/user.actions */ "./src/app/state/user/user.actions.ts");
+/* harmony import */ var _state_app_app_actions__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./state/app/app.actions */ "./src/app/state/app/app.actions.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _ionic_native_geolocation_ngx__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ionic-native/geolocation/ngx */ "./node_modules/@ionic-native/geolocation/ngx/index.js");
+/* harmony import */ var _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic-native/diagnostic/ngx */ "./node_modules/@ionic-native/diagnostic/ngx/index.js");
+/* harmony import */ var ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ngx-segment-analytics */ "./node_modules/ngx-segment-analytics/index.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./globals */ "./src/app/globals.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1228,14 +1227,13 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-
 function checkParams(store) {
     return function () {
         return new Promise(function (resolve) {
             var urlParams = new URLSearchParams(window.location.search);
             var partner = urlParams.get('partner');
             if (partner) {
-                store.dispatch(new _state_app_app_actions__WEBPACK_IMPORTED_MODULE_15__["SetPartner"](partner));
+                store.dispatch(new _state_app_app_actions__WEBPACK_IMPORTED_MODULE_14__["SetPartner"](partner));
             }
             resolve(true);
         });
@@ -1244,10 +1242,10 @@ function checkParams(store) {
 function initUserStuff(store) {
     return function () {
         return new Promise(function (resolve) {
-            store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_14__["Load"]()); // TODO should this be refresh?
+            store.dispatch(new _state_user_user_actions__WEBPACK_IMPORTED_MODULE_13__["Load"]()); // TODO should this be refresh?
             store
                 .select(function (state) { return state.user; })
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_16__["filter"])(function (user) { return user.authToken && user.authToken.length; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_16__["take"])(1))
+                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["filter"])(function (user) { return user.authToken && user.authToken.length; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["take"])(1))
                 .subscribe(function () {
                 resolve(true);
             });
@@ -1259,50 +1257,46 @@ var AppModule = /** @class */ (function () {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
-            declarations: [_app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"]],
+            declarations: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]],
             entryComponents: [],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-                ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_20__["SegmentModule"].forRoot({
-                    apiKey: src_environments_environment__WEBPACK_IMPORTED_MODULE_17__["environment"].segment.writeKey,
-                    debug: !src_environments_environment__WEBPACK_IMPORTED_MODULE_17__["environment"].production,
+                ngx_segment_analytics__WEBPACK_IMPORTED_MODULE_19__["SegmentModule"].forRoot({
+                    apiKey: src_environments_environment__WEBPACK_IMPORTED_MODULE_16__["environment"].segment.writeKey,
+                    debug: !src_environments_environment__WEBPACK_IMPORTED_MODULE_16__["environment"].production,
                     loadOnInitialization: true,
                 }),
                 _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["IonicModule"].forRoot(),
-                _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"],
-                _state_state_module__WEBPACK_IMPORTED_MODULE_9__["StateModule"].forRoot(),
-                _core_core_module__WEBPACK_IMPORTED_MODULE_10__["CoreModule"].forRoot(),
-                ng_intercom__WEBPACK_IMPORTED_MODULE_6__["IntercomModule"].forRoot({
-                    appId: src_environments_environment__WEBPACK_IMPORTED_MODULE_17__["environment"].intercom.appId,
-                    updateOnRouterChange: true,
-                }),
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"],
+                _state_state_module__WEBPACK_IMPORTED_MODULE_8__["StateModule"].forRoot(),
+                _core_core_module__WEBPACK_IMPORTED_MODULE_9__["CoreModule"].forRoot(),
             ],
             providers: [
-                _globals__WEBPACK_IMPORTED_MODULE_21__["Globals"],
+                _globals__WEBPACK_IMPORTED_MODULE_20__["Globals"],
                 {
                     provide: _angular_core__WEBPACK_IMPORTED_MODULE_0__["APP_INITIALIZER"],
                     useFactory: checkParams,
                     multi: true,
-                    deps: [_ngrx_store__WEBPACK_IMPORTED_MODULE_13__["Store"]],
+                    deps: [_ngrx_store__WEBPACK_IMPORTED_MODULE_12__["Store"]],
                 },
                 {
                     provide: _angular_core__WEBPACK_IMPORTED_MODULE_0__["APP_INITIALIZER"],
                     useFactory: initUserStuff,
                     multi: true,
-                    deps: [_ngrx_store__WEBPACK_IMPORTED_MODULE_13__["Store"]],
+                    deps: [_ngrx_store__WEBPACK_IMPORTED_MODULE_12__["Store"]],
                 },
                 _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_5__["StatusBar"],
                 _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_4__["SplashScreen"],
                 { provide: _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouteReuseStrategy"], useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["IonicRouteStrategy"] },
                 {
-                    provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HTTP_INTERCEPTORS"],
-                    useClass: _api_interceptor__WEBPACK_IMPORTED_MODULE_12__["ApiInterceptor"],
+                    provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_10__["HTTP_INTERCEPTORS"],
+                    useClass: _api_interceptor__WEBPACK_IMPORTED_MODULE_11__["ApiInterceptor"],
                     multi: true,
                 },
-                _ionic_native_geolocation_ngx__WEBPACK_IMPORTED_MODULE_18__["Geolocation"],
-                _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_19__["Diagnostic"],
+                _ionic_native_geolocation_ngx__WEBPACK_IMPORTED_MODULE_17__["Geolocation"],
+                _ionic_native_diagnostic_ngx__WEBPACK_IMPORTED_MODULE_18__["Diagnostic"],
             ],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"]],
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]],
         })
     ], AppModule);
     return AppModule;
@@ -1475,9 +1469,8 @@ var ProgramService = /** @class */ (function () {
         this.httpClient = httpClient;
         this.prefix = "programs";
     }
-    ProgramService.prototype.getPrograms = function () {
-        // return this.httpClient.get<Program[]>(this.prefix);
-        return this.httpClient.get(this.prefix).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (programs) {
+    ProgramService.prototype.getPrograms = function (location) {
+        return this.httpClient.get(this.prefix + "/location/" + location.id).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (programs) {
             programs.forEach(function (program) {
                 var icon;
                 if (program.subcategories) {
@@ -1765,6 +1758,8 @@ var Globals = /** @class */ (function () {
                     created: 'Reservation Created',
                     updated: 'Reservation Updated',
                     cancelled: 'Reservation Cancelled',
+                    clickedButton: 'Reservation Started: Button',
+                    clickedLink: 'Reservation Started: Link',
                 },
                 login: {
                     started: 'Login Started',
@@ -1777,9 +1772,9 @@ var Globals = /** @class */ (function () {
                 permissions: {
                     geolocation: {
                         denied: 'Permission Geolocation Denied',
-                        allowed: 'Permission Geolocation Allowed'
-                    }
-                }
+                        allowed: 'Permission Geolocation Allowed',
+                    },
+                },
             };
         },
         enumerable: true,
@@ -2286,8 +2281,8 @@ var ProgramsEffects = /** @class */ (function () {
         var _this = this;
         this.actions$ = actions$;
         this.programService = programService;
-        this.getAllPrograms$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["ofType"])(_program_actions__WEBPACK_IMPORTED_MODULE_4__["GET_PROGRAMS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function () {
-            return _this.programService.getPrograms().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (programs) { return new _program_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllByLocationSuccess"](programs); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _program_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllByLocationFail"](err)); }));
+        this.getAllPrograms$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_1__["ofType"])(_program_actions__WEBPACK_IMPORTED_MODULE_4__["GET_PROGRAMS"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (action) {
+            return _this.programService.getPrograms(action.payload).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (programs) { return new _program_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllByLocationSuccess"](programs); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (err) { return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(new _program_actions__WEBPACK_IMPORTED_MODULE_4__["GetAllByLocationFail"](err)); }));
         }));
     }
     __decorate([
@@ -3360,7 +3355,7 @@ __webpack_require__.r(__webpack_exports__);
 var environment = {
     production: false,
     apiBaseUrl: 'https://api-develop.tryclicker.com',
-    packageId: 'io.clickertv.app',
+    packageId: 'com.teamclicker.app',
     auth0: {
         domain: 'clikr-develop.auth0.com',
         clientId: 'abgmbT4pqRZROXxn383G4Js0dMMP4bRY',

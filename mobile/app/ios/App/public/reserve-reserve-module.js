@@ -66,7 +66,7 @@ var ReservationGuard = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-card *ngIf=\"(reservation$ | async) as reservation\">\n  <ion-card-content>\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onLengthChange($event)\">\n        <ion-list-header *ngIf=\"!isEditMode\"> Reservation Length </ion-list-header>\n        <ion-list-header *ngIf=\"isEditMode\"> Extend Reservation Length </ion-list-header>\n        <ion-item *ngFor=\"let p of availablePlans\">\n          <ion-label flex ion-justify-items-end>\n            <span\n              >{{ p.title }}\n              <ion-chip *ngIf=\"p.disabled; else enabled\"> <ion-label>Disabled Today</ion-label> </ion-chip>\n              <ng-template #enabled>\n                <ion-chip color=\"primary\"> <ion-label>Free Change</ion-label> </ion-chip>\n              </ng-template>\n            </span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span padding-start>{{ p.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ p.minutes }}\" [disabled]=\"saving || p.disabled\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <p class=\"ion-text-center\" padding-top>\n      <!-- show always -->\n      <span\n        >You are tuning <b>TV {{ reservation.box.label }}</b> to <b>{{ reservation.program.channelTitle }} </b></span\n      >\n      <!-- show if new and reserving, or editing -->\n      <span *ngIf=\"reservation.reserve || isEditMode; else oneTime\">\n        and reserving until <b>{{ reservationEnd$ | async | amDateFormat: 'h:mma' }}</b\n        >. You will be able to freely change the channel during your reservation.\n      </span>\n      <!-- show when new and not reserving -->\n      <ng-template #oneTime> <span *ngIf=\"!editMode\">but others will be able to change the channel</span> </ng-template>\n      <br />\n      <br />\n    </p>\n    <ion-button\n      color=\"success\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onConfirm(reservation)\"\n      slot=\"end\"\n      [disabled]=\"saving || !sufficientFunds\"\n      margin-top\n      align-items-center\n    >\n      <ion-row *ngIf=\"!saving; else isSaving\">\n        <span>Confirm</span> <img class=\"coin\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" padding-start />\n        <span>{{ reservation.cost }}</span>\n      </ion-row>\n      <ng-template #isSaving>\n        Tuning\n        <ion-spinner name=\"crescent\" margin-start></ion-spinner>\n      </ng-template>\n    </ion-button>\n    <ion-row class=\"ion-text-center\" *ngIf=\"reservation.location && reservation.location.name\">\n      <p class=\"center\">{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</p></ion-row\n    >\n    <ion-row class=\"ion-text-center\" *ngIf=\"!sufficientFunds\" margin-top>\n      <ion-text color=\"danger\">\n        Heads up! You only have {{ tokenCount }} <span *ngIf=\"tokenCount && tokenCount === 1; else tokens\">token</span\n        ><ng-template #tokens>tokens</ng-template> remaining. Please\n        <span *ngIf=\"!isLoggedIn\"><a [routerLink]=\"'/tabs/profile'\">login</a> and </span>\n        <a [routerLink]=\"'/tabs/profile'\" *ngIf=\"isLoggedIn\">add funds</a><span *ngIf=\"!isLoggedIn\">add funds</span>.\n      </ion-text>\n    </ion-row>\n  </ion-card-content>\n</ion-card>\n"
+module.exports = "<ion-card *ngIf=\"(reservation$ | async) as reservation\">\n  <ion-card-content>\n    <ion-list id=\"length\">\n      <ion-radio-group (ionChange)=\"onLengthChange($event)\">\n        <ion-list-header *ngIf=\"!isEditMode\"> Reservation Length </ion-list-header>\n        <ion-list-header *ngIf=\"isEditMode\"> Extend Reservation Length </ion-list-header>\n        <ion-item *ngFor=\"let p of availablePlans\">\n          <ion-label flex ion-justify-items-end>\n            <span\n              >{{ p.title }}\n              <ion-chip *ngIf=\"p.disabled; else enabled\" outline=\"true\"> <ion-label>Disabled Today</ion-label> </ion-chip>\n              <!-- <ng-template #enabled> -->\n                <!-- <ion-chip color=\"primary\"> <ion-label>Free Change</ion-label> </ion-chip> -->\n              <!-- </ng-template> -->\n            </span>\n            <div flex ion-align-items-center float-right>\n              <img class=\"coin ion-float-right\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" />\n              <span>{{ p.tokens }}</span>\n            </div>\n          </ion-label>\n          <ion-radio slot=\"start\" value=\"{{ p.minutes }}\" [disabled]=\"saving || p.disabled\" checked></ion-radio>\n        </ion-item>\n      </ion-radio-group>\n    </ion-list>\n    <p class=\"ion-text-center\" padding-top>\n      <!-- show always -->\n      <span\n        >You are tuning <b>TV {{ reservation.box.label }}</b> to <b>{{ reservation.program.channelTitle }} </b></span\n      >\n      <!-- show if new and reserving, or editing -->\n      <span *ngIf=\"reservation.reserve || isEditMode; else oneTime\">\n        and reserving until <b>{{ reservationEnd$ | async | amDateFormat: 'h:mma' }}</b\n        >. You will be able to freely change the channel during your reservation.\n      </span>\n      <!-- show when new and not reserving -->\n      <ng-template #oneTime> <span *ngIf=\"!editMode\">but others will be able to change the channel</span> </ng-template>\n      <br />\n      <br />\n    </p>\n    <ion-button\n      color=\"success\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onConfirm(reservation)\"\n      slot=\"end\"\n      [disabled]=\"saving || !sufficientFunds\"\n      margin-top\n      align-items-center\n    >\n      <ion-row *ngIf=\"!saving; else isSaving\">\n        <span>Confirm</span> <img class=\"coin\" src=\"./assets/coin.svg\" width=\"22\" height=\"22\" padding-start />\n        <span>{{ reservation.cost }}</span>\n      </ion-row>\n      <ng-template #isSaving>\n        Tuning\n        <ion-spinner name=\"crescent\" margin-start></ion-spinner>\n      </ng-template>\n    </ion-button>\n    <ion-row class=\"ion-text-center\" *ngIf=\"reservation.location && reservation.location.name\">\n      <p class=\"center\">{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</p></ion-row\n    >\n    <ion-row class=\"ion-text-center\" *ngIf=\"!sufficientFunds\" margin-top>\n      <ion-text color=\"danger\">\n        Heads up! You only have {{ tokenCount }} <span *ngIf=\"tokenCount && tokenCount === 1; else tokens\">token</span\n        ><ng-template #tokens>tokens</ng-template> remaining. Please\n        <span *ngIf=\"!isLoggedIn\"><a [routerLink]=\"'/tabs/profile'\">login</a> and </span>\n        <a [routerLink]=\"'/tabs/profile'\" *ngIf=\"isLoggedIn\">add funds</a><span *ngIf=\"!isLoggedIn\">add funds</span>.\n      </ion-text>\n    </ion-row>\n  </ion-card-content>\n</ion-card>\n"
 
 /***/ }),
 
@@ -77,7 +77,7 @@ module.exports = "<ion-card *ngIf=\"(reservation$ | async) as reservation\">\n  
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "ion-spinner {\n  vertical-align: middle; }\n\nion-icon.sport {\n  display: inline; }\n\nion-icon.sport[name='basketball'] {\n    color: #fa8320; }\n\nion-icon.sport[name='american-football'] {\n    color: #624a2e; }\n\nion-icon.sport ::ng-deep svg {\n    height: 30px; }\n\n.coin {\n  display: inline-block;\n  width: inherit; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvY29uZmlybWF0aW9uL2NvbmZpcm1hdGlvbi5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHNCQUFzQixFQUFBOztBQUl4QjtFQUNFLGVBQWUsRUFBQTs7QUFEakI7SUFHSSxjQUFjLEVBQUE7O0FBSGxCO0lBTUksY0FBYyxFQUFBOztBQU5sQjtJQVNJLFlBQVksRUFBQTs7QUFJaEI7RUFDRSxxQkFBcUI7RUFDckIsY0FBYyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvcmVzZXJ2ZS9jb21wb25lbnRzL2NvbmZpcm1hdGlvbi9jb25maXJtYXRpb24uY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJpb24tc3Bpbm5lciB7XG4gIHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7XG59XG5cbi8vIFRPRE8gZHVwbGljYXRlZFxuaW9uLWljb24uc3BvcnQge1xuICBkaXNwbGF5OiBpbmxpbmU7XG4gICZbbmFtZT0nYmFza2V0YmFsbCddIHtcbiAgICBjb2xvcjogI2ZhODMyMDtcbiAgfVxuICAmW25hbWU9J2FtZXJpY2FuLWZvb3RiYWxsJ10ge1xuICAgIGNvbG9yOiAjNjI0YTJlO1xuICB9XG4gIDo6bmctZGVlcCBzdmcge1xuICAgIGhlaWdodDogMzBweDtcbiAgfVxufVxuXG4uY29pbiB7XG4gIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgd2lkdGg6IGluaGVyaXQ7XG59XG5cbi8vICNsZW5ndGgge1xuLy8gICBpb24tbGFiZWwge1xuLy8gICAgIGRpc3BsYXk6IGZsZXg7XG4vLyAgIH1cbi8vIH1cbiJdfQ== */"
+module.exports = "ion-spinner {\n  vertical-align: middle; }\n\nion-icon.sport {\n  display: inline; }\n\nion-icon.sport[name='basketball'] {\n    color: #fa8320; }\n\nion-icon.sport[name='american-football'] {\n    color: #624a2e; }\n\nion-icon.sport ::ng-deep svg {\n    height: 30px; }\n\n.coin {\n  display: inline-block;\n  width: inherit;\n  padding-right: 4px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL2NvbXBvbmVudHMvY29uZmlybWF0aW9uL2NvbmZpcm1hdGlvbi5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHNCQUFzQixFQUFBOztBQUl4QjtFQUNFLGVBQWUsRUFBQTs7QUFEakI7SUFHSSxjQUFjLEVBQUE7O0FBSGxCO0lBTUksY0FBYyxFQUFBOztBQU5sQjtJQVNJLFlBQVksRUFBQTs7QUFJaEI7RUFDRSxxQkFBcUI7RUFDckIsY0FBYztFQUNkLGtCQUFrQixFQUFBIiwiZmlsZSI6InNyYy9hcHAvcmVzZXJ2ZS9jb21wb25lbnRzL2NvbmZpcm1hdGlvbi9jb25maXJtYXRpb24uY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJpb24tc3Bpbm5lciB7XG4gIHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7XG59XG5cbi8vIFRPRE8gZHVwbGljYXRlZFxuaW9uLWljb24uc3BvcnQge1xuICBkaXNwbGF5OiBpbmxpbmU7XG4gICZbbmFtZT0nYmFza2V0YmFsbCddIHtcbiAgICBjb2xvcjogI2ZhODMyMDtcbiAgfVxuICAmW25hbWU9J2FtZXJpY2FuLWZvb3RiYWxsJ10ge1xuICAgIGNvbG9yOiAjNjI0YTJlO1xuICB9XG4gIDo6bmctZGVlcCBzdmcge1xuICAgIGhlaWdodDogMzBweDtcbiAgfVxufVxuXG4uY29pbiB7XG4gIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgd2lkdGg6IGluaGVyaXQ7XG4gIHBhZGRpbmctcmlnaHQ6IDRweDtcbn1cblxuLy8gI2xlbmd0aCB7XG4vLyAgIGlvbi1sYWJlbCB7XG4vLyAgICAgZGlzcGxheTogZmxleDtcbi8vICAgfVxuLy8gfVxuIl19 */"
 
 /***/ }),
 
@@ -464,7 +464,7 @@ var LocationComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- show if data loading initally or evaluating geolocationDeclined\nunless pulling to refresh (so we don't show duplicate spinners) -->\n<ion-row *ngIf=\"((isLoading$ | async) || evaluatingGeolocation) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n\n<section>\n  <section\n    class=\"ion-text-center\"\n    padding\n    *ngIf=\"(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations\"\n  >\n    <ion-icon name=\"pin\" class=\"location\"></ion-icon>\n    <p>\n      Clicker would like to access your location for more accurate location details. This data is not stored anywhere.\n    </p>\n    <div><ion-button margin-top (click)=\"allowLocation()\">Allow Location Access </ion-button></div>\n    <div><ion-button fill=\"clear\" (click)=\"denyLocation()\">No Thanks </ion-button></div>\n  </section>\n\n  <ng-template #showLocations>\n    <ion-list lines=\"none\">\n      <ng-container *ngFor=\"let location of (locations$ | async | locationsFilter: searchTerm)\">\n        <app-location\n          [location]=\"location\"\n          [userRoles]=\"userRoles\"\n          [userLocations]=\"userLocations\"\n          (onClick)=\"onLocationClick($event)\"\n          (onManage)=\"onLocationManage($event)\"\n        ></app-location>\n      </ng-container>\n      <p *ngIf=\"geolocationDeclined && !evaluatingGeolocation\" class=\"ion-text-center\" padding>\n        Find locations around you by <a (click)=\"forceAllow()\">allowing location services</a>\n      </p>\n    </ion-list>\n  </ng-template>\n</section>\n"
+module.exports = "<!-- show if data loading initally or evaluating geolocationDeclined\nunless pulling to refresh (so we don't show duplicate spinners) -->\n<ion-row *ngIf=\"((isLoading$ | async) || evaluatingGeolocation) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n\n<section>\n  <section\n    class=\"ion-text-center\"\n    padding\n    *ngIf=\"(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations\"\n  >\n    <ion-icon name=\"pin\" class=\"location\"></ion-icon>\n    <p>\n      Clicker needs access to your location for more accurate location details. This data is not stored or shared.\n    </p>\n    <div><ion-button margin-top (click)=\"allowLocation()\">Allow Location Access </ion-button></div>\n  </section>\n\n  <ng-template #showLocations>\n    <ion-list lines=\"none\" [class.content-loading]=\"(isLoading$ | async) || waiting\">\n      <ng-container *ngFor=\"let location of locations$ | async | locationsFilter: searchTerm\">\n        <app-location\n          [location]=\"location\"\n          [userRoles]=\"userRoles\"\n          [userLocations]=\"userLocations\"\n          (onClick)=\"onLocationClick($event)\"\n          (onManage)=\"onLocationManage($event)\"\n        ></app-location>\n      </ng-container>\n      <p *ngIf=\"geolocationDeclined && !evaluatingGeolocation\" class=\"ion-text-center\" padding>\n        Find locations around you by <a (click)=\"forceAllow()\">allowing location services</a>\n      </p>\n    </ion-list>\n  </ng-template>\n</section>\n"
 
 /***/ }),
 
@@ -847,14 +847,19 @@ var LocationsComponent = /** @class */ (function () {
         });
     };
     LocationsComponent.prototype.onLocationClick = function (location) {
+        var _this = this;
+        this.waiting = true;
         this.reserveService.emitCloseSearch();
         this.store.dispatch(new _state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__["SetLocation"](location));
-        // this.actions$
-        //   .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
-        //   .pipe(first())
-        //   .subscribe(async () => {
-        this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
-        // });
+        this.actions$
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_12__["ofType"])(_state_reservation_reservation_actions__WEBPACK_IMPORTED_MODULE_8__["SET_RESERVATION_LOCATION_SUCCESS"]))
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_11__["first"])())
+            .subscribe(function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+                return [2 /*return*/];
+            });
+        }); });
     };
     LocationsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1061,6 +1066,7 @@ var ProgramComponent = /** @class */ (function () {
         }
     };
     ProgramComponent.prototype.onMoreInfo = function (slidingItem) {
+        console.log('onMoreInfo click');
         this.onInfo.emit(this.program);
         slidingItem.close();
     };
@@ -1098,7 +1104,7 @@ var ProgramComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-row *ngIf=\"(isLoading$ | async) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-list lines=\"none\">\n  <app-program\n    *ngFor=\"let program of (programs$ | async | programsFilter: searchTerm)\"\n    (onSelect)=\"onProgramSelect($event)\"\n    (onInfo)=\"onProgramInfo($event)\"\n    [program]=\"program\"\n  ></app-program>\n</ion-list>\n"
+module.exports = "<ion-row *ngIf=\"(isLoading$ | async) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-list lines=\"none\" [class.content-loading]=\"isLoading$ | async\">\n  <app-program\n    *ngFor=\"let program of (programs$ | async | programsFilter: searchTerm)\"\n    (onSelect)=\"onProgramSelect($event)\"\n    (onInfo)=\"onProgramInfo($event)\"\n    [program]=\"program\"\n  ></app-program>\n</ion-list>\n"
 
 /***/ }),
 
@@ -1286,10 +1292,12 @@ var ProgramsComponent = /** @class */ (function () {
             var modal;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.modalController.create({
-                            component: _info_info_component__WEBPACK_IMPORTED_MODULE_10__["InfoComponent"],
-                            componentProps: { program: program },
-                        })];
+                    case 0:
+                        console.log('onProgramInfo event caught');
+                        return [4 /*yield*/, this.modalController.create({
+                                component: _info_info_component__WEBPACK_IMPORTED_MODULE_10__["InfoComponent"],
+                                componentProps: { program: program },
+                            })];
                     case 1:
                         modal = _a.sent();
                         modal.present();
@@ -1325,7 +1333,7 @@ var ProgramsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-row *ngIf=\"(isLoading$ | async) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-row>\n  <ion-col *ngFor=\"let tv of (tvs$ | async)\" size=\"4\">\n    <ion-button\n      color=\"light\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onTvClick(tv)\"\n      [ngClass]=\"{ reserved: tv.reserved }\"\n      >{{ tv.label }}</ion-button\n    >\n  </ion-col>\n</ion-row>\n"
+module.exports = "<ion-row *ngIf=\"(isLoading$ | async) && !reserveService.isRefreshing\" margin-vertical>\n  <ion-spinner name=\"crescent\" class=\"center\"></ion-spinner>\n</ion-row>\n<ion-row [class.content-loading]=\"isLoading$ | async\">\n  <ion-col *ngFor=\"let tv of (tvs$ | async)\" size=\"4\">\n    <ion-button\n      color=\"light\"\n      size=\"large\"\n      expand=\"block\"\n      (click)=\"onTvClick(tv)\"\n      [ngClass]=\"{ reserved: tv.reserved }\"\n      >{{ tv.label }}</ion-button\n    >\n  </ion-col>\n</ion-row>\n"
 
 /***/ }),
 
@@ -1646,6 +1654,7 @@ var routes = [
             {
                 path: 'programs',
                 component: _components_programs_programs_component__WEBPACK_IMPORTED_MODULE_7__["ProgramsComponent"],
+                canActivate: [_guards_reservation_guard__WEBPACK_IMPORTED_MODULE_13__["ReservationGuard"]],
             },
             {
                 path: 'tvs',
@@ -1708,7 +1717,7 @@ var ReservePageModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button class=\"show-back-button\" *ngIf=\"showBack() && !searchMode\" (click)=\"goBack()\"></ion-back-button>\n    </ion-buttons>\n    <ion-buttons *ngIf=\"!searchMode\" slot=\"end\" padding-end> <app-coins></app-coins> </ion-buttons>\n    <ion-title *ngIf=\"!searchMode\"> {{ title }} </ion-title>\n    <ion-searchbar\n      #searchbar\n      *ngIf=\"searchMode\"\n      (ionCancel)=\"closeSearch()\"\n      (ionChange)=\"onSearch($event)\"\n      showCancelButton\n      animated\n    ></ion-searchbar>\n  </ion-toolbar>\n</ion-header>\n<ion-content>\n  <ion-refresher slot=\"fixed\" (ionRefresh)=\"doRefresh($event)\" [pullMax]=\"300\" [disabled]=\"disableRefresher()\">\n    <ion-refresher-content pullingIcon=\"arrow-down\" pullingText=\"Pull to refresh\" refreshingSpinner=\"crescent\">\n    </ion-refresher-content>\n  </ion-refresher>\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" *ngIf=\"isSearchablePage() && !searchMode\">\n    <ion-fab-button color=\"primary\" (click)=\"toggleSearch()\"> <ion-icon name=\"search\"></ion-icon> </ion-fab-button>\n  </ion-fab>\n  <router-outlet></router-outlet>\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button class=\"show-back-button\" *ngIf=\"showBack() && !searchMode\" (click)=\"goBack()\"></ion-back-button>\n    </ion-buttons>\n    <ion-buttons *ngIf=\"!searchMode\" slot=\"end\" padding-end> <app-coins></app-coins> </ion-buttons>\n    <ion-title *ngIf=\"!searchMode\"> {{ title }} </ion-title>\n    <ion-searchbar\n      #searchbar\n      *ngIf=\"searchMode\"\n      (ionCancel)=\"closeSearch()\"\n      (ionChange)=\"onSearch($event)\"\n      showCancelButton\n      animated\n    ></ion-searchbar>\n  </ion-toolbar>\n</ion-header>\n<ion-content>\n  <ion-refresher slot=\"fixed\" (ionRefresh)=\"doRefresh($event)\" [pullMax]=\"300\" [disabled]=\"disableRefresher()\">\n    <ion-refresher-content pullingIcon=\"arrow-down\" pullingText=\"Pull to refresh\" refreshingSpinner=\"crescent\">\n    </ion-refresher-content>\n  </ion-refresher>\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" *ngIf=\"isSearchablePage() && !searchMode\">\n    <ion-fab-button color=\"primary\" (click)=\"toggleSearch()\"> <ion-icon name=\"search\"></ion-icon> </ion-fab-button>\n  </ion-fab>\n  <ion-row class=\"breadcrumbs ion-text-center\" justify-content-center padding>\n    <span [class.active]=\"isStepActive('location')\" [class.complete]=\"isStepComplete('location')\">\n      <ion-icon *ngIf=\"!isStepComplete('location')\" name=\"radio-button-off\" color=\"medium\"></ion-icon> \n      <ion-icon *ngIf=\"isStepComplete('location')\" name=\"checkmark-circle\" color=\"success\"></ion-icon>\n      <span class=\"text\">Location</span>\n    </span>\n    <span [class.active]=\"isStepActive('channel')\" [class.complete]=\"isStepComplete('channel')\">\n      <ion-icon *ngIf=\"!isStepComplete('channel')\" name=\"radio-button-off\" color=\"medium\"></ion-icon> \n      <ion-icon *ngIf=\"isStepComplete('channel')\" name=\"checkmark-circle\" color=\"success\"></ion-icon>\n      <span class=\"text\">Channel</span>\n    </span>\n    <span [class.active]=\"isStepActive('tv')\" [class.complete]=\"isStepComplete('tv')\">\n      <ion-icon *ngIf=\"!isStepComplete('tv')\" name=\"radio-button-off\" color=\"medium\"></ion-icon> \n      <ion-icon *ngIf=\"isStepComplete('tv')\" name=\"checkmark-circle\" color=\"success\"></ion-icon>\n      <span class=\"text\">TV</span>\n    </span>\n    <span [class.active]=\"isStepActive('confirm')\" [class.complete]=\"isStepComplete('confirm')\">\n      <ion-icon *ngIf=\"!isStepComplete('confirm')\" name=\"radio-button-off\" color=\"medium\"></ion-icon> \n      <ion-icon *ngIf=\"isStepComplete('confirm')\" name=\"checkmark-circle\" color=\"success\"></ion-icon>\n      <span class=\"text\">Confirm</span>\n    </span>\n  </ion-row>\n  <router-outlet></router-outlet>\n</ion-content>\n"
 
 /***/ }),
 
@@ -1719,7 +1728,7 @@ module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "ion-item {\n  --padding-start: 0;\n  --inner-padding-end: 0; }\n  ion-item ion-card {\n    width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL3Jlc2VydmUucGFnZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0Usa0JBQWdCO0VBQ2hCLHNCQUFvQixFQUFBO0VBRnRCO0lBS0ksV0FBVyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvcmVzZXJ2ZS9yZXNlcnZlLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbImlvbi1pdGVtIHtcbiAgLS1wYWRkaW5nLXN0YXJ0OiAwO1xuICAtLWlubmVyLXBhZGRpbmctZW5kOiAwO1xuXG4gIGlvbi1jYXJkIHtcbiAgICB3aWR0aDogMTAwJTtcbiAgICAvLyBtYXJnaW4tdG9wOiAxNnB4ICFpbXBvcnRhbnQ7XG4gICAgLy8gbWFyZ2luLWJvdHRvbTogMTZweCAhaW1wb3J0YW50O1xuICB9XG59XG4iXX0= */"
+module.exports = ".breadcrumbs span {\n  margin-right: 5px; }\n  .breadcrumbs span:not(.active) {\n    opacity: .4; }\n  .breadcrumbs ion-icon {\n  margin-right: 2px; }\n  .breadcrumbs ion-icon, .breadcrumbs .text {\n  vertical-align: middle; }\n  ion-item {\n  --padding-start: 0;\n  --inner-padding-end: 0; }\n  ion-item ion-card {\n    width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90aW1naWJsaW4vQ29kZS9jbGlja2VyL21vYmlsZS9hcHAvc3JjL2FwcC9yZXNlcnZlL3Jlc2VydmUucGFnZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBR0ksaUJBQWlCLEVBQUE7RUFIckI7SUFLTSxXQUFXLEVBQUE7RUFMakI7RUFTSSxpQkFBaUIsRUFBQTtFQVRyQjtFQVlJLHNCQUFzQixFQUFBO0VBSTFCO0VBQ0Usa0JBQWdCO0VBQ2hCLHNCQUFvQixFQUFBO0VBRnRCO0lBS0ksV0FBVyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvcmVzZXJ2ZS9yZXNlcnZlLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5icmVhZGNydW1icyB7XG4gIC8vIHBhZGRpbmctdG9wOiAxMnB4O1xuICBzcGFuIHtcbiAgICBtYXJnaW4tcmlnaHQ6IDVweDtcbiAgICAmOm5vdCguYWN0aXZlKSB7XG4gICAgICBvcGFjaXR5OiAuNDtcbiAgICB9XG4gIH1cbiAgaW9uLWljb24ge1xuICAgIG1hcmdpbi1yaWdodDogMnB4O1xuICB9XG4gIGlvbi1pY29uLCAudGV4dCB7XG4gICAgdmVydGljYWwtYWxpZ246IG1pZGRsZTtcbiAgfVxufVxuXG5pb24taXRlbSB7XG4gIC0tcGFkZGluZy1zdGFydDogMDtcbiAgLS1pbm5lci1wYWRkaW5nLWVuZDogMDtcblxuICBpb24tY2FyZCB7XG4gICAgd2lkdGg6IDEwMCU7XG4gIH1cbn1cbiJdfQ== */"
 
 /***/ }),
 
@@ -1839,6 +1848,30 @@ var ReservePage = /** @class */ (function () {
     };
     ReservePage.prototype.isSearchablePage = function () {
         return this.router.url.includes('programs') || (this.router.url.includes('locations') && this.showingLocations);
+    };
+    ReservePage.prototype.isStepActive = function (stepName) {
+        switch (stepName) {
+            case "location":
+                return this.router.url.includes('locations');
+            case "channel":
+                return this.router.url.includes('programs');
+            case "tv":
+                return this.router.url.includes('tvs');
+            case "confirm":
+                return this.router.url.includes('confirmation');
+        }
+    };
+    ReservePage.prototype.isStepComplete = function (stepName) {
+        switch (stepName) {
+            case "location":
+                return !this.router.url.includes('locations');
+            case "channel":
+                return !this.router.url.includes('locations') && !this.router.url.includes('programs');
+            case "tv":
+                return !this.router.url.includes('locations') && !this.router.url.includes('programs') && !this.router.url.includes('tvs');
+            case "confirm":
+                return false;
+        }
     };
     ReservePage.prototype.toggleSearch = function () {
         var _this = this;

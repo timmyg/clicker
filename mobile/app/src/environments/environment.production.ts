@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   apiBaseUrl: 'https://api.tryclicker.com',
-  packageId: 'com.clickertv.app',
+  packageId: 'com.teamclicker.app',
   auth0: {
     domain: 'clikr.auth0.com',
     clientId: 'w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc',
