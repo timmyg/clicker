@@ -32,20 +32,20 @@ export class WalletPage {
 
   selectedAmount;
   stripeFormGroup: FormGroup;
-  fundingAmounts = [
-    {
-      tokens: 5,
-      dollars: 5,
-    },
-    {
-      tokens: 10,
-      dollars: 10,
-    },
-    {
-      tokens: 25,
-      dollars: 25,
-    },
-  ];
+  // fundingAmounts = [
+  //   {
+  //     tokens: 5,
+  //     dollars: 5,
+  //   },
+  //   {
+  //     tokens: 10,
+  //     dollars: 10,
+  //   },
+  //   {
+  //     tokens: 25,
+  //     dollars: 25,
+  //   },
+  // ];
 
   constructor(
     private store: Store<fromStore.AppState>,

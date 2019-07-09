@@ -2,15 +2,17 @@
   <ion-card-content>
     <ion-list id="length">
       <ion-radio-group (ionChange)="onLengthChange($event)">
-        <ion-list-header *ngIf="!isEditMode"> Reservation Length </ion-list-header>
+        <!-- <ion-list-header *ngIf="!isEditMode"> Reservation Length </ion-list-header> -->
         <ion-list-header *ngIf="isEditMode"> Extend Reservation Length </ion-list-header>
         <ion-item *ngFor="let p of availablePlans">
           <ion-label flex ion-justify-items-end>
             <span
               >{{ p.title }}
-              <ion-chip *ngIf="p.disabled; else enabled" outline="true"> <ion-label>Disabled Today</ion-label> </ion-chip>
+              <ion-chip *ngIf="p.disabled; else enabled" outline="true">
+                <ion-label>Disabled Today</ion-label>
+              </ion-chip>
               <!-- <ng-template #enabled> -->
-                <!-- <ion-chip color="primary"> <ion-label>Free Change</ion-label> </ion-chip> -->
+              <!-- <ion-chip color="primary"> <ion-label>Free Change</ion-label> </ion-chip> -->
               <!-- </ng-template> -->
             </span>
             <div flex ion-align-items-center float-right>
@@ -30,7 +32,8 @@
       <!-- show if new and reserving, or editing -->
       <span *ngIf="reservation.reserve || isEditMode; else oneTime">
         and reserving until <b>{{ reservationEnd$ | async | amDateFormat: 'h:mma' }}</b
-        >. You will be able to freely change the channel during your reservation.
+        >.
+        <p>You will be able to freely change the channel during your reservation.</p>
       </span>
       <!-- show when new and not reserving -->
       <ng-template #oneTime> <span *ngIf="!editMode">but others will be able to change the channel</span> </ng-template>
