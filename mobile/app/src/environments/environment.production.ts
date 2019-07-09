@@ -10,7 +10,7 @@ export const environment = {
     appId: 'lp9l5d9l',
   },
   stripe: {
-    publishableKey: '', // TODO
+    publishableKey: 'pk_live_LUgXVojsYzm2R5BfCvzhYqg800QyIkTHbr',
   },
   segment: {
     writeKey: 'Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I',
