@@ -11,6 +11,7 @@ import { getUserCard } from 'src/app/state/user';
 import { getUserTokenCount } from '../state/user';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
+import { Plan } from '../state/user/plan.model';
 
 @Component({
   selector: 'app-wallet',
@@ -31,20 +32,20 @@ export class WalletPage {
 
   selectedAmount;
   stripeFormGroup: FormGroup;
-  fundingAmounts = [
-    {
-      tokens: 5,
-      dollars: 5,
-    },
-    {
-      tokens: 10,
-      dollars: 10,
-    },
-    {
-      tokens: 25,
-      dollars: 25,
-    },
-  ];
+  // fundingAmounts = [
+  //   {
+  //     tokens: 5,
+  //     dollars: 5,
+  //   },
+  //   {
+  //     tokens: 10,
+  //     dollars: 10,
+  //   },
+  //   {
+  //     tokens: 25,
+  //     dollars: 25,
+  //   },
+  // ];
 
   constructor(
     private store: Store<fromStore.AppState>,

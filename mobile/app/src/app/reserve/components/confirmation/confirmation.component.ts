@@ -35,23 +35,24 @@ export class ConfirmationComponent implements OnInit {
   private reservationPlans = [
     {
       tokens: 1,
-      title: 'Change Channel',
-      minutes: 0,
-    },
-    {
-      tokens: 2,
-      title: '30 minutes',
+      title: 'Reserve for 30 minutes',
       minutes: 30,
       reserve: true,
-      disabled: true,
     },
-    {
-      tokens: 4,
-      title: '60 minutes',
-      minutes: 60,
-      reserve: true,
-      disabled: true,
-    },
+    // {
+    //   tokens: 2,
+    //   title: '30 minutes',
+    //   minutes: 30,
+    //   reserve: true,
+    //   disabled: true,
+    // },
+    // {
+    //   tokens: 4,
+    //   title: '60 minutes',
+    //   minutes: 60,
+    //   reserve: true,
+    //   disabled: true,
+    // },
   ];
 
   constructor(
