@@ -86,7 +86,7 @@ export class UserEffects {
   addFunds$: Observable<Action> = this.actions$.pipe(
     ofType(UserActions.ADD_FUNDS),
     switchMap((action: UserActions.AddFunds) =>
-      this.userService.addFunds(action.tokens).pipe(
+      this.userService.addFunds(action.plan).pipe(
         switchMap((result: any) => [new UserActions.AddFundsSuccess(result), new UserActions.Load()]),
         catchError(err => of(new UserActions.LoadFail(err))),
       ),

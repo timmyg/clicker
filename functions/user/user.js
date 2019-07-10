@@ -120,20 +120,17 @@ module.exports.removeCard = async event => {
 
 module.exports.replenish = async event => {
   const userId = getUserId(event);
-  const { planId } = getPathParameters(event);
+  const { plan } = getPathParameters(event);
   const wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
-  const plan = plans.find(p => p.id === planId);
-  if (!plan) {
-    return respond(200, `Couldn't find plan: ${planId}`);
-  }
+  // TODO audit plan
 
-  const { amount, tokens } = plan;
+  const { dollars, tokens } = plan;
 
   // charge via stripe
   const charge = await stripe.charges.create({
-    amount: amount * 100,
+    amount: dollars * 100,
     currency: 'usd',
     customer: wallet.stripeCustomer,
   });

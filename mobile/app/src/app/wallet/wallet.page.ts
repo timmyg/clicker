@@ -14,6 +14,7 @@ import { getUserTokenCount } from '../state/user';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
 import { Plan } from '../state/app/plan.model';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-wallet',
@@ -118,7 +119,7 @@ export class WalletPage {
 
   purchase() {
     this.waiting = true;
-    this.store.dispatch(new fromUser.AddFunds(this.selectedAmount.dollars));
+    this.store.dispatch(new fromUser.AddFunds(this.selectedAmount.id));
     setTimeout(async () => {
       this.waiting = false;
       const toast = await this.toastController.create({
@@ -135,7 +136,12 @@ export class WalletPage {
   }
 
   async onAmountChange(e) {
-    // this.selectedAmount = this.fundingAmounts.find(f => f.dollars === +e.detail.value);
+    this.plans$.pipe(first()).subscribe(plans => {
+      this.selectedAmount = plans.find(f => f.dollars === +e.detail.value);
+      console.log(this.selectedAmount);
+    });
+    // .find(f => f.dollars === +e.detail.value);
+    // console.log(e);
   }
 
   onClose() {

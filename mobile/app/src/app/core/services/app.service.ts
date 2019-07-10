@@ -5,7 +5,7 @@ import { Plan } from 'src/app/state/app/plan.model';
 
 @Injectable()
 export class AppService {
-  private prefix = `apps`;
+  private prefix = `app`;
   constructor(private httpClient: HttpClient) {}
 
   getPlans(): Observable<Plan[]> {

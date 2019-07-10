@@ -13,6 +13,7 @@ const storage = {
 
 import auth0 from 'auth0-js';
 import { environment } from 'src/environments/environment';
+import { Plan } from 'src/app/state/app/plan.model';
 
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
@@ -75,8 +76,8 @@ export class UserService {
     return this.httpClient.delete<any>(`${this.prefix}/stripe/card`);
   }
 
-  addFunds(tokens: number): Observable<any> {
-    return this.httpClient.post<any>(`${this.prefix}/replenish`, { tokens });
+  addFunds(plan: Plan): Observable<any> {
+    return this.httpClient.post<any>(`${this.prefix}/replenish`, plan);
   }
 
   async setToken(token: string) {
