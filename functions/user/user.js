@@ -120,7 +120,7 @@ module.exports.removeCard = async event => {
 
 module.exports.replenish = async event => {
   const userId = getUserId(event);
-  const { plan } = getPathParameters(event);
+  const plan = getBody(event);
   const wallet = await Wallet.queryOne('userId')
     .eq(userId)
     .exec();
