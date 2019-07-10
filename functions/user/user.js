@@ -92,19 +92,24 @@ module.exports.updateCard = async event => {
     .eq(userId)
     .exec();
 
-  if (wallet.stripeCustomer) {
-    const customer = await stripe.customers.update(wallet.stripeCustomer, {
-      source: stripeCardToken,
-    });
-    return respond(200, customer);
-  } else {
-    const customer = await stripe.customers.create({
-      source: stripeCardToken,
-      description: userId,
-    });
-    // TODO audit
-    await Wallet.update({ userId }, { stripeCustomer: customer.id });
-    return respond(201, customer);
+  try {
+    if (wallet.stripeCustomer) {
+      const customer = await stripe.customers.update(wallet.stripeCustomer, {
+        source: stripeCardToken,
+      });
+      return respond(200, customer);
+    } else {
+      const customer = await stripe.customers.create({
+        source: stripeCardToken,
+        description: userId,
+      });
+      // TODO audit
+      await Wallet.update({ userId }, { stripeCustomer: customer.id });
+      return respond(201, customer);
+    }
+  } catch (e) {
+    console.error(e);
+    return respond(400, e);
   }
 };
 
