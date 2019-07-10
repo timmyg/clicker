@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { FormGroup } from '@angular/forms';
 import { ToastController, ModalController, AlertController } from '@ionic/angular';
+import * as fromApp from '../state/app/app.actions';
 import * as fromUser from '../state/user/user.actions';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { Observable } from 'rxjs';
 import { Card } from 'src/app/state/user/card.model';
 import { getUserCard } from 'src/app/state/user';
+import { getPlans } from 'src/app/state/app';
 import { getUserTokenCount } from '../state/user';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
-import { Plan } from '../state/user/plan.model';
+import { Plan } from '../state/app/plan.model';
 
 @Component({
   selector: 'app-wallet',
@@ -57,12 +59,12 @@ export class WalletPage {
     private globals: Globals,
   ) {
     this.userCard$ = this.store.select(getUserCard);
+    this.plans$ = this.store.select(getPlans);
   }
 
   ngOnInit() {
-    // this.stripeFormGroup = this.fb.group({
-    //   name: ['', [Validators.required]],
-    // });
+    this.store.dispatch(new fromApp.LoadPlans());
+    // this.store.dispatch(new fromUser.LoadWallet());
     this.stripeService.elements(this.elementsOptions).subscribe(elements => {
       this.elements = elements;
       // Only mount the element the first time
@@ -133,7 +135,7 @@ export class WalletPage {
   }
 
   async onAmountChange(e) {
-    this.selectedAmount = this.fundingAmounts.find(f => f.dollars === +e.detail.value);
+    // this.selectedAmount = this.fundingAmounts.find(f => f.dollars === +e.detail.value);
   }
 
   onClose() {

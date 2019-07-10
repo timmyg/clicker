@@ -8,3 +8,8 @@ export const getPartner = createSelector(
   getAppState,
   fromApp.getPartner,
 );
+
+export const getPlans = createSelector(
+  getAppState,
+  fromApp.getPlans,
+);

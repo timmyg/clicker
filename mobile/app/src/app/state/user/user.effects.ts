@@ -5,7 +5,6 @@ import { Observable, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import * as decode from 'jwt-decode';
 
-// import { User } from './user.model';
 import * as UserActions from './user.actions';
 import { UserService } from 'src/app/core/services/user.service';
 

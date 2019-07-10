@@ -10,8 +10,8 @@
   <section [hidden]="!(userCard$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
-        <ion-list-header> Choose Amount </ion-list-header>
-        <ion-item *ngFor="let f of fundingAmounts">
+        <ion-list-header> Choose an Amount </ion-list-header>
+        <ion-item *ngFor="let f of (plans$ | async)">
           <ion-label flex ion-justify-items-end>
             <span>${{ f.dollars }}</span>
             <div flex ion-align-items-center float-right>
