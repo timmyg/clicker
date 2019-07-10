@@ -32,28 +32,6 @@ export class ConfirmationComponent implements OnInit {
   saving: boolean;
   isEditMode: boolean;
   sufficientFunds: boolean;
-  private reservationPlans = [
-    {
-      tokens: 1,
-      title: 'Reserve for 30 minutes',
-      minutes: 30,
-      reserve: true,
-    },
-    // {
-    //   tokens: 2,
-    //   title: '30 minutes',
-    //   minutes: 30,
-    //   reserve: true,
-    //   disabled: true,
-    // },
-    // {
-    //   tokens: 4,
-    //   title: '60 minutes',
-    //   minutes: 60,
-    //   reserve: true,
-    //   disabled: true,
-    // },
-  ];
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -78,11 +56,21 @@ export class ConfirmationComponent implements OnInit {
       )
       .subscribe(reservation => {
         this.reservation = reservation;
+        // initialize resrvation
+        this.reservation.cost = 1;
+        this.reservation.minutes = 30;
+        this.reservation.end = moment()
+          .add(this.reservation.minutes.valueOf(), 'minutes')
+          .toDate();
+        console.log(this.reservation);
+        this.reservation.reserve = true;
+        // this.checkWallet();
         if (reservation.id) {
           this.isEditMode = true;
         }
       });
     this.tokenCount$.subscribe(tokens => {
+      console.log({ tokens });
       this.tokenCount = tokens;
     });
     this.isLoggedIn$.subscribe(isLoggedIn => {
@@ -90,40 +78,13 @@ export class ConfirmationComponent implements OnInit {
     });
   }
 
-  get availablePlans() {
-    if (this.isEditMode) {
-      this.reservationPlans[0].title = "Don't extend";
-      this.reservationPlans[0].tokens = 0;
-    }
-    return this.reservationPlans;
-  }
+  // checkWallet() {
+  //   console.log(this.tokenCount, this.reservation.cost);
+  //   this.tokenCount >= this.reservation.cost ? (this.sufficientFunds = true) : (this.sufficientFunds = false);
+  // }
 
-  onLengthChange(e) {
-    const plan = this.reservationPlans.find(p => p.minutes === +e.detail.value);
-    this.reservation.cost = plan.tokens;
-    // const endTimeInitial = this.reservation.end ? moment(this.reservation.end) : moment();
-    this.reservation.minutes = plan.minutes;
-    this.reservation.reserve = plan.reserve;
-    this.checkWallet();
-    this.reservationEnd$ = interval(15 * 1000).pipe(
-      startWith(
-        this.getInitialEndTime()
-          .clone()
-          .add(plan.minutes, 'm')
-          .toDate(),
-      ), // this sets inital value
-      map(() => {
-        return this.getInitialEndTime()
-          .clone()
-          .add(plan.minutes, 'm')
-          .toDate();
-      }),
-      distinctUntilChanged(),
-    );
-  }
-
-  checkWallet() {
-    this.tokenCount >= this.reservation.cost ? (this.sufficientFunds = true) : (this.sufficientFunds = false);
+  hasSufficientFunds() {
+    return this.tokenCount >= this.reservation.cost;
   }
 
   getInitialEndTime() {

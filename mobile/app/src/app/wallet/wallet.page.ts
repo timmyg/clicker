@@ -33,7 +33,7 @@ export class WalletPage {
     locale: 'en',
   };
 
-  selectedAmount;
+  selectedPlan: Plan;
   stripeFormGroup: FormGroup;
   // fundingAmounts = [
   //   {
@@ -119,29 +119,26 @@ export class WalletPage {
 
   purchase() {
     this.waiting = true;
-    this.store.dispatch(new fromUser.AddFunds(this.selectedAmount.id));
+    this.store.dispatch(new fromUser.AddFunds(this.selectedPlan));
     setTimeout(async () => {
       this.waiting = false;
       const toast = await this.toastController.create({
-        message: `Successfully purchased ${this.selectedAmount.tokens} tokens`,
+        message: `Successfully purchased ${this.selectedPlan.tokens} tokens`,
         duration: 3000,
         cssClass: 'ion-text-center',
       });
       toast.present();
       this.onClose();
       this.segment.track(this.globals.events.payment.fundsAdded, {
-        amount: this.selectedAmount.dollars,
+        amount: this.selectedPlan.dollars,
       });
     }, 3000);
   }
 
   async onAmountChange(e) {
     this.plans$.pipe(first()).subscribe(plans => {
-      this.selectedAmount = plans.find(f => f.dollars === +e.detail.value);
-      console.log(this.selectedAmount);
+      this.selectedPlan = plans.find(f => f.dollars === +e.detail.value);
     });
-    // .find(f => f.dollars === +e.detail.value);
-    // console.log(e);
   }
 
   onClose() {
