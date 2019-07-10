@@ -40,7 +40,7 @@ functions:
               - authorization
               - content-type
   health:
-    handler: lead.health
+    handler: app.health
     events:
       - http:
           path: health
