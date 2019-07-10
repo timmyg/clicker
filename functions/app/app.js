@@ -12,4 +12,5 @@ module.exports.health = async event => {
 
 module.exports.tokenPlans = async event => {
   return respond(200, plans);
+  
 };
