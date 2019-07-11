@@ -58,7 +58,7 @@ export class ConfirmationComponent implements OnInit {
       .subscribe(reservation => {
         this.reservation = reservation;
         // initialize reservation
-        this.reservation.cost = 1;
+        this.reservation.cost = this.reservation.location.cost;
         this.route.queryParams.subscribe(params => {
           this.reservation.minutes = 30;
           if (params && params.edit) {
@@ -73,7 +73,6 @@ export class ConfirmationComponent implements OnInit {
         }
       });
     this.tokenCount$.subscribe(tokens => {
-      console.log({ tokens });
       this.tokenCount = tokens;
     });
     this.isLoggedIn$.subscribe(isLoggedIn => {
