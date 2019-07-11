@@ -27,11 +27,11 @@ custom:
     release: ${env:SEGMENT_WRITE_KEY_DEV}
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
 functions:
-  tokenPlans:
-    handler: app.tokenPlans
+  tokens:
+    handler: app.tokens
     events:
       - http:
-          path: plans
+          path: tokens
           method: get
           cors:
             origin: '*'
