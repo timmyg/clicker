@@ -10,6 +10,6 @@ module.exports.health = async event => {
   return respond(200, `hello`);
 };
 
-module.exports.tokens = async event => {
+module.exports.buy = async event => {
   return respond(200, plans);
 };
