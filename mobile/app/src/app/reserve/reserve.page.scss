@@ -1,15 +1,18 @@
 .breadcrumbs {
-  // padding-top: 12px;
   span {
     margin-right: 5px;
+    &.active {
+      font-weight: bold;
+    }
     &:not(.active) {
-      opacity: .4;
+      opacity: 0.4;
     }
   }
   ion-icon {
     margin-right: 2px;
   }
-  ion-icon, .text {
+  ion-icon,
+  .text {
     vertical-align: middle;
   }
 }
