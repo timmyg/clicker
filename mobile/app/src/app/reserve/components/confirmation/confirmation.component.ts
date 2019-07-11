@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { getReservation } from 'src/app/state/reservation';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
 import { startWith, map, distinctUntilChanged, first, filter } from 'rxjs/operators';
@@ -41,6 +41,7 @@ export class ConfirmationComponent implements OnInit {
     private actions$: Actions,
     private segment: SegmentService,
     private globals: Globals,
+    private route: ActivatedRoute,
   ) {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
@@ -56,15 +57,17 @@ export class ConfirmationComponent implements OnInit {
       )
       .subscribe(reservation => {
         this.reservation = reservation;
-        // initialize resrvation
+        // initialize reservation
         this.reservation.cost = 1;
-        this.reservation.minutes = 30;
-        this.reservation.end = moment()
-          .add(this.reservation.minutes.valueOf(), 'minutes')
-          .toDate();
-        console.log(this.reservation);
-        this.reservation.reserve = true;
-        // this.checkWallet();
+        this.route.queryParams.subscribe(params => {
+          this.reservation.minutes = 30;
+          if (params && params.edit) {
+            if (params.edit === 'channel') {
+              this.reservation.minutes = 0;
+            } else if (params.edit === 'time') {
+            }
+          }
+        });
         if (reservation.id) {
           this.isEditMode = true;
         }
@@ -78,17 +81,14 @@ export class ConfirmationComponent implements OnInit {
     });
   }
 
-  // checkWallet() {
-  //   console.log(this.tokenCount, this.reservation.cost);
-  //   this.tokenCount >= this.reservation.cost ? (this.sufficientFunds = true) : (this.sufficientFunds = false);
-  // }
+  getEndTime() {
+    return moment(this.reservation.end)
+      .add(this.reservation.minutes.valueOf(), 'minutes')
+      .toDate();
+  }
 
   hasSufficientFunds() {
     return this.tokenCount >= this.reservation.cost;
-  }
-
-  getInitialEndTime() {
-    return this.reservation.end ? moment(this.reservation.end) : moment();
   }
 
   onConfirm() {
