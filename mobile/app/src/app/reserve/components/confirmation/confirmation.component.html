@@ -1,6 +1,6 @@
-<ion-card *ngIf="reservation$ | async as reservation">
+<ion-card *ngIf="(reservation$ | async) as reservation">
   <ion-card-content>
-    <ion-list-header no-padding> Summary </ion-list-header>
+    <!-- <ion-list-header no-padding> Summary </ion-list-header> -->
     <div>
       <label> Channel: </label> <span>{{ reservation.program.title }} ({{ reservation.program.channelTitle }})</span>
     </div>
@@ -8,10 +8,10 @@
       <label> TV: </label> <span>{{ reservation.box.label }}</span>
     </div>
     <div>
-      <label> Reserved Until: </label> <span>{{ reservation.end | amDateFormat: 'h:mma' }}</span>
+      <label> Reserved Until: </label> <span>{{ getEndTime() | amDateFormat: 'h:mma' }}</span>
     </div>
     <br />
-    <p>You will be able to freely change the channel during your reservation.</p>
+    <p class="ion-text-center">You will be able to freely change the channel during your reservation.</p>
     <!-- </p> -->
     <ion-button
       color="success"

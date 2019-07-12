@@ -12,11 +12,12 @@
       <ion-radio-group (ionChange)="onAmountChange($event)">
         <ion-list-header> Choose an Amount </ion-list-header>
         <ion-item *ngFor="let f of (plans$ | async)">
-          <ion-label flex ion-justify-items-end>
-            <span>${{ f.dollars }}</span>
-            <div flex ion-align-items-center float-right>
+          <ion-label flex align-items-center>
+            <span class="dollars">${{ f.dollars }}</span>
+            <div flex align-items-center>
+              <ion-chip *ngIf="f.best" color="primary" padding-right> Best Deal </ion-chip>
               <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-              <span padding-start>{{ f.tokens }}</span>
+              <span>{{ f.tokens }}</span>
             </div>
           </ion-label>
           <ion-radio slot="start" value="{{ f.dollars }}" [disabled]="waiting" checked></ion-radio>

@@ -6,7 +6,10 @@
     <ion-card (click)="isAvailable() && onLocationClick()" no-margin>
       <ion-card-header>
         <ion-card-subtitle>
-          <span>{{ location.neighborhood }} <span *ngIf="!isAvailable()">(inactive)</span></span>
+          <span
+            >{{ location.neighborhood }} <span *ngIf="!isAvailable()">(inactive)</span>
+            <ion-chip color="primary" *ngIf="location.cost === 0"> Free </ion-chip></span
+          >
           <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 

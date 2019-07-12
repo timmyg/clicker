@@ -27,11 +27,11 @@ custom:
     release: ${env:SEGMENT_WRITE_KEY_DEV}
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
 functions:
-  tokenPlans:
-    handler: app.tokenPlans
+  buy:
+    handler: app.buy
     events:
       - http:
-          path: plans
+          path: buy
           method: get
           cors:
             origin: '*'

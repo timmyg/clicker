@@ -9,6 +9,6 @@ export class AppService {
   constructor(private httpClient: HttpClient) {}
 
   getPlans(): Observable<Plan[]> {
-    return this.httpClient.get<Plan[]>(`${this.prefix}/plans`);
+    return this.httpClient.get<Plan[]>(`${this.prefix}/buy`);
   }
 }
