@@ -33,5 +33,5 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-resources/android/*
-resources/ios/*
+resources/android
+resources/ios
