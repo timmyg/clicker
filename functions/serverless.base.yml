@@ -2,6 +2,8 @@
 # provider:
 #   name: aws
 #   runtime: nodejs8.10
+#   deploymentBucket:
+#     name: serverless-deploys-clicker
 #   environment:
 #     stage: ${self:custom.stage}
 #   iamRoleStatements:
