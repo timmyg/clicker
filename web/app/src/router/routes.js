@@ -25,7 +25,8 @@ export default [
     path: '/app/auth',
     name: 'app-auth',
     beforeEnter(to, from, next) {
-      alert('clicker://tabs/profile/logging-in' + window.location.hash);
+      // alert('clicker://tabs/profile/logging-in' + window.location.hash);
+      JSON.stringify(window.location);
       window.location = 'clicker://tabs/profile/logging-in' + window.location.hash;
     },
   },

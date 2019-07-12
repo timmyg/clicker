@@ -14,11 +14,13 @@ const auth = new auth0.WebAuth({
   // redirectUri: `${environment.packageId}://${environment.auth0.domain}/android/${
   //   environment.packageId
   // }/tabs/profile/logging-in`,
+  // redirectUri: `https://tryclicker.com/?test=4`,
   redirectUri: `https://develop.tryclicker.com/app/auth`,
   responseType: 'token id_token',
-  // prompt: 'none',
+  prompt: 'none',
   packageId: environment.packageId,
 });
+// auth0.crossOriginVerification();
 
 @Component({
   selector: 'app-login',
