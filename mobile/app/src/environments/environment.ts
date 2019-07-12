@@ -7,7 +7,8 @@ export const environment = {
   apiBaseUrl: 'https://api-develop.tryclicker.com',
   packageId: 'com.teamclicker.app',
   auth0: {
-    domain: 'clikr-develop.auth0.com',
+    // domain: 'clikr-develop.auth0.com',
+    domain: 'auth-develop.tryclicker.com',
     clientId: 'abgmbT4pqRZROXxn383G4Js0dMMP4bRY',
   },
   intercom: {
