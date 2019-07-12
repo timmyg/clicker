@@ -17,8 +17,15 @@ export default [
   },
   {
     path: '/app/privacy',
-    name: 'privacy',
+    name: 'app-privacy',
     component: PrivacyApp,
+  },
+  {
+    path: '/app/auth',
+    name: 'app-auth',
+    beforeEnter(to, from, next) {
+      window.location = 'com.teamclicker.app://tabs/profile/logging-in' + window.location.hash;
+    },
   },
   {
     path: '/dev/dashboard',

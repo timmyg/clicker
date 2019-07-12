@@ -8,12 +8,13 @@ const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
   clientID: environment.auth0.clientId,
   // redirectUri: `${window.location.origin}/tabs/profile/logging-in`,
-  redirectUri: `${environment.packageId}://${environment.auth0.domain}/cordova/${
-    environment.packageId
-  }/tabs/profile/logging-in`,
+  // redirectUri: `${environment.packageId}://${environment.auth0.domain}/cordova/${
+  //   environment.packageId
+  // }/tabs/profile/logging-in`,
   // redirectUri: `${environment.packageId}://${environment.auth0.domain}/android/${
   //   environment.packageId
   // }/tabs/profile/logging-in`,
+  redirectUri: `https://develop.tryclicker.com/app/auth`,
   responseType: 'token id_token',
   prompt: 'none',
   packageId: environment.packageId,
