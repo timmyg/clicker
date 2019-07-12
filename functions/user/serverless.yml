@@ -4,7 +4,6 @@ provider:
   name: aws
   runtime: nodejs8.10
   deploymentBucket:
-    # name: com.serverless.${self:provider.region}.deploys #
     name: serverless-deploys-clicker
   environment:
     tableWallet: ${self:custom.tableWallet}
