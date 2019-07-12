@@ -16,7 +16,7 @@ const auth = new auth0.WebAuth({
   // }/tabs/profile/logging-in`,
   redirectUri: `https://develop.tryclicker.com/app/auth`,
   responseType: 'token id_token',
-  prompt: 'none',
+  // prompt: 'none',
   packageId: environment.packageId,
 });
 
