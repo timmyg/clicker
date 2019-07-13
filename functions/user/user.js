@@ -197,14 +197,27 @@ module.exports.alias = async event => {
   return respond(201, wallet);
 };
 
-module.exports.verifyPhone = async event => {
+module.exports.verifyStart = async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
   const response = await client.verify
     .services(twilioServiceSid)
-    .verifications.create({ to: phone, channel: 'sms' })
+    .verifications.create({ to: phone, channel: 'sms', customMessage: '' })
     .then(verification => console.log(verification.sid));
+  return respond(201, response);
+};
+
+module.exports.verify = async event => {
+  const { phone, code } = getBody(event);
+  const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
+  const client = require('twilio')(twilioAccountSid, twilioAuthToken);
+
+  const response = client.verify
+    .services(twilioServiceSid)
+    .verificationChecks.create({ to: phone, code })
+    .then(verification_check => console.log(verification_check.status));
+  console.log(response);
   return respond(201, response);
 };
