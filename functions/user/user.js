@@ -217,7 +217,7 @@ module.exports.verify = async event => {
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
   try {
-    const response = client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
+    const response = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
     console.log(response);
     return respond(201, response);
   } catch (e) {
