@@ -205,7 +205,7 @@ module.exports.verifyStart = async event => {
   try {
     const response = await client.verify
       .services(twilioServiceSid)
-      .verifications.create({ to: phone, channel: 'sms', customMessage: '' })
+      .verifications.create({ to: phone, channel: 'sms' })
       .then(verification => console.log(verification.sid));
     return respond(201, response);
   } catch (e) {
