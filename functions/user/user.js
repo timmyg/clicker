@@ -202,11 +202,15 @@ module.exports.verifyStart = async event => {
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
-  const response = await client.verify
-    .services(twilioServiceSid)
-    .verifications.create({ to: phone, channel: 'sms', customMessage: '' })
-    .then(verification => console.log(verification.sid));
-  return respond(201, response);
+  try {
+    const response = await client.verify
+      .services(twilioServiceSid)
+      .verifications.create({ to: phone, channel: 'sms', customMessage: '' })
+      .then(verification => console.log(verification.sid));
+    return respond(201, response);
+  } catch (e) {
+    return respond(400, e);
+  }
 };
 
 module.exports.verify = async event => {
@@ -214,10 +218,14 @@ module.exports.verify = async event => {
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
-  const response = client.verify
-    .services(twilioServiceSid)
-    .verificationChecks.create({ to: phone, code })
-    .then(verification_check => console.log(verification_check.status));
-  console.log(response);
-  return respond(201, response);
+  try {
+    const response = client.verify
+      .services(twilioServiceSid)
+      .verificationChecks.create({ to: phone, code })
+      .then(verification_check => console.log(verification_check.status));
+    console.log(response);
+    return respond(201, response);
+  } catch (e) {
+    return respond(400, e);
+  }
 };
