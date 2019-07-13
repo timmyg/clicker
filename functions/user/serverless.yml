@@ -180,11 +180,23 @@ functions:
               - partner
               - authorization
               - content-type
-  verifyPhone:
-    handler: user.verifyPhone
+  verifyStart:
+    handler: user.verifyStart
     events:
       - http:
           path: 'verify/start'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  verify:
+    handler: user.verify
+    events:
+      - http:
+          path: 'verify'
           method: post
           cors:
             origin: '*'
