@@ -203,10 +203,8 @@ module.exports.verifyStart = async event => {
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
   try {
-    const response = await client.verify
-      .services(twilioServiceSid)
-      .verifications.create({ to: phone, channel: 'sms' })
-      .then(verification => console.log(verification.sid));
+    const response = await client.verify.services(twilioServiceSid).verifications.create({ to: phone, channel: 'sms' });
+    console.log(response);
     return respond(201, response);
   } catch (e) {
     return respond(400, e);
@@ -219,10 +217,7 @@ module.exports.verify = async event => {
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
   try {
-    const response = client.verify
-      .services(twilioServiceSid)
-      .verificationChecks.create({ to: phone, code })
-      .then(verification_check => console.log(verification_check.status));
+    const response = client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
     console.log(response);
     return respond(201, response);
   } catch (e) {
