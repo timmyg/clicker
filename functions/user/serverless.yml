@@ -10,6 +10,9 @@ provider:
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     stage: ${self:custom.stage}
     stripeSecretKey: ${self:custom.stripeSecretKey.${self:custom.stage}}
+    twilioAccountSid: ${env:TWILIO_ACCOUNT_SID}
+    twilioAuthToken: ${env:TWILIO_AUTH_TOKEN}
+    twilioServiceSid: ${env:TWILIO_SERVICE_SID}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -170,6 +173,18 @@ functions:
     events:
       - http:
           path: 'alias/{fromId}/{toId}'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  verifyPhone:
+    handler: user.verifyPhone
+    events:
+      - http:
+          path: 'verify/start'
           method: post
           cors:
             origin: '*'

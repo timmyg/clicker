@@ -196,3 +196,15 @@ module.exports.alias = async event => {
 
   return respond(201, wallet);
 };
+
+module.exports.alias = async event => {
+  const { phone } = getBody(event);
+  const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
+  const client = require('twilio')(twilioAccountSid, twilioAuthToken);
+
+  client.verify
+    .services(twilioServiceSid)
+    .verifications.create({ to: phone, channel: 'sms' })
+    .then(verification => console.log(verification.sid));
+  return respond(201);
+};
