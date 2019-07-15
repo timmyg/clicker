@@ -237,11 +237,15 @@ async function getToken(phone) {
     .eq(phone)
     .all()
     .exec();
+  console.log(users);
+  console.log(key);
   if (users && users.length) {
     const { userId } = users[0];
     return jwt.sign({ sub: userId }, key);
   } else {
+    console.log('1');
     const { userId } = await User.create({ userId, tokens: initialTokens });
+    console.log('2');
     return jwt.sign({ sub: userId }, key);
   }
 }
