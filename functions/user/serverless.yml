@@ -57,19 +57,6 @@ resources:
       Properties:
         TableName: ${self:custom.tableUser}
         AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
-    UsersTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableUser}
-        AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
         KeySchema:
