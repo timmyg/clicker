@@ -245,7 +245,7 @@ async function getToken(phone) {
     return jwt.sign({ sub: userId }, key);
   } else {
     console.log('1');
-    const user = await User.create({ tokens: initialTokens });
+    const user = await User.create({ phone, tokens: initialTokens });
     console.log('2', user);
     return jwt.sign({ sub: user.userId }, key);
   }
