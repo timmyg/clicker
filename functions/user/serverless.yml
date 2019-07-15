@@ -41,7 +41,7 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  tableUser: wallets-${self:custom.stage}
+  tableUser: users-${self:custom.stage}
   stripeSecretKey:
     prod: ${env:STRIPE_SECRET_KEY}
     release: ${env:STRIPE_SECRET_KEY_DEV}
