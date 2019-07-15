@@ -6,7 +6,7 @@ provider:
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
-    tableWallet: ${self:custom.tableWallet}
+    tableUser: ${self:custom.tableUser}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     stage: ${self:custom.stage}
     stripeSecretKey: ${self:custom.stripeSecretKey.${self:custom.stage}}
@@ -41,7 +41,7 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  tableWallet: wallets-${self:custom.stage}
+  tableUser: wallets-${self:custom.stage}
   stripeSecretKey:
     prod: ${env:STRIPE_SECRET_KEY}
     release: ${env:STRIPE_SECRET_KEY_DEV}
@@ -52,36 +52,32 @@ custom:
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
-    Walletable:
+    UserTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: ${self:custom.tableWallet}
+        TableName: ${self:custom.tableUser}
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          # - AttributeName: id
-          #   AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          # - AttributeName: id
-          #   KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-    # UsersTable:
-    #   Type: 'AWS::DynamoDB::Table'
-    #   Properties:
-    #     TableName: ${self:custom.tableUser}
-    #     AttributeDefinitions:
-    #       - AttributeName: id
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: id
-    #         KeyType: HASH
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: ${self:custom.tableThroughput}
-    #       WriteCapacityUnits: ${self:custom.tableThroughput}
+    UsersTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableUser}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
