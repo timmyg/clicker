@@ -10,15 +10,15 @@ const key = 'clikr';
 const User = dynamoose.model(
   process.env.tableUser,
   {
-    userId: {
-      type: String,
-      hashKey: true,
-      required: true,
-      default: uuid,
-      set: val => {
-        return decodeURI(val).replace('sms|', '');
-      },
-    },
+    // userId: {
+    //   type: String,
+    //   hashKey: true,
+    //   required: true,
+    //   default: uuid,
+    //   set: val => {
+    //     return decodeURI(val).replace('sms|', '');
+    //   },
+    // },
     id: {
       type: String,
       default: uuid,
@@ -32,9 +32,9 @@ const User = dynamoose.model(
     },
     aliasedTo: {
       type: String,
-      set: val => {
-        return decodeURI(val).replace('sms|', '');
-      },
+      // set: val => {
+      //   return decodeURI(val).replace('sms|', '');
+      // },
     },
   },
   {
@@ -47,16 +47,16 @@ module.exports.health = async event => {
 };
 
 module.exports.create = async event => {
-  const userId = uuid();
-  await User.create({ userId, tokens: initialTokens });
-  const token = jwt.sign({ sub: userId, guest: true }, key);
+  const id = uuid();
+  await User.create({ id, tokens: initialTokens });
+  const token = jwt.sign({ sub: id, guest: true }, key);
 
   return respond(201, { token });
 };
 
 module.exports.wallet = async event => {
   const userId = getUserId(event);
-  let user = await User.queryOne('userId')
+  let user = await User.queryOne('id')
     .eq(userId)
     .exec();
   console.log({ user });
@@ -65,7 +65,7 @@ module.exports.wallet = async event => {
   if (!user) {
     // const userId = uuid();
     console.log('creating user', userId, initialTokens);
-    user = await User.create({ userId, tokens: initialTokens });
+    user = await User.create({ id: userId, tokens: initialTokens });
   }
   console.log({ user });
 
@@ -82,7 +82,7 @@ module.exports.updateCard = async event => {
   const userId = getUserId(event);
   const { token: stripeCardToken } = getBody(event);
 
-  const user = await User.queryOne('userId')
+  const user = await User.queryOne('id')
     .eq(userId)
     .exec();
 
@@ -98,7 +98,7 @@ module.exports.updateCard = async event => {
         description: userId,
       });
       // TODO audit
-      await User.update({ userId }, { stripeCustomer: customer.id });
+      await User.update({ id: userId }, { stripeCustomer: customer.id });
       return respond(201, customer);
     }
   } catch (e) {
@@ -110,7 +110,7 @@ module.exports.updateCard = async event => {
 module.exports.removeCard = async event => {
   const userId = getUserId(event);
 
-  const { stripeCustomer } = await User.queryOne('userId')
+  const { stripeCustomer } = await User.queryOne('id')
     .eq(userId)
     .exec();
 
@@ -124,7 +124,7 @@ module.exports.removeCard = async event => {
 module.exports.replenish = async event => {
   const userId = getUserId(event);
   const plan = getBody(event);
-  const user = await User.queryOne('userId')
+  const user = await User.queryOne('id')
     .eq(userId)
     .exec();
   // TODO audit plan
@@ -141,7 +141,7 @@ module.exports.replenish = async event => {
   // TODO audit
 
   // update user
-  const updatedUser = await User.update({ userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+  const updatedUser = await User.update({ id: userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
   return respond(200, updatedUser);
 };
@@ -149,13 +149,13 @@ module.exports.replenish = async event => {
 module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
-  const user = await User.queryOne('userId')
+  const user = await User.queryOne('id')
     .eq(userId)
     .exec();
 
   if (user && user.tokens >= tokens) {
     // TODO audit
-    user = await User.update({ userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
+    user = await User.update({ id: userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
     return respond(200, user);
   } else {
     console.error('Insufficient Funds');
@@ -167,10 +167,10 @@ module.exports.alias = async event => {
   const { fromId, toId } = getPathParameters(event);
 
   // get existing users
-  const fromUser = await User.queryOne('userId')
+  const fromUser = await User.queryOne('id')
     .eq(fromId)
     .exec();
-  const toUser = await User.queryOne('userId')
+  const toUser = await User.queryOne('id')
     .eq(toId)
     .exec();
 
@@ -183,15 +183,15 @@ module.exports.alias = async event => {
   // create or update user
   let user;
   if (toUser) {
-    user = await User.update({ userId: toId }, { tokens });
+    user = await User.update({ id: toId }, { tokens });
   } else {
-    user = await User.create({ userId: toId, tokens });
+    user = await User.create({ id: toId, tokens });
   }
   // remove tokens from old account
-  await User.update({ userId: fromId }, { tokens: 0 });
+  await User.update({ id: fromId }, { tokens: 0 });
 
   // update for tracking purposes
-  await User.update({ userId: fromId }, { aliasedTo: toId });
+  await User.update({ id: fromId }, { aliasedTo: toId });
 
   // TODO update reservations to new user!
 
@@ -247,6 +247,6 @@ async function getToken(phone) {
     console.log('1');
     const user = await User.create({ phone, tokens: initialTokens });
     console.log('2', user);
-    return jwt.sign({ sub: user.userId }, key);
+    return jwt.sign({ sub: user.id }, key);
   }
 }
