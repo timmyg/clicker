@@ -4,6 +4,8 @@ import auth0 from 'auth0-js';
 import { environment } from 'src/environments/environment';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
+import { UserService } from 'src/app/core/services/user.service';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 const auth = new auth0.WebAuth({
   domain: environment.auth0.domain,
   clientID: environment.auth0.clientId,
@@ -38,6 +40,7 @@ export class LoginComponent {
     public toastController: ToastController,
     private segment: SegmentService,
     private globals: Globals,
+    private userService: UserService,
   ) {}
 
   onCloseClick() {
@@ -46,26 +49,22 @@ export class LoginComponent {
 
   async onPhoneSubmit() {
     this.waiting = true;
-    auth.passwordlessStart(
-      {
-        connection: 'sms',
-        send: 'code',
-        phoneNumber: `+1${this.phone}`,
-      },
-      async (err, res) => {
-        if (err) {
-          const toastInvalid = await this.toastController.create({
-            message: err.description,
-            color: 'danger',
-            duration: 4000,
-            cssClass: 'ion-text-center',
-          });
-          toastInvalid.present();
-          this.waiting = false;
-          return console.error(err, JSON.stringify(window));
-        }
+    // TODO these service should probably be using redux events
+    this.userService.loginVerifyStart(`+1${this.phone}`).subscribe(
+      result => {
         this.segment.track(this.globals.events.login.started);
         this.codeSent = true;
+        this.waiting = false;
+      },
+      async err => {
+        console.error(err);
+        const toastInvalid = await this.toastController.create({
+          message: 'Invalid phone number. Please enter your 10 digit phone number starting with area code.',
+          color: 'danger',
+          duration: 5000,
+          cssClass: 'ion-text-center',
+        });
+        toastInvalid.present();
         this.waiting = false;
       },
     );
@@ -73,27 +72,46 @@ export class LoginComponent {
 
   onCodeSubmit() {
     this.waiting = true;
-    auth.passwordlessLogin(
-      {
-        connection: 'sms',
-        phoneNumber: `+1${this.phone}`.trim(),
-        verificationCode: this.code.toString(),
+    // TODO move to store
+    this.userService.loginVerify(`+1${this.phone}`, this.code).subscribe(
+      result => {
+        this.segment.track(this.globals.events.login.completed);
+        this.waiting = false;
+        console.log('save token!', result);
       },
-      async (err, res) => {
-        if (err) {
-          const toastInvalid = await this.toastController.create({
-            message: err.code === 'access_denied' ? 'Invalid code' : err.description,
-            color: 'danger',
-            duration: 4000,
-            cssClass: 'ion-text-center',
-          });
-          toastInvalid.present();
-          this.waiting = false;
-          return console.error(err, JSON.stringify(window));
-        }
+      async err => {
+        console.error(err);
+        const toastInvalid = await this.toastController.create({
+          message: 'Invalid code.',
+          color: 'danger',
+          duration: 3000,
+          cssClass: 'ion-text-center',
+        });
+        toastInvalid.present();
         this.waiting = false;
       },
     );
+    // auth.passwordlessLogin(
+    //   {
+    //     connection: 'sms',
+    //     phoneNumber: `+1${this.phone}`.trim(),
+    //     verificationCode: this.code.toString(),
+    //   },
+    //   async (err, res) => {
+    //     if (err) {
+    //       const toastInvalid = await this.toastController.create({
+    //         message: err.code === 'access_denied' ? 'Invalid code' : err.description,
+    //         color: 'danger',
+    //         duration: 4000,
+    //         cssClass: 'ion-text-center',
+    //       });
+    //       toastInvalid.present();
+    //       this.waiting = false;
+    //       return console.error(err, JSON.stringify(window));
+    //     }
+    //     this.waiting = false;
+    //   },
+    // );
   }
 
   isEligibleCode() {

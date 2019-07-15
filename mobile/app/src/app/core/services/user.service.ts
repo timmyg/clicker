@@ -29,17 +29,25 @@ export class UserService {
   private prefix = `users`;
   constructor(private httpClient: HttpClient, private storage: Storage) {}
 
-  refresh(): Observable<any> {
-    return new Observable(observer => {
-      auth.checkSession({}, async (err, result) => {
-        if (result) {
-          await this.setToken(result.idToken);
-        } else {
-          console.error(err);
-        }
-        observer.next();
-      });
-    });
+  // refresh(): Observable<any> {
+  //   return new Observable(observer => {
+  //     auth.checkSession({}, async (err, result) => {
+  //       if (result) {
+  //         await this.setToken(result.idToken);
+  //       } else {
+  //         console.error(err);
+  //       }
+  //       observer.next();
+  //     });
+  //   });
+  // }
+
+  loginVerifyStart(phone: string): Observable<boolean> {
+    return this.httpClient.post<any>(`${this.prefix}/verify/start`, { phone });
+  }
+
+  loginVerify(phone, code: string): Observable<boolean> {
+    return this.httpClient.post<any>(`${this.prefix}/verify`, { phone, code });
   }
 
   get(): Observable<string> {

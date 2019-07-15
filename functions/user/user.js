@@ -218,9 +218,9 @@ module.exports.verify = async event => {
 
   try {
     const { status } = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
-    // console.log(response);
     if (status === 'approved') {
-      return respond(201, 'approved');
+      const token = generateToken(phone);
+      return respond(201, { token });
     }
     return respond(201, 'denied');
   } catch (e) {
