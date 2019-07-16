@@ -8,27 +8,25 @@ const directvEndpoint = 'https://www.directv.com/json';
 let Program;
 require('dotenv').config();
 const nationalChannels = [
-  // { channel: 5, channelTitle: 'NBC' },
-  // { channel: 9, channelTitle: 'ABC' },
-  // { channel: 12, channelTitle: 'CBS' },
-  // { channel: 19, channelTitle: 'FOX' },
   { channel: 206, channelTitle: 'ESPN' },
   { channel: 209, channelTitle: 'ESPN2' },
   { channel: 208, channelTitle: 'ESPNU' },
   { channel: 207, channelTitle: 'ESPNN' },
   { channel: 213, channelTitle: 'MLB' },
-  { channel: 219, channelTitle: 'FS1' },
-  // { channel: 618, channelTitle: 'FS2' }, // CHECK
-  // { channel: 245, channelTitle: 'TNT' },
-  // { channel: 247, channelTitle: 'TBS' },
+  { channel: 219, channelTitle: 'FS1' }, // { channel: 5, channelTitle: 'NBC' },
   { channel: 220, channelTitle: 'NBCSN' },
   { channel: 221, channelTitle: 'CBSSN' },
-  { channel: 212, channelTitle: 'NFL' },
-  // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
-  { channel: 602, channelTitle: 'TVG' },
-  { channel: 600, channelTitle: 'SMXHD' },
-  // { channel: 611, channelTitle: 'SECHD' },
+  { channel: 212, channelTitle: 'NFL' }, // { channel: 9, channelTitle: 'ABC' },
   { channel: 217, channelTitle: 'TNNSHD' },
+
+  // optional channels, but leave for syncing
+  { channel: 618, channelTitle: 'FS2' },
+  { channel: 602, channelTitle: 'TVG' },
+  // { channel: 245, channelTitle: 'TNT' },
+  // { channel: 247, channelTitle: 'TBS' },
+  // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
+  // { channel: 600, channelTitle: 'SMXHD' },
+  // { channel: 611, channelTitle: 'SECHD' },
   // { channel: 701, channelTitle: 'USO' },
   // { channel: 702, channelTitle: 'USO' },
   // { channel: 703, channelTitle: 'USO' },
@@ -62,6 +60,7 @@ function init() {
       end: Date,
       live: Boolean,
       repeat: Boolean,
+      sports: Boolean,
       programId: String, // "SH000296530000" - use this to get summary
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
@@ -144,9 +143,9 @@ module.exports.getAll = async event => {
       .and()
       .filter('end')
       .gt(now)
-      .and()
-      .filter('mainCategory')
-      .eq('Sports')
+      // .and()
+      // .filter('mainCategory')
+      // .eq('Sports')
       .and()
       .filter('zip')
       .null()
@@ -162,9 +161,9 @@ module.exports.getAll = async event => {
         .and()
         .filter('end')
         .gt(now)
-        .and()
-        .filter('mainCategory')
-        .eq('Sports')
+        // .and()
+        // .filter('mainCategory')
+        // .eq('Sports')
         .and()
         .filter('channel')
         .in(location.channels.premium)
@@ -182,8 +181,11 @@ module.exports.getAll = async event => {
         .filter('end')
         .gt(now)
         .and()
-        .filter('mainCategory')
-        .eq('Sports')
+        .filter('zip')
+        .eq(location.zip)
+        // .and()
+        // .filter('mainCategory')
+        // .eq('Sports')
         .and()
         .filter('channel')
         .in(location.channels.local)
@@ -329,7 +331,14 @@ function rank(program) {
   if (!program || !program.title) {
     return program;
   }
-  const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 3 }, { term: 'cincinnati', points: 5 }];
+  const terms = [
+    // { term: ' @ ', points: 2 },
+    { term: 'reds', points: 3 },
+    { term: 'fc cincinnati', points: 3 },
+    { term: 'bengals', points: 3 },
+    { term: 'bearcats', points: 3 },
+    { term: 'xavier', points: 3 },
+  ];
   const { title } = program;
   const searchTarget = title;
   let totalPoints = 0;
@@ -337,10 +346,13 @@ function rank(program) {
     searchTarget.toLowerCase().includes(term.toLowerCase()) ? (totalPoints += points) : null;
   });
 
-  program.live ? (totalPoints += 2) : null;
-  program.repeat ? (totalPoints -= 4) : null;
+  program.live ? (totalPoints += 1) : null;
+  program.repeat ? (totalPoints -= 2) : null;
 
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
+  program.channelTitle === 'ESPNHD' ? (totalPoints += 1) : null;
+
+  program.sports = program.mainCategory === 'Sports';
 
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;

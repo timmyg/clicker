@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { User } from './user.model';
+import { Plan } from '../app/plan.model';
 
 export const LOAD = '[USER] Load';
 export const LOAD_SUCCESS = '[USER] Load Success';
@@ -118,7 +119,7 @@ export class DeleteCardFail implements Action {
 
 export class AddFunds implements Action {
   readonly type = ADD_FUNDS;
-  constructor(public tokens: number) {}
+  constructor(public plan: Plan) {}
 }
 
 export class AddFundsSuccess implements Action {

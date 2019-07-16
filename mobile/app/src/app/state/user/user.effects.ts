@@ -5,22 +5,21 @@ import { Observable, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import * as decode from 'jwt-decode';
 
-// import { User } from './user.model';
 import * as UserActions from './user.actions';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Injectable()
 export class UserEffects {
-  @Effect()
-  refresh$: Observable<Action> = this.actions$.pipe(
-    ofType(UserActions.REFRESH),
-    switchMap(() =>
-      this.userService.refresh().pipe(
-        switchMap(() => [new UserActions.RefreshSuccess(), new UserActions.Load()]),
-        catchError(err => of(new UserActions.RefreshFail(err))),
-      ),
-    ),
-  );
+  // @Effect()
+  // refresh$: Observable<Action> = this.actions$.pipe(
+  //   ofType(UserActions.REFRESH),
+  //   switchMap(() =>
+  //     this.userService.refresh().pipe(
+  //       switchMap(() => [new UserActions.RefreshSuccess(), new UserActions.Load()]),
+  //       catchError(err => of(new UserActions.RefreshFail(err))),
+  //     ),
+  //   ),
+  // );
 
   @Effect()
   load$: Observable<Action> = this.actions$.pipe(
@@ -87,7 +86,7 @@ export class UserEffects {
   addFunds$: Observable<Action> = this.actions$.pipe(
     ofType(UserActions.ADD_FUNDS),
     switchMap((action: UserActions.AddFunds) =>
-      this.userService.addFunds(action.tokens).pipe(
+      this.userService.addFunds(action.plan).pipe(
         switchMap((result: any) => [new UserActions.AddFundsSuccess(result), new UserActions.Load()]),
         catchError(err => of(new UserActions.LoadFail(err))),
       ),

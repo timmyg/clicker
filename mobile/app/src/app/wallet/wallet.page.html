@@ -10,13 +10,15 @@
   <section [hidden]="!(userCard$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
-        <ion-list-header> Choose Amount </ion-list-header>
-        <ion-item *ngFor="let f of fundingAmounts">
-          <ion-label flex ion-justify-items-end>
-            <span>${{ f.dollars }}</span>
-            <div flex ion-align-items-center float-right>
+        <ion-list-header> Choose an Amount </ion-list-header>
+        <p padding>Channel changes typically cost 1 token</p>
+        <ion-item *ngFor="let f of (plans$ | async)">
+          <ion-label flex align-items-center>
+            <span class="dollars">${{ f.dollars }}</span>
+            <div flex align-items-center>
+              <ion-chip *ngIf="f.best" color="primary" padding-right> Best Deal </ion-chip>
               <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-              <span padding-start>{{ f.tokens }}</span>
+              <span>{{ f.tokens }}</span>
             </div>
           </ion-label>
           <ion-radio slot="start" value="{{ f.dollars }}" [disabled]="waiting" checked></ion-radio>
@@ -33,7 +35,7 @@
     </p>
   </section>
   <section [hidden]="userCard$ | async">
-    <p class="ion-text-center ">To purchase tokens, you first must add a credit card</p>
+    <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
     <form novalidate (ngSubmit)="addCard()">
       <div id="card-element" class="field "></div>
       <ion-button type="submit" expand="block" color="success" [disabled]="waiting">Add</ion-button>

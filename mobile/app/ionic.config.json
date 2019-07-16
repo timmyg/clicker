@@ -1,7 +1,6 @@
 {
   "name": "clicker",
   "integrations": {
-    "cordova": {},
     "capacitor": {}
   },
   "type": "angular",

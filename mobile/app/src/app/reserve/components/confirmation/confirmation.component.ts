@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { getReservation } from 'src/app/state/reservation';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
 import { startWith, map, distinctUntilChanged, first, filter } from 'rxjs/operators';
@@ -32,27 +32,6 @@ export class ConfirmationComponent implements OnInit {
   saving: boolean;
   isEditMode: boolean;
   sufficientFunds: boolean;
-  private reservationPlans = [
-    {
-      tokens: 1,
-      title: 'Change Channel',
-      minutes: 0,
-    },
-    {
-      tokens: 2,
-      title: '30 minutes',
-      minutes: 30,
-      reserve: true,
-      disabled: true,
-    },
-    {
-      tokens: 4,
-      title: '60 minutes',
-      minutes: 60,
-      reserve: true,
-      disabled: true,
-    },
-  ];
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -62,6 +41,7 @@ export class ConfirmationComponent implements OnInit {
     private actions$: Actions,
     private segment: SegmentService,
     private globals: Globals,
+    private route: ActivatedRoute,
   ) {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
@@ -77,6 +57,17 @@ export class ConfirmationComponent implements OnInit {
       )
       .subscribe(reservation => {
         this.reservation = reservation;
+        // initialize reservation
+        this.reservation.cost = this.reservation.location.cost;
+        this.route.queryParams.subscribe(params => {
+          this.reservation.minutes = this.reservation.location.minutes;
+          if (params && params.edit) {
+            if (params.edit === 'channel') {
+              this.reservation.minutes = 0;
+            } else if (params.edit === 'time') {
+            }
+          }
+        });
         if (reservation.id) {
           this.isEditMode = true;
         }
@@ -89,44 +80,14 @@ export class ConfirmationComponent implements OnInit {
     });
   }
 
-  get availablePlans() {
-    if (this.isEditMode) {
-      this.reservationPlans[0].title = "Don't extend";
-      this.reservationPlans[0].tokens = 0;
-    }
-    return this.reservationPlans;
+  getEndTime() {
+    return moment(this.reservation.end)
+      .add(this.reservation.minutes.valueOf(), 'minutes')
+      .toDate();
   }
 
-  onLengthChange(e) {
-    const plan = this.reservationPlans.find(p => p.minutes === +e.detail.value);
-    this.reservation.cost = plan.tokens;
-    // const endTimeInitial = this.reservation.end ? moment(this.reservation.end) : moment();
-    this.reservation.minutes = plan.minutes;
-    this.reservation.reserve = plan.reserve;
-    this.checkWallet();
-    this.reservationEnd$ = interval(15 * 1000).pipe(
-      startWith(
-        this.getInitialEndTime()
-          .clone()
-          .add(plan.minutes, 'm')
-          .toDate(),
-      ), // this sets inital value
-      map(() => {
-        return this.getInitialEndTime()
-          .clone()
-          .add(plan.minutes, 'm')
-          .toDate();
-      }),
-      distinctUntilChanged(),
-    );
-  }
-
-  checkWallet() {
-    this.tokenCount >= this.reservation.cost ? (this.sufficientFunds = true) : (this.sufficientFunds = false);
-  }
-
-  getInitialEndTime() {
-    return this.reservation.end ? moment(this.reservation.end) : moment();
+  hasSufficientFunds() {
+    return this.tokenCount >= this.reservation.cost;
   }
 
   onConfirm() {

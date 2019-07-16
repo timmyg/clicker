@@ -1,13 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>My Reservations</ion-title>
-    <!-- <ion-buttons slot="start">
-      <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut">
-        <ion-icon name="person"></ion-icon>
-      </ion-button>
-    </ion-buttons> -->
+    <ion-buttons slot="start">
+      <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
+    </ion-buttons>
     <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
-    <ng-template #loggedOut> <!-- <ion-button (click)="login()">Login</ion-button>  --> </ng-template>
+    <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>
   </ion-toolbar>
 </ion-header>
 
@@ -20,12 +18,12 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <!-- <ion-fab-button color="primary" (click)="openFeedback()"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button> -->
-    <a href="mailto:hello@tryclicker.com">
+  <!-- <ion-fab vertical="bottom" horizontal="start" slot="fixed"> -->
+  <!-- <ion-fab-button color="primary" (click)="openFeedback()"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button> -->
+  <!-- <a href="mailto:hello@tryclicker.com">
       <ion-fab-button color="primary"> <ion-icon name="chatbubbles"></ion-icon> </ion-fab-button>
-    </a>
-  </ion-fab>
+    </a> -->
+  <!-- </ion-fab> -->
   <!-- <ion-button size="small" color="light" (click)="openFeedback()">Contact Us</ion-button> -->
 
   <ion-refresher slot="fixed" [pullMax]="300" (ionRefresh)="doRefresh($event)">
@@ -53,6 +51,7 @@
         <div padding-horizontal class="ion-text-center"><p>No active reservations</p></div>
       </ng-template>
       <p class="ion-text-center"><a (click)="createNewReservation('link')">Change the channel</a></p>
+      <p class="ion-text-center"><a (click)="openFeedback()">Give feedback</a></p>
     </ng-template>
   </ion-grid>
 </ion-content>

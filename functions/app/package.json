@@ -1,0 +1,20 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^24.1.0",
+    "serverless": "^1.36.3",
+    "serverless-domain-manager": "^2.6.13"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.13"
+  }
+}

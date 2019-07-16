@@ -8,6 +8,7 @@
     "http-server": "^0.11.1"
   },
   "devDependencies": {
+    "cordova-res": "^0.6.0",
     "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.3.0",

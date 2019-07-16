@@ -5,12 +5,13 @@ import { LocationService } from './services/location.service';
 import { ProgramService } from './services/program.service';
 import { ReservationService } from './services/reservation.service';
 import { IonicStorageModule } from '@ionic/storage';
+import { AppService } from './services/app.service';
 
 @NgModule({
   declarations: [],
 
   imports: [CommonModule, HttpClientModule, IonicStorageModule.forRoot()],
-  providers: [LocationService, ProgramService, ReservationService],
+  providers: [AppService, LocationService, ProgramService, ReservationService],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders {

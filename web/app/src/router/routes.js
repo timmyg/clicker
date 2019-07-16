@@ -3,6 +3,7 @@ import Login from '../components/LogIn';
 import Landing from '../components/Landing';
 import Privacy from '../components/Privacy';
 import PrivacyApp from '../components/PrivacyApp';
+import { CLIENT_RENEG_LIMIT } from 'tls';
 
 export default [
   {
@@ -17,7 +18,7 @@ export default [
   },
   {
     path: '/app/privacy',
-    name: 'privacy',
+    name: 'app-privacy',
     component: PrivacyApp,
   },
   {

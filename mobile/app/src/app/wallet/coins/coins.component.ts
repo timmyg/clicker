@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../state/app.reducer';
-import { getUserRoles } from 'src/app/state/user';
+import { getUserRoles, isLoggedIn } from 'src/app/state/user';
 
 @Component({
   selector: 'app-coins',
@@ -14,6 +14,8 @@ import { getUserRoles } from 'src/app/state/user';
 export class CoinsComponent implements OnInit {
   tokenCount$: Observable<number>;
   userRoles$: Observable<string[]>;
+  isLoggedIn$: Observable<boolean>;
+  isLoggedIn: boolean;
   userRoles: string[];
   walletModal;
 
@@ -28,23 +30,28 @@ export class CoinsComponent implements OnInit {
     this.userRoles$.subscribe(userRoles => {
       this.userRoles = userRoles;
     });
+    this.isLoggedIn$ = this.store.select(isLoggedIn);
+    this.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
   }
 
   ngOnInit() {}
 
   async onClick() {
     // if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
-    this.walletModal = await this.modalController.create({
-      component: WalletPage,
-    });
-    return await this.walletModal.present();
-    // } else {
-    //   const toast = await this.toastController.create({
-    //     message: `Adding tokens is not available today.`,
-    //     duration: 2000,
-    //     cssClass: 'ion-text-center',
-    //   });
-    //   toast.present();
-    // }
+    if (this.isLoggedIn) {
+      this.walletModal = await this.modalController.create({
+        component: WalletPage,
+      });
+      return await this.walletModal.present();
+    } else {
+      const toast = await this.toastController.create({
+        message: `Please login to add tokens.`,
+        duration: 4000,
+        cssClass: 'ion-text-center',
+      });
+      toast.present();
+    }
   }
 }

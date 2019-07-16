@@ -12,7 +12,6 @@ import { SharedModule } from '../shared/shared.module';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AuthModule } from '../auth/auth.module';
 import { LoginComponent } from '../auth/login/login.component';
-import { LoggingInComponent } from './logging-in.component';
 import { FeatureFlag } from '../directives/feature-flag.directive';
 import { WalletModule } from '../wallet/wallet.module';
 import { WalletPage } from '../wallet/wallet.page';
@@ -22,10 +21,6 @@ const routes: Routes = [
   {
     path: '',
     component: ProfilePage,
-  },
-  {
-    path: 'logging-in',
-    component: LoggingInComponent,
   },
 ];
 
@@ -42,7 +37,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
   ],
-  declarations: [ProfilePage, ReservationComponent, LoggingInComponent, FeatureFlag],
+  declarations: [ProfilePage, ReservationComponent, FeatureFlag],
   entryComponents: [LoginComponent, WalletPage, CoinsComponent],
 })
 export class ProfilePageModule {}

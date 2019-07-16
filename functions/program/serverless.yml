@@ -3,10 +3,11 @@ frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
   runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
-    tableProgrammingArea: ${self:custom.tableProgrammingArea}
     serviceName: ${self:service}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
   iamRoleStatements:
@@ -111,27 +112,3 @@ functions:
               - authorization
               - content-type
       - schedule: rate(3 minutes)
-  createAreaProgramming:
-    handler: program.createAreaProgramming
-    events:
-      - http:
-          path: 'area/{areaId}'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  getAreaProgramming:
-    handler: program.getAreaProgramming
-    events:
-      - http:
-          path: 'area/{areaId}'
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type

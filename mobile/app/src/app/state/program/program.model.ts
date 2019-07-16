@@ -15,5 +15,6 @@ export interface Program {
   points: number; // ranking points
   live: boolean;
   repeat: boolean;
+  sports: boolean;
   icon: string;
 }
