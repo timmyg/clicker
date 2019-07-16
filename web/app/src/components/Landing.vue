@@ -44,7 +44,7 @@
 import Vue from 'vue';
 import VueScrollReveal from 'vue-scroll-reveal';
 import VueBrowserUpdate from 'vue-browserupdate';
-// import VueIntercom from 'vue-intercom';
+import VueIntercom from 'vue-intercom';
 import Quotes from './landing/Quotes';
 import Hero from './landing/Hero';
 import Features from './landing/Features';
@@ -56,7 +56,7 @@ import Faq from './landing/Faq';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
 
-// Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
+Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
 Vue.use(VueScrollReveal);
 Vue.use(VueBrowserUpdate, {
   options: {

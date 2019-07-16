@@ -15,6 +15,7 @@ import { SegmentService } from 'ngx-segment-analytics';
 import { getUserId } from './state/user';
 import { Globals } from './globals';
 import { first } from 'rxjs/operators';
+import { version } from '../../package.json';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ import { first } from 'rxjs/operators';
 })
 export class AppComponent {
   partner$: Observable<string>;
+  public version: string = version;
 
   constructor(
     private platform: Platform,
@@ -34,6 +36,7 @@ export class AppComponent {
   }
 
   async initializeApp() {
+    console.log(this.version);
     this.platform.ready().then(async () => {
       try {
         this.store
