@@ -10,16 +10,16 @@ import { UserService } from 'src/app/core/services/user.service';
 
 @Injectable()
 export class UserEffects {
-  @Effect()
-  refresh$: Observable<Action> = this.actions$.pipe(
-    ofType(UserActions.REFRESH),
-    switchMap(() =>
-      this.userService.refresh().pipe(
-        switchMap(() => [new UserActions.RefreshSuccess(), new UserActions.Load()]),
-        catchError(err => of(new UserActions.RefreshFail(err))),
-      ),
-    ),
-  );
+  // @Effect()
+  // refresh$: Observable<Action> = this.actions$.pipe(
+  //   ofType(UserActions.REFRESH),
+  //   switchMap(() =>
+  //     this.userService.refresh().pipe(
+  //       switchMap(() => [new UserActions.RefreshSuccess(), new UserActions.Load()]),
+  //       catchError(err => of(new UserActions.RefreshFail(err))),
+  //     ),
+  //   ),
+  // );
 
   @Effect()
   load$: Observable<Action> = this.actions$.pipe(

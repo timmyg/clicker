@@ -6,10 +6,13 @@ provider:
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
-    tableWallet: ${self:custom.tableWallet}
+    tableUser: ${self:custom.tableUser}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     stage: ${self:custom.stage}
     stripeSecretKey: ${self:custom.stripeSecretKey.${self:custom.stage}}
+    twilioAccountSid: ${env:TWILIO_ACCOUNT_SID}
+    twilioAuthToken: ${env:TWILIO_AUTH_TOKEN}
+    twilioServiceSid: ${env:TWILIO_SERVICE_SID}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -38,7 +41,7 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  tableWallet: wallets-${self:custom.stage}
+  tableUser: users-${self:custom.stage}
   stripeSecretKey:
     prod: ${env:STRIPE_SECRET_KEY}
     release: ${env:STRIPE_SECRET_KEY_DEV}
@@ -49,36 +52,19 @@ custom:
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
-    Walletable:
+    UserTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: ${self:custom.tableWallet}
+        TableName: ${self:custom.tableUser}
         AttributeDefinitions:
-          - AttributeName: userId
+          - AttributeName: id
             AttributeType: S
-          # - AttributeName: id
-          #   AttributeType: S
         KeySchema:
-          - AttributeName: userId
+          - AttributeName: id
             KeyType: HASH
-          # - AttributeName: id
-          #   KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-    # UsersTable:
-    #   Type: 'AWS::DynamoDB::Table'
-    #   Properties:
-    #     TableName: ${self:custom.tableUser}
-    #     AttributeDefinitions:
-    #       - AttributeName: id
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: id
-    #         KeyType: HASH
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: ${self:custom.tableThroughput}
-    #       WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
@@ -170,6 +156,30 @@ functions:
     events:
       - http:
           path: 'alias/{fromId}/{toId}'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  verifyStart:
+    handler: user.verifyStart
+    events:
+      - http:
+          path: 'verify/start'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  verify:
+    handler: user.verify
+    events:
+      - http:
+          path: 'verify'
           method: post
           cors:
             origin: '*'

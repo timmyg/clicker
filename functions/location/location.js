@@ -45,6 +45,7 @@ const Location = dynamoose.model(
       longitude: { type: Number, required: true },
     },
     cost: Number,
+    minutes: Number,
     img: String,
     active: Boolean,
     hidden: Boolean,
@@ -137,6 +138,10 @@ module.exports.get = async event => {
 
   if (location.cost === undefined) {
     location.cost = 1;
+  }
+
+  if (location.minutes === undefined) {
+    location.minutes = 30;
   }
 
   return respond(200, location);

@@ -1,26 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-// import { User } from 'src/app/state/user/user.model';
 import { Storage } from '@ionic/storage';
-import { mergeMap } from 'rxjs/operators';
-// import * as decode from 'jwt-decode';
+import { mergeMap, map } from 'rxjs/operators';
 const storage = {
   token: 'token',
   originalToken: 'originalToken',
   anonymous: 'anonymous',
 };
 
-import auth0 from 'auth0-js';
-import { environment } from 'src/environments/environment';
 import { Plan } from 'src/app/state/app/plan.model';
-
-const auth = new auth0.WebAuth({
-  domain: environment.auth0.domain,
-  clientID: environment.auth0.clientId,
-  responseType: 'token id_token',
-  redirectUri: window.location.origin + '/silent',
-});
 
 @Injectable({
   providedIn: 'root',
@@ -29,17 +18,12 @@ export class UserService {
   private prefix = `users`;
   constructor(private httpClient: HttpClient, private storage: Storage) {}
 
-  refresh(): Observable<any> {
-    return new Observable(observer => {
-      auth.checkSession({}, async (err, result) => {
-        if (result) {
-          await this.setToken(result.idToken);
-        } else {
-          console.error(err);
-        }
-        observer.next();
-      });
-    });
+  loginVerifyStart(phone: string): Observable<boolean> {
+    return this.httpClient.post<any>(`${this.prefix}/verify/start`, { phone });
+  }
+
+  loginVerify(phone, code: string): Observable<string> {
+    return this.httpClient.post<any>(`${this.prefix}/verify`, { phone, code }).pipe(map(result => result.token));
   }
 
   get(): Observable<string> {

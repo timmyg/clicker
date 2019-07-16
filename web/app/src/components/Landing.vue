@@ -24,11 +24,11 @@
           <Pricing />
         </section>-->
         <section class="pricing section">
-          <Faq/>
+          <Faq />
         </section>
 
         <section class="newsletter section">
-          <Interested/>
+          <Interested />
         </section>
       </main>
 
@@ -44,7 +44,7 @@
 import Vue from 'vue';
 import VueScrollReveal from 'vue-scroll-reveal';
 import VueBrowserUpdate from 'vue-browserupdate';
-// import VueIntercom from 'vue-intercom';
+import VueIntercom from 'vue-intercom';
 import Quotes from './landing/Quotes';
 import Hero from './landing/Hero';
 import Features from './landing/Features';
@@ -56,7 +56,7 @@ import Faq from './landing/Faq';
 import Interested from './landing/Interested';
 import Analytics from './Analytics';
 
-// Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
+Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
 Vue.use(VueScrollReveal);
 Vue.use(VueBrowserUpdate, {
   options: {
@@ -82,18 +82,18 @@ export default {
     Analytics,
   },
   mounted() {
-    // this.$intercom.boot({
-    //   // user_id: this.userId,
-    //   // name: this.name,
-    //   // email: this.email,
-    // });
-    // this.$intercom.hide();
+    this.$intercom.boot({
+      user_id: this.userId,
+      name: this.name,
+      email: this.email,
+    });
+    this.$intercom.hide();
   },
-  // watch: {
-  //   email(email) {
-  //     this.$intercom.update({ email });
-  //   },
-  // },
+  watch: {
+    email(email) {
+      this.$intercom.update({ email });
+    },
+  },
   methods: {
     tabClick: function(e) {
       e.preventDefault();

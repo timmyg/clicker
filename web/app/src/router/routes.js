@@ -22,14 +22,6 @@ export default [
     component: PrivacyApp,
   },
   {
-    path: '/app/auth',
-    name: 'app-auth',
-    beforeEnter(to, from, next) {
-      alert('clicker://tabs/profile/logging-in' + window.location.hash);
-      window.location = 'clicker://tabs/profile/logging-in' + window.location.hash;
-    },
-  },
-  {
     path: '/dev/dashboard',
     name: 'dashboard',
     component: Dashboard,

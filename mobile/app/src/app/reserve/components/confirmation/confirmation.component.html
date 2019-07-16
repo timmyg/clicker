@@ -8,7 +8,9 @@
       <label> TV: </label> <span>{{ reservation.box.label }}</span>
     </div>
     <div>
-      <label> Reserved Until: </label> <span>{{ getEndTime() | amDateFormat: 'h:mma' }}</span>
+      <label> Reserved Until: </label>
+      <span *ngIf="reservation.minutes; else noReservation">{{ getEndTime() | amDateFormat: 'h:mma' }}</span>
+      <ng-template #noReservation>One-time change</ng-template>
     </div>
     <br />
     <p class="ion-text-center">You will be able to freely change the channel during your reservation.</p>
