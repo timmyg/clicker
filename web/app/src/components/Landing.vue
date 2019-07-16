@@ -24,11 +24,11 @@
           <Pricing />
         </section>-->
         <section class="pricing section">
-          <Faq/>
+          <Faq />
         </section>
 
         <section class="newsletter section">
-          <Interested/>
+          <Interested />
         </section>
       </main>
 
@@ -82,18 +82,18 @@ export default {
     Analytics,
   },
   mounted() {
-    // this.$intercom.boot({
-    //   // user_id: this.userId,
-    //   // name: this.name,
-    //   // email: this.email,
-    // });
-    // this.$intercom.hide();
+    this.$intercom.boot({
+      user_id: this.userId,
+      name: this.name,
+      email: this.email,
+    });
+    this.$intercom.hide();
   },
-  // watch: {
-  //   email(email) {
-  //     this.$intercom.update({ email });
-  //   },
-  // },
+  watch: {
+    email(email) {
+      this.$intercom.update({ email });
+    },
+  },
   methods: {
     tabClick: function(e) {
       e.preventDefault();
