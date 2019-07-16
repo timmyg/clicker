@@ -60,7 +60,7 @@ export class ConfirmationComponent implements OnInit {
         // initialize reservation
         this.reservation.cost = this.reservation.location.cost;
         this.route.queryParams.subscribe(params => {
-          this.reservation.minutes = 30;
+          this.reservation.minutes = this.reservation.location.minutes;
           if (params && params.edit) {
             if (params.edit === 'channel') {
               this.reservation.minutes = 0;
