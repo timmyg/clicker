@@ -163,9 +163,9 @@ module.exports.getAll = async event => {
         .and()
         .filter('end')
         .gt(now)
-        .and()
-        .filter('mainCategory')
-        .eq('Sports')
+        // .and()
+        // .filter('mainCategory')
+        // .eq('Sports')
         .and()
         .filter('channel')
         .in(location.channels.premium)
@@ -182,9 +182,9 @@ module.exports.getAll = async event => {
         .and()
         .filter('end')
         .gt(now)
-        .and()
-        .filter('mainCategory')
-        .eq('Sports')
+        // .and()
+        // .filter('mainCategory')
+        // .eq('Sports')
         .and()
         .filter('channel')
         .in(location.channels.local)
@@ -330,7 +330,14 @@ function rank(program) {
   if (!program || !program.title) {
     return program;
   }
-  const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 3 }, { term: 'fc cincinnati', points: 3 }];
+  const terms = [
+    // { term: ' @ ', points: 2 },
+    { term: 'reds', points: 3 },
+    { term: 'fc cincinnati', points: 3 },
+    { term: 'bengals', points: 3 },
+    { term: 'bearcats', points: 3 },
+    { term: 'xavier', points: 3 },
+  ];
   const { title } = program;
   const searchTarget = title;
   let totalPoints = 0;
@@ -341,7 +348,7 @@ function rank(program) {
   program.live ? (totalPoints += 2) : null;
   program.repeat ? (totalPoints -= 4) : null;
 
-  program.mainCategory === 'Sports' ? (totalPoints += 5) : null;
+  program.mainCategory === 'Sports' ? (totalPoints += 3) : null;
 
   program.sports = program.mainCategory === 'Sports';
 
