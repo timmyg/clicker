@@ -8,27 +8,25 @@ const directvEndpoint = 'https://www.directv.com/json';
 let Program;
 require('dotenv').config();
 const nationalChannels = [
-  // { channel: 5, channelTitle: 'NBC' },
-  // { channel: 9, channelTitle: 'ABC' },
-  // { channel: 12, channelTitle: 'CBS' },
-  // { channel: 19, channelTitle: 'FOX' },
   { channel: 206, channelTitle: 'ESPN' },
   { channel: 209, channelTitle: 'ESPN2' },
   { channel: 208, channelTitle: 'ESPNU' },
   { channel: 207, channelTitle: 'ESPNN' },
   { channel: 213, channelTitle: 'MLB' },
-  { channel: 219, channelTitle: 'FS1' },
+  { channel: 219, channelTitle: 'FS1' }, // { channel: 5, channelTitle: 'NBC' },
+  { channel: 220, channelTitle: 'NBCSN' },
+  { channel: 221, channelTitle: 'CBSSN' },
+  { channel: 212, channelTitle: 'NFL' }, // { channel: 9, channelTitle: 'ABC' },
+  { channel: 217, channelTitle: 'TNNSHD' },
+  // { channel: 12, channelTitle: 'CBS' },
+  // { channel: 19, channelTitle: 'FOX' },
   // { channel: 618, channelTitle: 'FS2' }, // CHECK
   // { channel: 245, channelTitle: 'TNT' },
   // { channel: 247, channelTitle: 'TBS' },
-  { channel: 220, channelTitle: 'NBCSN' },
-  { channel: 221, channelTitle: 'CBSSN' },
-  { channel: 212, channelTitle: 'NFL' },
   // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
-  { channel: 602, channelTitle: 'TVG' },
-  { channel: 600, channelTitle: 'SMXHD' },
+  // { channel: 602, channelTitle: 'TVG' },
+  // { channel: 600, channelTitle: 'SMXHD' },
   // { channel: 611, channelTitle: 'SECHD' },
-  { channel: 217, channelTitle: 'TNNSHD' },
   // { channel: 701, channelTitle: 'USO' },
   // { channel: 702, channelTitle: 'USO' },
   // { channel: 703, channelTitle: 'USO' },
@@ -348,10 +346,11 @@ function rank(program) {
     searchTarget.toLowerCase().includes(term.toLowerCase()) ? (totalPoints += points) : null;
   });
 
-  program.live ? (totalPoints += 2) : null;
+  program.live ? (totalPoints += 1) : null;
   program.repeat ? (totalPoints -= 4) : null;
 
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
+  program.channelTitle === 'ESPNHD' ? (totalPoints += 1) : null;
 
   program.sports = program.mainCategory === 'Sports';
 
