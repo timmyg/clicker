@@ -233,20 +233,15 @@ module.exports.verify = async event => {
 };
 
 async function getToken(phone) {
-  //   // check if phone number
   const users = await User.scan('phone')
     .eq(phone)
     .all()
     .exec();
-  console.log(users);
-  console.log(key);
   if (users && users.length) {
     const { userId } = users[0];
     return jwt.sign({ sub: userId }, key);
   } else {
-    console.log('1');
-    const user = await User.create({ phone, tokens: initialTokens });
-    console.log('2', user);
+    const user = await User.create({ phone, tokens: 0 });
     return jwt.sign({ sub: user.id }, key);
   }
 }

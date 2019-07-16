@@ -1,28 +1,15 @@
 import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
-import auth0 from 'auth0-js';
-import { environment } from 'src/environments/environment';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
 import { UserService } from 'src/app/core/services/user.service';
-import { ClassGetter } from '@angular/compiler/src/output/output_ast';
-const auth = new auth0.WebAuth({
-  domain: environment.auth0.domain,
-  clientID: environment.auth0.clientId,
-  // redirectUri: `${window.location.origin}/tabs/profile/logging-in`,
-  // redirectUri: `${environment.packageId}://${environment.auth0.domain}/cordova/${
-  //   environment.packageId
-  // }/tabs/profile/logging-in`,
-  // redirectUri: `${environment.packageId}://${environment.auth0.domain}/android/${
-  //   environment.packageId
-  // }/tabs/profile/logging-in`,
-  // redirectUri: `https://tryclicker.com/?test=4`,
-  redirectUri: `https://develop.tryclicker.com/app/auth`,
-  responseType: 'token id_token',
-  prompt: 'none',
-  packageId: environment.packageId,
-});
-// auth0.crossOriginVerification();
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import * as fromStore from '../../state/app.reducer';
+import * as fromUser from '../../state/user/user.actions';
+import { getUserId } from 'src/app/state/user';
+import { first } from 'rxjs/operators';
+import * as decode from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +21,7 @@ export class LoginComponent {
   code: string;
   codeSent: boolean;
   waiting: boolean;
+  userId$: Observable<string>;
 
   constructor(
     public modalController: ModalController,
@@ -41,7 +29,10 @@ export class LoginComponent {
     private segment: SegmentService,
     private globals: Globals,
     private userService: UserService,
-  ) {}
+    private store: Store<fromStore.AppState>,
+  ) {
+    this.userId$ = this.store.select(getUserId);
+  }
 
   onCloseClick() {
     this.modalController.dismiss();
@@ -74,10 +65,11 @@ export class LoginComponent {
     this.waiting = true;
     // TODO move to store
     this.userService.loginVerify(`+1${this.phone}`, this.code).subscribe(
-      result => {
+      token => {
         this.segment.track(this.globals.events.login.completed);
         this.waiting = false;
-        console.log('save token!', result);
+        console.log('save token!', token);
+        this.saveToken(token);
       },
       async err => {
         console.error(err);
@@ -91,30 +83,28 @@ export class LoginComponent {
         this.waiting = false;
       },
     );
-    // auth.passwordlessLogin(
-    //   {
-    //     connection: 'sms',
-    //     phoneNumber: `+1${this.phone}`.trim(),
-    //     verificationCode: this.code.toString(),
-    //   },
-    //   async (err, res) => {
-    //     if (err) {
-    //       const toastInvalid = await this.toastController.create({
-    //         message: err.code === 'access_denied' ? 'Invalid code' : err.description,
-    //         color: 'danger',
-    //         duration: 4000,
-    //         cssClass: 'ion-text-center',
-    //       });
-    //       toastInvalid.present();
-    //       this.waiting = false;
-    //       return console.error(err, JSON.stringify(window));
-    //     }
-    //     this.waiting = false;
-    //   },
-    // );
   }
 
   isEligibleCode() {
     return this.code && this.code.toString().length >= 4;
+  }
+
+  saveToken(token: string) {
+    // alias user (move tokens to new user)
+    // const jwt = authResult.idToken;
+    const newUserId = decode(token).sub;
+
+    this.userId$.pipe(first(val => !!val)).subscribe(async oldUserId => {
+      this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
+      this.segment.alias(newUserId, oldUserId);
+      this.segment.track(this.globals.events.login.completed);
+      this.userService.setToken(token);
+      const toast = await this.toastController.create({
+        message: `Successfully logged in.`,
+        duration: 2000,
+        cssClass: 'ion-text-center',
+      });
+      toast.present();
+    });
   }
 }

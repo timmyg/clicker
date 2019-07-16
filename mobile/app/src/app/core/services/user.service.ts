@@ -3,7 +3,7 @@ import { Observable, from, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 // import { User } from 'src/app/state/user/user.model';
 import { Storage } from '@ionic/storage';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 // import * as decode from 'jwt-decode';
 const storage = {
   token: 'token',
@@ -38,7 +38,6 @@ export class UserService {
   //         console.error(err);
   //       }
   //       observer.next();
-  //     });
   //   });
   // }
 
@@ -46,8 +45,8 @@ export class UserService {
     return this.httpClient.post<any>(`${this.prefix}/verify/start`, { phone });
   }
 
-  loginVerify(phone, code: string): Observable<boolean> {
-    return this.httpClient.post<any>(`${this.prefix}/verify`, { phone, code });
+  loginVerify(phone, code: string): Observable<string> {
+    return this.httpClient.post<any>(`${this.prefix}/verify`, { phone, code }).pipe(map(result => result.token));
   }
 
   get(): Observable<string> {
