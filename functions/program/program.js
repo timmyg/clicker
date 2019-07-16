@@ -62,6 +62,7 @@ function init() {
       end: Date,
       live: Boolean,
       repeat: Boolean,
+      sports: Boolean,
       programId: String, // "SH000296530000" - use this to get summary
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
@@ -144,9 +145,9 @@ module.exports.getAll = async event => {
       .and()
       .filter('end')
       .gt(now)
-      .and()
-      .filter('mainCategory')
-      .eq('Sports')
+      // .and()
+      // .filter('mainCategory')
+      // .eq('Sports')
       .and()
       .filter('zip')
       .null()
@@ -329,7 +330,7 @@ function rank(program) {
   if (!program || !program.title) {
     return program;
   }
-  const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 3 }, { term: 'cincinnati', points: 5 }];
+  const terms = [{ term: ' @ ', points: 2 }, { term: 'reds', points: 3 }, { term: 'fc cincinnati', points: 3 }];
   const { title } = program;
   const searchTarget = title;
   let totalPoints = 0;
@@ -340,7 +341,9 @@ function rank(program) {
   program.live ? (totalPoints += 2) : null;
   program.repeat ? (totalPoints -= 4) : null;
 
-  program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
+  program.mainCategory === 'Sports' ? (totalPoints += 5) : null;
+
+  program.sports = program.mainCategory === 'Sports';
 
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;
