@@ -238,8 +238,8 @@ async function getToken(phone) {
     .all()
     .exec();
   if (users && users.length) {
-    const { userId } = users[0];
-    return jwt.sign({ sub: userId }, key);
+    const { id } = users[0];
+    return jwt.sign({ sub: id }, key);
   } else {
     const user = await User.create({ phone, tokens: 0 });
     return jwt.sign({ sub: user.id }, key);

@@ -14,6 +14,7 @@ import { SegmentService } from 'ngx-segment-analytics';
 
 import { getUserId } from './state/user';
 import { Globals } from './globals';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -35,10 +36,14 @@ export class AppComponent {
   async initializeApp() {
     this.platform.ready().then(async () => {
       try {
-        this.store.select(getUserId).subscribe(userId => {
-          this.segment.identify(userId.replace('sms|', ''));
-          this.segment.track(this.globals.events.opened);
-        });
+        this.store
+          .select(getUserId)
+          .pipe(first(val => !!val))
+          .subscribe(userId => {
+            console.log(userId);
+            this.segment.identify(userId);
+            this.segment.track(this.globals.events.opened);
+          });
         await SplashScreen.hide();
       } catch (e) {}
     });

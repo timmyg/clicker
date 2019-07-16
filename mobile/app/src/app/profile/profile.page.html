@@ -2,9 +2,7 @@
   <ion-toolbar>
     <ion-title>My Reservations</ion-title>
     <ion-buttons slot="start">
-      <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut">
-        <ion-icon name="person"></ion-icon>
-      </ion-button>
+      <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
     <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>

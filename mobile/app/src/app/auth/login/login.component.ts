@@ -69,7 +69,7 @@ export class LoginComponent {
         this.segment.track(this.globals.events.login.completed);
         this.waiting = false;
         console.log('save token!', token);
-        this.saveToken(token);
+        this.saveTokenAndClose(token);
       },
       async err => {
         console.error(err);
@@ -89,11 +89,9 @@ export class LoginComponent {
     return this.code && this.code.toString().length >= 4;
   }
 
-  saveToken(token: string) {
+  saveTokenAndClose(token: string) {
     // alias user (move tokens to new user)
-    // const jwt = authResult.idToken;
     const newUserId = decode(token).sub;
-
     this.userId$.pipe(first(val => !!val)).subscribe(async oldUserId => {
       this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
       this.segment.alias(newUserId, oldUserId);
@@ -105,6 +103,7 @@ export class LoginComponent {
         cssClass: 'ion-text-center',
       });
       toast.present();
+      this.modalController.dismiss();
     });
   }
 }
