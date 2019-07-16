@@ -18,13 +18,13 @@ const nationalChannels = [
   { channel: 221, channelTitle: 'CBSSN' },
   { channel: 212, channelTitle: 'NFL' }, // { channel: 9, channelTitle: 'ABC' },
   { channel: 217, channelTitle: 'TNNSHD' },
-  // { channel: 12, channelTitle: 'CBS' },
-  // { channel: 19, channelTitle: 'FOX' },
-  // { channel: 618, channelTitle: 'FS2' }, // CHECK
+
+  // optional channels, but leave for syncing
+  { channel: 618, channelTitle: 'FS2' },
+  { channel: 602, channelTitle: 'TVG' },
   // { channel: 245, channelTitle: 'TNT' },
   // { channel: 247, channelTitle: 'TBS' },
   // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
-  // { channel: 602, channelTitle: 'TVG' },
   // { channel: 600, channelTitle: 'SMXHD' },
   // { channel: 611, channelTitle: 'SECHD' },
   // { channel: 701, channelTitle: 'USO' },
@@ -347,7 +347,7 @@ function rank(program) {
   });
 
   program.live ? (totalPoints += 1) : null;
-  program.repeat ? (totalPoints -= 4) : null;
+  program.repeat ? (totalPoints -= 2) : null;
 
   program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
   program.channelTitle === 'ESPNHD' ? (totalPoints += 1) : null;
