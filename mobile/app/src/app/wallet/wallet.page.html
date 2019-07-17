@@ -11,7 +11,7 @@
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
         <ion-list-header> Choose an Amount </ion-list-header>
-        <p padding>Channel changes typically cost 1 token</p>
+        <!-- <p padding>Channel changes typically cost 1 token</p> -->
         <ion-item *ngFor="let f of (plans$ | async)">
           <ion-label flex align-items-center>
             <span class="dollars">${{ f.dollars }}</span>
@@ -21,11 +21,13 @@
               <span>{{ f.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" value="{{ f.dollars }}" [disabled]="waiting" checked></ion-radio>
+          <ion-radio slot="start" [value]="f" [disabled]="waiting" checked></ion-radio>
         </ion-item>
       </ion-radio-group>
     </ion-list>
-    <ion-button expand="block" color="success" (click)="purchase()" [disabled]="waiting">Purchase</ion-button>
+    <ion-button expand="block" color="success" (click)="purchase()" [disabled]="waiting" *ngIf="selectedPlan"
+      >Purchase ${{ selectedPlan.dollars }}</ion-button
+    >
     <p class="ion-text-center">
       {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
         color="danger"

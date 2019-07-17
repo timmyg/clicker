@@ -1,6 +1,9 @@
-<ion-card *ngIf="(reservation$ | async) as reservation">
+<ion-card *ngIf="(reservation$ | async)">
   <ion-card-content>
     <!-- <ion-list-header no-padding> Summary </ion-list-header> -->
+    <div>
+      <label> Location: </label> <span>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</span>
+    </div>
     <div>
       <label> Channel: </label> <span>{{ reservation.program.title }} ({{ reservation.program.channelTitle }})</span>
     </div>
@@ -13,18 +16,21 @@
       <ng-template #noReservation>One-time change</ng-template>
     </div>
     <br />
-    <ion-radio-group (ionChange)="onAmountChange($event)">
-      <ion-item *ngFor="let timeframe of (timeframes$ | async)">
-        <ion-label flex align-items-center>
-          <span class="dollars">{{ timeframe.minutes }} minutes</span>
-          <div flex align-items-center>
-            <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-            <span>{{ timeframe.tokens }}</span>
-          </div>
-        </ion-label>
-        <ion-radio slot="start" value="{{ timeframe.minutes }}" [disabled]="waiting" checked></ion-radio>
-      </ion-item>
-    </ion-radio-group>
+    <ion-list *ngIf="!reservation.location.free">
+      <ion-radio-group (ionChange)="onTimeframeChange($event)">
+        <ion-list-header> Choose Timeframe </ion-list-header>
+        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
+          <ion-label flex align-items-center>
+            <span class="dollars">{{ timeframe.minutes }} minutes</span>
+            <div flex align-items-center>
+              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+              <span>{{ timeframe.tokens }}</span>
+            </div>
+          </ion-label>
+          <ion-radio slot="start" [value]="timeframe" [disabled]="waiting" checked></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
     <p class="ion-text-center">You will be able to freely change the channel during your reservation.</p>
     <!-- </p> -->
     <ion-button
@@ -46,9 +52,6 @@
         <ion-spinner name="crescent" margin-start></ion-spinner>
       </ng-template>
     </ion-button>
-    <ion-row class="ion-text-center" *ngIf="reservation.location && reservation.location.name">
-      <p class="center">{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</p></ion-row
-    >
     <ion-row class="ion-text-center" *ngIf="!hasSufficientFunds()" margin-top>
       <ion-text color="danger">
         Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span

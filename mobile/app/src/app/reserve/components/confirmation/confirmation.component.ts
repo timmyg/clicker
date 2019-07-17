@@ -36,7 +36,6 @@ export class ConfirmationComponent implements OnInit {
   saving: boolean;
   isEditMode: boolean;
   sufficientFunds: boolean;
-  selectedTimeframe: Timeframe;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -66,23 +65,33 @@ export class ConfirmationComponent implements OnInit {
         this.reservation = reservation;
         // initialize reservation
         if (this.reservation.location.free) {
+          console.log('free!');
           this.reservation.cost = 0;
           this.reservation.minutes = 0;
         } else {
-          // this.plans$.pipe(first()).subscribe(plans => {
-          //   this.selectedPlan = plans.find(f => f.dollars === +e.detail.value);
-          // });
+          this.timeframes$
+            .pipe(
+              filter(t => t !== null),
+              first(),
+            )
+            .subscribe(timeframes => {
+              // this.selectedPlan = timeframes.find(f => f.dollars === +e.detail.value);
+              const timeframe = timeframes[0];
+              this.reservation.cost = timeframe.tokens;
+              this.reservation.minutes = timeframe.minutes;
+              // console.log(this.reservation);
+            });
         }
-        this.route.queryParams.subscribe(params => {
-          this.reservation.minutes = this.reservation.location.minutes;
-          if (params && params.edit) {
-            if (params.edit === 'channel') {
-              this.reservation.minutes = 0;
-            }
-            // else if (params.edit === 'time') {
-            // }
-          }
-        });
+        // this.route.queryParams.subscribe(params => {
+        //   // this.reservation.minutes = this.reservation.location.minutes;
+        //   if (params && params.edit) {
+        //     if (params.edit === 'channel') {
+        //       this.reservation.minutes = 0;
+        //     }
+        //     // else if (params.edit === 'time') {
+        //     // }
+        //   }
+        // });
         if (reservation.id) {
           this.isEditMode = true;
         }
@@ -145,8 +154,6 @@ export class ConfirmationComponent implements OnInit {
       .pipe(ofType(fromReservation.CREATE_RESERVATION_FAIL, fromReservation.UPDATE_RESERVATION_FAIL))
       .pipe(first())
       .subscribe(() => {
-        // this.store.dispatch(new fromReservation.Start());
-        // this.router.navigate(['/tabs/profile']);
         this.showErrorToast();
         this.saving = false;
       });
@@ -171,11 +178,9 @@ export class ConfirmationComponent implements OnInit {
     toast.present();
   }
 
-  async onAmountChange(e) {
-    this.timeframes$.pipe(first()).subscribe(timeframes => {
-      this.selectedTimeframe = timeframes.find(f => f.minutes === +e.detail.value);
-      this.reservation.cost = this.selectedTimeframe.tokens;
-      this.reservation.minutes = this.selectedTimeframe.minutes;
-    });
+  async onTimeframeChange(e) {
+    const timeframe = e.detail.value;
+    this.reservation.cost = timeframe.tokens;
+    this.reservation.minutes = timeframe.minutes;
   }
 }

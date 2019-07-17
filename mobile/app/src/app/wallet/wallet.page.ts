@@ -64,6 +64,7 @@ export class WalletPage {
   }
 
   ngOnInit() {
+    console.log('oninit');
     this.store.dispatch(new fromApp.LoadPlans());
     // this.store.dispatch(new fromUser.LoadWallet());
     this.stripeService.elements(this.elementsOptions).subscribe(elements => {
@@ -136,9 +137,7 @@ export class WalletPage {
   }
 
   async onAmountChange(e) {
-    this.plans$.pipe(first()).subscribe(plans => {
-      this.selectedPlan = plans.find(f => f.dollars === +e.detail.value);
-    });
+    this.selectedPlan = e.detail.value;
   }
 
   onClose() {
