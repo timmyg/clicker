@@ -41,6 +41,18 @@ functions:
               - partner
               - authorization
               - content-type
+  timeframes:
+    handler: app.timeframes
+    events:
+      - http:
+          path: timeframes
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   health:
     handler: app.health
     events:
