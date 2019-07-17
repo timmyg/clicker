@@ -14,6 +14,9 @@ import { isLoggedIn, getUserTokenCount } from 'src/app/state/user';
 import { Actions, ofType } from '@ngrx/effects';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
+import { Timeframe } from 'src/app/state/app/timeframe.model';
+import { getTimeframes } from 'src/app/state/app';
+import * as fromApp from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-confirmation',
@@ -21,6 +24,7 @@ import { Globals } from 'src/app/globals';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent implements OnInit {
+  timeframes$: Observable<Timeframe[]>;
   reservation$: Observable<Partial<Reservation>>;
   reservationEnd$: Observable<Date>;
   tokenCount$: Observable<number>;
@@ -32,6 +36,7 @@ export class ConfirmationComponent implements OnInit {
   saving: boolean;
   isEditMode: boolean;
   sufficientFunds: boolean;
+  selectedTimeframe: Timeframe;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -43,6 +48,7 @@ export class ConfirmationComponent implements OnInit {
     private globals: Globals,
     private route: ActivatedRoute,
   ) {
+    this.timeframes$ = this.store.select(getTimeframes);
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
     this.tokenCount$ = this.store.select(getUserTokenCount);
@@ -50,6 +56,7 @@ export class ConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.store.dispatch(new fromApp.LoadTimeframes());
     this.reservation$
       .pipe(
         filter(r => r !== null),
@@ -58,14 +65,22 @@ export class ConfirmationComponent implements OnInit {
       .subscribe(reservation => {
         this.reservation = reservation;
         // initialize reservation
-        this.reservation.cost = this.reservation.location.cost;
+        if (this.reservation.location.free) {
+          this.reservation.cost = 0;
+          this.reservation.minutes = 0;
+        } else {
+          // this.plans$.pipe(first()).subscribe(plans => {
+          //   this.selectedPlan = plans.find(f => f.dollars === +e.detail.value);
+          // });
+        }
         this.route.queryParams.subscribe(params => {
           this.reservation.minutes = this.reservation.location.minutes;
           if (params && params.edit) {
             if (params.edit === 'channel') {
               this.reservation.minutes = 0;
-            } else if (params.edit === 'time') {
             }
+            // else if (params.edit === 'time') {
+            // }
           }
         });
         if (reservation.id) {
@@ -154,5 +169,13 @@ export class ConfirmationComponent implements OnInit {
       color: 'danger',
     });
     toast.present();
+  }
+
+  async onAmountChange(e) {
+    this.timeframes$.pipe(first()).subscribe(timeframes => {
+      this.selectedTimeframe = timeframes.find(f => f.minutes === +e.detail.value);
+      this.reservation.cost = this.selectedTimeframe.tokens;
+      this.reservation.minutes = this.selectedTimeframe.minutes;
+    });
   }
 }

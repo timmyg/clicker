@@ -13,6 +13,18 @@
       <ng-template #noReservation>One-time change</ng-template>
     </div>
     <br />
+    <ion-radio-group (ionChange)="onAmountChange($event)">
+      <ion-item *ngFor="let timeframe of (timeframes$ | async)">
+        <ion-label flex align-items-center>
+          <span class="dollars">{{ timeframe.minutes }} minutes</span>
+          <div flex align-items-center>
+            <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+            <span>{{ timeframe.tokens }}</span>
+          </div>
+        </ion-label>
+        <ion-radio slot="start" value="{{ timeframe.minutes }}" [disabled]="waiting" checked></ion-radio>
+      </ion-item>
+    </ion-radio-group>
     <p class="ion-text-center">You will be able to freely change the channel during your reservation.</p>
     <!-- </p> -->
     <ion-button
