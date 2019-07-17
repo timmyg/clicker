@@ -41,6 +41,18 @@ functions:
               - partner
               - authorization
               - content-type
+  costs:
+    handler: app.costs
+    events:
+      - http:
+          path: costs
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   health:
     handler: app.health
     events:
