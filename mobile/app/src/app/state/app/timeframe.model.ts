@@ -1,5 +1,5 @@
 export interface Timeframe {
-  id: string;
+  id?: string;
   tokens: number;
   minutes: number;
 }

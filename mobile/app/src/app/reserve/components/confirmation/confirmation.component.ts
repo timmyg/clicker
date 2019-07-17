@@ -17,6 +17,7 @@ import { Globals } from 'src/app/globals';
 import { Timeframe } from 'src/app/state/app/timeframe.model';
 import { getTimeframes } from 'src/app/state/app';
 import * as fromApp from 'src/app/state/app/app.actions';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-confirmation',
@@ -36,6 +37,10 @@ export class ConfirmationComponent implements OnInit {
   saving: boolean;
   isEditMode: boolean;
   sufficientFunds: boolean;
+  timeframe0: Timeframe = {
+    minutes: 0,
+    tokens: 0,
+  };
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -76,22 +81,28 @@ export class ConfirmationComponent implements OnInit {
             )
             .subscribe(timeframes => {
               // this.selectedPlan = timeframes.find(f => f.dollars === +e.detail.value);
-              const timeframe = timeframes[0];
-              this.reservation.cost = timeframe.tokens;
-              this.reservation.minutes = timeframe.minutes;
-              // console.log(this.reservation);
+              if (this.reservation.minutes !== 0) {
+                const timeframe = timeframes[0];
+                this.reservation.cost = timeframe.tokens;
+                this.reservation.minutes = timeframe.minutes;
+                // console.log(this.reservation);
+              }
+              // else {
+              //   // is changing channel on existing reservation
+              //   this.reservation.cost = 0;
+              // }
             });
         }
-        // this.route.queryParams.subscribe(params => {
-        //   // this.reservation.minutes = this.reservation.location.minutes;
-        //   if (params && params.edit) {
-        //     if (params.edit === 'channel') {
-        //       this.reservation.minutes = 0;
-        //     }
-        //     // else if (params.edit === 'time') {
-        //     // }
-        //   }
-        // });
+        this.route.queryParams.subscribe(params => {
+          // this.reservation.minutes = this.reservation.location.minutes;
+          if (params && params.edit) {
+            if (params.edit === 'channel') {
+              this.reservation.minutes = 0;
+            }
+            // else if (params.edit === 'time') {
+            // }
+          }
+        });
         if (reservation.id) {
           this.isEditMode = true;
         }
@@ -182,5 +193,19 @@ export class ConfirmationComponent implements OnInit {
     const timeframe = e.detail.value;
     this.reservation.cost = timeframe.tokens;
     this.reservation.minutes = timeframe.minutes;
+  }
+
+  get availableTimeframes$() {
+    console.log('atf');
+    return this.timeframes$.pipe(
+      first(),
+      map(timeframes => {
+        // if (this.isEditMode) {
+        //   timeframes.unshift({ tokens: 0, minutes: 0 });
+        // }
+        // console.log(timeframes);
+        return timeframes;
+      }),
+    );
   }
 }

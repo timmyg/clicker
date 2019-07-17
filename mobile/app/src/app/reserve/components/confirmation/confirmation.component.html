@@ -19,7 +19,17 @@
     <ion-list *ngIf="!reservation.location.free">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
         <ion-list-header> Choose Timeframe </ion-list-header>
-        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
+        <ion-item *ngIf="isEditMode">
+          <ion-label flex align-items-center>
+            <span class="dollars">{{ timeframe0.minutes }} minutes</span>
+            <div flex align-items-center>
+              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+              <span>{{ timeframe0.tokens }}</span>
+            </div>
+          </ion-label>
+          <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting" checked></ion-radio>
+        </ion-item>
+        <ion-item *ngFor="let timeframe of (availableTimeframes$ | async)">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>
