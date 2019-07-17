@@ -20,6 +20,7 @@ const { Geolocation } = Plugins;
 import { Storage } from '@ionic/storage';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
+
 const permissionGeolocation = {
   name: 'permission.geolocation',
   values: {

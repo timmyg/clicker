@@ -11,3 +11,13 @@ ion-spinner {
 label {
   font-weight: bold;
 }
+
+ion-label {
+  display: flex !important;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.dollars {
+  margin-right: auto;
+}

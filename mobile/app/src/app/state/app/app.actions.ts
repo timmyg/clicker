@@ -1,12 +1,16 @@
 import { Action } from '@ngrx/store';
 import { Plan } from './plan.model';
+import { Timeframe } from './timeframe.model';
 
 export const SET_PARTNER = '[APP] Set Partner';
 export const SET_PARTNER_SUCCESS = '[APP] Set Partner Success';
 export const SET_PARTNER_FAIL = '[APP] Set Partner Fail';
-export const LOAD_PLANS = '[USER] Load Plans';
-export const LOAD_PLANS_SUCCESS = '[USER] Load Plans Success';
-export const LOAD_PLANS_FAIL = '[USER] Load Plans Fail';
+export const LOAD_PLANS = '[APP] Load Plans';
+export const LOAD_PLANS_SUCCESS = '[APP] Load Plans Success';
+export const LOAD_PLANS_FAIL = '[APP] Load Plans Fail';
+export const LOAD_TIMEFRAMES = '[APP] Load Timeframes';
+export const LOAD_TIMEFRAMES_SUCCESS = '[APP] Load Timeframes Success';
+export const LOAD_TIMEFRAMES_FAIL = '[APP] Load Timeframes Fail';
 
 export class SetPartner implements Action {
   readonly type = SET_PARTNER;
@@ -35,4 +39,27 @@ export class LoadPlansFail implements Action {
   constructor(public payload: any) {}
 }
 
-export type AppActions = SetPartner | SetPartnerSuccess | SetPartnerFail | LoadPlans | LoadPlansSuccess | LoadPlansFail;
+export class LoadTimeframes implements Action {
+  readonly type = LOAD_TIMEFRAMES;
+}
+
+export class LoadTimeframesSuccess implements Action {
+  readonly type = LOAD_TIMEFRAMES_SUCCESS;
+  constructor(public timeframes: Timeframe[]) {}
+}
+
+export class LoadTimeframesFail implements Action {
+  readonly type = LOAD_TIMEFRAMES_FAIL;
+  constructor(public payload: any) {}
+}
+
+export type AppActions =
+  | SetPartner
+  | SetPartnerSuccess
+  | SetPartnerFail
+  | LoadPlans
+  | LoadPlansSuccess
+  | LoadPlansFail
+  | LoadTimeframes
+  | LoadTimeframesSuccess
+  | LoadTimeframesFail;
