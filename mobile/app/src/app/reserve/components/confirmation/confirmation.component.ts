@@ -194,18 +194,4 @@ export class ConfirmationComponent implements OnInit {
     this.reservation.cost = timeframe.tokens;
     this.reservation.minutes = timeframe.minutes;
   }
-
-  get availableTimeframes$() {
-    console.log('atf');
-    return this.timeframes$.pipe(
-      first(),
-      map(timeframes => {
-        // if (this.isEditMode) {
-        //   timeframes.unshift({ tokens: 0, minutes: 0 });
-        // }
-        // console.log(timeframes);
-        return timeframes;
-      }),
-    );
-  }
 }

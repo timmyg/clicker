@@ -12,13 +12,18 @@
     </div>
     <div>
       <label> Reserved Until: </label>
-      <span *ngIf="reservation.minutes; else noReservation">{{ getEndTime() | amDateFormat: 'h:mma' }}</span>
-      <ng-template #noReservation>One-time change</ng-template>
+      <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
+        getEndTime() | amDateFormat: 'h:mma'
+      }}</span>
+      <ng-template #noReservation> One-time change </ng-template>
     </div>
     <br />
     <ion-list *ngIf="!reservation.location.free">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
-        <ion-list-header> Choose Timeframe </ion-list-header>
+        <ion-list-header>
+          <span *ngIf="isEditMode; else normal">Extend</span> <ng-template #normal>Choose</ng-template> Timeframe
+        </ion-list-header>
+        <!-- hacky - should put as first item in observable somehow? -->
         <ion-item *ngIf="isEditMode">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe0.minutes }} minutes</span>
@@ -29,7 +34,7 @@
           </ion-label>
           <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting" checked></ion-radio>
         </ion-item>
-        <ion-item *ngFor="let timeframe of (availableTimeframes$ | async)">
+        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>
@@ -66,8 +71,7 @@
       <ion-text color="danger">
         Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please
-        <span *ngIf="!isLoggedIn"><a [routerLink]="'/tabs/profile'">login</a> and </span>
-        <a [routerLink]="'/tabs/profile'" *ngIf="isLoggedIn">add funds</a><span *ngIf="!isLoggedIn">add funds</span>.
+        <span *ngIf="!isLoggedIn"><a [routerLink]="'/tabs/profile'">login</a> and </span> <span>add funds</span>.
       </ion-text>
     </ion-row>
   </ion-card-content>
