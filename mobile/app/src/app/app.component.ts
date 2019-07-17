@@ -44,7 +44,13 @@ export class AppComponent {
           .pipe(first(val => !!val))
           .subscribe(userId => {
             console.log(userId);
-            this.segment.identify(userId, { version });
+            this.segment.identify(
+              userId,
+              { version },
+              {
+                Intercom: { hideDefaultLauncher: true },
+              },
+            );
             this.segment.track(this.globals.events.opened);
           });
         await SplashScreen.hide();
