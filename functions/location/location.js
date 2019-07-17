@@ -44,8 +44,7 @@ const Location = dynamoose.model(
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },
     },
-    cost: Number,
-    minutes: Number,
+    free: Boolean,
     img: String,
     active: Boolean,
     hidden: Boolean,
@@ -136,13 +135,13 @@ module.exports.get = async event => {
   // TODO set reserved
   // call reservations to get active ones by location
 
-  if (location.cost === undefined) {
-    location.cost = 1;
-  }
+  // if (location.cost === undefined) {
+  //   location.cost = 1;
+  // }
 
-  if (location.minutes === undefined) {
-    location.minutes = 30;
-  }
+  // if (location.minutes === undefined) {
+  //   location.minutes = 30;
+  // }
 
   return respond(200, location);
 };

@@ -6,6 +6,7 @@ import { Plan } from './plan.model';
 import { Action } from '@ngrx/store';
 import * as AppActions from './app.actions';
 import { AppService } from 'src/app/core/services/app.service';
+import { Timeframe } from './timeframe.model';
 
 @Injectable()
 export class AppEffects {
@@ -16,6 +17,16 @@ export class AppEffects {
       this.appService.getPlans().pipe(
         switchMap((plans: Plan[]) => [new AppActions.LoadPlansSuccess(plans)]),
         catchError(err => of(new AppActions.LoadPlansFail(err))),
+      ),
+    ),
+  );
+  @Effect()
+  loadTimeframes$: Observable<Action> = this.actions$.pipe(
+    ofType(AppActions.LOAD_TIMEFRAMES),
+    switchMap(() =>
+      this.appService.getTimeframes().pipe(
+        switchMap((timeframes: Timeframe[]) => [new AppActions.LoadTimeframesSuccess(timeframes)]),
+        catchError(err => of(new AppActions.LoadTimeframesFail(err))),
       ),
     ),
   );
