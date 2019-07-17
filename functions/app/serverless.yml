@@ -41,11 +41,11 @@ functions:
               - partner
               - authorization
               - content-type
-  costs:
-    handler: app.costs
+  timeframes:
+    handler: app.timeframes
     events:
       - http:
-          path: costs
+          path: timeframes
           method: get
           cors:
             origin: '*'
