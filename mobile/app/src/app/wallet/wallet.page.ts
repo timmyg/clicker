@@ -85,9 +85,7 @@ export class WalletPage {
     });
   }
 
-  addCard(x) {
-    console.log(x);
-    // const name = this.stripeFormGroup.get('name').value;
+  addCard() {
     this.waiting = true;
     this.stripeService.createToken(this.card, {}).subscribe(async result => {
       console.log(result);

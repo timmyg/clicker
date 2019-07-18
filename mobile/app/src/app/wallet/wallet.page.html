@@ -38,7 +38,7 @@
   </section>
   <section [hidden]="userCard$ | async">
     <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
-    <form novalidate (ngSubmit)="addCard(x)">
+    <form novalidate (ngSubmit)="addCard()">
       <div id="card-element" class="field"></div>
       <ion-button type="submit" expand="block" color="success" [disabled]="waiting">Add</ion-button>
     </form>
