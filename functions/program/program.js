@@ -22,6 +22,7 @@ const nationalChannels = [
   // optional channels, but leave for syncing
   { channel: 618, channelTitle: 'FS2' },
   { channel: 602, channelTitle: 'TVG' },
+  { channel: 218, channelTitle: 'GOLF' },
   // { channel: 245, channelTitle: 'TNT' },
   // { channel: 247, channelTitle: 'TBS' },
   // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
