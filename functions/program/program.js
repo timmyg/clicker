@@ -358,7 +358,12 @@ function rank(program) {
   if (program.subcategories) {
     program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;
     // if (program.subcategories.includes('Golf')) {
-    if ((program.title.includes('PGA Championship') || program.title.includes('U.S. Open')) || program.title.includes('Open Championship')) && program.live) {
+    if (
+      (program.title.includes('PGA Championship') ||
+        program.title.includes('U.S. Open') ||
+        program.title.includes('Open Championship')) &&
+      program.live
+    ) {
       totalPoints += 5;
     }
     // }
