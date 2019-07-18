@@ -5,6 +5,7 @@ const moment = require('moment');
 const uuid = require('uuid/v1');
 require('dotenv').config({ path: '../.env.example' });
 
+
 const Location = dynamoose.model(
   process.env.tableLocation,
   {
