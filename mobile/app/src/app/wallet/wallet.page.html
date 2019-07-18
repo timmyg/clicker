@@ -28,7 +28,7 @@
     <ion-button expand="block" color="success" (click)="purchase()" [disabled]="waiting" *ngIf="selectedPlan"
       >Purchase ${{ selectedPlan.dollars }}</ion-button
     >
-    <p class="ion-text-center">
+    <p class="ion-text-center" *ngIf="!waiting">
       {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
         color="danger"
         (click)="removeCard()"
@@ -38,8 +38,8 @@
   </section>
   <section [hidden]="userCard$ | async">
     <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
-    <form novalidate (ngSubmit)="addCard()">
-      <div id="card-element" class="field "></div>
+    <form novalidate (ngSubmit)="addCard(x)">
+      <div id="card-element" class="field"></div>
       <ion-button type="submit" expand="block" color="success" [disabled]="waiting">Add</ion-button>
     </form>
   </section>

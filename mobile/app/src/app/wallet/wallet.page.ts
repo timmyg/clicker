@@ -14,7 +14,8 @@ import { getUserTokenCount } from '../state/user';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
 import { Plan } from '../state/app/plan.model';
-import { first } from 'rxjs/operators';
+import { first, take } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-wallet',
@@ -58,6 +59,7 @@ export class WalletPage {
     public alertController: AlertController,
     private segment: SegmentService,
     private globals: Globals,
+    private actions$: Actions,
   ) {
     this.userCard$ = this.store.select(getUserCard);
     this.plans$ = this.store.select(getPlans);
@@ -83,26 +85,48 @@ export class WalletPage {
     });
   }
 
-  addCard() {
+  addCard(x) {
+    console.log(x);
     // const name = this.stripeFormGroup.get('name').value;
     this.waiting = true;
     this.stripeService.createToken(this.card, {}).subscribe(async result => {
+      console.log(result);
       if (result.token) {
         // Use the token to create a charge or a customer
         // https://stripe.com/docs/charges
         this.store.dispatch(new fromUser.UpdateCard(result.token.id));
-        setTimeout(async () => {
-          const toast = await this.toastController.create({
-            message: `Card successfully added`,
-            duration: 3000,
-            cssClass: 'ion-text-center',
+
+        this.actions$
+          .pipe(
+            ofType(fromUser.UPDATE_CARD_SUCCESS),
+            take(1),
+          )
+          .subscribe(async () => {
+            const toast = await this.toastController.create({
+              message: `Card successfully added`,
+              duration: 3000,
+              cssClass: 'ion-text-center',
+            });
+            toast.present();
+            this.waiting = false;
+            this.segment.track(this.globals.events.payment.sourceAdded, {
+              type: 'Credit Card',
+            });
           });
-          toast.present();
-          this.waiting = false;
-          this.segment.track(this.globals.events.payment.sourceAdded, {
-            type: 'Credit Card',
+        this.actions$
+          .pipe(ofType(fromUser.UPDATE_CARD_FAIL))
+          .pipe(first())
+          .subscribe(async (error: any) => {
+            // console.log('fail', x);
+            const whoops = await this.toastController.create({
+              message: error.payload.error.message,
+              color: 'danger',
+              duration: 4000,
+              cssClass: 'ion-text-center',
+            });
+            whoops.present();
+            this.waiting = false;
           });
-        }, 3000);
       } else if (result.error) {
         // Error creating the token
         console.error(result.error.message);
