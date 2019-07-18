@@ -214,6 +214,7 @@ module.exports.verifyStart = async event => {
   }
 };
 
+
 module.exports.verify = async event => {
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
