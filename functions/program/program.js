@@ -407,6 +407,7 @@ module.exports.syncNew = async event => {
   }
 };
 
+
 async function syncChannels(channelsString, zip, channels) {
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()

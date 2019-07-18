@@ -34,6 +34,7 @@ export class AppComponent {
     this.partner$ = this.store.select(getPartner);
     this.initializeApp();
   }
+  
 
   async initializeApp() {
     console.log(this.version);
