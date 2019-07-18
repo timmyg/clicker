@@ -46,7 +46,9 @@
         </ion-item>
       </ion-radio-group>
     </ion-list>
-    <p class="ion-text-center">You will be able to freely change the channel during your reservation.</p>
+    <p class="ion-text-center" *ngIf="!reservation.location.free">
+      You will be able to freely change the channel during your reservation.
+    </p>
     <!-- </p> -->
     <ion-button
       color="success"

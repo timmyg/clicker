@@ -109,15 +109,17 @@ module.exports.get = async event => {
     .exec();
 
   // loop through boxes, and update reserved status if necessary
-  location.boxes.forEach((o, i, boxes) => {
-    // check if box is reserved and end time is in past
-    if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
-      // if so, update to not reserved
-      delete boxes[i].reserved;
-      delete boxes[i].end;
-    }
-  });
-  await location.save();
+  if (location.boxes) {
+    location.boxes.forEach((o, i, boxes) => {
+      // check if box is reserved and end time is in past
+      if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
+        // if so, update to not reserved
+        delete boxes[i].reserved;
+        delete boxes[i].end;
+      }
+    });
+    await location.save();
+  }
 
   // filter out inactive boxes
   // location.boxes.forEach((o, i, boxes) => {
