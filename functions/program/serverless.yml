@@ -89,7 +89,7 @@ functions:
     timeout: 20
     events:
       - http:
-          path: new
+          path: 'sync'
           method: post
           cors:
             origin: '*'
@@ -103,7 +103,7 @@ functions:
     # timeout: 10
     events:
       - http:
-          path: descriptions
+          path: 'sync/descriptions'
           method: post
           cors:
             origin: '*'
