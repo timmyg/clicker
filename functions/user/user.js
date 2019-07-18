@@ -226,7 +226,7 @@ module.exports.verify = async event => {
       const token = await getToken(phone);
       return respond(201, { token });
     }
-    return respond(201, 'denied');
+    return respond(400, 'denied');
   } catch (e) {
     return respond(400, e);
   }
