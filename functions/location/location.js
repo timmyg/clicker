@@ -119,31 +119,15 @@ module.exports.get = async event => {
       }
     });
     await location.save();
+
+    location.boxes = location.boxes.filter(b => b.active);
+
+    // filter out inactive boxes
+    // sort boxes alphabetically
+    location.boxes = location.boxes.sort((a, b) => {
+      return a.label.localeCompare(b.label);
+    });
   }
-
-  // filter out inactive boxes
-  // location.boxes.forEach((o, i, boxes) => {
-  //   if (!boxes[i].active) {
-  //     boxes.splice(i, 1);
-  //   }
-  // });
-  location.boxes = location.boxes.filter(b => b.active);
-
-  // sort boxes alphabetically
-  location.boxes = location.boxes.sort((a, b) => {
-    return a.label.localeCompare(b.label);
-  });
-
-  // TODO set reserved
-  // call reservations to get active ones by location
-
-  // if (location.cost === undefined) {
-  //   location.cost = 1;
-  // }
-
-  // if (location.minutes === undefined) {
-  //   location.minutes = 30;
-  // }
 
   return respond(200, location);
 };
