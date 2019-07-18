@@ -422,7 +422,9 @@ async function syncChannels(channelsString, zip, channels) {
     Cookie: `dtve-prospect-zip=${zip || zipDefault};`,
   };
   const method = 'get';
+  console.log('getting channels....', params, headers);
   let result = await axios({ method, url, params, headers });
+  console.log({ result });
 
   let { schedule } = result.data;
   let allPrograms = build(schedule, zip, channels);
