@@ -1,8 +1,11 @@
 .breadcrumbs {
-  span {
-    margin-right: 5px;
+  .step {
+    // margin-right: 8px;
     &.active {
-      font-weight: bold;
+      .text {
+        font-weight: bold;
+        color: var(--ion-color-primary);
+      }
     }
     &:not(.active) {
       opacity: 0.4;

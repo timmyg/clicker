@@ -1,10 +1,8 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
 import { NavController, Events, IonSearchbar, ModalController } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../state/app.reducer';
-import { Observable } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { WalletPage } from '../wallet/wallet.page';
 
 @Component({
@@ -19,10 +17,11 @@ export class ReservePage {
   searchMode: boolean;
   showingLocations: boolean;
   tokenCount$: Observable<number>;
+  percentageComplete: number;
   walletModal;
+  routerListerSub: Subscription;
 
   constructor(
-    private store: Store<fromStore.AppState>,
     public reserveService: ReserveService,
     private navCtrl: NavController,
     private router: Router,
@@ -40,6 +39,7 @@ export class ReservePage {
       this.showingLocations = true;
     });
     this.tokenCount$ = this.walletPage.getCoinCount();
+    this.initStepListener();
   }
 
   goBack() {
@@ -52,6 +52,32 @@ export class ReservePage {
 
   disableRefresher() {
     return this.router.url === '/tabs/reserve/confirmation';
+  }
+
+  initStepListener() {
+    console.log(this.routerListerSub);
+    this.routerListerSub = this.router.events.subscribe(e => {
+      // console.log(e);
+      // console.log(val);
+      if (e instanceof NavigationEnd) {
+        console.log(e.url);
+        switch (e.url) {
+          case '/tabs/reserve':
+          case '/tabs/reserve/locations':
+            this.percentageComplete = 0.125;
+            break;
+          case '/tabs/reserve/programs':
+            this.percentageComplete = 0.375;
+            break;
+          case '/tabs/reserve/tvs':
+            this.percentageComplete = 0.625;
+            break;
+          case '/tabs/reserve/confirmation':
+            this.percentageComplete = 0.875;
+            break;
+        }
+      }
+    });
   }
 
   async onCoinsClick() {
@@ -67,34 +93,50 @@ export class ReservePage {
 
   isStepActive(stepName: string) {
     switch (stepName) {
-      case "location":
+      case 'location':
         return this.router.url.includes('locations');
-      case "channel":
+      case 'channel':
         return this.router.url.includes('programs');
-      case "tv":
+      case 'tv':
         return this.router.url.includes('tvs');
-      case "confirm":
+      case 'confirm':
         return this.router.url.includes('confirmation');
     }
   }
 
-
   isStepComplete(stepName: string) {
     switch (stepName) {
-      case "location":
+      case 'location':
         return !this.router.url.includes('locations');
-      case "channel":
+      case 'channel':
         return !this.router.url.includes('locations') && !this.router.url.includes('programs');
-      case "tv":
-        return !this.router.url.includes('locations') && !this.router.url.includes('programs') && !this.router.url.includes('tvs');
-      case "confirm":
-        return false
+      case 'tv':
+        return (
+          !this.router.url.includes('locations') &&
+          !this.router.url.includes('programs') &&
+          !this.router.url.includes('tvs')
+        );
+      case 'confirm':
+        return false;
     }
   }
 
   toggleSearch() {
     this.searchMode = !this.searchMode;
     setTimeout(() => this.searchbar.setFocus(), 100);
+  }
+
+  getProgressPercentage(stepName) {
+    switch (stepName) {
+      case 'location':
+        return 0.2;
+      case 'channel':
+        return 0.4;
+      case 'tv':
+        return 0.6;
+      case 'confirm':
+        return 0.8;
+    }
   }
 
   closeSearch() {

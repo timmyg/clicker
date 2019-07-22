@@ -108,7 +108,7 @@ export class ProfilePage {
         this.showToast('Sorry, your reservation has expired');
       }
     } else {
-      this.showToast('Sorry, you did not reserve this TV for a time period. Please create new reservation.');
+      this.showToast('Sorry, you did not reserve this TV for a time period.');
     }
   }
 
@@ -175,7 +175,7 @@ export class ProfilePage {
     const alert = await this.alertController.create({
       header: 'Are you sure?',
       message:
-        'You will not be refunded any tokens, but you will be freeing up a TV for other patrons, which is appreciated ✌️',
+        'You will not be refunded any tokens, but you will be freeing up a TV for others, which is appreciated ✌️',
       buttons: [
         {
           text: 'Cancel Reservation',
@@ -238,7 +238,6 @@ export class ProfilePage {
   async rate() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Rate the Clicker TV app',
-      // message: 'Your existing reservations will not be affected',
       buttons: [
         {
           text: 'I already left a rating',

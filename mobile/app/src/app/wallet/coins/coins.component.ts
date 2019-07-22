@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { WalletPage } from '../wallet.page';
 import { Observable } from 'rxjs';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController, ToastController, Platform } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../state/app.reducer';
 import { getUserRoles, isLoggedIn } from 'src/app/state/user';
+import { LoginComponent } from 'src/app/auth/login/login.component';
 
 @Component({
   selector: 'app-coins',
@@ -18,12 +19,14 @@ export class CoinsComponent implements OnInit {
   isLoggedIn: boolean;
   userRoles: string[];
   walletModal;
+  loginModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
     private walletPage: WalletPage,
     public modalController: ModalController,
     public toastController: ToastController,
+    private platform: Platform,
   ) {
     this.tokenCount$ = this.walletPage.getCoinCount();
     this.userRoles$ = this.store.select(getUserRoles);
@@ -36,7 +39,13 @@ export class CoinsComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.platform.backButton.subscribe(() => {
+      // might just work with android
+      if (this.loginModal) this.loginModal.close();
+      if (this.walletModal) this.walletModal.close();
+    });
+  }
 
   async onClick() {
     // if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
@@ -47,9 +56,20 @@ export class CoinsComponent implements OnInit {
       return await this.walletModal.present();
     } else {
       const toast = await this.toastController.create({
-        message: `Please login to add tokens.`,
+        message: `You must be logged in to buy tokens.`,
         duration: 4000,
-        cssClass: 'ion-text-center',
+        buttons: [
+          {
+            side: 'end',
+            text: 'Login',
+            handler: async () => {
+              this.loginModal = await this.modalController.create({
+                component: LoginComponent,
+              });
+              return await this.loginModal.present();
+            },
+          },
+        ],
       });
       toast.present();
     }

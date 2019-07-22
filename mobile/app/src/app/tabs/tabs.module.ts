@@ -7,10 +7,9 @@ import { TabsPageRoutingModule } from './tabs.router.module';
 
 import { TabsPage } from './tabs.page';
 import { OnboardingModule } from '../onboarding/onboarding.module';
-import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
-  imports: [IonicModule, CommonModule, FormsModule, TabsPageRoutingModule, OnboardingModule, AuthModule],
+  imports: [IonicModule, CommonModule, FormsModule, TabsPageRoutingModule, OnboardingModule],
   declarations: [TabsPage],
 })
 export class TabsPageModule {}
