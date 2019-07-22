@@ -28,11 +28,11 @@ const nationalChannels = [
   // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
   // { channel: 600, channelTitle: 'SMXHD' },
   // { channel: 611, channelTitle: 'SECHD' },
-  // { channel: 701, channelTitle: 'USO' },
-  // { channel: 702, channelTitle: 'USO' },
-  // { channel: 703, channelTitle: 'USO' },
-  // { channel: 704, channelTitle: 'USO' },
-  // { channel: 705, channelTitle: 'USO' },
+  { channel: 701, channelTitle: 'OPN' },
+  { channel: 702, channelTitle: 'OPN' },
+  { channel: 703, channelTitle: 'OPN' },
+  { channel: 704, channelTitle: 'OPN' },
+  { channel: 705, channelTitle: 'OPN' },
   // { channel: 104, channelTitle: 'DTV4K' },
   // { channel: 105, channelTitle: 'LIVE4K' },
   // { channel: 106, channelTitle: 'LIVE4K2' },
@@ -406,7 +406,6 @@ module.exports.syncNew = async event => {
     return respond(400, `Could not create: ${e.stack}`);
   }
 };
-
 
 async function syncChannels(channelsString, zip, channels) {
   const url = `${directvEndpoint}/channelschedule`;
