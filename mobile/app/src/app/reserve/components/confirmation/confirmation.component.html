@@ -51,10 +51,10 @@
     </p>
     <!-- </p> -->
     <ion-button
-      color="success"
       size="large"
       expand="block"
       (click)="onConfirm(reservation)"
+      id="confirm"
       slot="end"
       [disabled]="saving || !hasSufficientFunds()"
       margin-top

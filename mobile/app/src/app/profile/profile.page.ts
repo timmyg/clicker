@@ -32,9 +32,14 @@ export class ProfilePage {
   user$: Observable<User>;
   isReservationsLoading$: Observable<boolean>;
   isWalletLoading$: Observable<boolean>;
+  showRatingLink = false;
   faCopyright = faCopyright;
   walletModal;
   loginModal;
+  rating = {
+    cookieName: 'rating',
+    given: 'given',
+  };
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -65,6 +70,17 @@ export class ProfilePage {
       if (this.loginModal) this.loginModal.close();
       if (this.walletModal) this.walletModal.close();
     });
+    this.configureRating();
+  }
+
+  async configureRating() {
+    const rating = await this.storage.get(this.rating.cookieName);
+    console.log({ rating });
+    if (rating === this.rating.given) {
+      this.showRatingLink = false;
+    } else {
+      this.showRatingLink = true;
+    }
   }
 
   async login() {
@@ -217,5 +233,54 @@ export class ProfilePage {
     });
 
     await alert.present();
+  }
+
+  async rate() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Rate the Clicker TV app',
+      // message: 'Your existing reservations will not be affected',
+      buttons: [
+        {
+          text: 'I already left a rating',
+          handler: async () => {
+            await this.storage.set(this.rating.cookieName, this.rating.given);
+            this.showRatingLink = false;
+            const toast = await this.toastController.create({
+              message: `We appreciate it! 🙌😁😍🎉😻🎈`,
+              duration: 3000,
+              cssClass: 'ion-text-center',
+            });
+            await toast.present();
+          },
+        },
+        {
+          text: 'Leave rating',
+          handler: async () => {
+            await this.storage.set(this.rating.cookieName, this.rating.given);
+            let link = 'https://tryclicker.com';
+            console.log(this.platform);
+            if (this.platform.is('ios')) {
+              link = 'itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8';
+            } else if (this.platform.is('android')) {
+              link = 'market://details?id=com.teamclicker.app';
+            }
+            window.open(link);
+            return null;
+          },
+        },
+      ],
+    });
+
+    await actionSheet.present();
+  }
+
+  getStoreName() {
+    let storeName = 'app store';
+    if (this.platform.is('ios')) {
+      storeName = 'App Store';
+    } else if (this.platform.is('android')) {
+      storeName = 'Play Store';
+    }
+    return storeName;
   }
 }

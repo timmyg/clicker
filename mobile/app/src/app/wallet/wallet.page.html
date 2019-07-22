@@ -25,7 +25,7 @@
         </ion-item>
       </ion-radio-group>
     </ion-list>
-    <ion-button expand="block" color="success" (click)="purchase()" [disabled]="waiting" *ngIf="selectedPlan"
+    <ion-button expand="block" color="primary" (click)="purchase()" [disabled]="waiting" *ngIf="selectedPlan"
       >Purchase ${{ selectedPlan.dollars }}</ion-button
     >
     <p class="ion-text-center" *ngIf="!waiting">
@@ -40,7 +40,7 @@
     <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
     <form novalidate (ngSubmit)="addCard()">
       <div id="card-element" class="field"></div>
-      <ion-button type="submit" expand="block" color="success" [disabled]="waiting">Add</ion-button>
+      <ion-button type="submit" expand="block" color="primary" [disabled]="waiting">Add</ion-button>
     </form>
   </section>
 </ion-content>
