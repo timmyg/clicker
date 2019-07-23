@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { Observable } from 'rxjs';
 import { Card } from 'src/app/state/user/card.model';
-import { getUserCard } from 'src/app/state/user';
+import { getUserCard, getUserId } from 'src/app/state/user';
 import { getPlans } from 'src/app/state/app';
 import { getUserTokenCount } from '../state/user';
 import { SegmentService } from 'ngx-segment-analytics';
@@ -155,6 +155,18 @@ export class WalletPage {
       this.segment.track(this.globals.events.payment.fundsAdded, {
         amount: this.selectedPlan.dollars,
       });
+      this.store
+        .select(getUserId)
+        .pipe(first(val => !!val))
+        .subscribe(async userId => {
+          this.segment.identify(
+            userId,
+            { paid: true },
+            {
+              Intercom: { hideDefaultLauncher: true },
+            },
+          );
+        });
     }, 3000);
   }
 

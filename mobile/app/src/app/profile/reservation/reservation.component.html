@@ -1,17 +1,16 @@
 <ion-card no-margin-horizontal>
-  <ion-card-header>
-    <ion-card-subtitle>
-      <span>{{ reservation.program.channelTitle }} (#{{ reservation.box.label }})</span>
-      <span float-right>
-        <!-- <span>{{ minutesFromNow$ | async }} left</span> -->
-        <span *ngIf="timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>
-        <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes">Expired</span>
-        <!-- <span *ngIf="!isReserved()">Expired</span> -->
-      </span>
-    </ion-card-subtitle>
-  </ion-card-header>
   <ion-card-content>
     <!-- <div>{{ reservation.programTitle }}</div> -->
-    <span>Length: {{ getTimeLeft(reservation.minutes).label }}</span> <a (click)="modify()" float-right>Modify</a>
+    <ion-row align-items-center
+      ><ion-icon name="tv" margin-end></ion-icon> <span padding-end> {{ reservation.box.label }}</span>
+      <span>({{ reservation.program.channelTitle }})</span>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-icon name="time" margin-end></ion-icon>
+      <span padding-end>{{ getTimeLeft(reservation.minutes).label }}</span>
+      <span *ngIf="timeLeft?.minutes > 0">({{ timeLeft?.label }} left)</span>
+      <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes">(Expired)</span>
+    </ion-row>
+    <ion-row justify-content-end> <a (click)="modify()">Modify</a></ion-row>
   </ion-card-content>
 </ion-card>
