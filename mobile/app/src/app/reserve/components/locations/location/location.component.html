@@ -14,7 +14,7 @@
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 
           <span float-right *ngIf="location.distance">
-            <span *ngIf="location.distance >= 0.2; else near"> {{ location.distance }} miles </span>
+            <span *ngIf="location.distance >= 0.2; else near"> {{ getDistance() }} miles </span>
             <ng-template #near> Near </ng-template>
           </span>
         </ion-card-subtitle>

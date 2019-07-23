@@ -70,7 +70,6 @@ export class ConfirmationComponent implements OnInit {
         this.reservation = reservation;
         // initialize reservation
         if (this.reservation.location.free) {
-          console.log('free!');
           this.reservation.cost = 0;
           this.reservation.minutes = 0;
         } else {
@@ -172,7 +171,7 @@ export class ConfirmationComponent implements OnInit {
 
   async showTunedToast(label: string, channelName: string) {
     const toast = await this.toastController.create({
-      message: `TV ${label} successfully changed to ${channelName}`,
+      message: `${label} successfully changed to ${channelName}`,
       duration: 2000,
       cssClass: 'ion-text-center',
     });

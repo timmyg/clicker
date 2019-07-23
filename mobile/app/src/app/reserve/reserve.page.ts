@@ -55,13 +55,10 @@ export class ReservePage {
   }
 
   initStepListener() {
-    console.log(this.routerListerSub);
     this.routerListerSub = this.router.events.subscribe(e => {
-      // console.log(e);
-      // console.log(val);
       if (e instanceof NavigationEnd) {
-        console.log(e.url);
         switch (e.url) {
+          case '/':
           case '/tabs/reserve':
           case '/tabs/reserve/locations':
             this.percentageComplete = 0.125;

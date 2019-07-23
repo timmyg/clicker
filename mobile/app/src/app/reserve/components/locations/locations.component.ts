@@ -20,6 +20,8 @@ const { Geolocation } = Plugins;
 import { Storage } from '@ionic/storage';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
+import { Intercom } from 'ng-intercom';
+import { environment } from 'src/environments/environment';
 
 const permissionGeolocation = {
   name: 'permission.geolocation',
@@ -64,6 +66,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private storage: Storage,
     private segment: SegmentService,
     private globals: Globals,
+    public intercom: Intercom,
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
@@ -120,30 +123,43 @@ export class LocationsComponent implements OnDestroy, OnInit {
     }
   }
 
-  refresh() {
-    this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
-    this.store.dispatch(new fromUser.Refresh());
-    this.actions$
-      .pipe(
-        ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
-        take(1),
-      )
-      .subscribe(() => {
-        this.reserveService.emitRefreshed();
-      });
-    this.actions$
-      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_FAIL))
-      .pipe(first())
-      .subscribe(async () => {
-        const whoops = await this.toastController.create({
-          message: 'Something went wrong. Please try again.',
-          color: 'danger',
-          duration: 4000,
-          cssClass: 'ion-text-center',
+  async refresh() {
+    // console.log(this.userGeolocation);
+    await Geolocation.getCurrentPosition().then(response => {
+      const { latitude, longitude } = response.coords;
+      this.userGeolocation = { latitude, longitude };
+      this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+      this.store.dispatch(new fromUser.Refresh());
+      this.actions$
+        .pipe(
+          ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
+          take(1),
+        )
+        .subscribe(() => {
+          this.reserveService.emitRefreshed();
         });
-        whoops.present();
-        this.reserveService.emitRefreshed();
-      });
+      this.actions$
+        .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_FAIL))
+        .pipe(first())
+        .subscribe(async () => {
+          const whoops = await this.toastController.create({
+            message: 'Something went wrong. Please try again.',
+            color: 'danger',
+            duration: 4000,
+            cssClass: 'ion-text-center',
+          });
+          whoops.present();
+          this.reserveService.emitRefreshed();
+        });
+    });
+  }
+
+  async suggestLocation() {
+    await this.intercom.boot({ app_id: environment.intercom.appId });
+    await this.intercom.showNewMessage();
+    this.intercom.onHide(() => {
+      this.intercom.shutdown();
+    });
   }
 
   async allowLocation() {

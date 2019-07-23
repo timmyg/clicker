@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import * as fromUser from './state/user/user.actions';
 
-const { SplashScreen, StatusBar } = Plugins;
+const { Device, SplashScreen } = Plugins;
 import { Store } from '@ngrx/store';
 
 import * as fromStore from './state/app.reducer';
@@ -34,20 +34,20 @@ export class AppComponent {
     this.partner$ = this.store.select(getPartner);
     this.initializeApp();
   }
-  
 
   async initializeApp() {
-    console.log(this.version);
     this.platform.ready().then(async () => {
       try {
         this.store
           .select(getUserId)
           .pipe(first(val => !!val))
-          .subscribe(userId => {
-            console.log(userId);
+          .subscribe(async userId => {
+            const info = await Device.getInfo();
+            console.log(info);
+            const { manufacturer, model, osVersion, platform, uuid } = info;
             this.segment.identify(
               userId,
-              { version },
+              { version, manufacturer, model, osVersion, platform, uuid },
               {
                 Intercom: { hideDefaultLauncher: true },
               },
