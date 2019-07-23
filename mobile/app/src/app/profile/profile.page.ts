@@ -75,7 +75,6 @@ export class ProfilePage {
 
   async configureRating() {
     const rating = await this.storage.get(this.rating.cookieName);
-    console.log({ rating });
     if (rating === this.rating.given) {
       this.showRatingLink = false;
     } else {
@@ -257,7 +256,6 @@ export class ProfilePage {
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
             let link = 'https://tryclicker.com';
-            console.log(this.platform);
             if (this.platform.is('ios')) {
               link = 'itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8';
             } else if (this.platform.is('android')) {

@@ -79,17 +79,11 @@ export class ConfirmationComponent implements OnInit {
               first(),
             )
             .subscribe(timeframes => {
-              // this.selectedPlan = timeframes.find(f => f.dollars === +e.detail.value);
               if (this.reservation.minutes !== 0) {
                 const timeframe = timeframes[0];
                 this.reservation.cost = timeframe.tokens;
                 this.reservation.minutes = timeframe.minutes;
-                // console.log(this.reservation);
               }
-              // else {
-              //   // is changing channel on existing reservation
-              //   this.reservation.cost = 0;
-              // }
             });
         }
         this.route.queryParams.subscribe(params => {

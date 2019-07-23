@@ -43,7 +43,6 @@ export class AppComponent {
           .pipe(first(val => !!val))
           .subscribe(async userId => {
             const info = await Device.getInfo();
-            console.log(info);
             const { manufacturer, model, osVersion, platform, uuid } = info;
             this.segment.identify(
               userId,

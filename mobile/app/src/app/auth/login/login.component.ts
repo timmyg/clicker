@@ -38,7 +38,6 @@ export class LoginComponent {
 
   async ngOnInit() {
     const info = await Device.getInfo();
-    console.log(info);
     this.deviceUuid = info.uuid;
   }
 
@@ -76,7 +75,6 @@ export class LoginComponent {
       token => {
         this.segment.track(this.globals.events.login.completed);
         this.waiting = false;
-        console.log('save token!', token);
         this.saveTokenAndClose(token);
       },
       async err => {

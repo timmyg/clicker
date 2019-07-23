@@ -124,7 +124,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async refresh() {
-    // console.log(this.userGeolocation);
     await Geolocation.getCurrentPosition().then(response => {
       const { latitude, longitude } = response.coords;
       this.userGeolocation = { latitude, longitude };

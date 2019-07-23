@@ -9,7 +9,7 @@ import * as fromStore from '../state/app.reducer';
 import { Observable } from 'rxjs';
 import { Card } from 'src/app/state/user/card.model';
 import { getUserCard, getUserId } from 'src/app/state/user';
-import { getPlans } from 'src/app/state/app';
+import { getLoading, getPlans } from 'src/app/state/app';
 import { getUserTokenCount } from '../state/user';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
@@ -27,6 +27,7 @@ export class WalletPage {
   card: StripeElement;
   userCard$: Observable<Card>;
   plans$: Observable<Plan[]>;
+  isLoading$: Observable<boolean>;
   waiting: boolean;
 
   // optional parameters
@@ -36,20 +37,6 @@ export class WalletPage {
 
   selectedPlan: Plan;
   stripeFormGroup: FormGroup;
-  // fundingAmounts = [
-  //   {
-  //     tokens: 5,
-  //     dollars: 5,
-  //   },
-  //   {
-  //     tokens: 10,
-  //     dollars: 10,
-  //   },
-  //   {
-  //     tokens: 25,
-  //     dollars: 25,
-  //   },
-  // ];
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -63,10 +50,10 @@ export class WalletPage {
   ) {
     this.userCard$ = this.store.select(getUserCard);
     this.plans$ = this.store.select(getPlans);
+    this.isLoading$ = this.store.select(getLoading);
   }
 
   ngOnInit() {
-    console.log('oninit');
     this.store.dispatch(new fromApp.LoadPlans());
     // this.store.dispatch(new fromUser.LoadWallet());
     this.stripeService.elements(this.elementsOptions).subscribe(elements => {
@@ -88,7 +75,6 @@ export class WalletPage {
   addCard() {
     this.waiting = true;
     this.stripeService.createToken(this.card, {}).subscribe(async result => {
-      console.log(result);
       if (result.token) {
         // Use the token to create a charge or a customer
         // https://stripe.com/docs/charges
@@ -115,7 +101,6 @@ export class WalletPage {
           .pipe(ofType(fromUser.UPDATE_CARD_FAIL))
           .pipe(first())
           .subscribe(async (error: any) => {
-            // console.log('fail', x);
             const whoops = await this.toastController.create({
               message: error.payload.error.message,
               color: 'danger',
