@@ -56,7 +56,7 @@
       (click)="onConfirm(reservation)"
       id="confirm"
       slot="end"
-      [disabled]="saving || !hasSufficientFunds()"
+      [disabled]="saving || insufficientFunds()"
       margin-top
       align-items-center
     >
@@ -69,7 +69,7 @@
         <ion-spinner name="crescent" margin-start></ion-spinner>
       </ng-template>
     </ion-button>
-    <ion-row class="ion-text-center" *ngIf="!hasSufficientFunds()" margin-top>
+    <ion-row class="ion-text-center" *ngIf="insufficientFunds()" margin-top>
       <ion-text color="danger">
         Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please

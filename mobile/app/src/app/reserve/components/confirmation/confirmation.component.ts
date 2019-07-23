@@ -120,8 +120,8 @@ export class ConfirmationComponent implements OnInit {
       .toDate();
   }
 
-  hasSufficientFunds() {
-    return this.tokenCount >= this.reservation.cost;
+  insufficientFunds() {
+    return this.tokenCount < this.reservation.cost;
   }
 
   onConfirm() {
