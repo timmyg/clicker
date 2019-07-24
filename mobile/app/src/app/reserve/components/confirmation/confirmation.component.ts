@@ -60,13 +60,13 @@ export class ConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new fromApp.LoadTimeframes());
     this.reservation$
       .pipe(
         filter(r => r !== null),
         first(),
       )
       .subscribe(reservation => {
+        this.store.dispatch(new fromApp.LoadTimeframes(reservation.location.id));
         this.reservation = reservation;
         // initialize reservation
         if (this.reservation.location.free) {

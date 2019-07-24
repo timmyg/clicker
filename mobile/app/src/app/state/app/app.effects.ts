@@ -23,8 +23,8 @@ export class AppEffects {
   @Effect()
   loadTimeframes$: Observable<Action> = this.actions$.pipe(
     ofType(AppActions.LOAD_TIMEFRAMES),
-    switchMap(() =>
-      this.appService.getTimeframes().pipe(
+    switchMap((action: AppActions.LoadTimeframes) =>
+      this.appService.getTimeframes(action.locationId).pipe(
         switchMap((timeframes: Timeframe[]) => [new AppActions.LoadTimeframesSuccess(timeframes)]),
         catchError(err => of(new AppActions.LoadTimeframesFail(err))),
       ),
