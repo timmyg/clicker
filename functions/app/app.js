@@ -16,5 +16,7 @@ module.exports.buy = async event => {
 };
 
 module.exports.timeframes = async event => {
+  const { locationId } = event.query.params;
+  console.log({ locationId });
   return respond(200, timeframes);
 };
