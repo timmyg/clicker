@@ -7,45 +7,45 @@
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <ion-row *ngIf="(isLoading$ | async); else loaded" margin-vertical>
+  <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
-  <ng-template #loaded>
-    <section [hidden]="!(userCard$ | async)">
-      <ion-list id="length">
-        <ion-radio-group (ionChange)="onAmountChange($event)">
-          <ion-list-header> Choose an Amount </ion-list-header>
-          <!-- <p padding>Channel changes typically cost 1 token</p> -->
-          <ion-item *ngFor="let f of (plans$ | async)">
-            <ion-label flex align-items-center>
-              <span class="dollars">${{ f.dollars }}</span>
-              <div flex align-items-center>
-                <ion-chip *ngIf="f.best" color="primary" padding-right> Best Deal </ion-chip>
-                <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-                <span>{{ f.tokens }}</span>
-              </div>
-            </ion-label>
-            <ion-radio slot="start" [value]="f" [disabled]="waiting" checked></ion-radio>
-          </ion-item>
-        </ion-radio-group>
-      </ion-list>
-      <ion-button expand="block" color="primary" (click)="purchase()" [disabled]="waiting" *ngIf="selectedPlan"
-        >Purchase ${{ selectedPlan.dollars }}</ion-button
+  <!-- <ng-template #loaded> -->
+  <section [hidden]="!(userCard$ | async)">
+    <ion-list id="length">
+      <ion-radio-group (ionChange)="onAmountChange($event)">
+        <ion-list-header> Choose an Amount </ion-list-header>
+        <!-- <p padding>Channel changes typically cost 1 token</p> -->
+        <ion-item *ngFor="let f of (plans$ | async)">
+          <ion-label flex align-items-center>
+            <span class="dollars">${{ f.dollars }}</span>
+            <div flex align-items-center>
+              <ion-chip *ngIf="f.best" color="primary" padding-right> Best Deal </ion-chip>
+              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+              <span>{{ f.tokens }}</span>
+            </div>
+          </ion-label>
+          <ion-radio slot="start" [value]="f" [disabled]="waiting" checked></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+    <ion-button expand="block" color="primary" (click)="purchase()" [disabled]="waiting" *ngIf="selectedPlan"
+      >Purchase ${{ selectedPlan.dollars }}</ion-button
+    >
+    <p class="ion-text-center" *ngIf="!waiting">
+      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
+        color="danger"
+        (click)="removeCard()"
+        >Remove Card</a
       >
-      <p class="ion-text-center" *ngIf="!waiting">
-        {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
-          color="danger"
-          (click)="removeCard()"
-          >Remove Card</a
-        >
-      </p>
-    </section>
-    <section [hidden]="userCard$ | async">
-      <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
-      <form novalidate (ngSubmit)="addCard()">
-        <div id="card-element" class="field"></div>
-        <ion-button type="submit" expand="block" color="primary" [disabled]="waiting">Add</ion-button>
-      </form>
-    </section>
-  </ng-template>
+    </p>
+  </section>
+  <section [hidden]="userCard$ | async">
+    <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
+    <form novalidate (ngSubmit)="addCard()">
+      <div id="card-element" class="field"></div>
+      <ion-button type="submit" expand="block" color="primary" [disabled]="waiting">Add</ion-button>
+    </form>
+  </section>
+  <!-- </ng-template> -->
 </ion-content>
