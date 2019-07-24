@@ -15,7 +15,7 @@
       <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
         getEndTime() | amDateFormat: 'h:mma'
       }}</span>
-      <ng-template #noReservation> One-time change </ng-template>
+      <ng-template #noReservation> Free single change </ng-template>
     </div>
     <br />
     <ion-list *ngIf="!reservation.location.free">
@@ -60,12 +60,12 @@
       margin-top
       align-items-center
     >
-      <ion-row *ngIf="!saving; else isSaving">
-        <span class="scale">⚡ </span> <span>Change Channel</span>
+      <ion-row *ngIf="!saving; else isSaving" align-items-center>
+        <span class="scale">⚡&nbsp;&nbsp;</span> <span>Change<br />Channel&nbsp;</span>
         <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
         <span>{{ reservation.cost }}</span>
       </ion-row>
-      <ng-template #isSaving> <span class="shake">⚡ Tuning...</span> </ng-template>
+      <ng-template #isSaving> <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span> </ng-template>
     </ion-button>
     <ion-row class="ion-text-center" *ngIf="insufficientFunds()" margin-top>
       <ion-text color="danger">
