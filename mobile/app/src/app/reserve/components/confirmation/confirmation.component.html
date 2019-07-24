@@ -61,9 +61,11 @@
       align-items-center
     >
       <ion-row *ngIf="!saving; else isSaving" align-items-center>
-        <span class="scale">⚡&nbsp;&nbsp;</span> <span>Change<br />Channel&nbsp;</span>
-        <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
-        <span>{{ reservation.cost }}</span>
+        <span class="scale">⚡&nbsp;&nbsp;</span> <span padding-horizontal>Change<br />Channel&nbsp;</span>
+        <span
+          ><img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
+          {{ reservation.cost }}</span
+        >
       </ion-row>
       <ng-template #isSaving> <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span> </ng-template>
     </ion-button>
