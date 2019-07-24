@@ -14,7 +14,7 @@
           </ion-col>
           <ion-col flex align-items-center>
             <span *ngIf="timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>
-            <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes; else free">Expired</span>
+            <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes">Expired</span>
             <span *ngIf="!reservation.minutes">Free single change</span>
           </ion-col>
         </ion-row>
