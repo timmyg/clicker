@@ -30,7 +30,6 @@ export class WalletPage {
   isLoading$: Observable<boolean>;
   waiting: boolean;
 
-  // optional parameters
   elementsOptions: ElementsOptions = {
     locale: 'en',
   };
@@ -55,7 +54,10 @@ export class WalletPage {
 
   ngOnInit() {
     this.store.dispatch(new fromApp.LoadPlans());
-    // this.store.dispatch(new fromUser.LoadWallet());
+    this.initStripe();
+  }
+
+  private initStripe() {
     this.stripeService.elements(this.elementsOptions).subscribe(elements => {
       this.elements = elements;
       // Only mount the element the first time
