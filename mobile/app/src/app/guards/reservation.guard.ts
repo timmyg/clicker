@@ -22,6 +22,7 @@ export class ReservationGuard implements CanActivate {
       map(r => {
         const isValidReservation = r && r.location !== undefined;
         if (!isValidReservation) {
+          console.info('bad reservation, starting over');
           this.router.navigate(['/tabs/reserve']);
         }
         return true;
