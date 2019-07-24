@@ -21,6 +21,7 @@ import { take } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
+import { ToastOptions } from '@ionic/core';
 
 @Component({
   selector: 'app-profile',
@@ -104,20 +105,34 @@ export class ProfilePage {
       if (duration > 0) {
         this.showModify(reservation);
       } else {
-        this.showToast('Sorry, your reservation has expired');
+        this.showToast('Sorry, your reservation has expired', true);
       }
     } else {
-      this.showToast('Sorry, you did not reserve this TV for a time period.');
+      this.showToast('Sorry, you did not reserve this TV for a time period.', true);
     }
   }
 
-  async showToast(message) {
-    const toastInvalid = await this.toastController.create({
+  async showToast(message, showNewReservation = false) {
+    const toastOptions: ToastOptions = {
       message: message,
       duration: 4000,
       cssClass: 'ion-text-center',
-    });
-    toastInvalid.present();
+    };
+    let toast;
+    if (showNewReservation) {
+      toastOptions.buttons = [
+        {
+          side: 'end',
+          text: 'Reserve Now',
+          handler: () => {
+            this.router.navigate(['/tabs/reserve']);
+            toast.dismiss();
+          },
+        },
+      ];
+    }
+    toast = await this.toastController.create(toastOptions);
+    toast.present();
   }
 
   createNewReservation(source: string) {

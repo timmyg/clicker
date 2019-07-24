@@ -1,21 +1,26 @@
 <ion-card no-margin-horizontal>
   <ion-card-content>
-    <!-- <div>{{ reservation.programTitle }}</div> -->
     <ion-row>
       <ion-col>
-        <ion-row align-items-center
-          ><ion-icon name="tv" margin-end></ion-icon>
-          <span>{{ reservation.program.channelTitle }} on {{ reservation.box.label }}</span>
+        <ion-row>
+          <ion-col size="3" flex align-items-center> <ion-icon name="tv" size="large" margin-end></ion-icon> </ion-col>
+          <ion-col flex align-items-center>
+            <span>{{ reservation.program.channelTitle }} on {{ reservation.box.label }}</span>
+          </ion-col>
         </ion-row>
-        <ion-row align-items-center>
-          <ion-icon name="time" margin-end></ion-icon>
-          <!-- <span padding-end>{{ getTimeLeft(reservation.minutes).label }}</span> -->
-          <span *ngIf="timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>
-          <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes">Expired</span>
+        <ion-row>
+          <ion-col size="3" flex align-items-center>
+            <ion-icon name="time" size="large" margin-end></ion-icon>
+          </ion-col>
+          <ion-col flex align-items-center>
+            <span *ngIf="timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>
+            <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes; else free">Expired</span>
+            <span *ngIf="!reservation.minutes">Free single change</span>
+          </ion-col>
         </ion-row>
       </ion-col>
-      <ion-col size="3" class="ion-text-center" padding-top>
-        <div><a (click)="modify()">Modify</a></div>
+      <ion-col size="3" class="ion-text-center" padding-top flex align-items-center>
+        <a (click)="modify()">Modify</a>
       </ion-col>
     </ion-row>
   </ion-card-content>

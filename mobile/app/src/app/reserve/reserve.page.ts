@@ -51,13 +51,13 @@ export class ReservePage {
   }
 
   disableRefresher() {
-    return this.router.url === '/tabs/reserve/confirmation';
+    return this.router.url.includes('/tabs/reserve/confirmation');
   }
 
   initStepListener() {
     this.routerListerSub = this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
-        switch (e.url) {
+        switch (e.url.split('?')[0]) {
           case '/':
           case '/tabs/reserve':
           case '/tabs/reserve/locations':
