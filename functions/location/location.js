@@ -358,7 +358,7 @@ module.exports.controlCenter = async event => {
     for (const game of games) {
       const region = game.get('Region');
       const channel = game.get('Channel');
-      const zone = game.get('Zone');
+      const zone = +game.get('Zone');
       const gameId = game.id;
       console.log(`searching for locations for:`, { region, channel, zone });
       // find locations that are in region and control center enabled
@@ -377,6 +377,7 @@ module.exports.controlCenter = async event => {
       // loop through locations
       for (const location of locations) {
         // find boxes that have game zone
+        // TODO could be reserved with time past
         const boxes = location.boxes.filter(b => b.zone === zone && !b.reserved);
         console.log(`found ${boxes.length} boxes`);
         // loop through boxes, change to game channel
