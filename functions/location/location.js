@@ -2,9 +2,9 @@ const { respond, getBody, getPathParameters, invokeFunctionSync } = require('ser
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
+const Airtable = require('airtable');
 const uuid = require('uuid/v1');
 require('dotenv').config({ path: '../.env.example' });
-
 
 const Location = dynamoose.model(
   process.env.tableLocation,
@@ -344,6 +344,30 @@ module.exports.allOn = async event => {
   return respond(200, 'ok');
 };
 
+module.exports.controlCenter = async event => {
+  const base = Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  base('Games')
+    .select({
+      view: 'Ready To Change',
+    })
+    .eachPage(
+      function page(records, fetchNextPage) {
+        records.forEach(function(record) {
+          // console.log('Retrieved', record.get('Game Start'));
+          console.log('Retrieved', record.get('Game Start'), record);
+        });
+        fetchNextPage();
+      },
+      function done(err) {
+        if (err) {
+          console.error(err);
+          // return;
+        }
+        console.log('done');
+        return respond(200);
+      },
+    );
+};
 module.exports.health = async event => {
   return respond(200, 'ok');
 };
