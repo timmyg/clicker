@@ -360,6 +360,10 @@ module.exports.controlCenter = async event => {
       const channel = game.get('Channel');
       const zone = game.get('Zone');
       console.log(`searching for locations for:`, { region, channel, zone });
+      console.log(game.id);
+      console.log(game.get('Id'));
+      console.log(game.get('id'));
+      console.log(game.get('ID'));
       // find locations that are in region and control center enabled
       const locations = await Location.scan()
         .filter('controlCenter')
@@ -391,6 +395,8 @@ module.exports.controlCenter = async event => {
           await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
         }
       }
+      // mark game as completed on airtable
+      // TODO maybe delete in future?
     }
   }
 
