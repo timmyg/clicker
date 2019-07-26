@@ -363,6 +363,9 @@ module.exports.controlCenter = async event => {
       console.log(`searching for locations for:`, { region, channel, zone });
       // find locations that are in region and control center enabled
       const locations = await Location.scan()
+        .filter('active')
+        .eq(true)
+        .and()
         .filter('controlCenter')
         .eq(true)
         .and()
@@ -374,7 +377,7 @@ module.exports.controlCenter = async event => {
       // loop through locations
       for (const location of locations) {
         // find boxes that have game zone
-        const boxes = location.boxes.filter(b => b.zone === zone && b.active && !b.reserved);
+        const boxes = location.boxes.filter(b => b.zone === zone && !b.reserved);
         // loop through boxes, change to game channel
         for (const box of boxes) {
           const command = 'tune';
