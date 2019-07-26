@@ -387,7 +387,7 @@ module.exports.controlCenter = async event => {
           console.log('⚡ ⚡ tuning...');
           console.log('location:', location.name, location.neighborhood);
           console.log('box', box.label, box.ip);
-          console.log('channel', program.channel);
+          console.log('channel', channel);
           await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
         }
       }
