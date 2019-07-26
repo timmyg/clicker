@@ -354,9 +354,7 @@ module.exports.controlCenter = async event => {
   const games = await base('Games')
     .select({ view: 'Ready To Change' })
     .all();
-  // console.log(games.length);
-  // console.log(games[0].get('Game Start'), games[0].get('Notes'));
-  // console.log(games[1].get('Game Start'), games[1].get('Notes'));
+  console.log(games);
   if (games.length) {
     // loop through games
     for (const game of games) {
@@ -372,10 +370,12 @@ module.exports.controlCenter = async event => {
         .eq(region)
         .all()
         .exec();
+      console.log(locations);
       // loop through locations
       for (const location of locations) {
         // find boxes that have game zone
         const boxes = location.boxes.filter(b => b.zone === zone);
+        console.log(boxes);
         // loop through boxes, change to game channel
         for (const box of boxes) {
           // box.setupChannel = setupChannel;
