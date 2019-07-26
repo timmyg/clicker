@@ -362,12 +362,13 @@ module.exports.controlCenter = async event => {
       const channel = game.get('Channel');
       const zone = game.get('Zone');
       // find locations that are in region and control center enabled
+      console.log({ region, channel, zone });
       const locations = await Location.scan()
         .filter('controlCenter')
         .eq(true)
         .and()
         .filter('region')
-        .eq(region)
+        .in(region)
         .all()
         .exec();
       console.log(locations);
