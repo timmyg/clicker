@@ -348,12 +348,12 @@ module.exports.allOn = async event => {
 };
 
 module.exports.controlCenter = async event => {
-  console.log(process.env.airtableKey);
-  console.log(process.env.airtableBase);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  console.log('searching for games to change');
   const games = await base('Games')
     .select({ view: 'Ready To Change' })
     .all();
+  console.log(`found ${games.length} games`);
   console.log(games);
   if (games.length) {
     // loop through games
@@ -361,8 +361,8 @@ module.exports.controlCenter = async event => {
       const region = game.get('Region');
       const channel = game.get('Channel');
       const zone = game.get('Zone');
+      console.log(`searching for locations for:`, { region, channel, zone });
       // find locations that are in region and control center enabled
-      console.log({ region, channel, zone });
       const locations = await Location.scan()
         .filter('controlCenter')
         .eq(true)
@@ -371,16 +371,13 @@ module.exports.controlCenter = async event => {
         .in(region)
         .all()
         .exec();
-      console.log(locations);
+      console.log(`found ${locations.length} locations`);
       // loop through locations
       for (const location of locations) {
         // find boxes that have game zone
         const boxes = location.boxes.filter(b => b.zone === zone);
-        console.log(boxes);
         // loop through boxes, change to game channel
         for (const box of boxes) {
-          // box.setupChannel = setupChannel;
-          // setupChannel++;
           const command = 'tune';
           const reservation = {
             location,
@@ -389,10 +386,11 @@ module.exports.controlCenter = async event => {
               channel,
             },
           };
-          console.log('tune');
-          console.log(reservation);
-          console.log(command);
-          // await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+          console.log('⚡ ⚡ tuning...');
+          console.log('location:', location.name, location.neighborhood);
+          console.log('box', box.label, box.ip);
+          console.log('channel', program.channel);
+          await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
         }
       }
     }
