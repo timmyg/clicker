@@ -349,7 +349,7 @@ module.exports.controlCenter = async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   const games = await base('Games')
-    .select({ view: 'Ready To Change' })
+    .select({ view: 'Changing...' })
     .all();
   console.log(`found ${games.length} games`);
   console.log(games);
