@@ -30,9 +30,7 @@ const Location = dynamoose.model(
         reserved: Boolean,
         end: Date,
         zone: Number,
-        active: {
-          type: Boolean,
-        },
+        active: Boolean,
       },
     ],
     channels: {
@@ -375,7 +373,7 @@ module.exports.controlCenter = async event => {
       // loop through locations
       for (const location of locations) {
         // find boxes that have game zone
-        const boxes = location.boxes.filter(b => b.zone === zone);
+        const boxes = location.boxes.filter(b => b.zone === zone && b.active && !b.reserved);
         // loop through boxes, change to game channel
         for (const box of boxes) {
           const command = 'tune';
