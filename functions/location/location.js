@@ -378,6 +378,7 @@ module.exports.controlCenter = async event => {
       for (const location of locations) {
         // find boxes that have game zone
         const boxes = location.boxes.filter(b => b.zone === zone && !b.reserved);
+        console.log(`found ${boxes.length} boxes`);
         // loop through boxes, change to game channel
         for (const box of boxes) {
           const command = 'tune';
