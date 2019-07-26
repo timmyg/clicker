@@ -354,33 +354,7 @@ module.exports.controlCenter = async event => {
   console.log(games.length);
   console.log(games[0].get('Game Start'), games[0].get('Notes'));
   console.log(games[1].get('Game Start'), games[1].get('Notes'));
-  // base('Games')
-  //   .select({
-  //     view: 'Ready To Change',
-  //   })
-  //   .eachPage(
-  //     function page(records, fetchNextPage) {
-  //       records.forEach(function(record) {
-  //         // console.log('Retrieved', record.get('Game Start'));
-  //         console.log('Retrieved', record.get('Game Start'), record);
-  //       });
-  //       fetchNextPage();
-  //     },
-  //     function done(err) {
-  //       if (err) {
-  //         console.error(err);
-  //         // return;
-  //       }
-  //       console.log('done');
-  //       return respond(200);
-  //     },
-  //   );
-
-  const cursor = await base.select({ view: 'Ready To Change' }).all();
-  while (cursor.hasMore) {
-    const records = await cursor.next();
-    console.log(records);
-  }
+  return respond(200);
 };
 module.exports.health = async event => {
   return respond(200, 'ok');
