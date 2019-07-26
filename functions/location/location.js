@@ -345,7 +345,8 @@ module.exports.allOn = async event => {
 };
 
 module.exports.controlCenter = async event => {
-  console.log(process.env);
+  console.log(process.env.airtableKey);
+  console.log(process.env.airtableBase);
   const base = Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   base('Games')
     .select({
