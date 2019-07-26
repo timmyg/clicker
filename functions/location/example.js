@@ -4,8 +4,7 @@
   console.log(process.env.airtableBase);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const games = await base('Games')
-    // .select({ view: 'Scheduled', filterByFormula: `DATESTR({Game Start}) <= DATESTR(NOW())` })
-    .select({ view: 'Scheduled', filterByFormula: `DATETIME_DIFF({Game Start}, NOW(), 'milliseconds') < 0` })
+    .select({ view: 'Scheduled', filterByFormula: `DATETIME_DIFF({Game Start}, NOW(), 'minutes') <= 0` })
     .all();
   console.log(games.length);
   if (games.length) {
