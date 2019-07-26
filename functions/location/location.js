@@ -29,6 +29,7 @@ const Location = dynamoose.model(
         ip: String,
         reserved: Boolean,
         end: Date,
+        zone: Number,
         active: {
           type: Boolean,
         },
@@ -47,10 +48,12 @@ const Location = dynamoose.model(
     },
     free: Boolean,
     img: String,
+    region: String,
     active: Boolean,
     hidden: Boolean,
     connected: Boolean,
     setup: Boolean,
+    controlCenter: Boolean,
     // calculated fields
     distance: Number,
   },
@@ -351,11 +354,52 @@ module.exports.controlCenter = async event => {
   const games = await base('Games')
     .select({ view: 'Ready To Change' })
     .all();
-  console.log(games.length);
-  console.log(games[0].get('Game Start'), games[0].get('Notes'));
-  console.log(games[1].get('Game Start'), games[1].get('Notes'));
+  // console.log(games.length);
+  // console.log(games[0].get('Game Start'), games[0].get('Notes'));
+  // console.log(games[1].get('Game Start'), games[1].get('Notes'));
+  if (games.length) {
+    // loop through games
+    for (const game of games) {
+      const region = game.get('Region');
+      const channel = game.get('Channel');
+      const zone = game.get('Zone');
+      // find locations that are in region and control center enabled
+      const locations = await Location.scan()
+        .filter('controlCenter')
+        .eq(true)
+        .and()
+        .filter('region')
+        .eq(region)
+        .all()
+        .exec();
+      // loop through locations
+      for (const location of locations) {
+        // find boxes that have game zone
+        const boxes = location.boxes.filter(b => b.zone === zone);
+        // loop through boxes, change to game channel
+        for (const box of boxes) {
+          // box.setupChannel = setupChannel;
+          // setupChannel++;
+          const command = 'tune';
+          const reservation = {
+            location,
+            box,
+            program: {
+              channel,
+            },
+          };
+          console.log('tune');
+          console.log(reservation);
+          console.log(command);
+          // await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+        }
+      }
+    }
+  }
+
   return respond(200);
 };
+
 module.exports.health = async event => {
   return respond(200, 'ok');
 };
