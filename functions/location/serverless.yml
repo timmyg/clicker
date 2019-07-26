@@ -246,7 +246,7 @@ functions:
   controlCenter:
     handler: location.controlCenter
     events:
-      - schedule: cron(0,5,10,15,20,25,30,35,40,45,50,55 * * * *)
+      - schedule: cron(0/5 * * * *)
       - http:
           path: 'control-center'
           method: post
