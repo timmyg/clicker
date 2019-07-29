@@ -348,10 +348,11 @@ module.exports.allOn = async event => {
 module.exports.controlCenter = async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
+  const filterByFormula = `DATETIME_DIFF(SET_TIMEZONE({Game Start}, 'America/New_York'),SET_TIMEZONE(NOW(), 'America/New_York'), 'minutes') <= 0`;
   const games = await base('Games')
     .select({
       view: 'Scheduled',
-      filterByFormula: `DATETIME_DIFF({Game Start}, NOW()), 'minutes') <= 0`,
+      filterByFormula,
     })
     .all();
   console.log(`found ${games.length} games`);
