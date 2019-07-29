@@ -53,6 +53,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
   evaluatingGeolocation = true;
   geolocationDeclined = true;
   waiting: boolean;
+  showHidden = false;
+  hiddenClicks = 0;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -265,5 +267,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
       .subscribe(async () => {
         this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
       });
+  }
+
+  toggleHidden() {
+    this.hiddenClicks++;
+    if (this.hiddenClicks > 10) {
+      this.showHidden = !this.showHidden;
+      this.hiddenClicks = 0;
+    }
   }
 }

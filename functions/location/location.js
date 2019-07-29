@@ -83,7 +83,7 @@ module.exports.all = async event => {
       locations[i].distance = roundedMiles;
     }
   });
-  allLocations = allLocations.filter(l => !l.hidden);
+  // allLocations = allLocations.filter(l => !l.hidden);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
 };
