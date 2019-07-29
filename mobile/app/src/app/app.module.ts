@@ -68,6 +68,8 @@ export function initUserStuff(store: Store<AppState>): Function {
     IntercomModule.forRoot({
       appId: environment.intercom.appId, // from your Intercom config
       updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
+      vertical_padding: 30,
+      horizontal_padding: 30,
     }),
   ],
   providers: [

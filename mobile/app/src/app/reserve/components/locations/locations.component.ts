@@ -158,8 +158,20 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async suggestLocation() {
     await this.intercom.boot({ app_id: environment.intercom.appId });
     await this.intercom.showNewMessage();
-    this.intercom.onHide(() => {
-      this.intercom.shutdown();
+    this.intercom.onHide(x => {
+      // console.log('hide', this, window, this.intercom);
+      // // this.intercom.hide();
+      // this.segment.track(
+      //   this.globals.events.opened,
+      //   {},
+      //   {
+      //     Intercom: { hideDefaultLauncher: true },
+      //   },
+      // );
+      this.intercom.update({ hide_default_launcher: true });
+    });
+    this.intercom.onUnreadCountChange(() => {
+      console.log('unread change');
     });
   }
 
