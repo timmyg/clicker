@@ -6,13 +6,13 @@ import { Location } from 'src/app/state/location/location.model';
 })
 export class LocationsFilterPipe implements PipeTransform {
   transform(locations: Location[], searchText: string, showHidden): any[] {
-    console.log(showHidden);
+    console.log(showHidden, locations);
     if (!locations) return [];
-    if (!searchText) return locations;
+    if (!searchText) return locations.filter(l => l.hidden === (showHidden || undefined));
     searchText = searchText.toLowerCase();
     return locations.filter(l => {
       return (
-        (l.hidden === showHidden && l.name.toLowerCase().includes(searchText)) ||
+        (l.hidden === (showHidden || undefined) && l.name.toLowerCase().includes(searchText)) ||
         l.neighborhood.toLowerCase().includes(searchText)
       );
     });
