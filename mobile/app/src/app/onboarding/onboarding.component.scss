@@ -1,9 +1,8 @@
 ion-slides {
   height: 100vh;
-  align-items: center;
   background: #7b7b7b;
   ion-slide {
-    align-items: center;
+    align-items: unset;
     ion-chip {
       height: inherit;
     }

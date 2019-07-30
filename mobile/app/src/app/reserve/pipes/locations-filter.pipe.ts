@@ -5,12 +5,21 @@ import { Location } from 'src/app/state/location/location.model';
   name: 'locationsFilter',
 })
 export class LocationsFilterPipe implements PipeTransform {
-  transform(locations: Location[], searchText: string): any[] {
+  transform(locations: Location[], searchText: string, showHidden: boolean): any[] {
     if (!locations) return [];
-    if (!searchText) return locations;
+    if (!searchText) {
+      if (!showHidden) {
+        return locations.filter(l => l.hidden !== true);
+      }
+      return locations;
+    }
     searchText = searchText.toLowerCase();
-    return locations.filter(p => {
-      return p.name.toLowerCase().includes(searchText) || p.neighborhood.toLowerCase().includes(searchText);
+    locations = locations.filter(l => {
+      return l.name.toLowerCase().includes(searchText) || l.neighborhood.toLowerCase().includes(searchText);
     });
+    if (!showHidden) {
+      locations = locations.filter(l => l.hidden !== true);
+    }
+    return locations;
   }
 }

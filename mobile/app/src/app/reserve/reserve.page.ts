@@ -123,19 +123,6 @@ export class ReservePage {
     setTimeout(() => this.searchbar.setFocus(), 100);
   }
 
-  getProgressPercentage(stepName) {
-    switch (stepName) {
-      case 'location':
-        return 0.2;
-      case 'channel':
-        return 0.4;
-      case 'tv':
-        return 0.6;
-      case 'confirm':
-        return 0.8;
-    }
-  }
-
   closeSearch() {
     this.searchMode = false;
   }

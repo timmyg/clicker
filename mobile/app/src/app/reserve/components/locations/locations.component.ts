@@ -53,6 +53,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
   evaluatingGeolocation = true;
   geolocationDeclined = true;
   waiting: boolean;
+  showHidden = false;
+  hiddenClicks = 0;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -157,8 +159,12 @@ export class LocationsComponent implements OnDestroy, OnInit {
     await this.intercom.boot({ app_id: environment.intercom.appId });
     await this.intercom.showNewMessage();
     this.intercom.onHide(() => {
-      this.intercom.shutdown();
+      this.intercom.update({ hide_default_launcher: true });
     });
+    // this.intercom.onUnreadCountChange(() => {
+    //   console.log('unread change');
+    //   this.intercom.show();
+    // });
   }
 
   async allowLocation() {
@@ -265,5 +271,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
       .subscribe(async () => {
         this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
       });
+  }
+
+  toggleHidden() {
+    this.hiddenClicks++;
+    if (this.hiddenClicks > 10) {
+      this.showHidden = !this.showHidden;
+      this.hiddenClicks = 0;
+    }
   }
 }
