@@ -29,7 +29,13 @@
         </ion-item>
       </ion-radio-group>
     </ion-list>
-    <ion-button expand="block" color="primary" (click)="purchase()" [disabled]="waiting" *ngIf="selectedPlan"
+    <ion-button
+      expand="block"
+      color="primary"
+      size="large"
+      (click)="purchase()"
+      [disabled]="waiting"
+      *ngIf="selectedPlan"
       >Purchase ${{ selectedPlan.dollars }}</ion-button
     >
     <p class="ion-text-center" *ngIf="!waiting">

@@ -1,6 +1,5 @@
 <ion-card *ngIf="(reservation$ | async)">
   <ion-card-content>
-    <!-- <ion-list-header no-padding> Summary </ion-list-header> -->
     <div>
       <label> Location: </label> <span>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</span>
     </div>
@@ -24,7 +23,11 @@
           <span *ngIf="isEditMode; else normal">Extend</span> <ng-template #normal>Choose</ng-template> Timeframe
         </ion-list-header>
         <!-- hacky - should put as first item in observable somehow? -->
-        <ion-item *ngIf="isEditMode">
+        <ion-row *ngIf="isAppLoading" margin-vertical>
+          <ion-spinner name="crescent" class="center"></ion-spinner>
+        </ion-row>
+        <!-- <ng-template #appLoaded> -->
+        <ion-item *ngIf="isEditMode && !isAppLoading">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe0.minutes }} minutes</span>
             <div flex align-items-center>
@@ -32,7 +35,7 @@
               <span>{{ timeframe0.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting" checked></ion-radio>
+          <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting || isAppLoading" checked></ion-radio>
         </ion-item>
         <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label flex align-items-center>
@@ -42,8 +45,9 @@
               <span>{{ timeframe.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" [value]="timeframe" [disabled]="waiting" checked></ion-radio>
+          <ion-radio slot="start" [value]="timeframe" [disabled]="waiting || isAppLoading" checked></ion-radio>
         </ion-item>
+        <!-- </ng-template> -->
       </ion-radio-group>
     </ion-list>
     <p class="ion-text-center" *ngIf="!reservation.location.free" padding-top>

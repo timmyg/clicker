@@ -12,6 +12,8 @@ export const LOAD_PLANS_FAIL = '[APP] Load Plans Fail';
 export const LOAD_TIMEFRAMES = '[APP] Load Timeframes';
 export const LOAD_TIMEFRAMES_SUCCESS = '[APP] Load Timeframes Success';
 export const LOAD_TIMEFRAMES_FAIL = '[APP] Load Timeframes Fail';
+export const CLEAR_TIMEFRAMES = '[APP] Clear Timeframes';
+export const CLEAR_PLANS = '[APP] Clear Plans';
 
 export class SetPartner implements Action {
   readonly type = SET_PARTNER;
@@ -55,6 +57,14 @@ export class LoadTimeframesFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class ClearTimeframes implements Action {
+  readonly type = CLEAR_TIMEFRAMES;
+}
+
+export class ClearPlans implements Action {
+  readonly type = CLEAR_PLANS;
+}
+
 export type AppActions =
   | SetPartner
   | SetPartnerSuccess
@@ -64,4 +74,6 @@ export type AppActions =
   | LoadPlansFail
   | LoadTimeframes
   | LoadTimeframesSuccess
-  | LoadTimeframesFail;
+  | LoadTimeframesFail
+  | ClearTimeframes
+  | ClearPlans;
