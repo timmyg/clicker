@@ -92,16 +92,11 @@ module.exports.getLocalChannels = async event => {
   const allLocations = await Location.scan().exec();
   let locationsByZip = {};
   allLocations.forEach(l => {
-    console.log('1');
     locationsByZip[l.zip] = locationsByZip[l.zip] || [];
-    console.log('2');
-    console.log(l.zip, locationsByZip[l.zip]);
     if (l.channels && l.channels.local) {
-      console.log('2.1');
       locationsByZip[l.zip] = locationsByZip[l.zip].concat(l.channels.local);
     }
     // remove duplicates
-    console.log('3');
     locationsByZip[l.zip] = locationsByZip[l.zip].filter((elem, index, self) => {
       return index === self.indexOf(elem);
     });
