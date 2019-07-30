@@ -3,8 +3,8 @@
     <p class="container blurb">
       With the
       <span class="brand-font">Clicker</span> app, guests will be able to pick the channel and TV they want to watch.
-      <br>
-      <br>
+      <br />
+      <br />
     </p>
     <h3 class="text-center">In four easy steps, guests can:</h3>
     <div class="features-desktop container">
@@ -23,7 +23,7 @@
         </ul>
         <div class="tabs-content" v-for="(feature, index) in features" :key="feature.img">
           <div class="tab-panel" :class="{'is-active': index === activeTab}">
-            <img :src="feature.img" alt>
+            <img :src="feature.img" :alt="feature.message" />
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
         <slide v-for="(feature, index) in features" :key="feature.img">
           <span class="label">
             <span>{{index+1}}. {{feature.message}}</span>
-            <img :src="feature.img">
+            <img :src="feature.img" />
           </span>
         </slide>
       </carousel>

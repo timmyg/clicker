@@ -60,17 +60,16 @@ export class ConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new fromApp.LoadTimeframes());
     this.reservation$
       .pipe(
         filter(r => r !== null),
         first(),
       )
       .subscribe(reservation => {
+        this.store.dispatch(new fromApp.LoadTimeframes(reservation.location.id));
         this.reservation = reservation;
         // initialize reservation
         if (this.reservation.location.free) {
-          console.log('free!');
           this.reservation.cost = 0;
           this.reservation.minutes = 0;
         } else {
@@ -80,17 +79,11 @@ export class ConfirmationComponent implements OnInit {
               first(),
             )
             .subscribe(timeframes => {
-              // this.selectedPlan = timeframes.find(f => f.dollars === +e.detail.value);
               if (this.reservation.minutes !== 0) {
                 const timeframe = timeframes[0];
                 this.reservation.cost = timeframe.tokens;
                 this.reservation.minutes = timeframe.minutes;
-                // console.log(this.reservation);
               }
-              // else {
-              //   // is changing channel on existing reservation
-              //   this.reservation.cost = 0;
-              // }
             });
         }
         this.route.queryParams.subscribe(params => {
@@ -121,8 +114,8 @@ export class ConfirmationComponent implements OnInit {
       .toDate();
   }
 
-  hasSufficientFunds() {
-    return this.tokenCount >= this.reservation.cost;
+  insufficientFunds() {
+    return this.tokenCount < this.reservation.cost;
   }
 
   onConfirm() {
@@ -172,7 +165,7 @@ export class ConfirmationComponent implements OnInit {
 
   async showTunedToast(label: string, channelName: string) {
     const toast = await this.toastController.create({
-      message: `TV ${label} successfully changed to ${channelName}`,
+      message: `${label} successfully changed to ${channelName}`,
       duration: 2000,
       cssClass: 'ion-text-center',
     });

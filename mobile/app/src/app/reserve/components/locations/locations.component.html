@@ -12,14 +12,14 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
   >
     <ion-icon name="pin" class="location"></ion-icon>
     <p>
-      Clicker needs access to your location for more accurate location details. This data is not stored or shared.
+      Clicker TV needs access to your location for more accurate location details. This data is not stored or shared.
     </p>
     <div><ion-button margin-top (click)="allowLocation()">Allow Location Access </ion-button></div>
   </section>
 
   <ng-template #showLocations>
     <ion-list lines="none" [class.content-loading]="(isLoading$ | async) || waiting">
-      <ng-container *ngFor="let location of locations$ | async | locationsFilter: searchTerm">
+      <ng-container *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)">
         <app-location
           [location]="location"
           [userRoles]="userRoles"
@@ -31,6 +31,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
         Find locations around you by <a (click)="forceAllow()">allowing location services</a>
       </p>
+      <p class="ion-text-center" padding><a (click)="suggestLocation()">Suggest a location</a></p>
     </ion-list>
   </ng-template>
 </section>

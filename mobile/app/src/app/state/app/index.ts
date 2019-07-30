@@ -14,6 +14,11 @@ export const getPlans = createSelector(
   fromApp.getPlans,
 );
 
+export const getLoading = createSelector(
+  getAppState,
+  fromApp.getLoading,
+);
+
 export const getTimeframes = createSelector(
   getAppState,
   fromApp.getTimeframes,

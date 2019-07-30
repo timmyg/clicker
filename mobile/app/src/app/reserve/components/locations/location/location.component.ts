@@ -32,4 +32,15 @@ export class LocationComponent {
     this.onManage.emit(this.location);
     slidingItem.close();
   }
+
+  getDistance() {
+    const { distance } = this.location;
+    if (distance <= 10) {
+      return distance;
+    } else if (distance > 10 && distance <= 500) {
+      return Math.round(distance);
+    } else {
+      return '500+';
+    }
+  }
 }

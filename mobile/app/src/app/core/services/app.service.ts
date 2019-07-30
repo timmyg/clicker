@@ -13,7 +13,10 @@ export class AppService {
     return this.httpClient.get<Plan[]>(`${this.prefix}/buy`);
   }
 
-  getTimeframes(): Observable<Timeframe[]> {
-    return this.httpClient.get<Timeframe[]>(`${this.prefix}/timeframes`);
+  getTimeframes(locationId): Observable<Timeframe[]> {
+    const params = {
+      locationId,
+    };
+    return this.httpClient.get<Timeframe[]>(`${this.prefix}/timeframes`, { params });
   }
 }

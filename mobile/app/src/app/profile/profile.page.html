@@ -14,7 +14,7 @@
     <img src="https://clicker-brand.s3.amazonaws.com/logo.png" alt="Clicker logo" class="logo" />
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="success" (click)="createNewReservation('fab')">
+    <ion-fab-button color="primary" (click)="createNewReservation('fab')">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -52,6 +52,7 @@
       </ng-template>
       <p class="ion-text-center"><a (click)="createNewReservation('link')">Change the channel</a></p>
       <p class="ion-text-center"><a (click)="openFeedback()">Give feedback</a></p>
+      <p class="ion-text-center"><a *ngIf="showRatingLink" (click)="rate()">Rate this app</a></p>
     </ng-template>
   </ion-grid>
 </ion-content>

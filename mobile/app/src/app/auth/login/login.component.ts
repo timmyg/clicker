@@ -10,6 +10,7 @@ import * as fromUser from '../../state/user/user.actions';
 import { getUserId } from 'src/app/state/user';
 import { first } from 'rxjs/operators';
 import * as decode from 'jwt-decode';
+import { Device } from '@capacitor/core';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent {
   codeSent: boolean;
   waiting: boolean;
   userId$: Observable<string>;
+  deviceUuid: string;
 
   constructor(
     public modalController: ModalController,
@@ -32,6 +34,11 @@ export class LoginComponent {
     private store: Store<fromStore.AppState>,
   ) {
     this.userId$ = this.store.select(getUserId);
+  }
+
+  async ngOnInit() {
+    const info = await Device.getInfo();
+    this.deviceUuid = info.uuid;
   }
 
   onCloseClick() {
@@ -64,11 +71,10 @@ export class LoginComponent {
   onCodeSubmit() {
     this.waiting = true;
     // TODO move to store
-    this.userService.loginVerify(`+1${this.phone}`, this.code).subscribe(
+    this.userService.loginVerify(`+1${this.phone}`, this.code, this.deviceUuid).subscribe(
       token => {
         this.segment.track(this.globals.events.login.completed);
         this.waiting = false;
-        console.log('save token!', token);
         this.saveTokenAndClose(token);
       },
       async err => {

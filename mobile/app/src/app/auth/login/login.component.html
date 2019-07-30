@@ -18,7 +18,12 @@
         name="phone"
         [disabled]="waiting"
       ></ion-input>
-      <ion-button expand="block" type="submit" margin-top [disabled]="!phone || phone.length !== 10 || waiting"
+      <ion-button
+        expand="block"
+        type="submit"
+        size="large"
+        margin-top
+        [disabled]="!phone || phone.length !== 10 || waiting"
         >Next</ion-button
       >
       <p class="ion-text-center"><em> Your number is only used for authentication and is never shared.</em></p>
@@ -37,7 +42,9 @@
         name="code"
         [disabled]="waiting"
       ></ion-input>
-      <ion-button expand="block" type="submit" margin-top [disabled]="!isEligibleCode() || waiting">Login</ion-button>
+      <ion-button expand="block" type="submit" size="large" margin-top [disabled]="!isEligibleCode() || waiting"
+        >Login</ion-button
+      >
     </section>
   </form>
 </ion-content>

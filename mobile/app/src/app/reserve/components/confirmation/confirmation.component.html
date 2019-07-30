@@ -5,7 +5,7 @@
       <label> Location: </label> <span>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</span>
     </div>
     <div>
-      <label> Channel: </label> <span>{{ reservation.program.title }} ({{ reservation.program.channelTitle }})</span>
+      <label> Channel: </label> <span>{{ reservation.program.channelTitle }} ({{ reservation.program.title }})</span>
     </div>
     <div>
       <label> TV: </label> <span>{{ reservation.box.label }}</span>
@@ -15,7 +15,7 @@
       <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
         getEndTime() | amDateFormat: 'h:mma'
       }}</span>
-      <ng-template #noReservation> One-time change </ng-template>
+      <ng-template #noReservation> Free single change </ng-template>
     </div>
     <br />
     <ion-list *ngIf="!reservation.location.free">
@@ -46,30 +46,30 @@
         </ion-item>
       </ion-radio-group>
     </ion-list>
-    <p class="ion-text-center" *ngIf="!reservation.location.free">
+    <p class="ion-text-center" *ngIf="!reservation.location.free" padding-top>
       You will be able to freely change the channel during your reservation.
     </p>
     <!-- </p> -->
     <ion-button
-      color="success"
       size="large"
       expand="block"
       (click)="onConfirm(reservation)"
+      id="confirm"
       slot="end"
-      [disabled]="saving || !hasSufficientFunds()"
+      [disabled]="saving || insufficientFunds()"
       margin-top
       align-items-center
     >
-      <ion-row *ngIf="!saving; else isSaving">
-        <span>Change Channel</span> <img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
-        <span>{{ reservation.cost }}</span>
+      <ion-row *ngIf="!saving; else isSaving" align-items-center>
+        <span class="scale">⚡&nbsp;&nbsp;</span> <span padding-horizontal>Change<br />Channel&nbsp;</span>
+        <span flex align-items-center
+          ><img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
+          {{ reservation.cost }}</span
+        >
       </ion-row>
-      <ng-template #isSaving>
-        Tuning
-        <ion-spinner name="crescent" margin-start></ion-spinner>
-      </ng-template>
+      <ng-template #isSaving> <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span> </ng-template>
     </ion-button>
-    <ion-row class="ion-text-center" *ngIf="!hasSufficientFunds()" margin-top>
+    <ion-row class="ion-text-center" *ngIf="insufficientFunds()" margin-top>
       <ion-text color="danger">
         Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please

@@ -8,13 +8,13 @@
         <ion-card-subtitle>
           <span
             >{{ location.neighborhood }} <span *ngIf="!isAvailable()">(inactive)</span>
-            <ion-chip color="primary" *ngIf="location.free"> <label color="success"> Free </label></ion-chip></span
+            <ion-chip color="primary" *ngIf="location.free"> <label color="primary"> Free </label></ion-chip></span
           >
           <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 
           <span float-right *ngIf="location.distance">
-            <span *ngIf="location.distance >= 0.2; else near"> {{ location.distance }} miles </span>
+            <span *ngIf="location.distance >= 0.2; else near"> {{ getDistance() }} miles </span>
             <ng-template #near> Near </ng-template>
           </span>
         </ion-card-subtitle>

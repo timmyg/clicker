@@ -22,8 +22,8 @@ export class UserService {
     return this.httpClient.post<any>(`${this.prefix}/verify/start`, { phone });
   }
 
-  loginVerify(phone, code: string): Observable<string> {
-    return this.httpClient.post<any>(`${this.prefix}/verify`, { phone, code }).pipe(map(result => result.token));
+  loginVerify(phone, code: string, uuid: string): Observable<string> {
+    return this.httpClient.post<any>(`${this.prefix}/verify`, { phone, code, uuid }).pipe(map(result => result.token));
   }
 
   get(): Observable<string> {

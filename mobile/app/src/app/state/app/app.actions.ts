@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { Plan } from './plan.model';
 import { Timeframe } from './timeframe.model';
+import { Location } from '../location/location.model';
 
 export const SET_PARTNER = '[APP] Set Partner';
 export const SET_PARTNER_SUCCESS = '[APP] Set Partner Success';
@@ -41,6 +42,7 @@ export class LoadPlansFail implements Action {
 
 export class LoadTimeframes implements Action {
   readonly type = LOAD_TIMEFRAMES;
+  constructor(public locationId: string) {}
 }
 
 export class LoadTimeframesSuccess implements Action {
