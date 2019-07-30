@@ -5,16 +5,21 @@ import { Location } from 'src/app/state/location/location.model';
   name: 'locationsFilter',
 })
 export class LocationsFilterPipe implements PipeTransform {
-  transform(locations: Location[], searchText: string, showHidden): any[] {
-    console.log(showHidden, locations);
+  transform(locations: Location[], searchText: string, showHidden: boolean): any[] {
     if (!locations) return [];
-    if (!searchText) return locations.filter(l => l.hidden === (showHidden || undefined));
+    if (!searchText) {
+      if (!showHidden) {
+        return locations.filter(l => l.hidden !== true);
+      }
+      return locations;
+    }
     searchText = searchText.toLowerCase();
-    return locations.filter(l => {
-      return (
-        (l.hidden === (showHidden || undefined) && l.name.toLowerCase().includes(searchText)) ||
-        l.neighborhood.toLowerCase().includes(searchText)
-      );
+    locations = locations.filter(l => {
+      return l.name.toLowerCase().includes(searchText) || l.neighborhood.toLowerCase().includes(searchText);
     });
+    if (!showHidden) {
+      locations = locations.filter(l => l.hidden !== true);
+    }
+    return locations;
   }
 }

@@ -94,7 +94,7 @@ export class ProfilePage {
     this.intercom.boot({ app_id: environment.intercom.appId });
     this.intercom.showNewMessage();
     this.intercom.onHide(() => {
-      this.intercom.shutdown();
+      this.intercom.update({ hide_default_launcher: true });
     });
   }
 
