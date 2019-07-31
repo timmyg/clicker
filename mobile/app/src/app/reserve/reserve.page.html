@@ -24,7 +24,11 @@
     <ion-fab-button color="primary" (click)="toggleSearch()"> <ion-icon name="search"></ion-icon> </ion-fab-button>
   </ion-fab>
   <ion-row class="breadcrumbs ion-text-center">
-    <ion-col class="step" [ngClass]="{ active: isStepActive('location'), complete: isStepComplete('location') }">
+    <ion-col
+      class="step"
+      [ngClass]="{ active: isStepActive('location'), complete: isStepComplete('location') }"
+      (click)="reserveService.toggleHiddenLocations()"
+    >
       <ion-icon
         *ngIf="!isStepComplete('location')"
         name="radio-button-off"

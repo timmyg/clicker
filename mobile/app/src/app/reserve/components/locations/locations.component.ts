@@ -48,13 +48,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
   refreshSubscription: Subscription;
   searchSubscription: Subscription;
   closeSearchSubscription: Subscription;
+  hiddenLocationsSubscription: Subscription;
   askForGeolocation$ = new BehaviorSubject<boolean>(true);
   userGeolocation: Geo;
   evaluatingGeolocation = true;
   geolocationDeclined = true;
   waiting: boolean;
   showHidden = false;
-  hiddenClicks = 0;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -72,7 +72,12 @@ export class LocationsComponent implements OnDestroy, OnInit {
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
+    this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
+    this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(() => {
+      console.log('HIDDEN TOOGLE');
+      this.showHidden = !this.showHidden;
+    });
   }
 
   async ngOnInit() {
@@ -161,10 +166,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.intercom.onHide(() => {
       this.intercom.update({ hide_default_launcher: true });
     });
-    // this.intercom.onUnreadCountChange(() => {
-    //   console.log('unread change');
-    //   this.intercom.show();
-    // });
   }
 
   async allowLocation() {
@@ -273,11 +274,5 @@ export class LocationsComponent implements OnDestroy, OnInit {
       });
   }
 
-  toggleHidden() {
-    this.hiddenClicks++;
-    if (this.hiddenClicks > 10) {
-      this.showHidden = !this.showHidden;
-      this.hiddenClicks = 0;
-    }
-  }
+  // toggleHiddenLocations() {}
 }
