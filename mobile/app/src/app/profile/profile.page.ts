@@ -6,7 +6,6 @@ import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
 import { getUser, getLoading as getWalletLoading } from '../state/user';
 import { ModalController, AlertController, ToastController, Platform, ActionSheetController } from '@ionic/angular';
-import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import * as fromReservation from '../state/reservation/reservation.actions';
 import * as fromUser from '../state/user/user.actions';
@@ -16,7 +15,6 @@ import * as moment from 'moment';
 import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
-import { environment } from 'src/environments/environment.production';
 import { take, first } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 import { SegmentService } from 'ngx-segment-analytics';
@@ -36,7 +34,6 @@ export class ProfilePage {
   sub: Subscription;
   sub2: Subscription;
   showRatingLink = false;
-  faCopyright = faCopyright;
   loginModal;
   rating = {
     cookieName: 'rating',
@@ -275,6 +272,8 @@ export class ProfilePage {
               cssClass: 'ion-text-center',
             });
             await toast.present();
+            this.segment.track(this.globals.events.rated);
+            this.segment.identify(null, { rated: true });
           },
         },
         {

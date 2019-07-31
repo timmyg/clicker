@@ -5,6 +5,7 @@ export class Globals {
   get events() {
     return {
       opened: 'Opened',
+      rated: 'Rated',
       onboarding: {
         completed: 'Onboarding Completed',
       },
