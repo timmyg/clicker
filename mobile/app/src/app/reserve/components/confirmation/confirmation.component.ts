@@ -172,9 +172,10 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.actions$
       .pipe(ofType(fromReservation.CREATE_RESERVATION_FAIL, fromReservation.UPDATE_RESERVATION_FAIL))
       .pipe(first())
-      .subscribe(() => {
+      .subscribe(async () => {
         this.showErrorToast();
         this.saving = false;
+        await this.segment.track(this.globals.events.reservation.failed);
       });
   }
 
