@@ -11,11 +11,10 @@
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
   <!-- <ng-template #loaded> -->
-  <section [hidden]="!(userCard$ | async)">
+  <section [hidden]="!(userCard$ | async) || (isLoading$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
         <ion-list-header> Choose an Amount </ion-list-header>
-        <!-- <p padding>Channel changes typically cost 1 token</p> -->
         <ion-item *ngFor="let f of (plans$ | async)">
           <ion-label flex align-items-center>
             <span class="dollars">${{ f.dollars }}</span>
@@ -50,7 +49,7 @@
     <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
     <form novalidate (ngSubmit)="addCard()">
       <div id="card-element" class="field"></div>
-      <ion-button type="submit" expand="block" color="primary" [disabled]="waiting">Add</ion-button>
+      <ion-button type="submit" expand="block" color="primary" size="large" [disabled]="waiting">Add Card</ion-button>
     </form>
   </section>
   <!-- </ng-template> -->

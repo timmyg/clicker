@@ -31,11 +31,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
         Find locations around you by <a (click)="forceAllow()">allowing location services</a>
       </p>
-      <p class="ion-text-center" padding>
-        <span padding-end (click)="toggleHidden()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <a (click)="suggestLocation()">Suggest a location</a
-        ><span padding-start>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-      </p>
+      <p class="ion-text-center" padding><a (click)="suggestLocation()">Suggest a location</a></p>
     </ion-list>
   </ng-template>
 </section>
