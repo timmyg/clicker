@@ -14,6 +14,8 @@ import { first } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 import { InfoComponent } from './info/info.component';
 import { ModalController, ToastController, Platform } from '@ionic/angular';
+import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from 'src/app/globals';
 
 @Component({
   templateUrl: './programs.component.html',
@@ -38,6 +40,8 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     public toastController: ToastController,
     private router: Router,
     private platform: Platform,
+    private segment: SegmentService,
+    private globals: Globals,
     private route: ActivatedRoute,
     private actions$: Actions,
   ) {
@@ -46,6 +50,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.reserveService.emitTitle(this.title);
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
       this.searchTerm = searchTerm;
+      this.segment.track(this.globals.events.program.search, { term: this.searchTerm });
     });
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
       this.searchTerm = null;
@@ -114,5 +119,6 @@ export class ProgramsComponent implements OnDestroy, OnInit {
       if (this.infoModal) this.infoModal.close();
     });
     this.infoModal.present();
+    return await this.segment.track(this.globals.events.program.info);
   }
 }

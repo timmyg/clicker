@@ -10,7 +10,7 @@
     v-else
   >
     <div class="control control-expanded">
-      <input class="input" type="email" placeholder="Enter your email" v-model.trim="email">
+      <input class="input" type="email" placeholder="Enter your email" v-model.trim="email" />
     </div>
     <div class="control">
       <button
@@ -37,9 +37,9 @@ export default {
     onSubmit() {
       this.submitting = true;
       const { email } = this;
-      console.log("$analytics")
-      console.log(this.$analytics)
-      console.log(email)
+      console.log('$analytics');
+      console.log(this.$analytics);
+      console.log(email);
       this.$analytics.alias(email);
       this.$http
         .post('/leads', { email })
@@ -73,6 +73,14 @@ button[type='submit'] {
 }
 .center {
   margin: 0 auto;
+}
+@include media('<medium') {
+  .field-grouped {
+    flex-direction: column;
+  }
+  button {
+    margin-top: 8px;
+  }
 }
 </style>
 

@@ -4,7 +4,7 @@
       <div class="hero-copy col">
         <h1 class="listen-up">
           Change the game.
-          <br>Literally.
+          <br />Literally.
         </h1>
         <p
           class="hero-paragraph"
@@ -72,6 +72,9 @@ export default {
 @include media('<medium') {
   .mobile-break {
     display: inline-block;
+  }
+  .hero-illustration {
+    display: none;
   }
 }
 </style>

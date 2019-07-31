@@ -96,6 +96,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
       this.searchTerm = searchTerm;
+      this.segment.track(this.globals.events.location.search, { term: this.searchTerm });
     });
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
       this.searchTerm = null;
