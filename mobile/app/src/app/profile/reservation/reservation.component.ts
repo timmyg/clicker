@@ -21,8 +21,6 @@ export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
   @Output() onModify = new EventEmitter<Reservation>();
   timeLeft: TimeLeft;
-  editChannelModal;
-  editTimeModal;
   intervalJobId;
 
   constructor(

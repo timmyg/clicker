@@ -1,9 +1,10 @@
 import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
-import { NavController, Events, IonSearchbar, ModalController } from '@ionic/angular';
+import { NavController, Events, IonSearchbar, ModalController, Platform } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { WalletPage } from '../wallet/wallet.page';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reserve',
@@ -19,12 +20,15 @@ export class ReservePage {
   tokenCount$: Observable<number>;
   percentageComplete: number;
   walletModal;
+  sub: Subscription;
+  pageSub: Subscription;
   routerListerSub: Subscription;
 
   constructor(
     public reserveService: ReserveService,
     private navCtrl: NavController,
     private router: Router,
+    private platform: Platform,
     public events: Events,
     public modalController: ModalController,
     private walletPage: WalletPage,
@@ -40,6 +44,17 @@ export class ReservePage {
     });
     this.tokenCount$ = this.walletPage.getCoinCount();
     this.initStepListener();
+  }
+
+  ngOnInit() {
+    this.pageSub = this.platform.backButton.subscribe(() => {
+      console.log('page back');
+      this.goBack();
+    });
+  }
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+    this.pageSub.unsubscribe();
   }
 
   goBack() {
@@ -80,6 +95,9 @@ export class ReservePage {
   async onCoinsClick() {
     this.walletModal = await this.modalController.create({
       component: WalletPage,
+    });
+    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+      if (this.walletModal) this.walletModal.close();
     });
     return await this.walletModal.present();
   }
