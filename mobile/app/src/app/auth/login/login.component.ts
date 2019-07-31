@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { Component, ViewChild } from '@angular/core';
+import { ModalController, ToastController, IonInput } from '@ionic/angular';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
 import { UserService } from 'src/app/core/services/user.service';
@@ -18,6 +18,8 @@ import { Device } from '@capacitor/core';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+  @ViewChild('phoneInput') phoneInput: IonInput;
+  @ViewChild('codeInput') codeInput: IonInput;
   phone: string;
   code: string;
   codeSent: boolean;
@@ -39,7 +41,13 @@ export class LoginComponent {
   async ngOnInit() {
     const info = await Device.getInfo();
     this.deviceUuid = info.uuid;
+    //timeout of 100 blows up whole component on ios, also tried in ngAfterViewChecked
+    setTimeout(() => this.phoneInput.setFocus(), 1000);
   }
+
+  // ngAfterViewChecked() {
+  //   this.phoneInput.setFocus();
+  // }
 
   onCloseClick() {
     this.modalController.dismiss();
@@ -53,6 +61,7 @@ export class LoginComponent {
         this.segment.track(this.globals.events.login.started);
         this.codeSent = true;
         this.waiting = false;
+        setTimeout(() => this.codeInput.setFocus(), 1000);
       },
       async err => {
         console.error(err);

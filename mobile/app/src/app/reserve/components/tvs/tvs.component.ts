@@ -8,12 +8,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { getReservation, getReservationTvs } from 'src/app/state/reservation';
-import * as fromLocation from '../../../state/location/location.actions';
 import { ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Actions, ofType } from '@ngrx/effects';
 import { first } from 'rxjs/operators';
 import { getLoading } from 'src/app/state/location';
+import { Globals } from 'src/app/globals';
+import { SegmentService } from 'ngx-segment-analytics';
 
 @Component({
   selector: 'app-tvs',
@@ -32,6 +33,8 @@ export class TvsComponent implements OnDestroy {
     private store: Store<fromStore.AppState>,
     public reserveService: ReserveService,
     private router: Router,
+    private segment: SegmentService,
+    private globals: Globals,
     private route: ActivatedRoute,
     private toastController: ToastController,
     private actions$: Actions,
@@ -54,11 +57,12 @@ export class TvsComponent implements OnDestroy {
   async onTvClick(tv: TV) {
     if (tv.reserved) {
       const toast = await this.toastController.create({
-        message: `${tv.label} is reserved until ${moment(tv.end).format('h:mma')}`,
+        message: `📺 ${tv.label} is reserved until ${moment(tv.end).format('h:mma')}`,
         duration: 2000,
         cssClass: 'ion-text-center',
       });
-      return toast.present();
+      toast.present();
+      return await this.segment.track(this.globals.events.tv.reserved);
     }
     this.store.dispatch(new fromReservation.SetTv(tv));
     this.router.navigate(['../confirmation'], { relativeTo: this.route });

@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Reservation } from '../../../state/reservation/reservation.model';
 import { ReserveService } from '../../reserve.service';
-import { Observable, interval } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { Store, select } from '@ngrx/store';
 import { getReservation } from 'src/app/state/reservation';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
-import { startWith, map, distinctUntilChanged, first, filter } from 'rxjs/operators';
+import { first, filter } from 'rxjs/operators';
 import { isLoggedIn, getUserTokenCount } from 'src/app/state/user';
 import { Actions, ofType } from '@ngrx/effects';
 import { SegmentService } from 'ngx-segment-analytics';
@@ -17,14 +17,15 @@ import { Globals } from 'src/app/globals';
 import { Timeframe } from 'src/app/state/app/timeframe.model';
 import { getTimeframes } from 'src/app/state/app';
 import * as fromApp from 'src/app/state/app/app.actions';
-import { ClassGetter } from '@angular/compiler/src/output/output_ast';
+import { getLoading as getAppLoading } from 'src/app/state/app';
 
 @Component({
   selector: 'app-confirmation',
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush, // ExpressionChangedAfterItHasBeenCheckedError when opening wallet if not here
 })
-export class ConfirmationComponent implements OnInit {
+export class ConfirmationComponent implements OnDestroy, OnInit {
   timeframes$: Observable<Timeframe[]>;
   reservation$: Observable<Partial<Reservation>>;
   reservationEnd$: Observable<Date>;
@@ -37,6 +38,9 @@ export class ConfirmationComponent implements OnInit {
   saving: boolean;
   isEditMode: boolean;
   sufficientFunds: boolean;
+  isAppLoading$: Observable<boolean>;
+  isAppLoading: boolean;
+  sub: Subscription;
   timeframe0: Timeframe = {
     minutes: 0,
     tokens: 0,
@@ -57,6 +61,17 @@ export class ConfirmationComponent implements OnInit {
     this.reserveService.emitTitle(this.title);
     this.tokenCount$ = this.store.select(getUserTokenCount);
     this.isLoggedIn$ = this.store.select(isLoggedIn);
+    // TODO this is ugly but gets rid of ExpressionChangedAfterItHasBeenCheckedError issue when opening wallet
+    this.isAppLoading$ = this.store.pipe(select(getAppLoading));
+    this.sub = this.isAppLoading$.subscribe(x => {
+      this.isAppLoading = x;
+    });
+  }
+
+  ngOnDestroy() {
+    // clear timeframes because it messes up the radio buttons when reloading
+    this.store.dispatch(new fromApp.ClearTimeframes());
+    this.sub.unsubscribe();
   }
 
   ngOnInit() {
@@ -157,9 +172,10 @@ export class ConfirmationComponent implements OnInit {
     this.actions$
       .pipe(ofType(fromReservation.CREATE_RESERVATION_FAIL, fromReservation.UPDATE_RESERVATION_FAIL))
       .pipe(first())
-      .subscribe(() => {
+      .subscribe(async () => {
         this.showErrorToast();
         this.saving = false;
+        await this.segment.track(this.globals.events.reservation.failed);
       });
   }
 

@@ -2,9 +2,9 @@ const { respond, getBody, getPathParameters, invokeFunctionSync } = require('ser
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
+const Airtable = require('airtable');
 const uuid = require('uuid/v1');
 require('dotenv').config({ path: '../.env.example' });
-
 
 const Location = dynamoose.model(
   process.env.tableLocation,
@@ -29,9 +29,8 @@ const Location = dynamoose.model(
         ip: String,
         reserved: Boolean,
         end: Date,
-        active: {
-          type: Boolean,
-        },
+        zone: Number,
+        active: Boolean,
       },
     ],
     channels: {
@@ -47,10 +46,12 @@ const Location = dynamoose.model(
     },
     free: Boolean,
     img: String,
+    region: String,
     active: Boolean,
     hidden: Boolean,
     connected: Boolean,
     setup: Boolean,
+    controlCenter: Boolean,
     // calculated fields
     distance: Number,
   },
@@ -82,7 +83,7 @@ module.exports.all = async event => {
       locations[i].distance = roundedMiles;
     }
   });
-  allLocations = allLocations.filter(l => !l.hidden);
+  // allLocations = allLocations.filter(l => !l.hidden);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
 };
@@ -91,16 +92,11 @@ module.exports.getLocalChannels = async event => {
   const allLocations = await Location.scan().exec();
   let locationsByZip = {};
   allLocations.forEach(l => {
-    console.log('1');
     locationsByZip[l.zip] = locationsByZip[l.zip] || [];
-    console.log('2');
-    console.log(l.zip, locationsByZip[l.zip]);
     if (l.channels && l.channels.local) {
-      console.log('2.1');
       locationsByZip[l.zip] = locationsByZip[l.zip].concat(l.channels.local);
     }
     // remove duplicates
-    console.log('3');
     locationsByZip[l.zip] = locationsByZip[l.zip].filter((elem, index, self) => {
       return index === self.indexOf(elem);
     });
@@ -342,6 +338,74 @@ module.exports.allOn = async event => {
     console.log('turned on', box);
   }
   return respond(200, 'ok');
+};
+
+module.exports.controlCenter = async event => {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  console.log('searching for games to change');
+  let games = await base('Games')
+    .select({
+      view: 'Scheduled',
+    })
+    .all();
+  console.log(`found ${games.length} games`);
+  games = games.filter(g => new Date(g.get('Game Start')) <= new Date());
+  console.log(`found ${games.length} games now/past`);
+  console.log(games);
+  if (games.length) {
+    // loop through games
+    for (const game of games) {
+      const region = game.get('Region');
+      const channel = game.get('Channel');
+      const zone = +game.get('TV Zone');
+      const gameId = game.id;
+      console.log(`searching for locations for:`, { region, channel, zone });
+      // find locations that are in region and control center enabled
+      const locations = await Location.scan()
+        .filter('active')
+        .eq(true)
+        .and()
+        .filter('controlCenter')
+        .eq(true)
+        .and()
+        .filter('region')
+        .in(region)
+        .all()
+        .exec();
+      console.log(`found ${locations.length} locations`);
+      // loop through locations
+      for (const location of locations) {
+        // find boxes that have game zone
+        const boxes = location.boxes.filter(
+          b => (b.zone === zone && !b.reserved) || (b.reserved && moment(boxes[i].end).diff(moment().toDate()) < 0),
+        );
+        console.log(`found ${boxes.length} boxes`);
+        // loop through boxes, change to game channel
+        for (const box of boxes) {
+          const command = 'tune';
+          const reservation = {
+            location,
+            box,
+            program: {
+              channel,
+            },
+          };
+          console.log('⚡ ⚡ tuning...');
+          console.log('location:', location.name, location.neighborhood);
+          console.log('box', box.label, box.ip);
+          console.log('channel', channel);
+          await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+        }
+      }
+      // mark game as completed on airtable
+      // TODO maybe delete in future?
+      await base('Games').update(gameId, {
+        Completed: true,
+      });
+    }
+  }
+
+  return respond(200);
 };
 
 module.exports.health = async event => {

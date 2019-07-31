@@ -13,4 +13,5 @@ export interface Location {
   free?: boolean;
   active?: boolean;
   connected?: boolean;
+  hidden?: boolean;
 }

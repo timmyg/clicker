@@ -16,7 +16,7 @@ module.exports.buy = async event => {
 };
 
 module.exports.timeframes = async event => {
-  console.log(event);
+  console.log(event.queryStringParameters.locationId);
   // locationId should be available in query params
   return respond(200, timeframes);
 };

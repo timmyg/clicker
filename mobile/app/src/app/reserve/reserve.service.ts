@@ -20,7 +20,12 @@ export class ReserveService {
   private emitShowingLocationsSource = new Subject<boolean>();
   showingLocationsEmitted$ = this.emitShowingLocationsSource.asObservable();
 
+  private emitToggleHiddenLocationsSource = new Subject<boolean>();
+  showingHiddenLocationsEmitted$ = this.emitToggleHiddenLocationsSource.asObservable();
+
   public isRefreshing: boolean;
+
+  hiddenClicks = 0;
 
   emitTitle(title: any) {
     this.emitTitleSource.next(title);
@@ -46,5 +51,13 @@ export class ReserveService {
   emitRefreshed() {
     this.emitRefreshedSource.next();
     this.isRefreshing = false;
+  }
+
+  toggleHiddenLocations() {
+    this.hiddenClicks++;
+    if (this.hiddenClicks >= 7) {
+      this.emitToggleHiddenLocationsSource.next();
+      this.hiddenClicks = 0;
+    }
   }
 }

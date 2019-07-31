@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { WalletPage } from '../wallet.page';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ModalController, ToastController, Platform } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../state/app.reducer';
-import { getUserRoles, isLoggedIn } from 'src/app/state/user';
+import { getUserRoles, isLoggedIn, getLoading } from 'src/app/state/user';
 import { LoginComponent } from 'src/app/auth/login/login.component';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-coins',
@@ -16,8 +17,10 @@ export class CoinsComponent implements OnInit {
   tokenCount$: Observable<number>;
   userRoles$: Observable<string[]>;
   isLoggedIn$: Observable<boolean>;
+  isLoading$: Observable<boolean>;
   isLoggedIn: boolean;
   userRoles: string[];
+  sub: Subscription;
   walletModal;
   loginModal;
 
@@ -33,6 +36,7 @@ export class CoinsComponent implements OnInit {
     this.userRoles$.subscribe(userRoles => {
       this.userRoles = userRoles;
     });
+    this.isLoading$ = this.store.select(getLoading);
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     this.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
@@ -40,11 +44,15 @@ export class CoinsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.platform.backButton.subscribe(() => {
-      // might just work with android
-      if (this.loginModal) this.loginModal.close();
-      if (this.walletModal) this.walletModal.close();
-    });
+    // this.platform.backButton.subscribe(() => {
+    //   // might just work with android
+    //   if (this.loginModal) this.loginModal.close();
+    //   if (this.walletModal) this.walletModal.close();
+    // });
+  }
+
+  ngOnDestoy() {
+    this.sub.unsubscribe();
   }
 
   async onClick() {
@@ -52,6 +60,9 @@ export class CoinsComponent implements OnInit {
     if (this.isLoggedIn) {
       this.walletModal = await this.modalController.create({
         component: WalletPage,
+      });
+      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+        if (this.walletModal) this.walletModal.close();
       });
       return await this.walletModal.present();
     } else {
@@ -65,6 +76,9 @@ export class CoinsComponent implements OnInit {
             handler: async () => {
               this.loginModal = await this.modalController.create({
                 component: LoginComponent,
+              });
+              this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+                if (this.loginModal) this.loginModal.close();
               });
               return await this.loginModal.present();
             },
