@@ -18,16 +18,26 @@ export class ProgramService {
           let icon;
           if (program.subcategories) {
             if (program.subcategories.indexOf('Baseball') > -1) {
-              icon = 'baseball';
+              icon = '⚾';
             } else if (program.subcategories.indexOf('Basketball') > -1) {
-              icon = 'basketball';
+              icon = '🏀';
             } else if (program.subcategories.indexOf('Soccer') > -1) {
-              icon = 'football';
+              icon = '⚽';
             } else if (program.subcategories.indexOf('Football') > -1) {
-              icon = 'american-football';
+              icon = '🏈';
+            } else if (program.subcategories.indexOf('Golf') > -1) {
+              icon = '⛳';
+            } else if (program.subcategories.indexOf('Tennis') > -1) {
+              icon = '🎾';
+            } else if (program.subcategories.indexOf('Horse') > -1) {
+              icon = '🏇';
+            } else if (program.subcategories.indexOf('Motorcycle') > -1) {
+              icon = '🏍️';
+            } else if (program.subcategories.indexOf('Auto') > -1) {
+              icon = '🏎️';
             }
           }
-          program.icon = icon || 'tv';
+          program.icon = icon || '📺';
         });
         return programs;
       }),

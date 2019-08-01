@@ -94,7 +94,7 @@ export class WalletPage {
           )
           .subscribe(async () => {
             const toast = await this.toastController.create({
-              message: `Card successfully added`,
+              message: `💳 Card successfully added`,
               duration: 3000,
               cssClass: 'ion-text-center',
             });
@@ -138,7 +138,7 @@ export class WalletPage {
     setTimeout(async () => {
       this.waiting = false;
       const toast = await this.toastController.create({
-        message: `Successfully purchased ${this.selectedPlan.tokens} tokens`,
+        message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens 🎉`,
         duration: 3000,
         cssClass: 'ion-text-center',
       });
@@ -188,7 +188,7 @@ export class WalletPage {
             this.store.dispatch(new fromUser.DeleteCard());
             setTimeout(async () => {
               const toast = await this.toastController.create({
-                message: `Card removed`,
+                message: `Card removed 👍`,
                 duration: 3000,
                 cssClass: 'ion-text-center',
               });

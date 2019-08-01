@@ -71,7 +71,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     // clear timeframes because it messes up the radio buttons when reloading
     this.store.dispatch(new fromApp.ClearTimeframes());
-    this.sub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
   }
 
   ngOnInit() {

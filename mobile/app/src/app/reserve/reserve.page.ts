@@ -53,8 +53,8 @@ export class ReservePage {
     });
   }
   ngOnDestroy() {
-    this.sub.unsubscribe();
-    this.pageSub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
+    if (this.pageSub) this.pageSub.unsubscribe();
   }
 
   goBack() {
