@@ -113,7 +113,7 @@ export class LoginComponent {
       this.segment.track(this.globals.events.login.completed);
       this.userService.setToken(token);
       const toast = await this.toastController.create({
-        message: `🎊mSuccessfully logged in. 🎊`,
+        message: `🎊 Successfully logged in. 🎊`,
         duration: 2000,
         cssClass: 'ion-text-center',
       });
