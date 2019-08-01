@@ -113,7 +113,7 @@ export class ProfilePage {
       if (duration > 0) {
         this.showModify(reservation);
       } else {
-        this.showToast('Sorry, your reservation has expired', true);
+        this.showToast('Sorry, your reservation has expired.', true);
       }
     } else {
       this.showToast('Sorry, you did not reserve this TV for a time period.', true);
@@ -232,7 +232,7 @@ export class ProfilePage {
   async onLogout() {
     const alert = await this.alertController.create({
       header: 'Are you sure?',
-      message: 'Your existing reservations will not be affected',
+      message: 'Your existing reservations will not be affected.',
       buttons: [
         {
           text: 'Cancel',

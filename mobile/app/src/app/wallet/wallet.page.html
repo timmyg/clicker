@@ -38,7 +38,7 @@
       >Purchase ${{ selectedPlan.dollars }}</ion-button
     >
     <p class="ion-text-center" *ngIf="!waiting">
-      {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
+        💳 {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
         color="danger"
         (click)="removeCard()"
         >Remove Card</a
