@@ -5,6 +5,7 @@ export class Globals {
   get events() {
     return {
       opened: 'Opened',
+      rated: 'Rated',
       onboarding: {
         completed: 'Onboarding Completed',
       },
@@ -15,6 +16,17 @@ export class Globals {
         cancelled: 'Reservation Cancelled',
         clickedButton: 'Reservation Started: Button',
         clickedLink: 'Reservation Started: Link',
+        failed: 'Reservation Failed',
+      },
+      location: {
+        search: 'Location Searched',
+      },
+      program: {
+        info: 'Program Info Viewed',
+        search: 'Program Searched',
+      },
+      tv: {
+        reserved: 'Clicked Reserved TV',
       },
       login: {
         started: 'Login Started',

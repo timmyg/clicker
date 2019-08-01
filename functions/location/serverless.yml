@@ -9,6 +9,8 @@ provider:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    airtableKey: ${env:AIRTABLE_KEY}
+    airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -41,6 +43,10 @@ custom:
     prod: ${env:SEGMENT_WRITE_KEY}
     release: ${env:SEGMENT_WRITE_KEY_DEV}
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
+  airtableBase:
+    prod: ${env:AIRTABLE_BASE}
+    release: ${env:AIRTABLE_BASE_RELEASE}
+    develop: ${env:AIRTABLE_BASE_DEV}
 resources:
   Resources:
     LocationsTable:
@@ -230,6 +236,20 @@ functions:
     events:
       - http:
           path: '{id}/boxes/on'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  controlCenter:
+    handler: location.controlCenter
+    events:
+      # - schedule: cron(0,5,10,15,20,25,30,35,40,45,50,55 * * * * *)
+      - schedule: cron(*/5 * * * ? *)
+      - http:
+          path: 'control-center'
           method: post
           cors:
             origin: '*'

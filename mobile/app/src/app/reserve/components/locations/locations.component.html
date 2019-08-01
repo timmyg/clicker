@@ -19,7 +19,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
 
   <ng-template #showLocations>
     <ion-list lines="none" [class.content-loading]="(isLoading$ | async) || waiting">
-      <ng-container *ngFor="let location of (locations$ | async | locationsFilter: searchTerm)">
+      <ng-container *ngFor="let location of (locations$ | async | locationsFilter: searchTerm:showHidden)">
         <app-location
           [location]="location"
           [userRoles]="userRoles"

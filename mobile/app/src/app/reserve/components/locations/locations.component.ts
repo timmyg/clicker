@@ -10,7 +10,7 @@ import * as fromLocation from '../../../state/location/location.actions';
 import * as fromUser from '../../../state/user/user.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, ActionSheetController, ToastController } from '@ionic/angular';
+import { NavController, ActionSheetController, ToastController, Platform } from '@ionic/angular';
 import { first, take } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
@@ -48,11 +48,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
   refreshSubscription: Subscription;
   searchSubscription: Subscription;
   closeSearchSubscription: Subscription;
+  hiddenLocationsSubscription: Subscription;
   askForGeolocation$ = new BehaviorSubject<boolean>(true);
   userGeolocation: Geo;
   evaluatingGeolocation = true;
   geolocationDeclined = true;
   waiting: boolean;
+  showHidden = false;
+  sub: Subscription;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -67,10 +70,16 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private segment: SegmentService,
     private globals: Globals,
     public intercom: Intercom,
+    public platform: Platform,
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
+    this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
+    this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(() => {
+      console.log('HIDDEN TOOGLE');
+      this.showHidden = !this.showHidden;
+    });
   }
 
   async ngOnInit() {
@@ -87,6 +96,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
       this.searchTerm = searchTerm;
+      this.segment.track(this.globals.events.location.search, { term: this.searchTerm });
     });
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
       this.searchTerm = null;
@@ -97,6 +107,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.refreshSubscription.unsubscribe();
     this.searchSubscription.unsubscribe();
     this.closeSearchSubscription.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
   }
 
   private async redirectIfUpdating() {
@@ -154,10 +165,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async suggestLocation() {
-    await this.intercom.boot({ app_id: environment.intercom.appId });
+    // await this.intercom.boot({ app_id: environment.intercom.appId });
     await this.intercom.showNewMessage();
     this.intercom.onHide(() => {
-      this.intercom.shutdown();
+      this.intercom.update({ hide_default_launcher: true });
+    });
+    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+      this.intercom.hide();
     });
   }
 
@@ -266,4 +280,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
         this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
       });
   }
+
+  // toggleHiddenLocations() {}
 }

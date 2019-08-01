@@ -31,6 +31,16 @@ export function reducer(state = initialState, action: fromApp.AppActions): State
       state.partner = action.payload;
       return state;
     }
+    case fromApp.CLEAR_TIMEFRAMES:
+      return {
+        ...state,
+        timeframes: null,
+      };
+    case fromApp.CLEAR_PLANS:
+      return {
+        ...state,
+        plans: null,
+      };
     case fromApp.LOAD_PLANS_SUCCESS:
       return {
         ...state,

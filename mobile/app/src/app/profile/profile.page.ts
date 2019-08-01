@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { Reservation } from '../state/reservation/reservation.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
 import { getUser, getLoading as getWalletLoading } from '../state/user';
 import { ModalController, AlertController, ToastController, Platform, ActionSheetController } from '@ionic/angular';
-import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import { Storage } from '@ionic/storage';
 import * as fromReservation from '../state/reservation/reservation.actions';
 import * as fromUser from '../state/user/user.actions';
@@ -16,8 +15,7 @@ import * as moment from 'moment';
 import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
-import { environment } from 'src/environments/environment.production';
-import { take } from 'rxjs/operators';
+import { take, first } from 'rxjs/operators';
 import { ofType, Actions } from '@ngrx/effects';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
@@ -33,9 +31,9 @@ export class ProfilePage {
   user$: Observable<User>;
   isReservationsLoading$: Observable<boolean>;
   isWalletLoading$: Observable<boolean>;
+  sub: Subscription;
+  sub2: Subscription;
   showRatingLink = false;
-  faCopyright = faCopyright;
-  walletModal;
   loginModal;
   rating = {
     cookieName: 'rating',
@@ -66,12 +64,16 @@ export class ProfilePage {
 
   ngOnInit() {
     this.store.dispatch(new fromReservation.GetAll());
-    this.platform.backButton.subscribe(() => {
-      // might just work with android
+    this.platform.backButton.pipe(first()).subscribe(() => {
+      // android
       if (this.loginModal) this.loginModal.close();
-      if (this.walletModal) this.walletModal.close();
     });
     this.configureRating();
+  }
+
+  ngOnDestroy() {
+    if (this.sub) this.sub.unsubscribe();
+    if (this.sub2) this.sub2.unsubscribe();
   }
 
   async configureRating() {
@@ -87,14 +89,20 @@ export class ProfilePage {
     this.loginModal = await this.modalController.create({
       component: LoginComponent,
     });
+    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+      if (this.loginModal) this.loginModal.close();
+    });
     return await this.loginModal.present();
   }
 
   async openFeedback() {
-    this.intercom.boot({ app_id: environment.intercom.appId });
-    this.intercom.showNewMessage();
+    // await this.intercom.boot({ app_id: environment.intercom.appId });
+    await this.intercom.showNewMessage();
     this.intercom.onHide(() => {
-      this.intercom.shutdown();
+      this.intercom.update({ hide_default_launcher: true });
+    });
+    this.sub2 = this.platform.backButton.pipe(first()).subscribe(() => {
+      this.intercom.hide();
     });
   }
 
@@ -264,6 +272,8 @@ export class ProfilePage {
               cssClass: 'ion-text-center',
             });
             await toast.present();
+            this.segment.track(this.globals.events.rated);
+            this.segment.identify(null, { rated: true });
           },
         },
         {

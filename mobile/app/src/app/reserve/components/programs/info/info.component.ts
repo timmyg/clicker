@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Program } from 'src/app/state/program/program.model';
 import { ModalController } from '@ionic/angular';
 
@@ -15,4 +15,5 @@ export class InfoComponent {
   onCloseClick() {
     this.modalController.dismiss();
   }
+  x;
 }

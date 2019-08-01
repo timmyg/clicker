@@ -46,6 +46,12 @@
 }
 
 .content-loading {
-  opacity: .3;
+  opacity: 0.3;
   pointer-events: none;
+}
+
+// never show intercom launcher icon in corner
+.intercom-launcher-frame,
+.intercom-launcher-badge-frame {
+  display: none !important;
 }

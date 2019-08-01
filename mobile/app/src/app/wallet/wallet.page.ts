@@ -57,6 +57,11 @@ export class WalletPage {
     this.initStripe();
   }
 
+  ngOnDestroy() {
+    // clear timeframes because it messes up the radio buttons when reloading
+    this.store.dispatch(new fromApp.ClearPlans());
+  }
+
   private initStripe() {
     this.stripeService.elements(this.elementsOptions).subscribe(elements => {
       this.elements = elements;
