@@ -3,14 +3,16 @@
     <ion-row>
       <ion-col>
         <ion-row>
-          <ion-col size="3" flex align-items-center> <ion-icon name="tv" size="large" margin-end></ion-icon> </ion-col>
+          <ion-col size="3" flex class="ion-justify-content-center" align-items-center>
+            <span class="icon">📺</span>
+          </ion-col>
           <ion-col flex align-items-center>
             <span>{{ reservation.program.channelTitle }} on {{ reservation.box.label }}</span>
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="3" flex align-items-center>
-            <ion-icon name="time" size="large" margin-end></ion-icon>
+          <ion-col size="3" flex class="ion-justify-content-center" align-items-center>
+            <span class="icon">⏱️</span>
           </ion-col>
           <ion-col flex align-items-center>
             <span *ngIf="timeLeft?.minutes > 0">{{ timeLeft?.label }} left</span>

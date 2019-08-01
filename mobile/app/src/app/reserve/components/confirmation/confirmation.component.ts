@@ -181,7 +181,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
 
   async showTunedToast(label: string, channelName: string) {
     const toast = await this.toastController.create({
-      message: `${label} successfully changed to ${channelName}`,
+      message: `📺 ${label} successfully changed to ${channelName} ⚡`,
       duration: 2000,
       cssClass: 'ion-text-center',
     });
