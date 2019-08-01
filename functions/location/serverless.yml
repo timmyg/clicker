@@ -45,7 +45,7 @@ custom:
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
   airtableBase:
     prod: ${env:AIRTABLE_BASE}
-    release: ${env:AIRTABLE_BASE_DEV}
+    release: ${env:AIRTABLE_BASE_RELEASE}
     develop: ${env:AIRTABLE_BASE_DEV}
 resources:
   Resources:
