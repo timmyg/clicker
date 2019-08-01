@@ -16,7 +16,8 @@ export class ProgramService {
       map((programs: Program[]) => {
         programs.forEach(program => {
           let icon;
-          if (program.subcategories) {
+          // icon may be set on backend in future
+          if (program.subcategories && !program.icon) {
             if (program.subcategories.indexOf('Baseball') > -1) {
               icon = '⚾';
             } else if (program.subcategories.indexOf('Basketball') > -1) {
