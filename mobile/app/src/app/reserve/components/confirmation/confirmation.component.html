@@ -19,8 +19,10 @@
     <br />
     <ion-list *ngIf="!reservation.location.free">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
-        <ion-list-header>
-          <span *ngIf="isEditMode; else normal">Extend</span> <ng-template #normal>Choose</ng-template> Timeframe
+        <ion-list-header no-padding>
+          <span>
+            <span *ngIf="isEditMode; else normal">Extend</span> <ng-template #normal>Choose</ng-template> Timeframe:
+          </span>
         </ion-list-header>
         <!-- hacky - should put as first item in observable somehow? -->
         <ion-row *ngIf="isAppLoading" margin-vertical>

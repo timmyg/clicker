@@ -41,8 +41,13 @@ export class LoginComponent {
   async ngOnInit() {
     const info = await Device.getInfo();
     this.deviceUuid = info.uuid;
-    setTimeout(() => this.phoneInput.setFocus(), 100);
+    //timeout of 100 blows up whole component on ios, also tried in ngAfterViewChecked
+    setTimeout(() => this.phoneInput.setFocus(), 1000);
   }
+
+  // ngAfterViewChecked() {
+  //   this.phoneInput.setFocus();
+  // }
 
   onCloseClick() {
     this.modalController.dismiss();
@@ -56,7 +61,7 @@ export class LoginComponent {
         this.segment.track(this.globals.events.login.started);
         this.codeSent = true;
         this.waiting = false;
-        setTimeout(() => this.codeInput.setFocus(), 100);
+        setTimeout(() => this.codeInput.setFocus(), 1000);
       },
       async err => {
         console.error(err);
@@ -108,7 +113,7 @@ export class LoginComponent {
       this.segment.track(this.globals.events.login.completed);
       this.userService.setToken(token);
       const toast = await this.toastController.create({
-        message: `Successfully logged in.`,
+        message: `🎊 Successfully logged in. 🎊`,
         duration: 2000,
         cssClass: 'ion-text-center',
       });

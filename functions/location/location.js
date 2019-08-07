@@ -377,7 +377,7 @@ module.exports.controlCenter = async event => {
       for (const location of locations) {
         // find boxes that have game zone
         const boxes = location.boxes.filter(
-          b => (b.zone === zone && !b.reserved) || (b.reserved && moment(boxes[i].end).diff(moment().toDate()) < 0),
+          b => b.zone === zone && (!b.reserved || (b.reserved && moment(b.end).diff(moment().toDate()) < 0)),
         );
         console.log(`found ${boxes.length} boxes`);
         // loop through boxes, change to game channel
