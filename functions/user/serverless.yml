@@ -139,6 +139,18 @@ functions:
               - partner
               - authorization
               - content-type
+  charge:
+    handler: user.charge
+    events:
+      - http:
+          path: 'charge'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   transaction:
     handler: user.transaction
     events:

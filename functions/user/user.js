@@ -146,6 +146,26 @@ module.exports.replenish = async event => {
   return respond(200, updatedUser);
 };
 
+module.exports.charge = async event => {
+  const { token, amount, email, company } = getBody(event);
+
+  // create customer in stripe
+  const customer = await stripe.customers.create({
+    source: token,
+    name: company,
+    email,
+  });
+
+  // charge via stripe
+  const charge = await stripe.charges.create({
+    amount: amount * 100,
+    currency: 'usd',
+    customer: customer.id,
+  });
+
+  return respond(200, charge);
+};
+
 module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
@@ -213,7 +233,6 @@ module.exports.verifyStart = async event => {
     return respond(400, e);
   }
 };
-
 
 module.exports.verify = async event => {
   const { phone, code } = getBody(event);
