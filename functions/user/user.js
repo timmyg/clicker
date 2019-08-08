@@ -177,7 +177,7 @@ module.exports.charge = async event => {
 
 module.exports.subscribe = async event => {
   try {
-    const { token, amount, email, company, name, start } = getBody(event);
+    const { token, email, company, name, start, plan } = getBody(event);
 
     // create customer in stripe
     const customer = await stripe.customers.create({
@@ -193,7 +193,7 @@ module.exports.subscribe = async event => {
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       billing_cycle_anchor: start || ~~(Date.now() / 1000),
-      items: [{ plan: 'plan_FaQC8DPwTXB5Xy' }],
+      items: [{ plan }],
     });
 
     console.log(subscription);

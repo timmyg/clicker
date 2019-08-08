@@ -9,11 +9,17 @@
       <main>
         <section class="container">
           <form id="pay" v-on:submit.prevent="pay" v-if="!completed">
-            <div>
+            <div v-if="isOneTime">
               <div class="label-wrapper">
                 <label>Amount</label>
               </div>
               <span>${{amount}}</span>
+            </div>
+            <div v-if="isSubscription">
+              <div class="label-wrapper">
+                <label>Amount</label>
+              </div>
+              <span>${{amount}}/month (starting {{ start | moment("M/D/YY") }})</span>
             </div>
             <div>
               <div class="label-wrapper">
@@ -55,24 +61,26 @@
 <script>
 import { Card, createToken } from 'vue-stripe-elements-plus';
 import PageHeader from './landing/PageHeader';
+import * as moment from 'moment';
 
 export default {
   data() {
     return {
       completed: false,
       submitting: false,
+      isSubscription: false,
+      isOneTime: false,
       error: null,
+      start: null,
+      type: null,
       amount: null,
-      company: '',
-      email: '',
-      name: '',
+      company: null,
+      email: null,
+      name: null,
       stripeOptions: {
-        // see https://stripe.com/docs/stripe.js#element-options for details
         style: {
           base: {
-            // Add your base input styles here. For example:
             fontSize: '18px',
-            // color: 'red',
           },
         },
       },
@@ -83,11 +91,15 @@ export default {
   components: { Card, PageHeader },
 
   mounted: function() {
-    const { amount, company, email, name } = this.$route.query;
+    const { amount, company, email, name, type, start } = this.$route.query;
     this.amount = amount;
     this.company = company;
     this.email = email;
     this.name = name;
+    this.type = type;
+    this.start = start ? moment(start, 'M-D-YYYY').toDate() : moment.toDate();
+    this.isSubscription = type === 'subscription';
+    this.isOneTime = type === 'onetime';
   },
 
   methods: {
@@ -95,7 +107,7 @@ export default {
       this.error = null;
       this.submitting = true;
       // return console.log(this.amount, this.company, this.email, this.name);
-      const { amount, company, email, name } = this;
+      const { amount, company, email, name, plan } = this;
       if (!amount || !company || !email || !name) {
         this.submitting = false;
         return (this.error = 'Please fill out all fields');
@@ -106,11 +118,12 @@ export default {
             return (this.error = data.error.message);
           }
           const token = data.token.id;
-          const body = { token, amount, company, email, name };
+          const body = { token, amount, company, email, name, plan };
           console.log(body);
-          return;
+          // return;
+          const endpoint = this.isOneTime ? '/users/charge' : '/users/subscribe';
           this.$http
-            .post('/users/charge', body)
+            .post(endpoint, body)
             .then(x => {
               console.log(x);
               this.completed = true;
