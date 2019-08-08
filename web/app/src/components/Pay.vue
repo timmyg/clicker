@@ -1,7 +1,7 @@
 <template>
   <section>
     <div>
-      <header class="site-header">
+      <header class="site-header-center">
         <page-header></page-header>
         <div id="title">Pay</div>
       </header>
@@ -19,7 +19,7 @@
               <div class="label-wrapper">
                 <label>Amount</label>
               </div>
-              <span>${{amount}}/month (starting {{ start | moment("M/D/YY") }})</span>
+              <span>${{amount}}/month (starting {{ start || now | moment("M/D/YY") }})</span>
             </div>
             <div>
               <div class="label-wrapper">
@@ -54,7 +54,7 @@
           <section class="completed" v-else>
             <span
               v-if="isSubscription"
-            >Successfully setup ${{amount}}/month autopay for the {{ start | moment("Do") }} of every month.</span>
+            >Successfully setup ${{amount}}/month autopay for the {{ start || now | moment("Do") }} of every month.</span>
             <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
             <div class="emojis">
               <div>🎉</div>
@@ -83,6 +83,7 @@ export default {
       isOneTime: false,
       error: null,
       start: null,
+      now: moment().toDate(),
       type: null,
       amount: null,
       company: null,
@@ -110,7 +111,7 @@ export default {
     this.type = type;
     this.plan = plan;
     console.log(start);
-    this.start = start ? moment(start, 'M-D-YYYY').toDate() : moment().toDate();
+    this.start = start ? moment(start, 'M-D-YYYY').toDate() : null;
     this.isSubscription = type === 'subscription';
     this.isOneTime = type === 'onetime';
     console.log(this);
@@ -180,8 +181,8 @@ export default {
 </script> 
 
 <style lang="scss">
-.site-header {
-  padding: 0;
+.site-header-center {
+  padding: 20px 0;
   .header-brand {
     margin: 0 auto;
   }

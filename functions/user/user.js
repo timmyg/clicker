@@ -156,6 +156,7 @@ module.exports.charge = async event => {
       name: company,
       description: name,
       email,
+      receipt_email: email,
     });
 
     console.log(customer);
