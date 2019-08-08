@@ -192,7 +192,7 @@ module.exports.subscribe = async event => {
     // create subscription via stripe
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
-      billing_cycle_anchor: start || ~~(Date.now() / 1000),
+      billing_cycle_anchor: start / 1000 || ~~(Date.now() / 1000),
       items: [{ plan }],
     });
 

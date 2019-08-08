@@ -46,12 +46,18 @@
               <card class="stripe-card" :stripe="stripePublishableKey" :options="stripeOptions" />
             </div>
             <p class="error" v-if="error">{{error}}</p>
-            <button
-              class="button button-primary button-block button-shadow"
-              :disabled="submitting"
-            >Pay ${{amount}}</button>
+            <button class="button button-primary button-block button-shadow" :disabled="submitting">
+              <span v-if="isSubscription">Setup ${{amount}}/month autopay</span>
+              <span v-if="isOneTime">Pay ${{amount}}</span>
+            </button>
           </form>
-          <section class="completed" v-else>Payment completed. Email receipt is on the way.</section>
+          <section class="completed" v-else>
+            <span
+              v-if="isSubscription"
+            >Successfully setup ${{amount}}/month autopay for the {{ start | moment("Do") }} of every month.</span>
+            <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
+            <div class="emojis">🎉🎊🙌🎈</div>
+          </section>
         </section>
       </main>
     </div>
@@ -91,12 +97,13 @@ export default {
   components: { Card, PageHeader },
 
   mounted: function() {
-    const { amount, company, email, name, type, start } = this.$route.query;
+    const { amount, company, email, name, type, start, plan } = this.$route.query;
     this.amount = amount;
     this.company = company;
     this.email = email;
     this.name = name;
     this.type = type;
+    this.plan = plan;
     this.start = start ? moment(start, 'M-D-YYYY').toDate() : moment.toDate();
     this.isSubscription = type === 'subscription';
     this.isOneTime = type === 'onetime';
@@ -107,7 +114,7 @@ export default {
       this.error = null;
       this.submitting = true;
       // return console.log(this.amount, this.company, this.email, this.name);
-      const { amount, company, email, name, plan } = this;
+      const { amount, company, email, name, plan, start } = this;
       if (!amount || !company || !email || !name) {
         this.submitting = false;
         return (this.error = 'Please fill out all fields');
@@ -118,7 +125,15 @@ export default {
             return (this.error = data.error.message);
           }
           const token = data.token.id;
-          const body = { token, amount, company, email, name, plan };
+          const body = {
+            token,
+            amount,
+            company,
+            email,
+            name,
+            plan,
+            start: start ? moment(start).unix() * 1000 : null,
+          };
           console.log(body);
           // return;
           const endpoint = this.isOneTime ? '/users/charge' : '/users/subscribe';
@@ -144,10 +159,10 @@ export default {
         .catch(e => {
           console.error(e);
           this.error = e.message;
-        })
-        .finally(() => {
-          this.submitting = false;
         });
+      // .finally(() => {
+      //   this.submitting = false;
+      // });
     },
   },
 };
@@ -204,5 +219,39 @@ $danger: #cf665b;
 .completed {
   margin-top: 40px;
   text-align: center;
+}
+.emojis {
+  font-size: 26px;
+  animation-name: rubberBand;
+}
+
+@keyframes rubberBand {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
 }
 </style> 
