@@ -190,9 +190,11 @@ module.exports.subscribe = async event => {
     console.log(customer);
 
     // create subscription via stripe
+    const startTimestamp = ~~((start || Date.now()) / 1000);
+    console.log({ startTimestamp });
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
-      billing_cycle_anchor: ~~((start || Date.now()) / 1000),
+      billing_cycle_anchor: startTimestamp,
       items: [{ plan }],
       prorate: false,
     });
