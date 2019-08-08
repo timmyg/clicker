@@ -147,14 +147,17 @@ module.exports.replenish = async event => {
 };
 
 module.exports.charge = async event => {
-  const { token, amount, email, company } = getBody(event);
+  const { token, amount, email, company, name } = getBody(event);
 
   // create customer in stripe
   const customer = await stripe.customers.create({
     source: token,
     name: company,
+    description: name,
     email,
   });
+
+  console.log(customer);
 
   // charge via stripe
   const charge = await stripe.charges.create({
@@ -162,6 +165,8 @@ module.exports.charge = async event => {
     currency: 'usd',
     customer: customer.id,
   });
+
+  console.log(charge);
 
   return respond(200, charge);
 };

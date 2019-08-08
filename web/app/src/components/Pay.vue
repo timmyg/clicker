@@ -1,25 +1,19 @@
 <template>
   <section>
     <div>
-      <header class="site-header">
+      <!-- <header class="site-header">
         <page-header></page-header>
         <div id="title">Pay</div>
-      </header>
+      </header>-->
 
       <main>
         <section class="container">
-          <form id="pay" v-on:submit.prevent="pay">
+          <form id="pay" v-on:submit.prevent="pay" v-if="!completed">
             <div>
               <div class="label-wrapper">
                 <label>Amount</label>
               </div>
               <span>${{amount}}</span>
-            </div>
-            <div>
-              <div class="label-wrapper">
-                <label>Company</label>
-              </div>
-              <input type="text" class="custom" v-model="company" />
             </div>
             <div>
               <div class="label-wrapper">
@@ -29,18 +23,26 @@
             </div>
             <div>
               <div class="label-wrapper">
+                <label>Name</label>
+              </div>
+              <input type="text" class="custom" v-model="name" />
+            </div>
+            <div>
+              <div class="label-wrapper">
+                <label>Company</label>
+              </div>
+              <input type="text" class="custom" v-model="company" />
+            </div>
+            <div>
+              <div class="label-wrapper">
                 <label>Credit Card</label>
               </div>
-              <card
-                class="stripe-card"
-                :class="{ complete }"
-                :stripe="stripePublishableKey"
-                :options="stripeOptions"
-                @change="complete = $event.complete"
-              />
+              <card class="stripe-card" :stripe="stripePublishableKey" :options="stripeOptions" />
             </div>
+            <p class="error" v-if="error">{{error}}</p>
             <button class="button button-primary button-block button-shadow">Pay ${{amount}}</button>
           </form>
+          <section v-else>Payment completed. Check your email for receipt.</section>
         </section>
       </main>
     </div>
@@ -54,10 +56,12 @@ import PageHeader from './landing/PageHeader';
 export default {
   data() {
     return {
-      complete: false,
+      completed: false,
+      error: null,
       amount: null,
       company: '',
       email: '',
+      name: '',
       stripeOptions: {
         // see https://stripe.com/docs/stripe.js#element-options for details
         style: {
@@ -75,30 +79,40 @@ export default {
   components: { Card, PageHeader },
 
   mounted: function() {
-    // console.log(this.$route.query.amount);
-    const { amount, company, email } = this.$route.query;
-    this.amount = this.$route.query.amount;
-    this.company = this.$route.query.company;
-    this.email = this.$route.query.email;
+    const { amount, company, email, name } = this.$route.query;
+    this.amount = amount;
+    this.company = company;
+    this.email = email;
+    this.name = name;
   },
 
   methods: {
     pay() {
-      return console.log(this.amount, this.company, this.email);
-      createToken().then(data => {
-        const { id: token } = data;
-        this.$http
-          .post('/leads', { email })
-          .then(() => {
-            this.submitting = false;
-            this.submitted = true;
-          })
-          .catch(e => {
-            console.error(e);
-            this.submitting = false;
-            this.error = true;
-          });
-      });
+      this.error = null;
+      // return console.log(this.amount, this.company, this.email, this.name);
+      const { amount, company, email, name } = this;
+      if (!amount || !company || !email || !name) {
+        return (this.error = 'Please fill out all fields');
+      }
+      createToken()
+        .then(data => {
+          console.log(data);
+          const { id: token, amount, company, email, name } = data;
+          this.$http
+            .post('/users/charge', { id: token, amount, company, email, name })
+            .then(x => {
+              console.log(x);
+              this.completed = true;
+            })
+            .catch(e => {
+              console.error(e);
+              this.error = e.message;
+            });
+        })
+        .catch(e => {
+          console.error(e);
+          this.error = e.message;
+        });
     },
   },
 };
@@ -143,5 +157,13 @@ button {
   text-align: center;
   font-size: 18px;
   font-weight: 500;
+}
+$danger: #cf665b;
+.error {
+  border-left: 5px solid $danger;
+  color: $danger;
+  margin-top: 8px;
+  padding: 16px;
+  font-size: 14px;
 }
 </style> 
