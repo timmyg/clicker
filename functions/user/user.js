@@ -195,7 +195,7 @@ module.exports.subscribe = async event => {
       // amount: amount * 100,
       // currency: 'usd',
       billing_cycle_anchor: 1566493139,
-      items: [{ plan: 'plan_FaPelj6JT35XO4', quantity: 50 }],
+      items: [{ plan: 'plan_FaQC8DPwTXB5Xy' }],
     });
 
     console.log(subscription);
