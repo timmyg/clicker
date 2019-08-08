@@ -194,7 +194,8 @@ module.exports.subscribe = async event => {
       customer: customer.id,
       // amount: amount * 100,
       // currency: 'usd',
-      items: [{ plan: 'prod_FaPdj31vTsuNl1', quantity: 50, billing_cycle_anchor: 1566493139 }],
+      billing_cycle_anchor: 1566493139,
+      items: [{ plan: 'prod_FaPdj31vTsuNl1', quantity: 50 }],
     });
 
     console.log(subscription);

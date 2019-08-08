@@ -1,10 +1,10 @@
 <template>
   <section>
     <div>
-      <header class="site-header">
+      <!-- <header class="site-header">
         <page-header></page-header>
         <div id="title">Pay</div>
-      </header>
+      </header>-->
 
       <main>
         <section class="container">
@@ -108,6 +108,7 @@ export default {
           const token = data.token.id;
           const body = { token, amount, company, email, name };
           console.log(body);
+          return;
           this.$http
             .post('/users/charge', body)
             .then(x => {
