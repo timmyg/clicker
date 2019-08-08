@@ -40,9 +40,12 @@
               <card class="stripe-card" :stripe="stripePublishableKey" :options="stripeOptions" />
             </div>
             <p class="error" v-if="error">{{error}}</p>
-            <button class="button button-primary button-block button-shadow">Pay ${{amount}}</button>
+            <button
+              class="button button-primary button-block button-shadow"
+              :disabled="submitting"
+            >Pay ${{amount}}</button>
           </form>
-          <section v-else>Payment completed. Check your email for receipt.</section>
+          <section class="completed" v-else>Payment completed. Email receipt is on the way.</section>
         </section>
       </main>
     </div>
@@ -57,6 +60,7 @@ export default {
   data() {
     return {
       completed: false,
+      submitting: false,
       error: null,
       amount: null,
       company: '',
@@ -89,29 +93,41 @@ export default {
   methods: {
     pay() {
       this.error = null;
+      this.submitting = true;
       // return console.log(this.amount, this.company, this.email, this.name);
       const { amount, company, email, name } = this;
       if (!amount || !company || !email || !name) {
+        this.submitting = false;
         return (this.error = 'Please fill out all fields');
       }
       createToken()
         .then(data => {
-          console.log(data);
-          const { id: token, amount, company, email, name } = data;
+          // console.log(data);
+          // const { id: token, amount, company, email, name } = data;
+          const token = data.token.id;
+          const body = { token, amount, company, email, name };
+          console.log(body);
           this.$http
-            .post('/users/charge', { id: token, amount, company, email, name })
+            .post('/users/charge', body)
             .then(x => {
               console.log(x);
               this.completed = true;
+              this.submitting = false;
             })
             .catch(e => {
               console.error(e);
               this.error = e.message;
+            })
+            .finally(() => {
+              this.submitting = false;
             });
         })
         .catch(e => {
           console.error(e);
           this.error = e.message;
+        })
+        .finally(() => {
+          this.submitting = false;
         });
     },
   },
@@ -165,5 +181,9 @@ $danger: #cf665b;
   margin-top: 8px;
   padding: 16px;
   font-size: 14px;
+}
+.completed {
+  margin-top: 40px;
+  text-align: center;
 }
 </style> 
