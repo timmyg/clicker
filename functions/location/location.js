@@ -387,7 +387,8 @@ module.exports.controlCenter = async event => {
             location,
             box,
             program: {
-              channel,
+              channel: channel.split('-')[0],
+              channelMinor: channel.split('-')[1],
             },
           };
           console.log('⚡ ⚡ tuning...');
