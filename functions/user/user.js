@@ -162,14 +162,44 @@ module.exports.charge = async event => {
 
     // charge via stripe
     const charge = await stripe.charges.create({
+      customer: customer.id,
       amount: amount * 100,
       currency: 'usd',
-      customer: customer.id,
     });
 
     console.log(charge);
 
     return respond(200, charge);
+  } catch (e) {
+    return respond(400, e);
+  }
+};
+
+module.exports.subscribe = async event => {
+  try {
+    const { token, amount, email, company, name } = getBody(event);
+
+    // create customer in stripe
+    const customer = await stripe.customers.create({
+      source: token,
+      name: company,
+      description: name,
+      email,
+    });
+
+    console.log(customer);
+
+    // create subscription via stripe
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      // amount: amount * 100,
+      // currency: 'usd',
+      items: [{ plan: 'prod_FaPdj31vTsuNl1', quantity: 50, billing_cycle_anchor: 1566493139 }],
+    });
+
+    console.log(subscription);
+
+    return respond(200, subscription);
   } catch (e) {
     return respond(400, e);
   }

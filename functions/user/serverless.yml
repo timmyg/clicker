@@ -151,6 +151,18 @@ functions:
               - partner
               - authorization
               - content-type
+  subscribe:
+    handler: user.subscribe
+    events:
+      - http:
+          path: 'subscribe'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   transaction:
     handler: user.transaction
     events:

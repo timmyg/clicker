@@ -1,10 +1,10 @@
 <template>
   <section>
     <div>
-      <!-- <header class="site-header">
+      <header class="site-header">
         <page-header></page-header>
         <div id="title">Pay</div>
-      </header>-->
+      </header>
 
       <main>
         <section class="container">
@@ -102,8 +102,9 @@ export default {
       }
       createToken()
         .then(data => {
-          // console.log(data);
-          // const { id: token, amount, company, email, name } = data;
+          if (data.error) {
+            return (this.error = data.error.message);
+          }
           const token = data.token.id;
           const body = { token, amount, company, email, name };
           console.log(body);
@@ -115,8 +116,12 @@ export default {
               this.submitting = false;
             })
             .catch(e => {
-              console.error(e);
-              this.error = e.message;
+              // TODO this isnt working for the actual message...
+              // console.error(e);
+              // console.error(e.message);
+              // console.error(JSON.parse(e));
+              // this.error = e.message;
+              this.error = 'Sorry, there was an issue with you card';
             })
             .finally(() => {
               this.submitting = false;
