@@ -194,6 +194,7 @@ module.exports.subscribe = async event => {
       customer: customer.id,
       billing_cycle_anchor: start / 1000 || ~~(Date.now() / 1000),
       items: [{ plan }],
+      prorate: false,
     });
 
     console.log(subscription);

@@ -1,10 +1,10 @@
 <template>
   <section>
     <div>
-      <!-- <header class="site-header">
+      <header class="site-header">
         <page-header></page-header>
         <div id="title">Pay</div>
-      </header>-->
+      </header>
 
       <main>
         <section class="container">
@@ -56,7 +56,12 @@
               v-if="isSubscription"
             >Successfully setup ${{amount}}/month autopay for the {{ start | moment("Do") }} of every month.</span>
             <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
-            <div class="emojis">🎉🎊🙌🎈</div>
+            <div class="emojis">
+              <div>🎉</div>
+              <div>🎊</div>
+              <div>🙌</div>
+              <div>🎈</div>
+            </div>
           </section>
         </section>
       </main>
@@ -104,9 +109,11 @@ export default {
     this.name = name;
     this.type = type;
     this.plan = plan;
-    this.start = start ? moment(start, 'M-D-YYYY').toDate() : moment.toDate();
+    console.log(start);
+    this.start = start ? moment(start, 'M-D-YYYY').toDate() : moment().toDate();
     this.isSubscription = type === 'subscription';
     this.isOneTime = type === 'onetime';
+    console.log(this);
   },
 
   methods: {
@@ -122,6 +129,7 @@ export default {
       createToken()
         .then(data => {
           if (data.error) {
+            this.submitting = false;
             return (this.error = data.error.message);
           }
           const token = data.token.id;
@@ -150,7 +158,9 @@ export default {
               // console.error(e.message);
               // console.error(JSON.parse(e));
               // this.error = e.message;
-              this.error = 'Sorry, there was an issue with you card';
+              // console.log(e);
+              // console.log(e.response.data.message);
+              this.error = e.response.data.message;
             })
             .finally(() => {
               this.submitting = false;
@@ -159,6 +169,7 @@ export default {
         .catch(e => {
           console.error(e);
           this.error = e.message;
+          this.submitting = false;
         });
       // .finally(() => {
       //   this.submitting = false;
@@ -167,8 +178,17 @@ export default {
   },
 };
 </script> 
- 
+
 <style lang="scss">
+.site-header {
+  padding: 0;
+  .header-brand {
+    margin: 0 auto;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
 form#pay {
   width: 500px;
   margin: 0 auto;
@@ -198,11 +218,7 @@ button {
     opacity: 0.4;
   }
 }
-.site-header {
-  .header-brand {
-    margin: 0 auto;
-  }
-}
+
 #title {
   text-align: center;
   font-size: 18px;
@@ -221,37 +237,58 @@ $danger: #cf665b;
   text-align: center;
 }
 .emojis {
-  font-size: 26px;
-  animation-name: rubberBand;
+  div {
+    font-size: 36px;
+    display: inline-block;
+    padding: 5px;
+  }
+  div:nth-child(1) {
+    animation: shake #{random(7)}s 0s infinite;
+  }
+  div:nth-child(2) {
+    animation: shake #{random(7)}s 0s infinite;
+  }
+  div:nth-child(3) {
+    animation: shake #{random(7)}s 0s infinite;
+  }
+  div:nth-child(4) {
+    animation: shake #{random(7)}s 0s infinite;
+  }
 }
 
-@keyframes rubberBand {
-  from {
-    transform: scale3d(1, 1, 1);
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
   }
-
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
   30% {
-    transform: scale3d(1.25, 0.75, 1);
+    transform: translate(3px, 2px) rotate(0deg);
   }
-
   40% {
-    transform: scale3d(0.75, 1.25, 1);
+    transform: translate(1px, -1px) rotate(1deg);
   }
-
   50% {
-    transform: scale3d(1.15, 0.85, 1);
+    transform: translate(-1px, 2px) rotate(-1deg);
   }
-
-  65% {
-    transform: scale3d(0.95, 1.05, 1);
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
   }
-
-  75% {
-    transform: scale3d(1.05, 0.95, 1);
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
   }
-
-  to {
-    transform: scale3d(1, 1, 1);
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
   }
 }
 </style> 
