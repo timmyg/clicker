@@ -8,8 +8,8 @@ console.log(process.env.VUE_APP_API_URL);
 Vue.prototype.$http = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
   timeout: 8000,
+  // responseType: 'json',
 });
-
 
 Vue.config.productionTip = false;
 

@@ -58,10 +58,9 @@ import Analytics from './Analytics';
 
 Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
 Vue.use(VueScrollReveal);
+Vue.use(require('vue-moment'));
 Vue.use(VueBrowserUpdate, {
   options: {
-    // http://browser-update.org/
-    // latest version of safari
     required: { e: -1, f: -3, o: -3, s: 0, c: -3 },
     insecure: true,
     api: 2019.03,
