@@ -39,7 +39,7 @@
               </div>
               <input type="text" class="custom" v-model="company" />
             </div>
-            <div>
+            <div v-if="loadedStripe">
               <div class="label-wrapper">
                 <label>Credit Card</label>
               </div>
@@ -89,6 +89,7 @@ export default {
       company: null,
       email: null,
       name: null,
+      loadedStripe: false,
       stripeOptions: {
         style: {
           base: {
@@ -115,6 +116,17 @@ export default {
     this.isSubscription = type === 'subscription';
     this.isOneTime = type === 'onetime';
     console.log(this);
+  },
+
+  created() {
+    if (process.browser) {
+      let domElement = document.createElement('script');
+      domElement.setAttribute('src', 'https://js.stripe.com/v3/');
+      domElement.onload = () => {
+        this.loadedStripe = true;
+      };
+      document.body.appendChild(domElement);
+    }
   },
 
   methods: {
@@ -191,20 +203,23 @@ export default {
 
 <style lang="scss" scoped>
 form#pay {
-  width: 500px;
+  width: 300px;
   margin: 0 auto;
   & > div {
     margin-bottom: 10px;
   }
 }
 .label-wrapper {
-  width: 130px;
-  display: inline-block;
+  // width: 130px;
+  display: block;
+  label {
+    font-size: 10px;
+  }
 }
 .stripe-card,
 input {
   vertical-align: middle;
-  width: calc(100% - 130px);
+  width: 100%;
   display: inline-block;
   &.custom {
     background: transparent;
