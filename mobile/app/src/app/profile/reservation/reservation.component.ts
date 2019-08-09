@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import * as moment from 'moment';
-import { ActionSheetController, ModalController, AlertController, ToastController } from '@ionic/angular';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../state/app.reducer';
-import * as fromReservation from '../../state/reservation/reservation.actions';
 import { Router } from '@angular/router';
 
 interface TimeLeft {

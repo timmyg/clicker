@@ -4,9 +4,13 @@
 
 1. bump `package.json` version number
 2. native:
-   - android: `build.gradle` update **versionCode** and **versionName**
    - iOS: click on App in Xcode > General > update **Version** and **Build**
-3. `npm run build:android:prod && npm run build:ios:prod`
+   - android: `build.gradle` update **versionCode** and **versionName**
+3. merge to master
+4. `npm run build:android:prod && npm run build:ios:prod`
+5. build natively:
+   - iOS: Product > Archive
+   - android: Build > Generate Signed Bundle / APK > App Bundle > Release
 
 ###### screenshots
 

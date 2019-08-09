@@ -146,6 +146,68 @@ module.exports.replenish = async event => {
   return respond(200, updatedUser);
 };
 
+module.exports.charge = async event => {
+  try {
+    const { token, amount, email, company, name } = getBody(event);
+
+    // create customer in stripe
+    const customer = await stripe.customers.create({
+      source: token,
+      name: company,
+      description: name,
+      email,
+      receipt_email: email,
+    });
+
+    console.log(customer);
+
+    // charge via stripe
+    const charge = await stripe.charges.create({
+      customer: customer.id,
+      amount: amount * 100,
+      currency: 'usd',
+    });
+
+    console.log(charge);
+
+    return respond(200, charge);
+  } catch (e) {
+    return respond(400, e);
+  }
+};
+
+module.exports.subscribe = async event => {
+  try {
+    const { token, email, company, name, start, plan } = getBody(event);
+
+    // create customer in stripe
+    const customer = await stripe.customers.create({
+      source: token,
+      name: company,
+      description: name,
+      email,
+    });
+
+    console.log(customer);
+
+    // create subscription via stripe
+    const startTimestamp = ~~((start || Date.now()) / 1000);
+    console.log({ startTimestamp });
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      billing_cycle_anchor: startTimestamp,
+      items: [{ plan }],
+      prorate: false,
+    });
+
+    console.log(subscription);
+
+    return respond(200, subscription);
+  } catch (e) {
+    return respond(400, e);
+  }
+};
+
 module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
@@ -213,7 +275,6 @@ module.exports.verifyStart = async event => {
     return respond(400, e);
   }
 };
-
 
 module.exports.verify = async event => {
   const { phone, code } = getBody(event);
