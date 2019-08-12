@@ -88,7 +88,7 @@ export class UserEffects {
     switchMap((action: UserActions.AddFunds) =>
       this.userService.addFunds(action.plan).pipe(
         switchMap((result: any) => [new UserActions.AddFundsSuccess(result), new UserActions.Load()]),
-        catchError(err => of(new UserActions.LoadFail(err))),
+        catchError((err: UserActions.AddFundsFail) => of(new UserActions.AddFundsFail(err))),
       ),
     ),
   );
