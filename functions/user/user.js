@@ -160,7 +160,6 @@ module.exports.charge = async event => {
       name: company,
       description: name,
       email,
-      receipt_email: email,
     });
 
     console.log(customer);
@@ -168,6 +167,7 @@ module.exports.charge = async event => {
     // charge via stripe
     const charge = await stripe.charges.create({
       customer: customer.id,
+      receipt_email: email,
       amount: amount * 100,
       currency: 'usd',
     });
