@@ -3,8 +3,8 @@ import Login from '../components/LogIn';
 import Landing from '../components/Landing';
 import Privacy from '../components/Privacy';
 import Pay from '../components/Pay';
+import Brand from '../components/Brand';
 import PrivacyApp from '../components/PrivacyApp';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 export default [
   {
@@ -26,6 +26,11 @@ export default [
     path: '/pay',
     name: 'pay',
     component: Pay,
+  },
+  {
+    path: '/brand',
+    name: 'brand',
+    component: Brand,
   },
   {
     path: '/dev/dashboard',
