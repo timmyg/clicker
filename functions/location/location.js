@@ -52,6 +52,7 @@ const Location = dynamoose.model(
     connected: Boolean,
     setup: Boolean,
     controlCenter: Boolean,
+    announcement: String,
     // calculated fields
     distance: Number,
   },
