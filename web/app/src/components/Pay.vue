@@ -55,7 +55,7 @@
               v-if="isSubscription"
             >Successfully setup ${{amount}}/month autopay for the {{ start || now | moment("Do") }} of every month.</span>
             <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
-            <div class="emojis">
+            <div class="emojis mt-24">
               <div>🎉</div>
               <div>🎊</div>
               <div>🙌</div>
@@ -206,7 +206,8 @@ form#pay {
 .stripe-card,
 input {
   vertical-align: middle;
-  width: calc(100% - 130px);
+  // width: calc(100% - 130px);
+  width: 100%;
   display: inline-block;
   &.custom {
     background: transparent;

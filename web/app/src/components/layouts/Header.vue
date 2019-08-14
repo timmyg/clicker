@@ -8,7 +8,6 @@
         >
           <h1 class="m-0">
             <a href="./">
-              <!-- <img src="./dist/images/logo.svg" alt="Twist" width="32" height="32" /> -->
               <img
                 src="https://clicker-brand.s3.amazonaws.com/logo.png"
                 width="150"
@@ -17,7 +16,7 @@
             </a>
           </h1>
         </div>
-        <button
+        <!-- <button
           id="header-nav-toggle"
           class="header-nav-toggle"
           aria-controls="primary-menu"
@@ -45,7 +44,7 @@
               </li>
             </ul>
           </div>
-        </nav>
+        </nav>-->
       </div>
     </div>
   </header>

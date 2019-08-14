@@ -19,7 +19,7 @@
           <div class="footer-social">
             <ul class="list-reset">
               <li>
-                <a href="#">
+                <a href="https://www.facebook.com/tryclicker/" target="_blank">
                   <svg
                     width="16"
                     height="16"
@@ -33,7 +33,7 @@
                   </svg>
                 </a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="#">
                   <svg
                     width="16"
@@ -47,9 +47,9 @@
                     />
                   </svg>
                 </a>
-              </li>
+              </li>-->
               <li>
-                <a href="#">
+                <a href="https://www.instagram.com/clickertv" target="_blank">
                   <svg
                     width="16"
                     height="16"
@@ -76,16 +76,10 @@
           <nav class="footer-nav">
             <ul class="list-reset">
               <li>
-                <a href="#">Contact</a>
+                <a href="/privacy">Privacy</a>
               </li>
               <li>
-                <a href="#">About us</a>
-              </li>
-              <li>
-                <a href="#">FAQ's</a>
-              </li>
-              <li>
-                <a href="#">Support</a>
+                <a href="mailto:hello@tryclicker.com">Support</a>
               </li>
             </ul>
           </nav>
