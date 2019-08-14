@@ -4,11 +4,11 @@
       <div class="pricing-inner section-inner">
         <div class="section-header center-content invert-color">
           <div class="container-xs">
-            <h2 class="m-0">Simple pricing</h2>
+            <h2 class="m-0" v-scroll-reveal>Simple pricing</h2>
           </div>
         </div>
         <div class="tiles-wrap illustration-section-07">
-          <div class="tiles-item reveal-scale-up">
+          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 0 , origin: 'bottom'}">
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
@@ -36,7 +36,10 @@
               </div>
             </div>
           </div>
-          <div class="tiles-item reveal-scale-up" data-reveal-delay="200">
+          <div
+            class="tiles-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 200 , origin: 'bottom'}"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
@@ -71,7 +74,10 @@
               </div>
             </div>
           </div>
-          <div class="tiles-item reveal-scale-up" data-reveal-delay="400">
+          <div
+            class="tiles-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 400 , origin: 'bottom'}"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">

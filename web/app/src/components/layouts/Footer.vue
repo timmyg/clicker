@@ -1,7 +1,7 @@
 <template>
   <footer
     class="site-footer center-content-mobile illustration-section-08 reveal-from-bottom"
-    data-reveal-offset="0"
+    v-scroll-reveal="{ delay: 200 , origin: 'bottom'}"
   >
     <div class="container">
       <div class="site-footer-inner">

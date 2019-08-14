@@ -1,5 +1,13 @@
 <template>
-  <section class="cta section center-content-mobile">
+  <section
+    class="cta section center-content-mobile"
+    v-scroll-reveal="{
+  origin : 'right',
+  delay    : 20,
+  distance : '40px',
+  easing   : 'ease-in-out'
+  }"
+  >
     <div class="container">
       <div class="cta-inner section-inner cta-split has-top-divider has-bottom-divider">
         <div class="cta-slogan reveal-from-left is-revealed">
@@ -7,6 +15,7 @@
         </div>
         <form
           class="footer-form newsletter-form field field-grouped"
+          id="signup-form"
           v-on:submit.prevent="onSubmit"
         >
           <div class="control control-expanded">
