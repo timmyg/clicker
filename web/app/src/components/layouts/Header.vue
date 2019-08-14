@@ -88,3 +88,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+header {
+  top: 40px;
+}
+</style>

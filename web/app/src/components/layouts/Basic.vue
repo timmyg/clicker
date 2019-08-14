@@ -1,7 +1,6 @@
 <template>
   <div class="body-wrap">
     <div class="basic-layout">
-      <Header />
       <section class="main">
         <slot />
       </section>
@@ -14,7 +13,7 @@
 import Header from './Header';
 import Footer from './Footer';
 export default {
-  name: 'Analytics',
+  name: 'Basic',
   components: {
     Header,
     Footer,

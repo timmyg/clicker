@@ -1,10 +1,10 @@
 // import Dashboard from '../components-old/Dashboard';
 // import Login from '../components-old/LogIn';
 import Landing from '../components/landing/Landing';
-// import Privacy from '../components-old/Privacy';
-// import Pay from '../components-old/Pay';
+import Pay from '../components/Pay';
+import Privacy from '../components/Privacy';
+import PrivacyApp from '../components/PrivacyApp';
 // import Brand from '../components-old/Brand';
-// import PrivacyApp from '../components-old/PrivacyApp';
 
 export default [
   {
@@ -12,21 +12,21 @@ export default [
     name: 'landing',
     component: Landing,
   },
-  // {
-  //   path: '/privacy',
-  //   name: 'privacy',
-  //   component: Privacy,
-  // },
-  // {
-  //   path: '/app/privacy',
-  //   name: 'app-privacy',
-  //   component: PrivacyApp,
-  // },
-  // {
-  //   path: '/pay',
-  //   name: 'pay',
-  //   component: Pay,
-  // },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: Privacy,
+  },
+  {
+    path: '/app/privacy',
+    name: 'app-privacy',
+    component: PrivacyApp,
+  },
+  {
+    path: '/pay',
+    name: 'pay',
+    component: Pay,
+  },
   // {
   //   path: '/brand',
   //   name: 'brand',

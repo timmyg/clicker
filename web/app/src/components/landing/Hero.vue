@@ -1,5 +1,6 @@
 <template>
   <section class="hero section illustration-section-01">
+    <Header />
     <div class="container">
       <div class="hero-inner section-inner">
         <div class="split-wrap">
@@ -27,7 +28,10 @@
 </template>
 
 <script>
-export default {};
+import Header from '@/components/layouts/Header';
+export default {
+  components: { Header },
+};
 </script>
 
 <style lang="scss" scoped>
