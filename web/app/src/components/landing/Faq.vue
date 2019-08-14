@@ -38,7 +38,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Currently, we support DIRECTV and are adding more providers.</p>
+              <p>Currently, we support DIRECTV. Contact us with your provider if you are interested in another provider being added.</p>
             </div>
           </li>
           <li v-on:click="questionToggle(5)" :class="{'is-open': isOpen(5)}">
