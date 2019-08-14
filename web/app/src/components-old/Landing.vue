@@ -57,7 +57,14 @@ import Interested from './landing/Interested';
 import Analytics from './Analytics';
 
 Vue.use(VueIntercom, { appId: 'lp9l5d9l' });
-Vue.use(VueScrollReveal);
+Vue.use(VueScrollReveal, {
+  class: 'v-scroll-reveal', // A CSS class applied to elements with the v-scroll-reveal directive; useful for animation overrides.
+  duration: 800,
+  scale: 1,
+  distance: '10px',
+  mobile: false
+});
+console.log('SR');
 Vue.use(require('vue-moment'));
 Vue.use(VueBrowserUpdate, {
   options: {
