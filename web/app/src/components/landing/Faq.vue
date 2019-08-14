@@ -15,7 +15,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>It's simple! We'll send a small device that's already set up with your Wi-Fi. Then, we'll work with you to map your TV labels - a process that takes no more than 5 minutes.</p>
+              <p>It's simple! We'll install a small device that you plug into your internet router. We'll hook in your DirecTV boxes to that same router, then we'll work with you to map your TV labels - a process that only takes a few minutes.</p>
             </div>
           </li>
           <li
@@ -24,11 +24,18 @@
             v-scroll-reveal="{origin: 'right', delay: 80, distance : '10px' }"
           >
             <div class="accordion-title">
-              <span>What are tokens, and how do guests get them?</span>
+              <span>How do guests change the TVs themselves?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Tokens are credits your guests can use toward reserving TVs. When signing up, we give them a few to start out, and they can purchase more with a credit card.</p>
+              <p>
+                Tokens are credits your guests can use toward reserving TVs through the
+                <a
+                  href="http://onelink.to/thxs9v"
+                  class="brand-font"
+                  target="_blank"
+                >Clicker TV</a> app. When signing up, we give them a few to start out, and they can purchase more with a credit card.
+              </p>
             </div>
           </li>
           <li
@@ -68,8 +75,9 @@
             </div>
             <div class="accordion-body">
               <p>
-                We recommend having only a subset of your TVs on
-                <span class="brand-font">Clicker</span> to allow your staff to control your main TVs. Staff will still be able to manually change any TV at any time.
+                We recommend having 50-75% of your TVs on
+                <span class="brand-font">Control Center</span>, with only about 25% enabled with the
+                <span class="brand-font">Clicker TV</span> app. Staff will still be able to manually change any TV at any time.
               </p>
             </div>
           </li>

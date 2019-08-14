@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -12,7 +12,7 @@
 }
 
 .brand-font {
-  font-family: 'Saira', sans-serif;
+  font-family: 'Saira', sans-serif !important;
 }
 
 #app {

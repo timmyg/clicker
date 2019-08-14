@@ -6,10 +6,9 @@
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
               <h1 class="mt-0 mb-16" v-scroll-reveal>Let us manage your TVs</h1>
-              <p
-                class="m-0 mb-24"
-                v-scroll-reveal="{ delay: 200 , origin: 'left'}"
-              >Clicker ensures the most relevant local and national sports are on your TVs throughout the day.</p>
+              <p class="m-0 mb-24" v-scroll-reveal="{ delay: 200 , origin: 'left'}">
+                <span class="brand-font">Clicker</span> ensures the most relevant local and national sports are on your TVs throughout the day.
+              </p>
               <div v-scroll-reveal="{ delay: 400 }">
                 <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a>
               </div>
