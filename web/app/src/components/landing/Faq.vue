@@ -3,7 +3,7 @@
     <div class="pricing-inner section-inner">
       <!-- <h2 class="section-title mt-0 text-center">FAQs</h2> -->
       <div class="pricing-faqs container-sm">
-        <h4 class="mt-40 mb-32">FAQs</h4>
+        <h4 class="mt-40 mb-32" v-scroll-reveal>FAQs</h4>
         <ul class="accordion">
           <li
             v-on:click="questionToggle(1)"

@@ -538,3 +538,22 @@ textarea.form-input {
     }
   }
 }
+
+@include media('<medium') {
+  .field-grouped {
+    display: flex;
+    flex-flow: wrap;
+
+    > .control {
+      flex: 1 100%;
+      margin: 8px 0 !important;
+    }
+    //   flex-shrink: 0;
+
+    //   &.control-expanded {
+    //     flex-grow: 1;
+    //     flex-shrink: 1;
+    //   }
+    // }
+  }
+}

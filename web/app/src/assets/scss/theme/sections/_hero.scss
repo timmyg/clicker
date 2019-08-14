@@ -1,16 +1,14 @@
 .hero-inner {
-
-	.split-item {
-		margin-bottom: 16px;
-	}
+  .split-item {
+    margin-bottom: 16px;
+  }
 }
 
-@include media( '>medium' ) {
-
-	.hero-inner {
-
-		.split-item {
-			margin-bottom: 124px;
-		}
-	}
+@include media('>medium') {
+  .hero-inner {
+    .split-item {
+      padding-top: 68px;
+      margin-bottom: 124px;
+    }
+  }
 }
