@@ -18,7 +18,7 @@
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
               v-scroll-reveal="{ scale: .9}"
             >
-              <img src="/images/hero-image.svg" alt="Hero image" />
+              <img src="/images/landing/wall-tvs.png" alt="Wall with three tvs" />
             </div>
           </div>
         </div>

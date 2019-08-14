@@ -25,7 +25,7 @@
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-03">
-              <img src="/images/features-split-image-01.svg" alt="Features split image 01" />
+              <img src="/images/landing/tv-zones.png" alt="TV zones schedule" />
             </div>
           </div>
           <div class="split-item reveal-scale-up" v-scroll-reveal="{ delay: 200 , origin: 'right'}">
@@ -41,7 +41,7 @@
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-04">
-              <img src="/images/features-split-image-02.svg" alt="Features split image 02" />
+              <img src="/images/landing/wall-tv-zap.png" alt="Wall TV with app" />
             </div>
           </div>
           <div class="split-item reveal-scale-up" v-scroll-reveal="{ delay: 200 , origin: 'left'}">
@@ -54,7 +54,7 @@
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-05">
-              <img src="/images/features-split-image-03.svg" alt="Features split image 03" />
+              <img src="/images/landing/wall-tvs-more.png" alt="Wall with six tvs" />
             </div>
           </div>
         </div>
