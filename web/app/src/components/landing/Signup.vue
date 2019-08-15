@@ -32,7 +32,7 @@
               type="submit"
               :disabled="submitting"
               class="button button-primary button-block button-shadow"
-            >Sign up</button>
+            >I'm Interested</button>
           </div>
         </form>
       </div>

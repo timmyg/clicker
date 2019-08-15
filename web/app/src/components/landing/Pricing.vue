@@ -26,12 +26,12 @@
                   <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">
                       <span>
-                        Add your location in
+                        Your location added to
                         <b class="brand-font">Clicker TV</b> app
                       </span>
                     </li>
-                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">TV layout strategy guidance</li>
+                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">Email + chat support</li>
                   </ul>
                 </div>
@@ -62,14 +62,13 @@
                   <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">
                       <span>
-                        Remotely manage your TVs with
-                        <b class="brand-font">Control Center</b>
+                        <b class="brand-font">Control Center</b> automatically manages your TVs
                       </span>
                     </li>
                     <li class="is-checked">Sports programming guidance</li>
-                    <li class="is-checked">Weekly email with upcoming sports schedule</li>
-                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
+                    <li class="is-checked">Weekly email with upcoming TV sports schedule</li>
                     <li class="is-checked">TV layout strategy guidance</li>
+                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">Email + chat support</li>
                   </ul>
                 </div>

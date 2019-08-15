@@ -36,6 +36,6 @@ export default {
 
 <style lang="scss" scoped>
 .hero-inner {
-  padding-top: 80px;
+  padding-top: 24px;
 }
 </style>

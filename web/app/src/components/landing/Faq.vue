@@ -15,7 +15,7 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>It's simple! We'll install a small device that you plug into your internet router. We'll hook in your DirecTV boxes to that same router, then we'll work with you to map your TV labels - a process that only takes a few minutes.</p>
+              <p>It's simple! All you need is an internet connection. We'll install a small device and ensure your DIRECTV boxes are interenet enabled.</p>
             </div>
           </li>
           <li
@@ -29,12 +29,12 @@
             </div>
             <div class="accordion-body">
               <p>
-                Tokens are credits your guests can use toward reserving TVs through the
+                Guests can purchase tokens used toward reserving TVs through the
                 <a
                   href="http://onelink.to/thxs9v"
                   class="brand-font"
                   target="_blank"
-                >Clicker TV</a> app. When signing up, we give them a few to start out, and they can purchase more with a credit card.
+                >Clicker TV</a> app. When signing up, they start with a few free tokens, and they can purchase more with a credit card.
               </p>
             </div>
           </li>
@@ -48,7 +48,10 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Our platform allows for transparent reservations so that your guests will know which TVs are available to be reserved.</p>
+              <p>
+                The
+                <a href="http://onelink.to/thxs9v" class="brand-font" target="_blank">Clicker TV</a> app allows for transparent reservations so that your guests will know which TVs are available to be reserved.
+              </p>
             </div>
           </li>
           <li
@@ -61,7 +64,10 @@
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
-              <p>Currently, we support DIRECTV. Contact us with your provider if you are interested in another provider being added.</p>
+              <p>
+                Currently, we support
+                <a href="https://www.directv.com" target="_blank">DIRECTV</a>. Contact us with your provider if you are interested in another provider being added.
+              </p>
             </div>
           </li>
           <li
@@ -76,7 +82,7 @@
             <div class="accordion-body">
               <p>
                 We recommend having 50-75% of your TVs on
-                <span class="brand-font">Control Center</span>, with only about 25% enabled with the
+                <span class="brand-font">Control Center</span>, and around 25% enabled with the
                 <span class="brand-font">Clicker TV</span> app. Staff will still be able to manually change any TV at any time.
               </p>
             </div>

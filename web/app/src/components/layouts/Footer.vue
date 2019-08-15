@@ -7,14 +7,12 @@
       <div class="site-footer-inner">
         <div class="footer-top space-between text-xxs">
           <div class="brand">
-            <a href="./">
-              <img
-                src="https://clicker-brand.s3.amazonaws.com/logo-tv.png"
-                alt="Clicker logo"
-                width="32"
-                height="32"
-              />
-            </a>
+            <img
+              src="https://clicker-brand.s3.amazonaws.com/logo-tv.png"
+              alt="Clicker logo"
+              width="32"
+              height="32"
+            />
           </div>
           <div class="footer-social">
             <ul class="list-reset">

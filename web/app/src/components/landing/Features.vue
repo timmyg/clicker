@@ -7,8 +7,10 @@
             <h2 class="mt-0 mb-16">We'll take care of it</h2>
             <p>
               Clicker provides two products:
-              <b class="brand-font">Control Center</b> remotely manages the majority of your TVs, while the
-              <b class="brand-font">Clicker TV</b> app lets your guests control TVs from their phone.
+              <b class="brand-font">Control Center</b> automatically manages the majority of your TVs, while the
+              <b
+                class="brand-font"
+              >Clicker TV</b> app lets your guests change channels from their phone.
             </p>
           </div>
         </div>
@@ -21,7 +23,7 @@
               <h3 class="mt-0 mb-16">Right Game, Right TV, Right Time</h3>
               <p class="m-0">
                 With
-                <b class="brand-font">Control Center</b>, we'll work closely to learn your location's sports preferences and ensure those are on your TVs - without your staff having to lift a finger.
+                <b class="brand-font">Control Center</b>, we'll work closely to learn your location's sports preferences and put those on your TVs throughout the day - without your staff having to lift a finger.
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-03">
@@ -33,7 +35,7 @@
               <h3 class="mt-0 mb-16">Empower Your Guests to Change the Game</h3>
               <p class="m-0">
                 After downloading the
-                <b class="brand-font">Clicker TV</b> app, your guests can choose the sports they want to watch on your TVs instantly from their phone.
+                <b class="brand-font">Clicker TV</b> app, your guests can choose the sports they want to watch and change the channel instantly from their phone.
                 <a
                   href="http://onelink.to/thxs9v"
                   target="_blank"
