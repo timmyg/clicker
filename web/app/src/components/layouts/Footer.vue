@@ -74,6 +74,9 @@
           <nav class="footer-nav">
             <ul class="list-reset">
               <li>
+                <a href="/brand">Brand</a>
+              </li>
+              <li>
                 <a href="/privacy">Privacy</a>
               </li>
               <li>

@@ -6,15 +6,17 @@
           class="brand"
           v-scroll-reveal.reset="{ easing: 'cubic-bezier(0.5, 0, 0, 1)', distance: '10px', origin: 'top', rotate : { z: -20 }}"
         >
-          <h1 class="m-0">
-            <a href="./">
-              <img
-                src="https://clicker-brand.s3.amazonaws.com/logo.png"
-                width="150"
-                alt="Clicker logo"
-              />
-            </a>
-          </h1>
+          <a href="./">
+            <img
+              src="https://clicker-brand.s3.amazonaws.com/logo.png"
+              width="150"
+              alt="Clicker logo"
+            />
+            <div
+              class="subtitle"
+              v-scroll-reveal.reset="{ origin: 'right', delay: 500}"
+            >{{subtitle}}</div>
+          </a>
         </div>
         <!-- <button
           id="header-nav-toggle"
@@ -55,6 +57,7 @@
 
 <script>
 export default {
+  props: ['subtitle'],
   mounted() {
     // 'use strict';
     const navToggle = document.getElementById('header-nav-toggle');
@@ -91,5 +94,13 @@ export default {
 <style lang="scss" scoped>
 header {
   top: 40px;
+  .subtitle {
+    text-align: center;
+    color: black;
+    font-size: 16px;
+  }
+}
+a {
+  text-decoration: none !important;
 }
 </style>

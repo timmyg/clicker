@@ -1,10 +1,6 @@
 <template>
-  <section>
-    <div>
-      <Header>
-        <div id="title">Pay</div>
-      </Header>
-
+  <layout-basic>
+      <Header v-bind:subtitle="'Pay'" />
       <main>
         <section class="container">
           <form id="pay" v-on:submit.prevent="pay" v-if="!completed">
@@ -69,13 +65,13 @@
           </section>
         </section>
       </main>
-    </div>
-  </section>
+  </layout-basic>
 </template>
 
 <script>
 import { Card, createToken } from 'vue-stripe-elements-plus';
 import Header from '@/components/layouts/Header';
+import LayoutBasic from '@/components/layouts/Basic';
 import * as moment from 'moment';
 
 export default {
@@ -106,7 +102,7 @@ export default {
     };
   },
 
-  components: { Card, Header },
+  components: { Card, Header, LayoutBasic },
 
   mounted: function() {
     const { amount, company, email, name, type, start, plan } = this.$route.query;
