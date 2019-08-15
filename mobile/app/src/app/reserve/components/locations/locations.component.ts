@@ -21,7 +21,6 @@ import { Storage } from '@ionic/storage';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
 import { Intercom } from 'ng-intercom';
-import { environment } from 'src/environments/environment';
 
 const permissionGeolocation = {
   name: 'permission.geolocation',
@@ -56,6 +55,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   waiting: boolean;
   showHidden = false;
   sub: Subscription;
+  milesRadius = 0.1;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -77,8 +77,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
     this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(() => {
-      console.log('HIDDEN TOOGLE');
       this.showHidden = !this.showHidden;
+      if (this.showHidden) {
+        this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+      }
     });
   }
 
@@ -138,7 +140,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     await Geolocation.getCurrentPosition().then(response => {
       const { latitude, longitude } = response.coords;
       this.userGeolocation = { latitude, longitude };
-      this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+      this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
       this.store.dispatch(new fromUser.Refresh());
       this.actions$
         .pipe(
@@ -236,13 +238,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
           const { latitude, longitude } = response.coords;
           this.userGeolocation = { latitude, longitude };
-          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+          console.log(this.userGeolocation, this.milesRadius);
+          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
           this.reserveService.emitShowingLocations();
         })
         .catch(async error => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
-          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
           this.reserveService.emitShowingLocations();
           console.error('Error getting location', error);
           const whoops = await this.toastController.create({
@@ -253,11 +256,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
           });
           whoops.present();
         });
-    } else if (permissionStatus === permissionGeolocation.values.denied) {
-      this.askForGeolocation$.next(false);
-      this.evaluatingGeolocation = false;
-      this.reserveService.emitShowingLocations();
-      this.store.dispatch(new fromLocation.GetAll());
     } else {
       this.askForGeolocation$.next(true);
       this.evaluatingGeolocation = false;

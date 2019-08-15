@@ -15,7 +15,7 @@ export const TURN_OFF_FAIL = '[LOCATION] Turn Off Fail';
 // Get Location List
 export class GetAll implements Action {
   readonly type = GET_ALL_LOCATIONS;
-  constructor(public geolocation?: Geolocation) {}
+  constructor(public geolocation?: Geolocation, public miles?: number) {}
 }
 
 export class GetAllSuccess implements Action {
