@@ -11,7 +11,7 @@
     <div class="container">
       <div class="cta-inner section-inner cta-split has-top-divider has-bottom-divider">
         <div class="cta-slogan reveal-from-left is-revealed">
-          <h3 class="m-0">Unleash the future of sports programming.</h3>
+          <h4 class="m-0">Unleash the future of sports programming.</h4>
         </div>
         <p v-if="submitted" class="success">Thank you! We'll be in contact.</p>
         <p
@@ -86,6 +86,9 @@ export default {
 }
 .center {
   margin: 0 auto;
+}
+input {
+  min-width: 260px;
 }
 @include media('<medium') {
   .field-grouped {
