@@ -8,6 +8,7 @@ export interface Location {
   boxes: TV[];
   distance?: number;
   img: string;
+  announcement?: string;
   ip: string;
   zip: number;
   free?: boolean;
