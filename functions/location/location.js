@@ -116,7 +116,7 @@ module.exports.allv2 = async event => {
       locations[i].distance = roundedMiles;
     }
   });
-  const nearLocations = allLocations.filter(l => l.distance <= 10);
+  const nearLocations = allLocations.filter(l => l.distance <= milesRadius);
   const sorted = nearLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
 };
