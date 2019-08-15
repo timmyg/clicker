@@ -42,7 +42,12 @@
               <div class="label-wrapper">
                 <label>Credit Card</label>
               </div>
-              <card class="stripe-card" :stripe="stripePublishableKey" :options="stripeOptions" />
+              <card
+                v-if="loadedStripe"
+                class="stripe-card"
+                :stripe="stripePublishableKey"
+                :options="stripeOptions"
+              />
             </div>
             <p class="error" v-if="error">{{error}}</p>
             <button class="button button-primary button-block button-shadow" :disabled="submitting">
@@ -81,6 +86,7 @@ export default {
       submitting: false,
       isSubscription: false,
       isOneTime: false,
+      loadedStripe: false,
       error: null,
       start: null,
       now: moment().toDate(),
@@ -115,6 +121,17 @@ export default {
     this.isSubscription = type === 'subscription';
     this.isOneTime = type === 'onetime';
     // console.log(this);
+  },
+
+  created() {
+    if (process.browser) {
+      let domElement = document.createElement('script');
+      domElement.setAttribute('src', 'https://js.stripe.com/v3/');
+      domElement.onload = () => {
+        this.loadedStripe = true;
+      };
+      document.body.appendChild(domElement);
+    }
   },
 
   methods: {
