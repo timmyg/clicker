@@ -240,7 +240,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
           const { latitude, longitude } = response.coords;
           this.userGeolocation = { latitude, longitude };
-          console.log(this.userGeolocation, this.milesRadius);
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
           this.reserveService.emitShowingLocations();
         })

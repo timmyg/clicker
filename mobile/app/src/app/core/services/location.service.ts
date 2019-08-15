@@ -12,7 +12,6 @@ export class LocationService {
 
   getAll(geolocation?: Geolocation, miles?: number): Observable<Location[]> {
     let url = this.prefix;
-    console.log(geolocation, miles);
     const { latitude, longitude } = { ...geolocation };
     let params;
     if (miles) {
