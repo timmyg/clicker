@@ -165,7 +165,7 @@
   width: $width;
   max-width: $width;
   height: $height;
-  background-image: url(/images/#{$file});
+  background-image: url(/images/theme/#{$file});
   background-repeat: no-repeat;
   background-position: center;
   @if (unit($height) == '%') {
