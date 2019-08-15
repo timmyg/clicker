@@ -1,80 +1,41 @@
 <template>
-  <div class="container">
-    <div class="flex-grid wrapper">
-      <div class="hero-copy col">
-        <h1 class="listen-up">
-          Change the game.
-          <br />Literally.
-        </h1>
-        <p
-          class="hero-paragraph"
-        >Empower guests at your bar or restaurant to change the channel easily from their phone.</p>
-        <signup></signup>
-      </div>
-      <div class="hero-illustration col">
-        <!-- <div class="flex-grid img-wrapper"> -->
-        <hero-image></hero-image>
-        <!-- </div> -->
+  <section class="hero section illustration-section-01">
+    <Header />
+    <div class="container">
+      <div class="hero-inner section-inner">
+        <div class="split-wrap">
+          <div class="split-item">
+            <div class="hero-content split-item-content center-content-mobile">
+              <h1 class="mt-0 mb-16" v-scroll-reveal>Let us manage your TVs</h1>
+              <p class="m-0 mb-24" v-scroll-reveal="{ delay: 200 , origin: 'left'}">
+                <span class="brand-font">Clicker</span> ensures the most relevant local and national sports are on your TVs throughout the day.
+              </p>
+              <div v-scroll-reveal="{ delay: 400 }">
+                <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a>
+              </div>
+            </div>
+            <div
+              class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
+              v-scroll-reveal="{ scale: .9}"
+            >
+              <img src="/images/landing/wall-tvs.png" alt="Wall with three tvs" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
-import HeroImage from './HeroImage';
-import Signup from './Signup';
+import Header from '@/components/layouts/Header';
 export default {
-  name: 'Hero',
-  components: {
-    HeroImage,
-    Signup,
-  },
+  components: { Header },
 };
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  flex-direction: column;
-}
-.img-wrapper {
-  justify-content: center;
-}
-.hero-illustration {
-  background-image: url(/img/wall.svg);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position-y: 20px;
-  height: 360px;
-  flex: 1 auto;
-}
-
-@include media('>large') {
-  .hero > div {
-    min-height: 350px;
-  }
-  .hero-illustration {
-    background-image: url(/img/wall-sm.svg);
-    background-position-y: 0px;
-    height: inherit;
-  }
-  .hero-paragraph {
-    margin-bottom: 32px;
-    max-width: 380px;
-  }
-}
-@include media('>small') {
-  .hero-copy {
-    text-align: left;
-    padding-right: 30px;
-  }
-}
-
-@include media('<medium') {
-  .mobile-break {
-    display: inline-block;
-  }
-  .hero-illustration {
-    display: none;
-  }
+.hero-inner {
+  padding-top: 24px;
 }
 </style>

@@ -4,6 +4,7 @@ import store from '../state/store';
 import routes from './routes';
 
 Vue.use(Router);
+Vue.use(require('vue-moment'));
 
 const router = new Router({
   routes,

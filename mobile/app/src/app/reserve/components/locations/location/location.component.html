@@ -8,8 +8,11 @@
         <ion-card-subtitle>
           <span
             >{{ location.neighborhood }} <span *ngIf="!isAvailable()">(inactive)</span>
-            <ion-chip color="primary" *ngIf="location.free"> <label color="primary"> Free </label></ion-chip></span
-          >
+            <ion-chip color="primary" *ngIf="location.free"> <label color="primary"> Free </label></ion-chip>
+            <ion-chip color="primary" *ngIf="location.announcement">
+              <label color="primary"> {{ location.announcement }}</label></ion-chip
+            >
+          </span>
           <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { Location } from '../../state/location/location.model';
@@ -10,13 +10,17 @@ export class LocationService {
   private prefix = `locations`;
   constructor(private httpClient: HttpClient) {}
 
-  getAll(geolocation?: Geolocation): Observable<Location[]> {
+  getAll(geolocation?: Geolocation, miles?: number): Observable<Location[]> {
     let url = this.prefix;
     const { latitude, longitude } = { ...geolocation };
+    let params;
+    if (miles) {
+      params = new HttpParams().set('miles', miles.toString());
+    }
     if (latitude && longitude) {
       url += `/geo/${latitude}/${longitude}`;
     }
-    return this.httpClient.get<Location[]>(url);
+    return this.httpClient.get<Location[]>(url, { params });
   }
 
   get(locationId: string): Observable<Location> {

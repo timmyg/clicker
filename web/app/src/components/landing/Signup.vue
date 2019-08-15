@@ -1,25 +1,43 @@
 <template>
-  <p v-if="submitted" class="success">Thank you! We'll be in contact.</p>
-  <p
-    v-else-if="error"
-    class="error"
-  >Oh no! Something is wrong on our end. We've been alerted, please try again in a bit.</p>
-  <form
-    class="footer-form newsletter-form field field-grouped"
-    v-on:submit.prevent="onSubmit"
-    v-else
+  <section
+    class="cta section center-content-mobile"
+    v-scroll-reveal="{
+  origin : 'right',
+  delay    : 20,
+  distance : '40px',
+  easing   : 'ease-in-out'
+  }"
   >
-    <div class="control control-expanded">
-      <input class="input" type="email" placeholder="Enter your email" v-model.trim="email" />
+    <div class="container">
+      <div class="cta-inner section-inner cta-split has-top-divider has-bottom-divider">
+        <div class="cta-slogan reveal-from-left is-revealed">
+          <h3 class="m-0">Unleash the future of sports programming.</h3>
+        </div>
+        <p v-if="submitted" class="success">Thank you! We'll be in contact.</p>
+        <p
+          v-else-if="error"
+          class="error"
+        >Oh no! Something is wrong on our end. We've been alerted, please try again in a bit.</p>
+        <form
+          class="footer-form newsletter-form field field-grouped"
+          id="signup-form"
+          v-on:submit.prevent="onSubmit"
+          v-else
+        >
+          <div class="control control-expanded">
+            <input class="input" type="email" placeholder="Enter your email" v-model.trim="email" />
+          </div>
+          <div class="control">
+            <button
+              type="submit"
+              :disabled="submitting"
+              class="button button-primary button-block button-shadow"
+            >I'm Interested</button>
+          </div>
+        </form>
+      </div>
     </div>
-    <div class="control">
-      <button
-        type="submit"
-        :disabled="submitting"
-        class="button button-primary button-block button-shadow"
-      >Learn More</button>
-    </div>
-  </form>
+  </section>
 </template>
 
 <script>
@@ -40,7 +58,9 @@ export default {
       console.log('$analytics');
       console.log(this.$analytics);
       console.log(email);
-      this.$analytics.alias(email);
+      if (this.$analytics) {
+        this.$analytics.alias(email);
+      }
       this.$http
         .post('/leads', { email })
         .then(() => {
@@ -58,18 +78,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button[type='submit'] {
-  display: inline-flex;
-  &[disabled] {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-}
 .error {
-  color: color(additional-2, 1);
+  color: get-color(alert, error);
 }
 .success {
-  color: color(additional, 3);
+  color: get-color(alert, success);
 }
 .center {
   margin: 0 auto;
@@ -83,4 +96,3 @@ button[type='submit'] {
   }
 }
 </style>
-

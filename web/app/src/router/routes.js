@@ -1,10 +1,10 @@
-import Dashboard from '../components/Dashboard';
-import Login from '../components/LogIn';
-import Landing from '../components/Landing';
-import Privacy from '../components/Privacy';
+// import Dashboard from '../components-old/Dashboard';
+// import Login from '../components-old/LogIn';
+import Landing from '../components/landing/Landing';
 import Pay from '../components/Pay';
-import Brand from '../components/Brand';
+import Privacy from '../components/Privacy';
 import PrivacyApp from '../components/PrivacyApp';
+// import Brand from '../components-old/Brand';
 
 export default [
   {
@@ -27,28 +27,28 @@ export default [
     name: 'pay',
     component: Pay,
   },
-  {
-    path: '/brand',
-    name: 'brand',
-    component: Brand,
-  },
-  {
-    path: '/dev/dashboard',
-    name: 'dashboard',
-    component: Dashboard,
-    meta: {
-      authRequired: true,
-    },
-  },
-  {
-    path: '/dev/login',
-    name: 'login',
-    component: Login,
-  },
-  {
-    path: '/404',
-    name: '404',
-    component: 404,
-    props: true,
-  },
+  // {
+  //   path: '/brand',
+  //   name: 'brand',
+  //   component: Brand,
+  // },
+  // {
+  //   path: '/dev/dashboard',
+  //   name: 'dashboard',
+  //   component: Dashboard,
+  //   meta: {
+  //     authRequired: true,
+  //   },
+  // },
+  // {
+  //   path: '/dev/login',
+  //   name: 'login',
+  //   component: Login,
+  // },
+  // {
+  //   path: '/404',
+  //   name: '404',
+  //   component: 404,
+  //   props: true,
+  // },
 ];

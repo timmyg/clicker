@@ -1,10 +1,9 @@
 <template>
   <section>
     <div>
-      <header class="site-header-center">
-        <page-header></page-header>
+      <Header>
         <div id="title">Pay</div>
-      </header>
+      </Header>
 
       <main>
         <section class="container">
@@ -56,7 +55,7 @@
               v-if="isSubscription"
             >Successfully setup ${{amount}}/month autopay for the {{ start || now | moment("Do") }} of every month.</span>
             <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
-            <div class="emojis">
+            <div class="emojis mt-24">
               <div>🎉</div>
               <div>🎊</div>
               <div>🙌</div>
@@ -71,11 +70,12 @@
 
 <script>
 import { Card, createToken } from 'vue-stripe-elements-plus';
-import PageHeader from './landing/PageHeader';
+import Header from '@/components/layouts/Header';
 import * as moment from 'moment';
 
 export default {
   data() {
+    console.log(process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY);
     return {
       completed: false,
       submitting: false,
@@ -100,7 +100,7 @@ export default {
     };
   },
 
-  components: { Card, PageHeader },
+  components: { Card, Header },
 
   mounted: function() {
     const { amount, company, email, name, type, start, plan } = this.$route.query;
@@ -110,11 +110,11 @@ export default {
     this.name = name;
     this.type = type;
     this.plan = plan;
-    console.log(start);
+    // console.log(start);
     this.start = start ? moment(start, 'M-D-YYYY').toDate() : null;
     this.isSubscription = type === 'subscription';
     this.isOneTime = type === 'onetime';
-    console.log(this);
+    // console.log(this);
   },
 
   methods: {
@@ -191,25 +191,29 @@ export default {
 
 <style lang="scss" scoped>
 form#pay {
-  width: 500px;
+  width: inherit;
   margin: 0 auto;
   & > div {
     margin-bottom: 10px;
   }
 }
 .label-wrapper {
-  width: 130px;
+  // width: 130px;
+  width: 100%;
+  font-size: 12px;
   display: inline-block;
 }
 .stripe-card,
 input {
   vertical-align: middle;
-  width: calc(100% - 130px);
+  // width: calc(100% - 130px);
+  width: 100%;
   display: inline-block;
   &.custom {
     background: transparent;
     border: none;
     border-bottom: 1px solid lightgrey;
+    width: 100%;
   }
 }
 button {

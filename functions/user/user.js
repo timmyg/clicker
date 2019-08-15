@@ -122,28 +122,32 @@ module.exports.removeCard = async event => {
 };
 
 module.exports.replenish = async event => {
-  const userId = getUserId(event);
-  const plan = getBody(event);
-  const user = await User.queryOne('id')
-    .eq(userId)
-    .exec();
-  // TODO audit plan
+  try {
+    const userId = getUserId(event);
+    const plan = getBody(event);
+    const user = await User.queryOne('id')
+      .eq(userId)
+      .exec();
+    // TODO audit plan
 
-  const { dollars, tokens } = plan;
+    const { dollars, tokens } = plan;
 
-  // charge via stripe
-  const charge = await stripe.charges.create({
-    amount: dollars * 100,
-    currency: 'usd',
-    customer: user.stripeCustomer,
-  });
+    // charge via stripe
+    const charge = await stripe.charges.create({
+      amount: dollars * 100,
+      currency: 'usd',
+      customer: user.stripeCustomer,
+    });
 
-  // TODO audit
+    // TODO audit
 
-  // update user
-  const updatedUser = await User.update({ id: userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+    // update user
+    const updatedUser = await User.update({ id: userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
 
-  return respond(200, updatedUser);
+    return respond(200, updatedUser);
+  } catch (e) {
+    return respond(400, e);
+  }
 };
 
 module.exports.charge = async event => {
