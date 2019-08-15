@@ -55,7 +55,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   waiting: boolean;
   showHidden = false;
   sub: Subscription;
-  milesRadius = 0.1;
+  milesRadius = 10;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -80,6 +80,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
       this.showHidden = !this.showHidden;
       if (this.showHidden) {
         this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+      } else {
+        this.refresh();
       }
     });
   }
