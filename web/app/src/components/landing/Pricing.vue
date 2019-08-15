@@ -1,83 +1,135 @@
 <template>
-  <div class="container">
-    <div class="pricing-inner section-inner">
-      <h2 class="section-title mt-0 text-center">Pricing</h2>
-      <div>
-        <div class="pricing-tables-wrap">
-          <div class="pricing-table ">
-            <div class="pricing-table-inner">
-              <div class="pricing-table-main">
-                <div class="pricing-table-header mb-24 pb-24">
-                  <div class="pricing-table-title h4 mt-0 mb-16">Startup</div>
-                  <div class="pricing-table-price">
-                    <span class="pricing-table-price-currency">$</span>
-                    <span class="pricing-table-price-amount h1">29</span>/m
+  <section class="pricing section illustration-section-03">
+    <div class="container">
+      <div class="pricing-inner section-inner">
+        <div class="section-header center-content invert-color">
+          <div class="container-xs">
+            <h2 class="m-0" v-scroll-reveal>Simple pricing packages</h2>
+          </div>
+        </div>
+        <div class="tiles-wrap illustration-section-07">
+          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 0 , origin: 'bottom'}">
+            <div class="tiles-item-inner has-shadow">
+              <div class="pricing-item-content">
+                <div class="pricing-item-header pb-16 mb-24">
+                  <div class="pricing-item-price mb-4">
+                    <span class="pricing-item-price-currency h5 text-color-low">$</span>
+                    <span class="pricing-item-price-amount h4">30</span>
+                    <span class="text-color-low text-xs">/month</span>
+                    <span class="pricing-item-name brand-font h5">Assistant Coach</span>
                   </div>
                 </div>
-                <ul class="pricing-table-features list-reset text-xs">
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                </ul>
+                <div class="pricing-item-features mb-40">
+                  <div class="pricing-item-features-title fw-500 text-xs text-color-high">
+                    <b>What's included</b>
+                  </div>
+                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                    <li class="is-checked">
+                      <span>
+                        Your location added to
+                        <b class="brand-font">Clicker TV</b> app
+                      </span>
+                    </li>
+                    <li class="is-checked">TV layout strategy guidance</li>
+                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
+                    <li class="is-checked">Email + chat support</li>
+                  </ul>
+                </div>
               </div>
-              <div class="pricing-table-cta">
-                <a
-                  class="button button-secondary button-shadow button-block"
-                  href="#"
-                >Get started</a>
+              <div class="pricing-item-cta mb-8">
+                <a class="button button-primary button-block" href="#signup-form">Learn More</a>
               </div>
             </div>
           </div>
-          <div class="pricing-table ">
-            <div class="pricing-table-inner">
-              <div class="pricing-table-main">
-                <div class="pricing-table-header mb-24 pb-24">
-                  <div class="pricing-table-title h4 mt-0 mb-16">Enterprise</div>
-                  <div class="pricing-table-price">
-                    <span class="pricing-table-price-currency">$</span>
-                    <span class="pricing-table-price-amount h1">49</span>/m
+          <div
+            class="tiles-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 200 , origin: 'bottom'}"
+          >
+            <div class="tiles-item-inner has-shadow">
+              <div class="pricing-item-content">
+                <div class="pricing-item-header pb-16 mb-24">
+                  <div class="pricing-item-price mb-4">
+                    <span class="pricing-item-price-currency h5 text-color-low">$</span>
+                    <span class="pricing-item-price-amount h4">30</span>
+                    <span class="text-color-low text-xs">/month</span>
+                    <span class="pricing-item-name brand-font h5">Advanced Scout</span>
                   </div>
                 </div>
-                <ul class="pricing-table-features list-reset text-xs">
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                  <li>
-                    <span>Lorem ipsum dolor sit amet</span>
-                  </li>
-                </ul>
+                <div class="pricing-item-features mb-40">
+                  <div class="pricing-item-features-title fw-500 text-xs text-color-high">
+                    <b>What's included</b>
+                  </div>
+                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                    <li class="is-checked">
+                      <span>
+                        <b class="brand-font">Control Center</b> automatically manages your TVs
+                      </span>
+                    </li>
+                    <li class="is-checked">Sports programming guidance</li>
+                    <li class="is-checked">Weekly email with upcoming TV sports schedule</li>
+                    <li class="is-checked">TV layout strategy guidance</li>
+                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
+                    <li class="is-checked">Email + chat support</li>
+                  </ul>
+                </div>
               </div>
-              <div class="pricing-table-cta">
-                <a
-                  class="button button-primary button-shadow button-block"
-                  href="#"
-                >Get started</a>
+              <div class="pricing-item-cta mb-8">
+                <a class="button button-primary button-block" href="#signup-form">Learn More</a>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tiles-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 400 , origin: 'bottom'}"
+          >
+            <div class="tiles-item-inner has-shadow">
+              <div class="pricing-item-content">
+                <div class="pricing-item-header pb-16 mb-24">
+                  <div class="pricing-item-price mb-4">
+                    <span class="pricing-item-price-currency h5 text-color-low">$</span>
+                    <span class="pricing-item-price-amount h4">50</span>
+                    <span class="text-color-low text-xs">/month</span>
+                    <span class="pricing-item-name brand-font h5">General Manager</span>
+                  </div>
+                </div>
+                <div class="pricing-item-features mb-40">
+                  <div class="pricing-item-features-title fw-500 text-xs text-color-high">
+                    <b>What's included</b>
+                  </div>
+                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                    <li class="is-checked">
+                      <span>
+                        Everything in
+                        <span class="brand-font">Assistant Coach</span> +
+                        <span class="brand-font">Advanced Scout</span>
+                        packages
+                      </span>
+                    </li>
+                    <li class="is-checked">Email, chat + phone support</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="pricing-item-cta mb-8">
+                <a class="button button-primary button-block" href="#signup-form">Learn More</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
-<script>
-export default {
-  name: 'Pricing',
-};
-</script>
+<style lang="scss" scoped>
+.pricing-item-name {
+  float: right;
+  margin: 0;
+}
+.pricing-item-price-currency {
+  vertical-align: top;
+  padding-right: 2px;
+}
+ul.pricing-item-features-list li:before {
+  display: none;
+}
+</style>

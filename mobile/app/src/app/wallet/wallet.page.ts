@@ -132,34 +132,54 @@ export class WalletPage {
     });
   }
 
-  purchase() {
+  async purchase() {
     this.waiting = true;
     this.store.dispatch(new fromUser.AddFunds(this.selectedPlan));
-    setTimeout(async () => {
-      this.waiting = false;
-      const toast = await this.toastController.create({
-        message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens. 🎉`,
-        duration: 3000,
-        cssClass: 'ion-text-center',
-      });
-      toast.present();
-      this.onClose();
-      this.segment.track(this.globals.events.payment.fundsAdded, {
-        amount: this.selectedPlan.dollars,
-      });
-      this.store
-        .select(getUserId)
-        .pipe(first(val => !!val))
-        .subscribe(async userId => {
-          this.segment.identify(
-            userId,
-            { paid: true },
-            {
-              Intercom: { hideDefaultLauncher: true },
-            },
-          );
+
+    this.actions$
+      .pipe(
+        ofType(fromUser.ADD_FUNDS_SUCCESS),
+        take(1),
+      )
+      .subscribe(async () => {
+        this.waiting = false;
+        const toast = await this.toastController.create({
+          message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens. 🎉`,
+          duration: 3000,
+          cssClass: 'ion-text-center',
         });
-    }, 3000);
+        toast.present();
+        this.onClose();
+        this.segment.track(this.globals.events.payment.fundsAdded, {
+          amount: this.selectedPlan.dollars,
+        });
+        this.store
+          .select(getUserId)
+          .pipe(first(val => !!val))
+          .subscribe(async userId => {
+            this.segment.identify(
+              userId,
+              { paid: true },
+              {
+                Intercom: { hideDefaultLauncher: true },
+              },
+            );
+          });
+      });
+    this.actions$
+      .pipe(ofType(fromUser.ADD_FUNDS_FAIL))
+      .pipe(first())
+      .subscribe(async (err: fromUser.AddFundsFail) => {
+        console.error('add funds failed', err.payload.error.message);
+        this.waiting = false;
+        const toast = await this.toastController.create({
+          color: 'danger',
+          message: err.payload.error.message,
+          duration: 3000,
+          cssClass: 'ion-text-center',
+        });
+        toast.present();
+      });
   }
 
   async onAmountChange(e) {

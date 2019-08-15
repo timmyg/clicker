@@ -52,6 +52,7 @@ const Location = dynamoose.model(
     connected: Boolean,
     setup: Boolean,
     controlCenter: Boolean,
+    announcement: String,
     // calculated fields
     distance: Number,
   },
@@ -64,6 +65,8 @@ module.exports.all = async event => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   const { partner } = event.headers;
+  const milesRadius =
+    event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
 
   if (pathParams) {
     latitude = pathParams.latitude;
@@ -72,6 +75,7 @@ module.exports.all = async event => {
   let allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
+    delete l.losantId;
     if (latitude && longitude) {
       const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
       const meters = geolib.getDistanceSimple(
@@ -83,7 +87,9 @@ module.exports.all = async event => {
       locations[i].distance = roundedMiles;
     }
   });
-  // allLocations = allLocations.filter(l => !l.hidden);
+  if (milesRadius) {
+    allLocations = allLocations.filter(l => l.distance <= milesRadius);
+  }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
 };

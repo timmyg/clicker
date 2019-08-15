@@ -1,9 +1,7 @@
 <template>
   <section>
     <div>
-      <header class="site-header">
-        <page-header></page-header>
-      </header>
+      <Header />
 
       <main>
         <section class="container">
@@ -89,11 +87,11 @@
 </template>
 
 <script>
-import PageHeader from './landing/PageHeader';
+import Header from '@/components/layouts/Header';
 
 export default {
   components: {
-    PageHeader,
+    Header,
   },
 };
 </script>
