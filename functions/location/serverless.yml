@@ -100,6 +100,18 @@ functions:
               - partner
               - authorization
               - content-type
+  allByGeolocationv2:
+    handler: location.allv2
+    events:
+      - http:
+          path: '/v2/geo/{latitude}/{longitude}'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   get:
     handler: location.get
     events:

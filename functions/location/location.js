@@ -73,6 +73,7 @@ module.exports.all = async event => {
   let allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
+    delete l.losantId;
     if (latitude && longitude) {
       const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
       const meters = geolib.getDistanceSimple(
@@ -86,6 +87,36 @@ module.exports.all = async event => {
   });
   // allLocations = allLocations.filter(l => !l.hidden);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+  return respond(200, sorted);
+};
+
+module.exports.allv2 = async event => {
+  let latitude, longitude;
+  const pathParams = getPathParameters(event);
+  const { partner } = event.headers;
+  let milesRadius = event.queryStringParameters.miles || 10;
+
+  if (pathParams) {
+    latitude = pathParams.latitude;
+    longitude = pathParams.longitude;
+  }
+  let allLocations = await Location.scan().exec();
+  allLocations.forEach((l, i, locations) => {
+    delete l.boxes;
+    delete l.losantId;
+    if (latitude && longitude) {
+      const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
+      const meters = geolib.getDistanceSimple(
+        { latitude, longitude },
+        { latitude: locationLatitude, longitude: locationLongitude },
+      );
+      const miles = geolib.convertUnit('mi', meters);
+      const roundedMiles = Math.round(10 * miles) / 10;
+      locations[i].distance = roundedMiles;
+    }
+  });
+  const nearLocations = allLocations.filter(l => l.distance <= 10);
+  const sorted = nearLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
 };
 
