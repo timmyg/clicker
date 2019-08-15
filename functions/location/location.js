@@ -94,7 +94,8 @@ module.exports.allv2 = async event => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   const { partner } = event.headers;
-  let milesRadius = (event.queryStringParameters && event.queryStringParameters.miles) || 10;
+  let milesRadius =
+    event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : 10;
 
   if (pathParams) {
     latitude = pathParams.latitude;
