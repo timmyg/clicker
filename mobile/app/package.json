@@ -14,7 +14,7 @@
     "build:android:release": "ENV=release npm run build && npx cap sync android && npx cap open android",
     "build:android:prod": "ENV=production npm run build && npx cap sync android && npx cap open android",
     "generate:assets": "npx cordova-res",
-    "test": "ng test",
+    "test": "ng test && npx cypress run",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -77,6 +77,7 @@
     "@types/node": "^10.12.29",
     "codelyzer": "~4.5.0",
     "cordova-res": "^0.6.0",
+    "cypress": "^3.4.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.4",
