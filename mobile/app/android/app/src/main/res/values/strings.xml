@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Clicker</string>
-    <string name="title_activity_main">Clicker</string>
+    <string name="app_name">ClickerDev</string>
+    <string name="title_activity_main">ClickerDev</string>
     <string name="package_name">com.teamclicker.app</string>
     <string name="fileprovider_authority">com.teamclicker.app.fileprovider</string>
     <string name="custom_url_scheme">com.teamclicker.app</string>
