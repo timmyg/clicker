@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OnboardingComponent } from '../reserve/components/onboarding/onboarding.component';
+import { OnboardingComponent } from './onboarding.component';
 
 describe('OnboardingComponent', () => {
   let component: OnboardingComponent;
