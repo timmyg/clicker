@@ -1,10 +1,19 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+// import VueScrollReveal from 'vue-scroll-reveal';
 import store from '../state/store';
 import routes from './routes';
 
 Vue.use(Router);
 Vue.use(require('vue-moment'));
+// Vue.use(VueScrollReveal, {
+//   class: 'v-scroll-reveal', // A CSS class applied to elements with the v-scroll-reveal directive; useful for animation overrides.
+//   duration: 800,
+//   scale: 1,
+//   distance: '10px',
+//   mobile: false,
+//   // origin: 'left',
+// });
 
 const router = new Router({
   routes,

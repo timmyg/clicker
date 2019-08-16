@@ -3,5 +3,7 @@
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
     <loc>https://www.tryclicker.com</loc>
+    <loc>https://www.tryclicker.com/privacy</loc>
+    <loc>https://www.tryclicker.com/brand</loc>
   </url>
 </urlset>

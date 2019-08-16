@@ -1,11 +1,11 @@
 <template>
-  <section>
+  <layout-basic>
     <div>
-      <Header />
+      <Header v-bind:subtitle="'Privacy'"></Header>
 
       <main>
         <section class="container">
-          <h2>Web Site Terms and Conditions of Use</h2>
+          <h2>Terms and Conditions of Use</h2>
 
           <h3>1. Terms</h3>
 
@@ -83,15 +83,17 @@
         </section>
       </main>
     </div>
-  </section>
+  </layout-basic>
 </template>
 
 <script>
 import Header from '@/components/layouts/Header';
+import LayoutBasic from '@/components/layouts/Basic';
 
 export default {
   components: {
     Header,
+    LayoutBasic,
   },
 };
 </script>
