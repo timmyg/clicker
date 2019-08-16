@@ -1,7 +1,7 @@
 <template>
-  <section>
+  <layout-basic>
     <div>
-      <Header />
+      <Header v-bind:subtitle="'App Privacy'"></Header>
 
       <main>
         <section class="container">
@@ -83,15 +83,17 @@
         </section>
       </main>
     </div>
-  </section>
+  </layout-basic>
 </template>
 
 <script>
 import Header from '@/components/layouts/Header';
+import LayoutBasic from '@/components/layouts/Basic';
 
 export default {
   components: {
     Header,
+    LayoutBasic,
   },
 };
 </script>

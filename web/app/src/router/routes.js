@@ -1,10 +1,10 @@
 // import Dashboard from '../components-old/Dashboard';
 // import Login from '../components-old/LogIn';
+import Brand from '../components/Brand';
 import Landing from '../components/landing/Landing';
 import Pay from '../components/Pay';
 import Privacy from '../components/Privacy';
 import PrivacyApp from '../components/PrivacyApp';
-// import Brand from '../components-old/Brand';
 
 export default [
   {
@@ -26,6 +26,11 @@ export default [
     path: '/pay',
     name: 'pay',
     component: Pay,
+  },
+  {
+    path: '/brand',
+    name: 'brand',
+    component: Brand,
   },
   // {
   //   path: '/brand',
