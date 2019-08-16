@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavController, Events, IonSearchbar, ModalController, Platform } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
 import { Router, NavigationEnd } from '@angular/router';
@@ -13,7 +13,7 @@ import { first } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None,
 })
 export class ReservePage {
-  @ViewChild('searchbar') searchbar: IonSearchbar;
+  @ViewChild('searchbar', { static: false }) searchbar: IonSearchbar;
   title: String;
   searchMode: boolean;
   showingLocations: boolean;
