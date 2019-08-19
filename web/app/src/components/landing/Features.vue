@@ -1,5 +1,5 @@
 <template>
-  <section class="features-split section illustration-section-05">
+  <section class="features-split section illustration-section-05 load-hidden">
     <div class="container">
       <div class="features-split-inner section-inner">
         <div class="section-header center-content">

@@ -1,5 +1,5 @@
 <template>
-  <section class="hero section illustration-section-01">
+  <section class="hero section illustration-section-01 load-hidden">
     <Header />
     <div class="container">
       <div class="hero-inner section-inner">
