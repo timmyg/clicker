@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hero-inner {
-  padding-top: 24px;
+.hero div.hero-inner {
+  padding-top: 96px;
 }
 </style>
