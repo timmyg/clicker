@@ -339,6 +339,7 @@ function rank(program) {
     { term: 'bengals', points: 3 },
     { term: 'bearcats', points: 3 },
     { term: 'xavier', points: 3 },
+    { term: 'college football', points: 1 },
   ];
   const { title } = program;
   const searchTarget = title;
