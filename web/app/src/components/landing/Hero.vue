@@ -1,5 +1,5 @@
 <template>
-  <section class="hero section illustration-section-01 load-hidden">
+  <section class="hero section illustration-section-01">
     <Header />
     <div class="container">
       <div class="hero-inner section-inner">
@@ -35,7 +35,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hero div.hero-inner {
-  padding-top: 96px;
-}
+// .hero div.hero-inner {
+//   padding-top: 96px;
+// }
+// html.sr section.hero {
+//   visibility: hidden;
+// }
 </style>
+

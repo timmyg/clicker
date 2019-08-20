@@ -1,5 +1,5 @@
 <template>
-  <section class="features-split section illustration-section-05 load-hidden">
+  <section class="features-split section illustration-section-05">
     <div class="container">
       <div class="features-split-inner section-inner">
         <div class="section-header center-content">
@@ -64,3 +64,9 @@
     </div>
   </section>
 </template>
+
+<style lang="scss" scoped>
+// html.sr section.features-split {
+//   visibility: hidden;
+// }
+</style>
