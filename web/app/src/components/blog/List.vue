@@ -61,7 +61,7 @@ export default Vue.extend({
   /* right: 10px; */
   width: 90%;
 }
-a:hover {
+figure:hover {
   opacity: 0.6;
 }
 figure {
