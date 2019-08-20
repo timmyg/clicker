@@ -11,6 +11,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap-scss": "^4.3.1",
+    "contentful-rich-text-vue-renderer": "^1.1.2",
+    "contentful-vue": "^1.0.5",
     "gotrue-js": "^0.9.22",
     "moment": "^2.24.0",
     "vue": "^2.6.7",
