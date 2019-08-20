@@ -74,7 +74,7 @@
           <nav class="footer-nav">
             <ul class="list-reset">
               <li>
-                <a href="https://blog.tryclicker.com">Blog</a>
+                <a href="/blog">Blog</a>
               </li>
               <li>
                 <a href="/brand">Brand</a>

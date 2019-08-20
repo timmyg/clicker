@@ -1,17 +1,17 @@
 <template>
   <layout-basic>
     <Header v-bind:subtitle="'Blog'"></Header>
-    <main class="container">
+    <main if="post">
       <article class="media">
         <figure>
           <img v-if="post.fields.featuredImg" :src="post.fields.featuredImg" alt />
           <img v-else src="http://via.placeholder.com/3000x1000" alt />
         </figure>
-        <div class="title h2">{{ post.fields.title }}</div>
-        <!-- <p>{{ post.fields.summary }}</p> -->
+        <div class="container">
+          <div class="title h2">{{ post.fields.title }}</div>
+          <RichTextRenderer :document="post.fields.content" />
+        </div>
       </article>
-      <!-- <div>{{post.fields.content}}</div> -->
-      <RichTextRenderer :document="post.fields.content" />
     </main>
   </layout-basic>
 </template>
@@ -25,6 +25,7 @@ export default Vue.extend({
   components: {
     Header,
     LayoutBasic,
+    RichTextRenderer,
   },
   data() {
     return {
@@ -41,8 +42,8 @@ export default Vue.extend({
           'fields.slug': slug,
         })
         .then(res => {
-          console.log(res);
           this.post = res.items[0];
+          console.log(this.post.fields.content);
         })
         .catch(error => console.error(error));
     },
@@ -52,3 +53,15 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.title {
+  position: relative;
+  top: -140px;
+  color: white;
+  text-align: center;
+}
+main {
+  padding-top: 50px;
+}
+</style>

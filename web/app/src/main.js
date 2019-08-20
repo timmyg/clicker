@@ -17,6 +17,10 @@ Vue.use(ContentfulVue, {
   accessToken: 'Ai_IJR4RoCAhqsUk4q0NMXcR1ON42EHL02jD9-gjiGE',
 });
 
+Vue.filter('truncate', function(text, stop, clamp) {
+  return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '');
+});
+
 Vue.config.productionTip = false;
 
 new Vue({

@@ -37,7 +37,7 @@
           <div class="header-nav-inner">
             <ul class="list-reset text-xxs header-nav-right">
               <li>
-                <a href="https://blog.tryclicker.com">Blog</a>
+                <a href="/blog" v-if="currentRouteName !== 'blog'">Blog</a>
               </li>
             </ul>
           </div>
@@ -47,12 +47,14 @@
   </header>
 </template>
 
-<style lang="scss" scoped>
-</style>
-
 <script>
 export default {
   props: ['subtitle'],
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    },
+  },
   mounted() {
     // 'use strict';
     const navToggle = document.getElementById('header-nav-toggle');

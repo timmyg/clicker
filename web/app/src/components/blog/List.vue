@@ -5,11 +5,13 @@
       <div v-for="(post,index) in posts" :key="post.fields.slug + '_' + index">
         <router-link :to="'/blog/' + post.fields.slug">
           <article class="media">
-            <figure>
-              <img v-if="post.fields.featuredImg" :src="post.fields.featuredImg" alt />
-              <img v-else src="http://via.placeholder.com/3000x1000" alt />
+            <figure
+              v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImg || 'http://via.placeholder.com/3000x1000') + ')' }"
+            >
+              <!-- <img v-if="post.fields.featuredImg" :src="post.fields.featuredImg" alt /> -->
+              <!-- <img v-else src="http://via.placeholder.com/3000x1000" alt /> -->
+              <div class="title h3">{{ post.fields.title | truncate(50) }}</div>
             </figure>
-            <div class="title h2">{{ post.fields.title }}</div>
             <!-- <p>{{ post.fields.summary }}</p> -->
           </article>
         </router-link>
@@ -22,6 +24,7 @@
 import Vue from 'vue';
 import Header from '@/components/layouts/Header';
 import LayoutBasic from '@/components/layouts/Basic';
+
 export default Vue.extend({
   components: {
     Header,
@@ -52,9 +55,20 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .title {
+  top: 50px;
   position: relative;
-  bottom: 170px;
   left: 10px;
-  color: white;
+  /* right: 10px; */
+  width: 90%;
+}
+a:hover {
+  opacity: 0.6;
+}
+figure {
+  height: 200px;
+  margin: 0;
+}
+main {
+  padding-top: 50px;
 }
 </style>
