@@ -1,7 +1,7 @@
 <template>
   <layout-basic>
     <Header v-bind:subtitle="'Blog'"></Header>
-    <main if="post">
+    <main v-if="post">
       <article class="media">
         <figure>
           <img v-if="post.fields.featuredImg" :src="post.fields.featuredImg" alt />
