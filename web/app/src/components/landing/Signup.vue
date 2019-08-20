@@ -13,7 +13,7 @@
         <div class="cta-slogan reveal-from-left is-revealed">
           <h4 class="m-0">Unleash the future of sports programming.</h4>
         </div>
-        <p v-if="submitted" class="success">Thank you! We'll be in contact.</p>
+        <span v-if="submitted" class="success">Thank you! We'll be in contact.</span>
         <p
           v-else-if="error"
           class="error"
@@ -25,7 +25,13 @@
           v-else
         >
           <div class="control control-expanded">
-            <input class="input" type="email" placeholder="Enter your email" v-model.trim="email" />
+            <input
+              class="input"
+              type="email"
+              placeholder="Enter your email"
+              v-model.trim="email"
+              :disabled="submitting"
+            />
           </div>
           <div class="control">
             <button

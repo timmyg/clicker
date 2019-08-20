@@ -1,7 +1,7 @@
 <template>
   <layout-basic>
     <Header v-bind:subtitle="'Brand'"></Header>
-    <section class="container">
+    <section class="main container">
       <div class="row">
         <div v-bind:class="spacing">
           <div class="card">
@@ -101,5 +101,8 @@ img {
   max-width: 200px;
   max-height: 100px;
   margin: 0 auto;
+}
+section.main {
+  padding-top: 100px;
 }
 </style>
