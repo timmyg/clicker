@@ -6,13 +6,11 @@
         <router-link :to="'/blog/' + post.fields.slug">
           <article class="media">
             <figure
-              v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImg || 'http://via.placeholder.com/3000x1000') + ')' }"
+              v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImage.fields.file.url || 'http://via.placeholder.com/3000x1000') + ')' }"
             >
-              <!-- <img v-if="post.fields.featuredImg" :src="post.fields.featuredImg" alt /> -->
-              <!-- <img v-else src="http://via.placeholder.com/3000x1000" alt /> -->
-              <div class="title h3">{{ post.fields.title | truncate(50) }}</div>
+              <div class="title h3">{{ post.fields.title | truncate(40) }}</div>
+              <div class="date h5">{{ post.sys.createdAt | moment("MMMM D, YYYY") }}</div>
             </figure>
-            <!-- <p>{{ post.fields.summary }}</p> -->
           </article>
         </router-link>
       </div>
@@ -43,6 +41,8 @@ export default Vue.extend({
         })
         .then(res => {
           this.posts = res.items;
+          // console.log(this.posts[0].sys.createdAt);
+          // this.posts.forEach(element => console.log(element.sys.createdAt));
         })
         .catch(error => {});
     },
@@ -55,18 +55,26 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .title {
-  top: 50px;
+  top: 60px;
   position: relative;
   left: 10px;
-  /* right: 10px; */
   width: 90%;
+  color: white;
+}
+.date {
+  position: relative;
+  top: 40px;
+  float: right;
+  color: white;
+  padding-right: 20px;
 }
 figure:hover {
   opacity: 0.6;
 }
 figure {
   height: 200px;
-  margin: 0;
+  background-position: 0 100%;
+  background-size: 100%;
 }
 main {
   padding-top: 50px;
