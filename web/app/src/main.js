@@ -5,16 +5,14 @@ import router from './router';
 import store from './state/store';
 import axios from 'axios';
 
-console.log(process.env.VUE_APP_API_URL);
 Vue.prototype.$http = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
   timeout: 8000,
-  // responseType: 'json',
 });
 
 Vue.use(ContentfulVue, {
-  space: 'jaxoslda9dxk',
-  accessToken: 'Ai_IJR4RoCAhqsUk4q0NMXcR1ON42EHL02jD9-gjiGE',
+  space: process.env.VUE_APP_CONTENTFUL_SPACE_ID,
+  accessToken: process.env.VUE_APP_CONTENTFUL_API_TOKEN,
 });
 
 Vue.filter('truncate', function(text, stop, clamp) {
