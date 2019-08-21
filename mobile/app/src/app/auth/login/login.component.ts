@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+// import { Component, ViewChild } from '@angular/core';
 import { ModalController, ToastController, IonInput } from '@ionic/angular';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
@@ -11,6 +11,7 @@ import { getUserId } from 'src/app/state/user';
 import { first } from 'rxjs/operators';
 import * as decode from 'jwt-decode';
 import { Device } from '@capacitor/core';
+import { Component, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +19,8 @@ import { Device } from '@capacitor/core';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  @ViewChild('phoneInput') phoneInput: IonInput;
-  @ViewChild('codeInput') codeInput: IonInput;
+  @ViewChild('phoneInput', { static: false }) phoneInput: IonInput;
+  @ViewChild('codeInput', { static: false }) codeInput: IonInput;
   phone: string;
   code: string;
   codeSent: boolean;

@@ -74,6 +74,9 @@
           <nav class="footer-nav">
             <ul class="list-reset">
               <li>
+                <a href="/blog">Blog</a>
+              </li>
+              <li>
                 <a href="/brand">Brand</a>
               </li>
               <li>

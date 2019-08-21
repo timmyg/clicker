@@ -1,9 +1,9 @@
 <template>
   <layout-basic>
     <Header v-bind:subtitle="'Brand'"></Header>
-    <section class="container">
+    <section class="main container">
       <div class="row">
-        <div v-bind:class="spacing">
+        <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
             <header>Logo</header>
             <div>
@@ -11,7 +11,7 @@
             </div>
           </div>
         </div>
-        <div v-bind:class="spacing">
+        <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
             <header>Logo TV</header>
             <div>
@@ -19,7 +19,7 @@
             </div>
           </div>
         </div>
-        <div v-bind:class="spacing">
+        <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
             <header>Logo TV Square 180</header>
             <div>
@@ -30,7 +30,7 @@
             </div>
           </div>
         </div>
-        <div v-bind:class="spacing">
+        <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
             <header>Logo Square</header>
             <div>
@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div v-bind:class="spacing">
+        <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
             <header>Favicon</header>
             <div>
@@ -49,7 +49,7 @@
             </div>
           </div>
         </div>
-        <div v-bind:class="spacing">
+        <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
             <header>Checkerboard</header>
             <div>
@@ -85,13 +85,15 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '/css/chota.min.css';
 
-.card {
-  background: #eeeeee;
-  padding-top: 20px;
-  padding-bottom: 40px;
-  header {
-    text-align: center;
-    padding-bottom: 20px;
+.card-wrapper {
+  padding: 20px 10px;
+  .card {
+    background: #eeeeee;
+
+    header {
+      text-align: center;
+      padding-bottom: 20px;
+    }
   }
 }
 header.site-header {
@@ -101,5 +103,8 @@ img {
   max-width: 200px;
   max-height: 100px;
   margin: 0 auto;
+}
+section.main {
+  padding-top: 100px;
 }
 </style>

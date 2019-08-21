@@ -18,7 +18,7 @@
             >{{subtitle}}</div>
           </a>
         </div>
-        <!-- <button
+        <button
           id="header-nav-toggle"
           class="header-nav-toggle"
           aria-controls="primary-menu"
@@ -37,27 +37,24 @@
           <div class="header-nav-inner">
             <ul class="list-reset text-xxs header-nav-right">
               <li>
-                <a href="./additional.html">Secondary page</a>
-              </li>
-            </ul>
-            <ul class="list-reset header-nav-right">
-              <li>
-                <a class="button button-primary button-sm" href="#signup-form">Sign up</a>
+                <a href="/blog" v-if="currentRouteName !== 'blog'">Blog</a>
               </li>
             </ul>
           </div>
-        </nav>-->
+        </nav>
       </div>
     </div>
   </header>
 </template>
 
-<style lang="scss" scoped>
-</style>
-
 <script>
 export default {
   props: ['subtitle'],
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    },
+  },
   mounted() {
     // 'use strict';
     const navToggle = document.getElementById('header-nav-toggle');

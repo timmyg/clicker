@@ -1,70 +1,70 @@
 <template>
   <layout-basic>
-      <Header v-bind:subtitle="'Pay'" />
-      <main>
-        <section class="container">
-          <form id="pay" v-on:submit.prevent="pay" v-if="!completed">
-            <div v-if="isOneTime">
-              <div class="label-wrapper">
-                <label>Amount</label>
-              </div>
-              <span>${{amount}}</span>
+    <Header v-bind:subtitle="'Pay'" />
+    <main>
+      <section class="container">
+        <form id="pay" v-on:submit.prevent="pay" v-if="!completed">
+          <div v-if="isOneTime">
+            <div class="label-wrapper">
+              <label>Amount</label>
             </div>
-            <div v-if="isSubscription">
-              <div class="label-wrapper">
-                <label>Amount</label>
-              </div>
-              <span>${{amount}}/month (starting {{ start || now | moment("M/D/YY") }})</span>
+            <span>${{amount}}</span>
+          </div>
+          <div v-if="isSubscription">
+            <div class="label-wrapper">
+              <label>Amount</label>
             </div>
-            <div>
-              <div class="label-wrapper">
-                <label>Email</label>
-              </div>
-              <input type="text" class="custom" v-model="email" />
+            <span>${{amount}}/month (starting {{ start || now | moment("M/D/YY") }})</span>
+          </div>
+          <div>
+            <div class="label-wrapper">
+              <label>Email</label>
             </div>
-            <div>
-              <div class="label-wrapper">
-                <label>Name</label>
-              </div>
-              <input type="text" class="custom" v-model="name" />
+            <input type="text" class="custom" v-model="email" />
+          </div>
+          <div>
+            <div class="label-wrapper">
+              <label>Name</label>
             </div>
-            <div>
-              <div class="label-wrapper">
-                <label>Company</label>
-              </div>
-              <input type="text" class="custom" v-model="company" />
+            <input type="text" class="custom" v-model="name" />
+          </div>
+          <div>
+            <div class="label-wrapper">
+              <label>Company</label>
             </div>
-            <div>
-              <div class="label-wrapper">
-                <label>Credit Card</label>
-              </div>
-              <card
-                v-if="loadedStripe"
-                class="stripe-card"
-                :stripe="stripePublishableKey"
-                :options="stripeOptions"
-              />
+            <input type="text" class="custom" v-model="company" />
+          </div>
+          <div>
+            <div class="label-wrapper">
+              <label>Credit Card</label>
             </div>
-            <p class="error" v-if="error">{{error}}</p>
-            <button class="button button-primary button-block button-shadow" :disabled="submitting">
-              <span v-if="isSubscription">Setup ${{amount}}/month autopay</span>
-              <span v-if="isOneTime">Pay ${{amount}}</span>
-            </button>
-          </form>
-          <section class="completed" v-else>
-            <span
-              v-if="isSubscription"
-            >Successfully setup ${{amount}}/month autopay for the {{ start || now | moment("Do") }} of every month.</span>
-            <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
-            <div class="emojis mt-24">
-              <div>🎉</div>
-              <div>🎊</div>
-              <div>🙌</div>
-              <div>🎈</div>
-            </div>
-          </section>
+            <card
+              v-if="loadedStripe"
+              class="stripe-card"
+              :stripe="stripePublishableKey"
+              :options="stripeOptions"
+            />
+          </div>
+          <p class="error" v-if="error">{{error}}</p>
+          <button class="button button-primary button-block button-shadow" :disabled="submitting">
+            <span v-if="isSubscription">Setup ${{amount}}/month autopay</span>
+            <span v-if="isOneTime">Pay ${{amount}}</span>
+          </button>
+        </form>
+        <section class="completed" v-else>
+          <span
+            v-if="isSubscription"
+          >Successfully setup ${{amount}}/month autopay for the {{ start || now | moment("Do") }} of every month.</span>
+          <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
+          <div class="emojis mt-24">
+            <div>🎉</div>
+            <div>🎊</div>
+            <div>🙌</div>
+            <div>🎈</div>
+          </div>
         </section>
-      </main>
+      </section>
+    </main>
   </layout-basic>
 </template>
 
@@ -308,5 +308,8 @@ $danger: #cf665b;
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
   }
+}
+main {
+  padding-top: 100px;
 }
 </style> 

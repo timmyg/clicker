@@ -64,3 +64,9 @@
     </div>
   </section>
 </template>
+
+<style lang="scss" scoped>
+// html.sr section.features-split {
+//   visibility: hidden;
+// }
+</style>
