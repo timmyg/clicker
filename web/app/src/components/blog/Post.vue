@@ -3,10 +3,9 @@
     <Header v-bind:subtitle="'Blog'"></Header>
     <main v-if="post">
       <article class="media">
-        <figure>
-          <img v-if="post.fields.featuredImg" :src="post.fields.featuredImg" alt />
-          <img v-else src="http://via.placeholder.com/3000x1000" alt />
-        </figure>
+        <figure
+          v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImage.fields.file.url || 'http://via.placeholder.com/3000x1000') + ')' }"
+        ></figure>
         <div class="container">
           <div class="title h2">{{ post.fields.title }}</div>
           <RichTextRenderer :document="post.fields.content" />
@@ -35,7 +34,6 @@ export default Vue.extend({
   methods: {
     getPost() {
       const { slug } = this.$route.params;
-      console.log(slug);
       this.$contentful
         .getEntries({
           content_type: 'blogPost',
@@ -43,7 +41,8 @@ export default Vue.extend({
         })
         .then(res => {
           this.post = res.items[0];
-          console.log(this.post.fields.content);
+          console.log(this.post.fields.featuredImage.fields.file.url);
+          // console.log(this.post.fields.featuredImage.fields.title);
         })
         .catch(error => console.error(error));
     },
@@ -63,5 +62,10 @@ export default Vue.extend({
 }
 main {
   padding-top: 50px;
+}
+figure {
+  height: 300px;
+  background-position: 0 100%;
+  background-size: 100%;
 }
 </style>

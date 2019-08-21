@@ -6,13 +6,10 @@
         <router-link :to="'/blog/' + post.fields.slug">
           <article class="media">
             <figure
-              v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImg || 'http://via.placeholder.com/3000x1000') + ')' }"
+              v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImage.fields.file.url || 'http://via.placeholder.com/3000x1000') + ')' }"
             >
-              <!-- <img v-if="post.fields.featuredImg" :src="post.fields.featuredImg" alt /> -->
-              <!-- <img v-else src="http://via.placeholder.com/3000x1000" alt /> -->
               <div class="title h3">{{ post.fields.title | truncate(50) }}</div>
             </figure>
-            <!-- <p>{{ post.fields.summary }}</p> -->
           </article>
         </router-link>
       </div>
@@ -55,18 +52,20 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .title {
-  top: 50px;
+  top: 100px;
   position: relative;
   left: 10px;
   /* right: 10px; */
   width: 90%;
+  color: white;
 }
 figure:hover {
   opacity: 0.6;
 }
 figure {
   height: 200px;
-  margin: 0;
+  background-position: 0 100%;
+  background-size: 100%;
 }
 main {
   padding-top: 50px;
