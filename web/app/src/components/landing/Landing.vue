@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-main.site-content {
-  visibility: hidden;
-}
+// main.site-content {
+//   visibility: hidden;
+// }
 </style>

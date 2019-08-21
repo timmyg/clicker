@@ -35,9 +35,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .hero div.hero-inner {
-//   padding-top: 96px;
-// }
+.hero div.hero-inner {
+  padding-top: 96px;
+}
 // html.sr section.hero {
 //   visibility: hidden;
 // }
