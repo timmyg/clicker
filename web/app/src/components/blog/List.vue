@@ -8,7 +8,7 @@
             <figure
               v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImage.fields.file.url || 'http://via.placeholder.com/3000x1000') + ')' }"
             >
-              <div class="title h3">{{ post.fields.title | truncate(50) }}</div>
+              <div class="title h3">{{ post.fields.title | truncate(40) }}</div>
               <div class="date h5">{{ post.sys.createdAt | moment("MMMM D, YYYY") }}</div>
             </figure>
           </article>
@@ -55,7 +55,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .title {
-  top: 100px;
+  top: 60px;
   position: relative;
   left: 10px;
   width: 90%;
@@ -63,7 +63,7 @@ export default Vue.extend({
 }
 .date {
   position: relative;
-  top: 70px;
+  top: 40px;
   float: right;
   color: white;
   padding-right: 20px;

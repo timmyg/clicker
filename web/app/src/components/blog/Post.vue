@@ -84,7 +84,8 @@ main {
 figure {
   height: 300px;
   background-position: 0 100%;
-  background-size: 100%;
   margin-bottom: 0;
+  background-size: 600px;
+  background-repeat: no-repeat;
 }
 </style>
