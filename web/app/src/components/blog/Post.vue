@@ -7,7 +7,10 @@
           v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImage.fields.file.url || 'http://via.placeholder.com/3000x1000') + ')' }"
         ></figure>
         <div class="container">
-          <div class="title h2">{{ post.fields.title }}</div>
+          <div class="wrapper">
+            <div class="title h2">{{ post.fields.title }}</div>
+            <div class="date h5">{{ post.sys.createdAt | moment("MMMM D, YYYY") }}</div>
+          </div>
           <RichTextRenderer :document="post.fields.content" />
         </div>
       </article>
@@ -54,12 +57,27 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.title {
+.wrapper {
   position: relative;
   top: -140px;
   color: white;
   text-align: center;
+  .title,
+  .date {
+    color: white;
+    margin: 0;
+  }
+  .date {
+    margin-top: 8px;
+  }
 }
+// .title {
+
+// }
+// .date {
+//   color: white;
+//   text-align: center;
+// }
 main {
   padding-top: 50px;
 }
@@ -67,5 +85,6 @@ figure {
   height: 300px;
   background-position: 0 100%;
   background-size: 100%;
+  margin-bottom: 0;
 }
 </style>

@@ -9,6 +9,7 @@
               v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImage.fields.file.url || 'http://via.placeholder.com/3000x1000') + ')' }"
             >
               <div class="title h3">{{ post.fields.title | truncate(50) }}</div>
+              <div class="date h5">{{ post.sys.createdAt | moment("MMMM D, YYYY") }}</div>
             </figure>
           </article>
         </router-link>
@@ -40,6 +41,8 @@ export default Vue.extend({
         })
         .then(res => {
           this.posts = res.items;
+          // console.log(this.posts[0].sys.createdAt);
+          // this.posts.forEach(element => console.log(element.sys.createdAt));
         })
         .catch(error => {});
     },
@@ -55,9 +58,15 @@ export default Vue.extend({
   top: 100px;
   position: relative;
   left: 10px;
-  /* right: 10px; */
   width: 90%;
   color: white;
+}
+.date {
+  position: relative;
+  top: 70px;
+  float: right;
+  color: white;
+  padding-right: 20px;
 }
 figure:hover {
   opacity: 0.6;
