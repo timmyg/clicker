@@ -88,4 +88,9 @@ figure {
   background-size: 600px;
   background-repeat: no-repeat;
 }
+@include media('>medium') {
+  figure {
+    background-size: 100%;
+  }
+}
 </style>
