@@ -1,5 +1,6 @@
 const PrerenderSpaPlugin = require('prerender-spa-plugin');
 const path = require('path');
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
 
 module.exports = {
   css: {
@@ -49,6 +50,7 @@ module.exports = {
           '/blog/control-center-schedule-january3-january4',
           '/blog/control-center-schedule-january10-january11',
         ],
+        renderer: new Renderer({ renderAfterTime: 5000 }),
       }),
     ],
   },
