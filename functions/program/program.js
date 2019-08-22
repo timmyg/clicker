@@ -18,11 +18,14 @@ const nationalChannels = [
   { channel: 221, channelTitle: 'CBSSN' },
   { channel: 212, channelTitle: 'NFL' }, // { channel: 9, channelTitle: 'ABC' },
   { channel: 217, channelTitle: 'TNNSHD' },
+  { channel: 215, channelTitle: 'NHLHD' },
+  { channel: 216, channelTitle: 'NBAHD' },
 
   // optional channels, but leave for syncing
-  { channel: 618, channelTitle: 'FS2' },
-  { channel: 602, channelTitle: 'TVG' },
   { channel: 218, channelTitle: 'GOLF' },
+  { channel: 602, channelTitle: 'TVG' },
+  { channel: 612, channelTitle: 'ACCN' },
+  { channel: 618, channelTitle: 'FS2' },
   // { channel: 245, channelTitle: 'TNT' },
   // { channel: 247, channelTitle: 'TBS' },
   // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
@@ -36,8 +39,6 @@ const nationalChannels = [
   // { channel: 104, channelTitle: 'DTV4K' },
   // { channel: 105, channelTitle: 'LIVE4K' },
   // { channel: 106, channelTitle: 'LIVE4K2' },
-  // { channel: 215, channelTitle: 'NHLHD' },
-  // { channel: 216, channelTitle: 'NBAHD' },
 ];
 const zipDefault = 45202;
 
@@ -313,6 +314,15 @@ module.exports.getAll = async event => {
   //   }
   // });
   // console.timeEnd('nextProgram');
+
+  console.time('remove excluded');
+  if (location.channels && location.channels.excluded) {
+    const excludedChannels = location.channels.excluded.map(function(item) {
+      return parseInt(item, 10);
+    });
+    programsResult = programs.filter(p => !excludedChannels.includes(p.channel));
+  }
+  console.timeEnd('remove excluded');
 
   console.time('rank');
   const rankedPrograms = rankPrograms(programsResult);
