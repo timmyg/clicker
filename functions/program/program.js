@@ -323,7 +323,7 @@ module.exports.getAll = async event => {
     });
     console.log(excludedChannels);
     console.log(programsResult.length);
-    programsResult = programs.filter(p => !excludedChannels.includes(p.channel));
+    programsResult = programsResult.filter(p => !excludedChannels.includes(p.channel));
     console.log(programsResult.length);
   }
   console.timeEnd('remove excluded');
