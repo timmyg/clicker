@@ -316,8 +316,9 @@ module.exports.getAll = async event => {
   // console.timeEnd('nextProgram');
 
   console.time('remove excluded');
-  if (location.channels && location.channels.excluded) {
-    const excludedChannels = location.channels.excluded.map(function(item) {
+  console.log('exclude', location.channels);
+  if (location.channels && location.channels.exclude) {
+    const excludedChannels = location.channels.exclude.map(function(item) {
       return parseInt(item, 10);
     });
     programsResult = programs.filter(p => !excludedChannels.includes(p.channel));
