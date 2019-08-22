@@ -36,10 +36,8 @@
               <p class="m-0">
                 After downloading the
                 <b class="brand-font">Clicker TV</b> app, your guests can choose the sports they want to watch and change the channel instantly from their phone.
-                <a
-                  href="http://onelink.to/thxs9v"
-                  target="_blank"
-                >Check it out</a>.
+                <br />
+                <a href="http://onelink.to/thxs9v" target="_blank">Check it out</a>.
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-04">
