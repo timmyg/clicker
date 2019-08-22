@@ -1,6 +1,6 @@
 const PrerenderSpaPlugin = require('prerender-spa-plugin');
 const path = require('path');
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
+const Renderer = PrerenderSpaPlugin.PuppeteerRenderer;
 
 module.exports = {
   css: {
