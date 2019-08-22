@@ -44,3 +44,15 @@ module.exports.command = async event => {
   }
 };
 
+module.exports.debug = async event => {
+  try {
+    const { command, payload, losantId } = getBody(event);
+    const api = new LosantApi();
+
+    await api.sendCommand(command, losantId, payload);
+    return respond();
+  } catch (e) {
+    console.error(e);
+    return respond(400, `Could not tune: ${e.stack}`);
+  }
+};
