@@ -12,6 +12,8 @@
             <div class="date h5">{{ post.sys.createdAt | moment("MMMM D, YYYY") }}</div>
           </div>
           <RichTextRenderer :document="post.fields.content" />
+          <!-- <RichTextRenderer :document="post.fields.test" /> -->
+          <div v-html="post.fields.test"></div>
         </div>
       </article>
     </main>
@@ -44,7 +46,7 @@ export default Vue.extend({
         })
         .then(res => {
           this.post = res.items[0];
-          console.log(this.post.fields.featuredImage.fields.file.url);
+          console.log(this.post.fields.test);
           // console.log(this.post.fields.featuredImage.fields.title);
         })
         .catch(error => console.error(error));
