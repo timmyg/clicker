@@ -55,7 +55,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   waiting: boolean;
   showHidden = false;
   sub: Subscription;
-  milesRadius = 10;
+  milesRadius = 3;
 
   constructor(
     private store: Store<fromStore.AppState>,

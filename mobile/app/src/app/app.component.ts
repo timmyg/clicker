@@ -18,6 +18,7 @@ import { first } from 'rxjs/operators';
 import { version } from '../../package.json';
 import { Intercom } from 'ng-intercom';
 import { environment } from 'src/environments/environment';
+import { AppService } from './core/services/app.service';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,7 @@ export class AppComponent {
     private segment: SegmentService,
     private globals: Globals,
     public intercom: Intercom,
+    public appService: AppService,
   ) {
     this.partner$ = this.store.select(getPartner);
     this.initializeApp();
@@ -61,6 +63,7 @@ export class AppComponent {
           });
       } catch (e) {}
     });
+    this.appService.setVersion(version);
     this.platform.resume.subscribe(() => {
       this.segment.track(this.globals.events.opened, { version });
       this.store.dispatch(new fromUser.Refresh());

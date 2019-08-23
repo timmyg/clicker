@@ -20,6 +20,7 @@ import { ofType, Actions } from '@ngrx/effects';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
 import { ToastOptions } from '@ionic/core';
+import { AppService } from '../core/services/app.service';
 
 @Component({
   selector: 'app-profile',
@@ -39,11 +40,13 @@ export class ProfilePage {
     cookieName: 'rating',
     given: 'given',
   };
+  showVersionClicks = 0;
 
   constructor(
     private store: Store<fromStore.AppState>,
     public modalController: ModalController,
     public alertController: AlertController,
+    public appService: AppService,
     private storage: Storage,
     private router: Router,
     private route: ActivatedRoute,
@@ -227,6 +230,20 @@ export class ProfilePage {
       .subscribe(() => {
         event.target.complete();
       });
+  }
+
+  async showVersion() {
+    this.showVersionClicks++;
+    if (this.showVersionClicks >= 7) {
+      const version = this.appService.getVersion();
+      const toast = await this.toastController.create({
+        message: `Version: ${version} 😏`,
+        duration: 3000,
+        cssClass: 'ion-text-center',
+      });
+      await toast.present();
+      this.showVersionClicks = 0;
+    }
   }
 
   async onLogout() {

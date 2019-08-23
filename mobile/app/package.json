@@ -1,6 +1,6 @@
 {
   "name": "clicker-mobile",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "author": "Tim Giblin",
   "homepage": "https://tryclicker.com/",
   "scripts": {
@@ -14,7 +14,8 @@
     "build:android:release": "ENV=release npm run build && npx cap sync android && npx cap open android",
     "build:android:prod": "ENV=production npm run build && npx cap sync android && npx cap open android",
     "generate:assets": "npx cordova-res",
-    "test": "ng test && npx cypress run",
+    "test": "ng test",
+    "test:ui": "npx cypress run",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
