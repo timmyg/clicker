@@ -12,32 +12,52 @@ const nationalChannels = [
   { channel: 209, channelTitle: 'ESPN2' },
   { channel: 208, channelTitle: 'ESPNU' },
   { channel: 207, channelTitle: 'ESPNN' },
+  { channel: 614, channelTitle: 'ESPNC' },
   { channel: 213, channelTitle: 'MLB' },
   { channel: 219, channelTitle: 'FS1' }, // { channel: 5, channelTitle: 'NBC' },
   { channel: 220, channelTitle: 'NBCSN' },
-  { channel: 221, channelTitle: 'CBSSN' },
   { channel: 212, channelTitle: 'NFL' }, // { channel: 9, channelTitle: 'ABC' },
   { channel: 217, channelTitle: 'TNNSHD' },
+  { channel: 215, channelTitle: 'NHLHD' },
+  { channel: 216, channelTitle: 'NBAHD' },
 
   // optional channels, but leave for syncing
-  { channel: 618, channelTitle: 'FS2' },
-  { channel: 602, channelTitle: 'TVG' },
   { channel: 218, channelTitle: 'GOLF' },
+  { channel: 602, channelTitle: 'TVG' },
+  { channel: 612, channelTitle: 'ACCN' },
+  { channel: 618, channelTitle: 'FS2' },
+  { channel: 620, channelTitle: 'FS2' },
+  { channel: 610, channelTitle: 'BTN' },
+  { channel: 611, channelTitle: 'SECHD' },
+  { channel: 605, channelTitle: 'SPMN' },
+  { channel: 606, channelTitle: 'OTDR' },
+  { channel: 221, channelTitle: 'CBSSN' }, // premium
   // { channel: 245, channelTitle: 'TNT' },
   // { channel: 247, channelTitle: 'TBS' },
   // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
   // { channel: 600, channelTitle: 'SMXHD' },
-  // { channel: 611, channelTitle: 'SECHD' },
-  { channel: 701, channelTitle: 'OPN' },
-  { channel: 702, channelTitle: 'OPN' },
-  { channel: 703, channelTitle: 'OPN' },
-  { channel: 704, channelTitle: 'OPN' },
-  { channel: 705, channelTitle: 'OPN' },
+  { channel: 701, channelTitle: 'NFLMX' }, // 4 game mix
+  { channel: 702, channelTitle: 'NFLMX' }, // 8 game mix
+  { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
+  { channel: 704, channelTitle: 'NFLFAN' }, // Fantasy Zone (premium)
+  { channel: 705, channelTitle: 'NFL' },
+  { channel: 706, channelTitle: 'NFL' },
+  { channel: 707, channelTitle: 'NFL' },
+  { channel: 708, channelTitle: 'NFL' },
+  { channel: 709, channelTitle: 'NFL' },
+  { channel: 710, channelTitle: 'NFL' },
+  { channel: 711, channelTitle: 'NFL' },
+  { channel: 712, channelTitle: 'NFL' },
+  { channel: 713, channelTitle: 'NFL' },
+  { channel: 714, channelTitle: 'NFL' },
+  { channel: 715, channelTitle: 'NFL' },
+  { channel: 716, channelTitle: 'NFL' },
+  { channel: 717, channelTitle: 'NFL' },
+  { channel: 718, channelTitle: 'NFL' },
+  { channel: 719, channelTitle: 'NFL' },
   // { channel: 104, channelTitle: 'DTV4K' },
   // { channel: 105, channelTitle: 'LIVE4K' },
   // { channel: 106, channelTitle: 'LIVE4K2' },
-  // { channel: 215, channelTitle: 'NHLHD' },
-  // { channel: 216, channelTitle: 'NBAHD' },
 ];
 const zipDefault = 45202;
 
@@ -313,6 +333,19 @@ module.exports.getAll = async event => {
   //   }
   // });
   // console.timeEnd('nextProgram');
+
+  console.time('remove excluded');
+  console.log('exclude', location.channels);
+  if (location.channels && location.channels.exclude) {
+    const excludedChannels = location.channels.exclude.map(function(item) {
+      return parseInt(item, 10);
+    });
+    console.log(excludedChannels);
+    console.log(programsResult.length);
+    programsResult = programsResult.filter(p => !excludedChannels.includes(p.channel));
+    console.log(programsResult.length);
+  }
+  console.timeEnd('remove excluded');
 
   console.time('rank');
   const rankedPrograms = rankPrograms(programsResult);
