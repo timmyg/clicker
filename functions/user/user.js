@@ -96,6 +96,7 @@ module.exports.updateCard = async event => {
       const customer = await stripe.customers.create({
         source: stripeCardToken,
         description: userId,
+        phone: user.phone,
       });
       // TODO audit
       await User.update({ id: userId }, { stripeCustomer: customer.id });
