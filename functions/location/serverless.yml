@@ -2,7 +2,7 @@ service: location
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  region: ap-northeast-1
+  # region: ap-northeast-1
   runtime: nodejs8.10
   deploymentBucket:
     name: serverless-deploys-clicker
