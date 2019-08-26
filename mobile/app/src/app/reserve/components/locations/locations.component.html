@@ -29,7 +29,11 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
         ></app-location>
       </ng-container>
       <ng-container
-        *ngIf="!(isLoading$ | async) && (locations$ | async | locationsFilter: searchTerm:showHidden)?.length === 0"
+        *ngIf="
+          !((isLoading$ | async) || evaluatingGeolocation) &&
+          !reserveService.isRefreshing &&
+          (locations$ | async | locationsFilter: searchTerm:showHidden)?.length === 0
+        "
       >
         <ion-card>
           <ion-card-content class="ion-text-center">

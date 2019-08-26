@@ -11,7 +11,12 @@
 
 <ion-content margin-top>
   <ion-row class="ion-justify-content-center" margin-top>
-    <img src="https://clicker-brand.s3.amazonaws.com/logo.png" alt="Clicker logo" class="logo" />
+    <img
+      src="https://clicker-brand.s3.amazonaws.com/logo.png"
+      alt="Clicker logo"
+      class="logo"
+      (click)="showVersion()"
+    />
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="createNewReservation('fab')">
