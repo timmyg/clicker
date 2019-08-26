@@ -40,6 +40,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   sufficientFunds: boolean;
   isAppLoading$: Observable<boolean>;
   isAppLoading: boolean;
+  isFree: boolean;
   sub: Subscription;
   timeframe0: Timeframe = {
     minutes: 0,
@@ -202,5 +203,8 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     const timeframe = e.detail.value;
     this.reservation.cost = timeframe.tokens;
     this.reservation.minutes = timeframe.minutes;
+    // console.log(this.reservation);
+    this.isFree = this.reservation.cost === 0;
+    console.log('isfre', this.isFree);
   }
 }
