@@ -7,6 +7,7 @@ import { Timeframe } from 'src/app/state/app/timeframe.model';
 @Injectable()
 export class AppService {
   private prefix = `app`;
+  private version: string;
   constructor(private httpClient: HttpClient) {}
 
   getPlans(): Observable<Plan[]> {
@@ -18,5 +19,13 @@ export class AppService {
       locationId,
     };
     return this.httpClient.get<Timeframe[]>(`${this.prefix}/timeframes`, { params });
+  }
+
+  setVersion(version: string) {
+    this.version = version;
+  }
+
+  getVersion(): string {
+    return this.version;
   }
 }
