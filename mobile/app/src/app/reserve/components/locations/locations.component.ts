@@ -32,10 +32,11 @@ const permissionGeolocation = {
   },
 };
 
+// not working in browser
 const geolocationOptions: GeolocationOptions = {
-  enableHighAccuracy: true,
-  timeout: 2500,
-  maximumAge: 600000, // 10 minuts
+  // enableHighAccuracy: true,
+  // timeout: 10000, // 10 seconds
+  // maximumAge: 600000, // 10 minutes
 };
 
 @Component({
@@ -147,7 +148,9 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async refresh() {
+    console.time('geolocation 1');
     await Geolocation.getCurrentPosition(geolocationOptions).then(response => {
+      console.timeEnd('geolocation 1');
       const { latitude, longitude } = response.coords;
       this.userGeolocation = { latitude, longitude };
       this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
@@ -241,8 +244,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
       (permissionStatus === permissionGeolocation.values.allowed ||
         permissionStatus === permissionGeolocation.values.probably)
     ) {
+      console.time('geolocation 2');
       await Geolocation.getCurrentPosition(geolocationOptions)
         .then(response => {
+          console.timeEnd('geolocation 2');
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;
           this.geolocationDeclined = false;
