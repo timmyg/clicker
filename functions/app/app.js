@@ -23,13 +23,12 @@ module.exports.timeframes = async event => {
   return respond(200, timeframes);
 };
 
-
 module.exports.blogPostUpdated = async event => {
   const stage = process.env.stage;
   console.log(stage);
   if (stage === 'prod') {
     const response = await axios.post('https://api.netlify.com/build_hooks/5c7458709c6a819dd611ee82', {});
-    return respond(200, response);
+    return respond(200, 'ok');
   }
   return respond(400);
 };
