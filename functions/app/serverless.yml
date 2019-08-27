@@ -69,7 +69,7 @@ functions:
     handler: app.blogPostUpdated
     events:
       - http:
-          path: blogPostUpdated
+          path: blog
           method: get
           cors:
             origin: '*'
