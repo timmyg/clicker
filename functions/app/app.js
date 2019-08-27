@@ -1,4 +1,6 @@
 require('dotenv').config();
+const axios = require('axios');
+
 const { respond } = require('serverless-helpers');
 const plans = [
   { tokens: 2, dollars: 10, id: 'bb23310b-3fec-4873-8cdf-279ffcd31b32' },
@@ -19,4 +21,14 @@ module.exports.timeframes = async event => {
   console.log(event.queryStringParameters.locationId);
   // locationId should be available in query params
   return respond(200, timeframes);
+};
+
+module.exports.blogPostUpdated = async event => {
+  const stage = process.env.stage;
+  console.log(stage);
+  if (stage === 'prod') {
+    const response = await axios.post('https://api.netlify.com/build_hooks/5c7458709c6a819dd611ee82', {});
+    return respond(200, response);
+  }
+  return respond(400);
 };
