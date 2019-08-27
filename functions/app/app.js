@@ -23,6 +23,7 @@ module.exports.timeframes = async event => {
   return respond(200, timeframes);
 };
 
+
 module.exports.blogPostUpdated = async event => {
   const stage = process.env.stage;
   console.log(stage);
