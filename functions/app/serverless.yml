@@ -65,3 +65,15 @@ functions:
               - partner
               - authorization
               - content-type
+  blogPostUpdated:
+    handler: app.blogPostUpdated
+    events:
+      - http:
+          path: blogPostUpdated
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
