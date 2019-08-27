@@ -70,7 +70,7 @@ functions:
     events:
       - http:
           path: blog
-          method: get
+          method: post
           cors:
             origin: '*'
             headers:
