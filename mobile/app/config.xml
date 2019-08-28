@@ -101,7 +101,7 @@
     <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
     <plugin name="cordova-plugin-ionic" spec="5.3.0">
         <variable name="APP_ID" value="ff3de01e" />
-        <variable name="CHANNEL_NAME" value="Production" />
+        <variable name="CHANNEL_NAME" value="Master" />
         <variable name="UPDATE_METHOD" value="background" />
         <variable name="UPDATE_API" value="https://api.ionicjs.com" />
         <variable name="MAX_STORE" value="2" />
