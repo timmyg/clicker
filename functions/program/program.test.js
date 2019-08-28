@@ -43,5 +43,5 @@ test('build programs', () => {
   const response = build(data.schedule, null, ['324', '661-1']);
   // console.log({ response });
   expect(response[0]).toHaveProperty('id');
-  expect(response.length).toBe(180);
+  expect(response.length).toBe(129);
 });
