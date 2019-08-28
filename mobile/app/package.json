@@ -31,6 +31,7 @@
     "@angular/platform-browser-dynamic": "^8.2.2",
     "@angular/router": "^8.2.2",
     "@capacitor/android": "1.1.1",
+    "@capacitor/angular": "0.0.11",
     "@capacitor/cli": "^1.1.1",
     "@capacitor/core": "1.1.1",
     "@capacitor/ios": "1.1.1",
@@ -93,7 +94,8 @@
     "protractor": "~5.4.0",
     "ts-node": "~8.0.0",
     "tslint": "~5.12.0",
-    "typescript": "~3.5.3"
+    "typescript": "~3.5.3",
+    "@capacitor/cli": "latest"
   },
   "description": "Clicker: Change the Channel"
 }
