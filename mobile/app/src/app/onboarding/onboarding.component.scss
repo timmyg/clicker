@@ -1,0 +1,24 @@
+ion-slides {
+  height: 100vh;
+  background: #7b7b7b;
+  ion-slide {
+    align-items: unset;
+    ion-chip {
+      height: inherit;
+    }
+    &.what {
+      img.logo {
+        width: 60px;
+        height: inherit;
+        margin: 0 auto;
+      }
+    }
+    ol {
+      padding-left: 20px;
+    }
+    ion-card {
+      padding: 20px 0;
+      background: white;
+    }
+  }
+}

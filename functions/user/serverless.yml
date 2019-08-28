@@ -1,0 +1,213 @@
+service: user
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    tableUser: ${self:custom.tableUser}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    stage: ${self:custom.stage}
+    stripeSecretKey: ${self:custom.stripeSecretKey.${self:custom.stage}}
+    twilioAccountSid: ${env:TWILIO_ACCOUNT_SID}
+    twilioAuthToken: ${env:TWILIO_AUTH_TOKEN}
+    twilioServiceSid: ${env:TWILIO_SERVICE_SID}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  tableThroughputs:
+    prod: 5
+    default: 1
+  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: users
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  tableUser: users-${self:custom.stage}
+  stripeSecretKey:
+    prod: ${env:STRIPE_SECRET_KEY}
+    release: ${env:STRIPE_SECRET_KEY_DEV}
+    develop: ${env:STRIPE_SECRET_KEY_DEV}
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+resources:
+  Resources:
+    UserTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableUser}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
+
+functions:
+  health:
+    handler: user.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  create:
+    handler: user.create
+    events:
+      - http:
+          path: ''
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  wallet:
+    handler: user.wallet
+    events:
+      - http:
+          path: wallet
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  updateCard:
+    handler: user.updateCard
+    events:
+      - http:
+          path: stripe/card
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  removeCard:
+    handler: user.removeCard
+    events:
+      - http:
+          path: stripe/card
+          method: delete
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  replenish:
+    handler: user.replenish
+    events:
+      - http:
+          path: 'replenish'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  charge:
+    handler: user.charge
+    events:
+      - http:
+          path: 'charge'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  subscribe:
+    handler: user.subscribe
+    events:
+      - http:
+          path: 'subscribe'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  transaction:
+    handler: user.transaction
+    events:
+      - http:
+          path: 'transaction'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  alias:
+    handler: user.alias
+    events:
+      - http:
+          path: 'alias/{fromId}/{toId}'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  verifyStart:
+    handler: user.verifyStart
+    events:
+      - http:
+          path: 'verify/start'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  verify:
+    handler: user.verify
+    events:
+      - http:
+          path: 'verify'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

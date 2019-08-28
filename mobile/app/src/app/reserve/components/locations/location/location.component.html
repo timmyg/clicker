@@ -1,0 +1,31 @@
+<ion-item-sliding [ngClass]="{ inactive: !isAvailable() }" [disabled]="!isAvailable() || !isManager()" #slidingItem>
+  <ion-item-options side="start">
+    <ion-item-option (click)="onManageClick(slidingItem)">Manage</ion-item-option>
+  </ion-item-options>
+  <ion-item>
+    <ion-card (click)="isAvailable() && onLocationClick()" no-margin>
+      <ion-card-header>
+        <ion-card-subtitle>
+          <span
+            >{{ location.neighborhood }} <span *ngIf="!isAvailable()">(inactive)</span>
+            <ion-chip color="primary" *ngIf="location.free"> <label color="primary"> Free </label></ion-chip>
+            <ion-chip color="primary" *ngIf="location.announcement">
+              <label color="primary"> {{ location.announcement }}</label></ion-chip
+            >
+          </span>
+          <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
+          <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
+
+          <span float-right *ngIf="location.distance">
+            <span *ngIf="location.distance >= 0.2; else near"> {{ getDistance() }} miles </span>
+            <ng-template #near> Near </ng-template>
+          </span>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content no-padding-top>
+        <img [src]="location.img" class="logo" />
+        <h1>{{ location.name }}</h1>
+      </ion-card-content>
+    </ion-card>
+  </ion-item>
+</ion-item-sliding>

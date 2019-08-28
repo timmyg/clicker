@@ -1,0 +1,29 @@
+{
+  "name": "users",
+  "version": "1.0.0",
+  "description": "",
+  "main": "user.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "invoke:health": "serverless invoke local --function health",
+    "invoke:create": "serverless invoke local --function create --path ../.resources/data/user.json",
+    "invoke:getWallet": "serverless invoke local --function getWallet --path ../.resources/data/user.json",
+    "invoke:addTokens": "serverless invoke local --function addTokens --path ../.resources/data/user.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "dynamoose": "^1.7.2",
+    "jsonwebtoken": "^8.5.1",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.13",
+    "stripe": "^6.31.1",
+    "twilio": "^3.33.1",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^24.0.0",
+    "serverless": "^1.36.3",
+    "serverless-domain-manager": "^2.6.13"
+  }
+}

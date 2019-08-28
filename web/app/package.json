@@ -1,0 +1,60 @@
+{
+  "name": "clicker-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "vue-cli-service serve --host local.tryclicker.com",
+    "build": "vue-cli-service build",
+    "build:dev": "vue-cli-service build --mode development",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap-scss": "^4.3.1",
+    "contentful-rich-text-vue-renderer": "^1.1.2",
+    "contentful-vue": "^1.0.5",
+    "gotrue-js": "^0.9.22",
+    "moment": "^2.24.0",
+    "vue": "^2.6.7",
+    "vue-browserupdate": "^1.2.0",
+    "vue-carousel": "^0.18.0",
+    "vue-intercom": "^1.0.13",
+    "vue-ionicons": "^3.0.4",
+    "vue-moment": "^4.0.0",
+    "vue-router": "^3.0.1",
+    "vue-scroll-reveal": "^1.0.11",
+    "vue-stripe-elements-plus": "^0.2.10",
+    "vue2-animate": "^2.1.0",
+    "vuex": "^3.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.4.1",
+    "@vue/cli-plugin-eslint": "^3.4.1",
+    "@vue/cli-service": "^3.4.1",
+    "@vue/eslint-config-prettier": "^4.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-vue": "^5.2.2",
+    "install": "^0.12.2",
+    "lint-staged": "^7.2.2",
+    "node-sass": "^4.9.0",
+    "npm": "^6.8.0",
+    "prerender-spa-plugin": "^3.4.0",
+    "prettier": "^1.16.4",
+    "sass-loader": "^7.0.1",
+    "vue-svg-loader": "^0.12.0",
+    "vue-template-compiler": "^2.6.7"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}

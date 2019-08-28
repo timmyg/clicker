@@ -1,20 +1,8 @@
-### mobile app
+### Clicker
 
-##### native releases
+[![CircleCI](https://circleci.com/gh/teamclicker/clicker/tree/master.svg?style=svg&circle-token=6f621ea70e1a65a7dc4a1b9d10defa2989f2904d)](https://circleci.com/gh/teamclicker/clicker/tree/master)
+[![CircleCI](https://circleci.com/gh/teamclicker/clicker/tree/release.svg?style=svg&circle-token=6f621ea70e1a65a7dc4a1b9d10defa2989f2904d)](https://circleci.com/gh/teamclicker/clicker/tree/stage)
+[![CircleCI](https://circleci.com/gh/teamclicker/clicker/tree/develop.svg?style=svg&circle-token=6f621ea70e1a65a7dc4a1b9d10defa2989f2904d)](https://circleci.com/gh/teamclicker/clicker/tree/develop)
 
-1. bump `package.json` version number
-2. native:
-   - iOS: click on App in Xcode > General > update **Version** and **Build**
-   - android: `build.gradle` update **versionCode** and **versionName**
-3. merge to master
-4. `npm run build:android:prod && npm run build:ios:prod`
-5. build natively:
-   - iOS: Product > Archive
-   - android: Build > Generate Signed Bundle / APK > App Bundle > Release
-
-###### screenshots
-
-- iPhone XS Max for 6.5"
-- iPhone 8+ for 5.5"
-- Pixel 3
-
+[![Netlify Status](https://api.netlify.com/api/v1/badges/15292ae9-9229-46a4-baea-50e6ea54e90d/deploy-status)](https://app.netlify.com/sites/tryclicker-web/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c2f2bef3-8ef6-4856-941f-c5caf083cde9/deploy-status)](https://app.netlify.com/sites/tryclicker-mobile/deploys) 

@@ -1,0 +1,150 @@
+service: reservation
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    tableReservation: ${self:custom.tableReservation}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    tableThroughputs: ${self:custom.tableThroughputs.${self:custom.stage}}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  tableThroughputs:
+    prod: 5
+    default: 1
+  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: reservations
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  tableReservation: reservations-${self:custom.stage}
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+resources:
+  Resources:
+    ReservationTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableReservation}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        # GlobalSecondaryIndexes:
+        #   - IndexName: StartTimeByLocationIndex
+        #     KeySchema:
+        #       - AttributeName: category
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: 1
+        #       WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
+
+functions:
+  health:
+    handler: reservation.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  activeByUser:
+    handler: reservation.activeByUser
+    events:
+      - http:
+          path: 'active/user'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  get:
+    handler: reservation.get
+    events:
+      - http:
+          path: '{id}'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  create:
+    handler: reservation.create
+    timeout: 20
+    events:
+      - http:
+          path: ''
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  cancel:
+    handler: reservation.cancel
+    events:
+      - http:
+          path: '{id}'
+          method: delete
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  update:
+    handler: reservation.update
+    timeout: 20
+    events:
+      - http:
+          path: '{id}'
+          method: put
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

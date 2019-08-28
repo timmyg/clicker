@@ -1,0 +1,20 @@
+{
+  "name": "antenna",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "start": "npx node startup.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "directv-remote": "git+https://github.com/timmyg/directv-remote.git",
+    "dotenv": "^6.1.0",
+    "iotdb-arp": "0.0.6",
+    "losant-mqtt": "^3.1.0",
+    "request": "^2.88.0",
+    "winston": "^3.1.0",
+    "winston-logzio": "https://github.com/timmyg/winston-logzio.git"
+  }
+}

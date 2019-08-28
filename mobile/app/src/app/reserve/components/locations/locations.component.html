@@ -1,0 +1,51 @@
+<!-- show if data loading initally or evaluating geolocationDeclined
+unless pulling to refresh (so we don't show duplicate spinners) -->
+<ion-row *ngIf="((isLoading$ | async) || evaluatingGeolocation) && !reserveService.isRefreshing" margin-vertical>
+  <ion-spinner name="crescent" class="center"></ion-spinner>
+</ion-row>
+
+<section>
+  <section
+    class="ion-text-center"
+    padding
+    *ngIf="(askForGeolocation$ | async) && !evaluatingGeolocation; else showLocations"
+  >
+    <ion-icon name="pin" class="location"></ion-icon>
+    <p>
+      Clicker TV needs access to your location for more accurate location details. This data is not stored or shared.
+    </p>
+    <div><ion-button margin-top (click)="allowLocation()">Allow Location Access </ion-button></div>
+  </section>
+
+  <ng-template #showLocations>
+    <ion-list lines="none" [class.content-loading]="(isLoading$ | async) || waiting">
+      <ng-container *ngFor="let location of (locations$ | async | locationsFilter: searchTerm:showHidden)">
+        <app-location
+          [location]="location"
+          [userRoles]="userRoles"
+          [userLocations]="userLocations"
+          (onClick)="onLocationClick($event)"
+          (onManage)="onLocationManage($event)"
+        ></app-location>
+      </ng-container>
+      <ng-container
+        *ngIf="
+          !((isLoading$ | async) || evaluatingGeolocation) &&
+          !reserveService.isRefreshing &&
+          (locations$ | async | locationsFilter: searchTerm:showHidden)?.length === 0
+        "
+      >
+        <ion-card>
+          <ion-card-content class="ion-text-center">
+            Sorry, no Clicker locations within {{ milesRadius }} miles 😢
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <p *ngIf="geolocationDeclined && !evaluatingGeolocation" class="ion-text-center" padding>
+        Find locations around you by <a (click)="forceAllow()">allowing location services</a>
+      </p>
+      <p class="ion-text-center" padding><a (click)="suggestLocation()">Suggest a location</a></p>
+    </ion-list>
+  </ng-template>
+</section>

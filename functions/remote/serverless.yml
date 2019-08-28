@@ -1,0 +1,71 @@
+service: remote
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    # losantKey: ${env:LOSANT_KEY}
+    # losantSecret: ${env:LOSANT_SECRET}
+    losantAppId: ${env:LOSANT_APP_ID}
+    losantAccessToken: ${env:LOSANT_ACCESS_TOKEN}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+plugins:
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: remote
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+functions:
+  health:
+    handler: remote.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  command:
+    handler: remote.command
+    events:
+      - http:
+          path: '/command'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  debug:
+    handler: remote.debug
+    events:
+      - http:
+          path: '/debug'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

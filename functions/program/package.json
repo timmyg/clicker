@@ -1,0 +1,30 @@
+{
+  "name": "program",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "invoke:pull": "serverless invoke local --function pull",
+    "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",
+    "invoke:programming:area:get": "serverless invoke local --function getAreaProgramming --path ../.resources/data/programming-area.json",
+    "invoke:syncNew": "serverless invoke local --function syncNew",
+    "invoke:syncDescriptions": "serverless invoke local --function syncDescriptions"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
+    "dynamoose": "^1.5.2",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.13",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0",
+    "serverless": "^1.37.0",
+    "serverless-domain-manager": "^2.6.13"
+  }
+}

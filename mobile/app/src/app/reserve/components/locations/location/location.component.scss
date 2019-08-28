@@ -1,0 +1,14 @@
+img.logo {
+  height: 40px;
+  width: inherit;
+  float: left;
+  padding: 0 10px 10px 0;
+}
+
+.inactive {
+  opacity: 0.4;
+}
+
+ion-icon.disconnected {
+  color: var(--ion-color-danger);
+}

@@ -1,0 +1,12 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "wrapper project for serverless functions",
+  "scripts": {
+    "test": "jest --coverage",
+    "logs:account": "serverless logs --function account --stage $STAGE --aws-profile $PROFILE",
+    "invoke:widget:register": "serverless invoke local --function register --path ../.resources/data/widget.json",
+    "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
+  },
+  "dependencies": {}
+}

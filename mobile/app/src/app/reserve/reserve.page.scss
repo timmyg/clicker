@@ -1,0 +1,33 @@
+.breadcrumbs {
+  ion-icon {
+    font-size: 24px;
+  }
+  .step {
+    // margin-right: 8px;
+    &.active {
+      .text {
+        font-weight: bold;
+        color: var(--ion-color-primary);
+      }
+    }
+    &:not(.active) {
+      opacity: 0.4;
+    }
+  }
+  ion-icon {
+    margin-right: 2px;
+  }
+  ion-icon,
+  .text {
+    vertical-align: middle;
+  }
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+
+  ion-card {
+    width: 100%;
+  }
+}
