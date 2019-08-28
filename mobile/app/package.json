@@ -1,13 +1,13 @@
 {
   "name": "clicker-mobile",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": "Tim Giblin",
   "homepage": "https://tryclicker.com/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4100 --host local.tryclicker.com",
     "build": "ng build --configuration=production",
-    "build:dev": "ng build --configuration=$ENV",
+    "build:dev": "ng build --configuration=develop",
     "build:ios": "npm run build && npx cap sync ios && npx cap open ios",
     "build:ios:release": "ENV=release npm run build && npx cap sync ios && npx cap open ios",
     "build:ios:prod": "ENV=production npm run build && npx cap sync ios && npx cap open ios",
