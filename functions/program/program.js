@@ -26,6 +26,7 @@ const nationalChannels = [
   { channel: 602, channelTitle: 'TVG' },
   { channel: 612, channelTitle: 'ACCN' },
   { channel: 618, channelTitle: 'FS2' },
+  { channel: 620, channelTitle: 'FS2' },
   { channel: 610, channelTitle: 'BTN' },
   { channel: 611, channelTitle: 'SECHD' },
   { channel: 605, channelTitle: 'SPMN' },
@@ -569,8 +570,8 @@ function build(dtvSchedule, zip, channels) {
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.zip = zip;
-        program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
         program.id = generateId(program);
+        program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
         program.end = new Date(
           parseInt(
             moment(program.airTime)
@@ -588,8 +589,8 @@ function build(dtvSchedule, zip, channels) {
 }
 
 function generateId(program) {
-  const { programId, zip, start } = program;
-  const id = programId + start + (zip || '');
+  const { programId, zip } = program;
+  const id = programId + (zip || '');
   // console.log(id, uuid.DNS);
   return uuid(id, uuid.DNS);
 }
