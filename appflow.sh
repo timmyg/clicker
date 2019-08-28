@@ -7,6 +7,8 @@ then
     find * -maxdepth 0 -name 'mobile' -prune -o -exec rm -rf '{}' ';'
     echo "move to root";
     mv -v ./mobile/app/* ./
+    echo "ls:";
+    ls
 else 
     echo "Not an Appflow build"; 
 fi
