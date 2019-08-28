@@ -1,6 +1,0 @@
-.env
-node_modules
-*.log
-tmp
-stuff
-package-lock.json
