@@ -1,5 +1,5 @@
 {
-  "appId": "com.teamclicker.appd",
+  "appId": "com.teamclicker.app",
   "appName": "clicker",
   "bundledWebRuntime": false,
   "npmClient": "npm",
