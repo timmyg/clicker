@@ -1,6 +1,0 @@
-{
-  "defaultProject": "clicker",
-  "projects": {
-    "clicker": { "name": "Clicker", "integrations": {}, "type": "angular", "root": "mobile/app" }
-  }
-}
