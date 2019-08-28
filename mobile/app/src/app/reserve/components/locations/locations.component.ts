@@ -266,7 +266,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.disableButton = false;
           console.error('Error getting location', error);
           const whoops = await this.toastController.create({
-            message: 'You need to allow location services in your phone settings for this app.',
+            message: 'Error getting your location. Make sure location services are enabled for this app.',
             color: 'light',
             duration: 6000,
             cssClass: 'ion-text-center',

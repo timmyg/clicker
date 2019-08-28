@@ -72,6 +72,7 @@ module.exports.all = async event => {
   if (pathParams) {
     latitude = pathParams.latitude;
     longitude = pathParams.longitude;
+    console.log('lat/lng', latitude, longitude);
   }
   let allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
