@@ -22,6 +22,7 @@ import { WalletModule } from '../wallet/wallet.module';
 import { WalletPage } from '../wallet/wallet.page';
 import { AuthModule } from '../auth/auth.module';
 import { LoginComponent } from '../auth/login/login.component';
+import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
 
 const routes: Routes = [
   {
@@ -79,6 +80,7 @@ const routes: Routes = [
     InfoComponent,
     LocationComponent,
   ],
+  providers: [Deploy],
   entryComponents: [LoginComponent, InfoComponent, WalletPage],
 })
 export class ReservePageModule {}
