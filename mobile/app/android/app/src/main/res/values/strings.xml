@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="app_name">Clicker TVm</string>
-  <string name="title_activity_main">Clicker TVm</string>
-  <string name="package_name">com.teamclicker.appm</string>
+  <string name="app_name">Clicker TVd</string>
+  <string name="title_activity_main">Clicker TVd</string>
+  <string name="package_name">com.teamclicker.appd</string>
   <string name="fileprovider_authority">com.teamclicker.app.fileprovider</string>
-  <string name="custom_url_scheme">com.teamclicker.appm</string>
+  <string name="custom_url_scheme">com.teamclicker.appd</string>
   <string name="ionic_app_id">aab910fb</string>
   <string name="ionic_channel_name">Master</string>
   <string name="ionic_update_method">auto</string>
