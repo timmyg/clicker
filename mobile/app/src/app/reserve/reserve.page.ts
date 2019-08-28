@@ -187,6 +187,7 @@ export class ReservePage {
     const toast = await this.toastController.create({
       message,
       cssClass: 'ion-text-center',
+      duration: 3000,
     });
     toast.present();
   }
