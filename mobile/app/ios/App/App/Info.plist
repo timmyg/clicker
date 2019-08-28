@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Clicker TVm</string>
+	<string>Clicker TV</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,19 +40,19 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3-m</string>
+	<string>1</string>
 	<key>IonApi</key>
 	<string>https://api.ionicjs.com</string>
 	<key>IonAppId</key>
 	<string>aab910fb</string>
 	<key>IonChannelName</key>
-	<string>Master</string>
+	<string>Production</string>
 	<key>IonMaxVersions</key>
 	<string>2</string>
 	<key>IonMinBackgroundDuration</key>
 	<string>30</string>
 	<key>IonUpdateMethod</key>
-	<string>background</string>
+	<string>auto</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>clicker</string>
