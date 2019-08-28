@@ -16,8 +16,8 @@ then
     rm -rf netlify.toml
     echo "move to root";
     mv -v ./mobile/app/* ./
-    echo "ls:";
-    ls
+    echo "ls -lrt:";
+    ls -lrt
 else 
     echo "Not an Appflow build"; 
 fi
