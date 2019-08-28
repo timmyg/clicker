@@ -1,15 +1,1 @@
-{
-  "appId": "com.teamclicker.app",
-  "appName": "clicker",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www",
-  "server": {
-    "hostname": "127.0.0.1"
-  },
-  "plugins": {
-    "SplashScreen": {
-      "launchAutoHide": false
-    }
-  }
-}
+{}
