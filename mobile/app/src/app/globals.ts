@@ -17,6 +17,11 @@ export class Globals {
         clickedButton: 'Reservation Started: Button',
         clickedLink: 'Reservation Started: Link',
         failed: 'Reservation Failed',
+        selectedLocation: 'Reservation Location Selected',
+        selectedTV: 'Reservation TV Selected',
+        selectedChannel: 'Reservation Channel Selected',
+        selectedProgram: 'Reservation Program Selected',
+        selectedTimeframe: 'Reservation Timeframe Selected',
       },
       location: {
         search: 'Location Searched',
