@@ -21,7 +21,7 @@
         </div>
         <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
-            <header>Logo TV Square 180</header>
+            <header>Logo TV Square</header>
             <div>
               <img
                 src="https://clicker-brand.s3.amazonaws.com/logo-tv-square-180.png"
@@ -32,7 +32,7 @@
         </div>
         <div class="card-wrapper" v-bind:class="spacing">
           <div class="card">
-            <header>Logo Square</header>
+            <header>Logo Square w/ bg</header>
             <div>
               <img
                 src="https://clicker-brand.s3.amazonaws.com/logo-square.png"
@@ -83,8 +83,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import '/css/chota.min.css';
-
+.card {
+  height: 100%;
+}
 .card-wrapper {
   padding: 20px 10px;
   .card {

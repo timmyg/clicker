@@ -158,9 +158,9 @@ export default {
           };
           console.log(body);
           // return;
-          const endpoint = this.isOneTime ? '/users/charge' : '/users/subscribe';
+          const endpoint = this.isOneTime ? 'users/charge' : 'users/subscribe';
           this.$http
-            .post(endpoint, body)
+            .post(`${process.env.NUXT_ENV_API_BASE}/${endpoint}`, body)
             .then(x => {
               console.log(x);
               this.completed = true;
