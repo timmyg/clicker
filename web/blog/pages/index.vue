@@ -1,5 +1,13 @@
 <template>
-  <section>
-    <nuxt-link :to="{ name: 'blog'}">Blog</nuxt-link>
-  </section>
+  <Landing />
 </template>
+
+<script>
+import Landing from '~/components/landing/Landing';
+
+export default {
+  components: {
+    Landing,
+  },
+};
+</script>
