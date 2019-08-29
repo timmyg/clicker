@@ -13,10 +13,12 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@nuxt/http": "^0.3.4",
     "@nuxtjs/markdownit": "^1.2.6",
     "contentful": "^7.9.1",
     "moment": "^2.24.0",
     "nuxt": "^2.9.2",
+    "vue-intercom": "^1.0.14",
     "vue-moment": "^4.0.0",
     "vue-scroll-reveal": "^1.0.11"
   },
@@ -28,6 +30,7 @@
     "eslint-loader": "^2.1.1",
     "eslint-plugin-vue": "^4.0.0",
     "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0"
+    "sass-loader": "^8.0.0",
+    "sass-resources-loader": "^2.0.1"
   }
 }

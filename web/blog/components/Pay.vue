@@ -76,7 +76,7 @@ import * as moment from 'moment';
 
 export default {
   data() {
-    console.log(process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY);
+    console.log(process.env.NUXT_ENV_STRIPE_PUBLISHABLE_KEY);
     return {
       completed: false,
       submitting: false,
@@ -98,7 +98,7 @@ export default {
           },
         },
       },
-      stripePublishableKey: process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY,
+      stripePublishableKey: process.env.NUXT_ENV_STRIPE_PUBLISHABLE_KEY,
     };
   },
 

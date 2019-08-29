@@ -19,28 +19,25 @@ module.exports = {
   generate: {
     routes: dynamicRoutes,
   },
-  modules: ['@nuxtjs/markdownit', '@nuxtjs/style-resources'],
+  modules: ['@nuxtjs/markdownit', '@nuxtjs/style-resources', '@nuxt/http'],
   plugins: ['~/plugins/vue-moment.js'],
-  styleResources: {
-    scss: ['/assets/scss/style.scss'],
-  },
-  // css: [
-  //   `
-  //   @import "@/assets/scss/style.scss"
-  // `,
-  // ],
+  css: ['~assets/scss/style.scss'],
 
   /*
    ** Headers of the page
    */
   head: {
-    title: 'blog',
+    title: 'Clicker: Sports Programming Platform',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'clicker blog' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'TV sports programming platform and app ensuring the best, most relevent games are on at all times',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: 'https://clicker-brand.s3.amazonaws.com/favicon.ico' }],
   },
   /*
    ** Customize the progress bar color

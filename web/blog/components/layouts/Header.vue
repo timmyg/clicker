@@ -1,6 +1,6 @@
 <template>
   <header class="site-header">
-    <!-- <div class="container">
+    <div class="container">
       <div class="site-header-inner">
         <div
           class="brand"
@@ -37,13 +37,14 @@
           <div class="header-nav-inner">
             <ul class="list-reset text-xxs header-nav-right">
               <li>
-                <a href="/blog" v-if="currentRouteName !== 'blog'">Blog</a>
+                <!-- <a href="/blog" v-if="currentRouteName !== 'blog'">Blog</a> -->
+                <nuxt-link :to="{ name: 'blog'}" v-if="currentRouteName !== 'blog'">Blog</nuxt-link>
               </li>
             </ul>
           </div>
         </nav>
       </div>
-    </div>-->
+    </div>
   </header>
 </template>
 
@@ -90,7 +91,7 @@ export default {
 
 <style lang="scss" scoped>
 header {
-  top: 40px;
+  // top: 40px;
   .subtitle {
     text-align: center;
     color: black;

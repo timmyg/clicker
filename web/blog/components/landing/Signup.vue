@@ -67,8 +67,9 @@ export default {
       if (this.$analytics) {
         this.$analytics.alias(email);
       }
+      console.log(this.$http);
       this.$http
-        .post('/leads', { email })
+        .post(`${process.env.NUXT_ENV_API_BASE}/leads`, { email })
         .then(() => {
           this.submitting = false;
           this.submitted = true;
