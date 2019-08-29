@@ -9,7 +9,7 @@
               v-bind:style="{ backgroundImage: 'url(' + (post.fields.featuredImage.fields.file.url || 'http://via.placeholder.com/3000x1000') + ')' }"
             >
               <div class="title h3">{{ post.fields.title | truncate(40) }}</div>
-              <div class="date h5">{{ post.sys.createdAt | moment("MMMM D, YYYY") }}</div>
+              <div class="date h5">{{ post.sys.publishedAt | moment("MMMM D, YYYY") }}</div>
             </figure>
           </article>
         </router-link>

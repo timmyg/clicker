@@ -14,7 +14,7 @@
       <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
         getEndTime() | amDateFormat: 'h:mma'
       }}</span>
-      <ng-template #noReservation> Free single change </ng-template>
+      <ng-template #noReservation> Free one-time change </ng-template>
     </div>
     <br />
     <ion-list *ngIf="!reservation.location.free">
@@ -52,10 +52,15 @@
         <!-- </ng-template> -->
       </ion-radio-group>
     </ion-list>
-    <p class="ion-text-center" *ngIf="!reservation.location.free" padding-top>
-      You will be able to freely change the channel during your reservation.
+    <p class="ion-text-center" padding-top>
+      <span *ngIf="!reservation.location.free && reservation.cost !== 0; else free">
+        You will be able to freely change the channel during your reservation.
+      </span>
+      <ng-template #free
+        >This TV is not currently reserved, so you can change it for free, but others will be able to change it at any
+        time.</ng-template
+      >
     </p>
-    <!-- </p> -->
     <ion-button
       size="large"
       expand="block"

@@ -8,12 +8,12 @@
         ></figure>
         <div class="container">
           <div class="wrapper">
-            <div class="title h2">{{ post.fields.title }}</div>
-            <div class="date h5">{{ post.sys.createdAt | moment("MMMM D, YYYY") }}</div>
+            <div class="title h2">{{ post.fields.title | truncate(40) }}</div>
+            <div class="date h5">{{ post.sys.publishedAt | moment("MMMM D, YYYY") }}</div>
           </div>
-          <RichTextRenderer :document="post.fields.content" />
+          <!-- <RichTextRenderer :document="post.fields.content" /> -->
           <!-- <RichTextRenderer :document="post.fields.test" /> -->
-          <div v-html="post.fields.test"></div>
+          <div v-html="post.fields.content"></div>
         </div>
       </article>
     </main>

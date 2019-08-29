@@ -21,6 +21,7 @@ import { Storage } from '@ionic/storage';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
 import { Intercom } from 'ng-intercom';
+import { GeolocationOptions } from '@ionic-native/geolocation/ngx';
 
 const permissionGeolocation = {
   name: 'permission.geolocation',
@@ -29,6 +30,13 @@ const permissionGeolocation = {
     probably: 'probably',
     denied: 'denied',
   },
+};
+
+// not working in browser
+const geolocationOptions: GeolocationOptions = {
+  // enableHighAccuracy: true,
+  // timeout: 10000, // 10 seconds
+  // maximumAge: 600000, // 10 minutes
 };
 
 @Component({
@@ -54,8 +62,9 @@ export class LocationsComponent implements OnDestroy, OnInit {
   geolocationDeclined = true;
   waiting: boolean;
   showHidden = false;
+  disableButton = false;
   sub: Subscription;
-  milesRadius = 3;
+  milesRadius = 5;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -139,7 +148,9 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async refresh() {
-    await Geolocation.getCurrentPosition().then(response => {
+    console.time('geolocation 1');
+    await Geolocation.getCurrentPosition(geolocationOptions).then(response => {
+      console.timeEnd('geolocation 1');
       const { latitude, longitude } = response.coords;
       this.userGeolocation = { latitude, longitude };
       this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
@@ -182,6 +193,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async allowLocation() {
     await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.probably);
     this.evaluateGeolocation();
+    this.disableButton = true;
     this.segment.track(this.globals.events.permissions.geolocation.allowed);
   }
 
@@ -232,11 +244,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
       (permissionStatus === permissionGeolocation.values.allowed ||
         permissionStatus === permissionGeolocation.values.probably)
     ) {
-      await Geolocation.getCurrentPosition()
+      console.time('geolocation 2');
+      await Geolocation.getCurrentPosition(geolocationOptions)
         .then(response => {
+          console.timeEnd('geolocation 2');
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;
           this.geolocationDeclined = false;
+          this.disableButton = false;
           this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
           const { latitude, longitude } = response.coords;
           this.userGeolocation = { latitude, longitude };
@@ -248,9 +263,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.askForGeolocation$.next(false);
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
           this.reserveService.emitShowingLocations();
+          this.disableButton = false;
           console.error('Error getting location', error);
           const whoops = await this.toastController.create({
-            message: 'You need to allow location services in your phone settings for this app.',
+            message: 'Error getting your location. Make sure location services are enabled for this app.',
             color: 'light',
             duration: 6000,
             cssClass: 'ion-text-center',
@@ -260,6 +276,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     } else {
       this.askForGeolocation$.next(true);
       this.evaluatingGeolocation = false;
+      this.disableButton = false;
     }
   }
 
