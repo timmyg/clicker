@@ -14,7 +14,7 @@
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
                     <span class="pricing-item-price-currency h5 text-color-low">$</span>
-                    <span class="pricing-item-price-amount h4">30</span>
+                    <span class="pricing-item-price-amount h4">50</span>
                     <span class="text-color-low text-xs">/month</span>
                     <span class="pricing-item-name brand-font h5">Assistant Coach</span>
                   </div>
@@ -50,7 +50,7 @@
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
                     <span class="pricing-item-price-currency h5 text-color-low">$</span>
-                    <span class="pricing-item-price-amount h4">30</span>
+                    <span class="pricing-item-price-amount h4">50</span>
                     <span class="text-color-low text-xs">/month</span>
                     <span class="pricing-item-name brand-font h5">Advanced Scout</span>
                   </div>
@@ -87,7 +87,7 @@
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
                     <span class="pricing-item-price-currency h5 text-color-low">$</span>
-                    <span class="pricing-item-price-amount h4">50</span>
+                    <span class="pricing-item-price-amount h4">90</span>
                     <span class="text-color-low text-xs">/month</span>
                     <span class="pricing-item-name brand-font h5">General Manager</span>
                   </div>
