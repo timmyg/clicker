@@ -14,7 +14,9 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
     <p>
       Clicker TV needs access to your location for more accurate location details. This data is not stored or shared.
     </p>
-    <div><ion-button margin-top (click)="allowLocation()">Allow Location Access </ion-button></div>
+    <div>
+      <ion-button margin-top (click)="allowLocation()" [disabled]="disableButton">Allow Location Access </ion-button>
+    </div>
   </section>
 
   <ng-template #showLocations>

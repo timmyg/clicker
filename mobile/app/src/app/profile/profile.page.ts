@@ -298,9 +298,12 @@ export class ProfilePage {
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
             let link = 'https://tryclicker.com';
+            console.log('checking platform type');
             if (this.platform.is('ios')) {
+              console.log('is ios');
               link = 'itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8';
             } else if (this.platform.is('android')) {
+              console.log('is android');
               link = 'market://details?id=com.teamclicker.app';
             }
             window.open(link);

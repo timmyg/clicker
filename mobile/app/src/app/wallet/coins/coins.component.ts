@@ -67,7 +67,7 @@ export class CoinsComponent implements OnInit {
       return await this.walletModal.present();
     } else {
       const toast = await this.toastController.create({
-        message: `✋ You must be logged in to buy tokens. ✋`,
+        message: `✋ You must be logged in to buy tokens.`,
         duration: 4000,
         buttons: [
           {
