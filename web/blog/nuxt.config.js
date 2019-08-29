@@ -1,5 +1,26 @@
+import { createClient } from './plugins/contentful.js';
+
+let dynamicRoutes = () => {
+  const client = createClient();
+  return Promise.all([
+    client.getEntries({
+      content_type: 'blogPost',
+      order: '-sys.createdAt',
+    }),
+  ])
+    .then(([posts]) => {
+      return posts.items.map(post => `/blog/${post.fields.slug}`);
+    })
+    .catch(e => console.error(e));
+};
+
 module.exports = {
   mode: 'spa',
+  generate: {
+    routes: dynamicRoutes,
+  },
+  modules: ['@nuxtjs/markdownit'],
+  plugins: ['~/plugins/vue-moment.js'],
   /*
    ** Headers of the page
    */
@@ -33,5 +54,9 @@ module.exports = {
         });
       }
     },
+  },
+  markdownit: {
+    injected: true,
+    html: true,
   },
 };
