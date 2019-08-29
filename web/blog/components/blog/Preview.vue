@@ -1,19 +1,20 @@
 <template>
   <article>
-    <img
-      class="thumbnail"
-      :src="post.fields.featuredImage.fields.file.url + '?fit=scale&w=350&h=196'"
-      :srcset="`${post.fields.featuredImage.fields.file.url}?w=350&h=196&fit=fill 350w, ${post.fields.featuredImage.fields.file.url}?w=1000&h=562&fit=fill 1000w, ${post.fields.featuredImage.fields.file.url}?w=2000&h=1125&fit=fill 2000w`"
-      sizes="(min-width: 1024px) 400px, 100vw"
-    />
-    <time class="tiny date">{{ post.sys.createdAt | moment("MMMM Do YYYY") }}</time>
-    <h4>
-      <nuxt-link
-        :to="{ name: 'blog-slug', params: { slug: post.fields.slug }}"
-        class="title"
-      >{{ post.fields.title }}</nuxt-link>
-    </h4>
-    <p>{{ post.fields.description }}</p>
+    <nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug }}" class="title">
+      <div class="wrap">
+        <img
+          class="primary thumbnail"
+          :src="post.fields.featuredImage.fields.file.url + '?fit=scale&w=350&h=196'"
+          :srcset="`${post.fields.featuredImage.fields.file.url}?w=350&h=196&fit=fill 350w, ${post.fields.featuredImage.fields.file.url}?w=1000&h=562&fit=fill 1000w, ${post.fields.featuredImage.fields.file.url}?w=2000&h=1125&fit=fill 2000w`"
+          sizes="(min-width: 1024px) 400px, 100vw"
+        />
+        <div class="secondary">
+          <h4>{{ post.fields.title }}</h4>
+          <time>{{ post.sys.createdAt | moment("MMMM Do YYYY") }}</time>
+          <p>{{ post.fields.summary }}</p>
+        </div>
+      </div>
+    </nuxt-link>
 
     <div class="tags">
       <nuxt-link
@@ -32,38 +33,40 @@ export default {
 };
 </script>
 
-<style>
-.thumbnail {
-  margin-bottom: 1em;
+<style lang='scss' scoped >
+// img {
+//   height: 300px;
+// }
+
+.wrap {
+  display: flex;
+  margin-bottom: 30px;
 }
 
-.title {
-  text-decoration: none;
-  font-size: 22px;
-  color: #373f49;
+.primary {
+  width: 30%;
 }
 
-.tags {
-  padding: 1em 0;
-  margin-bottom: 2em;
+.secondary {
+  padding-left: 30px;
 }
 
-.tag:link,
-.tag:visited {
-  color: #a0a0a0;
-  text-decoration: none;
-  display: inline-block;
-  padding: 0.33333rem 0.5rem;
-  line-height: 1;
-  border-radius: 2px;
-  border: 1px solid #a0a0a0;
-  margin-right: 0.5em;
+p {
+  color: #182334;
 }
 
-.tag:active,
-.tag:hover,
-.tag:focus {
-  color: #606060;
-  border-color: #606060;
+time {
+  color: grey;
+}
+
+@media (max-width: 767px) {
+  .wrap {
+    flex-direction: column-reverse;
+  }
+  .primary,
+  .secondary {
+    width: auto;
+    padding: 0;
+  }
 }
 </style>

@@ -1,24 +1,31 @@
 <template>
-  <div class="container">
-    <div class="columns">
-      <div class="column is-offset-2 is-8">
-        <h1 class="title is-2">Latest Posts</h1>
-        <hr />
-        <h2 class="title is-4" v-for="(post, index) in posts" :key="index">
-          <Preview :post="post" />
-        </h2>
+  <layout-basic>
+    <Header v-bind:subtitle="'Blog'"></Header>
+    <main>
+      <div class="container">
+        <div class="columns">
+          <div class="column is-offset-2 is-8">
+            <div v-for="(post, index) in posts" :key="index">
+              <Preview :post="post" />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </main>
+  </layout-basic>
 </template>
 
 <script>
 import { createClient } from '~/plugins/contentful.js';
+import Header from '@/components/layouts/Header';
 import Preview from '~/components/blog/Preview';
+import LayoutBasic from '@/components/layouts/Basic';
 
 const client = createClient();
 export default {
   components: {
+    Header,
+    LayoutBasic,
     Preview,
   },
   asyncData({ env }) {
@@ -29,7 +36,7 @@ export default {
       }),
     ])
       .then(([posts]) => {
-        console.log(JSON.stringify(posts.items[0]));
+        // console.log(JSON.stringify(posts.items[0]));
         return {
           posts: posts.items,
         };
@@ -38,3 +45,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+// main {
+//   padding-top: 100px;
+// }
+</style>

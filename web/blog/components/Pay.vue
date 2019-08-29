@@ -156,7 +156,7 @@ export default {
             plan,
             start: start ? moment(start).unix() * 1000 : null,
           };
-          console.log(body);
+          // console.log(body);
           // return;
           const endpoint = this.isOneTime ? 'users/charge' : 'users/subscribe';
           this.$http

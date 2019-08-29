@@ -19,7 +19,7 @@ module.exports = {
   generate: {
     routes: dynamicRoutes,
   },
-  modules: ['@nuxtjs/markdownit', '@nuxtjs/style-resources', '@nuxt/http'],
+  modules: ['@nuxtjs/markdownit', '@nuxtjs/style-resources', '@nuxt/http', '@nuxtjs/dotenv'],
   plugins: ['~/plugins/vue-moment.js'],
   css: ['~assets/scss/style.scss'],
 

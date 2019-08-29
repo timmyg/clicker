@@ -37,8 +37,8 @@
           <div class="header-nav-inner">
             <ul class="list-reset text-xxs header-nav-right">
               <li>
-                <!-- <a href="/blog" v-if="currentRouteName !== 'blog'">Blog</a> -->
-                <nuxt-link :to="{ name: 'blog'}" v-if="currentRouteName !== 'blog'">Blog</nuxt-link>
+                <nuxt-link to="/" v-if="currentRouteName.includes('blog')">Home</nuxt-link>
+                <nuxt-link :to="{ name: 'blog'}" v-else>Blog</nuxt-link>
               </li>
             </ul>
           </div>
@@ -53,6 +53,7 @@ export default {
   props: ['subtitle'],
   computed: {
     currentRouteName() {
+      console.log(this.$route.name);
       return this.$route.name;
     },
   },
