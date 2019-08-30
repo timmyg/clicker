@@ -249,11 +249,11 @@ functions:
               - partner
               - authorization
               - content-type
-  controlCenterLocationsByRegions:
-    handler: location.controlCenterLocationsByRegions
+  controlCenterLocationsByRegion:
+    handler: location.controlCenterLocationsByRegion
     events:
       - http:
-          path: 'region'
+          path: 'region/{region}'
           method: get
           cors:
             origin: '*'

@@ -348,14 +348,14 @@ module.exports.allOn = async event => {
   return respond(200, 'ok');
 };
 
-module.exports.controlCenterLocationsByRegions = async event => {
-  // const { regions } = getPathParameters(event);
-  const { regions } = event.queryStringParameters;
-  console.log(regions);
-  if (!regions) {
+module.exports.controlCenterLocationsByRegion = async event => {
+  const { region } = getPathParameters(event);
+  // const { regions } = event.queryStringParameters;
+  console.log(region);
+  if (!region) {
     return respond(200, []);
   }
-  console.log(regions);
+  console.log(region);
   console.log(event);
   const locations = await Location.scan()
     .filter('active')
@@ -365,7 +365,8 @@ module.exports.controlCenterLocationsByRegions = async event => {
     .eq(true)
     .and()
     .filter('region')
-    .in(regions)
+    // .in([region])
+    .eq(region)
     .all()
     .exec();
   return respond(200, locations);
@@ -388,15 +389,16 @@ module.exports.controlCenter = async event => {
     // loop through games
     for (const game of games) {
       const regions = game.get('Region');
+      const region = regions[0];
       const channel = game.get('Channel');
       const zone = +game.get('TV Zone');
       const gameId = game.id;
-      console.log(`searching for locations for:`, { regions, channel, zone });
+      console.log(`searching for locations for:`, { region, channel, zone });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
-        `location-${process.env.stage}-controlCenterLocationsByRegions`,
+        `location-${process.env.stage}-controlCenterLocationsByRegion`,
+        { region },
         null,
-        { regions },
         event.headers,
       );
 
