@@ -1,10 +1,11 @@
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
-import { NavController, Events, IonSearchbar, ModalController, Platform } from '@ionic/angular';
+import { NavController, Events, IonSearchbar, ModalController, Platform, ToastController } from '@ionic/angular';
 import { ReserveService } from './reserve.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { WalletPage } from '../wallet/wallet.page';
 import { first } from 'rxjs/operators';
+import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
 
 @Component({
   selector: 'app-reserve',
@@ -23,6 +24,7 @@ export class ReservePage {
   sub: Subscription;
   pageSub: Subscription;
   routerListerSub: Subscription;
+  channelsClick = 0;
 
   constructor(
     public reserveService: ReserveService,
@@ -32,6 +34,8 @@ export class ReservePage {
     public events: Events,
     public modalController: ModalController,
     private walletPage: WalletPage,
+    public toastController: ToastController,
+    private deploy: Deploy,
   ) {
     this.reserveService.titleEmitted$.subscribe(title => {
       this.title = title;
@@ -154,5 +158,37 @@ export class ReservePage {
     this.reserveService.refreshedEmitted$.pipe().subscribe(() => {
       event.target.complete();
     });
+  }
+
+  async toggleChannel() {
+    this.channelsClick++;
+    console.log(this.channelsClick);
+    if (this.channelsClick === 7) {
+      if (!this.platform.is('capacitor')) {
+        return this.showToast(`capacitor only`);
+      }
+      const channel = 'Master';
+      const x = await this.deploy.configure({ channel });
+      console.log(x);
+      this.showToast(`switch to channel: ${channel}`);
+    } else if (this.channelsClick === 14) {
+      const channel = 'Develop';
+      await this.deploy.configure({ channel });
+      this.showToast(`switch to channel: ${channel}`);
+    } else if (this.channelsClick === 21) {
+      const channel = 'Production';
+      await this.deploy.configure({ channel });
+      this.showToast(`switch to channel: ${channel}`);
+      this.channelsClick = 0;
+    }
+  }
+
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      cssClass: 'ion-text-center',
+      duration: 3000,
+    });
+    toast.present();
   }
 }
