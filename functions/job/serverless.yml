@@ -20,7 +20,6 @@ provider:
         - lambda:InvokeAsync
       Resource: '*'
 plugins:
-  - serverless-domain-manager
   - serverless-prune-plugin
 
 custom:
@@ -28,17 +27,6 @@ custom:
   prune:
     automatic: true
     number: 3
-  domains:
-    prod: api.tryclicker.com
-    release: api-release.tryclicker.com
-    develop: api-develop.tryclicker.com
-  customDomain:
-    domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: jobs
-    certificateName: 'api.tryclicker.com'
-    stage: ${self:custom.stage}
-    createRoute53Record: true
-    endpointType: 'edge'
   segmentKey:
     prod: ${env:SEGMENT_WRITE_KEY}
     release: ${env:SEGMENT_WRITE_KEY_DEV}
