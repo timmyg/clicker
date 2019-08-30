@@ -10,7 +10,7 @@ export class Globals {
         completed: 'Onboarding Completed',
       },
       reservation: {
-        started: 'Reservation Started',
+        // started: 'Reservation Started',
         created: 'Reservation Created',
         updated: 'Reservation Updated',
         cancelled: 'Reservation Cancelled',

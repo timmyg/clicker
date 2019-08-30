@@ -143,7 +143,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       }
     } else {
       this.store.dispatch(new fromReservation.Start());
-      this.segment.track(this.globals.events.reservation.started);
+      // this.segment.track(this.globals.events.reservation.started);
     }
   }
 
