@@ -403,6 +403,8 @@ module.exports.controlCenter = async event => {
         event.headers,
       );
 
+      console.log({ region });
+
       const locations = result;
 
       console.log(`found ${locations.length} locations`);
