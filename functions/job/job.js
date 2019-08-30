@@ -7,3 +7,4 @@ module.exports.health = async event => {
 module.exports.controlCenter = async event => {
   return respond(200, `hello`);
 };
+
