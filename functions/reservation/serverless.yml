@@ -2,6 +2,7 @@ service: reservation
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
+  versionFunctions: false
   runtime: nodejs8.10
   deploymentBucket:
     name: serverless-deploys-clicker
