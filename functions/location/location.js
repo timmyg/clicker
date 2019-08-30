@@ -359,7 +359,7 @@ module.exports.controlCenterLocationsByRegion = async event => {
     .eq(true)
     .and()
     .filter('region')
-    .in(region)
+    .in([region])
     .all()
     .exec();
   return respond(200, locations);
