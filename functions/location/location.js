@@ -76,7 +76,7 @@ module.exports.all = async event => {
   }
   let allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
-    delete l.boxes; 
+    delete l.boxes;
     delete l.losantId;
     if (latitude && longitude) {
       const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
@@ -385,16 +385,16 @@ module.exports.controlCenter = async event => {
   if (games.length) {
     // loop through games
     for (const game of games) {
-      const region = game.get('Region');
+      const regions = game.get('Region');
       const channel = game.get('Channel');
       const zone = +game.get('TV Zone');
       const gameId = game.id;
-      console.log(`searching for locations for:`, { region, channel, zone });
+      console.log(`searching for locations for:`, { regions, channel, zone });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
         `location-${process.env.stage}-controlCenterLocationsByRegions`,
         null,
-        { region },
+        { regions },
         event.headers,
       );
 
