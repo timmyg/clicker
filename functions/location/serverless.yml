@@ -249,7 +249,7 @@ functions:
     handler: location.controlCenterLocationsByRegion
     events:
       - http:
-          path: 'locations/region/{region}'
+          path: 'region/{region}'
           method: get
           cors:
             origin: '*'
