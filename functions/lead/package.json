@@ -17,7 +17,7 @@
   "dependencies": {
     "dotenv": "^6.2.0",
     "hubspot": "^2.0.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.2",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4",
     "trello": "^0.9.1"
   }
 }
