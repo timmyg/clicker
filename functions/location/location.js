@@ -348,6 +348,22 @@ module.exports.allOn = async event => {
   return respond(200, 'ok');
 };
 
+module.exports.controlCenterLocationsByRegion = async event => {
+  const { region } = getBody(event);
+  const locations = await Location.scan()
+    .filter('active')
+    .eq(true)
+    .and()
+    .filter('controlCenter')
+    .eq(true)
+    .and()
+    .filter('region')
+    .in(region)
+    .all()
+    .exec();
+  return respond(200, locations);
+};
+
 module.exports.controlCenter = async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
@@ -360,6 +376,7 @@ module.exports.controlCenter = async event => {
   games = games.filter(g => new Date(g.get('Game Start')) <= new Date());
   console.log(`found ${games.length} games now/past`);
   console.log(games);
+  let changedCount = 0;
   if (games.length) {
     // loop through games
     for (const game of games) {
@@ -369,17 +386,15 @@ module.exports.controlCenter = async event => {
       const gameId = game.id;
       console.log(`searching for locations for:`, { region, channel, zone });
       // find locations that are in region and control center enabled
-      const locations = await Location.scan()
-        .filter('active')
-        .eq(true)
-        .and()
-        .filter('controlCenter')
-        .eq(true)
-        .and()
-        .filter('region')
-        .in(region)
-        .all()
-        .exec();
+      const result = await invokeFunctionSync(
+        `location-${process.env.stage}-controlCenterLocationsByRegion`,
+        { region },
+        null,
+        event.headers,
+      );
+
+      const locations = JSON.parse(JSON.parse(result.Payload).body);
+
       console.log(`found ${locations.length} locations`);
       // loop through locations
       for (const location of locations) {
@@ -404,6 +419,7 @@ module.exports.controlCenter = async event => {
           console.log('box', box.label, box.ip);
           console.log('channel', channel);
           await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+          changedCount++;
         }
       }
       // mark game as completed on airtable
@@ -414,7 +430,7 @@ module.exports.controlCenter = async event => {
     }
   }
 
-  return respond(200);
+  return respond(200, { changedCount });
 };
 
 module.exports.health = async event => {

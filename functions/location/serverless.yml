@@ -244,6 +244,18 @@ functions:
               - partner
               - authorization
               - content-type
+  controlCenterLocationsByRegion:
+    handler: location.controlCenterLocationsByRegion
+    events:
+      - http:
+          path: 'locations/region'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   controlCenter:
     handler: location.controlCenter
     timeout: 30
