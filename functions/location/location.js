@@ -350,7 +350,6 @@ module.exports.allOn = async event => {
 
 module.exports.controlCenterLocationsByRegion = async event => {
   const { region } = getPathParameters(event);
-  console.log({ region });
   const locations = await Location.scan()
     .filter('active')
     .eq(true)
@@ -394,7 +393,7 @@ module.exports.controlCenter = async event => {
         event.headers,
       );
 
-      const locations = JSON.parse(JSON.parse(result.Payload).body);
+      const locations = result;
 
       console.log(`found ${locations.length} locations`);
       // loop through locations
