@@ -32,7 +32,7 @@ module.exports.controlCenter = async event => {
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
         null,
         { region },
-        event.headers,
+        event.headers, 
       );
       const locations = result.data;
 
