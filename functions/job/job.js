@@ -1,5 +1,6 @@
 require('dotenv').config();
 const Airtable = require('airtable');
+const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
 
 module.exports.health = async event => {
   return respond(200, `hello`);
@@ -32,7 +33,7 @@ module.exports.controlCenter = async event => {
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
         null,
         { region },
-        event.headers, 
+        event.headers,
       );
       const locations = result.data;
 
