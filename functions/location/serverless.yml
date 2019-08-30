@@ -254,20 +254,6 @@ functions:
               - partner
               - authorization
               - content-type
-  controlCenter:
-    handler: location.controlCenter
-    timeout: 30
-    events:
-      - schedule: cron(*/5 * * * ? *)
-      - http:
-          path: 'control-center'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   getLocalChannels:
     handler: location.getLocalChannels
     events:
