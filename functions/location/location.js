@@ -69,6 +69,7 @@ module.exports.all = async event => {
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
 
+    
   if (pathParams) {
     latitude = pathParams.latitude;
     longitude = pathParams.longitude;
