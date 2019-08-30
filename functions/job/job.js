@@ -34,6 +34,8 @@ module.exports.controlCenter = async event => {
         null,
         { region },
         event.headers,
+        null,
+        'us-east-1',
       );
       const locations = result.data;
 
@@ -60,7 +62,14 @@ module.exports.controlCenter = async event => {
           console.log('location:', location.name, location.neighborhood);
           console.log('box', box.label, box.ip);
           console.log('channel', channel);
-          await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+          await invokeFunctionSync(
+            `remote-${process.env.stage}-command`,
+            { reservation, command },
+            null,
+            null,
+            null,
+            'us-east-1',
+          );
           changedCount++;
         }
       }
