@@ -350,6 +350,9 @@ module.exports.allOn = async event => {
 
 module.exports.controlCenterLocationsByRegion = async event => {
   const { region } = getPathParameters(event);
+  if (!region) {
+    return respond(200, []);
+  }
   const locations = await Location.scan()
     .filter('active')
     .eq(true)
@@ -388,8 +391,8 @@ module.exports.controlCenter = async event => {
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
-        { region },
         null,
+        { region },
         event.headers,
       );
 
