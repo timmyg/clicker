@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4100 --host local.tryclicker.com",
-    "build": "ng build",
+    "build": "ng build --configuration=production",
     "build:env": "ng build --configuration=$ENV",
     "build:release": "ng build --configuration=release",
     "build:develop": "ng build --configuration=develop",
