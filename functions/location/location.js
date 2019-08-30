@@ -397,8 +397,8 @@ module.exports.controlCenter = async event => {
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
-        { region },
         null,
+        { region },
         event.headers,
       );
 
