@@ -65,6 +65,7 @@ export class TvsComponent implements OnDestroy {
       return await this.segment.track(this.globals.events.tv.reserved);
     }
     this.store.dispatch(new fromReservation.SetTv(tv));
+    await this.segment.track(this.globals.events.reservation.selectedTV, { tv });
     this.router.navigate(['../confirmation'], { relativeTo: this.route });
   }
 
