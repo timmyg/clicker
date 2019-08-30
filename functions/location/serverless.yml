@@ -22,9 +22,13 @@ provider:
       Resource: '*'
 plugins:
   - serverless-domain-manager
+  - serverless-prune-plugin
 
 custom:
   stage: ${opt:stage}
+  prune:
+    automatic: true
+    number: 3
   tableThroughputs:
     prod: 5
     default: 1
