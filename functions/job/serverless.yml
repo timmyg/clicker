@@ -6,7 +6,7 @@ provider:
   versionFunctions: false
   runtime: nodejs8.10
   deploymentBucket:
-    name: serverless-deploys-clicker
+    name: serverless-deploys-clicker-east
   environment:
     stage: ${self:custom.stage}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
@@ -28,7 +28,7 @@ custom:
   prune:
     automatic: true
     number: 3
-  domains: 
+  domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
