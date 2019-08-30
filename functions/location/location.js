@@ -355,8 +355,8 @@ module.exports.controlCenterLocationsByRegion = async event => {
   if (!region) {
     return respond(200, []);
   }
-  console.log(region);
-  console.log(event);
+  // console.log(region);
+  // console.log(event);
   const locations = await Location.scan()
     .filter('active')
     .eq(true)
@@ -369,6 +369,7 @@ module.exports.controlCenterLocationsByRegion = async event => {
     .eq(region)
     .all()
     .exec();
+  console.log({ locations });
   return respond(200, locations);
 };
 
