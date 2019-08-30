@@ -19,9 +19,7 @@ export class Globals {
         failed: 'Reservation Failed',
         selectedLocation: 'Reservation Location Selected',
         selectedTV: 'Reservation TV Selected',
-        selectedChannel: 'Reservation Channel Selected',
         selectedProgram: 'Reservation Program Selected',
-        selectedTimeframe: 'Reservation Timeframe Selected',
       },
       location: {
         search: 'Location Searched',
