@@ -98,6 +98,9 @@ jobs:
   functions/app:
     working_directory: ~/clicker/functions/app
     <<: *serverless_build_test_deploy
+  functions/job:
+    working_directory: ~/clicker/functions/app
+    <<: *serverless_build_test_deploy
   functions/lead:
     working_directory: ~/clicker/functions/lead
     <<: *serverless_build_test_deploy
