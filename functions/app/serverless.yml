@@ -14,6 +14,9 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com

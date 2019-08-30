@@ -8,5 +8,8 @@
     "invoke:widget:register": "serverless invoke local --function register --path ../.resources/data/widget.json",
     "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-prune-plugin": "^1.4.0"
+  }
 }

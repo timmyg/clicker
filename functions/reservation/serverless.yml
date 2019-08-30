@@ -21,9 +21,13 @@ provider:
 
 plugins:
   - serverless-domain-manager
+  - serverless-prune-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
   tableThroughputs:
     prod: 5
     default: 1
