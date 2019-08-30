@@ -76,7 +76,7 @@ module.exports.all = async event => {
   }
   let allLocations = await Location.scan().exec();
   allLocations.forEach((l, i, locations) => {
-    delete l.boxes;
+    delete l.boxes; 
     delete l.losantId;
     if (latitude && longitude) {
       const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
