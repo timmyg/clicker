@@ -245,8 +245,8 @@ functions:
               - partner
               - authorization
               - content-type
-  controlCenterLocationsByRegion:
-    handler: location.controlCenterLocationsByRegion
+  controlCenterLocationsByRegions:
+    handler: location.controlCenterLocationsByRegions
     events:
       - http:
           path: 'region/{region}'
