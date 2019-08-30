@@ -118,15 +118,15 @@ module.exports.getAll = async event => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
-  const locationResult = await invokeFunctionSync(
+  const location = await invokeFunctionSync(
     `location-${process.env.stage}-get`,
     null,
     { id: locationId },
     event.headers,
   );
-  console.log(locationResult);
-  const location = JSON.parse(JSON.parse(locationResult.Payload).body);
-  console.log(location);
+  // console.log(locationResult);
+  // // const location = JSON.parse(JSON.parse(locationResult.Payload).body);
+  // console.log(location);
   // location.channels.local
   // location.channels.premium
   // location.zip

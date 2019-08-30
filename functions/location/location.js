@@ -402,10 +402,7 @@ module.exports.controlCenter = async event => {
         { region },
         event.headers,
       );
-
-      console.log({ result });
-
-      const locations = result;
+      const locations = result.data;
 
       console.log(`found ${locations.length} locations`);
       // loop through locations
