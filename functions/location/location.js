@@ -349,7 +349,9 @@ module.exports.allOn = async event => {
 };
 
 module.exports.controlCenterLocationsByRegions = async event => {
-  const { regions } = getPathParameters(event);
+  // const { regions } = getPathParameters(event);
+  const { regions } = event.queryStringParameters;
+  console.log(regions);
   if (!regions) {
     return respond(200, []);
   }

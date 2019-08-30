@@ -26,15 +26,12 @@ aliases:
               - develop
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              # npx serverless prune -n 3 --stage prod 
               npx serverless deploy --stage prod --verbose
             fi
             if [ "${CIRCLE_BRANCH}" == "release" ]; then
-              # npx serverless prune -n 3 --stage release 
               npx serverless deploy --stage release --verbose
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              # npx serverless prune -n 3 --stage develop 
               npx serverless deploy --stage develop --verbose
             fi
 version: 2.0
