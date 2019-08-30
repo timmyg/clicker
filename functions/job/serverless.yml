@@ -6,7 +6,7 @@ provider:
   versionFunctions: false
   runtime: nodejs8.10
   deploymentBucket:
-    name: serverless-deploys-clicker-east
+    name: serverless-deploys-clicker-far-east
   environment:
     stage: ${self:custom.stage}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
