@@ -29,7 +29,9 @@
   NUXT_ENV_SEGMENT_KEY = "VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"
   NUXT_ENV_STRIPE_PUBLISHABLE_KEY = "pk_test_emgg6PM2oFAFsEmyTjomZQbG00vopAGOw7"
   NUXT_ENV_CONTENTFUL_SPACE_ID = "jaxoslda9dxk"
+  CONTENTFUL_SPACE_ID = "jaxoslda9dxk"
   NUXT_ENV_CONTENTFUL_API_TOKEN = "Ai_IJR4RoCAhqsUk4q0NMXcR1ON42EHL02jD9-gjiGE"
+  CONTENTFUL_API_TOKEN = "Ai_IJR4RoCAhqsUk4q0NMXcR1ON42EHL02jD9-gjiGE"
   ENV = "develop"
 [context.deploy-preview.environment]
   NUXT_ENV_API_BASE = "https://api-develop.tryclicker.com"
