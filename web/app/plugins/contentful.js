@@ -9,8 +9,8 @@ console.log(process.env.NUXT_ENV_CONTENTFUL_SPACE_ID);
 console.log(process.env.NUXT_ENV_CONTENTFUL_ACCESS_TOKEN);
 
 const config = {
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+  space: process.env.NUXT_ENV_CONTENTFUL_SPACE_ID,
+  accessToken: process.env.NUXT_ENV_CONTENTFUL_ACCESS_TOKEN,
 };
 
 // export 'createClient' to use it in page components
