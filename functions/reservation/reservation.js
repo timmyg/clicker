@@ -114,10 +114,10 @@ module.exports.create = async event => {
     null,
     event.headers,
   );
+  const statusCode = result.statusCode;
   console.timeEnd('deduct transaction');
-  const statusCode = JSON.parse(result.Payload).statusCode;
   if (statusCode >= 400) {
-    const message = JSON.parse(JSON.parse(result.Payload).body).message;
+    const messsage = result.data.message;
     return respond(statusCode, message);
   }
 
@@ -182,10 +182,10 @@ module.exports.update = async event => {
   );
   console.timeEnd('deduct transition');
 
-  const statusCode = JSON.parse(result.Payload).statusCode;
+  const statusCode = result.statusCode;
   if (statusCode >= 400) {
     // TODO mark not reserved
-    const message = JSON.parse(JSON.parse(result.Payload).body).message;
+    const message = result.data.message;
     return respond(statusCode, message);
   }
 

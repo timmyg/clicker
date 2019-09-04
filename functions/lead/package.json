@@ -11,12 +11,13 @@
   "devDependencies": {
     "jest": "^24.1.0",
     "serverless": "^1.36.3",
-    "serverless-domain-manager": "^2.6.13"
+    "serverless-domain-manager": "^2.6.13",
+    "serverless-prune-plugin": "^1.4.0"
   },
   "dependencies": {
     "dotenv": "^6.2.0",
     "hubspot": "^2.0.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.13",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4",
     "trello": "^0.9.1"
   }
 }

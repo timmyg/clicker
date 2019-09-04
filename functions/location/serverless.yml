@@ -2,7 +2,7 @@ service: location
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  # region: ap-northeast-1
+  versionFunctions: false
   runtime: nodejs8.10
   deploymentBucket:
     name: serverless-deploys-clicker
@@ -10,8 +10,6 @@ provider:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
-    airtableKey: ${env:AIRTABLE_KEY}
-    airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -21,9 +19,13 @@ provider:
       Resource: '*'
 plugins:
   - serverless-domain-manager
+  - serverless-prune-plugin
 
 custom:
   stage: ${opt:stage}
+  prune:
+    automatic: true
+    number: 3
   tableThroughputs:
     prod: 5
     default: 1
@@ -44,10 +46,6 @@ custom:
     prod: ${env:SEGMENT_WRITE_KEY}
     release: ${env:SEGMENT_WRITE_KEY_DEV}
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
-  airtableBase:
-    prod: ${env:AIRTABLE_BASE}
-    release: ${env:AIRTABLE_BASE_RELEASE}
-    develop: ${env:AIRTABLE_BASE_DEV}
 resources:
   Resources:
     LocationsTable:
@@ -244,14 +242,12 @@ functions:
               - partner
               - authorization
               - content-type
-  controlCenter:
-    handler: location.controlCenter
-    timeout: 30
+  controlCenterLocationsByRegion:
+    handler: location.controlCenterLocationsByRegion
     events:
-      - schedule: cron(*/5 * * * ? *)
       - http:
-          path: 'control-center'
-          method: post
+          path: 'region/{region}'
+          method: get
           cors:
             origin: '*'
             headers:

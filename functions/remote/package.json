@@ -14,11 +14,12 @@
   "dependencies": {
     "dotenv": "^8.0.0",
     "losant-rest": "^2.3.5",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.13"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4"
   },
   "devDependencies": {
     "jest": "^24.0.0",
     "serverless": "1.38.0",
-    "serverless-domain-manager": "^2.6.13"
+    "serverless-domain-manager": "^2.6.13",
+    "serverless-prune-plugin": "^1.4.0"
   }
 }

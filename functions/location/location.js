@@ -2,7 +2,6 @@ const { respond, getBody, getPathParameters, invokeFunctionSync } = require('ser
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
-const Airtable = require('airtable');
 const uuid = require('uuid/v1');
 require('dotenv').config({ path: '../.env.example' });
 
@@ -348,73 +347,29 @@ module.exports.allOn = async event => {
   return respond(200, 'ok');
 };
 
-module.exports.controlCenter = async event => {
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  console.log('searching for games to change');
-  let games = await base('Games')
-    .select({
-      view: 'Scheduled',
-    })
-    .all();
-  console.log(`found ${games.length} games`);
-  games = games.filter(g => new Date(g.get('Game Start')) <= new Date());
-  console.log(`found ${games.length} games now/past`);
-  console.log(games);
-  if (games.length) {
-    // loop through games
-    for (const game of games) {
-      const region = game.get('Region');
-      const channel = game.get('Channel');
-      const zone = +game.get('TV Zone');
-      const gameId = game.id;
-      console.log(`searching for locations for:`, { region, channel, zone });
-      // find locations that are in region and control center enabled
-      const locations = await Location.scan()
-        .filter('active')
-        .eq(true)
-        .and()
-        .filter('controlCenter')
-        .eq(true)
-        .and()
-        .filter('region')
-        .in(region)
-        .all()
-        .exec();
-      console.log(`found ${locations.length} locations`);
-      // loop through locations
-      for (const location of locations) {
-        // find boxes that have game zone
-        const boxes = location.boxes.filter(
-          b => b.zone === zone && (!b.reserved || (b.reserved && moment(b.end).diff(moment().toDate()) < 0)),
-        );
-        console.log(`found ${boxes.length} boxes`);
-        // loop through boxes, change to game channel
-        for (const box of boxes) {
-          const command = 'tune';
-          const reservation = {
-            location,
-            box,
-            program: {
-              channel: channel.split('-')[0],
-              channelMinor: channel.split('-')[1],
-            },
-          };
-          console.log('⚡ ⚡ tuning...');
-          console.log('location:', location.name, location.neighborhood);
-          console.log('box', box.label, box.ip);
-          console.log('channel', channel);
-          await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
-        }
-      }
-      // mark game as completed on airtable
-      // TODO maybe delete in future?
-      await base('Games').update(gameId, {
-        Completed: true,
-      });
-    }
+module.exports.controlCenterLocationsByRegion = async event => {
+  const { region } = getPathParameters(event);
+  // const { regions } = event.queryStringParameters;
+  console.log(region);
+  if (!region) {
+    return respond(200, []);
   }
-
-  return respond(200);
+  // console.log(region);
+  // console.log(event);
+  const locations = await Location.scan()
+    .filter('active')
+    .eq(true)
+    .and()
+    .filter('controlCenter')
+    .eq(true)
+    .and()
+    .filter('region')
+    // .in([region])
+    .eq(region)
+    .all()
+    .exec();
+  console.log({ locations });
+  return respond(200, locations);
 };
 
 module.exports.health = async event => {

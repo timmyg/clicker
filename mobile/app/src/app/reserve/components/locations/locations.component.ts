@@ -143,7 +143,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       }
     } else {
       this.store.dispatch(new fromReservation.Start());
-      this.segment.track(this.globals.events.reservation.started);
+      // this.segment.track(this.globals.events.reservation.started);
     }
   }
 
@@ -293,7 +293,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())
       .subscribe(async () => {
-        await this.segment.track(this.globals.events.reservation.selectedLocation, { location });
+        await this.segment.track(this.globals.events.reservation.selectedLocation, location);
         this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
       });
   }

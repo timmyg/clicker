@@ -2,6 +2,7 @@ service: remote
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
+  versionFunctions: false
   runtime: nodejs8.10
   deploymentBucket:
     name: serverless-deploys-clicker
@@ -14,9 +15,13 @@ provider:
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
 plugins:
   - serverless-domain-manager
+  - serverless-prune-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
