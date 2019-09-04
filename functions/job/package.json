@@ -17,6 +17,7 @@
   "dependencies": {
     "airtable": "^0.7.1",
     "dotenv": "^6.2.0",
+    "moment": "^2.24.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4"
   }
 }
