@@ -37,6 +37,7 @@ module.exports = {
         name: 'description',
         content: 'TV sports programming platform and app ensuring the best, most relevent games are on at all times',
       },
+      { name: 'fragment', content: '!' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: 'https://clicker-brand.s3.amazonaws.com/favicon.ico' }],
   },
