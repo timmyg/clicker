@@ -22,8 +22,7 @@ module.exports.controlCenter = async event => {
   if (games.length) {
     // loop through games
     for (const game of games) {
-      const regions = game.get('Region');
-      // const region = regions[0];
+      const regions = game.get('Regions');
       const channel = game.get('Channel');
       const gamePackage = game.get('Package');
       const zones = game.get('TV Zones');
