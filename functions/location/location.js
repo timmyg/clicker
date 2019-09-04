@@ -37,6 +37,7 @@ const Location = dynamoose.model(
       premium: [String],
       exclude: [String],
     },
+    packages: [String],
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
     zip: { type: Number, required: true },
@@ -349,13 +350,10 @@ module.exports.allOn = async event => {
 
 module.exports.controlCenterLocationsByRegion = async event => {
   const { region } = getPathParameters(event);
-  // const { regions } = event.queryStringParameters;
   console.log(region);
   if (!region) {
     return respond(200, []);
   }
-  // console.log(region);
-  // console.log(event);
   const locations = await Location.scan()
     .filter('active')
     .eq(true)
@@ -364,7 +362,6 @@ module.exports.controlCenterLocationsByRegion = async event => {
     .eq(true)
     .and()
     .filter('region')
-    // .in([region])
     .eq(region)
     .all()
     .exec();

@@ -25,6 +25,7 @@ module.exports.controlCenter = async event => {
       const regions = game.get('Region');
       const region = regions[0];
       const channel = game.get('Channel');
+      const package = game.get('Package');
       const zone = +game.get('TV Zone');
       const gameId = game.id;
       console.log(`searching for locations for:`, { region, channel, zone });
@@ -42,6 +43,13 @@ module.exports.controlCenter = async event => {
       console.log(`found ${locations.length} locations`);
       // loop through locations
       for (const location of locations) {
+        // ensure location has package for game
+        if (!location.packages.includes(package)) {
+          console.log(`${location.name} doesn't have ${package} package`);
+          continue;
+        }
+        console.log(`${location.name} has ${package} package`);
+
         // find boxes that have game zone
         const boxes = location.boxes.filter(
           b => b.zone === zone && (!b.reserved || (b.reserved && moment(b.end).diff(moment().toDate()) < 0)),
