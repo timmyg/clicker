@@ -54,7 +54,7 @@ const nationalChannels = [
   { channel: 716, channelTitle: 'NFL' },
   { channel: 717, channelTitle: 'NFL' },
   { channel: 718, channelTitle: 'NFL' },
-  { channel: 719, channelTitle: 'NFL' },
+  // { channel: 719, channelTitle: 'NFL' },
   // { channel: 104, channelTitle: 'DTV4K' },
   // { channel: 105, channelTitle: 'LIVE4K' },
   // { channel: 106, channelTitle: 'LIVE4K2' },
