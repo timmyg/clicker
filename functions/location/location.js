@@ -349,9 +349,9 @@ module.exports.allOn = async event => {
 };
 
 module.exports.controlCenterLocationsByRegion = async event => {
-  const { region } = getPathParameters(event);
-  console.log(region);
-  if (!region) {
+  const { regions } = getPathParameters(event);
+  console.log(regions);
+  if (!regions || !regions.length) {
     return respond(200, []);
   }
   const locations = await Location.scan()
@@ -362,7 +362,7 @@ module.exports.controlCenterLocationsByRegion = async event => {
     .eq(true)
     .and()
     .filter('region')
-    .eq(region)
+    .in(regions)
     .all()
     .exec();
   console.log({ locations });
