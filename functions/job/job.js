@@ -44,7 +44,7 @@ module.exports.controlCenter = async event => {
       // loop through locations
       for (const location of locations) {
         // ensure location has package for game
-        if (!location.packages.includes(gamePackage)) {
+        if (location.packages && !location.packages.includes(gamePackage)) {
           console.log(`${location.name} doesn't have ${gamePackage} package`);
           continue;
         }
