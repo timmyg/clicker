@@ -2,11 +2,11 @@ service: job
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  region: ap-northeast-1 # Tokyo
+  region: eu-central-1 # Germany
   versionFunctions: false
   runtime: nodejs8.10
   deploymentBucket:
-    name: serverless-deploys-clicker-far-east
+    name: serverless-deploys-clicker-eu-central-1
   environment:
     stage: ${self:custom.stage}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
@@ -21,6 +21,7 @@ provider:
       Resource: '*'
 plugins:
   - serverless-prune-plugin
+  - serverless-deployment-bucket
 
 custom:
   stage: ${opt:stage}
