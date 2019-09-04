@@ -50,6 +50,7 @@ module.exports.controlCenter = async event => {
         console.log(`${location.name} has ${gamePackage} package`);
 
         // find boxes that have game zones
+        console.log('zones', zones);
         const boxes = location.boxes.filter(
           b => zones.includes(b.zone) && (!b.reserved || (b.reserved && moment(b.end).diff(moment().toDate()) < 0)),
         );
