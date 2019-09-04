@@ -22,17 +22,17 @@ module.exports.controlCenter = async event => {
   if (games.length) {
     // loop through games
     for (const game of games) {
-      const regions = game.get('Region');
-      const region = regions[0];
+      const regions = game.get('Regions');
       const channel = game.get('Channel');
-      const zone = +game.get('TV Zone');
+      const gamePackage = game.get('Package');
+      const zones = game.get('TV Zones');
       const gameId = game.id;
-      console.log(`searching for locations for:`, { region, channel, zone });
+      console.log(`searching for locations for:`, { regions, channel, zones });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
         null,
-        { region },
+        { regions },
         event.headers,
         null,
         'us-east-1',
@@ -42,9 +42,17 @@ module.exports.controlCenter = async event => {
       console.log(`found ${locations.length} locations`);
       // loop through locations
       for (const location of locations) {
-        // find boxes that have game zone
+        // ensure location has package for game
+        if (gamePackage && (!location.packages || !location.packages.includes(gamePackage))) {
+          console.log(`${location.name} doesn't have ${gamePackage} package`);
+          continue;
+        }
+        // console.log(`${location.name} has ${gamePackage} package`);
+
+        // find boxes that have game zones
+        console.log('zones', zones);
         const boxes = location.boxes.filter(
-          b => b.zone === zone && (!b.reserved || (b.reserved && moment(b.end).diff(moment().toDate()) < 0)),
+          b => zones.includes(b.zone) && (!b.reserved || (b.reserved && moment(b.end).diff(moment().toDate()) < 0)),
         );
         console.log(`found ${boxes.length} boxes`);
         // loop through boxes, change to game channel

@@ -246,7 +246,7 @@ functions:
     handler: location.controlCenterLocationsByRegion
     events:
       - http:
-          path: 'region/{region}'
+          path: 'regions/{regions}'
           method: get
           cors:
             origin: '*'
