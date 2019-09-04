@@ -28,7 +28,7 @@ const Location = dynamoose.model(
         ip: String,
         reserved: Boolean,
         end: Date,
-        zone: Number,
+        zone: String,
         active: Boolean,
       },
     ],
