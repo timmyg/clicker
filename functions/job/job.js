@@ -47,7 +47,7 @@ module.exports.controlCenter = async event => {
           console.log(`${location.name} doesn't have ${gamePackage} package`);
           continue;
         }
-        console.log(`${location.name} has ${gamePackage} package`);
+        // console.log(`${location.name} has ${gamePackage} package`);
 
         // find boxes that have game zones
         console.log('zones', zones);
