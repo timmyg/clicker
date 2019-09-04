@@ -67,7 +67,7 @@
       (click)="onConfirm(reservation)"
       id="confirm"
       slot="end"
-      [disabled]="saving || insufficientFunds()"
+      [disabled]="saving || insufficientFunds() || isAppLoading"
       margin-top
       align-items-center
     >

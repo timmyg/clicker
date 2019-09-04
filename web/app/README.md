@@ -1,4 +1,23 @@
-### /pay
+# blog
 
-- recurring: `/pay?type=subscription&amount=50&company=company 123&email=test@tester.com&start=9-19-2019&name=Tim Giblin&plan=plan_FaT3JX6lm7wLzF`
-- one time: `/pay?type=onetime&amount=100&company=company 321&email=test@tester.com&name=Tim Giblin`
+> clicker blog
+
+## Build Setup
+
+``` bash
+# install dependencies
+$ npm install # Or yarn install
+
+# serve with hot reload at localhost:3000
+$ npm run dev
+
+# build for production and launch server
+$ npm run build
+$ npm start
+
+# generate static project
+$ npm run generate
+```
+
+For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
+

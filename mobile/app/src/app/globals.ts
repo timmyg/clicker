@@ -10,7 +10,7 @@ export class Globals {
         completed: 'Onboarding Completed',
       },
       reservation: {
-        started: 'Reservation Started',
+        // started: 'Reservation Started',
         created: 'Reservation Created',
         updated: 'Reservation Updated',
         cancelled: 'Reservation Cancelled',
@@ -19,9 +19,7 @@ export class Globals {
         failed: 'Reservation Failed',
         selectedLocation: 'Reservation Location Selected',
         selectedTV: 'Reservation TV Selected',
-        selectedChannel: 'Reservation Channel Selected',
         selectedProgram: 'Reservation Program Selected',
-        selectedTimeframe: 'Reservation Timeframe Selected',
       },
       location: {
         search: 'Location Searched',

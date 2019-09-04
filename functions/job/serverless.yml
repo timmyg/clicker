@@ -1,0 +1,65 @@
+service: job
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  region: ap-northeast-1 # Tokyo
+  versionFunctions: false
+  runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker-far-east
+  environment:
+    stage: ${self:custom.stage}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    airtableKey: ${env:AIRTABLE_KEY}
+    airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+plugins:
+  - serverless-prune-plugin
+
+custom:
+  stage: ${opt:stage}
+  prune:
+    automatic: true
+    number: 3
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+  airtableBase:
+    prod: ${env:AIRTABLE_BASE}
+    release: ${env:AIRTABLE_BASE_RELEASE}
+    develop: ${env:AIRTABLE_BASE_DEV}
+
+functions:
+  health:
+    handler: job.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  controlCenter:
+    handler: job.controlCenter
+    timeout: 30
+    events:
+      - schedule: cron(*/5 * * * ? *)
+      - http:
+          path: 'control-center'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

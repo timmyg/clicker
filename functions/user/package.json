@@ -16,7 +16,7 @@
     "dotenv": "^8.0.0",
     "dynamoose": "^1.7.2",
     "jsonwebtoken": "^8.5.1",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.1.13",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4",
     "stripe": "^6.31.1",
     "twilio": "^3.33.1",
     "uuid": "^3.3.2"
@@ -24,6 +24,7 @@
   "devDependencies": {
     "jest": "^24.0.0",
     "serverless": "^1.36.3",
-    "serverless-domain-manager": "^2.6.13"
+    "serverless-domain-manager": "^2.6.13",
+    "serverless-prune-plugin": "^1.4.0"
   }
 }

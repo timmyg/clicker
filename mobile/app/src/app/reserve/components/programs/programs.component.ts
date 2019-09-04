@@ -106,7 +106,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     if (reservation.id && reservation.box && reservation.box.label) {
       this.router.navigate(['../confirmation'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     } else {
-      this.segment.track(this.globals.events.reservation.selectedProgram, { program });
+      this.segment.track(this.globals.events.reservation.selectedProgram, program);
       this.router.navigate(['../tvs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
     }
   }
