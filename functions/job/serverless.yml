@@ -2,8 +2,7 @@ service: job
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  # region: ap-northeast-1 # Tokyo
-  region: eu-central-1 # Germany
+  region: ap-northeast-1 # Tokyo
   versionFunctions: false
   runtime: nodejs8.10
   deploymentBucket:
