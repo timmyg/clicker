@@ -115,6 +115,7 @@ module.exports.create = async event => {
     null,
     event.headers,
   );
+  console.log('result', result);
   const statusCode = result.statusCode;
   console.timeEnd('deduct transaction');
   if (statusCode >= 400) {
