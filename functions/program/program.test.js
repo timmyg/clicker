@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '../.env.example' });
 const moment = require('moment');
-const { build, generateId } = require('./program');
+const { build, generateId, getLocalChannelName } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
 
@@ -44,4 +44,12 @@ test('build programs', () => {
   // console.log({ response });
   expect(response[0]).toHaveProperty('id');
   expect(response.length).toBe(129);
+});
+
+test('convert local channel names', () => {
+  expect(getLocalChannelName('Cincinnati, OH WCPO ABC 9 SD')).toBe('ABC');
+  expect(getLocalChannelName('Cincinnati, OH WLWT NBC 5 SD')).toBe('NBC');
+  expect(getLocalChannelName('Cincinnati, OH WKRC CBS 12 SD')).toBe('CBS');
+  expect(getLocalChannelName('Cincinnati, OH WXIX FOX 19 SD')).toBe('FOX');
+  expect(getLocalChannelName('Cincinnati Blah blah')).toBe(undefined);
 });
