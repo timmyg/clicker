@@ -134,7 +134,7 @@ module.exports.replenish = async event => {
     // update user
     const updatedUser = await User.update(
       { id: userId },
-      { $ADD: { tokens, spent: dollars } } },
+      { $ADD: { tokens, spent: dollars } },
       { returnValues: 'ALL_NEW' },
     );
 
