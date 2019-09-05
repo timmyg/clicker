@@ -10,15 +10,6 @@ const key = 'clikr';
 const User = dynamoose.model(
   process.env.tableUser,
   {
-    // userId: {
-    //   type: String,
-    //   hashKey: true,
-    //   required: true,
-    //   default: uuid,
-    //   set: val => {
-    //     return decodeURI(val).replace('sms|', '');
-    //   },
-    // },
     id: {
       type: String,
       default: uuid,
@@ -26,15 +17,13 @@ const User = dynamoose.model(
     stripeCustomer: String,
     phone: String,
     card: Object, // set in api
+    spent: Number,
     tokens: {
       type: Number,
       required: true,
     },
     aliasedTo: {
       type: String,
-      // set: val => {
-      //   return decodeURI(val).replace('sms|', '');
-      // },
     },
   },
   {
@@ -143,7 +132,11 @@ module.exports.replenish = async event => {
     // TODO audit
 
     // update user
-    const updatedUser = await User.update({ id: userId }, { $ADD: { tokens } }, { returnValues: 'ALL_NEW' });
+    const updatedUser = await User.update(
+      { id: userId },
+      { $ADD: { tokens, spent: dollars } } },
+      { returnValues: 'ALL_NEW' },
+    );
 
     return respond(200, updatedUser);
   } catch (e) {
