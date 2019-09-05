@@ -216,7 +216,7 @@ module.exports.subscribe = async event => {
 module.exports.transaction = async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
-  const user = await User.queryOne('id')
+  let user = await User.queryOne('id')
     .eq(userId)
     .exec();
 
