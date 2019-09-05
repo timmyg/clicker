@@ -124,12 +124,6 @@ module.exports.getAll = async event => {
     { id: locationId },
     event.headers,
   );
-  // console.log(locationResult);
-  // // const location = JSON.parse(JSON.parse(locationResult.Payload).body);
-  // console.log(location);
-  // location.channels.local
-  // location.channels.premium
-  // location.zip
 
   init();
   const initialChannels = nationalChannels;
@@ -422,7 +416,8 @@ module.exports.syncNew = async event => {
       null,
       event.headers,
     );
-    const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
+    // const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
+    const locationResultBody = locationsResult.data;
     for (const [zip, localChannels] of Object.entries(locationResultBody)) {
       console.log('localChannels', localChannels);
       let strippedChannels = localChannels.slice(0);

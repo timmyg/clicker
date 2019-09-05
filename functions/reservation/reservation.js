@@ -82,7 +82,6 @@ module.exports.create = async event => {
   );
   console.timeEnd('ensure location active');
   console.log(locationResult);
-  // const locationResultBody = JSON.parse(JSON.parse(locationResult.Payload).body);
   const locationResultBody = locationResult.data;
   if (!locationResultBody.active) {
     return respond(400, 'Sorry, location inactive');
