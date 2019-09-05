@@ -547,10 +547,10 @@ function build(dtvSchedule, zip, channels) {
       program.programId = program.programID;
       if (program.programId !== '-1') {
         program.channel = channel.chNum;
-        program.channelTitle = channel.chCall;
+        program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
         const channelWithMinor = channels.find(c => c.channel === program.channel);
-        console.log(channelWithMinor, program.channel);
+        // console.log(channelWithMinor, program.channel);
         if (channelWithMinor) {
           program.channelMinor = channelWithMinor.channelMinor;
         }
@@ -590,5 +590,19 @@ function generateId(program) {
   return uuid(id, uuid.DNS);
 }
 
+function getLocalChannelName(chName) {
+  // chName will be Cincinnati, OH WCPO ABC 9 SD
+  if (chName.toLowerCase().includes(' abc ')) {
+    return 'ABC';
+  } else if (chName.toLowerCase().includes(' nbc ')) {
+    return 'NBC';
+  } else if (chName.toLowerCase().includes(' fox ')) {
+    return 'FOX';
+  } else if (chName.toLowerCase().includes(' cbs ')) {
+    return 'CBS';
+  }
+}
+
 module.exports.build = build;
 module.exports.generateId = generateId;
+module.exports.getLocalChannelName = getLocalChannelName;
