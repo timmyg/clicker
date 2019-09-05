@@ -21,6 +21,8 @@ import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from '../globals';
 import { ToastOptions } from '@ionic/core';
 import { AppService } from '../core/services/app.service';
+import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
+import { ICurrentConfig } from 'cordova-plugin-ionic/dist/IonicCordova';
 
 @Component({
   selector: 'app-profile',
@@ -58,6 +60,7 @@ export class ProfilePage {
     public actionSheetController: ActionSheetController,
     private segment: SegmentService,
     private globals: Globals,
+    private deploy: Deploy,
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
@@ -236,8 +239,9 @@ export class ProfilePage {
     this.showVersionClicks++;
     if (this.showVersionClicks >= 7) {
       const version = this.appService.getVersion();
+      const configuration: ICurrentConfig = await this.deploy.getConfiguration();
       const toast = await this.toastController.create({
-        message: `Version: ${version} 😏`,
+        message: `Version: ${version} 😏 (${configuration.channel})`,
         duration: 3000,
         cssClass: 'ion-text-center',
       });
