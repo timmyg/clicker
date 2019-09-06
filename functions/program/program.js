@@ -188,6 +188,7 @@ module.exports.getAll = async event => {
   }
   // local
   if (location.channels && location.channels.local) {
+    console.log('include local channels!', now, location.zip);
     programs.push(
       Program.scan()
         .filter('start')
@@ -211,6 +212,8 @@ module.exports.getAll = async event => {
 
   let programsResult = await Promise.all(programs);
   programsResult = Array.prototype.concat.apply([], programsResult);
+
+  console.log('programsResult', programsResult.length);
 
   // [currentNational, currentLocal] = await Promise.all([
   //   // find all national (no zip)
