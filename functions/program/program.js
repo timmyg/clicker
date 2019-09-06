@@ -201,9 +201,9 @@ module.exports.getAll = async event => {
         // .and()
         // .filter('mainCategory')
         // .eq('Sports')
-        .and()
-        .filter('channel')
-        .in(location.channels.local)
+        // .and()
+        // .filter('channel')
+        // .in(location.channels.local)
         .all()
         .exec(),
     );
