@@ -145,7 +145,7 @@ module.exports.getAll = async event => {
       location.channels.premium[i] = parseInt(location.channels.premium[i].replace(/-.*$/, ''));
     }
   }
-  console.log(location);
+  console.log(JSON.stringify(location));
   // run in parallel
   // [currentNational, nextNational, currentPremium, nextPremium, currentLocal, nextLocal] = await Promise.all([
 
