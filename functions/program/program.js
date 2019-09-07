@@ -118,12 +118,14 @@ module.exports.getAll = async event => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
-  const location = await invokeFunctionSync(
+  const locationResult = await invokeFunctionSync(
     `location-${process.env.stage}-get`,
     null,
     { id: locationId },
     event.headers,
   );
+
+  const location = locationResult.data;
 
   init();
   const initialChannels = nationalChannels;
