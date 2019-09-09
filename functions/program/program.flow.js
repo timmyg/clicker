@@ -10,7 +10,8 @@ let Program, ProgramArea;
 require('dotenv').config();
 
 class process {
-  static env: { serviceName: string, tableProgram: string, stage: string, tableProgramArea: string };
+  // static env: { serviceName: string, tableProgram: string, stage: string, tableProgramArea: string };
+  env: { [key: string]: ?string };
 }
 
 class programAreaType {
