@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
-const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
+const { respond, invokeFunctionSync } = require('serverless-helpers');
 
 module.exports.health = async event => {
   return respond(200, `hello`);

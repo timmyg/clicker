@@ -131,3 +131,15 @@ functions:
               - authorization
               - content-type
       - schedule: rate(3 minutes)
+  createArea:
+    handler: program.createArea
+    events:
+      - http:
+          path: 'area'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

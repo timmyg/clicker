@@ -3,7 +3,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { respond, invokeFunctionSync, getPathParameters } = require('serverless-helpers');
+const { respond, invokeFunctionSync, getPathParameters, getBody } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgramArea;
 require('dotenv').config();
@@ -130,6 +130,13 @@ function init() {
 
 module.exports.health = async event => {
   return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
+};
+
+module.exports.createArea = async event => {
+  const { zip, channels } = getBody(event);
+  init();
+  const programArea = await ProgramArea.create({ zip, channels });
+  return respond(200, programArea);
 };
 
 module.exports.getAll = async event => {
