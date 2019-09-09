@@ -135,6 +135,7 @@ function init() {
 }
 
 module.exports.health = async (event: any) => {
+  console.log('hi');
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 };
 
