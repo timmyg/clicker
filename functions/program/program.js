@@ -633,6 +633,20 @@ function getLocalChannelName(chName) {
   }
 }
 
+function getAreaChannels(channels, includeMinor) {
+  if (includeMinor) {
+    return channels.map(obj => {
+      let channelString = obj.channel.toString();
+      if (obj.minor) {
+        channelString = channelString.concat(`-${obj.minor}`);
+      }
+      return channelString;
+    });
+  }
+  return channels.map(obj => obj.channel.toString());
+}
+
 module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
+module.exports.getAreaChannels = getAreaChannels;
