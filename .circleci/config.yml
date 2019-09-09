@@ -25,6 +25,7 @@ aliases:
               - release
               - develop
           command: |
+            npm run build
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               npx serverless deploy --stage prod --verbose
             fi

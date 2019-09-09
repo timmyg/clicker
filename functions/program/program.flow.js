@@ -1,4 +1,4 @@
-//      
+// @flow
 const dynamoose = require('dynamoose');
 const axios = require('axios');
 const moment = require('moment');
@@ -10,12 +10,12 @@ let Program, ProgramArea;
 require('dotenv').config();
 
 class process {
-                                                                                                     
+  static env: { serviceName: string, tableProgram: string, stage: string, tableProgramArea: string };
 }
 
 class programAreaType {
-              
-                     
+  zip: number;
+  channels: [number];
 }
 
 const nationalChannels = [
@@ -134,19 +134,19 @@ function init() {
   );
 }
 
-module.exports.health = async (event     ) => {
+module.exports.health = async (event: any) => {
   if (process.env.serviceName) throw new Error('FOO missing');
   return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
 };
 
-module.exports.createArea = async (event     ) => {
+module.exports.createArea = async (event: any) => {
   const { zip, channels } = getBody(event);
   init();
   const programArea = await ProgramArea.create({ zip, channels });
   return respond(200, programArea);
 };
 
-module.exports.getAll = async (event     ) => {
+module.exports.getAll = async (event: any) => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
@@ -286,7 +286,7 @@ function rank(program) {
   return program;
 }
 
-module.exports.syncNew = async (event     ) => {
+module.exports.syncNew = async (event: any) => {
   try {
     init();
 
@@ -296,7 +296,7 @@ module.exports.syncNew = async (event     ) => {
     await syncChannels(nationalChannels);
     count++;
 
-    const programAreas                    = await ProgramArea.scan()
+    const programAreas: programAreaType[] = await ProgramArea.scan()
       .all()
       .exec();
     for (const area of programAreas) {
@@ -313,7 +313,7 @@ module.exports.syncNew = async (event     ) => {
   }
 };
 
-async function syncChannels(channels     , zip         = zipDefault) {
+async function syncChannels(channels: any, zip: number = zipDefault) {
   const channelsString = channels.map(c => c.channel).join(',');
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()
@@ -339,7 +339,7 @@ async function syncChannels(channels     , zip         = zipDefault) {
   let dbResult = await Program.batchPut(transformedPrograms);
 }
 
-module.exports.syncDescriptions = async (event     ) => {
+module.exports.syncDescriptions = async (event: any) => {
   // find programs by unique programID without descriptions
   init();
   const maxPrograms = 3;
@@ -417,7 +417,7 @@ function transformPrograms(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule     , zip        , channels     ) {
+function build(dtvSchedule: any, zip: number, channels: any) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
@@ -461,14 +461,14 @@ function build(dtvSchedule     , zip        , channels     ) {
   return filteredPrograms;
 }
 
-function generateId(program     ) {
+function generateId(program: any) {
   const { programId, zip } = program;
   const id = programId + (zip || '');
   // console.log(id, uuid.DNS);
   return uuid(id, uuid.DNS);
 }
 
-function getLocalChannelName(chName        ) {
+function getLocalChannelName(chName: string) {
   // chName will be Cincinnati, OH WCPO ABC 9 SD
   if (chName.toLowerCase().includes(' abc ')) {
     return 'ABC';
@@ -481,7 +481,7 @@ function getLocalChannelName(chName        ) {
   }
 }
 
-function getAreaChannels(channels     , includeMinor          ) {
+function getAreaChannels(channels: any, includeMinor?: boolean) {
   if (includeMinor) {
     return channels.map(obj => {
       let channelString = obj.channel.toString();
