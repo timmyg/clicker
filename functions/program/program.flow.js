@@ -9,9 +9,14 @@ const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgramArea;
 require('dotenv').config();
 
-class process {
-  // static env: { serviceName: string, tableProgram: string, stage: string, tableProgramArea: string };
-  env: { [key: string]: ?string };
+declare class process {
+  static env: {
+    tableProgram: string,
+    serviceName: string,
+    tableProgram: string,
+    tableProgramArea: string,
+    stage: string,
+  };
 }
 
 class programAreaType {
@@ -136,7 +141,7 @@ function init() {
 }
 
 module.exports.health = async (event: any) => {
-  console.log('hi');
+  console.log('hi', process.env.tableProgram);
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 };
 
