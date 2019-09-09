@@ -450,7 +450,7 @@ module.exports.syncNew = async event => {
     // const locationResultBody = locationsResult.data;
     const programAreas = ProgramArea.scan();
     // for (const [zip, localChannels] of Object.entries(locationResultBody)) {
-    programAreas.forEach(area => {
+    for (const area of programAreas) {
       console.log('localChannels', localChannels);
       // let strippedChannels = localChannels.slice(0);
       // // replace dash, if there is one
