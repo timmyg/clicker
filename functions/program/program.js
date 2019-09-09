@@ -162,17 +162,17 @@ module.exports.getAll = async event => {
       .unix() * 1000;
 
   console.time('current + next Programming');
-  if (location.channels && location.channels.local) {
-    for (let i = 0; i < location.channels.local.length; i++) {
-      location.channels.local[i] = parseInt(location.channels.local[i].replace(/-.*$/, ''));
-    }
-  }
-  if (location.channels && location.channels.premium) {
-    for (let i = 0; i < location.channels.premium.length; i++) {
-      location.channels.premium[i] = parseInt(location.channels.premium[i].replace(/-.*$/, ''));
-    }
-  }
-  console.log(JSON.stringify(location));
+  // if (location.channels && location.channels.local) {
+  //   for (let i = 0; i < location.channels.local.length; i++) {
+  //     location.channels.local[i] = parseInt(location.channels.local[i].replace(/-.*$/, ''));
+  //   }
+  // }
+  // if (location.channels && location.channels.premium) {
+  //   for (let i = 0; i < location.channels.premium.length; i++) {
+  //     location.channels.premium[i] = parseInt(location.channels.premium[i].replace(/-.*$/, ''));
+  //   }
+  // }
+  // console.log(JSON.stringify(location));
   // run in parallel
   // [currentNational, nextNational, currentPremium, nextPremium, currentLocal, nextLocal] = await Promise.all([
 
@@ -195,24 +195,24 @@ module.exports.getAll = async event => {
       .exec(),
   );
   // premium national
-  if (location.channels && location.channels.premium) {
-    programs.push(
-      Program.scan()
-        .filter('start')
-        .lt(now)
-        .and()
-        .filter('end')
-        .gt(now)
-        // .and()
-        // .filter('mainCategory')
-        // .eq('Sports')
-        .and()
-        .filter('channel')
-        .in(location.channels.premium)
-        .all()
-        .exec(),
-    );
-  }
+  // if (location.channels && location.channels.premium) {
+  //   programs.push(
+  //     Program.scan()
+  //       .filter('start')
+  //       .lt(now)
+  //       .and()
+  //       .filter('end')
+  //       .gt(now)
+  //       // .and()
+  //       // .filter('mainCategory')
+  //       // .eq('Sports')
+  //       .and()
+  //       .filter('channel')
+  //       .in(location.channels.premium)
+  //       .all()
+  //       .exec(),
+  //   );
+  // }
   // local
   if (location.channels && location.channels.local) {
     console.log('include local channels!', now, location.zip);
@@ -440,24 +440,28 @@ module.exports.syncNew = async event => {
     await syncChannels(channels, null, nationalChannels);
 
     // sync local channels
-    const locationsResult = await invokeFunctionSync(
-      `location-${process.env.stage}-getLocalChannels`,
-      null,
-      null,
-      event.headers,
-    );
+    // const locationsResult = await invokeFunctionSync(
+    //   `location-${process.env.stage}-getLocalChannels`,
+    //   null,
+    //   null,
+    //   event.headers,
+    // );
     // const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
-    const locationResultBody = locationsResult.data;
-    for (const [zip, localChannels] of Object.entries(locationResultBody)) {
+    // const locationResultBody = locationsResult.data;
+    const programAreas = ProgramArea.scan();
+    // for (const [zip, localChannels] of Object.entries(locationResultBody)) {
+    programAreas.forEach(area => {
       console.log('localChannels', localChannels);
-      let strippedChannels = localChannels.slice(0);
-      // replace dash, if there is one
-      for (let i = 0; i < strippedChannels.length; i++) {
-        strippedChannels[i] = strippedChannels[i].replace(/-.*$/, '');
-      }
+      // let strippedChannels = localChannels.slice(0);
+      // // replace dash, if there is one
+      // for (let i = 0; i < strippedChannels.length; i++) {
+      //   strippedChannels[i] = strippedChannels[i].replace(/-.*$/, '');
+      // }
+      // const strippedChannelsString = strippedChannels.join(',');
+      const strippedChannels = getAreaChannels(area.channels);
       const strippedChannelsString = strippedChannels.join(',');
       await syncChannels(strippedChannelsString, zip, transformChannels(localChannels));
-    }
+    });
 
     return respond(201, { count: locationsResult.length + 1 });
   } catch (e) {

@@ -33,8 +33,8 @@ const Location = dynamoose.model(
       },
     ],
     channels: {
-      local: [String],
-      premium: [String],
+      // local: [String],
+      // premium: [String],
       exclude: [String],
     },
     packages: [String],
@@ -94,22 +94,6 @@ module.exports.all = async event => {
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
-};
-
-module.exports.getLocalChannels = async event => {
-  const allLocations = await Location.scan().exec();
-  let locationsByZip = {};
-  allLocations.forEach(l => {
-    locationsByZip[l.zip] = locationsByZip[l.zip] || [];
-    if (l.channels && l.channels.local) {
-      locationsByZip[l.zip] = locationsByZip[l.zip].concat(l.channels.local);
-    }
-    // remove duplicates
-    locationsByZip[l.zip] = locationsByZip[l.zip].filter((elem, index, self) => {
-      return index === self.indexOf(elem);
-    });
-  });
-  return respond(200, locationsByZip);
 };
 
 module.exports.get = async event => {
