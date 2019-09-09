@@ -9,6 +9,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
+    tableProgramArea: ${self:custom.tableProgramArea}
     serviceName: ${self:service}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
   iamRoleStatements:
@@ -29,7 +30,7 @@ custom:
     automatic: true
     number: 3
   tableProgram: programs-${self:custom.stage}
-  # tableProgrammingArea: programming-area-${self:custom.stage}
+  tableProgramArea: programs-area-${self:custom.stage}
   tableThroughputs:
     prod: 2
     default: 1
@@ -60,6 +61,19 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
+    ProgramAreaTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableProgramArea}
+        AttributeDefinitions:
+          - AttributeName: zip
+            AttributeType: N
+        KeySchema:
+          - AttributeName: zip
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}

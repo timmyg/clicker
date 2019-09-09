@@ -3,9 +3,9 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { respond, invokeFunction, invokeFunctionSync, getPathParameters } = require('serverless-helpers');
+const { respond, invokeFunctionSync, getPathParameters } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
-let Program;
+let Program, ProgramArea;
 require('dotenv').config();
 const nationalChannels = [
   { channel: 206, channelTitle: 'ESPN' },
@@ -106,6 +106,24 @@ function init() {
             .toDate();
         },
       },
+    },
+  );
+  ProgramArea = dynamoose.model(
+    process.env.tableProgramArea,
+    {
+      zip: {
+        type: Number,
+        hashKey: true,
+      },
+      channels: [
+        {
+          channel: { type: Number, required: true },
+          minor: { type: Number, required: false },
+        },
+      ],
+    },
+    {
+      timestamps: true,
     },
   );
 }
