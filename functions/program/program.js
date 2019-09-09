@@ -448,7 +448,7 @@ module.exports.syncNew = async event => {
     // );
     // const locationResultBody = JSON.parse(JSON.parse(locationsResult.Payload).body);
     // const locationResultBody = locationsResult.data;
-    const programAreas = ProgramArea.scan()
+    const programAreas = await ProgramArea.scan()
       .all()
       .exec();
     // for (const [zip, localChannels] of Object.entries(locationResultBody)) {
