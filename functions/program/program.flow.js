@@ -135,8 +135,7 @@ function init() {
 }
 
 module.exports.health = async (event: any) => {
-  if (process.env.serviceName) throw new Error('FOO missing');
-  return respond(200, `${process.env.serviceName}: i\'m good (table: ${process.env.tableProgram})`);
+  return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 };
 
 module.exports.createArea = async (event: any) => {
