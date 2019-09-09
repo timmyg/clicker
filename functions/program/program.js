@@ -461,7 +461,7 @@ module.exports.syncNew = async event => {
       const strippedChannels = getAreaChannels(area.channels);
       const strippedChannelsString = strippedChannels.join(',');
       await syncChannels(strippedChannelsString, zip, transformChannels(localChannels));
-    });
+    }
 
     return respond(201, { count: locationsResult.length + 1 });
   } catch (e) {
