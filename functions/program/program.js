@@ -115,12 +115,7 @@ function init() {
         type: Number,
         hashKey: true,
       },
-      channels: [
-        {
-          channel: { type: Number, required: true },
-          minor: { type: Number, required: false },
-        },
-      ],
+      channels: [Number],
     },
     {
       timestamps: true,
@@ -453,7 +448,7 @@ module.exports.syncNew = async event => {
       .exec();
     // for (const [zip, localChannels] of Object.entries(locationResultBody)) {
     for (const area of programAreas) {
-      console.log('localChannels', localChannels);
+      // console.log('localChannels', localChannels);
       // let strippedChannels = localChannels.slice(0);
       // // replace dash, if there is one
       // for (let i = 0; i < strippedChannels.length; i++) {
