@@ -49,7 +49,7 @@ custom:
     endpointType: 'edge'
 functions:
   health:
-    handler: job.health
+    handler: admin.health
     events:
       - http:
           path: health
@@ -61,7 +61,7 @@ functions:
               - authorization
               - content-type
   controlCenter:
-    handler: job.checkControlCenterEvents
+    handler: admin.checkControlCenterEvents
     timeout: 30
     events:
       - schedule: cron(0 10 * * ? *) # every day @ 8am eastern
