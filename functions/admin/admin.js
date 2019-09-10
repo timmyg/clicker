@@ -11,9 +11,11 @@ module.exports.checkControlCenterEvents = async event => {
   // check if any scheduled events for control center today
   const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  // find games scheduled for the next 24 hours
   let games = await base('Games')
     .select({
       view: 'Scheduled',
+      filterByFormula: `{Game Start} <= DATEADD(TODAY(),1,'d')`,
     })
     .all();
   console.log(`found ${games.length} games`);
