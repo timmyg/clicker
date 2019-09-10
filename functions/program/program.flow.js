@@ -26,6 +26,8 @@ class programAreaType {
 
 const minorChannels: number[] = [661];
 
+const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB'];
+
 const nationalChannels: number[] = [
   206, //ESPN
   209, //ESPN2
@@ -430,7 +432,7 @@ function build(dtvSchedule: any, zip: number) {
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
-      if (program.programId !== '-1') {
+      if (program.programId !== '-1' && !nationalExcludedChannels.includes(program.chCall)) {
         program.channel = channel.chNum;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
