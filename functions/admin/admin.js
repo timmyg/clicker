@@ -17,8 +17,13 @@ module.exports.checkControlCenterEvents = async event => {
     })
     .all();
   console.log(`found ${games.length} games`);
-  await controlCenterWebhook.send({
-    text: "I've got news for you...",
-  });
+  if (!games.length) {
+    const text = `No games scheduled today for Control Center! (${process.env.stage})`;
+    const icon_emoji = ':exclamation:';
+    await controlCenterWebhook.send({
+      text,
+      icon_emoji,
+    });
+  }
   return respond(200);
 };
