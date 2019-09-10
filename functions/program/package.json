@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx flow-remove-types program.flow.js -o program.js",
+    "flow": "flow",
     "test": "npm run build && jest --coverage",
     "invoke:pull": "serverless invoke local --function pull",
     "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",

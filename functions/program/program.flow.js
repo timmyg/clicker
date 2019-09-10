@@ -24,57 +24,57 @@ class programAreaType {
   channels: [number];
 }
 
-const nationalChannels = [
-  { channel: 206, channelTitle: 'ESPN' },
-  { channel: 209, channelTitle: 'ESPN2' },
-  { channel: 208, channelTitle: 'ESPNU' },
-  { channel: 207, channelTitle: 'ESPNN' },
-  { channel: 614, channelTitle: 'ESPNC' },
-  { channel: 213, channelTitle: 'MLB' },
-  { channel: 219, channelTitle: 'FS1' }, // { channel: 5, channelTitle: 'NBC' },
-  { channel: 220, channelTitle: 'NBCSN' },
-  { channel: 212, channelTitle: 'NFL' }, // { channel: 9, channelTitle: 'ABC' },
-  { channel: 217, channelTitle: 'TNNSHD' },
-  { channel: 215, channelTitle: 'NHLHD' },
-  { channel: 216, channelTitle: 'NBAHD' },
+const nationalChannels: number[] = [
+  206, //ESPN
+  209, //ESPN2
+  208, //ESPNU
+  207, //ESPNN
+  614, //ESPNC
+  213, //MLB
+  219, //FS1
+  220, //NBCSN
+  212, //NFL
+  217, //TNNSHD
+  215, //NHLHD
+  216, //NBAHD
 
   // optional channels, but leave for syncing
-  { channel: 218, channelTitle: 'GOLF' },
-  { channel: 602, channelTitle: 'TVG' },
-  { channel: 612, channelTitle: 'ACCN' },
-  { channel: 618, channelTitle: 'FS2' },
-  { channel: 620, channelTitle: 'FS2' },
-  { channel: 610, channelTitle: 'BTN' },
-  { channel: 611, channelTitle: 'SECHD' },
-  { channel: 605, channelTitle: 'SPMN' },
-  { channel: 606, channelTitle: 'OTDR' },
-  { channel: 221, channelTitle: 'CBSSN' }, // premium
-  // { channel: 245, channelTitle: 'TNT' },
-  // { channel: 247, channelTitle: 'TBS' },
-  // { channel: 661, channelTitle: 'FSOH', channelMinor: 1 },
-  // { channel: 600, channelTitle: 'SMXHD' },
-  { channel: 701, channelTitle: 'NFLMX' }, // 4 game mix
-  { channel: 702, channelTitle: 'NFLMX' }, // 8 game mix
-  { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
-  { channel: 704, channelTitle: 'NFLFAN' }, // Fantasy Zone (premium)
-  { channel: 705, channelTitle: 'NFL' },
-  { channel: 706, channelTitle: 'NFL' },
-  { channel: 707, channelTitle: 'NFL' },
-  { channel: 708, channelTitle: 'NFL' },
-  { channel: 709, channelTitle: 'NFL' },
-  { channel: 710, channelTitle: 'NFL' },
-  { channel: 711, channelTitle: 'NFL' },
-  { channel: 712, channelTitle: 'NFL' },
-  { channel: 713, channelTitle: 'NFL' },
-  { channel: 714, channelTitle: 'NFL' },
-  { channel: 715, channelTitle: 'NFL' },
-  { channel: 716, channelTitle: 'NFL' },
-  { channel: 717, channelTitle: 'NFL' },
-  { channel: 718, channelTitle: 'NFL' },
-  // { channel: 719, channelTitle: 'NFL' },
-  // { channel: 104, channelTitle: 'DTV4K' },
-  // { channel: 105, channelTitle: 'LIVE4K' },
-  // { channel: 106, channelTitle: 'LIVE4K2' },
+  218, //GOLF
+  602, //TVG
+  612, //ACCN
+  618, //FS2
+  620, //FS2
+  610, //BTN
+  611, //SECHD
+  605, //SPMN
+  606, //OTDR
+  221, //CBSSN // premium
+  //, 245 //TNT
+  //, 247 //TBS
+  //, 661 //FSOHhannelMinor: 1 },
+  //, 600 //SMXHD
+  701, //NFLMX // 4 game mix
+  702, //NFLMX // 8 game mix
+  703, //NFLRZ // Redzone (premium)
+  704, //NFLFAN // Fantasy Zone (premium)
+  705, //NFL
+  706, //NFL
+  707, //NFL
+  708, //NFL
+  709, //NFL
+  710, //NFL
+  711, //NFL
+  712, //NFL
+  713, //NFL
+  714, //NFL
+  715, //NFL
+  716, //NFL
+  717, //NFL
+  718, //NFL
+  //, 719 //NFL
+  //, 104 //DTV4K
+  //, 105 //LIVE4K
+  //, 106 //LIVE4K2
 ];
 const zipDefault = 45202;
 

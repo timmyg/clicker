@@ -1,0 +1,65 @@
+service: admin
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  versionFunctions: false
+  runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    airtableKey: ${env:AIRTABLE_KEY}
+    airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+plugins:
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+
+custom:
+  stage: ${opt:stage}
+  prune:
+    automatic: true
+    number: 3
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+  airtableBase:
+    prod: ${env:AIRTABLE_BASE}
+    release: ${env:AIRTABLE_BASE_RELEASE}
+    develop: ${env:AIRTABLE_BASE_DEV}
+
+functions:
+  health:
+    handler: job.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  controlCenter:
+    handler: job.checkControlCenterEvents
+    timeout: 30
+    events:
+      - schedule: cron(0 10 * * ? *) # every day @ 8am eastern
+      - http:
+          path: check/control-center
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
