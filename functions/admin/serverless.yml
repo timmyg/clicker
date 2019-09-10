@@ -63,9 +63,8 @@ functions:
               - content-type
   controlCenter:
     handler: admin.checkControlCenterEvents
-    timeout: 30
     events:
-      - schedule: cron(0 10 * * ? *) # every day @ 8am eastern
+      - schedule: cron(0 12 * * ? *) # every day @ 8am eastern
       - http:
           path: check/control-center
           method: post
