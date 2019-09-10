@@ -26,7 +26,7 @@
                 </h1>
               </ion-col>
 
-              <ion-col size="12">
+              <ion-col size="12" no-padding>
                 <span class="faded" *ngIf="program.nextProgramTitle">
                   Next: {{ getNextProgramTitle() }} at {{ program.nextProgramStart | amDateFormat: 'h:mma' }}
                 </span>
