@@ -433,7 +433,7 @@ function build(dtvSchedule: any, zip: number) {
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
         // if channel is in minors list, add a -1 to it
-        if (program.channel.includes(minorChannels)) {
+        if (minorChannels.includes(program.channel)) {
           program.channelMinor = 1;
         }
 
