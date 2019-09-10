@@ -190,11 +190,13 @@ module.exports.getAll = async (event: any) => {
       .filter('end')
       .gt(now)
       .and()
+      // .filter('zip')
+      // .null()
+      // .or()
+      // .filter('zip')
+      // .eq(location.zip)
       .filter('zip')
-      .null()
-      .or()
-      .filter('zip')
-      .eq(location.zip)
+      .in(null, location.zip)
       .all()
       .exec(),
   );
@@ -221,7 +223,6 @@ module.exports.getAll = async (event: any) => {
 
   console.time('rank');
   const rankedPrograms = rankPrograms(programsResult);
-  // const rankedPrograms = rankPrograms(currentNational.concat(currentPremium, currentLocal));
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };
