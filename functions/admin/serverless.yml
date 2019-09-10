@@ -11,6 +11,7 @@ provider:
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     airtableKey: ${env:AIRTABLE_KEY}
     airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
+    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
