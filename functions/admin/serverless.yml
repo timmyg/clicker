@@ -21,6 +21,7 @@ provider:
 plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
+  - serverless-domain-manager
 
 custom:
   stage: ${opt:stage}
@@ -35,7 +36,17 @@ custom:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
     develop: ${env:AIRTABLE_BASE_DEV}
-
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: locations
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
 functions:
   health:
     handler: job.health
