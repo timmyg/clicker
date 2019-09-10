@@ -479,19 +479,8 @@ function getLocalChannelName(chName: string) {
 function getChannels(channels: number[]): number[] {
   return channels.map(c => Math.floor(c));
 }
-function getChannelsWithMinor(channels: number[]): string[] {
-  return channels.map(c => {
-    const arr = (c + '').split('.');
-    let channel = arr[0];
-    if (arr[1]) {
-      channel = channel.concat(`-${arr[1]}`);
-    }
-    return channel;
-  });
-}
 
 module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
-module.exports.getChannelsWithMinor = getChannelsWithMinor;

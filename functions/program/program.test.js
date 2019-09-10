@@ -59,7 +59,3 @@ const channels = [5, 9, 12, 19, 661.1];
 test('getMajorChannels', () => {
   expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
 });
-
-test('getChannelsWithMinor', () => {
-  expect(getChannelsWithMinor(channels)).toEqual(['5', '9', '12', '19', '661-1']);
-});
