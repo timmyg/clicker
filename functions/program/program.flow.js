@@ -432,7 +432,7 @@ function build(dtvSchedule: any, zip: number) {
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
       program.programId = program.programID;
-      if (program.programId !== '-1' && !nationalExcludedChannels.includes(program.chCall)) {
+      if (program.programId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
