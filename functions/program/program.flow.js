@@ -299,6 +299,7 @@ module.exports.syncNew = async (event: any) => {
     init();
 
     // sync national channels
+    console.log('sync national channels');
     await syncChannels(nationalChannels);
 
     // sync local channels
@@ -306,6 +307,7 @@ module.exports.syncNew = async (event: any) => {
       .all()
       .exec();
     for (const area of programAreas) {
+      console.log(`sync local channels: ${area.zip}`);
       await syncChannels(area.channels, area.zip);
     }
 
