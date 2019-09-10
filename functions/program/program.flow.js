@@ -240,8 +240,8 @@ module.exports.getAll = async (event: any) => {
   currentPrograms.forEach((program, i) => {
     const nextProgram = nextPrograms.find(np => np.channel === program.channel && np.programId !== program.programId);
     if (nextProgram) {
-      currentPrograms.nextProgramTitle = nextProgram.title;
-      currentPrograms.nextProgramStart = nextProgram.start;
+      currentPrograms[i].nextProgramTitle = nextProgram.title;
+      currentPrograms[i].nextProgramStart = nextProgram.start;
     }
   });
 
