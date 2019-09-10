@@ -181,7 +181,7 @@ module.exports.getAll = async (event: any) => {
   console.time('current + next Programming');
 
   let programs = [];
-  // national
+  // get national and local channels
   programs.push(
     Program.scan()
       .filter('start')
@@ -189,32 +189,15 @@ module.exports.getAll = async (event: any) => {
       .and()
       .filter('end')
       .gt(now)
-      // .and()
-      // .filter('mainCategory')
-      // .eq('Sports')
       .and()
       .filter('zip')
       .null()
+      .or()
+      .filter('zip')
+      .eq(location.zip)
       .all()
       .exec(),
   );
-
-  if (location.channels && location.channels.local) {
-    console.log('include local channels!', now, location.zip);
-    programs.push(
-      Program.scan()
-        .filter('start')
-        .lt(now)
-        .and()
-        .filter('end')
-        .gt(now)
-        .and()
-        .filter('zip')
-        .eq(location.zip)
-        .all()
-        .exec(),
-    );
-  }
 
   let programsResult = await Promise.all(programs);
   programsResult = Array.prototype.concat.apply([], programsResult);

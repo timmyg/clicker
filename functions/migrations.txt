@@ -1,0 +1,2 @@
+1. remove channels.local and channels.premium
+2. add zips to area programming
