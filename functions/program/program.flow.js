@@ -24,6 +24,8 @@ class programAreaType {
   channels: [number];
 }
 
+const minorChannels: number[] = [661];
+
 const nationalChannels: number[] = [
   206, //ESPN
   209, //ESPN2
@@ -296,23 +298,18 @@ module.exports.syncNew = async (event: any) => {
   try {
     init();
 
-    let count = 0;
     // sync national channels
-    // const channels = nationalChannels.map(c => c.channel).join(',');
     await syncChannels(nationalChannels);
-    count++;
 
+    // sync local channels
     const programAreas: programAreaType[] = await ProgramArea.scan()
       .all()
       .exec();
     for (const area of programAreas) {
-      const strippedChannels = getAreaChannels(area.channels);
-      const strippedChannelsString = strippedChannels.join(',');
-      await syncChannels(strippedChannelsString, area.zip);
-      count++;
+      await syncChannels(area.channels, area.zip);
     }
 
-    return respond(201, { count });
+    return respond(201);
   } catch (e) {
     console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
@@ -320,7 +317,9 @@ module.exports.syncNew = async (event: any) => {
 };
 
 async function syncChannels(channels: any, zip: number = zipDefault) {
-  const channelsString = channels.map(c => c.channel).join(',');
+  // channels may have minor channel, so get main channel number
+  const channelsString = getChannels(channels).join(',');
+
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()
     .utc()
@@ -340,8 +339,8 @@ async function syncChannels(channels: any, zip: number = zipDefault) {
   console.log({ result });
 
   let { schedule } = result.data;
-  let allPrograms = build(schedule, zip, channels);
-  let transformedPrograms = transformPrograms(allPrograms);
+  let allPrograms = build(schedule, zip);
+  let transformedPrograms = buildProgramObjects(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
 }
 
@@ -415,7 +414,7 @@ function transformChannels(channelArray) {
   return channels;
 }
 
-function transformPrograms(programs) {
+function buildProgramObjects(programs) {
   const transformedPrograms = [];
   programs.forEach(p => {
     transformedPrograms.push(new Program(p));
@@ -423,7 +422,7 @@ function transformPrograms(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, zip: number, channels: any) {
+function build(dtvSchedule: any, zip: number) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
@@ -433,10 +432,9 @@ function build(dtvSchedule: any, zip: number, channels: any) {
         program.channel = channel.chNum;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
-        const channelWithMinor = channels.find(c => c.channel === program.channel);
-        // console.log(channelWithMinor, program.channel);
-        if (channelWithMinor) {
-          program.channelMinor = channelWithMinor.channelMinor;
+        // if channel is in minors list, add a -1 to it
+        if (program.channel.includes(minorChannels)) {
+          program.channelMinor = 1;
         }
 
         program.title = program.title !== 'Programming information not available' ? program.title : null;
@@ -487,26 +485,22 @@ function getLocalChannelName(chName: string) {
   }
 }
 
-function getAreaChannels(channels: any, includeMinor?: boolean) {
-  if (includeMinor) {
-    return channels.map(obj => {
-      let channelString = obj.channel.toString();
-      if (obj.minor) {
-        channelString = channelString.concat(`-${obj.minor}`);
-      }
-      return channelString;
-    });
-  }
-  return channels.map(obj => obj.channel.toString());
+function getChannels(channels: number[]): number[] {
+  return channels.map(c => Math.floor(c));
+}
+function getChannelsWithMinor(channels: number[]): string[] {
+  return channels.map(c => {
+    const arr = (c + '').split('.');
+    let channel = arr[0];
+    if (arr[1]) {
+      channel = channel.concat(`-${arr[1]}`);
+    }
+    return channel;
+  });
 }
 
 module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
-module.exports.getAreaChannels = getAreaChannels;
-
-// function square(n: number): number {
-//   return n * n;
-// }
-
-// square('2'); // Error!
+module.exports.getChannels = getChannels;
+module.exports.getChannelsWithMinor = getChannelsWithMinor;

@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '../.env.example' });
 const moment = require('moment');
-const { build, generateId, getLocalChannelName, getAreaChannels } = require('./program');
+const { build, generateId, getLocalChannelName, getChannels, getChannelsWithMinor } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
 
@@ -54,19 +54,12 @@ test('convert local channel names', () => {
   expect(getLocalChannelName('Cincinnati Blah blah')).toBe(undefined);
 });
 
-const areaChannels = [{ channel: 450 }, { channel: 661, minor: 1 }, { channel: 41, minor: undefined }];
+const channels = [5, 9, 12, 19, 661.1];
 
-test('get area channels', () => {
-  const channels = getAreaChannels(areaChannels);
-  console.log({ channels });
-  expect(channels[0]).toBe('450');
-  expect(channels[1]).toBe('661');
-  expect(channels[2]).toBe('41');
+test('getMajorChannels', () => {
+  expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
 });
 
-test('get area channels with minor', () => {
-  const channels = getAreaChannels(areaChannels, true);
-  expect(channels[0]).toBe('450');
-  expect(channels[1]).toBe('661-1');
-  expect(channels[2]).toBe('41');
+test('getChannelsWithMinor', () => {
+  expect(getChannelsWithMinor(channels)).toEqual(['5', '9', '12', '19', '661-1']);
 });
