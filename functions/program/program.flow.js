@@ -405,19 +405,6 @@ module.exports.syncDescriptions = async (event: any) => {
   return respond(200);
 };
 
-function transformChannels(channelArray) {
-  console.log('transformChannels', channelArray);
-  const channels = [];
-  for (var i = 0, len = channelArray.length; i < len; i++) {
-    let channel, channelMinor;
-    channel = channelArray[i].split('-')[0];
-    channelMinor = channelArray[i].split('-')[1];
-    channels.push({ channel: parseInt(channel), channelMinor: channelMinor ? parseInt(channelMinor) : undefined });
-  }
-  console.log('transformedChannels', channels);
-  return channels;
-}
-
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
   programs.forEach(p => {
