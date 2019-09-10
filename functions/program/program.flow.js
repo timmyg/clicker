@@ -180,33 +180,70 @@ module.exports.getAll = async (event: any) => {
 
   console.time('current + next Programming');
 
-  let programs = [];
-  // get national and local channels
-  programs.push(
-    Program.scan()
-      .filter('start')
-      .lt(now)
-      .and()
-      .filter('end')
-      .gt(now)
-      .and()
-      // .filter('zip')
-      // .null()
-      // .or()
-      // .filter('zip')
-      // .eq(location.zip)
-      .filter('zip')
-      .in(null, location.zip)
-      .all()
-      .exec(),
-  );
+  const programsNationalQuery = Program.scan()
+    .filter('start')
+    .lt(now)
+    .and()
+    .filter('end')
+    .gt(now)
+    .and()
+    .filter('zip')
+    .null()
+    .all()
+    .exec();
 
-  let programsResult = await Promise.all(programs);
-  programsResult = Array.prototype.concat.apply([], programsResult);
+  const programsNationalNextQuery = Program.scan()
+    .filter('start')
+    .lt(in25Mins)
+    .and()
+    .filter('end')
+    .gt(in25Mins)
+    .and()
+    .filter('zip')
+    .null()
+    .all()
+    .exec();
 
-  console.log('programsResult', programsResult.length);
+  const programsLocalQuery = Program.scan()
+    .filter('start')
+    .lt(now)
+    .and()
+    .filter('end')
+    .gt(now)
+    .and()
+    .filter('zip')
+    .eq(location.zip)
+    .all()
+    .exec();
 
-  console.timeEnd('current + next Programming');
+  const programsLocalNextQuery = Program.scan()
+    .filter('start')
+    .lt(in25Mins)
+    .and()
+    .filter('end')
+    .gt(in25Mins)
+    .and()
+    .filter('zip')
+    .eq(location.zip)
+    .all()
+    .exec();
+
+  const [programsNational, programsLocal, programsNationalNext, programsLocalNext] = await Promise.all([
+    programsNationalQuery,
+    programsLocalQuery,
+    programsNationalNextQuery,
+    programsLocalNextQuery,
+  ]);
+  let currentPrograms = [...programsNational, ...programsLocal];
+  const nextPrograms = [...programsNationalNext, ...programsLocalNext];
+
+  currentPrograms.forEach((program, i) => {
+    const nextProgram = nextPrograms.find(np => np.channel === program.channel && np.programId !== program.programId);
+    if (nextProgram) {
+      currentPrograms.nextProgramTitle = nextProgram.title;
+      currentPrograms.nextProgramStart = nextProgram.start;
+    }
+  });
 
   console.time('remove excluded');
   console.log('exclude', location.channels);
@@ -215,14 +252,15 @@ module.exports.getAll = async (event: any) => {
       return parseInt(item, 10);
     });
     console.log(excludedChannels);
-    console.log(programsResult.length);
-    programsResult = programsResult.filter(p => !excludedChannels.includes(p.channel));
-    console.log(programsResult.length);
+    // console.log(currentPrograms.length);
+    currentPrograms = currentPrograms.filter(p => !excludedChannels.includes(p.channel));
+    console.log(currentPrograms.length);
   }
   console.timeEnd('remove excluded');
 
   console.time('rank');
-  const rankedPrograms = rankPrograms(programsResult);
+  const rankedPrograms = rankPrograms(currentPrograms);
+  // const rankedPrograms = rankPrograms(currentNational.concat(currentPremium, currentLocal));
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
 };
