@@ -13,3 +13,13 @@ span.icon {
 .faded {
   opacity: 0.45;
 }
+
+.slide-indicator {
+  display: flex;
+  height: 100%;
+  width: 10px;
+  position: absolute;
+  .icon {
+    align-self: center;
+  }
+}

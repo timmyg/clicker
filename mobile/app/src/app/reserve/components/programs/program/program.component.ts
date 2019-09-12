@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Program } from 'src/app/state/program/program.model';
 import { IonItemSliding } from '@ionic/angular';
 
@@ -9,17 +9,8 @@ import { IonItemSliding } from '@ionic/angular';
 })
 export class ProgramComponent {
   @Input() program: Program;
-  // @ViewChild('slidingItem', { static: false }) itemSliding: IonItemSliding;
-  @ViewChild('slidingItem', { static: false }) itemSliding: IonItemSliding;
   @Output() onSelect = new EventEmitter<Program>();
   @Output() onInfo = new EventEmitter<Program>();
-
-  constructor() {}
-
-  ngAfterViewInit() {
-    this.itemSliding.open('start');
-    setTimeout(() => this.itemSliding.close(), 2000);
-  }
 
   async onProgramClick() {
     this.onSelect.emit(this.program);

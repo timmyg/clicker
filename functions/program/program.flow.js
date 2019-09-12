@@ -156,6 +156,12 @@ module.exports.createArea = async (event: any) => {
   return respond(200, programArea);
 };
 
+module.exports.getProgramAreas = async () => {
+  init();
+  const programAreas = ProgramArea.scan().exec();
+  return respond(200, programAreas);
+};
+
 module.exports.getAll = async (event: any) => {
   const params = getPathParameters(event);
   const { locationId } = params;

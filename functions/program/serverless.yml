@@ -103,6 +103,18 @@ functions:
               - partner
               - authorization
               - content-type
+  getProgramAreas:
+    handler: program.getProgramAreas
+    events:
+      - http:
+          path: 'areas'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   syncNew:
     handler: program.syncNew
     timeout: 20
