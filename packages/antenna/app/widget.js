@@ -63,6 +63,7 @@ class Widget {
 
   async initListeners() {
     try {
+      const context = this;
       // Listen for commands from Losant
       this.device.on('command', command => {
         logger.info({ command });
