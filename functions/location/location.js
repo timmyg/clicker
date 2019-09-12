@@ -375,6 +375,26 @@ module.exports.allOn = async event => {
   return respond(200, 'ok');
 };
 
+module.exports.checkAllBoxesInfo = async event => {
+  // const { id } = getPathParameters(event);
+  let allLocations = await Location.scan().exec();
+
+  allLocations.forEach(location => {
+    for (const box of location.boxes) {
+      const { losantId } = location;
+      const { id: boxId, ip, clientAddress: client } = box;
+      const response = await invokeFunctionSync(`remote-${process.env.stage}-checkBoxInfo`, {
+        losantId,
+        boxId,
+        ip,
+        client,
+      });
+      console.log(response);
+    }
+  });
+  return respond(200, 'ok');
+};
+
 module.exports.controlCenterLocationsByRegion = async event => {
   const { regions } = getPathParameters(event);
   console.log(regions);

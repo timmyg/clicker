@@ -255,6 +255,19 @@ functions:
               - partner
               - authorization
               - content-type
+  checkAllBoxesInfo:
+    handler: location.checkAllBoxesInfo
+    events:
+      - schedule: rate(30 minutes)
+      - http:
+          path: boxes/info
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   controlCenterLocationsByRegion:
     handler: location.controlCenterLocationsByRegion
     events:

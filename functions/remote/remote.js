@@ -44,6 +44,21 @@ module.exports.command = async event => {
   }
 };
 
+module.exports.checkBoxInfo = async event => {
+  try {
+    const { losantId, boxId, ip, client } = getBody(event);
+    const api = new LosantApi();
+    const payload = { boxId, ip, client };
+
+    const command = 'info.current';
+    await api.sendCommand(command, losantId, payload);
+    return respond();
+  } catch (e) {
+    console.error(e);
+    return respond(400, `Could not checkBoxInfo: ${e.stack}`);
+  }
+};
+
 module.exports.debug = async event => {
   try {
     const { command, payload, losantId } = getBody(event);
