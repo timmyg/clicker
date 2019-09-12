@@ -105,7 +105,7 @@ class Widget {
               if (err) return logger.error(JSON.stringify(err));
               logger.info('info.current!!');
               logger.info(JSON.stringify(response), payload);
-              await context.api.saveBoxInfo(payload.boxId, response);
+              context.api.saveBoxInfo(payload.boxId, response);
               return;
             });
             break;
