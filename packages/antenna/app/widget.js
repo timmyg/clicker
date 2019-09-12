@@ -104,7 +104,7 @@ class Widget {
             this.remote.getTuned(payload.client || '0', (err, response) => {
               if (err) return logger.error(JSON.stringify(err));
               logger.info('info.current!!');
-              logger.info(JSON.stringify(response));
+              logger.info(JSON.stringify(response), payload);
               await context.api.saveBoxInfo(payload.boxId, response);
               return;
             });
