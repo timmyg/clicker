@@ -31,11 +31,14 @@ const Location = dynamoose.model(
         zone: String,
         notes: String,
         active: Boolean,
+        channel: Number,
+        channelSource: {
+          type: String,
+          enum: ['app', 'control center', 'manual'],
+        },
       },
     ],
     channels: {
-      // local: [String],
-      // premium: [String],
       exclude: [String],
     },
     packages: [String],
@@ -55,6 +58,7 @@ const Location = dynamoose.model(
     setup: Boolean,
     controlCenter: Boolean,
     announcement: String,
+    notes: String,
     // calculated fields
     distance: Number,
   },
