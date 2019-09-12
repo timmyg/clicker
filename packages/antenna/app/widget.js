@@ -106,14 +106,12 @@ class Widget {
             );
             break;
           case 'info.current':
-            console.log('1');
             this.remote.getTuned('0', (err, response) => {
-              console.log('2');
-              console.log(err);
               if (err) return logger.error(JSON.stringify(err));
               console.log('3');
               logger.info('info.current!!');
-              logger.info(response);
+              logger.info(JSON.stringify(err));
+              logger.info(JSON.stringify(response));
               return { test: 5 };
             });
             break;
