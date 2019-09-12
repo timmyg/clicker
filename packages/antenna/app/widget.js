@@ -112,7 +112,8 @@ class Widget {
               console.log(err);
               if (err) return logger.error(JSON.stringify(err));
               console.log('3');
-              return logger.info('info.current!', response);
+              logger.info('info.current', response);
+              return { test: 5 };
             });
             break;
           // available endpoints
