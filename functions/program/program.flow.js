@@ -158,7 +158,7 @@ module.exports.createArea = async (event: any) => {
 
 module.exports.getProgramAreas = async () => {
   init();
-  const programAreas = ProgramArea.scan()
+  const programAreas = await ProgramArea.scan()
     .all()
     .exec();
   return respond(200, programAreas);
