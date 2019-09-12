@@ -379,7 +379,7 @@ module.exports.checkAllBoxesInfo = async event => {
   // const { id } = getPathParameters(event);
   let allLocations = await Location.scan().exec();
 
-  allLocations.forEach(location => {
+  for (const location of allLocations) {
     for (const box of location.boxes) {
       const { losantId } = location;
       const { id: boxId, ip, clientAddress: client } = box;
@@ -391,7 +391,7 @@ module.exports.checkAllBoxesInfo = async event => {
       });
       console.log(response);
     }
-  });
+  }
   return respond(200, 'ok');
 };
 
