@@ -3,6 +3,7 @@ const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
+const { IncomingWebhook } = require('@slack/webhook');
 require('dotenv').config({ path: '../.env.example' });
 
 const Location = dynamoose.model(
@@ -274,6 +275,15 @@ module.exports.connected = async event => {
   const location = locations[0];
   location.connected = true;
   await location.save();
+  
+  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
+  const text = `Antenna connected at ${location.name (${location.neighborhood})} ! (${process.env.stage})`;
+  const icon_emoji = ':tada:';
+  await antennaWebhook.send({
+    text,
+    icon_emoji,
+  });
+
   return respond(200, 'ok');
 };
 
@@ -286,6 +296,15 @@ module.exports.disconnected = async event => {
   const location = locations[0];
   location.connected = false;
   await location.save();
+
+  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
+  const text = `Antenna disconnected at ${location.name (${location.neighborhood})} ! (${process.env.stage})`;
+  const icon_emoji = ':exclamation:';
+  await antennaWebhook.send({
+    text,
+    icon_emoji,
+  });
+
   return respond(200, 'ok');
 };
 
