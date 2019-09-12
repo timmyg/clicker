@@ -10,6 +10,7 @@ provider:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
