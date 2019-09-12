@@ -226,6 +226,25 @@ module.exports.setBoxFree = async event => {
   return respond(200);
 };
 
+module.exports.saveBoxInfo = async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+  const { major } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  const i = location.boxes.findIndex(b => b.id === boxId);
+  console.log('box', location.boxes[i], major);
+  if (location.boxes[i]['channel'] !== major) {
+    location.boxes[i]['channel'] = major;
+    location.boxes[i]['channelSource'] = 'manual';
+    await location.save();
+  }
+
+  return respond(200);
+};
+
 module.exports.setLabels = async event => {
   const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);

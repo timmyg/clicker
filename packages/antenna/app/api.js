@@ -38,10 +38,16 @@ class Api {
 
   async updateIp(ip) {
     try {
-      // logger.info('update device dtv ip', ip);
-      // console.log(`/locations/${this.locationId}`, { ip }, process.env.API_BASE_URL);
-      // console.log(this.axios);
       const res = await this.axios.put(`/locations/${this.locationId}`, { ip });
+      return res.data;
+    } catch (error) {
+      return console.error(error);
+    }
+  }
+
+  async saveBoxInfo(boxId, info) {
+    try {
+      const res = await this.axios.post(`/locations/${this.locationId}/boxes/${boxId}/info`, info);
       return res.data;
     } catch (error) {
       return console.error(error);

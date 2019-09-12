@@ -66,16 +66,11 @@ class Widget {
       // Listen for commands from Losant
       this.device.on('command', command => {
         logger.info({ command });
-        // const ip = '192.168.200.221';
         const { name, payload } = command;
         const { ip } = payload;
-        // console.log({ ip, name, payload });
-        // console.log('setting ip', ip);
         this.remote = new DirecTV.Remote(ip);
         switch (name) {
           case 'tune':
-            // console.log('tuning...');
-            // console.log(payload.channel, payload.channelMinor, payload.client);
             this.remote.tune(payload.channel, payload.channelMinor, payload.client, err => {
               if (err) return logger.error(err);
               return logger.info('tuned');
@@ -106,13 +101,12 @@ class Widget {
             );
             break;
           case 'info.current':
-            this.remote.getTuned('0', (err, response) => {
+            this.remote.getTuned(payload.client || '0', (err, response) => {
               if (err) return logger.error(JSON.stringify(err));
-              console.log('3');
               logger.info('info.current!!');
-              logger.info(JSON.stringify(err));
               logger.info(JSON.stringify(response));
-              return { test: 5 };
+              await context.api.saveBoxInfo(payload.boxId, response);
+              return;
             });
             break;
           // available endpoints
