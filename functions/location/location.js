@@ -277,7 +277,7 @@ module.exports.connected = async event => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna connected at ${location.name} (${location.neighborhood})} ! (${process.env.stage})`;
+  const text = `Antenna connected at ${location.name} (${location.neighborhood})}(${process.env.stage})`;
   const icon_emoji = ':tada:';
   await antennaWebhook.send({
     text,
@@ -298,7 +298,7 @@ module.exports.disconnected = async event => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna disconnected at ${location.name} (${location.neighborhood})} ! (${process.env.stage})`;
+  const text = `Antenna disconnected at ${location.name} (${location.neighborhood})} (${process.env.stage})`;
   const icon_emoji = ':exclamation:';
   await antennaWebhook.send({
     text,

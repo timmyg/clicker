@@ -28,7 +28,7 @@ module.exports.checkControlCenterEvents = async event => {
     .all();
   console.log(`found ${games.length} games`);
   if (!games.length) {
-    const text = `No games scheduled today for Control Center! (${process.env.stage})`;
+    const text = `No games scheduled today for Control Center (${process.env.stage})`;
     const icon_emoji = ':exclamation:';
     await controlCenterWebhook.send({
       text,
