@@ -46,15 +46,15 @@ module.exports.command = async event => {
     );
 
     console.time('track event');
-    let event;
+    let eventName;
     if (source === 'app') {
-      event = 'App Zap';
+      eventName = 'App Zap';
     } else if (source === 'control center') {
-      event = 'Control Center Zap';
+      eventName = 'Control Center Zap';
     }
     await track({
       userId: reservation.userId,
-      event,
+      event: eventName,
       properties: {
         channel: reservation.program.channel,
         channelMinor: reservation.program.channelMinor,
