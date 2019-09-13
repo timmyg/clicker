@@ -1,0 +1,50 @@
+service: analytics
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  versionFunctions: false
+  runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+plugins:
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+
+custom:
+  stage: ${opt:stage}
+  prune:
+    automatic: true
+    number: 3
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+functions:
+  health:
+    handler: analytics.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  track:
+    handler: analytics.track
+    timeout: 20
+    events:
+      - http:
+          path: track
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

@@ -124,7 +124,8 @@ module.exports.create = async event => {
 
   console.time('remote command');
   const command = 'tune';
-  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+  const source = 'app';
+  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, source });
   console.timeEnd('remote command');
 
   // console.time('track event');
@@ -193,7 +194,8 @@ module.exports.update = async event => {
   // change the channel
   console.time('remote command');
   const command = 'tune';
-  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+  const source = 'app';
+  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, source });
   console.timeEnd('remote command');
 
   // console.time('track event');

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
-const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
+const { respond, invokeFunctionSync } = require('serverless-helpers');
 
 module.exports.health = async event => {
   return respond(200, `hello`);
@@ -71,9 +71,10 @@ module.exports.controlCenter = async event => {
           console.log('location:', location.name, location.neighborhood);
           console.log('box', box.label, box.ip);
           console.log('channel', channel);
+          const source = 'control center';
           await invokeFunctionSync(
             `remote-${process.env.stage}-command`,
-            { reservation, command },
+            { reservation, command, source },
             null,
             null,
             null,

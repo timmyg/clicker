@@ -48,3 +48,7 @@ export class Globals {
     };
   }
 }
+
+// used outside of app
+// 'Control Center Channel Change'
+// 'Manual Channel Change'

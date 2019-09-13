@@ -17,11 +17,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@slack/webhook": "^5.0.1",
     "dotenv": "^7.0.0",
     "dynamoose": "^1.7.2",
     "geolib": "^2.0.24",
     "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7"
   },
   "devDependencies": {
     "jest": "^24.0.0",

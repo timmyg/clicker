@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '../.env.example' });
 const moment = require('moment');
-const { build, generateId, getLocalChannelName } = require('./program');
+const { build, generateId, getLocalChannelName, getChannels, getChannelsWithMinor } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
 
@@ -52,4 +52,10 @@ test('convert local channel names', () => {
   expect(getLocalChannelName('Cincinnati, OH WKRC CBS 12 SD')).toBe('CBS');
   expect(getLocalChannelName('Cincinnati, OH WXIX FOX 19 SD')).toBe('FOX');
   expect(getLocalChannelName('Cincinnati Blah blah')).toBe(undefined);
+});
+
+const channels = [5, 9, 12, 19, 661.1];
+
+test('getMajorChannels', () => {
+  expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
 });

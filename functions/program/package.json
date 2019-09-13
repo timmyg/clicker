@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "build": "npx flow-remove-types program.flow.js -o program.js",
+    "flow": "flow",
+    "test": "npm run build && jest --coverage",
     "invoke:pull": "serverless invoke local --function pull",
     "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",
     "invoke:programming:area:get": "serverless invoke local --function getAreaProgramming --path ../.resources/data/programming-area.json",
@@ -23,6 +25,8 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
     "jest": "^24.1.0",
     "serverless": "^1.37.0",
     "serverless-domain-manager": "^2.6.13",

@@ -1,4 +1,4 @@
-service: remote
+service: admin
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
@@ -8,9 +8,10 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
-    losantAppId: ${env:LOSANT_APP_ID}
-    losantAccessToken: ${env:LOSANT_ACCESS_TOKEN}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    airtableKey: ${env:AIRTABLE_KEY}
+    airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
+    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -19,32 +20,37 @@ provider:
         - lambda:InvokeAsync
       Resource: '*'
 plugins:
-  - serverless-domain-manager
   - serverless-prune-plugin
+  - serverless-deployment-bucket
+  - serverless-domain-manager
 
 custom:
-  stage: ${opt:stage, self:provider.stage}
+  stage: ${opt:stage}
   prune:
     automatic: true
     number: 3
+  segmentKey:
+    prod: ${env:SEGMENT_WRITE_KEY}
+    release: ${env:SEGMENT_WRITE_KEY_DEV}
+    develop: ${env:SEGMENT_WRITE_KEY_DEV}
+  airtableBase:
+    prod: ${env:AIRTABLE_BASE}
+    release: ${env:AIRTABLE_BASE_RELEASE}
+    develop: ${env:AIRTABLE_BASE_DEV}
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: remote
+    basePath: admin
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  segmentKey:
-    prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 functions:
   health:
-    handler: remote.health
+    handler: admin.health
     events:
       - http:
           path: health
@@ -55,35 +61,12 @@ functions:
               - partner
               - authorization
               - content-type
-  command:
-    handler: remote.command
+  controlCenter:
+    handler: admin.checkControlCenterEvents
     events:
+      - schedule: cron(0 12 * * ? *) # every day @ 8am eastern
       - http:
-          path: '/command'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  checkBoxInfo:
-    handler: remote.checkBoxInfo
-    events:
-      - http:
-          path: '/box/info'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  debug:
-    handler: remote.debug
-    events:
-      - http:
-          path: '/debug'
+          path: check/control-center
           method: post
           cors:
             origin: '*'
