@@ -36,14 +36,17 @@ module.exports.command = async event => {
     const api = new LosantApi();
 
     console.log(command, losantId, client, channel, channelMinor, ip, key, source);
+    console.time('change channel');
     await api.sendCommand(command, losantId, { client, channel, channelMinor, ip, key });
+    console.timeEnd('change channel');
+
+    console.time('update channel');
     await invokeFunctionSync(
       `location-${process.env.stage}-updateChannel`,
       { channel, source }, // body
       { id: locationId, boxId }, // path params
-      null,
-      null,
     );
+    console.timeEnd('update channel');
 
     let eventName;
     if (source === 'app') {
@@ -74,14 +77,6 @@ module.exports.command = async event => {
     console.time('track event');
     await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
-
-    console.time('update channel');
-    await invokeFunctionAsync(
-      `location-${process.env.stage}-updateChannel`,
-      { channel, source }, // body
-      { id: locationId, boxId }, // path params
-    );
-    console.timeEnd('update channel');
 
     return respond();
   } catch (e) {
