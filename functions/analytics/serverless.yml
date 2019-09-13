@@ -37,6 +37,7 @@ functions:
               - content-type
   track:
     handler: analytics.track
+    timeout: 20
     events:
       - http:
           path: track
