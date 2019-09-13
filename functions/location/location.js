@@ -257,18 +257,17 @@ module.exports.saveBoxInfo = async event => {
     location.boxes[i]['channel'] = major;
     location.boxes[i]['channelSource'] = 'manual';
     await location.save();
+    const userId = 'system';
+    const name = 'Manual Zap';
+    const data = {
+      from: originalChannel,
+      to: major,
+      locationId: location.id,
+      locationName: location.name,
+      locationNeighborhood: location.neighborhood,
+    };
     console.time('track event');
-    await track({
-      userId: 'system',
-      event: 'Manual Zap',
-      properties: {
-        from: originalChannel,
-        to: major,
-        locationId: location.id,
-        locationName: location.name,
-        locationNeighborhood: location.neighborhood,
-      },
-    });
+    await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
   }
 
