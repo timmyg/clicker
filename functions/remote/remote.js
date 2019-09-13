@@ -48,14 +48,15 @@ module.exports.command = async event => {
     );
     console.timeEnd('update channel');
 
-    let eventName;
+    let eventName, userId;
     if (source === 'app') {
       eventName = 'App Zap';
+      userId = reservation.userId;
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
+      userId = 'system';
     }
 
-    const userId = reservation.userId;
     const name = eventName;
     const data = {
       boxLabel: reservation.box.label,
