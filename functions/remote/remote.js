@@ -43,39 +43,35 @@ module.exports.command = async event => {
       { id: locationId, boxId }, // path params
       null,
       null,
-      // 'us-east-1',
     );
 
     console.time('track event');
+    let event;
     if (source === 'app') {
-      await track({
-        userId: reservation.userId,
-        event: 'App Zap',
-        properties: {
-          ...reservation.box,
-          ...reservation.program,
-          minutes: reservation.minutes,
-          cost: reservation.cost,
-          locationId: reservation.location.id,
-          locationName: reservation.location.name,
-          locationNeighborhood: reservation.location.neighborhood,
-        },
-      });
+      event = 'App Zap';
     } else if (source === 'control center') {
-      await track({
-        userId: reservation.userId,
-        event: 'Control Center Zap',
-        properties: {
-          ...reservation.box,
-          ...reservation.program,
-          minutes: reservation.minutes,
-          cost: reservation.cost,
-          locationId: reservation.location.id,
-          locationName: reservation.location.name,
-          locationNeighborhood: reservation.location.neighborhood,
-        },
-      });
+      event = 'Control Center Zap';
     }
+    await track({
+      userId: reservation.userId,
+      event,
+      properties: {
+        channel: reservation.program.channel,
+        channelMinor: reservation.program.channelMinor,
+        channelTitle: reservation.program.channelTitle,
+        programTitle: reservation.program.title,
+        programCategory: reservation.program.mainCategory,
+        programDescription: reservation.program.description,
+        boxLabel: reservation.box.label,
+        minutes: reservation.minutes,
+        points: reservation.points,
+        boxZone: reservation.box.zone,
+        cost: reservation.cost,
+        locationId: reservation.location.id,
+        locationName: reservation.location.name,
+        locationNeighborhood: reservation.location.neighborhood,
+      },
+    });
     console.timeEnd('track event');
 
     return respond();
