@@ -8,11 +8,16 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
-    # losantKey: ${env:LOSANT_KEY}
-    # losantSecret: ${env:LOSANT_SECRET}
     losantAppId: ${env:LOSANT_APP_ID}
     losantAccessToken: ${env:LOSANT_ACCESS_TOKEN}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
