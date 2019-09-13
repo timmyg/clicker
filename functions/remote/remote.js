@@ -1,5 +1,5 @@
 const losantApi = require('losant-rest');
-const { respond, getBody, track, invokeFunctionAsync } = require('serverless-helpers');
+const { respond, getBody, track, invokeFunctionAsync, invokeFunctionSync } = require('serverless-helpers');
 
 class LosantApi {
   constructor() {
