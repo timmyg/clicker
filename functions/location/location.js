@@ -1,4 +1,4 @@
-const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, invokeFunctionSync, invokeFunctionAsync } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
