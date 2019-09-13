@@ -11,6 +11,7 @@ export class ProgramComponent {
   @Input() program: Program;
   @Output() onSelect = new EventEmitter<Program>();
   @Output() onInfo = new EventEmitter<Program>();
+  // @ViewChild('slidingItem', { static: false }) itemSliding: any;
 
   async onProgramClick() {
     this.onSelect.emit(this.program);
