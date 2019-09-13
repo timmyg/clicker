@@ -1,5 +1,5 @@
 const losantApi = require('losant-rest');
-const { respond, getBody, invokeFunctionSync } = require('serverless-helpers');
+const { respond, getBody, invokeFunctionSync, track } = require('serverless-helpers');
 
 class LosantApi {
   constructor() {
@@ -45,6 +45,39 @@ module.exports.command = async event => {
       null,
       // 'us-east-1',
     );
+
+    console.time('track event');
+    if (source === 'app') {
+      await track({
+        userId: reservation.userId,
+        event: 'App Zap',
+        properties: {
+          ...reservation.box,
+          ...reservation.program,
+          minutes: reservation.minutes,
+          cost: reservation.cost,
+          locationId: reservation.location.id,
+          locationName: reservation.location.name,
+          locationNeighborhood: reservation.location.neighborhood,
+        },
+      });
+    } else if (source === 'control center') {
+      await track({
+        userId: reservation.userId,
+        event: 'Control Center Zap',
+        properties: {
+          ...reservation.box,
+          ...reservation.program,
+          minutes: reservation.minutes,
+          cost: reservation.cost,
+          locationId: reservation.location.id,
+          locationName: reservation.location.name,
+          locationNeighborhood: reservation.location.neighborhood,
+        },
+      });
+    }
+    console.timeEnd('track event');
+
     return respond();
   } catch (e) {
     console.error(e);

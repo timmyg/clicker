@@ -252,10 +252,24 @@ module.exports.saveBoxInfo = async event => {
 
   const i = location.boxes.findIndex(b => b.id === boxId);
   console.log('box', location.boxes[i], major);
-  if (location.boxes[i]['channel'] !== major) {
+  const originalChannel = location.boxes[i]['channel'];
+  if (originalChannel !== major) {
     location.boxes[i]['channel'] = major;
     location.boxes[i]['channelSource'] = 'manual';
     await location.save();
+    console.time('track event');
+    await track({
+      userId: 'system',
+      event: 'Manual Zap',
+      properties: {
+        from: originalChannel,
+        to: major,
+        locationId: location.id,
+        locationName: location.name,
+        locationNeighborhood: location.neighborhood,
+      },
+    });
+    console.timeEnd('track event');
   }
 
   return respond(200);
