@@ -24,7 +24,7 @@ custom:
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
 functions:
   health:
-    handler: admin.health
+    handler: analytics.health
     events:
       - http:
           path: health
@@ -36,7 +36,7 @@ functions:
               - authorization
               - content-type
   track:
-    handler: admin.track
+    handler: analytics.track
     events:
       - http:
           path: track
