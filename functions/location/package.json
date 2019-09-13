@@ -22,7 +22,7 @@
     "dynamoose": "^1.7.2",
     "geolib": "^2.0.24",
     "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.5"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7"
   },
   "devDependencies": {
     "jest": "^24.0.0",
