@@ -253,6 +253,8 @@ module.exports.saveBoxInfo = async event => {
   const i = location.boxes.findIndex(b => b.id === boxId);
   console.log('box', location.boxes[i], major);
   const originalChannel = location.boxes[i]['channel'];
+  console.log('original channel', originalChannel);
+  console.log('current channel', major);
   if (originalChannel !== major) {
     location.boxes[i]['channel'] = major;
     location.boxes[i]['channelSource'] = 'manual';
