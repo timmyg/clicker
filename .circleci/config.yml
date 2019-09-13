@@ -99,7 +99,7 @@ jobs:
   functions/admin:
     working_directory: ~/clicker/functions/admin
     <<: *serverless_build_test_deploy
-functions/analytics:
+  functions/analytics:
     working_directory: ~/clicker/functions/analytics
     <<: *serverless_build_test_deploy
   functions/app:
