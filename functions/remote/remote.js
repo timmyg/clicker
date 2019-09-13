@@ -1,5 +1,5 @@
 const losantApi = require('losant-rest');
-const { respond, getBody } = require('serverless-helpers');
+const { respond, getBody, invokeFunctionSync } = require('serverless-helpers');
 
 class LosantApi {
   constructor() {
@@ -29,14 +29,22 @@ module.exports.health = async => {
 
 module.exports.command = async event => {
   try {
-    const { command, key, reservation } = getBody(event);
-    const { losantId } = reservation.location;
-    const { ip, clientAddress: client } = reservation.box;
+    const { command, key, reservation, source } = getBody(event);
+    const { losantId, id: locationId } = reservation.location;
+    const { ip, clientAddress: client, id: boxId } = reservation.box;
     const { channel, channelMinor } = reservation.program;
     const api = new LosantApi();
 
-    console.log(command, losantId, client, channel, channelMinor, ip, key);
+    console.log(command, losantId, client, channel, channelMinor, ip, key, source);
     await api.sendCommand(command, losantId, { client, channel, channelMinor, ip, key });
+    await invokeFunctionSync(
+      `location-${process.env.stage}-updateChannel`,
+      { channel, source }, // body
+      { id: locationId, boxId }, // path params
+      null,
+      null,
+      // 'us-east-1',
+    );
     return respond();
   } catch (e) {
     console.error(e);

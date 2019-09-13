@@ -226,6 +226,22 @@ module.exports.setBoxFree = async event => {
   return respond(200);
 };
 
+module.exports.updateChannel = async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+  const { channel, source } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  const i = location.boxes.findIndex(b => b.id === boxId);
+  location.boxes[i]['channel'] = channel;
+  location.boxes[i]['channelSource'] = source;
+  await location.save();
+
+  return respond(200);
+};
+
 module.exports.saveBoxInfo = async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { major } = getBody(event);

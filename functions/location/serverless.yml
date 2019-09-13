@@ -219,6 +219,18 @@ functions:
               - partner
               - authorization
               - content-type
+  updateChannel:
+    handler: location.updateChannel
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}/channel'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   saveBoxInfo:
     handler: location.saveBoxInfo
     events:

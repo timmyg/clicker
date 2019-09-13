@@ -71,9 +71,10 @@ module.exports.controlCenter = async event => {
           console.log('location:', location.name, location.neighborhood);
           console.log('box', box.label, box.ip);
           console.log('channel', channel);
+          const source = 'control center';
           await invokeFunctionSync(
             `remote-${process.env.stage}-command`,
-            { reservation, command },
+            { reservation, command, source },
             null,
             null,
             null,
