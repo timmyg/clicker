@@ -4,6 +4,7 @@
   </ion-item-options>
   <ion-item>
     <ion-card (click)="onProgramClick()" no-margin>
+      <div class="slide-indicator"><ion-icon name="arrow-dropright" class="icon"></ion-icon></div>
       <ion-card-header>
         <ion-card-subtitle>
           <span>{{ program.channelTitle }}</span>
@@ -26,7 +27,7 @@
                 </h1>
               </ion-col>
 
-              <ion-col size="12">
+              <ion-col size="12" no-padding>
                 <span class="faded" *ngIf="program.nextProgramTitle">
                   Next: {{ getNextProgramTitle() }} at {{ program.nextProgramStart | amDateFormat: 'h:mma' }}
                 </span>

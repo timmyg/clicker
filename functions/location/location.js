@@ -1,8 +1,9 @@
-const { respond, getBody, getPathParameters, invokeFunctionSync } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, invokeFunctionSync, invokeFunctionAsync } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
+const { IncomingWebhook } = require('@slack/webhook');
 require('dotenv').config({ path: '../.env.example' });
 
 const Location = dynamoose.model(
@@ -29,12 +30,16 @@ const Location = dynamoose.model(
         reserved: Boolean,
         end: Date,
         zone: String,
+        notes: String,
         active: Boolean,
+        channel: Number,
+        channelSource: {
+          type: String,
+          enum: ['app', 'control center', 'manual'],
+        },
       },
     ],
     channels: {
-      local: [String],
-      premium: [String],
       exclude: [String],
     },
     packages: [String],
@@ -54,6 +59,7 @@ const Location = dynamoose.model(
     setup: Boolean,
     controlCenter: Boolean,
     announcement: String,
+    notes: String,
     // calculated fields
     distance: Number,
   },
@@ -94,22 +100,6 @@ module.exports.all = async event => {
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
-};
-
-module.exports.getLocalChannels = async event => {
-  const allLocations = await Location.scan().exec();
-  let locationsByZip = {};
-  allLocations.forEach(l => {
-    locationsByZip[l.zip] = locationsByZip[l.zip] || [];
-    if (l.channels && l.channels.local) {
-      locationsByZip[l.zip] = locationsByZip[l.zip].concat(l.channels.local);
-    }
-    // remove duplicates
-    locationsByZip[l.zip] = locationsByZip[l.zip].filter((elem, index, self) => {
-      return index === self.indexOf(elem);
-    });
-  });
-  return respond(200, locationsByZip);
 };
 
 module.exports.get = async event => {
@@ -236,6 +226,56 @@ module.exports.setBoxFree = async event => {
   return respond(200);
 };
 
+module.exports.updateChannel = async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+  const { channel, source } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  const i = location.boxes.findIndex(b => b.id === boxId);
+  location.boxes[i]['channel'] = channel;
+  location.boxes[i]['channelSource'] = source;
+  await location.save();
+
+  return respond(200);
+};
+
+module.exports.saveBoxInfo = async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+  const { major } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  const i = location.boxes.findIndex(b => b.id === boxId);
+  console.log('box', location.boxes[i], major);
+  const originalChannel = location.boxes[i]['channel'];
+  console.log('original channel', originalChannel);
+  console.log('current channel', major);
+  if (originalChannel !== major) {
+    location.boxes[i]['channel'] = major;
+    location.boxes[i]['channelSource'] = 'manual';
+    await location.save();
+    const userId = 'system';
+    const name = 'Manual Zap';
+    const data = {
+      from: originalChannel,
+      to: major,
+      locationId: location.id,
+      locationName: location.name,
+      locationNeighborhood: location.neighborhood,
+    };
+    console.time('track event');
+    await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
+    console.timeEnd('track event');
+  }
+
+  return respond(200);
+};
+
 module.exports.setLabels = async event => {
   const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);
@@ -285,6 +325,15 @@ module.exports.connected = async event => {
   const location = locations[0];
   location.connected = true;
   await location.save();
+
+  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
+  const text = `Antenna connected at ${location.name} (${location.neighborhood})}(${process.env.stage})`;
+  const icon_emoji = ':tada:';
+  await antennaWebhook.send({
+    text,
+    icon_emoji,
+  });
+
   return respond(200, 'ok');
 };
 
@@ -297,6 +346,15 @@ module.exports.disconnected = async event => {
   const location = locations[0];
   location.connected = false;
   await location.save();
+
+  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
+  const text = `Antenna disconnected at ${location.name} (${location.neighborhood})} (${process.env.stage})`;
+  const icon_emoji = ':exclamation:';
+  await antennaWebhook.send({
+    text,
+    icon_emoji,
+  });
+
   return respond(200, 'ok');
 };
 
@@ -344,6 +402,26 @@ module.exports.allOn = async event => {
     console.log('turning on box', box);
     await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
     console.log('turned on', box);
+  }
+  return respond(200, 'ok');
+};
+
+module.exports.checkAllBoxesInfo = async event => {
+  // const { id } = getPathParameters(event);
+  let allLocations = await Location.scan().exec();
+
+  for (const location of allLocations) {
+    for (const box of location.boxes) {
+      const { losantId } = location;
+      const { id: boxId, ip, clientAddress: client } = box;
+      const response = await invokeFunctionSync(`remote-${process.env.stage}-checkBoxInfo`, {
+        losantId,
+        boxId,
+        ip,
+        client,
+      });
+      console.log(response);
+    }
   }
   return respond(200, 'ok');
 };

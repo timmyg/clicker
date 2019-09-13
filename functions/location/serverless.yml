@@ -10,6 +10,7 @@ provider:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
+    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -218,6 +219,30 @@ functions:
               - partner
               - authorization
               - content-type
+  updateChannel:
+    handler: location.updateChannel
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}/channel'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  saveBoxInfo:
+    handler: location.saveBoxInfo
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}/info'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   allOff:
     handler: location.allOff
     events:
@@ -242,23 +267,25 @@ functions:
               - partner
               - authorization
               - content-type
-  controlCenterLocationsByRegion:
-    handler: location.controlCenterLocationsByRegion
+  checkAllBoxesInfo:
+    handler: location.checkAllBoxesInfo
+    timeout: 30
     events:
+      - schedule: rate(5 minutes)
       - http:
-          path: 'regions/{regions}'
-          method: get
+          path: boxes/info
+          method: post
           cors:
             origin: '*'
             headers:
               - partner
               - authorization
               - content-type
-  getLocalChannels:
-    handler: location.getLocalChannels
+  controlCenterLocationsByRegion:
+    handler: location.controlCenterLocationsByRegion
     events:
       - http:
-          path: 'local'
+          path: 'regions/{regions}'
           method: get
           cors:
             origin: '*'

@@ -25,6 +25,7 @@ aliases:
               - release
               - develop
           command: |
+            npm run build --if-present
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               npx serverless deploy --stage prod --verbose
             fi
@@ -95,6 +96,12 @@ jobs:
                   https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
               fi
             done
+  functions/admin:
+    working_directory: ~/clicker/functions/admin
+    <<: *serverless_build_test_deploy
+  functions/analytics:
+    working_directory: ~/clicker/functions/analytics
+    <<: *serverless_build_test_deploy
   functions/app:
     working_directory: ~/clicker/functions/app
     <<: *serverless_build_test_deploy
