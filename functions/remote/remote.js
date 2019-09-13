@@ -1,5 +1,5 @@
 const losantApi = require('losant-rest');
-const { respond, getBody, invokeFunctionSync, track } = require('serverless-helpers');
+const { respond, getBody, track, invokeFunctionAsync } = require('serverless-helpers');
 
 class LosantApi {
   constructor() {
@@ -45,34 +45,43 @@ module.exports.command = async event => {
       null,
     );
 
-    console.time('track event');
     let eventName;
     if (source === 'app') {
       eventName = 'App Zap';
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
     }
-    await track({
-      userId: reservation.userId,
-      event: eventName,
-      properties: {
-        channel: reservation.program.channel,
-        channelMinor: reservation.program.channelMinor,
-        channelTitle: reservation.program.channelTitle,
-        programTitle: reservation.program.title,
-        programCategory: reservation.program.mainCategory,
-        programDescription: reservation.program.description,
-        boxLabel: reservation.box.label,
-        minutes: reservation.minutes,
-        points: reservation.points,
-        boxZone: reservation.box.zone,
-        cost: reservation.cost,
-        locationId: reservation.location.id,
-        locationName: reservation.location.name,
-        locationNeighborhood: reservation.location.neighborhood,
-      },
-    });
+
+    const userId = reservation.userId;
+    const name = eventName;
+    const data = {
+      boxLabel: reservation.box.label,
+      boxZone: reservation.box.zone,
+      channelMinor: reservation.program.channelMinor,
+      channelTitle: reservation.program.channelTitle,
+      cost: reservation.cost,
+      channel: reservation.program.channel,
+      programTitle: reservation.program.title,
+      programCategory: reservation.program.mainCategory,
+      programDescription: reservation.program.description,
+      minutes: reservation.minutes,
+      // points: reservation.points,
+      locationId: reservation.location.id,
+      locationName: reservation.location.name,
+      locationNeighborhood: reservation.location.neighborhood,
+    };
+
+    console.time('track event');
+    await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
+
+    console.time('update channel');
+    await invokeFunctionAsync(
+      `location-${process.env.stage}-updateChannel`,
+      { channel, source }, // body
+      { id: locationId, boxId }, // path params
+    );
+    console.timeEnd('update channel');
 
     return respond();
   } catch (e) {
