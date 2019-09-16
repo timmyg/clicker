@@ -18,9 +18,28 @@ module.exports.controlCenterDailyInit = async event => {
     'us-east-1',
   );
   for (location of locations) {
-    const boxes = location.boxes.sort((a, b) => a.zone - b.zone);
-    for (box of boxes) {
-      console.log({ box });
+    const boxes = location.boxes.filter(b => b.zone).sort((a, b) => a.zone - b.zone);
+    let i = 0;
+    for (const box of boxes) {
+      const command = 'tune';
+      const reservation = {
+        location,
+        box,
+        program: {
+          channel: getChannelForZone(i),
+        },
+      };
+      const source = 'control center daily';
+      await invokeFunctionSync(
+        `remote-${process.env.stage}-command`,
+        { reservation, command, source },
+        null,
+        null,
+        null,
+        'us-east-1',
+      );
+      changedCount++;
+      i++;
     }
   }
   return respond(200);
@@ -112,3 +131,10 @@ module.exports.controlCenter = async event => {
 
   return respond(200, { changedCount });
 };
+
+function getChannelForZone(i) {
+  const initChannels = [206, 209, 614, 208, 212, 219]; // espn, espn2, espnc, espnu, nfl, mlb
+  return initChannels[i % initChannels.length];
+}
+
+module.exports.getChannelForZone = getChannelForZone;
