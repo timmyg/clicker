@@ -7,6 +7,24 @@ module.exports.health = async event => {
   return respond(200, `hello`);
 };
 
+module.exports.controlCenterDailyInit = async event => {
+  const { data: locations } = await invokeFunctionSync(
+    `location-${process.env.stage}-controlCenterLocationsByRegion`,
+    null,
+    { regions },
+    event.headers,
+    null,
+    'us-east-1',
+  );
+  for (location of locations) {
+    const boxes = location.boxes.sort((a, b) => a.zone - b.zone);
+    for (box of location.boxes) {
+      console.log({ box });
+    }
+  }
+  return respond(200);
+};
+
 module.exports.controlCenter = async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
