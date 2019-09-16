@@ -19,7 +19,7 @@ module.exports.controlCenterDailyInit = async event => {
   );
   for (location of locations) {
     const boxes = location.boxes.sort((a, b) => a.zone - b.zone);
-    for (box of location.boxes) {
+    for (box of boxes) {
       console.log({ box });
     }
   }
