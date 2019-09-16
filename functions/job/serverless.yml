@@ -64,3 +64,17 @@ functions:
               - partner
               - authorization
               - content-type
+  controlCenterDailyInit:
+    handler: job.controlCenterDailyInit
+    timeout: 30
+    events:
+      - schedule: cron(0 12 * * ? *) # every day @ 8am eastern
+      - http:
+          path: 'control-center/daily'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
