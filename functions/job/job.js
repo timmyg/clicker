@@ -8,6 +8,7 @@ module.exports.health = async event => {
 };
 
 module.exports.controlCenterDailyInit = async event => {
+  const regions = ['Cincinnati'];
   const { data: locations } = await invokeFunctionSync(
     `location-${process.env.stage}-controlCenterLocationsByRegion`,
     null,
