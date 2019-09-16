@@ -155,3 +155,15 @@ functions:
               - partner
               - authorization
               - content-type
+  getScore:
+    handler: program.getScore
+    events:
+      - http:
+          path: 'score'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

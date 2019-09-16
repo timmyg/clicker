@@ -326,6 +326,15 @@ function rank(program) {
   return program;
 }
 
+module.exports.getScore = async (event: any) => {
+  const { url } = getBody(event);
+  transformSIUrl(url);
+
+  const method = 'get';
+  let result = await axios({ method, url });
+  return respond(200);
+};
+
 module.exports.syncNew = async (event: any) => {
   try {
     init();
@@ -510,7 +519,20 @@ function getChannels(channels: number[]): number[] {
   return channels.map(c => Math.floor(c));
 }
 
+function transformSIUrl(webUrl: string): string {
+  const urlParts = webUrl.split('/');
+  let apiUrl = ['https://stats.api.si.com/v1'];
+  let sport = urlParts[3];
+  if (sport === 'college-football') {
+    sport = 'ncaaf';
+  }
+  apiUrl.push(sport);
+  apiUrl.push(`game_detail?id=${urlParts[5]}`);
+  return apiUrl.join('/');
+}
+
 module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
+module.exports.transformSIUrl = transformSIUrl;

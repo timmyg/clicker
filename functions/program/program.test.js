@@ -1,6 +1,13 @@
 require('dotenv').config({ path: '../.env.example' });
 const moment = require('moment');
-const { build, generateId, getLocalChannelName, getChannels, getChannelsWithMinor } = require('./program');
+const {
+  build,
+  generateId,
+  getLocalChannelName,
+  getChannels,
+  getChannelsWithMinor,
+  transformSIUrl,
+} = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
 
@@ -58,4 +65,13 @@ const channels = [5, 9, 12, 19, 661.1];
 
 test('getMajorChannels', () => {
   expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
+});
+
+test('transformSIUrl', () => {
+  expect(transformSIUrl('https://www.si.com/nfl/game/2142137')).toEqual(
+    'https://stats.api.si.com/v1/nfl/game_detail?id=2142137',
+  );
+  expect(transformSIUrl('https://www.si.com/college-football/game/2126203')).toEqual(
+    'https://stats.api.si.com/v1/ncaaf/game_detail?id=2126203',
+  );
 });
