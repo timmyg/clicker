@@ -333,8 +333,8 @@ module.exports.getScore = async (event: any) => {
   const method = 'get';
   const options = { method, url: apiUrl };
   let result = await axios(options);
-  console.log({ result });
-  return respond(200, result.data);
+  const { data: game } = result;
+  return respond(200, game);
 };
 
 module.exports.syncNew = async (event: any) => {
