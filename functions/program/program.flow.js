@@ -79,7 +79,6 @@ const nationalChannels: number[] = [
   //, 104 //DTV4K
   //, 105 //LIVE4K
   //, 106 //LIVE4K2
-  
 ];
 const zipDefault = 45202;
 
@@ -333,7 +332,7 @@ module.exports.getScore = async (event: any) => {
 
   const method = 'get';
   let result = await axios({ method, url });
-  return respond(200);
+  return respond(200, result);
 };
 
 module.exports.syncNew = async (event: any) => {
