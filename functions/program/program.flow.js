@@ -327,11 +327,11 @@ function rank(program) {
 }
 
 module.exports.getScore = async (event: any) => {
-  const { url } = getBody(event);
-  transformSIUrl(url);
+  const { url: webUrl } = getBody(event);
+  const apiUrl = transformSIUrl(webUrl);
 
   const method = 'get';
-  let result = await axios({ method, url });
+  let result = await axios({ method, url: apiUrl });
   return respond(200, result);
 };
 
