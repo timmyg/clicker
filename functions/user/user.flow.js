@@ -1,3 +1,4 @@
+// @flow
 const dynamoose = require('dynamoose');
 const { respond, getBody, getPathParameters, getUserId } = require('serverless-helpers');
 const { stripeSecretKey } = process.env;
@@ -143,8 +144,6 @@ module.exports.replenish = async event => {
     return respond(400, e);
   }
 };
-
-
 
 module.exports.charge = async event => {
   try {

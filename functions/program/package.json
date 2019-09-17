@@ -10,7 +10,8 @@
     "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",
     "invoke:programming:area:get": "serverless invoke local --function getAreaProgramming --path ../.resources/data/programming-area.json",
     "invoke:syncNew": "serverless invoke local --function syncNew",
-    "invoke:syncDescriptions": "serverless invoke local --function syncDescriptions"
+    "invoke:syncDescriptions": "serverless invoke local --function syncDescriptions",
+    "invoke:score": "serverless invoke local --function getGameStatus --path ../.resources/data/si-url.json"
   },
   "author": "",
   "license": "ISC",

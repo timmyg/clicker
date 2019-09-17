@@ -1,3 +1,4 @@
+// @flow
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const { getUserId, getBody, getPathParameters, invokeFunctionSync, respond, track } = require('serverless-helpers');

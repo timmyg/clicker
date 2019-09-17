@@ -1,3 +1,4 @@
+// @flow
 const losantApi = require('losant-rest');
 const { respond, getBody, invokeFunctionAsync, invokeFunctionSync } = require('serverless-helpers');
 

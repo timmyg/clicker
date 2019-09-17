@@ -24,6 +24,39 @@ class programAreaType {
   channels: [number];
 }
 
+class SiTeam {
+  title: string; // Iowa State Cyclones
+  score: number; // 17
+  is_winner: boolean; // false
+}
+
+class SiStatus {
+  period: {
+    name: string, // 4th
+    unit: string, // Quarter
+  };
+  inning: number; // 1
+  name: string; // Final, Pre-Game
+  is_active: boolean; // false
+  inning_division: string; // "Top"
+}
+
+class SiGame {
+  tv: string;
+  status: {};
+  teams: SiTeam[];
+}
+
+class SiResult {
+  status: string;
+  data: any;
+}
+
+class GameStatus {
+  active: boolean;
+  blowout: boolean;
+}
+
 const minorChannels: number[] = [661];
 
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB'];
@@ -326,16 +359,25 @@ function rank(program) {
   return program;
 }
 
-module.exports.getScore = async (event: any) => {
+module.exports.getGameStatus = async (event: any) => {
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
 
   const method = 'get';
   const options = { method, url: apiUrl };
-  let result = await axios(options);
-  const { data: game } = result;
-  return respond(200, game);
+  const result = await axios(options);
+  const gameStatus: GameStatus = getGameStatus(result.data);
+
+  return respond(200, gameStatus);
 };
+
+function getGameStatus(result: SiResult): GameStatus {
+  const siGame: SiGame = result.data;
+  const gameStatus = new GameStatus();
+  gameStatus.active = false;
+  gameStatus.blowout = false;
+  return gameStatus;
+}
 
 module.exports.syncNew = async (event: any) => {
   try {
@@ -538,3 +580,4 @@ module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
 module.exports.transformSIUrl = transformSIUrl;
+module.exports.getGameStatus = getGameStatus;

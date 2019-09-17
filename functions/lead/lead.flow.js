@@ -1,3 +1,4 @@
+// @flow
 require('dotenv').config();
 const { respond, getBody } = require('serverless-helpers');
 const Hubspot = require('hubspot');

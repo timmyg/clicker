@@ -1,3 +1,4 @@
+// @flow
 const { respond, getBody, getPathParameters, invokeFunctionSync, invokeFunctionAsync } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');

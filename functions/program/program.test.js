@@ -6,6 +6,7 @@ const {
   getLocalChannelName,
   getChannels,
   getChannelsWithMinor,
+  getGameStatus,
   transformSIUrl,
 } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
@@ -74,4 +75,27 @@ test('transformSIUrl', () => {
   expect(transformSIUrl('https://www.si.com/college-football/game/2126203')).toEqual(
     'https://stats.api.si.com/v1/ncaaf/game_detail?id=2126203',
   );
+});
+
+describe('getGameStatus', () => {
+  test('correctly identifies active, blowout game', () => {
+    const data = require('../.resources/games/mlb-upcoming.json');
+    const { active, blowout } = getGameStatus(data);
+    expect(active).toBeFalsy();
+    expect(active).toBeTruthy();
+  });
+
+  test('correctly identifies inactive game', () => {
+    const data = require('../.resources/games/mlb-upcoming.json');
+    const { active, blowout } = getGameStatus(data);
+    expect(active).toBeFalsy();
+    expect(active).toBeTruthy();
+  });
+
+  test('correctly identifies active, non-blowout game', () => {
+    const data = require('../.resources/games/mlb-upcoming.json');
+    const { active, blowout } = getGameStatus(data);
+    expect(active).toBeFalsy();
+    expect(active).toBeTruthy();
+  });
 });

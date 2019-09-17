@@ -155,8 +155,8 @@ functions:
               - partner
               - authorization
               - content-type
-  getScore:
-    handler: program.getScore
+  getGameStatus:
+    handler: program.getGameStatus
     events:
       - http:
           path: 'score'

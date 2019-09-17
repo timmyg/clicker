@@ -1,0 +1,661 @@
+{
+    "status": "success",
+    "data": {
+        "id": 2142206,
+        "league": {
+            "name": "National Football League",
+            "abbreviation": "NFL"
+        },
+        "start": {
+            "local": "2019-09-16T20:15:00",
+            "utc": "2019-09-17T00:15:00",
+            "epoch": 1568679300
+        },
+        "tv": "ESPN",
+        "tv_stations": [
+            {
+                "tv_station_id": 276,
+                "name": "ESPN",
+                "call_letters": "ESPN",
+                "network_type": {
+                    "network_type_id": 1,
+                    "name": "National"
+                },
+                "country": {
+                    "country_id": 1,
+                    "name": "United States",
+                    "abbreviation": "USA"
+                }
+            }
+        ],
+        "venue": {
+            "name": "MetLife Stadium",
+            "city": "East Rutherford",
+            "state": {
+                "name": "New Jersey",
+                "abbreviation": "NJ"
+            },
+            "country": {
+                "name": "United States",
+                "abbreviation": "USA"
+            }
+        },
+        "status": {
+            "period": {
+                "id": 4,
+                "name": "4th",
+                "unit": "Quarter",
+                "full_name": "4th"
+            },
+            "name": "Final",
+            "id": 4,
+            "is_active": false
+        },
+        "teams": [
+            {
+                "id": 352,
+                "name": "Jets",
+                "abbreviation": "NYJ",
+                "location": {
+                    "name": "New York",
+                    "type": "home"
+                },
+                "title": "New York Jets",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/logos/",
+                    "cuts": {
+                        "default": "jets_50.png",
+                        "50x50": "jets_50.png",
+                        "100x100": "jets_100.png",
+                        "100x100_light": "jets_100_stroke.png",
+                        "360x360": "jets_360.png",
+                        "250x250": "jets_250.png",
+                        "150x150": "jets_150.png",
+                        "40x40": "jets_40.png",
+                        "40x40_light": "jets_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#203731",
+                    "secondary": "#000000"
+                },
+                "slug": "nfl/team/new-york-jets",
+                "record": {
+                    "wins": 0,
+                    "losses": 2,
+                    "ties": 0,
+                    "percentage": ".000"
+                },
+                "score": 3,
+                "possession": false,
+                "is_winner": false,
+                "linescores": [
+                    {
+                        "period": {
+                            "id": 1,
+                            "name": "1st",
+                            "unit": "Quarter",
+                            "full_name": "1st"
+                        },
+                        "score": 0
+                    },
+                    {
+                        "period": {
+                            "id": 2,
+                            "name": "2nd",
+                            "unit": "Quarter",
+                            "full_name": "2nd"
+                        },
+                        "score": 3
+                    },
+                    {
+                        "period": {
+                            "id": 3,
+                            "name": "3rd",
+                            "unit": "Quarter",
+                            "full_name": "3rd"
+                        },
+                        "score": 0
+                    },
+                    {
+                        "period": {
+                            "id": 4,
+                            "name": "4th",
+                            "unit": "Quarter",
+                            "full_name": "4th"
+                        },
+                        "score": 0
+                    }
+                ],
+                "taxonomy": {
+                    "teams": "nfl-new-york-jets",
+                    "airship": [
+                        {
+                            "name": "Game Start",
+                            "tag": "events::nfl-new-york-jets-1"
+                        },
+                        {
+                            "name": "Quarter",
+                            "tag": "events::nfl-new-york-jets-2"
+                        },
+                        {
+                            "name": "Scoring Plays",
+                            "tag": "events::nfl-new-york-jets-3"
+                        },
+                        {
+                            "name": "Final",
+                            "tag": "events::nfl-new-york-jets-4"
+                        },
+                        {
+                            "name": "Team News",
+                            "tag": "teams::nfl-new-york-jets"
+                        }
+                    ]
+                },
+                "leaders": {
+                    "passing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 198,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Luke",
+                                    "last": "Falk"
+                                },
+                                "uniform": "8",
+                                "slug": "nfl/player/749541/luke-falk",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "749541-84x74.png",
+                                        "84x74": "749541-84x74.png",
+                                        "300x300": "749541-300x300.png"
+                                    }
+                                },
+                                "id": 749541,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 198
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 0
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "receiving": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 81,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Robby",
+                                    "last": "Anderson"
+                                },
+                                "uniform": "11",
+                                "slug": "nfl/player/608360/robby-anderson",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "608360-84x74.png",
+                                        "84x74": "608360-84x74.png",
+                                        "300x300": "608360-300x300.png"
+                                    }
+                                },
+                                "id": 608360,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 81
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 0
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "rushing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 68,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Le'Veon",
+                                    "last": "Bell"
+                                },
+                                "uniform": "26",
+                                "slug": "nfl/player/543654/leveon-bell",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "543654-84x74.png",
+                                        "84x74": "543654-84x74.png",
+                                        "300x300": "543654-300x300.png"
+                                    }
+                                },
+                                "id": 543654,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 68
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 0
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "id": 329,
+                "name": "Browns",
+                "abbreviation": "Cle",
+                "location": {
+                    "name": "Cleveland",
+                    "type": "away"
+                },
+                "title": "Cleveland Browns",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/logos/",
+                    "cuts": {
+                        "default": "browns_50.png",
+                        "50x50": "browns_50.png",
+                        "100x100": "browns_100.png",
+                        "100x100_light": "browns_100_stroke.png",
+                        "360x360": "browns_360.png",
+                        "250x250": "browns_250.png",
+                        "150x150": "browns_150.png",
+                        "40x40": "browns_40.png",
+                        "40x40_light": "browns_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#311d00",
+                    "secondary": "#ff3c00"
+                },
+                "slug": "nfl/team/cleveland-browns",
+                "record": {
+                    "wins": 1,
+                    "losses": 1,
+                    "ties": 0,
+                    "percentage": ".500"
+                },
+                "score": 23,
+                "possession": false,
+                "is_winner": true,
+                "linescores": [
+                    {
+                        "period": {
+                            "id": 1,
+                            "name": "1st",
+                            "unit": "Quarter",
+                            "full_name": "1st"
+                        },
+                        "score": 6
+                    },
+                    {
+                        "period": {
+                            "id": 2,
+                            "name": "2nd",
+                            "unit": "Quarter",
+                            "full_name": "2nd"
+                        },
+                        "score": 10
+                    },
+                    {
+                        "period": {
+                            "id": 3,
+                            "name": "3rd",
+                            "unit": "Quarter",
+                            "full_name": "3rd"
+                        },
+                        "score": 7
+                    },
+                    {
+                        "period": {
+                            "id": 4,
+                            "name": "4th",
+                            "unit": "Quarter",
+                            "full_name": "4th"
+                        },
+                        "score": 0
+                    }
+                ],
+                "taxonomy": {
+                    "teams": "nfl-cleveland-browns",
+                    "airship": [
+                        {
+                            "name": "Game Start",
+                            "tag": "events::nfl-cleveland-browns-1"
+                        },
+                        {
+                            "name": "Quarter",
+                            "tag": "events::nfl-cleveland-browns-2"
+                        },
+                        {
+                            "name": "Scoring Plays",
+                            "tag": "events::nfl-cleveland-browns-3"
+                        },
+                        {
+                            "name": "Final",
+                            "tag": "events::nfl-cleveland-browns-4"
+                        },
+                        {
+                            "name": "Team News",
+                            "tag": "teams::nfl-cleveland-browns"
+                        }
+                    ]
+                },
+                "leaders": {
+                    "passing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 325,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Baker",
+                                    "last": "Mayfield"
+                                },
+                                "uniform": "6",
+                                "slug": "nfl/player/748070/baker-mayfield",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "748070-84x74.png",
+                                        "84x74": "748070-84x74.png",
+                                        "300x300": "748070-300x300.png"
+                                    }
+                                },
+                                "id": 748070,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 325
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 1
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "receiving": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 161,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Odell",
+                                    "last": "Beckham Jr."
+                                },
+                                "uniform": "13",
+                                "slug": "nfl/player/589984/odell-beckhamjr",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "589984-84x74.png",
+                                        "84x74": "589984-84x74.png",
+                                        "300x300": "589984-300x300.png"
+                                    }
+                                },
+                                "id": 589984,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 161
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 1
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "rushing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 62,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Nick",
+                                    "last": "Chubb"
+                                },
+                                "uniform": "24",
+                                "slug": "nfl/player/822857/nick-chubb",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "822857-84x74.png",
+                                        "84x74": "822857-84x74.png",
+                                        "300x300": "822857-300x300.png"
+                                    }
+                                },
+                                "id": 822857,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 62
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 1
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "alert_types": [
+            {
+                "name": "Game Start",
+                "airship": "events::1568678400-2142206-1"
+            },
+            {
+                "name": "Quarter",
+                "airship": "events::1568678400-2142206-2"
+            },
+            {
+                "name": "Scoring Play",
+                "airship": "events::1568678400-2142206-3"
+            },
+            {
+                "name": "Final",
+                "airship": "events::1568678400-2142206-4"
+            }
+        ],
+        "last_play": {},
+        "scoring_summaries": [
+            {
+                "period": {
+                    "id": 1,
+                    "name": "1st",
+                    "unit": "Quarter",
+                    "full_name": "1st"
+                },
+                "scores": [
+                    {
+                        "time": "10:27",
+                        "id": 329,
+                        "text": "Austin Seibert 23 yd FG",
+                        "score_type": {
+                            "name": "Field Goal Attempt",
+                            "id": 3
+                        },
+                        "current_score": {
+                            "leader_team_id": 329,
+                            "leading_score": 3,
+                            "trailing_score": 0
+                        }
+                    },
+                    {
+                        "time": "6:15",
+                        "id": 329,
+                        "text": "Austin Seibert 48 yd FG",
+                        "score_type": {
+                            "name": "Field Goal Attempt",
+                            "id": 3
+                        },
+                        "current_score": {
+                            "leader_team_id": 329,
+                            "leading_score": 6,
+                            "trailing_score": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "period": {
+                    "id": 2,
+                    "name": "2nd",
+                    "unit": "Quarter",
+                    "full_name": "2nd"
+                },
+                "scores": [
+                    {
+                        "time": "10:16",
+                        "id": 329,
+                        "text": "Nick Chubb 19 yd run (Austin Seibert kick)",
+                        "score_type": {
+                            "name": "Rushing TD",
+                            "id": 1
+                        },
+                        "current_score": {
+                            "leader_team_id": 329,
+                            "leading_score": 13,
+                            "trailing_score": 0
+                        }
+                    },
+                    {
+                        "time": "2:56",
+                        "id": 352,
+                        "text": "Sam Ficken 46 yd FG",
+                        "score_type": {
+                            "name": "Field Goal Attempt",
+                            "id": 3
+                        },
+                        "current_score": {
+                            "leader_team_id": 329,
+                            "leading_score": 13,
+                            "trailing_score": 3
+                        }
+                    },
+                    {
+                        "time": "0:00",
+                        "id": 329,
+                        "text": "Austin Seibert 43 yd FG",
+                        "score_type": {
+                            "name": "Field Goal Attempt",
+                            "id": 3
+                        },
+                        "current_score": {
+                            "leader_team_id": 329,
+                            "leading_score": 16,
+                            "trailing_score": 3
+                        }
+                    }
+                ]
+            },
+            {
+                "period": {
+                    "id": 3,
+                    "name": "3rd",
+                    "unit": "Quarter",
+                    "full_name": "3rd"
+                },
+                "scores": [
+                    {
+                        "time": "3:32",
+                        "id": 329,
+                        "text": "Odell Beckham Jr. 89 yd pass from Baker Mayfield (Austin Seibert kick)",
+                        "score_type": {
+                            "name": "Passing TD",
+                            "id": 2
+                        },
+                        "current_score": {
+                            "leader_team_id": 329,
+                            "leading_score": 23,
+                            "trailing_score": 3
+                        }
+                    }
+                ]
+            }
+        ],
+        "links": [
+            {
+                "name": "Recap",
+                "url": "https://www.si.com/nfl/game/2142206",
+                "id": 1
+            },
+            {
+                "name": "Box Score",
+                "url": "https://www.si.com/nfl/game/2142206/box-score",
+                "id": 2
+            },
+            {
+                "name": "Play-by-Play",
+                "url": "https://www.si.com/nfl/game/2142206/play-by-play",
+                "id": 3
+            }
+        ],
+        "editorial": {
+            "has_preview": true,
+            "has_recap": true,
+            "has_bullets": true,
+            "has_odds": false
+        }
+    }
+}

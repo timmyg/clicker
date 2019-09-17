@@ -1,0 +1,1022 @@
+{
+    "status": "success",
+    "data": {
+        "id": 2103522,
+        "league": {
+            "name": "Major League Baseball",
+            "abbreviation": "MLB"
+        },
+        "start": {
+            "local": "2019-09-17T18:35:00",
+            "utc": "2019-09-17T22:35:00",
+            "epoch": 1568759700
+        },
+        "tv": "YES",
+        "tv_stations": [
+            {
+                "tv_station_id": 691,
+                "name": "YES TV - New York",
+                "call_letters": "YES",
+                "network_type": {
+                    "network_type_id": 2,
+                    "name": "Regional"
+                },
+                "country": {
+                    "country_id": 1,
+                    "name": "United States",
+                    "abbreviation": "USA"
+                }
+            },
+            {
+                "tv_station_id": 633,
+                "name": "Fox Sports West",
+                "call_letters": "FSW",
+                "network_type": {
+                    "network_type_id": 2,
+                    "name": "Regional"
+                },
+                "country": {
+                    "country_id": 1,
+                    "name": "United States",
+                    "abbreviation": "USA"
+                }
+            }
+        ],
+        "watch": {
+            "name": "Fubo",
+            "text": "Watch Live on",
+            "url": "https://www.fubo.tv/watch/MLB?irmp=376635&utm_source=Aff&utm_medium=SI&utm_campaign=MLB",
+            "tracking": {
+                "Scoreboard": "&utm_term=Scoreboard&irad=360535",
+                "Schedule": "&utm_term=Schedule&irad=360686"
+            },
+            "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/logos/",
+                "cuts": {
+                    "default": "fubo_40x14_orange.png",
+                    "38x14": "fubo_38x14_orange.png",
+                    "40x14": "fubo_40x14_orange.png",
+                    "76x28": "fubo_76x28_orange.png",
+                    "80x28": "fubo_80x28_orange.png"
+                }
+            },
+            "station": {
+                "tv_station_id": 691,
+                "name": "YES TV - New York",
+                "call_letters": "YES",
+                "network_type": {
+                    "network_type_id": 2,
+                    "name": "Regional"
+                },
+                "country": {
+                    "country_id": 1,
+                    "name": "United States",
+                    "abbreviation": "USA"
+                }
+            }
+        },
+        "venue": {
+            "name": "Yankee Stadium",
+            "city": "Bronx",
+            "state": {
+                "name": "New York",
+                "abbreviation": "NY"
+            },
+            "country": {
+                "name": "United States",
+                "abbreviation": "USA"
+            }
+        },
+        "teams": [
+            {
+                "id": 234,
+                "name": "Yankees",
+                "abbreviation": "NYY",
+                "location": {
+                    "name": "New York",
+                    "type": "home"
+                },
+                "title": "New York Yankees",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/logos/",
+                    "cuts": {
+                        "default": "yankees_50.png",
+                        "50x50": "yankees_50.png",
+                        "100x100": "yankees_100.png",
+                        "100x100_light": "yankees_100_stroke.png",
+                        "360x360": "yankees_360.png",
+                        "250x250": "yankees_250.png",
+                        "150x150": "yankees_150.png",
+                        "40x40": "yankees_40.png",
+                        "40x40_light": "yankees_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#132448",
+                    "secondary": "#e4002b"
+                },
+                "slug": "mlb/team/new-york-yankees",
+                "pitchers": [
+                    {
+                        "type": {
+                            "id": 1,
+                            "name": "starter"
+                        },
+                        "name": {
+                            "first": "Luis",
+                            "last": "Severino"
+                        },
+                        "uniform": "40",
+                        "wins": 0,
+                        "losses": 0,
+                        "image": {
+                            "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                            "cuts": {
+                                "default": "657781-84x74.png",
+                                "84x74": "657781-84x74.png",
+                                "300x300": "657781-300x300.png"
+                            }
+                        },
+                        "slug": "mlb/player/657781/luis-severino",
+                        "id": 657781,
+                        "league": {
+                            "name": "Major League Baseball",
+                            "abbreviation": "MLB"
+                        },
+                        "innings_pitched": {
+                            "game": "0.0",
+                            "season": "0.0"
+                        },
+                        "earned_runs": {
+                            "game": 0,
+                            "season": 0
+                        },
+                        "strikeouts": {
+                            "game": 0,
+                            "season": 0
+                        },
+                        "pitch_count": 0
+                    }
+                ],
+                "record": {
+                    "wins": 98,
+                    "losses": 53,
+                    "percentage": ".649"
+                },
+                "score": 0,
+                "is_winner": false,
+                "linescores": [
+                    {
+                        "period": {
+                            "id": 1,
+                            "name": "1st",
+                            "unit": "Inning",
+                            "full_name": "1st"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 2,
+                            "name": "2nd",
+                            "unit": "Inning",
+                            "full_name": "2nd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 3,
+                            "name": "3rd",
+                            "unit": "Inning",
+                            "full_name": "3rd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 4,
+                            "name": "4th",
+                            "unit": "Inning",
+                            "full_name": "4th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 5,
+                            "name": "5th",
+                            "unit": "Inning",
+                            "full_name": "5th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 6,
+                            "name": "6th",
+                            "unit": "Inning",
+                            "full_name": "6th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 7,
+                            "name": "7th",
+                            "unit": "Inning",
+                            "full_name": "7th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 8,
+                            "name": "8th",
+                            "unit": "Inning",
+                            "full_name": "8th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 9,
+                            "name": "9th",
+                            "unit": "Inning",
+                            "full_name": "9th"
+                        }
+                    }
+                ],
+                "linescore_totals": {
+                    "runs": 0,
+                    "hits": 0,
+                    "errors": 0
+                },
+                "taxonomy": {
+                    "teams": "mlb-new-york-yankees",
+                    "airship": [
+                        {
+                            "name": "Game Start",
+                            "tag": "events::mlb-new-york-yankees-1"
+                        },
+                        {
+                            "name": "7th Inning Stretch",
+                            "tag": "events::mlb-new-york-yankees-2"
+                        },
+                        {
+                            "name": "Scoring Plays",
+                            "tag": "events::mlb-new-york-yankees-3"
+                        },
+                        {
+                            "name": "Final",
+                            "tag": "events::mlb-new-york-yankees-4"
+                        },
+                        {
+                            "name": "Team News",
+                            "tag": "teams::mlb-new-york-yankees"
+                        }
+                    ]
+                },
+                "live": {
+                    "current_pitcher": {
+                        "name": {
+                            "first": "Luis",
+                            "last": "Severino"
+                        },
+                        "uniform": "40",
+                        "throwing_hand": {
+                            "hand_id": 2,
+                            "name": "Right"
+                        },
+                        "image": {
+                            "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                            "cuts": {
+                                "default": "657781-84x74.png",
+                                "84x74": "657781-84x74.png",
+                                "300x300": "657781-300x300.png"
+                            }
+                        },
+                        "slug": "mlb/player/657781/luis-severino",
+                        "id": 657781,
+                        "league": {
+                            "name": "Major League Baseball",
+                            "abbreviation": "MLB"
+                        }
+                    },
+                    "next_up_batters": [
+                        {
+                            "name": {
+                                "first": "DJ",
+                                "last": "LeMahieu"
+                            },
+                            "uniform": "26",
+                            "bat_side": {
+                                "hand_id": 2,
+                                "name": "Right"
+                            },
+                            "image": {
+                                "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                "cuts": {
+                                    "default": "500845-84x74.png",
+                                    "84x74": "500845-84x74.png",
+                                    "300x300": "500845-300x300.png"
+                                }
+                            },
+                            "slug": "mlb/player/500845/dj-lemahieu",
+                            "id": 500845,
+                            "league": {
+                                "name": "Major League Baseball",
+                                "abbreviation": "MLB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "first": "Aaron",
+                                "last": "Judge"
+                            },
+                            "uniform": "99",
+                            "bat_side": {
+                                "hand_id": 2,
+                                "name": "Right"
+                            },
+                            "image": {
+                                "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                "cuts": {
+                                    "default": "549847-84x74.png",
+                                    "84x74": "549847-84x74.png",
+                                    "300x300": "549847-300x300.png"
+                                }
+                            },
+                            "slug": "mlb/player/549847/aaron-judge",
+                            "id": 549847,
+                            "league": {
+                                "name": "Major League Baseball",
+                                "abbreviation": "MLB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "first": "Didi",
+                                "last": "Gregorius"
+                            },
+                            "uniform": "18",
+                            "bat_side": {
+                                "hand_id": 1,
+                                "name": "Left"
+                            },
+                            "image": {
+                                "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                "cuts": {
+                                    "default": "456349-84x74.png",
+                                    "84x74": "456349-84x74.png",
+                                    "300x300": "456349-300x300.png"
+                                }
+                            },
+                            "slug": "mlb/player/456349/didi-gregorius",
+                            "id": 456349,
+                            "league": {
+                                "name": "Major League Baseball",
+                                "abbreviation": "MLB"
+                            }
+                        }
+                    ]
+                },
+                "leaders": {
+                    "batting_average": {
+                        "name": "batting_average",
+                        "abbreviation": "BA",
+                        "value": ".328",
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "DJ",
+                                    "last": "LeMahieu"
+                                },
+                                "uniform": "26",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                    "cuts": {
+                                        "default": "500845-84x74.png",
+                                        "84x74": "500845-84x74.png",
+                                        "300x300": "500845-300x300.png"
+                                    }
+                                },
+                                "slug": "mlb/player/500845/dj-lemahieu",
+                                "id": 500845,
+                                "league": {
+                                    "name": "Major League Baseball",
+                                    "abbreviation": "MLB"
+                                }
+                            }
+                        ]
+                    },
+                    "home_runs": {
+                        "name": "home_runs",
+                        "abbreviation": "HR",
+                        "value": 0,
+                        "players": []
+                    },
+                    "earned_run_average": {
+                        "name": "earned_run_average",
+                        "abbreviation": "ERA",
+                        "value": null,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Luis",
+                                    "last": "Severino"
+                                },
+                                "uniform": "40",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                    "cuts": {
+                                        "default": "657781-84x74.png",
+                                        "84x74": "657781-84x74.png",
+                                        "300x300": "657781-300x300.png"
+                                    }
+                                },
+                                "slug": "mlb/player/657781/luis-severino",
+                                "id": 657781,
+                                "league": {
+                                    "name": "Major League Baseball",
+                                    "abbreviation": "MLB"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "id": 227,
+                "name": "Angels",
+                "abbreviation": "LAA",
+                "location": {
+                    "name": "Los Angeles",
+                    "type": "away"
+                },
+                "title": "Los Angeles Angels",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/logos/",
+                    "cuts": {
+                        "default": "angels_50.png",
+                        "50x50": "angels_50.png",
+                        "100x100": "angels_100.png",
+                        "100x100_light": "angels_100_stroke.png",
+                        "360x360": "angels_360.png",
+                        "250x250": "angels_250.png",
+                        "150x150": "angels_150.png",
+                        "40x40": "angels_40.png",
+                        "40x40_light": "angels_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#ba0021",
+                    "secondary": "#003263"
+                },
+                "slug": "mlb/team/los-angeles-angels",
+                "pitchers": [
+                    {
+                        "type": {
+                            "id": 1,
+                            "name": "starter"
+                        },
+                        "name": {
+                            "first": "Jose",
+                            "last": "Suarez"
+                        },
+                        "uniform": "54",
+                        "wins": 2,
+                        "losses": 6,
+                        "era": "6.94",
+                        "image": {
+                            "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                            "cuts": {
+                                "default": "872545-84x74.png",
+                                "84x74": "872545-84x74.png",
+                                "300x300": "872545-300x300.png"
+                            }
+                        },
+                        "slug": "mlb/player/872545/jose-suarez",
+                        "id": 872545,
+                        "league": {
+                            "name": "Major League Baseball",
+                            "abbreviation": "MLB"
+                        },
+                        "innings_pitched": {
+                            "game": "0.0",
+                            "season": "71.1"
+                        },
+                        "earned_runs": {
+                            "game": 0,
+                            "season": 55
+                        },
+                        "strikeouts": {
+                            "game": 0,
+                            "season": 61
+                        },
+                        "pitch_count": 0
+                    }
+                ],
+                "record": {
+                    "wins": 68,
+                    "losses": 82,
+                    "percentage": ".453"
+                },
+                "score": 0,
+                "is_winner": false,
+                "linescores": [
+                    {
+                        "period": {
+                            "id": 1,
+                            "name": "1st",
+                            "unit": "Inning",
+                            "full_name": "1st"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 2,
+                            "name": "2nd",
+                            "unit": "Inning",
+                            "full_name": "2nd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 3,
+                            "name": "3rd",
+                            "unit": "Inning",
+                            "full_name": "3rd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 4,
+                            "name": "4th",
+                            "unit": "Inning",
+                            "full_name": "4th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 5,
+                            "name": "5th",
+                            "unit": "Inning",
+                            "full_name": "5th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 6,
+                            "name": "6th",
+                            "unit": "Inning",
+                            "full_name": "6th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 7,
+                            "name": "7th",
+                            "unit": "Inning",
+                            "full_name": "7th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 8,
+                            "name": "8th",
+                            "unit": "Inning",
+                            "full_name": "8th"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 9,
+                            "name": "9th",
+                            "unit": "Inning",
+                            "full_name": "9th"
+                        }
+                    }
+                ],
+                "linescore_totals": {
+                    "runs": 0,
+                    "hits": 0,
+                    "errors": 0
+                },
+                "taxonomy": {
+                    "teams": "mlb-los-angeles-angels",
+                    "airship": [
+                        {
+                            "name": "Game Start",
+                            "tag": "events::mlb-los-angeles-angels-1"
+                        },
+                        {
+                            "name": "7th Inning Stretch",
+                            "tag": "events::mlb-los-angeles-angels-2"
+                        },
+                        {
+                            "name": "Scoring Plays",
+                            "tag": "events::mlb-los-angeles-angels-3"
+                        },
+                        {
+                            "name": "Final",
+                            "tag": "events::mlb-los-angeles-angels-4"
+                        },
+                        {
+                            "name": "Team News",
+                            "tag": "teams::mlb-los-angeles-angels"
+                        }
+                    ]
+                },
+                "live": {
+                    "current_pitcher": {
+                        "name": {
+                            "first": "Jose",
+                            "last": "Suarez"
+                        },
+                        "uniform": "54",
+                        "throwing_hand": {
+                            "hand_id": 1,
+                            "name": "Left"
+                        },
+                        "image": {
+                            "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                            "cuts": {
+                                "default": "872545-84x74.png",
+                                "84x74": "872545-84x74.png",
+                                "300x300": "872545-300x300.png"
+                            }
+                        },
+                        "slug": "mlb/player/872545/jose-suarez",
+                        "id": 872545,
+                        "league": {
+                            "name": "Major League Baseball",
+                            "abbreviation": "MLB"
+                        }
+                    },
+                    "next_up_batters": [
+                        {
+                            "name": {
+                                "first": "David",
+                                "last": "Fletcher"
+                            },
+                            "uniform": "6",
+                            "bat_side": {
+                                "hand_id": 2,
+                                "name": "Right"
+                            },
+                            "image": {
+                                "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                "cuts": {
+                                    "default": "858824-84x74.png",
+                                    "84x74": "858824-84x74.png",
+                                    "300x300": "858824-300x300.png"
+                                }
+                            },
+                            "slug": "mlb/player/858824/david-fletcher",
+                            "id": 858824,
+                            "league": {
+                                "name": "Major League Baseball",
+                                "abbreviation": "MLB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "first": "Kole",
+                                "last": "Calhoun"
+                            },
+                            "uniform": "56",
+                            "bat_side": {
+                                "hand_id": 1,
+                                "name": "Left"
+                            },
+                            "image": {
+                                "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                "cuts": {
+                                    "default": "546813-84x74.png",
+                                    "84x74": "546813-84x74.png",
+                                    "300x300": "546813-300x300.png"
+                                }
+                            },
+                            "slug": "mlb/player/546813/kole-calhoun",
+                            "id": 546813,
+                            "league": {
+                                "name": "Major League Baseball",
+                                "abbreviation": "MLB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "first": "Albert",
+                                "last": "Pujols"
+                            },
+                            "uniform": "5",
+                            "bat_side": {
+                                "hand_id": 2,
+                                "name": "Right"
+                            },
+                            "image": {
+                                "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                "cuts": {
+                                    "default": "8715-84x74.png",
+                                    "84x74": "8715-84x74.png",
+                                    "300x300": "8715-300x300.png"
+                                }
+                            },
+                            "slug": "mlb/player/8715/albert-pujols",
+                            "id": 8715,
+                            "league": {
+                                "name": "Major League Baseball",
+                                "abbreviation": "MLB"
+                            }
+                        }
+                    ]
+                },
+                "leaders": {
+                    "batting_average": {
+                        "name": "batting_average",
+                        "abbreviation": "BA",
+                        "value": ".288",
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "David",
+                                    "last": "Fletcher"
+                                },
+                                "uniform": "6",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                    "cuts": {
+                                        "default": "858824-84x74.png",
+                                        "84x74": "858824-84x74.png",
+                                        "300x300": "858824-300x300.png"
+                                    }
+                                },
+                                "slug": "mlb/player/858824/david-fletcher",
+                                "id": 858824,
+                                "league": {
+                                    "name": "Major League Baseball",
+                                    "abbreviation": "MLB"
+                                }
+                            }
+                        ]
+                    },
+                    "home_runs": {
+                        "name": "home_runs",
+                        "abbreviation": "HR",
+                        "value": 0,
+                        "players": []
+                    },
+                    "earned_run_average": {
+                        "name": "earned_run_average",
+                        "abbreviation": "ERA",
+                        "value": "6.94",
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Jose",
+                                    "last": "Suarez"
+                                },
+                                "uniform": "54",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                                    "cuts": {
+                                        "default": "872545-84x74.png",
+                                        "84x74": "872545-84x74.png",
+                                        "300x300": "872545-300x300.png"
+                                    }
+                                },
+                                "slug": "mlb/player/872545/jose-suarez",
+                                "id": 872545,
+                                "league": {
+                                    "name": "Major League Baseball",
+                                    "abbreviation": "MLB"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "status": {
+            "balls": 0,
+            "strikes": 0,
+            "outs": 0,
+            "inning": 1,
+            "name": "Pre-Game",
+            "id": 1,
+            "is_active": false,
+            "inning_division": "Top",
+            "current_pitcher": {
+                "name": {
+                    "first": "Luis",
+                    "last": "Severino"
+                },
+                "uniform": "40",
+                "throwing_hand": {
+                    "hand_id": 2,
+                    "name": "Right"
+                },
+                "image": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                    "cuts": {
+                        "default": "657781-84x74.png",
+                        "84x74": "657781-84x74.png",
+                        "300x300": "657781-300x300.png"
+                    }
+                },
+                "slug": "mlb/player/657781/luis-severino",
+                "id": 657781,
+                "league": {
+                    "name": "Major League Baseball",
+                    "abbreviation": "MLB"
+                }
+            },
+            "next_up_batters": [
+                {
+                    "name": {
+                        "first": "David",
+                        "last": "Fletcher"
+                    },
+                    "uniform": "6",
+                    "bat_side": {
+                        "hand_id": 2,
+                        "name": "Right"
+                    },
+                    "image": {
+                        "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                        "cuts": {
+                            "default": "858824-84x74.png",
+                            "84x74": "858824-84x74.png",
+                            "300x300": "858824-300x300.png"
+                        }
+                    },
+                    "slug": "mlb/player/858824/david-fletcher",
+                    "id": 858824,
+                    "league": {
+                        "name": "Major League Baseball",
+                        "abbreviation": "MLB"
+                    }
+                },
+                {
+                    "name": {
+                        "first": "Kole",
+                        "last": "Calhoun"
+                    },
+                    "uniform": "56",
+                    "bat_side": {
+                        "hand_id": 1,
+                        "name": "Left"
+                    },
+                    "image": {
+                        "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                        "cuts": {
+                            "default": "546813-84x74.png",
+                            "84x74": "546813-84x74.png",
+                            "300x300": "546813-300x300.png"
+                        }
+                    },
+                    "slug": "mlb/player/546813/kole-calhoun",
+                    "id": 546813,
+                    "league": {
+                        "name": "Major League Baseball",
+                        "abbreviation": "MLB"
+                    }
+                },
+                {
+                    "name": {
+                        "first": "Albert",
+                        "last": "Pujols"
+                    },
+                    "uniform": "5",
+                    "bat_side": {
+                        "hand_id": 2,
+                        "name": "Right"
+                    },
+                    "image": {
+                        "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                        "cuts": {
+                            "default": "8715-84x74.png",
+                            "84x74": "8715-84x74.png",
+                            "300x300": "8715-300x300.png"
+                        }
+                    },
+                    "slug": "mlb/player/8715/albert-pujols",
+                    "id": 8715,
+                    "league": {
+                        "name": "Major League Baseball",
+                        "abbreviation": "MLB"
+                    }
+                }
+            ],
+            "current_batting_team": {
+                "id": 227,
+                "name": "Angels",
+                "abbreviation": "LAA",
+                "location": {
+                    "name": "Los Angeles",
+                    "type": "away"
+                },
+                "title": "Los Angeles Angels",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/logos/",
+                    "cuts": {
+                        "default": "angels_50.png",
+                        "50x50": "angels_50.png",
+                        "100x100": "angels_100.png",
+                        "100x100_light": "angels_100_stroke.png",
+                        "360x360": "angels_360.png",
+                        "250x250": "angels_250.png",
+                        "150x150": "angels_150.png",
+                        "40x40": "angels_40.png",
+                        "40x40_light": "angels_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#ba0021",
+                    "secondary": "#003263"
+                },
+                "slug": "mlb/team/los-angeles-angels"
+            },
+            "current_pitching_team": {
+                "id": 234,
+                "name": "Yankees",
+                "abbreviation": "NYY",
+                "location": {
+                    "name": "New York",
+                    "type": "home"
+                },
+                "title": "New York Yankees",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/logos/",
+                    "cuts": {
+                        "default": "yankees_50.png",
+                        "50x50": "yankees_50.png",
+                        "100x100": "yankees_100.png",
+                        "100x100_light": "yankees_100_stroke.png",
+                        "360x360": "yankees_360.png",
+                        "250x250": "yankees_250.png",
+                        "150x150": "yankees_150.png",
+                        "40x40": "yankees_40.png",
+                        "40x40_light": "yankees_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#132448",
+                    "secondary": "#e4002b"
+                },
+                "slug": "mlb/team/new-york-yankees"
+            },
+            "current_batter": {
+                "uniform": "18",
+                "name": {
+                    "first": "Brian",
+                    "last": "Goodwin"
+                },
+                "bat_side": {
+                    "hand_id": 1,
+                    "name": "Left"
+                },
+                "image": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/baseball/mlb/players/",
+                    "cuts": {
+                        "default": "501964-84x74.png",
+                        "84x74": "501964-84x74.png",
+                        "300x300": "501964-300x300.png"
+                    }
+                },
+                "slug": "mlb/player/501964/brian-goodwin",
+                "id": 501964,
+                "league": {
+                    "name": "Major League Baseball",
+                    "abbreviation": "MLB"
+                }
+            },
+            "runners_on_base": []
+        },
+        "alert_types": [
+            {
+                "name": "Game Start",
+                "airship": "events::1568678400-2103522-1"
+            },
+            {
+                "name": "7th Inning Stretch",
+                "airship": "events::1568678400-2103522-2"
+            },
+            {
+                "name": "Scoring Play",
+                "airship": "events::1568678400-2103522-3"
+            },
+            {
+                "name": "Final",
+                "airship": "events::1568678400-2103522-4"
+            }
+        ],
+        "scoring_summaries": [],
+        "links": [
+            {
+                "name": "Preview",
+                "url": "https://www.si.com/mlb/game/2103522",
+                "id": 1
+            }
+        ],
+        "editorial": {
+            "has_preview": false,
+            "has_recap": false,
+            "has_bullets": false,
+            "has_odds": false
+        }
+    }
+}

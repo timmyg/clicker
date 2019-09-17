@@ -1,3 +1,4 @@
+// @flow
 require('dotenv').config();
 const { respond, getBody, track } = require('serverless-helpers');
 
