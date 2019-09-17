@@ -18,6 +18,8 @@
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7"
   },
   "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
     "jest": "^24.0.0",
     "serverless": "1.38.0",
     "serverless-domain-manager": "^2.6.13",
