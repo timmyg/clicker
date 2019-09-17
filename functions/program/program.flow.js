@@ -331,8 +331,10 @@ module.exports.getScore = async (event: any) => {
   const apiUrl = transformSIUrl(webUrl);
 
   const method = 'get';
-  let result = await axios({ method, url: apiUrl });
-  return respond(200, result);
+  const options = { method, url: apiUrl };
+  console.log({ options });
+  let { data } = await axios(options);
+  return respond(200, data);
 };
 
 module.exports.syncNew = async (event: any) => {
