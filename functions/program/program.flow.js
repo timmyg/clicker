@@ -79,6 +79,7 @@ const nationalChannels: number[] = [
   //, 104 //DTV4K
   //, 105 //LIVE4K
   //, 106 //LIVE4K2
+  
 ];
 const zipDefault = 45202;
 
