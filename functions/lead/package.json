@@ -4,11 +4,14 @@
   "description": "",
   "main": "lead.js",
   "scripts": {
-    "test": "jest --coverage"
+    "build": "npx flow-remove-types lead.flow.js -o lead.js",
+    "test": "npm run build && jest --coverage"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
     "jest": "^24.1.0",
     "serverless": "^1.36.3",
     "serverless-domain-manager": "^2.6.13",
@@ -17,7 +20,7 @@
   "dependencies": {
     "dotenv": "^6.2.0",
     "hubspot": "^2.0.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7",
     "trello": "^0.9.1"
   }
 }

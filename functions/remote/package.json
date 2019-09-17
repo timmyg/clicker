@@ -4,7 +4,8 @@
   "description": "",
   "main": "remote.js",
   "scripts": {
-    "test": "jest --coverage",
+    "build": "npx flow-remove-types remote.flow.js -o remote.js",
+    "test": "npm run build && jest --coverage",
     "invoke:channel": "serverless invoke local --function command --path ../.resources/data/remote-channel.json",
     "invoke:key": "serverless invoke local --function command --path ../.resources/data/remote-key.json",
     "invoke:boxes": "serverless invoke local --function command --path ../.resources/data/remote-boxes.json"
