@@ -24,6 +24,11 @@ class programAreaType {
   channels: [number];
 }
 
+class SiLeague {
+  name: string; // Major League Baseball, College Football
+  abbreviation: string; // MLB, NCAAF
+}
+
 class SiTeam {
   title: string; // Iowa State Cyclones
   score: number; // 17
@@ -45,6 +50,7 @@ class SiGame {
   tv: string;
   status: {};
   teams: SiTeam[];
+  league: SiLeague;
 }
 
 class SiResult {
@@ -373,6 +379,7 @@ module.exports.getGameStatus = async (event: any) => {
 
 function getGameStatus(result: SiResult): GameStatus {
   const siGame: SiGame = result.data;
+  if 
   const gameStatus = new GameStatus();
   gameStatus.active = false;
   gameStatus.blowout = false;

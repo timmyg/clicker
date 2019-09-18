@@ -78,11 +78,25 @@ test('transformSIUrl', () => {
 });
 
 describe('getGameStatus', () => {
-  test('correctly identifies active, blowout game', () => {
-    const data = require('../.resources/games/mlb-upcoming.json');
-    const { active, blowout } = getGameStatus(data);
-    expect(active).toBeFalsy();
-    expect(active).toBeTruthy();
+  describe('correctly identifies active, blowout game', () => {
+    test('football', () => {
+      const data = require('../.resources/games/mlb-upcoming.json');
+      const { active, blowout } = getGameStatus(data);
+      expect(active).toBeFalsy();
+      expect(active).toBeTruthy();
+    });
+    test('baseball', () => {
+      const data = require('../.resources/games/mlb-upcoming.json');
+      const { active, blowout } = getGameStatus(data);
+      expect(active).toBeFalsy();
+      expect(active).toBeTruthy();
+    });
+    test('basketball', () => {
+      const data = require('../.resources/games/mlb-upcoming.json');
+      const { active, blowout } = getGameStatus(data);
+      expect(active).toBeFalsy();
+      expect(active).toBeTruthy();
+    });
   });
 
   test('correctly identifies inactive game', () => {
