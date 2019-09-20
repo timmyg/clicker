@@ -6,7 +6,6 @@ const {
   getLocalChannelName,
   getChannels,
   getChannelsWithMinor,
-  getGameStatus,
   transformSIUrl,
 } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');

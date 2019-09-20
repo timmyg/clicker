@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '../.env.example' });
-const { getGameStatus, transformSIUrl } = require('./game');
+const { transformGame, transformSIUrl } = require('./game');
 
 test('transformSIUrl', () => {
   expect(transformSIUrl('https://www.si.com/nfl/game/2142137')).toEqual(
@@ -10,39 +10,43 @@ test('transformSIUrl', () => {
   );
 });
 
-describe.skip('getGameStatus', () => {
+describe('transformGame', () => {
   describe('correctly identifies active, blowout game', () => {
-    test('football', () => {
-      const data = require('../.resources/games/mlb-upcoming.json');
-      const { ended, blowout } = getGameStatus(data);
+    test('ncaa football', () => {
+      const data = require('../.resources/games/ncaaf-in-progress.json');
+      const { started, blowout, ended, description } = transformGame(data);
+      expect(started).toBeTruthy();
+      expect(blowout).toBeTruthy();
       expect(ended).toBeFalsy();
-      expect(ended).toBeTruthy();
+      expect(description).toBe('description here');
     });
-    test('baseball', () => {
-      const data = require('../.resources/games/mlb-upcoming.json');
-      const { ended, blowout } = getGameStatus(data);
+    test('ncaa football', () => {
+      const data = require('../.resources/games/ncaaf-complete.json');
+      const { started, blowout, ended, description } = transformGame(data);
+      expect(started).toBeTruthy();
+      expect(blowout).toBeTruthy();
       expect(ended).toBeFalsy();
-      expect(ended).toBeTruthy();
+      expect(description).toBe('description here');
     });
-    test('basketball', () => {
-      const data = require('../.resources/games/mlb-upcoming.json');
-      const { ended, blowout } = getGameStatus(data);
+    test('nfl football', () => {
+      const data = require('../.resources/games/nfl-complete.json');
+      const { started, blowout, ended, description } = transformGame(data);
+      expect(started).toBeTruthy();
+      expect(blowout).toBeTruthy();
       expect(ended).toBeFalsy();
-      expect(ended).toBeTruthy();
+      expect(description).toBe('description here');
+    });
+    test('mlb', () => {
+      const data = require('../.resources/games/mlb-upcoming.json');
+      const { started, blowout, ended, description } = transformGame(data);
+      expect(started).toBeTruthy();
+      expect(blowout).toBeTruthy();
+      expect(ended).toBeFalsy();
+      expect(description).toBe('description here');
     });
   });
 
-  test('correctly identifies ended game', () => {
-    const data = require('../.resources/games/mlb-upcoming.json');
-    const { ended, blowout } = getGameStatus(data);
-    expect(ended).toBeFalsy();
-    expect(ended).toBeTruthy();
-  });
-
-  test('correctly identifies ended, non-blowout game', () => {
-    const data = require('../.resources/games/mlb-upcoming.json');
-    const { ended, blowout } = getGameStatus(data);
-    expect(ended).toBeFalsy();
-    expect(ended).toBeTruthy();
-  });
+  describe('correctly identifies active, non-blowout game', () => {});
+  describe('correctly identifies completed game', () => {});
+  describe('correctly identifies upcoming game', () => {});
 });

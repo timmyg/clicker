@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "npx flow-remove-types game.flow.js -o game.js",
-    "test": "npm run build && jest --coverage"
+    "test": "npm run build && jest --coverage",
+    "invoke:score": "serverless invoke local --function getStatus --path ../.resources/data/si-url.json"
   },
   "author": "",
   "license": "ISC",

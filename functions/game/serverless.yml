@@ -58,8 +58,8 @@ functions:
             headers:
               - partner
               - authorization
-  getGameStatus:
-    handler: game.getGameStatus
+  getStatus:
+    handler: game.getStatus
     events:
       - http:
           path: 'score'
