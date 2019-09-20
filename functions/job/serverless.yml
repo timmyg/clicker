@@ -64,6 +64,20 @@ functions:
               - partner
               - authorization
               - content-type
+  updateGameStatus:
+    handler: job.updateGameStatus
+    timeout: 30
+    events:
+      - schedule: cron(*/1 * * * ? *)
+      - http:
+          path: 'game-status'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   controlCenterDailyInit:
     handler: job.controlCenterDailyInit
     timeout: 30

@@ -77,7 +77,7 @@ test('transformSIUrl', () => {
   );
 });
 
-describe('getGameStatus', () => {
+describe.skip('getGameStatus', () => {
   describe('correctly identifies active, blowout game', () => {
     test('football', () => {
       const data = require('../.resources/games/mlb-upcoming.json');

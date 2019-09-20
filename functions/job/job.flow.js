@@ -12,6 +12,12 @@ declare class process {
   };
 }
 
+class GameStatus {
+  ended: boolean;
+  blowout: boolean;
+  description: string;
+}
+
 module.exports.health = async (event: any) => {
   return respond(200, `hello`);
 };
@@ -53,6 +59,39 @@ module.exports.controlCenterDailyInit = async (event: any) => {
   return respond(200);
 };
 
+module.exports.updateGameStatus = async (event: any) => {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  console.log('searching for games to change');
+  // TODO shouldnt be all games
+  let allGames = await base('Games').all();
+  if (allGames.length) {
+    for (const game of allGames) {
+      console.log({ game });
+      const siWebUrl: string = game.get('Scores Link');
+      const gameOver: boolean = game.get('Game Over');
+      const blowout: boolean = game.get('Blowout');
+      const gameId: string = game.id;
+      const { data } = await invokeFunctionSync(
+        `job-${process.env.stage}-getGameStatus`,
+        { url: siWebUrl },
+        null,
+        event.headers,
+        null,
+        'us-east-1',
+      );
+      console.log({ data });
+      const gameStatus: GameStatus = data;
+      console.log({ gameStatus });
+      await base('Games').update(gameId, {
+        'Game Status': gameStatus.description,
+        'Game Over': gameStatus.ended,
+        Blowout: gameStatus.blowout,
+      });
+    }
+  }
+  return respond(200);
+};
+
 module.exports.controlCenter = async (event: any) => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
@@ -73,8 +112,6 @@ module.exports.controlCenter = async (event: any) => {
       const channel: string = game.get('Channel');
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
-      const gameOver: boolean = game.get('Game Over');
-      const blowout: boolean = game.get('Blowout');
       const gameId: string = game.id;
       console.log(`searching for locations for:`, { regions, channel, zones });
       // find locations that are in region and control center enabled

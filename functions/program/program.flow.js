@@ -61,6 +61,7 @@ class SiResult {
 class GameStatus {
   ended: boolean;
   blowout: boolean;
+  description: string;
 }
 
 const minorChannels: number[] = [661];
@@ -383,7 +384,7 @@ function getGameStatus(result: SiResult): GameStatus {
   // check if game has ended
 
   gameStatus.ended = false;
-  gameStatus.blowout = false;
+  gameStatus.blowout = true;
   return gameStatus;
 }
 
