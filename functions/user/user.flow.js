@@ -32,11 +32,11 @@ const User = dynamoose.model(
   },
 );
 
-module.exports.health = async event => {
+module.exports.health = async (event: any) => {
   return respond();
 };
 
-module.exports.create = async event => {
+module.exports.create = async (event: any) => {
   const id = uuid();
   await User.create({ id, tokens: initialTokens });
   const token = jwt.sign({ sub: id, guest: true }, key);
@@ -44,7 +44,7 @@ module.exports.create = async event => {
   return respond(201, { token });
 };
 
-module.exports.wallet = async event => {
+module.exports.wallet = async (event: any) => {
   const userId = getUserId(event);
   let user = await User.queryOne('id')
     .eq(userId)
@@ -68,7 +68,7 @@ module.exports.wallet = async event => {
   return respond(200, user);
 };
 
-module.exports.updateCard = async event => {
+module.exports.updateCard = async (event: any) => {
   const userId = getUserId(event);
   const { token: stripeCardToken } = getBody(event);
 
@@ -98,7 +98,7 @@ module.exports.updateCard = async event => {
   }
 };
 
-module.exports.removeCard = async event => {
+module.exports.removeCard = async (event: any) => {
   const userId = getUserId(event);
 
   const { stripeCustomer } = await User.queryOne('id')
@@ -112,7 +112,7 @@ module.exports.removeCard = async event => {
   return respond(200, response);
 };
 
-module.exports.replenish = async event => {
+module.exports.replenish = async (event: any) => {
   try {
     const userId = getUserId(event);
     const plan = getBody(event);
@@ -145,7 +145,7 @@ module.exports.replenish = async event => {
   }
 };
 
-module.exports.charge = async event => {
+module.exports.charge = async (event: any) => {
   try {
     const { token, amount, email, company, name } = getBody(event);
 
@@ -175,7 +175,7 @@ module.exports.charge = async event => {
   }
 };
 
-module.exports.subscribe = async event => {
+module.exports.subscribe = async (event: any) => {
   try {
     const { token, email, company, name, start, plan } = getBody(event);
 
@@ -207,7 +207,7 @@ module.exports.subscribe = async event => {
   }
 };
 
-module.exports.transaction = async event => {
+module.exports.transaction = async (event: any) => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
   let user = await User.queryOne('id')
@@ -224,7 +224,7 @@ module.exports.transaction = async event => {
   }
 };
 
-module.exports.alias = async event => {
+module.exports.alias = async (event: any) => {
   const { fromId, toId } = getPathParameters(event);
 
   // get existing users
@@ -261,7 +261,7 @@ module.exports.alias = async event => {
   return respond(201, user);
 };
 
-module.exports.verifyStart = async event => {
+module.exports.verifyStart = async (event: any) => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
@@ -275,7 +275,7 @@ module.exports.verifyStart = async event => {
   }
 };
 
-module.exports.verify = async event => {
+module.exports.verify = async (event: any) => {
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);

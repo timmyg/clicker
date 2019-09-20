@@ -7,6 +7,14 @@ const uuid = require('uuid/v1');
 const { IncomingWebhook } = require('@slack/webhook');
 require('dotenv').config({ path: '../.env.example' });
 
+declare class process {
+  static env: {
+    stage: string,
+    slackAntennaWebhookUrl: string,
+    tableLocation: string,
+  };
+}
+
 const Location = dynamoose.model(
   process.env.tableLocation,
   {
@@ -69,7 +77,7 @@ const Location = dynamoose.model(
   },
 );
 
-module.exports.all = async event => {
+module.exports.all = async (event: any) => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   const { partner } = event.headers;
@@ -103,7 +111,7 @@ module.exports.all = async event => {
   return respond(200, sorted);
 };
 
-module.exports.get = async event => {
+module.exports.get = async (event: any) => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -134,7 +142,7 @@ module.exports.get = async event => {
   return respond(200, location);
 };
 
-module.exports.create = async event => {
+module.exports.create = async (event: any) => {
   try {
     const body = getBody(event);
     const location = await Location.create(body);
@@ -145,7 +153,7 @@ module.exports.create = async event => {
   }
 };
 
-module.exports.update = async event => {
+module.exports.update = async (event: any) => {
   try {
     const { id } = getPathParameters(event);
     const body = getBody(event);
@@ -158,7 +166,7 @@ module.exports.update = async event => {
   }
 };
 
-module.exports.setBoxes = async event => {
+module.exports.setBoxes = async (event: any) => {
   const { boxes, ip } = getBody(event);
   const { id } = getPathParameters(event);
 
@@ -196,7 +204,7 @@ module.exports.setBoxes = async event => {
   return respond(201, updatedLocation);
 };
 
-module.exports.setBoxReserved = async event => {
+module.exports.setBoxReserved = async (event: any) => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
 
@@ -212,7 +220,7 @@ module.exports.setBoxReserved = async event => {
   return respond(200);
 };
 
-module.exports.setBoxFree = async event => {
+module.exports.setBoxFree = async (event: any) => {
   const { id: locationId, boxId } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -227,7 +235,7 @@ module.exports.setBoxFree = async event => {
   return respond(200);
 };
 
-module.exports.updateChannel = async event => {
+module.exports.updateChannel = async (event: any) => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { channel, source } = getBody(event);
 
@@ -243,7 +251,7 @@ module.exports.updateChannel = async event => {
   return respond(200);
 };
 
-module.exports.saveBoxInfo = async event => {
+module.exports.saveBoxInfo = async (event: any) => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { major } = getBody(event);
 
@@ -277,7 +285,7 @@ module.exports.saveBoxInfo = async event => {
   return respond(200);
 };
 
-module.exports.setLabels = async event => {
+module.exports.setLabels = async (event: any) => {
   const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);
   const location = await Location.queryOne('id')
@@ -292,7 +300,7 @@ module.exports.setLabels = async event => {
   return respond(200, boxes);
 };
 
-module.exports.identifyBoxes = async event => {
+module.exports.identifyBoxes = async (event: any) => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -317,7 +325,7 @@ module.exports.identifyBoxes = async event => {
   return respond(200, `hello`);
 };
 
-module.exports.connected = async event => {
+module.exports.connected = async (event: any) => {
   const { losantId } = getPathParameters(event);
   const locations = await Location.scan('losantId')
     .eq(losantId)
@@ -338,7 +346,7 @@ module.exports.connected = async event => {
   return respond(200, 'ok');
 };
 
-module.exports.disconnected = async event => {
+module.exports.disconnected = async (event: any) => {
   const { losantId } = getPathParameters(event);
   const locations = await Location.scan('losantId')
     .eq(losantId)
@@ -359,7 +367,7 @@ module.exports.disconnected = async event => {
   return respond(200, 'ok');
 };
 
-module.exports.allOff = async event => {
+module.exports.allOff = async (event: any) => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -383,7 +391,7 @@ module.exports.allOff = async event => {
   return respond(200, 'ok');
 };
 
-module.exports.allOn = async event => {
+module.exports.allOn = async (event: any) => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -407,7 +415,7 @@ module.exports.allOn = async event => {
   return respond(200, 'ok');
 };
 
-module.exports.checkAllBoxesInfo = async event => {
+module.exports.checkAllBoxesInfo = async (event: any) => {
   // const { id } = getPathParameters(event);
   let allLocations = await Location.scan().exec();
 
@@ -427,7 +435,7 @@ module.exports.checkAllBoxesInfo = async event => {
   return respond(200, 'ok');
 };
 
-module.exports.controlCenterLocationsByRegion = async event => {
+module.exports.controlCenterLocationsByRegion = async (event: any) => {
   const { regions } = getPathParameters(event);
   console.log(regions);
   if (!regions || !regions.length) {
@@ -448,6 +456,6 @@ module.exports.controlCenterLocationsByRegion = async event => {
   return respond(200, locations);
 };
 
-module.exports.health = async event => {
+module.exports.health = async (event: any) => {
   return respond(200, 'ok');
 };

@@ -1,0 +1,480 @@
+{
+    "status": "success",
+    "data": {
+        "id": 2142213,
+        "league": {
+            "name": "National Football League",
+            "abbreviation": "NFL"
+        },
+        "start": {
+            "local": "2019-09-19T20:20:00",
+            "utc": "2019-09-20T00:20:00",
+            "epoch": 1568938800
+        },
+        "tv": "NFLN",
+        "tv_stations": [
+            {
+                "tv_station_id": 305,
+                "name": "NFL Network",
+                "call_letters": "NFLN",
+                "network_type": {
+                    "network_type_id": 1,
+                    "name": "National"
+                },
+                "country": {
+                    "country_id": 1,
+                    "name": "United States",
+                    "abbreviation": "USA"
+                }
+            }
+        ],
+        "venue": {
+            "name": "TIAA Bank Field",
+            "city": "Jacksonville",
+            "state": {
+                "name": "Florida",
+                "abbreviation": "FL"
+            },
+            "country": {
+                "name": "United States",
+                "abbreviation": "USA"
+            }
+        },
+        "status": {
+            "period": {
+                "id": 1,
+                "name": "1st",
+                "unit": "Quarter",
+                "full_name": "1st",
+                "time": "13:22"
+            },
+            "teamPossessionId": 365,
+            "yardsFromGoal": 66,
+            "down": 4,
+            "distance": 1,
+            "name": "In-Progress",
+            "isUnderReview": false,
+            "isInjuryTimeout": false,
+            "id": 2,
+            "is_active": true
+        },
+        "teams": [
+            {
+                "id": 365,
+                "name": "Jaguars",
+                "abbreviation": "Jax",
+                "location": {
+                    "name": "Jacksonville",
+                    "type": "home"
+                },
+                "title": "Jacksonville Jaguars",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/logos/",
+                    "cuts": {
+                        "default": "jaguars_50.png",
+                        "50x50": "jaguars_50.png",
+                        "100x100": "jaguars_100.png",
+                        "100x100_light": "jaguars_100_stroke.png",
+                        "360x360": "jaguars_360.png",
+                        "250x250": "jaguars_250.png",
+                        "150x150": "jaguars_150.png",
+                        "40x40": "jaguars_40.png",
+                        "40x40_light": "jaguars_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#000000",
+                    "secondary": "#006778"
+                },
+                "slug": "nfl/team/jacksonville-jaguars",
+                "record": {
+                    "wins": 0,
+                    "losses": 2,
+                    "ties": 0,
+                    "percentage": ".000"
+                },
+                "score": 0,
+                "timeouts_left": 3,
+                "possession": true,
+                "is_winner": false,
+                "linescores": [
+                    {
+                        "period": {
+                            "id": 1,
+                            "name": "1st",
+                            "unit": "Quarter",
+                            "full_name": "1st"
+                        },
+                        "score": 0
+                    },
+                    {
+                        "period": {
+                            "id": 2,
+                            "name": "2nd",
+                            "unit": "Quarter",
+                            "full_name": "2nd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 3,
+                            "name": "3rd",
+                            "unit": "Quarter",
+                            "full_name": "3rd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 4,
+                            "name": "4th",
+                            "unit": "Quarter",
+                            "full_name": "4th"
+                        }
+                    }
+                ],
+                "taxonomy": {
+                    "teams": "nfl-jacksonville-jaguars",
+                    "airship": [
+                        {
+                            "name": "Game Start",
+                            "tag": "events::nfl-jacksonville-jaguars-1"
+                        },
+                        {
+                            "name": "Quarter",
+                            "tag": "events::nfl-jacksonville-jaguars-2"
+                        },
+                        {
+                            "name": "Scoring Plays",
+                            "tag": "events::nfl-jacksonville-jaguars-3"
+                        },
+                        {
+                            "name": "Final",
+                            "tag": "events::nfl-jacksonville-jaguars-4"
+                        },
+                        {
+                            "name": "Team News",
+                            "tag": "teams::nfl-jacksonville-jaguars"
+                        }
+                    ]
+                },
+                "leaders": {
+                    "passing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 15,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Gardner",
+                                    "last": "Minshew II"
+                                },
+                                "uniform": "15",
+                                "slug": "nfl/player/867303/gardner-minshewii",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "867303-84x74.png",
+                                        "84x74": "867303-84x74.png",
+                                        "300x300": "867303-300x300.png"
+                                    }
+                                },
+                                "id": 867303,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 15
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 0
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "receiving": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 15,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Chris",
+                                    "last": "Conley"
+                                },
+                                "uniform": "18",
+                                "slug": "nfl/player/591801/chris-conley",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "591801-84x74.png",
+                                        "84x74": "591801-84x74.png",
+                                        "300x300": "591801-300x300.png"
+                                    }
+                                },
+                                "id": 591801,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 15
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 0
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "rushing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 4,
+                        "players": [
+                            {
+                                "name": {
+                                    "first": "Gardner",
+                                    "last": "Minshew II"
+                                },
+                                "uniform": "15",
+                                "slug": "nfl/player/867303/gardner-minshewii",
+                                "image": {
+                                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                                    "cuts": {
+                                        "default": "867303-84x74.png",
+                                        "84x74": "867303-84x74.png",
+                                        "300x300": "867303-300x300.png"
+                                    }
+                                },
+                                "id": 867303,
+                                "league": {
+                                    "name": "National Football League",
+                                    "abbreviation": "NFL"
+                                },
+                                "stats": {
+                                    "yards": {
+                                        "name": "yards",
+                                        "abbreviation": "Yds",
+                                        "value": 4
+                                    },
+                                    "touchdowns": {
+                                        "name": "touchdowns",
+                                        "abbreviation": "TD",
+                                        "value": 0
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "id": 336,
+                "name": "Titans",
+                "abbreviation": "Ten",
+                "location": {
+                    "name": "Tennessee",
+                    "type": "away"
+                },
+                "title": "Tennessee Titans",
+                "logo": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/logos/",
+                    "cuts": {
+                        "default": "titans_50.png",
+                        "50x50": "titans_50.png",
+                        "100x100": "titans_100.png",
+                        "100x100_light": "titans_100_stroke.png",
+                        "360x360": "titans_360.png",
+                        "250x250": "titans_250.png",
+                        "150x150": "titans_150.png",
+                        "40x40": "titans_40.png",
+                        "40x40_light": "titans_40_stroke.png"
+                    }
+                },
+                "color": {
+                    "primary": "#002244",
+                    "secondary": "#4b92db"
+                },
+                "slug": "nfl/team/tennessee-titans",
+                "record": {
+                    "wins": 1,
+                    "losses": 1,
+                    "ties": 0,
+                    "percentage": ".500"
+                },
+                "score": 0,
+                "timeouts_left": 3,
+                "possession": false,
+                "is_winner": false,
+                "linescores": [
+                    {
+                        "period": {
+                            "id": 1,
+                            "name": "1st",
+                            "unit": "Quarter",
+                            "full_name": "1st"
+                        },
+                        "score": 0
+                    },
+                    {
+                        "period": {
+                            "id": 2,
+                            "name": "2nd",
+                            "unit": "Quarter",
+                            "full_name": "2nd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 3,
+                            "name": "3rd",
+                            "unit": "Quarter",
+                            "full_name": "3rd"
+                        }
+                    },
+                    {
+                        "period": {
+                            "id": 4,
+                            "name": "4th",
+                            "unit": "Quarter",
+                            "full_name": "4th"
+                        }
+                    }
+                ],
+                "taxonomy": {
+                    "teams": "nfl-tennessee-titans",
+                    "airship": [
+                        {
+                            "name": "Game Start",
+                            "tag": "events::nfl-tennessee-titans-1"
+                        },
+                        {
+                            "name": "Quarter",
+                            "tag": "events::nfl-tennessee-titans-2"
+                        },
+                        {
+                            "name": "Scoring Plays",
+                            "tag": "events::nfl-tennessee-titans-3"
+                        },
+                        {
+                            "name": "Final",
+                            "tag": "events::nfl-tennessee-titans-4"
+                        },
+                        {
+                            "name": "Team News",
+                            "tag": "teams::nfl-tennessee-titans"
+                        }
+                    ]
+                },
+                "leaders": {
+                    "passing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 0,
+                        "players": []
+                    },
+                    "receiving": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 0,
+                        "players": []
+                    },
+                    "rushing": {
+                        "name": "yards",
+                        "abbreviation": "Yds",
+                        "value": 0,
+                        "players": []
+                    }
+                }
+            }
+        ],
+        "alert_types": [
+            {
+                "name": "Game Start",
+                "airship": "events::1568937600-2142213-1"
+            },
+            {
+                "name": "Quarter",
+                "airship": "events::1568937600-2142213-2"
+            },
+            {
+                "name": "Scoring Play",
+                "airship": "events::1568937600-2142213-3"
+            },
+            {
+                "name": "Final",
+                "airship": "events::1568937600-2142213-4"
+            }
+        ],
+        "last_play": {
+            "period": {
+                "id": 1,
+                "name": "1st",
+                "unit": "Quarter",
+                "full_name": "1st"
+            },
+            "time": "13:25",
+            "down": "3",
+            "distance": "1",
+            "yard_line": "Jax34",
+            "end_yard_line": "Jax34",
+            "text": "Gardner Minshew II incomplete pass to the right intended for James O'Shaughnessy.",
+            "player": {
+                "name": {
+                    "first": "Gardner",
+                    "last": "Minshew II"
+                },
+                "image": {
+                    "base": "https://cdn-s3.si.com/s3fs-public/teams/football/nfl/players/",
+                    "cuts": {
+                        "default": "867303-84x74.png",
+                        "84x74": "867303-84x74.png",
+                        "300x300": "867303-300x300.png"
+                    }
+                },
+                "slug": "nfl/player/867303/gardner-minshewii",
+                "id": 867303,
+                "league": {
+                    "name": "National Football League",
+                    "abbreviation": "NFL"
+                }
+            }
+        },
+        "scoring_summaries": [],
+        "links": [
+            {
+                "name": "Recap",
+                "url": "https://www.si.com/nfl/game/2142213",
+                "id": 1
+            },
+            {
+                "name": "Box Score",
+                "url": "https://www.si.com/nfl/game/2142213/box-score",
+                "id": 2
+            },
+            {
+                "name": "Play-by-Play",
+                "url": "https://www.si.com/nfl/game/2142213/play-by-play",
+                "id": 3
+            }
+        ],
+        "editorial": {
+            "has_preview": true,
+            "has_recap": false,
+            "has_bullets": true,
+            "has_odds": false
+        }
+    }
+}

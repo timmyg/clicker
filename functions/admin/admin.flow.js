@@ -4,11 +4,20 @@ const Airtable = require('airtable');
 const { IncomingWebhook } = require('@slack/webhook');
 const { respond, invokeFunctionSync } = require('serverless-helpers');
 
-module.exports.health = async event => {
+declare class process {
+  static env: {
+    slackControlCenterWebhookUrl: string,
+    airtableKey: string,
+    airtableBase: string,
+    stage: string,
+  };
+}
+
+module.exports.health = async (event: any) => {
   return respond(200, `hello`);
 };
 
-module.exports.checkControlCenterEvents = async event => {
+module.exports.checkControlCenterEvents = async (event: any) => {
   // check if any scheduled events for control center today
   const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);

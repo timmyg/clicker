@@ -4,11 +4,19 @@ const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, invokeFunctionSync } = require('serverless-helpers');
 
-module.exports.health = async event => {
+declare class process {
+  static env: {
+    stage: string,
+    airtableKey: string,
+    airtableBase: string,
+  };
+}
+
+module.exports.health = async (event: any) => {
   return respond(200, `hello`);
 };
 
-module.exports.controlCenterDailyInit = async event => {
+module.exports.controlCenterDailyInit = async (event: any) => {
   const regions = ['Cincinnati'];
   const { data: locations } = await invokeFunctionSync(
     `location-${process.env.stage}-controlCenterLocationsByRegion`,
@@ -39,14 +47,13 @@ module.exports.controlCenterDailyInit = async event => {
         null,
         'us-east-1',
       );
-      changedCount++;
       i++;
     }
   }
   return respond(200);
 };
 
-module.exports.controlCenter = async event => {
+module.exports.controlCenter = async (event: any) => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   let games = await base('Games')
@@ -62,11 +69,13 @@ module.exports.controlCenter = async event => {
   if (games.length) {
     // loop through games
     for (const game of games) {
-      const regions = game.get('Regions');
-      const channel = game.get('Channel');
-      const gamePackage = game.get('Package');
-      const zones = game.get('TV Zones');
-      const gameId = game.id;
+      const regions: string[] = game.get('Regions');
+      const channel: string = game.get('Channel');
+      const gamePackage: string = game.get('Package');
+      const zones: number[] = game.get('TV Zones');
+      const gameOver: boolean = game.get('Game Over');
+      const blowout: boolean = game.get('Blowout');
+      const gameId: string = game.id;
       console.log(`searching for locations for:`, { regions, channel, zones });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
@@ -133,7 +142,7 @@ module.exports.controlCenter = async event => {
   return respond(200, { changedCount });
 };
 
-function getChannelForZone(i) {
+function getChannelForZone(i: number) {
   const initChannels = [206, 209, 614, 208, 212, 219]; // espn, espn2, espnc, espnu, nfl, mlb
   return initChannels[i % initChannels.length];
 }

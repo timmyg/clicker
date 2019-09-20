@@ -379,7 +379,7 @@ module.exports.getGameStatus = async (event: any) => {
 
 function getGameStatus(result: SiResult): GameStatus {
   const siGame: SiGame = result.data;
-  if 
+
   const gameStatus = new GameStatus();
   gameStatus.active = false;
   gameStatus.blowout = false;
