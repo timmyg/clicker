@@ -37,7 +37,7 @@ custom:
     develop: api-develop.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: programs
+    basePath: games
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true
