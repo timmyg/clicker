@@ -373,7 +373,9 @@ module.exports.getGameStatus = async (event: any) => {
   const method = 'get';
   const options = { method, url: apiUrl };
   const result = await axios(options);
+  console.log({ result });
   const gameStatus: GameStatus = getGameStatus(result.data);
+  console.log({ gameStatus });
 
   return respond(200, gameStatus);
 };
