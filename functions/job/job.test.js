@@ -12,6 +12,6 @@ test('get initial channels', () => {
   expect(getChannelForZone(2)).toBe(614);
   expect(getChannelForZone(3)).toBe(208);
   expect(getChannelForZone(4)).toBe(212);
-  expect(getChannelForZone(4)).toBe(210);
-  expect(getChannelForZone(4)).toBe(206);
+  expect(getChannelForZone(5)).toBe(219);
+  expect(getChannelForZone(6)).toBe(206);
 });

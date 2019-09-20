@@ -179,8 +179,9 @@ module.exports.controlCenter = async (event: any) => {
   return respond(200, { changedCount });
 };
 
-function getChannelForZone(i: number) {
+function getChannelForZone(i) {
   const initChannels = [206, 209, 614, 208, 212, 219]; // espn, espn2, espnc, espnu, nfl, mlb
+  // const initChannels = [];
   return initChannels[i % initChannels.length];
 }
 
