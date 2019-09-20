@@ -1,0 +1,356 @@
+{
+  "status": "success",
+  "data": {
+    "id": 2128323,
+    "league": { "name": "College Football", "abbreviation": "NCAAF" },
+    "start": { "local": "2019-09-19T19:00:00", "utc": "2019-09-20T00:00:00", "epoch": 1568937600 },
+    "tv": "ESPN",
+    "tv_stations": [
+      {
+        "tv_station_id": 700,
+        "name": "ESPN",
+        "call_letters": "ESPN",
+        "network_type": { "network_type_id": 1, "name": "National" },
+        "country": { "country_id": 1, "name": "United States", "abbreviation": "USA" }
+      }
+    ],
+    "venue": {
+      "name": "Benson Field at Yulman Stadium",
+      "city": "New Orleans",
+      "state": { "name": "Louisiana", "abbreviation": "LA" },
+      "country": { "name": "United States", "abbreviation": "USA" }
+    },
+    "status": {
+      "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th", "time": "13:18" },
+      "teamPossessionId": 3485,
+      "yardsFromGoal": 54,
+      "down": 2,
+      "distance": 11,
+      "name": "In-Progress",
+      "isUnderReview": false,
+      "id": 2,
+      "is_active": true
+    },
+    "teams": [
+      {
+        "id": 3511,
+        "name": "Green Wave",
+        "abbreviation": "Tulane",
+        "location": { "name": "Tulane", "type": "home" },
+        "title": "Tulane Green Wave",
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/football/cfb/logos/",
+          "cuts": {
+            "default": "tulane_50.png",
+            "50x50": "tulane_50.png",
+            "100x100": "tulane_100.png",
+            "100x100_light": "tulane_100_stroke.png",
+            "360x360": "tulane_360.png",
+            "250x250": "tulane_250.png",
+            "150x150": "tulane_150.png",
+            "40x40": "tulane_40.png",
+            "40x40_light": "tulane_40_stroke.png"
+          }
+        },
+        "color": { "primary": "#005837", "secondary": "#00A6eb" },
+        "slug": "college-football/team/tulane-green-wave",
+        "record": {
+          "wins": 2,
+          "losses": 1,
+          "ties": 0,
+          "percentage": ".667",
+          "conferenceWins": 0,
+          "conferenceLosses": 0
+        },
+        "score": 28,
+        "timeouts_left": 3,
+        "possession": false,
+        "is_winner": false,
+        "linescores": [
+          { "period": { "id": 1, "name": "1st", "unit": "Quarter", "full_name": "1st" }, "score": 7 },
+          { "period": { "id": 2, "name": "2nd", "unit": "Quarter", "full_name": "2nd" }, "score": 7 },
+          { "period": { "id": 3, "name": "3rd", "unit": "Quarter", "full_name": "3rd" }, "score": 7 },
+          { "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th" }, "score": 7 }
+        ],
+        "college_sub_division": { "name": "FBS", "id": 1 },
+        "conference": { "name": "American Athletic Conference", "abbreviation": "AAC", "id": 122 },
+        "division": { "name": "West Division", "id": 2 },
+        "taxonomy": {
+          "teams": "ncaaf-tulane-green-wave",
+          "airship": [
+            { "name": "Game Start", "tag": "events::ncaaf-tulane-green-wave-1" },
+            { "name": "Quarter", "tag": "events::ncaaf-tulane-green-wave-2" },
+            { "name": "Scoring Plays", "tag": "events::ncaaf-tulane-green-wave-3" },
+            { "name": "Final", "tag": "events::ncaaf-tulane-green-wave-4" },
+            { "name": "Team News", "tag": "teams::ncaaf-tulane-green-wave" }
+          ]
+        },
+        "leaders": {
+          "passing": {
+            "name": "yards",
+            "abbreviation": "Yds",
+            "value": 122,
+            "players": [
+              {
+                "name": { "first": "Justin", "last": "McMillan" },
+                "uniform": "12",
+                "slug": "college-football/player/865538/justin-mcmillan",
+                "id": 865538,
+                "league": { "name": "College Football", "abbreviation": "NCAAF" },
+                "stats": {
+                  "yards": { "name": "yards", "abbreviation": "Yds", "value": 122 },
+                  "touchdowns": { "name": "touchdowns", "abbreviation": "TD", "value": 2 }
+                }
+              }
+            ]
+          },
+          "receiving": {
+            "name": "yards",
+            "abbreviation": "Yds",
+            "value": 67,
+            "players": [
+              {
+                "name": { "first": "Jalen", "last": "McCleskey" },
+                "uniform": "1",
+                "slug": "college-football/player/882856/jalen-mccleskey",
+                "id": 882856,
+                "league": { "name": "College Football", "abbreviation": "NCAAF" },
+                "stats": {
+                  "yards": { "name": "yards", "abbreviation": "Yds", "value": 67 },
+                  "touchdowns": { "name": "touchdowns", "abbreviation": "TD", "value": 1 }
+                }
+              }
+            ]
+          },
+          "rushing": {
+            "name": "yards",
+            "abbreviation": "Yds",
+            "value": 91,
+            "players": [
+              {
+                "name": { "first": "Justin", "last": "McMillan" },
+                "uniform": "12",
+                "slug": "college-football/player/865538/justin-mcmillan",
+                "id": 865538,
+                "league": { "name": "College Football", "abbreviation": "NCAAF" },
+                "stats": {
+                  "yards": { "name": "yards", "abbreviation": "Yds", "value": 91 },
+                  "touchdowns": { "name": "touchdowns", "abbreviation": "TD", "value": 1 }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 3485,
+        "name": "Cougars",
+        "abbreviation": "Hou",
+        "location": { "name": "Houston", "type": "away" },
+        "title": "Houston Cougars",
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/football/cfb/logos/",
+          "cuts": {
+            "default": "hou_50.png",
+            "50x50": "hou_50.png",
+            "100x100": "hou_100.png",
+            "100x100_light": "hou_100_stroke.png",
+            "360x360": "hou_360.png",
+            "250x250": "hou_250.png",
+            "150x150": "hou_150.png",
+            "40x40": "hou_40.png",
+            "40x40_light": "hou_40_stroke.png"
+          }
+        },
+        "color": { "primary": "#C90822", "secondary": "#00529C" },
+        "slug": "college-football/team/houston-cougars",
+        "record": {
+          "wins": 1,
+          "losses": 2,
+          "ties": 0,
+          "percentage": ".333",
+          "conferenceWins": 0,
+          "conferenceLosses": 0
+        },
+        "score": 28,
+        "timeouts_left": 3,
+        "possession": true,
+        "is_winner": false,
+        "linescores": [
+          { "period": { "id": 1, "name": "1st", "unit": "Quarter", "full_name": "1st" }, "score": 14 },
+          { "period": { "id": 2, "name": "2nd", "unit": "Quarter", "full_name": "2nd" }, "score": 14 },
+          { "period": { "id": 3, "name": "3rd", "unit": "Quarter", "full_name": "3rd" }, "score": 0 },
+          { "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th" }, "score": 0 }
+        ],
+        "college_sub_division": { "name": "FBS", "id": 1 },
+        "conference": { "name": "American Athletic Conference", "abbreviation": "AAC", "id": 122 },
+        "division": { "name": "West Division", "id": 2 },
+        "taxonomy": {
+          "teams": "ncaaf-houston-cougars",
+          "airship": [
+            { "name": "Game Start", "tag": "events::ncaaf-houston-cougars-1" },
+            { "name": "Quarter", "tag": "events::ncaaf-houston-cougars-2" },
+            { "name": "Scoring Plays", "tag": "events::ncaaf-houston-cougars-3" },
+            { "name": "Final", "tag": "events::ncaaf-houston-cougars-4" },
+            { "name": "Team News", "tag": "teams::ncaaf-houston-cougars" }
+          ]
+        },
+        "leaders": {
+          "passing": {
+            "name": "yards",
+            "abbreviation": "Yds",
+            "value": 225,
+            "players": [
+              {
+                "name": { "first": "D'Eriq", "last": "King" },
+                "uniform": "4",
+                "slug": "college-football/player/921395/deriq-king",
+                "id": 921395,
+                "league": { "name": "College Football", "abbreviation": "NCAAF" },
+                "stats": {
+                  "yards": { "name": "yards", "abbreviation": "Yds", "value": 225 },
+                  "touchdowns": { "name": "touchdowns", "abbreviation": "TD", "value": 2 }
+                }
+              }
+            ]
+          },
+          "receiving": {
+            "name": "yards",
+            "abbreviation": "Yds",
+            "value": 95,
+            "players": [
+              {
+                "name": { "first": "Marquez", "last": "Stevenson" },
+                "uniform": "5",
+                "slug": "college-football/player/921399/marquez-stevenson",
+                "id": 921399,
+                "league": { "name": "College Football", "abbreviation": "NCAAF" },
+                "stats": {
+                  "yards": { "name": "yards", "abbreviation": "Yds", "value": 95 },
+                  "touchdowns": { "name": "touchdowns", "abbreviation": "TD", "value": 1 }
+                }
+              }
+            ]
+          },
+          "rushing": {
+            "name": "yards",
+            "abbreviation": "Yds",
+            "value": 69,
+            "players": [
+              {
+                "name": { "first": "D'Eriq", "last": "King" },
+                "uniform": "4",
+                "slug": "college-football/player/921395/deriq-king",
+                "id": 921395,
+                "league": { "name": "College Football", "abbreviation": "NCAAF" },
+                "stats": {
+                  "yards": { "name": "yards", "abbreviation": "Yds", "value": 69 },
+                  "touchdowns": { "name": "touchdowns", "abbreviation": "TD", "value": 1 }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "alert_types": [
+      { "name": "Game Start", "airship": "events::1568937600-2128323-1" },
+      { "name": "Quarter", "airship": "events::1568937600-2128323-2" },
+      { "name": "Scoring Play", "airship": "events::1568937600-2128323-3" },
+      { "name": "Final", "airship": "events::1568937600-2128323-4" }
+    ],
+    "last_play": {
+      "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th" },
+      "time": "13:54",
+      "down": "1",
+      "distance": "10",
+      "yard_line": "Hou47",
+      "end_yard_line": "Hou46",
+      "text": "D'Eriq King pass to the middle to Shane Creamer for a loss of 1 yard to the Hou46."
+    },
+    "scoring_summaries": [
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Quarter", "full_name": "1st" },
+        "scores": [
+          {
+            "time": "14:46",
+            "id": 3485,
+            "text": "Marquez Stevenson 75 yd pass from D'Eriq King (Dalton Witherspoon kick)",
+            "score_type": { "name": "Passing TD", "id": 2 },
+            "current_score": { "leader_team_id": 3485, "leading_score": 7, "trailing_score": 0 }
+          },
+          {
+            "time": "7:24",
+            "id": 3511,
+            "text": "Jalen McCleskey 38 yd pass from Justin McMillan (Merek Glover kick)",
+            "score_type": { "name": "Passing TD", "id": 2 },
+            "current_score": { "leading_score": 7, "trailing_score": 7 }
+          },
+          {
+            "time": "3:25",
+            "id": 3485,
+            "text": "Kyle Porter 1 yd run (Dalton Witherspoon kick)",
+            "score_type": { "name": "Rushing TD", "id": 1 },
+            "current_score": { "leader_team_id": 3485, "leading_score": 14, "trailing_score": 7 }
+          }
+        ]
+      },
+      {
+        "period": { "id": 2, "name": "2nd", "unit": "Quarter", "full_name": "2nd" },
+        "scores": [
+          {
+            "time": "14:35",
+            "id": 3485,
+            "text": "Keith Corbin 28 yd pass from D'Eriq King (Dalton Witherspoon kick)",
+            "score_type": { "name": "Passing TD", "id": 2 },
+            "current_score": { "leader_team_id": 3485, "leading_score": 21, "trailing_score": 7 }
+          },
+          {
+            "time": "13:16",
+            "id": 3485,
+            "text": "D'Eriq King 35 yd run (Dalton Witherspoon kick)",
+            "score_type": { "name": "Rushing TD", "id": 1 },
+            "current_score": { "leader_team_id": 3485, "leading_score": 28, "trailing_score": 7 }
+          },
+          {
+            "time": "10:11",
+            "id": 3511,
+            "text": "Stephon Huderson 9 yd run (Merek Glover kick)",
+            "score_type": { "name": "Rushing TD", "id": 1 },
+            "current_score": { "leader_team_id": 3485, "leading_score": 28, "trailing_score": 14 }
+          }
+        ]
+      },
+      {
+        "period": { "id": 3, "name": "3rd", "unit": "Quarter", "full_name": "3rd" },
+        "scores": [
+          {
+            "time": "12:53",
+            "id": 3511,
+            "text": "Darnell Mooney 48 yd pass from Justin McMillan (Merek Glover kick)",
+            "score_type": { "name": "Passing TD", "id": 2 },
+            "current_score": { "leader_team_id": 3485, "leading_score": 28, "trailing_score": 21 }
+          }
+        ]
+      },
+      {
+        "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th" },
+        "scores": [
+          {
+            "time": "14:22",
+            "id": 3511,
+            "text": "Justin McMillan 15 yd run (Merek Glover kick)",
+            "score_type": { "name": "Rushing TD", "id": 1 },
+            "current_score": { "leading_score": 28, "trailing_score": 28 }
+          }
+        ]
+      }
+    ],
+    "links": [
+      { "name": "Recap", "url": "https://www.si.com/college-football/game/2128323", "id": 1 },
+      { "name": "Box Score", "url": "https://www.si.com/college-football/game/2128323/box-score", "id": 2 },
+      { "name": "Play-by-Play", "url": "https://www.si.com/college-football/game/2128323/play-by-play", "id": 3 }
+    ],
+    "editorial": { "has_preview": false, "has_recap": false, "has_bullets": false, "has_odds": false }
+  }
+}
