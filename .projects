@@ -1,6 +1,7 @@
 functions/admin
 functions/analytics
 functions/app
+functions/game
 functions/job
 functions/lead
 functions/location
