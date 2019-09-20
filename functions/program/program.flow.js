@@ -389,7 +389,7 @@ function getGameStatus(result: SiResult): GameStatus {
 
   gameStatus.ended = false;
   gameStatus.blowout = true;
-  gameStatus.status = 'USC 40, UCLA 11 - 3rd quarter 12:44';
+  gameStatus.description = 'USC 40, UCLA 11 - 3rd quarter 12:44';
   return gameStatus;
 }
 
