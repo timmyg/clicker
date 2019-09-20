@@ -387,8 +387,8 @@ function getGameStatus(result: SiResult): GameStatus {
   const gameStatus = new GameStatus();
   // check if game has ended
 
-  gameStatus.ended = false;
-  gameStatus.blowout = true;
+  gameStatus.ended = true;
+  gameStatus.blowout = false;
   gameStatus.description = 'USC 40, UCLA 11 - 3rd quarter 12:44';
   return gameStatus;
 }
