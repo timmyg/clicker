@@ -63,32 +63,35 @@ module.exports.updateGameStatus = async (event: any) => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   // TODO shouldnt be all games
-  let allGames = await base('Games').all();
-  if (allGames.length) {
-    for (const game of allGames) {
-      console.log({ game });
-      const siWebUrl: string = game.get('Scores Link');
-      const gameOver: boolean = game.get('Game Over');
-      const blowout: boolean = game.get('Blowout');
-      const gameId: string = game.id;
-      const { data } = await invokeFunctionSync(
-        `job-${process.env.stage}-getGameStatus`,
-        { url: siWebUrl },
-        null,
-        event.headers,
-        null,
-        'us-east-1',
-      );
-      console.log({ data });
-      const gameStatus: GameStatus = data;
-      console.log({ gameStatus });
-      await base('Games').update(gameId, {
-        'Game Status': gameStatus.description,
-        'Game Over': gameStatus.ended,
-        Blowout: gameStatus.blowout,
-      });
-    }
-  }
+  let allGames = await base('Games')
+    .select({})
+    .eachPage(async (allGames, fetchNextPage) => {
+      if (allGames.length) {
+        for (const game of allGames) {
+          console.log({ game });
+          const siWebUrl: string = game.get('Scores Link');
+          const gameOver: boolean = game.get('Game Over');
+          const blowout: boolean = game.get('Blowout');
+          const gameId: string = game.id;
+          const { data } = await invokeFunctionSync(
+            `job-${process.env.stage}-getGameStatus`,
+            { url: siWebUrl },
+            null,
+            event.headers,
+            null,
+            'us-east-1',
+          );
+          console.log({ data });
+          const gameStatus: GameStatus = data;
+          console.log({ gameStatus });
+          await base('Games').update(gameId, {
+            'Game Status': gameStatus.description,
+            'Game Over': gameStatus.ended,
+            Blowout: gameStatus.blowout,
+          });
+        }
+      }
+    });
   return respond(200);
 };
 
