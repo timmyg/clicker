@@ -74,7 +74,6 @@ function transformGame(result: SiResult): GameStatus {
     gameStatus.ended = false;
   } else if (status === 'Pre-Game') {
     gameStatus.started = false;
-    gameStatus.ended = false;
   } else {
     console.error(`unknown result status: ${status}`);
   }

@@ -13,6 +13,7 @@ declare class process {
 }
 
 class GameStatus {
+  started: boolean;
   ended: boolean;
   blowout: boolean;
   description: string;
@@ -88,6 +89,7 @@ module.exports.updateGameStatus = async (event: any) => {
           await base('Games').update(gameId, {
             'Game Status': gameStatus.description,
             'Game Over': gameStatus.ended,
+            Started: gameStatus.started,
             Blowout: gameStatus.blowout,
           });
         }
