@@ -367,11 +367,13 @@ function rank(program) {
 }
 
 module.exports.getGameStatus = async (event: any) => {
+  console.log('getGameStatus');
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
 
   const method = 'get';
   const options = { method, url: apiUrl };
+  console.log({ options });
   const result = await axios(options);
   console.log({ result });
   const gameStatus: GameStatus = getGameStatus(result.data);
