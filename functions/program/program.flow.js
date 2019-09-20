@@ -593,4 +593,3 @@ module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
 module.exports.transformSIUrl = transformSIUrl;
-module.exports.getGameStatus = getGameStatus;
