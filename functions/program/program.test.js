@@ -81,35 +81,35 @@ describe('getGameStatus', () => {
   describe('correctly identifies active, blowout game', () => {
     test('football', () => {
       const data = require('../.resources/games/mlb-upcoming.json');
-      const { active, blowout } = getGameStatus(data);
-      expect(active).toBeFalsy();
-      expect(active).toBeTruthy();
+      const { ended, blowout } = getGameStatus(data);
+      expect(ended).toBeFalsy();
+      expect(ended).toBeTruthy();
     });
     test('baseball', () => {
       const data = require('../.resources/games/mlb-upcoming.json');
-      const { active, blowout } = getGameStatus(data);
-      expect(active).toBeFalsy();
-      expect(active).toBeTruthy();
+      const { ended, blowout } = getGameStatus(data);
+      expect(ended).toBeFalsy();
+      expect(ended).toBeTruthy();
     });
     test('basketball', () => {
       const data = require('../.resources/games/mlb-upcoming.json');
-      const { active, blowout } = getGameStatus(data);
-      expect(active).toBeFalsy();
-      expect(active).toBeTruthy();
+      const { ended, blowout } = getGameStatus(data);
+      expect(ended).toBeFalsy();
+      expect(ended).toBeTruthy();
     });
   });
 
-  test('correctly identifies inactive game', () => {
+  test('correctly identifies ended game', () => {
     const data = require('../.resources/games/mlb-upcoming.json');
-    const { active, blowout } = getGameStatus(data);
-    expect(active).toBeFalsy();
-    expect(active).toBeTruthy();
+    const { ended, blowout } = getGameStatus(data);
+    expect(ended).toBeFalsy();
+    expect(ended).toBeTruthy();
   });
 
-  test('correctly identifies active, non-blowout game', () => {
+  test('correctly identifies ended, non-blowout game', () => {
     const data = require('../.resources/games/mlb-upcoming.json');
-    const { active, blowout } = getGameStatus(data);
-    expect(active).toBeFalsy();
-    expect(active).toBeTruthy();
+    const { ended, blowout } = getGameStatus(data);
+    expect(ended).toBeFalsy();
+    expect(ended).toBeTruthy();
   });
 });

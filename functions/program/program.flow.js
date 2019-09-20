@@ -59,7 +59,7 @@ class SiResult {
 }
 
 class GameStatus {
-  active: boolean;
+  ended: boolean;
   blowout: boolean;
 }
 
@@ -379,9 +379,10 @@ module.exports.getGameStatus = async (event: any) => {
 
 function getGameStatus(result: SiResult): GameStatus {
   const siGame: SiGame = result.data;
-
   const gameStatus = new GameStatus();
-  gameStatus.active = false;
+  // check if game has ended
+
+  gameStatus.ended = false;
   gameStatus.blowout = false;
   return gameStatus;
 }
