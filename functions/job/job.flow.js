@@ -66,6 +66,7 @@ module.exports.updateGameStatus = async (event: any) => {
   let allGames = await base('Games')
     .select({})
     .eachPage(async (allGames, fetchNextPage) => {
+      console.log('allGames', allGames.length);
       if (allGames.length) {
         for (const game of allGames) {
           console.log({ game });
@@ -90,6 +91,7 @@ module.exports.updateGameStatus = async (event: any) => {
             Blowout: gameStatus.blowout,
           });
         }
+        fetchNextPage();
       }
     });
   return respond(200);
