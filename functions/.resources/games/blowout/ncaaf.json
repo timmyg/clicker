@@ -21,7 +21,7 @@
       "country": { "name": "United States", "abbreviation": "USA" }
     },
     "status": {
-      "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th", "time": "13:18" },
+      "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th", "time": "2:18" },
       "teamPossessionId": 3485,
       "yardsFromGoal": 54,
       "down": 2,
@@ -62,7 +62,7 @@
           "conferenceWins": 0,
           "conferenceLosses": 0
         },
-        "score": 28,
+        "score": 38,
         "timeouts_left": 3,
         "possession": false,
         "is_winner": false,
@@ -172,7 +172,7 @@
           "conferenceWins": 0,
           "conferenceLosses": 0
         },
-        "score": 28,
+        "score": 21,
         "timeouts_left": 3,
         "possession": true,
         "is_winner": false,

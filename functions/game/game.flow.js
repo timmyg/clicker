@@ -64,7 +64,8 @@ function transformGame(result: SiResult): GameStatus {
   const gameStatus = new GameStatus();
   const { name: status } = game.status;
 
-  // set started/ended
+  console.log({ status });
+  // set started, ended
   if (status === 'Final') {
     gameStatus.started = true;
     gameStatus.ended = true;
@@ -78,52 +79,61 @@ function transformGame(result: SiResult): GameStatus {
     console.error(`unknown result status: ${status}`);
   }
 
-  // set blowout
   const { abbreviation: leageAbbreviation } = game.league;
   const [homeTeam, awayTeam] = game.teams; // looks like first team is always home
-  if (leageAbbreviation === 'NCAAF') {
-    // 6:00 left in 4th quarter and 17+ point difference
-    const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
-    const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 17;
-    if (isNearEnd && isBlowout) {
-      gameStatus.blowout = true;
-    }
-  } else if (leageAbbreviation === 'NFL') {
-    // 8:00 left in 4th quarter and 22+ point difference
-    const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 8;
-    const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 22;
-    if (isNearEnd && isBlowout) {
-      gameStatus.blowout = true;
-    }
-  } else if (leageAbbreviation === 'MLB') {
-    // 8th inning and 5+ run difference
-    const isNearEnd = game.status.inning >= 8;
-    const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 5;
-    if (isNearEnd && isBlowout) {
-      gameStatus.blowout = true;
-    }
-  } else if (leageAbbreviation === 'NCAAB') {
-    // 8:00 left in 2nd half and 20+ point difference
-    const isNearEnd = game.status.period.id === 2 && +game.status.period.time.split(':')[0] <= 8;
-    const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 20;
-    if (isNearEnd && isBlowout) {
-      gameStatus.blowout = true;
-    }
-  } else if (leageAbbreviation === 'NBA') {
-    // 6:00 left in 4th quarter and 25+ point difference
-    const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
-    const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 25;
-    if (isNearEnd && isBlowout) {
-      gameStatus.blowout = true;
+  // set blowout
+  if (status === 'In-Progress') {
+    if (leageAbbreviation === 'NCAAF') {
+      // 6:00 left in 4th quarter and 17+ point difference
+      const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 17;
+      console.log('NCAAF!!!!', homeTeam.score, awayTeam.score);
+      if (isNearEnd && isBlowout) {
+        gameStatus.blowout = true;
+      }
+    } else if (leageAbbreviation === 'NFL') {
+      // 8:00 left in 4th quarter and 22+ point difference
+      const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 8;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 22;
+      if (isNearEnd && isBlowout) {
+        gameStatus.blowout = true;
+      }
+    } else if (leageAbbreviation === 'MLB') {
+      // 8th inning and 5+ run difference
+      const isNearEnd = game.status.inning >= 8;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 5;
+      if (isNearEnd && isBlowout) {
+        gameStatus.blowout = true;
+      }
+    } else if (leageAbbreviation === 'NCAAB') {
+      // 8:00 left in 2nd half and 20+ point difference
+      const isNearEnd = game.status.period.id === 2 && +game.status.period.time.split(':')[0] <= 8;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 20;
+      if (isNearEnd && isBlowout) {
+        gameStatus.blowout = true;
+      }
+    } else if (leageAbbreviation === 'NBA') {
+      // 6:00 left in 4th quarter and 25+ point difference
+      const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 25;
+      if (isNearEnd && isBlowout) {
+        gameStatus.blowout = true;
+      }
     }
   }
 
   // set description
-  gameStatus.description = `${awayTeam.abbreviation} ${awayTeam.score} @ ${homeTeam.abbreviation}`;
-  if (['NFL', 'NCAAF', 'NCAAB', 'NBA'].includes(leageAbbreviation)) {
-    gameStatus.description += ` (${game.status.period.time} ${game.status.period.name})`;
-  } else if (['MLB'].includes(leageAbbreviation)) {
-    gameStatus.description += ` (${game.status.inning_division} ${game.status.inning_division})`;
+  gameStatus.description = `${awayTeam.abbreviation} ${awayTeam.score} @ ${homeTeam.abbreviation} ${homeTeam.score}`;
+  if (status === 'In-Progress') {
+    if (['NFL', 'NCAAF', 'NCAAB', 'NBA'].includes(leageAbbreviation)) {
+      gameStatus.description += ` (${game.status.period.time} ${game.status.period.name})`;
+    } else if (['MLB'].includes(leageAbbreviation)) {
+      gameStatus.description += ` (${game.status.inning_division} ${game.status.inning})`;
+    }
+  } else if (status === 'Final') {
+    gameStatus.description += ` (Final)`;
+  } else if (status === 'Pre-Game') {
+    gameStatus.description += ` (Pre-Game)`;
   }
 
   return gameStatus;

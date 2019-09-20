@@ -42,11 +42,11 @@
         },
         "status": {
             "period": {
-                "id": 1,
-                "name": "1st",
+                "id": 2,
+                "name": "2nd",
                 "unit": "Quarter",
-                "full_name": "1st",
-                "time": "13:22"
+                "full_name": "2nd",
+                "time": "4:22"
             },
             "teamPossessionId": 365,
             "yardsFromGoal": 66,
@@ -314,7 +314,7 @@
                     "ties": 0,
                     "percentage": ".500"
                 },
-                "score": 0,
+                "score": 22,
                 "timeouts_left": 3,
                 "possession": false,
                 "is_winner": false,

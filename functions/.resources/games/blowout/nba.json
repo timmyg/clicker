@@ -62,7 +62,7 @@
         "name": "4th",
         "unit": "Quarter",
         "full_name": "4th",
-        "time": "8:04"
+        "time": "5:51"
       },
       "name": "In-Progress",
       "id": 2,
@@ -170,7 +170,7 @@
           "ties": 0,
           "is_series_winner": false
         },
-        "score": 83,
+        "score": 103,
         "is_winner": false,
         "taxonomy": {
           "teams": "nba-houston-rockets",
