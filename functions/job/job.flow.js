@@ -76,7 +76,7 @@ module.exports.updateGameStatus = async (event: any) => {
           const blowout: boolean = game.get('Blowout');
           const gameId: string = game.id;
           const { data } = await invokeFunctionSync(
-            `games-${process.env.stage}-getStatus`,
+            `game-${process.env.stage}-getStatus`,
             { url: siWebUrl },
             null,
             event.headers,
