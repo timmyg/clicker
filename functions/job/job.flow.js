@@ -76,23 +76,25 @@ module.exports.updateGameStatus = async (event: any) => {
             const gameOver: boolean = game.get('Game Over');
             const blowout: boolean = game.get('Blowout');
             const gameId: string = game.id;
-            const { data } = await invokeFunctionSync(
-              `game-${process.env.stage}-getStatus`,
-              { url: siWebUrl },
-              null,
-              event.headers,
-              null,
-              'us-east-1',
-            );
-            console.log({ data });
-            const gameStatus: GameStatus = data;
-            console.log({ gameStatus });
-            await base('Games').update(gameId, {
-              'Game Status': gameStatus.description,
-              'Game Over': gameStatus.ended,
-              Started: gameStatus.started,
-              Blowout: gameStatus.blowout,
-            });
+            if (siWebUrl) {
+              const { data } = await invokeFunctionSync(
+                `game-${process.env.stage}-getStatus`,
+                { url: siWebUrl },
+                null,
+                event.headers,
+                null,
+                'us-east-1',
+              );
+              console.log({ data });
+              const gameStatus: GameStatus = data;
+              console.log({ gameStatus });
+              await base('Games').update(gameId, {
+                'Game Status': gameStatus.description,
+                'Game Over': gameStatus.ended,
+                Started: gameStatus.started,
+                Blowout: gameStatus.blowout,
+              });
+            }
           }
           fetchNextPage();
         }
