@@ -271,7 +271,7 @@ functions:
     handler: location.checkAllBoxesInfo
     timeout: 30
     events:
-      - schedule: rate(5 minutes)
+      # - schedule: rate(5 minutes)
       - http:
           path: boxes/info
           method: post
