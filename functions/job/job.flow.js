@@ -64,39 +64,48 @@ module.exports.updateGameStatus = async (event: any) => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   // TODO shouldnt be all games
-  let allGames = await base('Games')
-    .select({})
-    .eachPage(async (allGames, fetchNextPage) => {
-      console.log('allGames', allGames.length);
-      if (allGames.length) {
-        for (const game of allGames) {
-          console.log({ game });
-          const siWebUrl: string = game.get('Scores Link');
-          const gameOver: boolean = game.get('Game Over');
-          const blowout: boolean = game.get('Blowout');
-          const gameId: string = game.id;
-          const { data } = await invokeFunctionSync(
-            `games-${process.env.stage}-getStatus`,
-            { url: siWebUrl },
-            null,
-            event.headers,
-            null,
-            'us-east-1',
-          );
-          console.log({ data });
-          const gameStatus: GameStatus = data;
-          console.log({ gameStatus });
-          await base('Games').update(gameId, {
-            'Game Status': gameStatus.description,
-            'Game Over': gameStatus.ended,
-            Started: gameStatus.started,
-            Blowout: gameStatus.blowout,
-          });
+  try {
+    let allGames = await base('Games')
+      .select({
+        view: 'Score Update',
+      })
+      .eachPage(async (allGames, fetchNextPage) => {
+        console.log('allGames', allGames.length);
+        if (allGames.length) {
+          for (const game of allGames) {
+            console.log({ game });
+            const siWebUrl: string = game.get('Scores Link');
+            const gameOver: boolean = game.get('Game Over');
+            const blowout: boolean = game.get('Blowout');
+            const gameId: string = game.id;
+            // if (siWebUrl) {
+            const { data } = await invokeFunctionSync(
+              `game-${process.env.stage}-getStatus`,
+              { url: siWebUrl },
+              null,
+              event.headers,
+              null,
+              'us-east-1',
+            );
+            console.log({ data });
+            const gameStatus: GameStatus = data;
+            console.log({ gameStatus });
+            await base('Games').update(gameId, {
+              'Game Status': gameStatus.description,
+              'Game Over': gameStatus.ended,
+              Started: gameStatus.started,
+              Blowout: gameStatus.blowout,
+            });
+            // }
+          }
+          fetchNextPage();
         }
-        fetchNextPage();
-      }
-    });
-  return respond(200);
+      });
+    return respond(200);
+  } catch (e) {
+    console.error(e);
+    return respond(400, e);
+  }
 };
 
 module.exports.controlCenter = async (event: any) => {
