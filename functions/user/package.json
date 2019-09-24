@@ -4,7 +4,8 @@
   "description": "",
   "main": "user.js",
   "scripts": {
-    "test": "jest --coverage",
+    "build": "npx flow-remove-types user.flow.js -o user.js",
+    "test": "npm run build && jest --coverage",
     "invoke:health": "serverless invoke local --function health",
     "invoke:create": "serverless invoke local --function create --path ../.resources/data/user.json",
     "invoke:getWallet": "serverless invoke local --function getWallet --path ../.resources/data/user.json",
@@ -16,12 +17,14 @@
     "dotenv": "^8.0.0",
     "dynamoose": "^1.7.2",
     "jsonwebtoken": "^8.5.1",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7",
     "stripe": "^6.31.1",
     "twilio": "^3.33.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
     "jest": "^24.0.0",
     "serverless": "^1.36.3",
     "serverless-domain-manager": "^2.6.13",

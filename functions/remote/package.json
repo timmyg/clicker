@@ -4,7 +4,8 @@
   "description": "",
   "main": "remote.js",
   "scripts": {
-    "test": "jest --coverage",
+    "build": "npx flow-remove-types remote.flow.js -o remote.js",
+    "test": "npm run build && jest --coverage",
     "invoke:channel": "serverless invoke local --function command --path ../.resources/data/remote-channel.json",
     "invoke:key": "serverless invoke local --function command --path ../.resources/data/remote-key.json",
     "invoke:boxes": "serverless invoke local --function command --path ../.resources/data/remote-boxes.json"
@@ -17,6 +18,8 @@
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7"
   },
   "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
     "jest": "^24.0.0",
     "serverless": "1.38.0",
     "serverless-domain-manager": "^2.6.13",

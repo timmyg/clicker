@@ -1,6 +1,13 @@
 require('dotenv').config({ path: '../.env.example' });
 const moment = require('moment');
-const { build, generateId, getLocalChannelName, getChannels, getChannelsWithMinor } = require('./program');
+const {
+  build,
+  generateId,
+  getLocalChannelName,
+  getChannels,
+  getChannelsWithMinor,
+  transformSIUrl,
+} = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
 
