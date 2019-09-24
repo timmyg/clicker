@@ -1,1 +1,12 @@
 endpoints.txt
+admin.js
+analytics.js
+app.js
+game.js
+job.js
+lead.js
+location.js
+program.js
+remote.js
+reservation.js
+user.js

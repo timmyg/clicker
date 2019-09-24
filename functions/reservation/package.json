@@ -4,7 +4,8 @@
   "description": "",
   "main": "reservation.js",
   "scripts": {
-    "test": "jest --coverage",
+    "build": "npx flow-remove-types reservation.flow.js -o reservation.js",
+    "test": "npm run build && jest --coverage",
     "invoke:active": "serverless invoke local --function active --path ../.resources/data/reservation.json",
     "invoke:all": "serverless invoke local --function all --path ../.resources/data/reservation.json",
     "invoke:create": "serverless invoke local --function create --path ../.resources/data/reservation.json",
@@ -20,9 +21,11 @@
     "dotenv": "^8.0.0",
     "dynamoose": "^1.7.2",
     "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7"
   },
   "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
     "jest": "^24.0.0",
     "serverless": "^1.36.3",
     "serverless-domain-manager": "^2.6.13",

@@ -1,7 +1,17 @@
+// @flow
 const losantApi = require('losant-rest');
 const { respond, getBody, invokeFunctionAsync, invokeFunctionSync } = require('serverless-helpers');
 
+declare class process {
+  static env: {
+    stage: string,
+    losantAccessToken: string,
+    losantAppId: string,
+  };
+}
+
 class LosantApi {
+  client: any;
   constructor() {
     this.client = losantApi.createClient({ accessToken: process.env.losantAccessToken });
   }
@@ -23,11 +33,11 @@ class LosantApi {
   }
 }
 
-module.exports.health = async => {
+module.exports.health = async (event: any) => {
   return respond();
 };
 
-module.exports.command = async event => {
+module.exports.command = async (event: any) => {
   try {
     const { command, key, reservation, source } = getBody(event);
     const { losantId, id: locationId } = reservation.location;
@@ -86,7 +96,7 @@ module.exports.command = async event => {
   }
 };
 
-module.exports.checkBoxInfo = async event => {
+module.exports.checkBoxInfo = async (event: any) => {
   try {
     const { losantId, boxId, ip, client } = getBody(event);
     const api = new LosantApi();
@@ -101,7 +111,7 @@ module.exports.checkBoxInfo = async event => {
   }
 };
 
-module.exports.debug = async event => {
+module.exports.debug = async (event: any) => {
   try {
     const { command, payload, losantId } = getBody(event);
     const api = new LosantApi();

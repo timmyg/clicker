@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "build": "npx flow-remove-types program.flow.js -o program.js",
-    "flow": "flow",
     "test": "npm run build && jest --coverage",
     "invoke:pull": "serverless invoke local --function pull",
     "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",
@@ -21,7 +20,7 @@
     "dynamoose": "^1.5.2",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.4",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

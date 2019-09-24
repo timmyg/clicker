@@ -105,6 +105,9 @@ jobs:
   functions/app:
     working_directory: ~/clicker/functions/app
     <<: *serverless_build_test_deploy
+  functions/game:
+    working_directory: ~/clicker/functions/game
+    <<: *serverless_build_test_deploy
   functions/job:
     working_directory: ~/clicker/functions/job
     <<: *serverless_build_test_deploy

@@ -101,15 +101,15 @@ class Widget {
               },
             );
             break;
-          // case 'info.current':
-          //   this.remote.getTuned(payload.client || '0', (err, response) => {
-          //     if (err) return logger.error(JSON.stringify(err));
-          //     logger.info('info.current!!');
-          //     logger.info(JSON.stringify(response), payload);
-          //     context.api.saveBoxInfo(payload.boxId, response);
-          //     return;
-          //   });
-          //   break;
+          case 'info.current':
+            this.remote.getTuned(payload.client || '0', (err, response) => {
+              if (err) return logger.error(JSON.stringify(err));
+              logger.info('info.current!!');
+              logger.info(JSON.stringify(response), payload);
+              context.api.saveBoxInfo(payload.boxId, response);
+              return;
+            });
+            break;
           // available endpoints
           case 'options':
             this.remote.getOptions((err, response) => {

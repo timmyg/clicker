@@ -1,3 +1,4 @@
+// @flow
 require('dotenv').config();
 const axios = require('axios');
 
@@ -9,21 +10,21 @@ const plans = [
 ];
 const timeframes = [{ tokens: 0, minutes: 0 }, { tokens: 1, minutes: 30 }, { tokens: 2, minutes: 60 }];
 
-module.exports.health = async event => {
+module.exports.health = async (event: any) => {
   return respond(200, `hello`);
 };
 
-module.exports.buy = async event => {
+module.exports.buy = async (event: any) => {
   return respond(200, plans);
 };
 
-module.exports.timeframes = async event => {
+module.exports.timeframes = async (event: any) => {
   console.log(event.queryStringParameters.locationId);
   // locationId should be available in query params
   return respond(200, timeframes);
 };
 
-// module.exports.blogPostUpdated = async event => {
+// module.exports.blogPostUpdated = async (event: any) => {
 //   const stage = process.env.stage;
 //   console.log(stage);
 //   if (stage === 'prod') {

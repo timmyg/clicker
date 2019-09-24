@@ -1,0 +1,28 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx flow-remove-types game.flow.js -o game.js",
+    "test": "npm run build && jest --coverage",
+    "invoke:score": "serverless invoke local --function getStatus --path ../.resources/data/si-url.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
+    "moment": "^2.24.0",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
+    "jest": "^24.1.0",
+    "serverless": "^1.37.0",
+    "serverless-domain-manager": "^2.6.13",
+    "serverless-prune-plugin": "^1.4.0"
+  }
+}

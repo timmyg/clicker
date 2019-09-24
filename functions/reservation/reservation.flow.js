@@ -1,7 +1,15 @@
+// @flow
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const { getUserId, getBody, getPathParameters, invokeFunctionSync, respond, track } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+
+declare class process {
+  static env: {
+    stage: string,
+    tableReservation: string,
+  };
+}
 
 const Reservation = dynamoose.model(
   process.env.tableReservation,
@@ -63,11 +71,11 @@ const Reservation = dynamoose.model(
 //   return false;
 // });
 
-module.exports.health = async event => {
+module.exports.health = async (event: any) => {
   return respond(200, `hello`);
 };
 
-module.exports.create = async event => {
+module.exports.create = async (event: any) => {
   let reservation = getBody(event);
   const { cost } = reservation;
   reservation.userId = getUserId(event);
@@ -118,7 +126,7 @@ module.exports.create = async event => {
   const statusCode = result.statusCode;
   console.timeEnd('deduct transaction');
   if (statusCode >= 400) {
-    const messsage = result.data.message;
+    const message: string = result.data.message;
     return respond(statusCode, message);
   }
 
@@ -145,7 +153,7 @@ module.exports.create = async event => {
   return respond(201, reservation);
 };
 
-module.exports.update = async event => {
+module.exports.update = async (event: any) => {
   const { id } = getPathParameters(event);
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
@@ -215,7 +223,7 @@ module.exports.update = async event => {
   return respond(200, `hello`);
 };
 
-module.exports.activeByUser = async event => {
+module.exports.activeByUser = async (event: any) => {
   const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
@@ -235,7 +243,7 @@ module.exports.activeByUser = async event => {
   return respond(200, []);
 };
 
-module.exports.get = async event => {
+module.exports.get = async (event: any) => {
   const userId = getUserId(event);
   const params = getPathParameters(event);
   const { id } = params;
@@ -244,7 +252,7 @@ module.exports.get = async event => {
   return respond(200, reservation);
 };
 
-module.exports.cancel = async event => {
+module.exports.cancel = async (event: any) => {
   const userId = getUserId(event);
   const { id } = getPathParameters(event);
 

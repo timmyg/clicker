@@ -1,3 +1,4 @@
+// @flow
 require('dotenv').config();
 const { respond, getBody } = require('serverless-helpers');
 const Hubspot = require('hubspot');
@@ -7,7 +8,7 @@ const trello = new Trello(process.env.trelloApiKey, process.env.trelloAuthToken)
 const stage = process.env.stage;
 const webSignupsListId = '5ca63bbb28858a47be1b5f9a';
 
-module.exports.create = async event => {
+module.exports.create = async (event: any) => {
   const body = getBody(event);
   const { email } = body;
   if (stage === 'prod') {
@@ -18,7 +19,7 @@ module.exports.create = async event => {
   return respond(201, "not prod so didn't actually create anything");
 };
 
-module.exports.health = async event => {
+module.exports.health = async (event: any) => {
   return respond(200, `hello`);
 };
 
