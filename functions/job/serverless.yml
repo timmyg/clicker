@@ -82,7 +82,7 @@ functions:
     handler: job.controlCenterDailyInit
     timeout: 30
     events:
-      - schedule: cron(0 12 * * ? *) # every day @ 8am eastern
+      - schedule: cron(59 9 * * ? *) # every day @ 5:59am eastern
       - http:
           path: 'control-center/daily'
           method: post
