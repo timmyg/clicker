@@ -73,9 +73,9 @@
         <div class="footer-bottom space-between text-xxs invert-order-desktop">
           <nav class="footer-nav">
             <ul class="list-reset">
-              <li>
+              <!-- <li>
                 <a href="/blog">Blog</a>
-              </li>
+              </li> -->
               <li>
                 <a href="/brand">Brand</a>
               </li>
