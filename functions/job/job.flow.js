@@ -141,7 +141,7 @@ module.exports.controlCenter = async (event: any) => {
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
         // lockedUntil is either Blowout or Game Over
-        if (lockedUntil === 'Blowout' && !blowout) {
+        if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
           continue;
