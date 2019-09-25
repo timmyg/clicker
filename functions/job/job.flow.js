@@ -124,12 +124,14 @@ module.exports.controlCenter = async (event: any) => {
   if (games.length) {
     // loop through games
     for (const game of games) {
+      console.log(game);
+      const waitOn: string[] = game.get('Wait On');
       const regions: string[] = game.get('Regions');
       const channel: string = game.get('Channel');
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
       const gameId: string = game.id;
-      console.log(`searching for locations for:`, { regions, channel, zones });
+      console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
