@@ -187,7 +187,7 @@ module.exports.controlCenter = async (event: any) => {
       // mark game as completed on airtable
       // TODO maybe delete in future?
       await base('Games').update(gameId, {
-        Completed: true,
+        Zapped: true,
       });
     }
   }
