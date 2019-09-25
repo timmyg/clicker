@@ -150,7 +150,7 @@ module.exports.controlCenter = async (event: any) => {
         if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for blowout/game over of *${dependencyGameNotes} (${dependencyChannel}* (${
+          const text = `*${gameNotes} (${channel})* waiting for blowout or game over of *${dependencyGameNotes} (${dependencyChannel})* (${
             process.env.stage
           })`;
           await controlCenterWebhook.send({
@@ -160,7 +160,7 @@ module.exports.controlCenter = async (event: any) => {
         } else if (lockedUntil === 'Game Over' && !gameOver) {
           console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for game over of *${dependencyGameNotes} (${dependencyChannel}* _(${
+          const text = `*${gameNotes} (${channel})* waiting for game over of *${dependencyGameNotes} (${dependencyChannel})* _(${
             process.env.stage
           })_`;
           await controlCenterWebhook.send({
