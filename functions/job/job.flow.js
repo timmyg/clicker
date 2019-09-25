@@ -145,11 +145,12 @@ module.exports.controlCenter = async (event: any) => {
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
         const dependencyGameNotes = dependencyGame.get('Notes');
+        const dependencyChannel: string = game.get('Channel');
         // lockedUntil is either Blowout or Game Over
         if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes}* waiting for blowout/game over of *${dependencyGameNotes}* (${
+          const text = `*${gameNotes} (${channel})* waiting for blowout/game over of *${dependencyGameNotes} (${dependencyChannel}* (${
             process.env.stage
           })`;
           await controlCenterWebhook.send({
