@@ -121,6 +121,7 @@ module.exports.controlCenter = async (event: any) => {
   console.log(`found ${games.length} games now/past`);
   console.log(games);
   let changedCount = 0;
+  let waitingCount = 0;
   if (games.length) {
     // loop through games
     for (const game of games) {
@@ -135,16 +136,18 @@ module.exports.controlCenter = async (event: any) => {
       if (waitOn && waitOn.length) {
         console.log('has depdendency game');
         const [dependencyGameId] = waitOn;
-        const dependencyGame = base.find(dependencyGameId);
+        const dependencyGame = await base.find(dependencyGameId);
         const lockedUntil = dependencyGame.get('Locked Until');
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
         // lockedUntil is either Blowout or Game Over
         if (lockedUntil === 'Blowout' && !blowout) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
+          waitingCount++;
           continue;
         } else if (lockedUntil === 'Game Over' && !gameOver) {
           console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
+          waitingCount++;
           continue;
         }
       }
@@ -212,7 +215,7 @@ module.exports.controlCenter = async (event: any) => {
     }
   }
 
-  return respond(200, { changedCount });
+  return respond(200, { changedCount, waitingCount });
 };
 
 function getChannelForZone(index) {
