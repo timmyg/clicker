@@ -3,12 +3,14 @@ require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, invokeFunctionSync } = require('serverless-helpers');
+const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
   static env: {
     stage: string,
     airtableKey: string,
     airtableBase: string,
+    slackControlCenterWebhookUrl: string,
   };
 }
 
@@ -109,6 +111,7 @@ module.exports.updateGameStatus = async (event: any) => {
 };
 
 module.exports.controlCenter = async (event: any) => {
+  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   let games = await base('Games')
@@ -131,6 +134,7 @@ module.exports.controlCenter = async (event: any) => {
       const channel: string = game.get('Channel');
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
+      const gameNotes: string = game.get('Notes');
       const gameId: string = game.id;
       // check if game has a dependency it is waiting on
       if (waitOn && waitOn.length) {
@@ -140,14 +144,25 @@ module.exports.controlCenter = async (event: any) => {
         const lockedUntil = dependencyGame.get('Locked Until');
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
+        const dependencyGameNotes = dependencyGame.get('Notes');
         // lockedUntil is either Blowout or Game Over
         if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
+          const text = `*${gameNotes}* waiting for blowout/game over of *${dependencyGameNotes}* (${
+            process.env.stage
+          })`;
+          await controlCenterWebhook.send({
+            text,
+          });
           continue;
         } else if (lockedUntil === 'Game Over' && !gameOver) {
           console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
+          const text = `*${gameNotes}* waiting for game over of *${dependencyGameNotes}* _(${process.env.stage})_`;
+          await controlCenterWebhook.send({
+            text,
+          });
           continue;
         }
       }
