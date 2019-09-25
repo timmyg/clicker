@@ -280,6 +280,8 @@ module.exports.saveBoxInfo = async (event: any) => {
     console.time('track event');
     await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
+
+    // TODO slack (manual zap detected)
   }
 
   return respond(200);
@@ -429,7 +431,6 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
         ip,
         client,
       });
-      console.log(response);
     }
   }
   return respond(200, 'ok');
