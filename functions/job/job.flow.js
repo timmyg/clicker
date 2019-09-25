@@ -136,7 +136,7 @@ module.exports.controlCenter = async (event: any) => {
       if (waitOn && waitOn.length) {
         console.log('has depdendency game');
         const [dependencyGameId] = waitOn;
-        const dependencyGame = await base.find(dependencyGameId);
+        const dependencyGame = await base('Games').find(dependencyGameId);
         const lockedUntil = dependencyGame.get('Locked Until');
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
