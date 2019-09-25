@@ -121,15 +121,38 @@ module.exports.controlCenter = async (event: any) => {
   console.log(`found ${games.length} games now/past`);
   console.log(games);
   let changedCount = 0;
+  let waitingCount = 0;
   if (games.length) {
     // loop through games
     for (const game of games) {
+      console.log(game);
+      const waitOn: string[] = game.get('Wait On');
       const regions: string[] = game.get('Regions');
       const channel: string = game.get('Channel');
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
       const gameId: string = game.id;
-      console.log(`searching for locations for:`, { regions, channel, zones });
+      // check if game has a dependency it is waiting on
+      if (waitOn && waitOn.length) {
+        console.log('has depdendency game');
+        const [dependencyGameId] = waitOn;
+        const dependencyGame = await base('Games').find(dependencyGameId);
+        const lockedUntil = dependencyGame.get('Locked Until');
+        const gameOver = dependencyGame.get('Game Over');
+        const blowout = dependencyGame.get('Blowout');
+        // lockedUntil is either Blowout or Game Over
+        if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
+          console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
+          waitingCount++;
+          continue;
+        } else if (lockedUntil === 'Game Over' && !gameOver) {
+          console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
+          waitingCount++;
+          continue;
+        }
+      }
+
+      console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
@@ -187,17 +210,17 @@ module.exports.controlCenter = async (event: any) => {
       // mark game as completed on airtable
       // TODO maybe delete in future?
       await base('Games').update(gameId, {
-        Completed: true,
+        Zapped: true,
       });
     }
   }
 
-  return respond(200, { changedCount });
+  return respond(200, { changedCount, waitingCount });
 };
 
-function getChannelForZone(i) {
-  const initChannels = [206, 209, 614, 208, 212, 219]; // espn, espn2, espnc, espnu, nfl, mlb
-  return initChannels[i % initChannels.length];
+function getChannelForZone(index) {
+  const initChannels = [206, 209, 614, 208, 212, 219];
+  return initChannels[index % initChannels.length];
 }
 
 module.exports.getChannelForZone = getChannelForZone;

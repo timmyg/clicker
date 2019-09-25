@@ -44,7 +44,7 @@ const Location = dynamoose.model(
         channel: Number,
         channelSource: {
           type: String,
-          enum: ['app', 'control center', 'manual'],
+          enum: ['app', 'control center', 'manual', 'control center daily'],
         },
       },
     ],

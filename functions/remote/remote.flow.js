@@ -65,6 +65,9 @@ module.exports.command = async (event: any) => {
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
+    } else if (source === 'control center daily') {
+      eventName = 'Control Center Daily Zap';
+      userId = 'system';
     }
 
     const name = eventName;

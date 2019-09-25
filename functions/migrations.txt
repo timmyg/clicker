@@ -1,3 +1,4 @@
 1. remove channels.local and channels.premium
 2. add zips to area programming
 3. update airtable columns with started/ended/blowout
+4. add airtable columns: Locked Until, Wait On, Completed -> Zapped
