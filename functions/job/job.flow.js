@@ -131,6 +131,24 @@ module.exports.controlCenter = async (event: any) => {
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
       const gameId: string = game.id;
+      // check if game has a dependency it is waiting on
+      if (waitOn && waitOn.length) {
+        console.log('has depdendency game');
+        const [dependencyGameId] = waitOn;
+        const dependencyGame = base.find(dependencyGameId);
+        const lockedUntil = dependencyGame.get('Locked Until');
+        const gameOver = dependencyGame.get('Game Over');
+        const blowout = dependencyGame.get('Blowout');
+        // lockedUntil is either Blowout or Game Over
+        if (lockedUntil === 'Blowout' && !blowout) {
+          console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
+          continue;
+        } else if (lockedUntil === 'Game Over' && !gameOver) {
+          console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
+          continue;
+        }
+      }
+
       console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
