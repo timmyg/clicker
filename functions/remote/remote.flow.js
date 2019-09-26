@@ -109,8 +109,6 @@ module.exports.command = async (event: any) => {
     await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
 
-    // TODO slack (control center, app zap)
-
     return respond();
   } catch (e) {
     console.error(e);
