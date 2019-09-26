@@ -38,7 +38,7 @@
             <ul class="list-reset text-xxs header-nav-right">
               <li>
                 <nuxt-link to="/" v-if="currentRouteName.includes('blog')">Home</nuxt-link>
-                <nuxt-link :to="{ name: 'blog'}" v-else>Blog</nuxt-link>
+                <!-- <nuxt-link :to="{ name: 'blog'}" v-else>Blog</nuxt-link> -->
               </li>
             </ul>
           </div>
