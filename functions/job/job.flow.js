@@ -3,12 +3,14 @@ require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, invokeFunctionSync } = require('serverless-helpers');
+const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
   static env: {
     stage: string,
     airtableKey: string,
     airtableBase: string,
+    slackControlCenterWebhookUrl: string,
   };
 }
 
@@ -109,6 +111,7 @@ module.exports.updateGameStatus = async (event: any) => {
 };
 
 module.exports.controlCenter = async (event: any) => {
+  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   let games = await base('Games')
@@ -121,15 +124,53 @@ module.exports.controlCenter = async (event: any) => {
   console.log(`found ${games.length} games now/past`);
   console.log(games);
   let changedCount = 0;
+  let waitingCount = 0;
   if (games.length) {
     // loop through games
     for (const game of games) {
+      console.log(game);
+      const waitOn: string[] = game.get('Wait On');
       const regions: string[] = game.get('Regions');
       const channel: string = game.get('Channel');
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
+      const gameNotes: string = game.get('Notes');
       const gameId: string = game.id;
-      console.log(`searching for locations for:`, { regions, channel, zones });
+      // check if game has a dependency it is waiting on
+      if (waitOn && waitOn.length) {
+        console.log('has depdendency game');
+        const [dependencyGameId] = waitOn;
+        const dependencyGame = await base('Games').find(dependencyGameId);
+        const lockedUntil = dependencyGame.get('Locked Until');
+        const gameOver = dependencyGame.get('Game Over');
+        const blowout = dependencyGame.get('Blowout');
+        const dependencyGameNotes = dependencyGame.get('Notes');
+        const dependencyChannel: string = game.get('Channel');
+        // lockedUntil is either Blowout or Game Over
+        if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
+          console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
+          waitingCount++;
+          const text = `*${gameNotes} (${channel})* waiting for blowout or game over of *${dependencyGameNotes} (${dependencyChannel})* (${
+            process.env.stage
+          })`;
+          await controlCenterWebhook.send({
+            text,
+          });
+          continue;
+        } else if (lockedUntil === 'Game Over' && !gameOver) {
+          console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
+          waitingCount++;
+          const text = `*${gameNotes} (${channel})* waiting for game over of *${dependencyGameNotes} (${dependencyChannel})* _(${
+            process.env.stage
+          })_`;
+          await controlCenterWebhook.send({
+            text,
+          });
+          continue;
+        }
+      }
+
+      console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
       const result = await invokeFunctionSync(
         `location-${process.env.stage}-controlCenterLocationsByRegion`,
@@ -187,12 +228,12 @@ module.exports.controlCenter = async (event: any) => {
       // mark game as completed on airtable
       // TODO maybe delete in future?
       await base('Games').update(gameId, {
-        Completed: true,
+        Zapped: true,
       });
     }
   }
 
-  return respond(200, { changedCount });
+  return respond(200, { changedCount, waitingCount });
 };
 
 function getChannelForZone(index) {
