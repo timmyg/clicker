@@ -1,12 +1,15 @@
 // @flow
 const losantApi = require('losant-rest');
 const { respond, getBody, invokeFunctionAsync, invokeFunctionSync } = require('serverless-helpers');
+const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
   static env: {
     stage: string,
     losantAccessToken: string,
     losantAppId: string,
+    slackControlCenterWebhookUrl: string,
+    slackAppWebhookUrl: string,
   };
 }
 
@@ -58,16 +61,30 @@ module.exports.command = async (event: any) => {
     );
     console.timeEnd('update channel');
 
+    const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
+    const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
     let eventName, userId;
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
+      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      await appWebhook.send({
+        text,
+      });
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
+      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      await controlCenterWebhook.send({
+        text,
+      });
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
+      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      await controlCenterWebhook.send({
+        text,
+      });
     }
 
     const name = eventName;

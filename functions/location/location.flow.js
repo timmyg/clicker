@@ -11,6 +11,7 @@ declare class process {
   static env: {
     stage: string,
     slackAntennaWebhookUrl: string,
+    slackControlCenterWebhookUrl: string,
     tableLocation: string,
   };
 }
@@ -255,6 +256,8 @@ module.exports.saveBoxInfo = async (event: any) => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { major } = getBody(event);
 
+  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
+
   const location = await Location.queryOne('id')
     .eq(locationId)
     .exec();
@@ -280,6 +283,13 @@ module.exports.saveBoxInfo = async (event: any) => {
     console.time('track event');
     await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
+
+    const text = `Manual zap detected at ${location.name} (${
+      location.neighborhood
+    }) from ${originalChannel} to ${major} _(${process.env.stage})_`;
+    await controlCenterWebhook.send({
+      text,
+    });
   }
 
   return respond(200);
@@ -336,7 +346,7 @@ module.exports.connected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna connected at ${location.name} (${location.neighborhood})}(${process.env.stage})`;
+  const text = `Antenna connected at ${location.name} (${location.neighborhood}) _(${process.env.stage})_`;
   const icon_emoji = ':tada:';
   await antennaWebhook.send({
     text,
@@ -357,7 +367,7 @@ module.exports.disconnected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna disconnected at ${location.name} (${location.neighborhood})} (${process.env.stage})`;
+  const text = `Antenna disconnected at ${location.name} (${location.neighborhood}) _(${process.env.stage})_`;
   const icon_emoji = ':exclamation:';
   await antennaWebhook.send({
     text,
@@ -429,7 +439,6 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
         ip,
         client,
       });
-      console.log(response);
     }
   }
   return respond(200, 'ok');
