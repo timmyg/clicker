@@ -67,11 +67,11 @@ module.exports.command = async (event: any) => {
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
-      const title = `${eventName} @ ${reservation.location.name} _(${
+      const title = `${eventName} @ ${reservation.location.name} (${
         process.env.stage !== 'prod' ? process.env.stage : ''
-      })_`;
+      })`;
       const color = '#0091ea'; // good, warning, danger
-      await controlCenterWebhook.send({
+      await appWebhook.send({
         attachments: [
           {
             title,
@@ -95,9 +95,9 @@ module.exports.command = async (event: any) => {
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const title = `${eventName} @ ${reservation.location.name} _(${
+      const title = `${eventName} @ ${reservation.location.name} (${
         process.env.stage !== 'prod' ? process.env.stage : ''
-      })_`;
+      })`;
       const color = '#0091ea'; // good, warning, danger
       await controlCenterWebhook.send({
         attachments: [
@@ -123,10 +123,9 @@ module.exports.command = async (event: any) => {
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      // const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
-      const title = `${eventName} @ ${reservation.location.name} _(${
+      const title = `${eventName} @ ${reservation.location.name} (${
         process.env.stage !== 'prod' ? process.env.stage : ''
-      })_`;
+      })`;
       const color = '#0091ea'; // good, warning, danger
       await controlCenterWebhook.send({
         attachments: [

@@ -14,6 +14,7 @@ provider:
     twilioAccountSid: ${env:TWILIO_ACCOUNT_SID}
     twilioAuthToken: ${env:TWILIO_AUTH_TOKEN}
     twilioServiceSid: ${env:TWILIO_SERVICE_SID}
+    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

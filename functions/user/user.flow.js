@@ -5,8 +5,21 @@ const { stripeSecretKey } = process.env;
 const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
+const { IncomingWebhook } = require('@slack/webhook');
 const initialTokens = 1;
 const key = 'clikr';
+
+declare class process {
+  static env: {
+    stage: string,
+    stripeSecretKey: string,
+    slackAppWebhookUrl: string,
+    tableUser: string,
+    twilioAccountSid: string,
+    twilioAuthToken: string,
+    twilioServiceSid: string,
+  };
+}
 
 const User = dynamoose.model(
   process.env.tableUser,
@@ -138,6 +151,31 @@ module.exports.replenish = async (event: any) => {
       { $ADD: { tokens, spent: dollars } },
       { returnValues: 'ALL_NEW' },
     );
+
+    const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
+    const title = `Money Added to Wallet! _(${process.env.stage !== 'prod' ? process.env.stage : ''})_`;
+    const color = 'good'; // good, warning, danger
+    await appWebhook.send({
+      attachments: [
+        {
+          title,
+          fallback: title,
+          color,
+          fields: [
+            {
+              title: 'Amount',
+              value: dollars,
+              short: true,
+            },
+            {
+              title: 'User',
+              value: user.phone,
+              short: true,
+            },
+          ],
+        },
+      ],
+    });
 
     return respond(200, updatedUser);
   } catch (e) {
