@@ -152,9 +152,9 @@ module.exports.controlCenter = async (event: any) => {
         if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* on *${dependencyGameNotes} (${dependencyChannel})* _(${
+          const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* on *${dependencyGameNotes} (${dependencyChannel})* (${
             process.env.stage !== 'prod' ? process.env.stage : ''
-          })_`;
+          })`;
           const title = 'Control Center';
           const color = process.env.stage === 'prod' ? 'warning' : null; // good, warning, danger
           await controlCenterWebhook.send({
@@ -183,9 +183,9 @@ module.exports.controlCenter = async (event: any) => {
         } else if (lockedUntil === 'Game Over' && !gameOver) {
           console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for *game over* of *${dependencyGameNotes} (${dependencyChannel})* _(${
+          const text = `*${gameNotes} (${channel})* waiting for *game over* of *${dependencyGameNotes} (${dependencyChannel})* (${
             process.env.stage !== 'prod' ? process.env.stage : ''
-          })_`;
+          })`;
           const title = 'Control Center';
           const color = process.env.stage === 'prod' ? 'warning' : null; // good, warning, danger
           await controlCenterWebhook.send({

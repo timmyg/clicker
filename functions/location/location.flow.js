@@ -370,9 +370,9 @@ module.exports.connected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) _(${
+  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) (${
     process.env.stage !== 'prod' ? process.env.stage : ''
-  })_`;
+  })`;
   const color = 'good'; // good, warning, danger
   await antennaWebhook.send({
     attachments: [
@@ -398,9 +398,9 @@ module.exports.disconnected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) _(${
+  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) (${
     process.env.stage !== 'prod' ? process.env.stage : ''
-  })_`;
+  })`;
   const color = 'danger'; // good, warning, danger
   await antennaWebhook.send({
     attachments: [
