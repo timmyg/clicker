@@ -9,7 +9,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableReservation: ${self:custom.tableReservation}
-    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     tableThroughputs: ${self:custom.tableThroughputs.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
@@ -44,10 +43,6 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
   tableReservation: reservations-${self:custom.stage}
-  segmentKey:
-    prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     ReservationTable:
