@@ -284,9 +284,9 @@ module.exports.saveBoxInfo = async (event: any) => {
     await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
 
-    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) (${
+    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) ${
       process.env.stage !== 'prod' ? process.env.stage : ''
-    })`;
+    }`;
     const color = 'warning'; // good, warning, danger
     await controlCenterWebhook.send({
       attachments: [
@@ -370,9 +370,9 @@ module.exports.connected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) (${
+  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) ${
     process.env.stage !== 'prod' ? process.env.stage : ''
-  })`;
+  }`;
   const color = 'good'; // good, warning, danger
   await antennaWebhook.send({
     attachments: [
@@ -398,9 +398,9 @@ module.exports.disconnected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) (${
+  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) ${
     process.env.stage !== 'prod' ? process.env.stage : ''
-  })`;
+  }`;
   const color = 'danger'; // good, warning, danger
   await antennaWebhook.send({
     attachments: [
