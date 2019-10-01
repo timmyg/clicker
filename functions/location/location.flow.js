@@ -284,9 +284,9 @@ module.exports.saveBoxInfo = async (event: any) => {
     await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
 
-    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) _(${
+    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) (${
       process.env.stage !== 'prod' ? process.env.stage : ''
-    })_`;
+    })`;
     const color = 'warning'; // good, warning, danger
     await controlCenterWebhook.send({
       attachments: [
