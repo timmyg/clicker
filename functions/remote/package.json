@@ -16,7 +16,7 @@
     "@slack/webhook": "^5.0.1",
     "dotenv": "^8.0.0",
     "losant-rest": "^2.3.5",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.2"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.3"
   },
   "devDependencies": {
     "flow-bin": "^0.107.0",
