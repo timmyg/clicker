@@ -1,5 +1,5 @@
 // @flow
-const { respond, getBody, getPathParameters, invokeFunctionSync, invokeFunctionAsync } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, Invoke } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
@@ -470,12 +470,18 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
     for (const box of location.boxes) {
       const { losantId } = location;
       const { id: boxId, ip, clientAddress: client } = box;
-      const response = await invokeFunctionSync(`remote-${process.env.stage}-checkBoxInfo`, {
+      const body = {
         losantId,
         boxId,
         ip,
         client,
-      });
+      };
+      let invoke = new Invoke();
+      await invoke
+        .service('remote')
+        .name('checkBoxInfo')
+        .body(body)
+        .go();
     }
   }
   return respond(200, 'ok');
