@@ -153,7 +153,7 @@ module.exports.replenish = async (event: any) => {
     );
 
     const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
-    const title = `Money Added to Wallet! _(${process.env.stage !== 'prod' ? process.env.stage : ''})_`;
+    const title = `Money Added to Wallet! (${process.env.stage !== 'prod' ? process.env.stage : ''})`;
     const color = 'good'; // good, warning, danger
     await appWebhook.send({
       attachments: [

@@ -38,7 +38,7 @@ module.exports.checkControlCenterEvents = async (event: any) => {
   console.log(`found ${games.length} games`);
   if (!games.length) {
     const title = 'Control Center Scheduling';
-    const text = `No games scheduled today _(${process.env.stage})_`;
+    const text = `No games scheduled today (${process.env.stage !== 'prod' ? process.env.stage : ''})`;
     const color = process.env.stage === 'prod' ? 'danger' : null;
     await sendControlCenterSlack(title, text, color);
   }
