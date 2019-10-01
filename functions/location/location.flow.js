@@ -284,11 +284,35 @@ module.exports.saveBoxInfo = async (event: any) => {
     await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
     console.timeEnd('track event');
 
-    const text = `Manual zap detected at ${location.name} (${
-      location.neighborhood
-    }) from ${originalChannel} to ${major} _(${process.env.stage})_`;
+    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) _(${
+      process.env.stage !== 'prod' ? process.env.stage : ''
+    })_`;
+    const color = 'warning'; // good, warning, danger
     await controlCenterWebhook.send({
-      text,
+      attachments: [
+        {
+          title,
+          fallback: title,
+          color,
+          fields: [
+            {
+              title: 'From',
+              value: originalChannel,
+              short: true,
+            },
+            {
+              title: 'To',
+              value: major,
+              short: true,
+            },
+            {
+              title: 'Zone',
+              value: location.boxes[i].zone,
+              short: true,
+            },
+          ],
+        },
+      ],
     });
   }
 
@@ -346,11 +370,18 @@ module.exports.connected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna connected at ${location.name} (${location.neighborhood}) _(${process.env.stage})_`;
-  const icon_emoji = ':tada:';
+  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) _(${
+    process.env.stage !== 'prod' ? process.env.stage : ''
+  })_`;
+  const color = 'good'; // good, warning, danger
   await antennaWebhook.send({
-    text,
-    icon_emoji,
+    attachments: [
+      {
+        title,
+        fallback: title,
+        color,
+      },
+    ],
   });
 
   return respond(200, 'ok');
@@ -367,13 +398,19 @@ module.exports.disconnected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna disconnected at ${location.name} (${location.neighborhood}) _(${process.env.stage})_`;
-  const icon_emoji = ':exclamation:';
+  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) _(${
+    process.env.stage !== 'prod' ? process.env.stage : ''
+  })_`;
+  const color = 'danger'; // good, warning, danger
   await antennaWebhook.send({
-    text,
-    icon_emoji,
+    attachments: [
+      {
+        title,
+        fallback: title,
+        color,
+      },
+    ],
   });
-
   return respond(200, 'ok');
 };
 

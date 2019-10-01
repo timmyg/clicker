@@ -19,7 +19,6 @@ module.exports.health = async (event: any) => {
 
 module.exports.checkControlCenterEvents = async (event: any) => {
   // check if any scheduled events for control center today
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   // find games scheduled for the next 24 hours
   let games = await base('Games')
@@ -41,17 +40,22 @@ module.exports.checkControlCenterEvents = async (event: any) => {
     const title = 'Control Center Scheduling';
     const text = `No games scheduled today _(${process.env.stage})_`;
     const color = process.env.stage === 'prod' ? 'danger' : null;
-    await controlCenterWebhook.send({
-      attachments: [
-        {
-          title,
-          text,
-          fallback: text,
-          color,
-          fields: [],
-        },
-      ],
-    });
+    await sendControlCenterSlack(title, text, color);
   }
   return respond(200);
 };
+
+async function sendControlCenterSlack(title, text, color, fields) {
+  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
+  await controlCenterWebhook.send({
+    attachments: [
+      {
+        title,
+        text,
+        fallback: text,
+        color,
+        fields: fields,
+      },
+    ],
+  });
+}

@@ -67,23 +67,87 @@ module.exports.command = async (event: any) => {
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
-      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
-      await appWebhook.send({
-        text,
+      const title = `${eventName} @ ${reservation.location.name} _(${
+        process.env.stage !== 'prod' ? process.env.stage : ''
+      })_`;
+      const color = '#0091ea'; // good, warning, danger
+      await controlCenterWebhook.send({
+        attachments: [
+          {
+            title,
+            fallback: title,
+            color,
+            fields: [
+              {
+                title: 'Channel',
+                value: channel,
+                short: true,
+              },
+              {
+                title: 'Label',
+                value: reservation.box.label,
+                short: true,
+              },
+            ],
+          },
+        ],
       });
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      const title = `${eventName} @ ${reservation.location.name} _(${
+        process.env.stage !== 'prod' ? process.env.stage : ''
+      })_`;
+      const color = '#0091ea'; // good, warning, danger
       await controlCenterWebhook.send({
-        text,
+        attachments: [
+          {
+            title,
+            fallback: title,
+            color,
+            fields: [
+              {
+                title: 'Channel',
+                value: channel,
+                short: true,
+              },
+              {
+                title: 'Zone',
+                value: reservation.box.zone,
+                short: true,
+              },
+            ],
+          },
+        ],
       });
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      // const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      const title = `${eventName} @ ${reservation.location.name} _(${
+        process.env.stage !== 'prod' ? process.env.stage : ''
+      })_`;
+      const color = '#0091ea'; // good, warning, danger
       await controlCenterWebhook.send({
-        text,
+        attachments: [
+          {
+            title,
+            fallback: title,
+            color,
+            fields: [
+              {
+                title: 'Channel',
+                value: channel,
+                short: true,
+              },
+              {
+                title: 'Zone',
+                value: reservation.box.zone,
+                short: true,
+              },
+            ],
+          },
+        ],
       });
     }
 

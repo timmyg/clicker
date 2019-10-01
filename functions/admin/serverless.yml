@@ -61,7 +61,7 @@ functions:
               - partner
               - authorization
               - content-type
-  controlCenter:
+  checkControlCenterEvents:
     handler: admin.checkControlCenterEvents
     events:
       - schedule: cron(0 12 * * ? *) # every day @ 8am eastern
