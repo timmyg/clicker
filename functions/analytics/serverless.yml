@@ -15,6 +15,7 @@ plugins:
 
 custom:
   stage: ${opt:stage}
+  basePath: analytics
   prune:
     automatic: true
     number: 3

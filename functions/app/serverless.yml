@@ -8,7 +8,6 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
-    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
 plugins:
   - serverless-domain-manager
 
@@ -28,10 +27,6 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  segmentKey:
-    prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 functions:
   buy:
     handler: app.buy

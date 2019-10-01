@@ -1,6 +1,6 @@
 // @flow
 const losantApi = require('losant-rest');
-const { respond, getBody, invokeFunctionAsync, invokeFunctionSync } = require('serverless-helpers');
+const { respond, getBody, Invoke } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
@@ -54,11 +54,17 @@ module.exports.command = async (event: any) => {
     console.timeEnd('change channel');
 
     console.time('update channel');
-    await invokeFunctionSync(
-      `location-${process.env.stage}-updateChannel`,
-      { channel, source }, // body
-      { id: locationId, boxId }, // path params
-    );
+    // await invokeFunctionSync(
+    //   `location-${process.env.stage}-updateChannel`,
+    //   { channel, source }, // body
+    //   { id: locationId, boxId }, // path params
+    // );
+    let invoke = new Invoke();
+    invoke = invoke
+      .name('updateChannel')
+      .body({ channel, source })
+      .pathParams({ id: locationId, boxId });
+    await invoke.go();
     console.timeEnd('update channel');
 
     const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
@@ -67,23 +73,88 @@ module.exports.command = async (event: any) => {
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
-      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      const title = `${eventName} @ ${reservation.location.name} ${
+        process.env.stage !== 'prod' ? process.env.stage : ''
+      }`;
+      const text = `Zapped to ${reservation.program.title} on ${reservation.program.channelTitle}`;
+      const color = '#0091ea'; // good, warning, danger
       await appWebhook.send({
-        text,
+        attachments: [
+          {
+            title,
+            fallback: title,
+            color,
+            text,
+            fields: [
+              {
+                title: 'Minutes',
+                value: reservation.minutes,
+                short: true,
+              },
+              {
+                title: 'TV Label',
+                value: reservation.box.label,
+                short: true,
+              },
+            ],
+          },
+        ],
       });
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      const title = `${eventName} @ ${reservation.location.name} ${
+        process.env.stage !== 'prod' ? process.env.stage : ''
+      }`;
+      const color = '#0091ea'; // good, warning, danger
       await controlCenterWebhook.send({
-        text,
+        attachments: [
+          {
+            title,
+            fallback: title,
+            color,
+            fields: [
+              {
+                title: 'Channel',
+                value: channel,
+                short: true,
+              },
+              {
+                title: 'Zone',
+                value: reservation.box.zone,
+                short: true,
+              },
+            ],
+          },
+        ],
       });
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const text = `${eventName} at ${reservation.location.name} to channel ${channel} _(${process.env.stage})_`;
+      const title = `${eventName} @ ${reservation.location.name} ${
+        process.env.stage !== 'prod' ? process.env.stage : ''
+      }`;
+      const color = '#0091ea'; // good, warning, danger
       await controlCenterWebhook.send({
-        text,
+        attachments: [
+          {
+            title,
+            fallback: title,
+            color,
+            fields: [
+              {
+                title: 'Channel',
+                value: channel,
+                short: true,
+              },
+              {
+                title: 'Zone',
+                value: reservation.box.zone,
+                short: true,
+              },
+            ],
+          },
+        ],
       });
     }
 
@@ -106,7 +177,10 @@ module.exports.command = async (event: any) => {
     };
 
     console.time('track event');
-    await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
+    // await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
+    let invokeAnalytics = new Invoke();
+    invokeAnalytics = invokeAnalytics.name('track').body({ userId, name, data });
+    await invokeAnalytics.go();
     console.timeEnd('track event');
 
     return respond();
