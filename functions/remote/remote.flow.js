@@ -1,6 +1,6 @@
 // @flow
 const losantApi = require('losant-rest');
-const { respond, getBody, invokeFunctionAsync, invokeFunctionSync } = require('serverless-helpers');
+const { respond, getBody, Invoke } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
@@ -54,11 +54,17 @@ module.exports.command = async (event: any) => {
     console.timeEnd('change channel');
 
     console.time('update channel');
-    await invokeFunctionSync(
-      `location-${process.env.stage}-updateChannel`,
-      { channel, source }, // body
-      { id: locationId, boxId }, // path params
-    );
+    // await invokeFunctionSync(
+    //   `location-${process.env.stage}-updateChannel`,
+    //   { channel, source }, // body
+    //   { id: locationId, boxId }, // path params
+    // );
+    let invoke = new Invoke();
+    invoke = invoke
+      .name('updateChannel')
+      .body({ channel, source })
+      .pathParams({ id: locationId, boxId });
+    await invoke.go();
     console.timeEnd('update channel');
 
     const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
@@ -171,7 +177,10 @@ module.exports.command = async (event: any) => {
     };
 
     console.time('track event');
-    await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
+    // await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
+    let invokeAnalytics = new Invoke();
+    invokeAnalytics = invokeAnalytics.name('track').body({ userId, name, data });
+    await invokeAnalytics.go();
     console.timeEnd('track event');
 
     return respond();
