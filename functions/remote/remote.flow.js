@@ -70,6 +70,7 @@ module.exports.command = async (event: any) => {
       const title = `${eventName} @ ${reservation.location.name} (${
         process.env.stage !== 'prod' ? process.env.stage : ''
       })`;
+      const text = `Zapped to ${reservation.program.title} on ${reservation.program.channelTitle}`;
       const color = '#0091ea'; // good, warning, danger
       await appWebhook.send({
         attachments: [
@@ -77,14 +78,15 @@ module.exports.command = async (event: any) => {
             title,
             fallback: title,
             color,
+            text,
             fields: [
               {
-                title: 'Channel',
-                value: channel,
+                title: 'Minutes',
+                value: reservation.minutes,
                 short: true,
               },
               {
-                title: 'Label',
+                title: 'TV Label',
                 value: reservation.box.label,
                 short: true,
               },
