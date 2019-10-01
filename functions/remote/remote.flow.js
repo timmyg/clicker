@@ -60,11 +60,11 @@ module.exports.command = async (event: any) => {
     //   { id: locationId, boxId }, // path params
     // );
     let invoke = new Invoke();
-    invoke = invoke
+    await invoke
+      .service('location')
       .name('updateChannel')
       .body({ channel, source })
-      .pathParams({ id: locationId, boxId });
-    await invoke.go();
+      .pathParams({ id: locationId, boxId }).go();
     console.timeEnd('update channel');
 
     const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
