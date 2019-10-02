@@ -501,12 +501,14 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
         ip,
         client,
       };
-      const invoke = new Invoke();
-      await invoke
-        .service('remote')
-        .name('checkBoxInfo')
-        .body(body)
-        .go();
+      if (losantId.length > 3) {
+        const invoke = new Invoke();
+        await invoke
+          .service('remote')
+          .name('checkBoxInfo')
+          .body(body)
+          .go();
+      }
     }
   }
   return respond(200, 'ok');
