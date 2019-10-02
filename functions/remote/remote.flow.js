@@ -192,6 +192,7 @@ module.exports.command = async (event: any) => {
 module.exports.checkBoxInfo = async (event: any) => {
   try {
     const { losantId, boxId, ip, client } = getBody(event);
+    console.log({ losantId, boxId, ip, client });
     const api = new LosantApi();
     const payload = { boxId, ip, client };
 
