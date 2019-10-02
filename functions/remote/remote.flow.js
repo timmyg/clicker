@@ -54,17 +54,14 @@ module.exports.command = async (event: any) => {
     console.timeEnd('change channel');
 
     console.time('update channel');
-    // await invokeFunctionSync(
-    //   `location-${process.env.stage}-updateChannel`,
-    //   { channel, source }, // body
-    //   { id: locationId, boxId }, // path params
-    // );
-    let invoke = new Invoke();
+    const invoke = new Invoke();
     await invoke
       .service('location')
       .name('updateChannel')
       .body({ channel, source })
-      .pathParams({ id: locationId, boxId }).go();
+      .pathParams({ id: locationId, boxId })
+      .async()
+      .go();
     console.timeEnd('update channel');
 
     const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
@@ -177,10 +174,12 @@ module.exports.command = async (event: any) => {
     };
 
     console.time('track event');
-    // await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
-    let invokeAnalytics = new Invoke();
-    invokeAnalytics = invokeAnalytics.name('track').body({ userId, name, data });
-    await invokeAnalytics.go();
+    const invokeAnalytics = new Invoke();
+    await invokeAnalytics
+      .name('track')
+      .body({ userId, name, data })
+      .async()
+      .go();
     console.timeEnd('track event');
 
     return respond();

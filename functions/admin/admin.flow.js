@@ -2,7 +2,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const { IncomingWebhook } = require('@slack/webhook');
-const { respond, invokeFunctionSync } = require('serverless-helpers');
+const { respond } = require('serverless-helpers');
 
 declare class process {
   static env: {

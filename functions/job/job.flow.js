@@ -2,7 +2,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
-const { respond, invokeFunctionSync } = require('serverless-helpers');
+const { respond, Invoke } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
@@ -27,14 +27,13 @@ module.exports.health = async (event: any) => {
 
 module.exports.controlCenterDailyInit = async (event: any) => {
   const regions = ['Cincinnati'];
-  const { data: locations } = await invokeFunctionSync(
-    `location-${process.env.stage}-controlCenterLocationsByRegion`,
-    null,
-    { regions },
-    event.headers,
-    null,
-    'us-east-1',
-  );
+  const invoke = new Invoke();
+  const { data: locations } = await invoke
+    .service('location')
+    .name('controlCenterLocationsByRegion')
+    .pathParams({ regions })
+    .headers(event.headers)
+    .go();
   for (location of locations) {
     const boxes = location.boxes.filter(b => b.zone).sort((a, b) => a.zone - b.zone);
     let i = 0;
@@ -48,14 +47,13 @@ module.exports.controlCenterDailyInit = async (event: any) => {
         },
       };
       const source = 'control center daily';
-      await invokeFunctionSync(
-        `remote-${process.env.stage}-command`,
-        { reservation, command, source },
-        null,
-        null,
-        null,
-        'us-east-1',
-      );
+      const invoke = new Invoke();
+      await invoke
+        .service('remote')
+        .name('command')
+        .body({ reservation, command, source })
+        .async()
+        .go();
       i++;
     }
   }
@@ -80,15 +78,13 @@ module.exports.updateGameStatus = async (event: any) => {
             const gameOver: boolean = game.get('Game Over');
             const blowout: boolean = game.get('Blowout');
             const gameId: string = game.id;
-            // if (siWebUrl) {
-            const { data } = await invokeFunctionSync(
-              `game-${process.env.stage}-getStatus`,
-              { url: siWebUrl },
-              null,
-              event.headers,
-              null,
-              'us-east-1',
-            );
+            const invoke = new Invoke();
+            const { data } = await invoke
+              .service('game')
+              .name('getStatus')
+              .body({ url: siWebUrl })
+              .headers(event.headers)
+              .go();
             console.log({ data });
             const gameStatus: GameStatus = data;
             console.log({ gameStatus });
@@ -216,14 +212,13 @@ module.exports.controlCenter = async (event: any) => {
 
       console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
-      const result = await invokeFunctionSync(
-        `location-${process.env.stage}-controlCenterLocationsByRegion`,
-        null,
-        { regions },
-        event.headers,
-        null,
-        'us-east-1',
-      );
+      const invoke = new Invoke();
+      const result = await invoke
+        .service('location')
+        .name('controlCenterLocationsByRegion')
+        .pathParams({ regions })
+        .headers(event.headers)
+        .go();
       const locations = result.data;
 
       console.log(`found ${locations.length} locations`);
@@ -258,14 +253,14 @@ module.exports.controlCenter = async (event: any) => {
           console.log('box', box.label, box.ip);
           console.log('channel', channel);
           const source = 'control center';
-          await invokeFunctionSync(
-            `remote-${process.env.stage}-command`,
-            { reservation, command, source },
-            null,
-            null,
-            null,
-            'us-east-1',
-          );
+          const invoke = new Invoke();
+          await invoke
+            .service('remote')
+            .name('command')
+            .body({ reservation, command, source })
+            .headers(event.headers)
+            .async()
+            .go();
           changedCount++;
         }
       }

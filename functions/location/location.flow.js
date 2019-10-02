@@ -281,7 +281,13 @@ module.exports.saveBoxInfo = async (event: any) => {
       locationNeighborhood: location.neighborhood,
     };
     console.time('track event');
-    await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
+    const invoke = new Invoke();
+    await invoke
+      .service('analytics')
+      .name('track')
+      .body({ userId, name, data })
+      .async()
+      .go();
     console.timeEnd('track event');
 
     const title = `Manual Zap @ ${location.name} (${location.neighborhood}) ${
@@ -353,7 +359,13 @@ module.exports.identifyBoxes = async (event: any) => {
         channel: box.setupChannel,
       },
     };
-    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+    const invoke = new Invoke();
+    await invoke
+      .service('remote')
+      .name('command')
+      .body({ reservation, command })
+      .async()
+      .go();
   }
   await Location.update({ id }, { boxes });
   return respond(200, `hello`);
@@ -432,7 +444,13 @@ module.exports.allOff = async (event: any) => {
       },
     };
     console.log('turning off box', box);
-    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+    const invoke = new Invoke();
+    await invoke
+      .service('remote')
+      .name('command')
+      .body({ reservation, command, key })
+      .async()
+      .go();
     console.log('turned off box', box);
   }
   return respond(200, 'ok');
@@ -456,7 +474,14 @@ module.exports.allOn = async (event: any) => {
       },
     };
     console.log('turning on box', box);
-    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+    const invoke = new Invoke();
+    await invoke
+      .service('remote')
+      .name('command')
+      .body({ reservation, command, key })
+      .headers(event.headers)
+      .async()
+      .go();
     console.log('turned on', box);
   }
   return respond(200, 'ok');
@@ -476,21 +501,12 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
         ip,
         client,
       };
-      let invoke = new Invoke();
-      console.log(invoke);
-      console.log(invoke.region);
-      console.log(invoke.service);
-      console.log(invoke.name);
-      console.log(invoke.body);
-      const result = await invoke
+      const invoke = new Invoke();
+      await invoke
         .service('remote')
         .name('checkBoxInfo')
         .body(body)
         .go();
-      console.log(result);
-      // const x = new Invoke();
-      // console.log("2");
-      // await x.region("west").go();
     }
   }
   return respond(200, 'ok');

@@ -21,7 +21,7 @@
     "dotenv": "^8.0.0",
     "dynamoose": "^1.7.2",
     "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.2.7"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.7"
   },
   "devDependencies": {
     "flow-bin": "^0.107.0",
