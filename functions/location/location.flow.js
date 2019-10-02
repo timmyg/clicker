@@ -477,11 +477,14 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
         client,
       };
       let invoke = new Invoke();
-      invoke
+      await invoke
         .service('remote')
         .name('checkBoxInfo')
         .body(body)
         .go();
+      // const x = new Invoke();
+      // console.log("2");
+      // await x.region("west").go();
     }
   }
   return respond(200, 'ok');
