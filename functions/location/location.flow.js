@@ -480,8 +480,8 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
       invoke
         .service('remote')
         .name('checkBoxInfo')
-        .body(body);
-      await invoke.go();
+        .body(body)
+        .go();
     }
   }
   return respond(200, 'ok');
