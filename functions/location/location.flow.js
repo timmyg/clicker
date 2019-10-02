@@ -482,11 +482,12 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
       console.log(invoke.service);
       console.log(invoke.name);
       console.log(invoke.body);
-      await invoke
+      const result = await invoke
         .service('remote')
         .name('checkBoxInfo')
         .body(body)
         .go();
+      console.log(result);
       // const x = new Invoke();
       // console.log("2");
       // await x.region("west").go();
