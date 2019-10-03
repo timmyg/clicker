@@ -4,13 +4,16 @@
       <div class="features-split-inner section-inner">
         <div class="section-header center-content">
           <div class="container-xs" v-scroll-reveal>
-            <h2 class="mt-0 mb-16">We'll take care of it</h2>
+            <h2 class="mt-0 mb-16">Sell more food and beverage</h2>
             <p>
-              Clicker provides two products:
-              <b class="brand-font">Control Center</b> automatically manages the majority of your TVs, while the
-              <b
-                class="brand-font"
-              >Clicker TV</b> app lets your guests change channels from their phone.
+              <b class="brand-font">Clicker</b> drastically reduces channel change requests and increases customer dwell time
+            </p>
+            <p>
+              We provides two products:
+              <ul>
+                <li><b class="brand-font">Control Center</b> automatically manages the majority of your TVs</li>
+                <li><b class="brand-font">Clicker TV</b> app lets your guests change channels from their phone</li>
+              </ul>
             </p>
           </div>
         </div>
@@ -20,10 +23,10 @@
             v-scroll-reveal="{ delay: 200 , origin: 'left'}"
           >
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">Right Game, Right TV, Right Time</h3>
+              <h3 class="mt-0 mb-16">Right Game, Right TV, All the Time</h3>
               <p class="m-0">
-                With
-                <b class="brand-font">Control Center</b>, we'll work closely to learn your location's sports preferences and put those on your TVs throughout the day - without your staff having to lift a finger.
+                Your patrons are hard to predict, and your bartenders are easily distracted. With
+                <b class="brand-font">Control Center</b>, we'll work closely with you to learn your location's sports preferences and put those on your TVs throughout the day - without your staff having to lift a finger.
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-03">
@@ -46,11 +49,9 @@
           </div>
           <div class="split-item reveal-scale-up" v-scroll-reveal="{ delay: 200 , origin: 'left'}">
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">Just the Right Mix</h3>
+              <h3 class="mt-0 mb-16">Custom Scheduling</h3>
               <p class="m-0">
-                Every location is different. We recommend
-                <b class="brand-font">Control Center</b> on a majority of your TVs, while enabling
-                <b class="brand-font">Clicker TV</b> on a few.
+                Soccer bar? Texas A&M bar? Every location is different. We'll work closely with you to ensure your programming aligns with your bar preferences.
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-05">
