@@ -1,5 +1,5 @@
 // @flow
-const { respond, getBody, getPathParameters, invokeFunctionSync, invokeFunctionAsync } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, Invoke } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
@@ -281,14 +281,44 @@ module.exports.saveBoxInfo = async (event: any) => {
       locationNeighborhood: location.neighborhood,
     };
     console.time('track event');
-    await invokeFunctionAsync(`analytics-${process.env.stage}-track`, { userId, name, data });
+    const invoke = new Invoke();
+    await invoke
+      .service('analytics')
+      .name('track')
+      .body({ userId, name, data })
+      .async()
+      .go();
     console.timeEnd('track event');
 
-    const text = `Manual zap detected at ${location.name} (${
-      location.neighborhood
-    }) from ${originalChannel} to ${major} _(${process.env.stage})_`;
+    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) ${
+      process.env.stage !== 'prod' ? process.env.stage : ''
+    }`;
+    const color = 'warning'; // good, warning, danger
     await controlCenterWebhook.send({
-      text,
+      attachments: [
+        {
+          title,
+          fallback: title,
+          color,
+          fields: [
+            {
+              title: 'From',
+              value: originalChannel,
+              short: true,
+            },
+            {
+              title: 'To',
+              value: major,
+              short: true,
+            },
+            {
+              title: 'Zone',
+              value: location.boxes[i].zone,
+              short: true,
+            },
+          ],
+        },
+      ],
     });
   }
 
@@ -329,7 +359,13 @@ module.exports.identifyBoxes = async (event: any) => {
         channel: box.setupChannel,
       },
     };
-    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command });
+    const invoke = new Invoke();
+    await invoke
+      .service('remote')
+      .name('command')
+      .body({ reservation, command })
+      .async()
+      .go();
   }
   await Location.update({ id }, { boxes });
   return respond(200, `hello`);
@@ -346,11 +382,18 @@ module.exports.connected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna connected at ${location.name} (${location.neighborhood}) _(${process.env.stage})_`;
-  const icon_emoji = ':tada:';
+  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) ${
+    process.env.stage !== 'prod' ? process.env.stage : ''
+  }`;
+  const color = 'good'; // good, warning, danger
   await antennaWebhook.send({
-    text,
-    icon_emoji,
+    attachments: [
+      {
+        title,
+        fallback: title,
+        color,
+      },
+    ],
   });
 
   return respond(200, 'ok');
@@ -367,13 +410,19 @@ module.exports.disconnected = async (event: any) => {
   await location.save();
 
   const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const text = `Antenna disconnected at ${location.name} (${location.neighborhood}) _(${process.env.stage})_`;
-  const icon_emoji = ':exclamation:';
+  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) ${
+    process.env.stage !== 'prod' ? process.env.stage : ''
+  }`;
+  const color = 'danger'; // good, warning, danger
   await antennaWebhook.send({
-    text,
-    icon_emoji,
+    attachments: [
+      {
+        title,
+        fallback: title,
+        color,
+      },
+    ],
   });
-
   return respond(200, 'ok');
 };
 
@@ -395,7 +444,13 @@ module.exports.allOff = async (event: any) => {
       },
     };
     console.log('turning off box', box);
-    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+    const invoke = new Invoke();
+    await invoke
+      .service('remote')
+      .name('command')
+      .body({ reservation, command, key })
+      .async()
+      .go();
     console.log('turned off box', box);
   }
   return respond(200, 'ok');
@@ -419,7 +474,14 @@ module.exports.allOn = async (event: any) => {
       },
     };
     console.log('turning on box', box);
-    await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, key });
+    const invoke = new Invoke();
+    await invoke
+      .service('remote')
+      .name('command')
+      .body({ reservation, command, key })
+      .headers(event.headers)
+      .async()
+      .go();
     console.log('turned on', box);
   }
   return respond(200, 'ok');
@@ -433,12 +495,20 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
     for (const box of location.boxes) {
       const { losantId } = location;
       const { id: boxId, ip, clientAddress: client } = box;
-      const response = await invokeFunctionSync(`remote-${process.env.stage}-checkBoxInfo`, {
+      const body = {
         losantId,
         boxId,
         ip,
         client,
-      });
+      };
+      if (losantId.length > 3) {
+        const invoke = new Invoke();
+        await invoke
+          .service('remote')
+          .name('checkBoxInfo')
+          .body(body)
+          .go();
+      }
     }
   }
   return respond(200, 'ok');

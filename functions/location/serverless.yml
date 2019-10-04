@@ -9,7 +9,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
-    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
     slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
   iamRoleStatements:
@@ -44,10 +43,6 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
   tableLocation: locations-${self:custom.stage}
-  segmentKey:
-    prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     LocationsTable:

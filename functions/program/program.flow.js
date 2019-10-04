@@ -4,7 +4,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { respond, invokeFunctionSync, getPathParameters, getBody } = require('serverless-helpers');
+const { respond, getPathParameters, getBody, Invoke } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgramArea;
 require('dotenv').config();
@@ -53,8 +53,8 @@ const nationalChannels: number[] = [
   605, //SPMN
   606, //OTDR
   221, //CBSSN // premium
-  //, 245 //TNT
-  //, 247 //TBS
+  // 245, //TNT
+  247, //TBS
   //, 661 //FSOHhannelMinor: 1 },
   //, 600 //SMXHD
   701, //NFLMX // 4 game mix
@@ -168,12 +168,13 @@ module.exports.getAll = async (event: any) => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
-  const locationResult = await invokeFunctionSync(
-    `location-${process.env.stage}-get`,
-    null,
-    { id: locationId },
-    event.headers,
-  );
+  const invoke = new Invoke();
+  const locationResult = await invoke
+    .service('location')
+    .name('get')
+    .pathParams({ id: locationId })
+    .headers(event.headers)
+    .go();
 
   const location = locationResult.data;
 

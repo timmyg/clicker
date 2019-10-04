@@ -9,7 +9,6 @@ provider:
     name: serverless-deploys-clicker-eu-central-1
   environment:
     stage: ${self:custom.stage}
-    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     airtableKey: ${env:AIRTABLE_KEY}
     airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
     slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
@@ -29,10 +28,6 @@ custom:
   prune:
     automatic: true
     number: 3
-  segmentKey:
-    prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
   airtableBase:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}

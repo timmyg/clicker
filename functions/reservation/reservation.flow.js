@@ -1,7 +1,7 @@
 // @flow
 const dynamoose = require('dynamoose');
 const moment = require('moment');
-const { getUserId, getBody, getPathParameters, invokeFunctionSync, respond, track } = require('serverless-helpers');
+const { getUserId, getBody, getPathParameters, respond, track, Invoke } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 declare class process {
@@ -82,12 +82,13 @@ module.exports.create = async (event: any) => {
 
   // ensure location is active
   console.time('ensure location active');
-  const locationResult = await invokeFunctionSync(
-    `location-${process.env.stage}-get`,
-    null,
-    { id: reservation.location.id },
-    event.headers,
-  );
+  let invoke = new Invoke();
+  const locationResult = await invoke
+    .service('location')
+    .name('get')
+    .pathParams({ id: reservation.location.id })
+    .headers(event.headers)
+    .go();
   console.timeEnd('ensure location active');
   console.log(locationResult);
   const locationResultBody = locationResult.data;
@@ -106,22 +107,26 @@ module.exports.create = async (event: any) => {
 
   console.time('mark box reserved');
   // mark box reserved
-  await invokeFunctionSync(
-    `location-${process.env.stage}-setBoxReserved`,
-    { end: reservation.end },
-    { id: reservation.location.id, boxId: reservation.box.id },
-    event.headers,
-  );
+  invoke = new Invoke();
+  await invoke
+    .service('location')
+    .name('setBoxReserved')
+    .body({ end: reservation.end })
+    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
+    .headers(event.headers)
+    .async()
+    .go();
   console.timeEnd('mark box reserved');
 
   // deduct from user
   console.time('deduct transaction');
-  const result = await invokeFunctionSync(
-    `user-${process.env.stage}-transaction`,
-    { tokens: cost },
-    null,
-    event.headers,
-  );
+  invoke = new Invoke();
+  const result = await invoke
+    .service('user')
+    .name('transaction')
+    .body({ tokens: cost })
+    .headers(event.headers)
+    .go();
   console.log('result', result);
   const statusCode = result.statusCode;
   console.timeEnd('deduct transaction');
@@ -133,7 +138,14 @@ module.exports.create = async (event: any) => {
   console.time('remote command');
   const command = 'tune';
   const source = 'app';
-  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, source });
+  invoke = new Invoke();
+  await invoke
+    .service('remote')
+    .name('command')
+    .body({ reservation, command, source })
+    .headers(event.headers)
+    .async()
+    .go();
   console.timeEnd('remote command');
 
   // console.time('track event');
@@ -174,24 +186,27 @@ module.exports.update = async (event: any) => {
 
   console.time('mark box reserved');
   // mark box reserved
-  await invokeFunctionSync(
-    `location-${process.env.stage}-setBoxReserved`,
-    { end: updatedReservation.end },
-    { id: originalReservation.location.id, boxId: originalReservation.box.id },
-    event.headers,
-  );
+  let invoke = new Invoke();
+  await invoke
+    .service('location')
+    .name('setBoxReserved')
+    .body({ end: updatedReservation.end })
+    .pathParams({ id: originalReservation.location.id, boxId: originalReservation.box.id })
+    .headers(event.headers)
+    .async()
+    .go();
   console.timeEnd('mark box reserved');
 
   // deduct from user
-  console.time('deduct transition');
-  const result = await invokeFunctionSync(
-    `user-${process.env.stage}-transaction`,
-    { tokens: updatedReservation.cost },
-    null,
-    event.headers,
-  );
-  console.timeEnd('deduct transition');
-
+  console.time('deduct transaction');
+  invoke = new Invoke();
+  const result = await invoke
+    .service('user')
+    .name('transaction')
+    .body({ tokens: updatedReservation.cost })
+    .headers(event.headers)
+    .go();
+  console.timeEnd('deduct transaction');
   const statusCode = result.statusCode;
   if (statusCode >= 400) {
     // TODO mark not reserved
@@ -203,7 +218,14 @@ module.exports.update = async (event: any) => {
   console.time('remote command');
   const command = 'tune';
   const source = 'app';
-  await invokeFunctionSync(`remote-${process.env.stage}-command`, { reservation, command, source });
+  invoke = new Invoke();
+  await invoke
+    .service('remote')
+    .name('command')
+    .body({ reservation, command, source })
+    .headers(event.headers)
+    .async()
+    .go();
   console.timeEnd('remote command');
 
   // console.time('track event');
@@ -220,7 +242,7 @@ module.exports.update = async (event: any) => {
   // });
   // console.timeEnd('track event');
 
-  return respond(200, `hello`);
+  return respond(200, `nice`);
 };
 
 module.exports.activeByUser = async (event: any) => {
@@ -260,12 +282,14 @@ module.exports.cancel = async (event: any) => {
   await Reservation.update({ id, userId }, { cancelled: true });
 
   // mark box free
-  await invokeFunctionSync(
-    `location-${process.env.stage}-setBoxFree`,
-    null,
-    { id: reservation.location.id, boxId: reservation.box.id },
-    event.headers,
-  );
+  const invoke = new Invoke();
+  await invoke
+    .service('location')
+    .name('setBoxFree')
+    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
+    .headers(event.headers)
+    .async()
+    .go();
 
   // track({
   //   userId: userId,

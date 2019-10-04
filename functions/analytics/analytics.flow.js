@@ -1,11 +1,20 @@
 // @flow
 require('dotenv').config();
-const { respond, getBody, track } = require('serverless-helpers');
+const axios = require('axios');
+const { respond, getBody } = require('serverless-helpers');
 
 module.exports.track = async (event: any) => {
   const { userId, name, data } = getBody(event);
-  console.log({ userId, event: name, properties: data });
-  await track({ userId, event: name, properties: data });
+  // add in time
+  data.date = new Date().toISOString();
+  const body = { userId, event: name, properties: data };
+  const options = {
+    auth: {
+      username: process.env.segmentWriteKey,
+    },
+  };
+
+  await axios.post('https://api.segment.io/v1/track', body, options);
   return respond(200);
 };
 
