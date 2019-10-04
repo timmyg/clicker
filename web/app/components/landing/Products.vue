@@ -5,7 +5,7 @@
         <div class="section-header center-content">
           <div class="container-xs" v-scroll-reveal>
             <h2 class="mt-0 mb-16">
-              Let staff focus on selling food and beverage
+              Let staff focus on selling food + beverage
               <span
                 class="muted"
               >and let us keep them in their seats</span>
