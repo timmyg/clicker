@@ -10,19 +10,22 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img src="/images/landing/feature-tile-icon-01.svg" alt="Feature tile icon 01" />
+                  <img src="/images/landing/feature-tile-icon-02.svg" alt="Feature tile icon 01" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >Multiple Layouts</h4>
+                >Game Flow AI</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >A pseudo-Latin text used in web design, layout, and printing in place of things to emphasise design for previewing layouts.</p>
+                >
+                  With
+                  <span class="brand-font">Game Flow AI</span>, we read in live scoreboard data to make sure a close, intriguing game is never turned off just because another game is about to kick off.
+                </p>
               </div>
             </div>
           </div>
@@ -33,19 +36,19 @@
                   class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img src="/images/landing/feature-tile-icon-02.svg" alt="Feature tile icon 02" />
+                  <img src="/images/landing/feature-tile-icon-05.svg" alt="Feature tile icon 02" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >Multiple Layouts</h4>
+                >Manual Change Override</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >A pseudo-Latin text used in web design, layout, and printing in place of things to emphasise design for previewing layouts.</p>
+                >We can't predict what every patron wants to watch. If you put on a game with the traditional remote, we'll turn off our automation to prevent changing over their game.</p>
               </div>
             </div>
           </div>
@@ -56,88 +59,19 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img src="/images/landing/feature-tile-icon-03.svg" alt="Feature tile icon 03" />
+                  <img src="/images/landing/feature-tile-icon-01.svg" alt="Feature tile icon 03" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >Multiple Layouts</h4>
+                >Custom Scheduling</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >A pseudo-Latin text used in web design, layout, and printing in place of things to emphasise design for previewing layouts.</p>
-              </div>
-            </div>
-          </div>
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-icon-04.svg" alt="Feature tile icon 04" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                >Multiple Layouts</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >A pseudo-Latin text used in web design, layout, and printing in place of things to emphasise design for previewing layouts.</p>
-              </div>
-            </div>
-          </div>
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-icon-05.svg" alt="Feature tile icon 05" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                >Multiple Layouts</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >A pseudo-Latin text used in web design, layout, and printing in place of things to emphasise design for previewing layouts.</p>
-              </div>
-            </div>
-          </div>
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-icon-06.svg" alt="Feature tile icon 06" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                >Multiple Layouts</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >A pseudo-Latin text used in web design, layout, and printing in place of things to emphasise design for previewing layouts.</p>
+                >We'll work closely with you to learn your location's sports preferences and the atmosphere you want generated from your channel selections.</p>
               </div>
             </div>
           </div>

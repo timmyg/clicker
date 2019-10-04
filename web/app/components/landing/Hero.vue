@@ -6,10 +6,14 @@
         <div class="split-wrap">
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
-              <h1 class="mt-0 mb-16" v-scroll-reveal>You pay a lot for DirecTV.<br>Let's Maximize it.</h1>
-              <p class="m-0 mb-24" v-scroll-reveal="{ delay: 200 , origin: 'left'}">
-                <span class="brand-font">Clicker</span> ensures the most compelling local and national sports are on your TVs throughout the day.
-              </p>
+              <h1 class="mt-0 mb-16" v-scroll-reveal>
+                You pay a lot for DirecTV.
+                <br />Let's Maximize it.
+              </h1>
+              <p
+                class="m-0 mb-24"
+                v-scroll-reveal="{ delay: 200 , origin: 'left'}"
+              >We guarantee the most compelling local and national sports are on your TVs throughout the day, with no effort from your staff.</p>
               <div v-scroll-reveal="{ delay: 400 }">
                 <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a>
               </div>
@@ -38,8 +42,14 @@ export default {
 .hero div.hero-inner {
   padding-top: 96px;
 }
-// html.sr section.hero {
-//   visibility: hidden;
-// }
+
+// > large
+@media (min-width: 820px) {
+  .container .split-wrap .split-item {
+    .split-item-content {
+      width: 588px;
+    }
+  }
+}
 </style>
 

@@ -2,11 +2,12 @@
   <layout-basic>
     <div class="site-content">
       <Hero />
+      <Products />
       <Features />
       <FeaturesCards />
       <Pricing />
       <Faq />
-      <Testimonials />
+      <!-- <Testimonials /> -->
       <Signup />
     </div>
   </layout-basic>
@@ -17,6 +18,7 @@ import Hero from '@/components/landing/Hero';
 import Faq from '@/components/landing/Faq';
 import Features from '@/components/landing/Features';
 import LayoutBasic from '@/components/layouts/Basic';
+import Products from '@/components/landing/Products';
 import Pricing from '@/components/landing/Pricing';
 import Signup from '@/components/landing/Signup';
 import FeaturesCards from '@/components/landing/FeaturesCards';
@@ -27,6 +29,7 @@ export default {
     Features,
     Hero,
     LayoutBasic,
+    Products,
     Pricing,
     Signup,
     FeaturesCards,
@@ -34,9 +37,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-// main.site-content {
-//   visibility: hidden;
-// }
-</style>
