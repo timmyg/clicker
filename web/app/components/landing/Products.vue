@@ -8,10 +8,10 @@
               Let staff focus on selling food + beverage
               <span
                 class="muted"
-              >and let us keep them in their seats</span>
+              >and let us keep your guests in their seats</span>
             </h2>
             <p>
-              <span class="brand-font">Clicker</span> drastically reduces channel change requests and increases customer dwell time. We provides two distinct products:
+              <span class="brand-font">Clicker</span> drastically reduces channel change requests and increases customer dwell time. We provide two distinct products:
             </p>
           </div>
         </div>
@@ -35,7 +35,7 @@
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >We'll manage your TVs automatically throughout the day - taking into account local preference, matchups, and live game flow.</p>
+                >We'll manage your TVs automatically throughout the day - accounting for local preference, matchups, and live game flow.</p>
               </div>
             </div>
           </div>
@@ -58,7 +58,10 @@
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >Allow your guests to download our app, choose your location, and change TV channels right from their hand on a few select TVs.</p>
+                >
+                  Allow your guests to download our
+                  <a target="_blank" href="http://onelink.to/thxs9v">app</a>, choose your location, and change TV channels right from their phone on select TVs.
+                </p>
               </div>
             </div>
           </div>

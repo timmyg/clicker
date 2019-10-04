@@ -28,7 +28,8 @@
               <div class="testimonial-item-footer has-top-divider">
                 <div class="testimonial-item-name h6 m-0">Will</div>
                 <div class="testimonial-item-link text-xs">
-                  <a target="_none" href="https://www.tinroofcincinnati.com/">Tin Roof Cincinnati</a>
+                  <a target="_none" href="https://www.tinroofcincinnati.com/">Tin Roof</a>
+                  <p class="muted">Regional Manager</p>
                 </div>
               </div>
             </div>
@@ -54,6 +55,7 @@
                 <div class="testimonial-item-name h6 m-0">Patrick</div>
                 <div class="testimonial-item-link text-xs">
                   <a target="_none" href="http://www.queencityexchange.com/">Queen City Exchange</a>
+                  <p class="muted">General Manager</p>
                 </div>
               </div>
             </div>

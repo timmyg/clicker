@@ -13,7 +13,7 @@
               <p
                 class="m-0 mb-24"
                 v-scroll-reveal="{ delay: 200 , origin: 'left'}"
-              >We guarantee the most compelling local and national sports are always on your TVs, and take that responsibility away your from staff.</p>
+              >We guarantee the most compelling local and national sports are always on your TVs, taking that responsibility off your staff.</p>
               <div v-scroll-reveal="{ delay: 400 }">
                 <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a>
               </div>

@@ -26,8 +26,10 @@
               <p class="m-0">
                 After downloading the
                 <b class="brand-font">Clicker TV</b> app, your guests can choose the sports they want to watch and change the channel instantly from their phone.
-                <br />
-                <a href="http://onelink.to/thxs9v" target="_blank">Check it out</a>.
+                <a
+                  href="http://onelink.to/thxs9v"
+                  target="_blank"
+                >Check it out.</a>
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-04">
@@ -39,7 +41,7 @@
               <h3 class="mt-0 mb-16">Custom Scheduling</h3>
               <p
                 class="m-0"
-              >Soccer bar? Texas A&M bar? Every location is different. We'll work closely with you to ensure your programming aligns with your bar's preferences.</p>
+              >Soccer bar? Notre Dame bar? Every location is different. We'll work closely with you to ensure your programming aligns with your bar's preferences.</p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-05">
               <img src="/images/landing/wall-tvs-more.png" alt="Wall with six tvs" />
