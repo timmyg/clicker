@@ -4,9 +4,12 @@
       <div class="features-tiles-inner section-inner">
         <div class="section-header center-content">
           <div class="container-xs" v-scroll-reveal>
-            <h2
-              class="mt-0 mb-16"
-            >Let the staff focus on selling food and beverage, and let us keep them in their seats</h2>
+            <h2 class="mt-0 mb-16">
+              Let staff focus on selling food and beverage
+              <span
+                class="muted"
+              >and let us keep them in their seats</span>
+            </h2>
             <p>
               <span class="brand-font">Clicker</span> drastically reduces channel change requests and increases customer dwell time. We provides two distinct products:
             </p>

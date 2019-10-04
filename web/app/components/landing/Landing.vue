@@ -37,3 +37,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.muted {
+  color: #757575;
+}
+</style>

@@ -28,7 +28,7 @@
               <div class="testimonial-item-footer has-top-divider">
                 <div class="testimonial-item-name h6 m-0">Will</div>
                 <div class="testimonial-item-link text-xs">
-                  <a target="_none" href="https://www.tinroofcincinnati.com/">Tin Roof (Cincinnati)</a>
+                  <a target="_none" href="https://www.tinroofcincinnati.com/">Tin Roof Cincinnati</a>
                 </div>
               </div>
             </div>
