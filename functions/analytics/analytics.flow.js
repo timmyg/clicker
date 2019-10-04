@@ -13,6 +13,7 @@ module.exports.track = async (event: any) => {
       username: process.env.segmentWriteKey,
     },
   };
+
   await axios.post('https://api.segment.io/v1/track', body, options);
   return respond(200);
 };
