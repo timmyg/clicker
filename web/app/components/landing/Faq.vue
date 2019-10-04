@@ -93,13 +93,15 @@
             v-scroll-reveal="{origin: 'right', delay: 240,  distance : '10px' }"
           >
             <div class="accordion-title">
-              <span>Will the TV potentially change at a certain time if a patron is watching a specific game?</span>
+              <span>Will the TV potentially change at a certain time if a guest is watching a specific game?</span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
               <p>
                 No - our system can track the manual change inside your location, and disable our
-                <b class="brand-font">Control Center</b> automation until the game completes.
+                <b
+                  class="brand-font"
+                >Control Center</b> automation until the game completes.
               </p>
             </div>
           </li>

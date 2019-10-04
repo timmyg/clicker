@@ -28,14 +28,14 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: 'Clicker: Sports Programming Platform',
+    title: 'Clicker: Sports Programming Management Platform',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: 'TV sports programming platform and app ensuring the best, most relevent games are on at all times',
+        content: 'TV sports programming platform and app ensuring the best, most relevant games are on at all times',
       },
       { name: 'fragment', content: '!' },
     ],

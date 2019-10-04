@@ -7,7 +7,7 @@
       <FeaturesCards />
       <Pricing />
       <Faq />
-      <!-- <Testimonials /> -->
+      <Testimonials />
       <Signup />
     </div>
   </layout-basic>

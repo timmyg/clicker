@@ -10,7 +10,7 @@
             <div class="split-item-content center-content-mobile">
               <h3 class="mt-0 mb-16">Right Game, Right TV, All the Time</h3>
               <p class="m-0">
-                Your patrons are hard to predict, and your bartenders are easily distracted. With
+                Your guests are hard to predict, and your bartenders are easily distracted. With
                 <b
                   class="brand-font"
                 >Control Center</b>, we'll handle the TV changes behind the scenes and put the best sports on your TVs throughout the day - without your staff having to lift a finger.
@@ -39,7 +39,7 @@
               <h3 class="mt-0 mb-16">Custom Scheduling</h3>
               <p
                 class="m-0"
-              >Soccer bar? Texas A&M bar? Every location is different. We'll work closely with you to ensure your programming aligns with your bar preferences.</p>
+              >Soccer bar? Texas A&M bar? Every location is different. We'll work closely with you to ensure your programming aligns with your bar's preferences.</p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-05">
               <img src="/images/landing/wall-tvs-more.png" alt="Wall with six tvs" />

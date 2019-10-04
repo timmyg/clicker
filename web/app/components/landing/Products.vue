@@ -4,7 +4,9 @@
       <div class="features-tiles-inner section-inner">
         <div class="section-header center-content">
           <div class="container-xs" v-scroll-reveal>
-            <h2 class="mt-0 mb-16">Sell more food and beverage</h2>
+            <h2
+              class="mt-0 mb-16"
+            >Let the staff focus on selling food and beverage, and let us keep them in their seats</h2>
             <p>
               <span class="brand-font">Clicker</span> drastically reduces channel change requests and increases customer dwell time. We provides two distinct products:
             </p>
@@ -30,7 +32,7 @@
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >We'll manage your TVs for you automatically throughout the day - taking into account local preference, matchups, and live game flow.</p>
+                >We'll manage your TVs automatically throughout the day - taking into account local preference, matchups, and live game flow.</p>
               </div>
             </div>
           </div>

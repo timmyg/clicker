@@ -24,7 +24,7 @@
                   data-reveal-delay="150"
                 >
                   With
-                  <span class="brand-font">Game Flow AI</span>, we read in live scoreboard data to make sure a close, intriguing game is never turned off just because another game is about to kick off.
+                  <span class="brand-font">Game Flow AI</span>, we read live scoreboard data to make sure a close, intriguing game is never turned off just because another game is about to kick off.
                 </p>
               </div>
             </div>
@@ -48,7 +48,7 @@
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >We can't predict what every patron wants to watch. If you put on a game with the traditional remote, we'll turn off our automation to prevent changing over their game.</p>
+                >We can't predict what every guest wants to watch. If you put on a game with the traditional remote, we'll turn off our automation to prevent changing over their game.</p>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >We'll work closely with you to learn your location's sports preferences and the atmosphere you want generated from your channel selections.</p>
+                >We'll work closely with you to ensure you stay on brand by understanding your location's sports preferences and the atmosphere you want to cultivate and preserve.</p>
               </div>
             </div>
           </div>
