@@ -9,7 +9,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     serviceName: ${self:service}
-    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -42,10 +41,6 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-  segmentKey:
-    prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 functions:
   health:
     handler: game.health

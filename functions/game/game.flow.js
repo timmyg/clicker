@@ -1,6 +1,6 @@
 // @flow
 const axios = require('axios');
-const { respond, invokeFunctionSync, getPathParameters, getBody } = require('serverless-helpers');
+const { respond, getPathParameters, getBody } = require('serverless-helpers');
 require('dotenv').config();
 
 class SiLeague {
@@ -91,9 +91,9 @@ function transformGame(result: SiResult): GameStatus {
         gameStatus.blowout = true;
       }
     } else if (leageAbbreviation === 'NFL') {
-      // 8:00 left in 4th quarter and 22+ point difference
-      const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 8;
-      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 22;
+      // 6:00 left in 4th quarter and 17+ point difference
+      const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 17;
       if (isNearEnd && isBlowout) {
         gameStatus.blowout = true;
       }

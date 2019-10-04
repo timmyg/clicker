@@ -8,12 +8,12 @@ provider:
     name: serverless-deploys-clicker
   environment:
     tableUser: ${self:custom.tableUser}
-    segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
     stage: ${self:custom.stage}
     stripeSecretKey: ${self:custom.stripeSecretKey.${self:custom.stage}}
     twilioAccountSid: ${env:TWILIO_ACCOUNT_SID}
     twilioAuthToken: ${env:TWILIO_AUTH_TOKEN}
     twilioServiceSid: ${env:TWILIO_SERVICE_SID}
+    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -51,10 +51,6 @@ custom:
     prod: ${env:STRIPE_SECRET_KEY}
     release: ${env:STRIPE_SECRET_KEY_DEV}
     develop: ${env:STRIPE_SECRET_KEY_DEV}
-  segmentKey:
-    prod: ${env:SEGMENT_WRITE_KEY}
-    release: ${env:SEGMENT_WRITE_KEY_DEV}
-    develop: ${env:SEGMENT_WRITE_KEY_DEV}
 resources:
   Resources:
     UserTable:
