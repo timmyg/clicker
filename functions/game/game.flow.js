@@ -1,6 +1,6 @@
 // @flow
 const axios = require('axios');
-const { respond, getPathParameters, getBody } = require('serverless-helpers');
+const { respond, invokeFunctionSync, getPathParameters, getBody } = require('serverless-helpers');
 require('dotenv').config();
 
 class SiLeague {
@@ -53,6 +53,7 @@ module.exports.getStatus = async (event: any) => {
 
   const method = 'get';
   const options = { method, url: apiUrl };
+  console.log({ apiUrl });
   const result = await axios(options);
   const gameStatus: GameStatus = transformGame(result.data);
 

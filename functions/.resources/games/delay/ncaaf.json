@@ -1,0 +1,166 @@
+{
+  "status": "success",
+  "data": {
+    "id": 2127646,
+    "league": { "name": "College Football", "abbreviation": "NCAAF" },
+    "start": { "local": "2019-10-05T11:00:00", "utc": "2019-10-05T16:00:00", "epoch": 1570291200 },
+    "tv": "ABC",
+    "tv_stations": [
+      {
+        "tv_station_id": 702,
+        "name": "ABC",
+        "call_letters": "ABC",
+        "network_type": { "network_type_id": 1, "name": "National" },
+        "country": { "country_id": 1, "name": "United States", "abbreviation": "USA" }
+      }
+    ],
+    "venue": {
+      "name": "Kivisto Field at David Booth Kansas Memorial Stadium",
+      "city": "Lawrence",
+      "state": { "name": "Kansas", "abbreviation": "KS" },
+      "country": { "name": "United States", "abbreviation": "USA" }
+    },
+    "status": {
+      "period": { "id": 1, "name": "1st", "unit": "Quarter", "full_name": "1st", "time": "15:00" },
+      "teamPossessionId": 3430,
+      "name": "Delayed",
+      "isUnderReview": false,
+      "id": 23,
+      "is_active": false
+    },
+    "teams": [
+      {
+        "id": 3426,
+        "name": "Jayhawks",
+        "abbreviation": "Kansas",
+        "location": { "name": "Kansas", "type": "home" },
+        "title": "Kansas Jayhawks",
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/football/cfb/logos/",
+          "cuts": {
+            "default": "kansas_50.png",
+            "50x50": "kansas_50.png",
+            "100x100": "kansas_100.png",
+            "100x100_light": "kansas_100_stroke.png",
+            "360x360": "kansas_360.png",
+            "250x250": "kansas_250.png",
+            "150x150": "kansas_150.png",
+            "40x40": "kansas_40.png",
+            "40x40_light": "kansas_40_stroke.png"
+          }
+        },
+        "color": { "primary": "#006AB5", "secondary": "#E51837" },
+        "slug": "college-football/team/kansas-jayhawks",
+        "record": {
+          "wins": 2,
+          "losses": 3,
+          "ties": 0,
+          "percentage": ".400",
+          "conferenceWins": 0,
+          "conferenceLosses": 2
+        },
+        "score": 0,
+        "timeouts_left": 3,
+        "possession": false,
+        "is_winner": false,
+        "linescores": [
+          { "period": { "id": 1, "name": "1st", "unit": "Quarter", "full_name": "1st" }, "score": 0 },
+          { "period": { "id": 2, "name": "2nd", "unit": "Quarter", "full_name": "2nd" } },
+          { "period": { "id": 3, "name": "3rd", "unit": "Quarter", "full_name": "3rd" } },
+          { "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th" } }
+        ],
+        "college_sub_division": { "name": "FBS", "id": 1 },
+        "conference": { "name": "Big 12", "abbreviation": "Big 12", "id": 71 },
+        "taxonomy": {
+          "teams": "ncaaf-kansas-jayhawks",
+          "airship": [
+            { "name": "Game Start", "tag": "events::ncaaf-kansas-jayhawks-1" },
+            { "name": "Quarter", "tag": "events::ncaaf-kansas-jayhawks-2" },
+            { "name": "Scoring Plays", "tag": "events::ncaaf-kansas-jayhawks-3" },
+            { "name": "Final", "tag": "events::ncaaf-kansas-jayhawks-4" },
+            { "name": "Team News", "tag": "teams::ncaaf-kansas-jayhawks" }
+          ]
+        },
+        "leaders": {
+          "passing": { "name": "yards", "abbreviation": "Yds", "value": 0, "players": [] },
+          "receiving": { "name": "yards", "abbreviation": "Yds", "value": 0, "players": [] },
+          "rushing": { "name": "yards", "abbreviation": "Yds", "value": 0, "players": [] }
+        }
+      },
+      {
+        "id": 3430,
+        "name": "Sooners",
+        "abbreviation": "Okla",
+        "location": { "name": "Oklahoma", "type": "away" },
+        "title": "Oklahoma Sooners",
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/football/cfb/logos/",
+          "cuts": {
+            "default": "okla_50.png",
+            "50x50": "okla_50.png",
+            "100x100": "okla_100.png",
+            "100x100_light": "okla_100_stroke.png",
+            "360x360": "okla_360.png",
+            "250x250": "okla_250.png",
+            "150x150": "okla_150.png",
+            "40x40": "okla_40.png",
+            "40x40_light": "okla_40_stroke.png"
+          }
+        },
+        "color": { "primary": "#BA0034", "secondary": "#000000" },
+        "slug": "college-football/team/oklahoma-sooners",
+        "record": {
+          "wins": 4,
+          "losses": 0,
+          "ties": 0,
+          "percentage": "1.000",
+          "conferenceWins": 1,
+          "conferenceLosses": 0
+        },
+        "score": 0,
+        "timeouts_left": 3,
+        "possession": true,
+        "is_winner": false,
+        "linescores": [
+          { "period": { "id": 1, "name": "1st", "unit": "Quarter", "full_name": "1st" }, "score": 0 },
+          { "period": { "id": 2, "name": "2nd", "unit": "Quarter", "full_name": "2nd" } },
+          { "period": { "id": 3, "name": "3rd", "unit": "Quarter", "full_name": "3rd" } },
+          { "period": { "id": 4, "name": "4th", "unit": "Quarter", "full_name": "4th" } }
+        ],
+        "college_sub_division": { "name": "FBS", "id": 1 },
+        "conference": { "name": "Big 12", "abbreviation": "Big 12", "id": 71 },
+        "rank": { "name": "Associated Press", "rank": 6, "id": 1 },
+        "taxonomy": {
+          "teams": "ncaaf-oklahoma-sooners",
+          "airship": [
+            { "name": "Game Start", "tag": "events::ncaaf-oklahoma-sooners-1" },
+            { "name": "Quarter", "tag": "events::ncaaf-oklahoma-sooners-2" },
+            { "name": "Scoring Plays", "tag": "events::ncaaf-oklahoma-sooners-3" },
+            { "name": "Final", "tag": "events::ncaaf-oklahoma-sooners-4" },
+            { "name": "Team News", "tag": "teams::ncaaf-oklahoma-sooners" }
+          ]
+        },
+        "leaders": {
+          "passing": { "name": "yards", "abbreviation": "Yds", "value": 0, "players": [] },
+          "receiving": { "name": "yards", "abbreviation": "Yds", "value": 0, "players": [] },
+          "rushing": { "name": "yards", "abbreviation": "Yds", "value": 0, "players": [] }
+        }
+      }
+    ],
+    "alert_types": [
+      { "name": "Game Start", "airship": "events::1570233600-2127646-1" },
+      { "name": "Quarter", "airship": "events::1570233600-2127646-2" },
+      { "name": "Scoring Play", "airship": "events::1570233600-2127646-3" },
+      { "name": "Final", "airship": "events::1570233600-2127646-4" }
+    ],
+    "last_play": {},
+    "scoring_summaries": [],
+    "box_scores": [],
+    "links": [
+      { "name": "Recap", "url": "https://www.si.com/college-football/game/2127646", "id": 1 },
+      { "name": "Box Score", "url": "https://www.si.com/college-football/game/2127646/box-score", "id": 2 },
+      { "name": "Play-by-Play", "url": "https://www.si.com/college-football/game/2127646/play-by-play", "id": 3 }
+    ],
+    "editorial": { "has_preview": true, "has_recap": false, "has_bullets": true, "has_odds": false }
+  }
+}
