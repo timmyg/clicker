@@ -176,6 +176,7 @@ module.exports.command = async (event: any) => {
     console.time('track event');
     const invokeAnalytics = new Invoke();
     await invokeAnalytics
+      .service('analytics')
       .name('track')
       .body({ userId, name, data })
       .async()
