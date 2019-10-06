@@ -15,7 +15,9 @@ module.exports.track = async (event: any) => {
   };
 
   console.log('https://api.segment.io/v1/track', body, options);
+  console.time('track event');
   const result = await axios.post('https://api.segment.io/v1/track', body, options);
+  console.timeEnd('track event');
   console.log(result);
   return respond(200);
 };
