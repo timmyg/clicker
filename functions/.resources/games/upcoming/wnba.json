@@ -1,0 +1,140 @@
+{
+  "status": "success",
+  "data": {
+    "id": 2193135,
+    "league": { "name": "Women's National Basketball Association", "abbreviation": "WNBA" },
+    "start": { "local": "2019-10-06T15:30:00", "utc": "2019-10-06T19:30:00", "epoch": 1570390200 },
+    "tv": "ABC",
+    "tv_stations": [
+      {
+        "tv_station_id": 272,
+        "name": "ABC",
+        "call_letters": "ABC",
+        "network_type": { "network_type_id": 1, "name": "National" },
+        "country": { "country_id": 1, "name": "United States", "abbreviation": "USA" }
+      }
+    ],
+    "tickets": {},
+    "venue": {
+      "name": "Mohegan Sun Arena",
+      "city": "Uncasville",
+      "state": { "name": "Connecticut", "abbreviation": "CT" },
+      "country": { "name": "United States", "abbreviation": "USA" }
+    },
+    "status": {
+      "id": 1,
+      "name": "Pre-Game",
+      "is_break": true,
+      "is_active": false,
+      "is_live": false,
+      "is_playoff": null,
+      "round": null
+    },
+    "event_round": {
+      "title": "WNBA Finals",
+      "status": "",
+      "name": "WNBA Finals: Game undefined - ",
+      "games_in_series": 5
+    },
+    "teams": [
+      {
+        "slug": "wnba/team/connecticut-sun",
+        "id": 157,
+        "name": "Sun",
+        "abbreviation": "Con",
+        "location": { "name": "Connecticut", "type": "home" },
+        "title": "Connecticut Sun",
+        "venue": {
+          "name": "Mohegan Sun Arena",
+          "city": "Uncasville",
+          "state": { "name": "Connecticut", "abbreviation": "CT" },
+          "country": { "name": "", "abbreviation": null }
+        },
+        "league": { "name": "Women's National Basketball Association", "abbreviation": "WNBA" },
+        "conference": { "name": "Eastern Conference", "abbreviation": "Eastern" },
+        "division": null,
+        "taxonomy": {
+          "teams": "wnba-connecticut-sun",
+          "airship": [
+            { "name": "Game Start", "tag": "events::wnba-connecticut-sun-1" },
+            { "name": "Quarter", "tag": "events::wnba-connecticut-sun-2" },
+            { "name": "Final", "tag": "events::wnba-connecticut-sun-4" },
+            { "name": "Team News", "tag": "teams::wnba-connecticut-sun" }
+          ]
+        },
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/basketball/wnba/logos/",
+          "cuts": {
+            "default": "sun_50.png",
+            "40x40": "sun_40.png",
+            "40x40_light": "sun_40_stroke.png",
+            "50x50": "sun_50.png",
+            "100x100": "sun_100.png",
+            "100x100_light": "sun_100_stroke.png",
+            "150x150": "sun_150.png",
+            "250x250": "sun_250.png",
+            "360x360": "sun_360.png"
+          }
+        },
+        "color": { "primary": "#a6192e", "secondary": "#041e42" },
+        "is_winner": false
+      },
+      {
+        "slug": "wnba/team/washington-mystics",
+        "id": 154,
+        "name": "Mystics",
+        "abbreviation": "Was",
+        "location": { "name": "Washington", "type": "away" },
+        "title": "Washington Mystics",
+        "venue": {
+          "name": "The Entertainment and Sports Arena",
+          "city": "Washington",
+          "state": { "name": "District Of Columbia", "abbreviation": "DC" },
+          "country": { "name": "", "abbreviation": null }
+        },
+        "league": { "name": "Women's National Basketball Association", "abbreviation": "WNBA" },
+        "conference": { "name": "Eastern Conference", "abbreviation": "Eastern" },
+        "division": null,
+        "taxonomy": {
+          "teams": "wnba-washington-mystics",
+          "airship": [
+            { "name": "Game Start", "tag": "events::wnba-washington-mystics-1" },
+            { "name": "Quarter", "tag": "events::wnba-washington-mystics-2" },
+            { "name": "Final", "tag": "events::wnba-washington-mystics-4" },
+            { "name": "Team News", "tag": "teams::wnba-washington-mystics" }
+          ]
+        },
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/basketball/wnba/logos/",
+          "cuts": {
+            "default": "mystics_50.png",
+            "40x40": "mystics_40.png",
+            "40x40_light": "mystics_40_stroke.png",
+            "50x50": "mystics_50.png",
+            "100x100": "mystics_100.png",
+            "100x100_light": "mystics_100_stroke.png",
+            "150x150": "mystics_150.png",
+            "250x250": "mystics_250.png",
+            "360x360": "mystics_360.png"
+          }
+        },
+        "color": { "primary": "#0c2340", "secondary": "#c8102e" },
+        "is_winner": false
+      }
+    ],
+    "alert_types": [
+      { "name": "Game Start", "airship": "events::1570390200-2193135-1" },
+      { "name": "Quarter", "airship": "events::1570390200-2193135-2" },
+      { "name": "Final", "airship": "events::1570390200-2193135-4" }
+    ],
+    "editorial": { "has_preview": true, "has_recap": false, "has_bullets": false, "has_odds": false },
+    "last_play": null,
+    "links": [
+      { "name": "Recap", "url": "https://www.si.com/wnba/game/2193135", "id": 1 },
+      { "name": "Box Score", "url": "https://www.si.com/wnba/game/2193135/box-score", "id": 2 },
+      { "name": "Play-by-Play", "url": "https://www.si.com/wnba/game/2193135/play-by-play", "id": 3 }
+    ],
+    "box_scores": [],
+    "play_by_play": []
+  }
+}

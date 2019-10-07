@@ -1,0 +1,58 @@
+service: message
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  versionFunctions: false
+  runtime: nodejs8.10
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
+    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
+    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
+    stage: ${self:custom.stage}
+plugins:
+  - serverless-domain-manager
+  - serverless-prune-plugin
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: leads
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+functions:
+  create:
+    handler: message.create
+    events:
+      - http:
+          path: ''
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  health:
+    handler: message.health
+    events:
+      - http:
+          path: health
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

@@ -117,6 +117,9 @@ jobs:
   functions/location:
     working_directory: ~/clicker/functions/location
     <<: *serverless_build_test_deploy
+  functions/message:
+    working_directory: ~/clicker/functions/message
+    <<: *serverless_build_test_deploy
   functions/program:
     working_directory: ~/clicker/functions/program
     <<: *serverless_build_test_deploy

@@ -2,7 +2,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const { IncomingWebhook } = require('@slack/webhook');
-const { respond } = require('serverless-helpers');
+const { respond, Invoke } = require('serverless-helpers');
 
 declare class process {
   static env: {
@@ -37,25 +37,20 @@ module.exports.checkControlCenterEvents = async (event: any) => {
     .all();
   console.log(`found ${games.length} games`);
   if (!games.length) {
-    const title = 'Control Center Scheduling';
-    const text = `No games scheduled today ${process.env.stage !== 'prod' ? process.env.stage : ''}`;
+    // const title = 'Control Center Scheduling';
+    const text = `No games scheduled today`;
     const color = process.env.stage === 'prod' ? 'danger' : null;
-    await sendControlCenterSlack(title, text, color);
+    await sendControlCenterSlack(text);
   }
   return respond(200);
 };
 
-async function sendControlCenterSlack(title, text, color, fields) {
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
-  await controlCenterWebhook.send({
-    attachments: [
-      {
-        title,
-        text,
-        fallback: text,
-        color,
-        fields: fields,
-      },
-    ],
-  });
+async function sendControlCenterSlack(text) {
+  const channel = 'control-center';
+  const invoke = new Invoke();
+  await invoke
+    .service('message')
+    .name('create')
+    .body({ channel, text })
+    .go();
 }
