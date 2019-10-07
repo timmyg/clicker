@@ -143,6 +143,7 @@ module.exports.get = async (event: any) => {
 module.exports.create = async (event: any) => {
   try {
     const body = getBody(event);
+    console.log(body);
     const location = await Location.create(body);
     return respond(201, location);
   } catch (e) {
