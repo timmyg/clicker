@@ -63,44 +63,18 @@ module.exports.command = async (event: any) => {
 
     let eventName, userId;
     if (source === 'app') {
-      eventName = 'App Zap';
       userId = reservation.userId;
-      const title = `${eventName} @ ${reservation.location.name} ${
-        process.env.stage !== 'prod' ? process.env.stage : ''
-      }`;
-      const text = `Zapped to ${reservation.program.title} on ${reservation.program.channelTitle}`;
-      const color = '#0091ea'; // good, warning, danger
-      const attachments = [
-        {
-          title,
-          fallback: title,
-          color,
-          text,
-          fields: [
-            {
-              title: 'Minutes',
-              value: reservation.minutes,
-              short: true,
-            },
-            {
-              title: 'TV Label',
-              value: reservation.box.label,
-              short: true,
-            },
-          ],
-        },
-      ];
+      let text = `_App Zap_ @ ${reservation.location.name}`;
+      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${reservation.minutes} mins, TV ${reservation.box.label})`;
       const invoke = new Invoke();
       await invoke
         .service('message')
         .name('sendApp')
-        .body({ attachments })
+        .body({ text })
         .go();
     } else if (source === 'control center') {
-      let text = 'Control Center Zap';
       userId = 'system';
-      text = `_${text}_ @ ${reservation.location.name} *Zone ${reservation.box.zone}* Channel ${channel}`;
-      const color = '#0091ea'; // good, warning, danger
+      const text = `_Control Center Zap_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
       const invoke = new Invoke();
       await invoke
         .service('message')
@@ -108,11 +82,8 @@ module.exports.command = async (event: any) => {
         .body({ text })
         .go();
     } else if (source === 'control center daily') {
-      let text = 'Control Center Daily Zap';
       userId = 'system';
-      // const title = `${eventName} @ ${reservation.location.name}`;
-      text = `_${text}_ @ ${reservation.location.name} *Zone ${reservation.box.zone}* Channel ${channel}`;
-      const color = '#0091ea'; // good, warning, danger
+      const text = `_Control Center Daily Zap_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
       const invoke = new Invoke();
       await invoke
         .service('message')
