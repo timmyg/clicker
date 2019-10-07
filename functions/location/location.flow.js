@@ -145,7 +145,7 @@ module.exports.get = async (event: any) => {
   if (latitude && longitude) {
     const { latitude: locationLatitude, longitude: locationLongitude } = location;
     const meters = geolib.getDistanceSimple(
-      { latitude, longitude },
+      { latitude: +latitude, longitude: +longitude },
       { latitude: locationLatitude, longitude: locationLongitude },
     );
     const miles = geolib.convertUnit('mi', meters);
