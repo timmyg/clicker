@@ -64,7 +64,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   showHidden = false;
   disableButton = false;
   sub: Subscription;
-  milesRadius = 5;
+  milesRadius = 100;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -246,12 +246,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
     ) {
       await Geolocation.getCurrentPosition(geolocationOptions)
         .then(response => {
+          const { latitude, longitude } = response.coords;
+          console.log(latitude, longitude);
+          this.store.dispatch(new fromUser.SetGeolocation(latitude, longitude));
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;
           this.geolocationDeclined = false;
           this.disableButton = false;
           this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
-          const { latitude, longitude } = response.coords;
           this.userGeolocation = { latitude, longitude };
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
           this.reserveService.emitShowingLocations();
@@ -286,6 +288,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   onLocationClick(location: Location) {
     this.waiting = true;
     this.reserveService.emitCloseSearch();
+    console.log(location);
     this.store.dispatch(new fromReservation.SetLocation(location));
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))

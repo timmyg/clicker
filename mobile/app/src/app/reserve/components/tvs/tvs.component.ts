@@ -70,6 +70,7 @@ export class TvsComponent implements OnDestroy {
   }
 
   refresh() {
+    console.log(this.reservation.location);
     this.store.dispatch(new fromReservation.SetLocation(this.reservation.location));
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))

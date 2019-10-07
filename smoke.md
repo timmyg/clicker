@@ -9,6 +9,7 @@
   - slack message
   - analytics
   - login
+  - tv reserved
 - manual zap
 - landing page signup
 - pull programming

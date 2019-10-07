@@ -12,6 +12,7 @@ export const LOAD_WALLET = '[USER] Load Wallet';
 export const LOAD_WALLET_SUCCESS = '[USER] Load Wallet Success';
 export const LOAD_WALLET_FAIL = '[USER] Load Wallet Fail';
 export const SET_AUTH_TOKEN = '[USER] Set Auth Token';
+export const SET_GEOLOCATION = '[USER] Set Geolocation';
 export const ALIAS = '[USER] Alias';
 export const ALIAS_SUCCESS = '[USER] Alias Success';
 export const ALIAS_FAIL = '[USER] Alias Fail';
@@ -70,6 +71,11 @@ export class LoadWalletFail implements Action {
 export class SetAuthToken implements Action {
   readonly type = SET_AUTH_TOKEN;
   constructor(public payload: string) {}
+}
+
+export class SetGeolocation implements Action {
+  readonly type = SET_GEOLOCATION;
+  constructor(public latitude: number, public longitude: number) {}
 }
 
 export class Alias implements Action {
@@ -140,6 +146,7 @@ export type UserActions =
   | LoadWalletSuccess
   | LoadWalletFail
   | SetAuthToken
+  | SetGeolocation
   | UpdateCard
   | UpdateCardSuccess
   | UpdateCardFail

@@ -137,6 +137,21 @@ module.exports.get = async (event: any) => {
     });
   }
 
+  delete location.losantId;
+
+  // set distance
+  const { latitude, longitude } = event.queryStringParameters;
+  if (latitude && longitude) {
+    const { latitude: locationLatitude, longitude: locationLongitude } = location;
+    const meters = geolib.getDistanceSimple(
+      { latitude, longitude },
+      { latitude: locationLatitude, longitude: locationLongitude },
+    );
+    const miles = geolib.convertUnit('mi', meters);
+    const roundedMiles = Math.round(10 * miles) / 10;
+    location.distance = roundedMiles;
+  }
+
   return respond(200, location);
 };
 
