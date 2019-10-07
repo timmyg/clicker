@@ -69,7 +69,7 @@ export class ReservationsEffects {
   setLocation$: Observable<Action> = this.actions$.pipe(
     ofType(ReservationActions.SET_RESERVATION_LOCATION),
     switchMap((action: ReservationActions.SetLocation) =>
-      this.locationService.get(action.payload.id, action.payload.latitude, action.payload.longitude).pipe(
+      this.locationService.get(action.location.id, action.latitude, action.longitude).pipe(
         map((location: Location) => new ReservationActions.SetLocationSuccess(location)),
         catchError(err => of(new ReservationActions.SetLocationFail(err))),
       ),

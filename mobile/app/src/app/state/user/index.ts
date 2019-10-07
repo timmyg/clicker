@@ -29,7 +29,7 @@ export const getUserId = createSelector(
   fromUser.getUserId,
 );
 
-export const getGeolocation = createSelector(
+export const getUserGeolocation = createSelector(
   getUserState,
   fromUser.getUserGeolocation,
 );

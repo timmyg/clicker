@@ -15,6 +15,7 @@ import { first } from 'rxjs/operators';
 import { getLoading } from 'src/app/state/location';
 import { Globals } from 'src/app/globals';
 import { SegmentService } from 'ngx-segment-analytics';
+import { getUserGeolocation } from 'src/app/state/user';
 
 @Component({
   selector: 'app-tvs',
@@ -28,6 +29,8 @@ export class TvsComponent implements OnDestroy {
   refreshSubscription: Subscription;
   title = 'Choose TV';
   isLoading$: Observable<boolean>;
+  userGeolocation$: Observable<{ latitude; longitude }>;
+  userGeolocation: { latitude; longitude };
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -44,6 +47,11 @@ export class TvsComponent implements OnDestroy {
     this.reservation$.subscribe(r => (this.reservation = r));
     this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
+    this.userGeolocation$ = this.store.select(getUserGeolocation);
+    this.userGeolocation$.subscribe(userGeolocation => {
+      console.log({ userGeolocation });
+      this.userGeolocation = userGeolocation;
+    });
   }
 
   ngOnInit() {
@@ -71,7 +79,13 @@ export class TvsComponent implements OnDestroy {
 
   refresh() {
     console.log(this.reservation.location);
-    this.store.dispatch(new fromReservation.SetLocation(this.reservation.location));
+    this.store.dispatch(
+      new fromReservation.SetLocation(
+        this.reservation.location,
+        this.userGeolocation.latitude,
+        this.userGeolocation.longitude,
+      ),
+    );
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())

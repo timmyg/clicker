@@ -289,7 +289,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.waiting = true;
     this.reserveService.emitCloseSearch();
     console.log(location);
-    this.store.dispatch(new fromReservation.SetLocation(location));
+    const { latitude, longitude } = this.userGeolocation;
+    this.store.dispatch(new fromReservation.SetLocation(location, latitude, longitude));
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())
