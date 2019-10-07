@@ -31,7 +31,7 @@
 
 // Generic section illustrations
 .illustration-section-04::after {
-  @include illustration('illustration-section-04.svg', 100%, 500px, top);
+  // @include illustration('illustration-section-04.svg', 100%, 500px, top);
 }
 
 .illustration-section-05::after {
