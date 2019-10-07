@@ -63,8 +63,9 @@ module.exports.command = async (event: any) => {
 
     let eventName, userId;
     if (source === 'app') {
+      eventName = 'App Zap';
       userId = reservation.userId;
-      let text = `_App Zap_ @ ${reservation.location.name}`;
+      let text = `_${eventName}_ @ ${reservation.location.name}`;
       text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${reservation.minutes} mins, TV ${reservation.box.label})`;
       const invoke = new Invoke();
       await invoke
@@ -73,8 +74,9 @@ module.exports.command = async (event: any) => {
         .body({ text })
         .go();
     } else if (source === 'control center') {
+      eventName = 'Control Center Zap';
       userId = 'system';
-      const text = `_Control Center Zap_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
+      const text = `_${eventName}_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
       const invoke = new Invoke();
       await invoke
         .service('message')
@@ -82,8 +84,9 @@ module.exports.command = async (event: any) => {
         .body({ text })
         .go();
     } else if (source === 'control center daily') {
+      eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const text = `_Control Center Daily Zap_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
+      const text = `_${eventName}_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
       const invoke = new Invoke();
       await invoke
         .service('message')
