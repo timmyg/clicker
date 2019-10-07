@@ -97,64 +97,27 @@ module.exports.command = async (event: any) => {
         .body({ attachments })
         .go();
     } else if (source === 'control center') {
-      eventName = 'Control Center Zap';
+      let text = 'Control Center Zap';
       userId = 'system';
-      const title = `${eventName} @ ${reservation.location.name}`;
+      text = `_${text}_ @ ${reservation.location.name} *Zone ${reservation.box.zone}* Channel ${channel}`;
       const color = '#0091ea'; // good, warning, danger
-      const attachments = [
-        {
-          title,
-          fallback: title,
-          color,
-          fields: [
-            {
-              title: 'Channel',
-              value: channel,
-              short: true,
-            },
-            {
-              title: 'Zone',
-              value: reservation.box.zone,
-              short: true,
-            },
-          ],
-        },
-      ];
       const invoke = new Invoke();
       await invoke
         .service('message')
         .name('sendControlCenter')
-        .body({ attachments })
+        .body({ text })
         .go();
     } else if (source === 'control center daily') {
-      eventName = 'Control Center Daily Zap';
+      let text = 'Control Center Daily Zap';
       userId = 'system';
-      const title = `${eventName} @ ${reservation.location.name}`;
+      // const title = `${eventName} @ ${reservation.location.name}`;
+      text = `_${text}_ @ ${reservation.location.name} *Zone ${reservation.box.zone}* Channel ${channel}`;
       const color = '#0091ea'; // good, warning, danger
-      const attachments = [
-        {
-          title,
-          fallback: title,
-          color,
-          fields: [
-            {
-              title: 'Channel',
-              value: channel,
-              short: true,
-            },
-            {
-              title: 'Zone',
-              value: reservation.box.zone,
-              short: true,
-            },
-          ],
-        },
-      ];
       const invoke = new Invoke();
       await invoke
         .service('message')
         .name('sendControlCenter')
-        .body({ attachments })
+        .body({ text })
         .go();
     }
 

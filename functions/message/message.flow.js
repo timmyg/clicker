@@ -2,9 +2,6 @@
 require('dotenv').config();
 const { respond, getBody } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
-const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
-const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
 const stage = process.env.stage;
 
 declare class process {
@@ -17,18 +14,21 @@ declare class process {
 }
 
 module.exports.sendApp = async (event: any) => {
+  const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
   const { text, attachments } = getBody(event);
   await sendSlack(appWebhook, text, attachments);
   return respond(200);
 };
 
 module.exports.sendControlCenter = async (event: any) => {
+  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const { text, attachments } = getBody(event);
   await sendSlack(controlCenterWebhook, text, attachments);
   return respond(200);
 };
 
 module.exports.sendAntenna = async (event: any) => {
+  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
   const { text, attachments } = getBody(event);
   await sendSlack(antennaWebhook, text, attachments);
   return respond(200);
