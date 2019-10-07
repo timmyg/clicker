@@ -13,7 +13,6 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
-        - dynamodb:*
         - lambda:InvokeFunction
         - lambda:InvokeAsync
       Resource: '*'

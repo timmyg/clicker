@@ -8,6 +8,12 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
 plugins:
   - serverless-domain-manager
 

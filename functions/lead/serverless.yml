@@ -11,6 +11,12 @@ provider:
     trelloApiKey: ${env:TRELLO_API_KEY}
     trelloAuthToken: ${env:TRELLO_AUTH_TOKEN}
     stage: ${self:custom.stage}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin

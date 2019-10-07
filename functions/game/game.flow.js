@@ -1,6 +1,6 @@
 // @flow
 const axios = require('axios');
-const { respond, invokeFunctionSync, getPathParameters, getBody } = require('serverless-helpers');
+const { respond, getPathParameters, getBody } = require('serverless-helpers');
 require('dotenv').config();
 
 class SiLeague {
