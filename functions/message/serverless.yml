@@ -8,6 +8,10 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
+    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
+    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
+    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
+    slackLandingWebhookUrl: SLACK_LANDING_WEBHOOK_URL
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin

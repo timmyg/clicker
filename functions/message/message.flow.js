@@ -10,27 +10,35 @@ declare class process {
     slackControlCenterWebhookUrl: string,
     slackAntennaWebhookUrl: string,
     slackAppWebhookUrl: string,
+    slackLandingWebhookUrl: string,
   };
 }
 
 module.exports.sendApp = async (event: any) => {
-  const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
+  const webhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
   const { text, attachments } = getBody(event);
-  await sendSlack(appWebhook, text, attachments);
+  await sendSlack(webhook, text, attachments);
   return respond(200);
 };
 
 module.exports.sendControlCenter = async (event: any) => {
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
+  const webhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const { text, attachments } = getBody(event);
-  await sendSlack(controlCenterWebhook, text, attachments);
+  await sendSlack(webhook, text, attachments);
   return respond(200);
 };
 
 module.exports.sendAntenna = async (event: any) => {
-  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
+  const webhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
   const { text, attachments } = getBody(event);
-  await sendSlack(antennaWebhook, text, attachments);
+  await sendSlack(webhook, text, attachments);
+  return respond(200);
+};
+
+module.exports.sendLanding = async (event: any) => {
+  const webhook = new IncomingWebhook(process.env.slackLandingWebhookUrl);
+  const { text, attachments } = getBody(event);
+  await sendSlack(webhook, text, attachments);
   return respond(200);
 };
 

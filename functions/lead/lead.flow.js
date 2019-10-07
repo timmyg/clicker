@@ -1,6 +1,6 @@
 // @flow
 require('dotenv').config();
-const { respond, getBody } = require('serverless-helpers');
+const { respond, getBody, Invoke } = require('serverless-helpers');
 const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.hubspotApiKey });
 const Trello = require('trello');
@@ -11,6 +11,13 @@ const webSignupsListId = '5ca63bbb28858a47be1b5f9a';
 module.exports.create = async (event: any) => {
   const body = getBody(event);
   const { email } = body;
+  const text = `*New Landing Signup*: ${email}`;
+  const invoke = new Invoke();
+  await invoke
+    .service('message')
+    .name('sendLanding')
+    .body({ text })
+    .go();
   if (stage === 'prod') {
     const hubspotContact = await createHubspotContact(email);
     const trelloContact = await createTrelloCard(email);
