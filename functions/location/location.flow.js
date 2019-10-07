@@ -52,7 +52,7 @@ const Location = dynamoose.model(
     packages: [String],
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
-    zip: { type: Number, required: true },
+    zip: { type: String, required: true },
     geo: {
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },

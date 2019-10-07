@@ -20,7 +20,7 @@ declare class process {
 }
 
 class programAreaType {
-  zip: number;
+  zip: string;
   channels: [number];
 }
 
@@ -351,7 +351,7 @@ module.exports.syncNew = async (event: any) => {
   }
 };
 
-async function syncChannels(channels: any, zip?: number) {
+async function syncChannels(channels: any, zip?: string) {
   // channels may have minor channel, so get main channel number
   const channelsString = getChannels(channels).join(',');
 
@@ -444,7 +444,7 @@ function buildProgramObjects(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, zip?: number) {
+function build(dtvSchedule: any, zip?: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
