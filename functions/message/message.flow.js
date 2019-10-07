@@ -38,6 +38,7 @@ module.exports.sendAntenna = async (event: any) => {
 module.exports.sendLanding = async (event: any) => {
   const webhook = new IncomingWebhook(process.env.slackLandingWebhookUrl);
   const { text, attachments } = getBody(event);
+  console.log(text, attachments, process.env.slackLandingWebhookUrl);
   await sendSlack(webhook, text, attachments);
   return respond(200);
 };
