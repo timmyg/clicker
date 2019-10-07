@@ -1,4 +1,4 @@
-<ion-card *ngIf="(reservation$ | async)">
+<ion-card *ngIf="reservation$ | async">
   <ion-card-content>
     <div>
       <label> Location: </label> <span>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</span>
@@ -29,7 +29,7 @@
           <ion-spinner name="crescent" class="center"></ion-spinner>
         </ion-row>
         <!-- <ng-template #appLoaded> -->
-        <ion-item *ngIf="isEditMode && !isAppLoading">
+        <!-- <ion-item *ngIf="isEditMode && !isAppLoading">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe0.minutes }} minutes</span>
             <div flex align-items-center>
@@ -38,8 +38,8 @@
             </div>
           </ion-label>
           <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting || isAppLoading" checked></ion-radio>
-        </ion-item>
-        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
+        </ion-item> -->
+        <ion-item *ngFor="let timeframe of timeframes$ | async">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>
