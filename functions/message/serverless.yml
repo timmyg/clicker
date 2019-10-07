@@ -69,6 +69,18 @@ functions:
               - partner
               - authorization
               - content-type
+  sendLanding:
+    handler: message.sendLanding
+    events:
+      - http:
+          path: ''
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   health:
     handler: message.health
     events:
