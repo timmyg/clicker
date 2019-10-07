@@ -3,14 +3,12 @@ require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, Invoke } = require('serverless-helpers');
-const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
   static env: {
     stage: string,
     airtableKey: string,
     airtableBase: string,
-    slackControlCenterWebhookUrl: string,
   };
 }
 
@@ -107,7 +105,6 @@ module.exports.updateGameStatus = async (event: any) => {
 };
 
 module.exports.controlCenter = async (event: any) => {
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   let games = await base('Games')
@@ -151,30 +148,32 @@ module.exports.controlCenter = async (event: any) => {
           const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* on *${dependencyGameNotes} (${dependencyChannel})* ${
             process.env.stage !== 'prod' ? process.env.stage : ''
           }`;
-          const title = 'Control Center';
-          const color = process.env.stage === 'prod' ? 'warning' : null; // good, warning, danger
-          await controlCenterWebhook.send({
-            attachments: [
-              {
-                title,
-                text,
-                fallback: text,
-                color,
-                fields: [
-                  {
-                    title: 'Zone',
-                    value: zones.join(' '),
-                    short: true,
-                  },
-                  {
-                    title: 'Game Status',
-                    value: dependencyGameStatus,
-                    short: true,
-                  },
-                ],
-              },
-            ],
-          });
+          const attachments = [
+            {
+              title,
+              text,
+              fallback: text,
+              color,
+              fields: [
+                {
+                  title: 'Zone',
+                  value: zones.join(' '),
+                  short: true,
+                },
+                {
+                  title: 'Game Status',
+                  value: dependencyGameStatus,
+                  short: true,
+                },
+              ],
+            },
+          ];
+          const invoke = new Invoke();
+          await invoke
+            .service('message')
+            .name('sendControlCenter')
+            .body({ attachments })
+            .go();
           continue;
         } else if (lockedUntil === 'Game Over' && !gameOver) {
           console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
@@ -184,28 +183,32 @@ module.exports.controlCenter = async (event: any) => {
           }`;
           const title = 'Control Center';
           const color = process.env.stage === 'prod' ? 'warning' : null; // good, warning, danger
-          await controlCenterWebhook.send({
-            attachments: [
-              {
-                title,
-                text,
-                fallback: text,
-                color,
-                fields: [
-                  {
-                    title: 'Zone',
-                    value: zones.join(' '),
-                    short: true,
-                  },
-                  {
-                    title: 'Game Status',
-                    value: dependencyGameStatus,
-                    short: true,
-                  },
-                ],
-              },
-            ],
-          });
+          const attachments = [
+            {
+              title,
+              text,
+              fallback: text,
+              color,
+              fields: [
+                {
+                  title: 'Zone',
+                  value: zones.join(' '),
+                  short: true,
+                },
+                {
+                  title: 'Game Status',
+                  value: dependencyGameStatus,
+                  short: true,
+                },
+              ],
+            },
+          ];
+          const invoke = new Invoke();
+          await invoke
+            .service('message')
+            .name('sendControlCenter')
+            .body({ attachments })
+            .go();
           continue;
         }
       }

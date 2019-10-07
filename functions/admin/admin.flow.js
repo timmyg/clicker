@@ -1,12 +1,10 @@
 // @flow
 require('dotenv').config();
 const Airtable = require('airtable');
-const { IncomingWebhook } = require('@slack/webhook');
 const { respond, Invoke } = require('serverless-helpers');
 
 declare class process {
   static env: {
-    slackControlCenterWebhookUrl: string,
     airtableKey: string,
     airtableBase: string,
     stage: string,
@@ -46,11 +44,10 @@ module.exports.checkControlCenterEvents = async (event: any) => {
 };
 
 async function sendControlCenterSlack(text) {
-  const channel = 'control-center';
   const invoke = new Invoke();
   await invoke
     .service('message')
-    .name('create')
-    .body({ channel, text })
+    .name('sendControlCenter')
+    .body({ text })
     .go();
 }

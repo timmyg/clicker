@@ -1,11 +1,10 @@
 // @flow
 const dynamoose = require('dynamoose');
-const { respond, getBody, getPathParameters, getUserId } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, getUserId, Invoke } = require('serverless-helpers');
 const { stripeSecretKey } = process.env;
 const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
-const { IncomingWebhook } = require('@slack/webhook');
 const initialTokens = 1;
 const key = 'clikr';
 
@@ -13,7 +12,6 @@ declare class process {
   static env: {
     stage: string,
     stripeSecretKey: string,
-    slackAppWebhookUrl: string,
     tableUser: string,
     twilioAccountSid: string,
     twilioAuthToken: string,
@@ -152,30 +150,33 @@ module.exports.replenish = async (event: any) => {
       { returnValues: 'ALL_NEW' },
     );
 
-    const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
     const title = `Money Added to Wallet! ${process.env.stage !== 'prod' ? process.env.stage : ''}`;
     const color = 'good'; // good, warning, danger
-    await appWebhook.send({
-      attachments: [
-        {
-          title,
-          fallback: title,
-          color,
-          fields: [
-            {
-              title: 'Amount',
-              value: dollars,
-              short: true,
-            },
-            {
-              title: 'User',
-              value: user.phone,
-              short: true,
-            },
-          ],
-        },
-      ],
-    });
+    const attachments = [
+      {
+        title,
+        fallback: title,
+        color,
+        fields: [
+          {
+            title: 'Amount',
+            value: dollars,
+            short: true,
+          },
+          {
+            title: 'User',
+            value: user.phone,
+            short: true,
+          },
+        ],
+      },
+    ];
+    const invoke = new Invoke();
+    await invoke
+      .service('message')
+      .name('sendApp')
+      .body({ attachments })
+      .go();
 
     return respond(200, updatedUser);
   } catch (e) {

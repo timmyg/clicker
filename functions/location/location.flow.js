@@ -4,14 +4,11 @@ const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
-const { IncomingWebhook } = require('@slack/webhook');
 require('dotenv').config({ path: '../.env.example' });
 
 declare class process {
   static env: {
     stage: string,
-    slackAntennaWebhookUrl: string,
-    slackControlCenterWebhookUrl: string,
     tableLocation: string,
   };
 }
@@ -256,8 +253,6 @@ module.exports.saveBoxInfo = async (event: any) => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { major } = getBody(event);
 
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
-
   const location = await Location.queryOne('id')
     .eq(locationId)
     .exec();
@@ -294,32 +289,36 @@ module.exports.saveBoxInfo = async (event: any) => {
       process.env.stage !== 'prod' ? process.env.stage : ''
     }`;
     const color = 'warning'; // good, warning, danger
-    await controlCenterWebhook.send({
-      attachments: [
-        {
-          title,
-          fallback: title,
-          color,
-          fields: [
-            {
-              title: 'From',
-              value: originalChannel,
-              short: true,
-            },
-            {
-              title: 'To',
-              value: major,
-              short: true,
-            },
-            {
-              title: 'Zone',
-              value: location.boxes[i].zone,
-              short: true,
-            },
-          ],
-        },
-      ],
-    });
+    const attachments = [
+      {
+        title,
+        fallback: title,
+        color,
+        fields: [
+          {
+            title: 'From',
+            value: originalChannel,
+            short: true,
+          },
+          {
+            title: 'To',
+            value: major,
+            short: true,
+          },
+          {
+            title: 'Zone',
+            value: location.boxes[i].zone,
+            short: true,
+          },
+        ],
+      },
+    ];
+    const invoke2 = new Invoke();
+    await invoke2
+      .service('message')
+      .name('sendControlCenter')
+      .body({ attachments })
+      .go();
   }
 
   return respond(200);
@@ -381,20 +380,21 @@ module.exports.connected = async (event: any) => {
   location.connected = true;
   await location.save();
 
-  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) ${
-    process.env.stage !== 'prod' ? process.env.stage : ''
-  }`;
+  const title = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
   const color = 'good'; // good, warning, danger
-  await antennaWebhook.send({
-    attachments: [
-      {
-        title,
-        fallback: title,
-        color,
-      },
-    ],
-  });
+  const attachments = [
+    {
+      title,
+      fallback: title,
+      color,
+    },
+  ];
+  const invoke = new Invoke();
+  await invoke
+    .service('message')
+    .name('sendAntenna')
+    .body({ attachments })
+    .go();
 
   return respond(200, 'ok');
 };
@@ -409,20 +409,21 @@ module.exports.disconnected = async (event: any) => {
   location.connected = false;
   await location.save();
 
-  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) ${
-    process.env.stage !== 'prod' ? process.env.stage : ''
-  }`;
+  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
   const color = 'danger'; // good, warning, danger
-  await antennaWebhook.send({
-    attachments: [
-      {
-        title,
-        fallback: title,
-        color,
-      },
-    ],
-  });
+  const attachments = [
+    {
+      title,
+      fallback: title,
+      color,
+    },
+  ];
+  const invoke = new Invoke();
+  await invoke
+    .service('message')
+    .name('sendAntenna')
+    .body({ attachments })
+    .go();
   return respond(200, 'ok');
 };
 

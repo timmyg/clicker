@@ -9,8 +9,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
-    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
-    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

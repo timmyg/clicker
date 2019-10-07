@@ -1,15 +1,12 @@
 // @flow
 const losantApi = require('losant-rest');
 const { respond, getBody, Invoke } = require('serverless-helpers');
-const { IncomingWebhook } = require('@slack/webhook');
 
 declare class process {
   static env: {
     stage: string,
     losantAccessToken: string,
     losantAppId: string,
-    slackControlCenterWebhookUrl: string,
-    slackAppWebhookUrl: string,
   };
 }
 
@@ -64,8 +61,6 @@ module.exports.command = async (event: any) => {
       .go();
     console.timeEnd('update channel');
 
-    const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
-    const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
     let eventName, userId;
     if (source === 'app') {
       eventName = 'App Zap';
@@ -75,84 +70,92 @@ module.exports.command = async (event: any) => {
       }`;
       const text = `Zapped to ${reservation.program.title} on ${reservation.program.channelTitle}`;
       const color = '#0091ea'; // good, warning, danger
-      await appWebhook.send({
-        attachments: [
-          {
-            title,
-            fallback: title,
-            color,
-            text,
-            fields: [
-              {
-                title: 'Minutes',
-                value: reservation.minutes,
-                short: true,
-              },
-              {
-                title: 'TV Label',
-                value: reservation.box.label,
-                short: true,
-              },
-            ],
-          },
-        ],
-      });
+      const attachments = [
+        {
+          title,
+          fallback: title,
+          color,
+          text,
+          fields: [
+            {
+              title: 'Minutes',
+              value: reservation.minutes,
+              short: true,
+            },
+            {
+              title: 'TV Label',
+              value: reservation.box.label,
+              short: true,
+            },
+          ],
+        },
+      ];
+      const invoke = new Invoke();
+      await invoke
+        .service('message')
+        .name('sendApp')
+        .body({ attachments })
+        .go();
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const title = `${eventName} @ ${reservation.location.name} ${
-        process.env.stage !== 'prod' ? process.env.stage : ''
-      }`;
+      const title = `${eventName} @ ${reservation.location.name}`;
       const color = '#0091ea'; // good, warning, danger
-      await controlCenterWebhook.send({
-        attachments: [
-          {
-            title,
-            fallback: title,
-            color,
-            fields: [
-              {
-                title: 'Channel',
-                value: channel,
-                short: true,
-              },
-              {
-                title: 'Zone',
-                value: reservation.box.zone,
-                short: true,
-              },
-            ],
-          },
-        ],
-      });
+      const attachments = [
+        {
+          title,
+          fallback: title,
+          color,
+          fields: [
+            {
+              title: 'Channel',
+              value: channel,
+              short: true,
+            },
+            {
+              title: 'Zone',
+              value: reservation.box.zone,
+              short: true,
+            },
+          ],
+        },
+      ];
+      const invoke = new Invoke();
+      await invoke
+        .service('message')
+        .name('sendControlCenter')
+        .body({ attachments })
+        .go();
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const title = `${eventName} @ ${reservation.location.name} ${
-        process.env.stage !== 'prod' ? process.env.stage : ''
-      }`;
+      const title = `${eventName} @ ${reservation.location.name}`;
       const color = '#0091ea'; // good, warning, danger
-      await controlCenterWebhook.send({
-        attachments: [
-          {
-            title,
-            fallback: title,
-            color,
-            fields: [
-              {
-                title: 'Channel',
-                value: channel,
-                short: true,
-              },
-              {
-                title: 'Zone',
-                value: reservation.box.zone,
-                short: true,
-              },
-            ],
-          },
-        ],
-      });
+      const attachments = [
+        {
+          title,
+          fallback: title,
+          color,
+          fields: [
+            {
+              title: 'Channel',
+              value: channel,
+              short: true,
+            },
+            {
+              title: 'Zone',
+              value: reservation.box.zone,
+              short: true,
+            },
+          ],
+        },
+      ];
+      const invoke = new Invoke();
+      await invoke
+        .service('message')
+        .name('sendControlCenter')
+        .body({ attachments })
+        .go();
     }
 
     const name = eventName;

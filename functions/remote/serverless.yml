@@ -10,8 +10,6 @@ provider:
     stage: ${self:custom.stage}
     losantAppId: ${env:LOSANT_APP_ID}
     losantAccessToken: ${env:LOSANT_ACCESS_TOKEN}
-    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
-    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

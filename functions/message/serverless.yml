@@ -7,9 +7,6 @@ provider:
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
-    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
-    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
-    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
     stage: ${self:custom.stage}
 plugins:
   - serverless-domain-manager
@@ -32,8 +29,32 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
 functions:
-  create:
-    handler: message.create
+  sendAntenna:
+    handler: message.sendAntenna
+    events:
+      - http:
+          path: ''
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  sendApp:
+    handler: message.sendApp
+    events:
+      - http:
+          path: ''
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  sendControlCenter:
+    handler: message.sendControlCenter
     events:
       - http:
           path: ''
