@@ -91,7 +91,7 @@ module.exports.updateGameStatus = async (event: any) => {
               'Game Status': gameStatus.description,
               'Game Over': gameStatus.ended,
               Started: gameStatus.started,
-              Blowout: gameStatus.blowout,
+              Blowout: gameStatus.blowout || false,
             });
             // }
           } catch (e) {

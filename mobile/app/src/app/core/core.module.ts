@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LocationService } from './services/location.service';
 import { ProgramService } from './services/program.service';
 import { ReservationService } from './services/reservation.service';
+import { MessageService } from './services/message.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { AppService } from './services/app.service';
 
@@ -11,7 +12,7 @@ import { AppService } from './services/app.service';
   declarations: [],
 
   imports: [CommonModule, HttpClientModule, IonicStorageModule.forRoot()],
-  providers: [AppService, LocationService, ProgramService, ReservationService],
+  providers: [AppService, LocationService, ProgramService, ReservationService, MessageService],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders {

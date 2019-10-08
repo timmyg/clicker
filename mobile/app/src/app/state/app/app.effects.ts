@@ -6,6 +6,7 @@ import { Plan } from './plan.model';
 import { Action } from '@ngrx/store';
 import * as AppActions from './app.actions';
 import { AppService } from 'src/app/core/services/app.service';
+import { MessageService } from 'src/app/core/services/message.service';
 import { Timeframe } from './timeframe.model';
 
 @Injectable()
@@ -30,5 +31,15 @@ export class AppEffects {
       ),
     ),
   );
-  constructor(private actions$: Actions, private appService: AppService) {}
+  @Effect()
+  sendMessage$: Observable<Action> = this.actions$.pipe(
+    ofType(AppActions.SEND_MESSAGE),
+    switchMap(() =>
+      this.messageService.send().pipe(
+        switchMap((result: boolean) => [new AppActions.SendMessageSuccess(result)]),
+        catchError(err => of(new AppActions.SendMessageFail(err))),
+      ),
+    ),
+  );
+  constructor(private actions$: Actions, private appService: AppService, private messageService: MessageService) {}
 }

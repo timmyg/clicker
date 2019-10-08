@@ -23,6 +23,7 @@ import { WalletPage } from '../wallet/wallet.page';
 import { AuthModule } from '../auth/auth.module';
 import { LoginComponent } from '../auth/login/login.component';
 import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
+import { SuggestComponent } from './components/locations/suggest/suggest.component';
 
 const routes: Routes = [
   {
@@ -78,9 +79,10 @@ const routes: Routes = [
     ProgramsFilterPipe,
     LocationsFilterPipe,
     InfoComponent,
+    SuggestComponent,
     LocationComponent,
   ],
   providers: [Deploy],
-  entryComponents: [LoginComponent, InfoComponent, WalletPage],
+  entryComponents: [LoginComponent, InfoComponent, WalletPage, SuggestComponent],
 })
 export class ReservePageModule {}

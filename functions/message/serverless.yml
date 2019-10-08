@@ -49,7 +49,7 @@ functions:
     handler: message.sendApp
     events:
       - http:
-          path: ''
+          path: 'app'
           method: post
           cors:
             origin: '*'

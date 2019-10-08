@@ -10,7 +10,7 @@ import * as fromLocation from '../../../state/location/location.actions';
 import * as fromUser from '../../../state/user/user.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, ActionSheetController, ToastController, Platform } from '@ionic/angular';
+import { NavController, ActionSheetController, ToastController, Platform, ModalController } from '@ionic/angular';
 import { first, take } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
@@ -22,6 +22,7 @@ import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
 import { Intercom } from 'ng-intercom';
 import { GeolocationOptions } from '@ionic-native/geolocation/ngx';
+import { SuggestComponent } from './suggest/suggest.component';
 
 const permissionGeolocation = {
   name: 'permission.geolocation',
@@ -65,11 +66,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
   disableButton = false;
   sub: Subscription;
   milesRadius = 100;
+  suggestModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
     public actionSheetController: ActionSheetController,
     public toastController: ToastController,
+    public modalController: ModalController,
     public reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
@@ -181,13 +184,20 @@ export class LocationsComponent implements OnDestroy, OnInit {
 
   async suggestLocation() {
     // await this.intercom.boot({ app_id: environment.intercom.appId });
-    await this.intercom.showNewMessage();
-    this.intercom.onHide(() => {
-      this.intercom.update({ hide_default_launcher: true });
+    // await this.intercom.showNewMessage();
+    // this.intercom.onHide(() => {
+    //   this.intercom.update({ hide_default_launcher: true });
+    // });
+    // this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+    //   this.intercom.hide();
+    // });
+    this.suggestModal = await this.modalController.create({
+      component: SuggestComponent,
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      this.intercom.hide();
+      if (this.suggestModal) this.suggestModal.close();
     });
+    return await this.suggestModal.present();
   }
 
   async allowLocation() {
