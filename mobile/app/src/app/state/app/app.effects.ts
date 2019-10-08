@@ -34,8 +34,8 @@ export class AppEffects {
   @Effect()
   sendMessage$: Observable<Action> = this.actions$.pipe(
     ofType(AppActions.SEND_MESSAGE),
-    switchMap(() =>
-      this.messageService.send().pipe(
+    switchMap((action: AppActions.SendMessage) =>
+      this.messageService.send(action.payload).pipe(
         switchMap((result: boolean) => [new AppActions.SendMessageSuccess(result)]),
         catchError(err => of(new AppActions.SendMessageFail(err))),
       ),

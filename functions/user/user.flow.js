@@ -30,6 +30,7 @@ const User = dynamoose.model(
     phone: String,
     card: Object, // set in api
     spent: Number,
+    referralCode: String,
     tokens: {
       type: Number,
       required: true,
@@ -61,6 +62,14 @@ module.exports.wallet = async (event: any) => {
     .eq(userId)
     .exec();
   console.log({ user });
+
+  // generate referral code if none
+  if (!user.referralCode) {
+    const referralCode = Math.random()
+      .toString(36)
+      .substr(2, 5);
+    await User.update({ id: userId }, { referralCode });
+  }
 
   // this shouldnt typically happen, but could in dev environments when database cleared
   if (!user) {

@@ -7,7 +7,7 @@ export class MessageService {
   private prefix = `messages`;
   constructor(private httpClient: HttpClient) {}
 
-  send(): Observable<boolean> {
-    return this.httpClient.get<boolean>(`${this.prefix}/app`);
+  send(text: string): Observable<boolean> {
+    return this.httpClient.post<boolean>(`${this.prefix}/app`, { text });
   }
 }
