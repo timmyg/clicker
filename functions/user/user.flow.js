@@ -64,11 +64,13 @@ module.exports.wallet = async (event: any) => {
   console.log({ user });
 
   // generate referral code if none
+  console.log(user);
   if (!user.referralCode) {
     const referralCode = Math.random()
       .toString(36)
       .substr(2, 5);
     await User.update({ id: userId }, { referralCode });
+    user.referralCode = referralCode;
   }
 
   // this shouldnt typically happen, but could in dev environments when database cleared
