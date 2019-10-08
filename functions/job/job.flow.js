@@ -62,50 +62,50 @@ module.exports.updateGameStatus = async (event: any) => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   // TODO shouldnt be all games
-  try {
-    let allGames = await base('Games')
-      .select({
-        view: 'Score Update',
-      })
-      .eachPage(async (allGames, fetchNextPage) => {
-        console.log('allGames', allGames.length);
-        if (allGames.length) {
-          for (const game of allGames) {
-            try {
-              console.log({ game });
-              const siWebUrl: string = game.get('Scores Link');
-              const gameOver: boolean = game.get('Game Over');
-              const blowout: boolean = game.get('Blowout');
-              const gameId: string = game.id;
-              const invoke = new Invoke();
-              const { data } = await invoke
-                .service('game')
-                .name('getStatus')
-                .body({ url: siWebUrl })
-                .headers(event.headers)
-                .go();
-              console.log({ data });
-              const gameStatus: GameStatus = data;
-              console.log({ gameStatus });
-              await base('Games').update(gameId, {
-                'Game Status': gameStatus.description,
-                'Game Over': gameStatus.ended,
-                Started: gameStatus.started,
-                Blowout: gameStatus.blowout,
-              });
-              // }
-            } catch (e) {
-              console.error('failed to get score', e);
-            }
+  // try {
+  let allGames = await base('Games')
+    .select({
+      view: 'Score Update',
+    })
+    .eachPage(async (allGames, fetchNextPage) => {
+      console.log('allGames', allGames.length);
+      if (allGames.length) {
+        for (const game of allGames) {
+          try {
+            console.log({ game });
+            const siWebUrl: string = game.get('Scores Link');
+            const gameOver: boolean = game.get('Game Over');
+            const blowout: boolean = game.get('Blowout');
+            const gameId: string = game.id;
+            const invoke = new Invoke();
+            const { data } = await invoke
+              .service('game')
+              .name('getStatus')
+              .body({ url: siWebUrl })
+              .headers(event.headers)
+              .go();
+            console.log({ data });
+            const gameStatus: GameStatus = data;
+            console.log({ gameStatus });
+            await base('Games').update(gameId, {
+              'Game Status': gameStatus.description,
+              'Game Over': gameStatus.ended,
+              Started: gameStatus.started,
+              Blowout: gameStatus.blowout,
+            });
+            // }
+          } catch (e) {
+            console.error('failed to get score', e);
           }
-          fetchNextPage();
         }
-      });
-    return respond(200);
-  } catch (e) {
-    console.error(e);
-    return respond(400, e);
-  }
+        fetchNextPage();
+      }
+    });
+  return respond(200);
+  // } catch (e) {
+  //   console.error(e);
+  //   return respond(400, e);
+  // }
 };
 
 module.exports.controlCenter = async (event: any) => {
