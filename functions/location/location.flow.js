@@ -140,6 +140,7 @@ module.exports.get = async (event: any) => {
   delete location.losantId;
 
   // set distance
+  console.log(event);
   const { latitude, longitude } = event.queryStringParameters;
   console.log({ latitude, longitude });
   if (latitude && longitude) {
