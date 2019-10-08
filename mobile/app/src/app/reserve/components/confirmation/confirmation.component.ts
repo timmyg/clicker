@@ -38,6 +38,8 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   saving: boolean;
   isEditMode: boolean;
   sufficientFunds: boolean;
+  rangeDistanceMiles = 1;
+  outOfRange: boolean;
   isAppLoading$: Observable<boolean>;
   isAppLoading: boolean;
   sub: Subscription;
@@ -81,6 +83,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         first(),
       )
       .subscribe(reservation => {
+        if (reservation.location.distance > this.rangeDistanceMiles) {
+          this.outOfRange = true;
+        }
         this.store.dispatch(new fromApp.LoadTimeframes(reservation.location.id));
         this.reservation = reservation;
         // initialize reservation

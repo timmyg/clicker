@@ -67,7 +67,7 @@
       (click)="onConfirm(reservation)"
       id="confirm"
       slot="end"
-      [disabled]="saving || insufficientFunds() || isAppLoading"
+      [disabled]="saving || insufficientFunds() || isAppLoading || outOfRange"
       margin-top
       align-items-center
     >
@@ -85,6 +85,12 @@
         Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please
         <span *ngIf="!isLoggedIn"><a [routerLink]="'/tabs/profile'">login</a> and </span> <span>add funds</span>.
+      </ion-text>
+    </ion-row>
+    <ion-row class="ion-text-center" *ngIf="outOfRange" margin-top>
+      <ion-text color="danger">
+        Sorry, you are too far away from
+        <b>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</b> to change the channel.
       </ion-text>
     </ion-row>
   </ion-card-content>

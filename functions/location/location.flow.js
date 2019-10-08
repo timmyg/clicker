@@ -137,7 +137,7 @@ module.exports.get = async (event: any) => {
     });
   }
 
-  delete location.losantId;
+  // delete location.losantId;
 
   // set distance
   console.log(event);
