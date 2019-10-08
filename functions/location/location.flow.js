@@ -143,7 +143,11 @@ module.exports.get = async (event: any) => {
   const { latitude, longitude } = event.queryStringParameters;
   console.log({ latitude, longitude });
   if (latitude && longitude) {
-    const { latitude: locationLatitude, longitude: locationLongitude } = location;
+    const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
+    console.log(
+      { latitude: +latitude, longitude: +longitude },
+      { latitude: locationLatitude, longitude: locationLongitude },
+    );
     const meters = geolib.getDistanceSimple(
       { latitude: +latitude, longitude: +longitude },
       { latitude: locationLatitude, longitude: locationLongitude },
