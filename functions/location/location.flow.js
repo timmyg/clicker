@@ -141,10 +141,9 @@ module.exports.get = async (event: any) => {
 
   // set distance
   console.log(event);
-  
-  const { latitude, longitude } = event.queryStringParameters;
-  console.log({ latitude, longitude });
-  if (latitude && longitude) {
+  if (event.queryStringParameters) {
+    const { latitude, longitude } = event.queryStringParameters;
+    console.log({ latitude, longitude });
     const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
     console.log(
       { latitude: +latitude, longitude: +longitude },
