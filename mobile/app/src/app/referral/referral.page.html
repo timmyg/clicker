@@ -23,11 +23,11 @@
     <ion-col size="9"
       ><ion-item>
         <ion-label position="stacked">Invited? Enter code here.</ion-label>
-        <ion-input></ion-input>
+        <ion-input maxlength="5" [(ngModel)]="invitedByCode"></ion-input>
       </ion-item>
     </ion-col>
     <ion-col flex align-items-end justify-content-bottom>
-      <ion-button>Submit</ion-button>
+      <ion-button (click)="onInviteCode()">Submit</ion-button>
     </ion-col>
   </ion-row>
 </ion-content>

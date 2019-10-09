@@ -1,8 +1,6 @@
 // @flow
 const axios = require('axios');
-const { respond, getPathParameters, getBody } = require('serverless-helpers');
-const Raven = require('raven'); // Official `raven` module
-const RavenLambdaWrapper = require('serverless-sentry-lib'); // This helper library
+const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 require('dotenv').config();
 
 class SiLeague {

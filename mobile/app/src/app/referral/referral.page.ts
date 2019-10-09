@@ -12,6 +12,7 @@ import { ModalController } from '@ionic/angular';
 })
 export class ReferralPage implements OnInit {
   referralCode$: Observable<string>;
+  invitedByCode: string;
 
   constructor(private store: Store<fromStore.AppState>, public modalController: ModalController) {
     this.referralCode$ = this.store.select(getUserReferralCode);
@@ -21,5 +22,8 @@ export class ReferralPage implements OnInit {
 
   onCloseClick() {
     this.modalController.dismiss();
+  }
+  onInviteCode() {
+    console.log(this.invitedByCode);
   }
 }
