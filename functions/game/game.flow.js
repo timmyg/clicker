@@ -50,9 +50,6 @@ class GameStatus {
 }
 
 module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async (event, context) => {
-  // console.log(process.env.sentryDsnEndpoint);
-  // Sentry.init({ dsn: process.env.sentryDsnEndpoint });
-  myUndefinedFunction();
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
 
