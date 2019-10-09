@@ -9,7 +9,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     serviceName: ${self:service}
-    sentryDsnEndpoint: ${env:SENTRY_DSN_ENDPOINT}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -21,6 +20,7 @@ provider:
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -42,6 +42,8 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
 functions:
   health:
     handler: game.health
