@@ -47,7 +47,7 @@ class GameStatus {
   description: string;
 }
 
-module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async (event, context) => {
+module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
 

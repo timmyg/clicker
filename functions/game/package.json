@@ -16,7 +16,6 @@
     "moment": "^2.24.0",
     "raven": "^2.6.4",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
-    "serverless-sentry-lib": "^1.1.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

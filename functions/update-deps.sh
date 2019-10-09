@@ -9,7 +9,7 @@ declare -a StringArray=("admin" "analytics" "app" "game" "job" "lead" "location"
 for val in ${StringArray[@]}; do
    echo $val
    cd ~/Code/other/clicker/functions/$val
-   npm i git+https://github.com/timmyg/serverless-helpers.git#v0.3.11
+   npm i git+https://github.com/timmyg/serverless-helpers.git#v0.3.12
    npm i serverless-sentry
    echo "updated $val function"
 done
