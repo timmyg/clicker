@@ -39,6 +39,7 @@ const User = dynamoose.model(
     card: Object, // set in api
     spent: Number,
     referralCode: String,
+    referredByCode: String,
     tokens: {
       type: Number,
       required: true,
@@ -72,10 +73,19 @@ module.exports.referred = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
 
-  // check if already referred
-  // return 400 with error already referred
-  // add token to user, save
-  // add alert for referrer (get referred by code)
+  const referrerUser = await User.scan('referralCode')
+    .eq(code)
+    .all()
+    .exec();
+
+  if (user.referredByCode) {
+    return respond(400, 'Sorry, you have already been referred');
+  }
+
+  // add token to each user, save
+  await User.update({ id: userId }, { $ADD: { tokens: 1, spent: 0 } });
+  await User.update({ id: referrerUser.userId }, { $ADD: { tokens: 1, spent: 0 } });
+
   return respond(200);
 });
 
