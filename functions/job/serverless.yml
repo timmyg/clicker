@@ -32,7 +32,8 @@ custom:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
     develop: ${env:AIRTABLE_BASE_DEV}
-
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
 functions:
   health:
     handler: job.health
