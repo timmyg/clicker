@@ -1,7 +1,8 @@
 // @flow
 const axios = require('axios');
 const { respond, getPathParameters, getBody } = require('serverless-helpers');
-// const Sentry = require('@sentry/node');
+const Raven = require('raven'); // Official `raven` module
+const RavenLambdaWrapper = require('serverless-sentry-lib'); // This helper library
 require('dotenv').config();
 
 class SiLeague {
@@ -48,7 +49,7 @@ class GameStatus {
   description: string;
 }
 
-module.exports.getStatus = async (event: any) => {
+module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async (event, context) => {
   // console.log(process.env.sentryDsnEndpoint);
   // Sentry.init({ dsn: process.env.sentryDsnEndpoint });
   myUndefinedFunction();
@@ -62,7 +63,7 @@ module.exports.getStatus = async (event: any) => {
   const gameStatus: GameStatus = transformGame(result.data);
 
   return respond(200, gameStatus);
-};
+});
 
 function transformGame(result: SiResult): GameStatus {
   const game = result.data;
