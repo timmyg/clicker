@@ -1,6 +1,14 @@
 // @flow
 const dynamoose = require('dynamoose');
-const { respond, getBody, getPathParameters, getUserId, Invoke } = require('serverless-helpers');
+const {
+  respond,
+  getBody,
+  getPathParameters,
+  getUserId,
+  Invoke,
+  Raven,
+  RavenLambdaWrapper,
+} = require('serverless-helpers');
 const { stripeSecretKey } = process.env;
 const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
@@ -44,19 +52,19 @@ const User = dynamoose.model(
   },
 );
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
-};
+});
 
-module.exports.create = async (event: any) => {
+module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const id = uuid();
   await User.create({ id, tokens: initialTokens });
   const token = jwt.sign({ sub: id, guest: true }, key);
 
   return respond(201, { token });
-};
+});
 
-module.exports.referred = async (event: any) => {
+module.exports.referred = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
   // get user
   // check if already referred
@@ -64,9 +72,9 @@ module.exports.referred = async (event: any) => {
   // add token to user, save
   // add alert for referrer (get referred by code)
   return respond(200);
-};
+});
 
-module.exports.wallet = async (event: any) => {
+module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   let user = await User.queryOne('id')
     .eq(userId)
@@ -97,9 +105,9 @@ module.exports.wallet = async (event: any) => {
     }
   }
   return respond(200, user);
-};
+});
 
-module.exports.updateCard = async (event: any) => {
+module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { token: stripeCardToken } = getBody(event);
 
@@ -127,9 +135,9 @@ module.exports.updateCard = async (event: any) => {
     console.error(e);
     return respond(400, e);
   }
-};
+});
 
-module.exports.removeCard = async (event: any) => {
+module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
 
   const { stripeCustomer } = await User.queryOne('id')
@@ -141,9 +149,9 @@ module.exports.removeCard = async (event: any) => {
   const response = await stripe.customers.deleteSource(stripeCustomer, cardToken);
 
   return respond(200, response);
-};
+});
 
-module.exports.replenish = async (event: any) => {
+module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const userId = getUserId(event);
     const plan = getBody(event);
@@ -202,9 +210,9 @@ module.exports.replenish = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.charge = async (event: any) => {
+module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { token, amount, email, company, name } = getBody(event);
 
@@ -232,9 +240,9 @@ module.exports.charge = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.subscribe = async (event: any) => {
+module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { token, email, company, name, start, plan } = getBody(event);
 
@@ -264,9 +272,9 @@ module.exports.subscribe = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.transaction = async (event: any) => {
+module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
   let user = await User.queryOne('id')
@@ -281,9 +289,9 @@ module.exports.transaction = async (event: any) => {
     console.error('Insufficient Funds');
     return respond(400, 'Insufficient Funds');
   }
-};
+});
 
-module.exports.alias = async (event: any) => {
+module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
   const { fromId, toId } = getPathParameters(event);
 
   // get existing users
@@ -318,9 +326,9 @@ module.exports.alias = async (event: any) => {
   // TODO audit transaction
 
   return respond(201, user);
-};
+});
 
-module.exports.verifyStart = async (event: any) => {
+module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
@@ -332,9 +340,9 @@ module.exports.verifyStart = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.verify = async (event: any) => {
+module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
@@ -350,7 +358,7 @@ module.exports.verify = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
 async function getToken(phone) {
   const users = await User.scan('phone')

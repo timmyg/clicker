@@ -1,6 +1,6 @@
 // @flow
 require('dotenv').config();
-const { respond, getBody } = require('serverless-helpers');
+const { respond, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
 const stage = process.env.stage;
 
@@ -14,38 +14,38 @@ declare class process {
   };
 }
 
-module.exports.sendApp = async (event: any) => {
+module.exports.sendApp = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
   const { text, attachments } = getBody(event);
   await sendSlack(webhook, text, attachments);
   return respond(200);
-};
+});
 
-module.exports.sendControlCenter = async (event: any) => {
+module.exports.sendControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
   const { text, attachments } = getBody(event);
   await sendSlack(webhook, text, attachments);
   return respond(200);
-};
+});
 
-module.exports.sendAntenna = async (event: any) => {
+module.exports.sendAntenna = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
   const { text, attachments } = getBody(event);
   await sendSlack(webhook, text, attachments);
   return respond(200);
-};
+});
 
-module.exports.sendLanding = async (event: any) => {
+module.exports.sendLanding = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackLandingWebhookUrl);
   const { text, attachments } = getBody(event);
   console.log(text, attachments, process.env.slackAntennaWebhookUrl, process.env.slackLandingWebhookUrl);
   await sendSlack(webhook, text, attachments);
   return respond(200);
-};
+});
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
-};
+});
 
 async function sendSlack(webhook, text, attachments) {
   const stage = `_${process.env.stage !== 'prod' ? process.env.stage : ''}_`;

@@ -12,6 +12,7 @@ provider:
 plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage}

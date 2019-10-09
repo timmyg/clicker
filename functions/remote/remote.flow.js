@@ -1,6 +1,6 @@
 // @flow
 const losantApi = require('losant-rest');
-const { respond, getBody, Invoke } = require('serverless-helpers');
+const { respond, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 declare class process {
   static env: {
@@ -33,11 +33,11 @@ class LosantApi {
   }
 }
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
-};
+});
 
-module.exports.command = async (event: any) => {
+module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { command, key, reservation, source } = getBody(event);
     const { losantId, id: locationId } = reservation.location;
@@ -128,9 +128,9 @@ module.exports.command = async (event: any) => {
     console.error(e);
     return respond(400, `Could not tune: ${e.stack}`);
   }
-};
+});
 
-module.exports.checkBoxInfo = async (event: any) => {
+module.exports.checkBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { losantId, boxId, ip, client } = getBody(event);
     console.log({ losantId, boxId, ip, client });
@@ -144,9 +144,9 @@ module.exports.checkBoxInfo = async (event: any) => {
     console.error(e);
     return respond(400, `Could not checkBoxInfo: ${e.stack}`);
   }
-};
+});
 
-module.exports.debug = async (event: any) => {
+module.exports.debug = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { command, payload, losantId } = getBody(event);
     const api = new LosantApi();
@@ -157,4 +157,4 @@ module.exports.debug = async (event: any) => {
     console.error(e);
     return respond(400, `Could not tune: ${e.stack}`);
   }
-};
+});

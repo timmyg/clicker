@@ -1,7 +1,16 @@
 // @flow
 const dynamoose = require('dynamoose');
 const moment = require('moment');
-const { getUserId, getBody, getPathParameters, respond, track, Invoke } = require('serverless-helpers');
+const {
+  getUserId,
+  getBody,
+  getPathParameters,
+  respond,
+  track,
+  Invoke,
+  Raven,
+  RavenLambdaWrapper,
+} = require('serverless-helpers');
 const uuid = require('uuid/v1');
 
 declare class process {
@@ -71,11 +80,11 @@ const Reservation = dynamoose.model(
 //   return false;
 // });
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
-};
+});
 
-module.exports.create = async (event: any) => {
+module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   let reservation = getBody(event);
   const { cost } = reservation;
   reservation.userId = getUserId(event);
@@ -163,9 +172,9 @@ module.exports.create = async (event: any) => {
   // console.timeEnd('track event');
 
   return respond(201, reservation);
-};
+});
 
-module.exports.update = async (event: any) => {
+module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
@@ -243,9 +252,9 @@ module.exports.update = async (event: any) => {
   // console.timeEnd('track event');
 
   return respond(200, `nice`);
-};
+});
 
-module.exports.activeByUser = async (event: any) => {
+module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
@@ -263,18 +272,18 @@ module.exports.activeByUser = async (event: any) => {
     return respond(200, sorted);
   }
   return respond(200, []);
-};
+});
 
-module.exports.get = async (event: any) => {
+module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const params = getPathParameters(event);
   const { id } = params;
 
   const reservation = await Reservation.get({ id, userId });
   return respond(200, reservation);
-};
+});
 
-module.exports.cancel = async (event: any) => {
+module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { id } = getPathParameters(event);
 
@@ -304,7 +313,7 @@ module.exports.cancel = async (event: any) => {
   // });
 
   return respond(200, `hello`);
-};
+});
 
 function calculateReservationEndTime(reservation) {
   reservation.start = moment().toDate();

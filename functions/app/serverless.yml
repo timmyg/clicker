@@ -16,6 +16,7 @@ provider:
       Resource: '*'
 plugins:
   - serverless-domain-manager
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -33,6 +34,8 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
 functions:
   buy:
     handler: app.buy

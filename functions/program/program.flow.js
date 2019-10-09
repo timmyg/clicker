@@ -4,7 +4,7 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const { respond, getPathParameters, getBody, Invoke } = require('serverless-helpers');
+const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgramArea;
 require('dotenv').config();
@@ -144,17 +144,17 @@ function init() {
   );
 }
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('hi', process.env.tableProgram);
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
-};
+});
 
-module.exports.createArea = async (event: any) => {
+module.exports.createArea = RavenLambdaWrapper.handler(Raven, async event => {
   const { zip, channels } = getBody(event);
   init();
   const programArea = await ProgramArea.create({ zip, channels });
   return respond(200, programArea);
-};
+});
 
 module.exports.getProgramAreas = async () => {
   init();
@@ -164,7 +164,7 @@ module.exports.getProgramAreas = async () => {
   return respond(200, programAreas);
 };
 
-module.exports.getAll = async (event: any) => {
+module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
@@ -272,7 +272,7 @@ module.exports.getAll = async (event: any) => {
   // const rankedPrograms = rankPrograms(currentNational.concat(currentPremium, currentLocal));
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
-};
+});
 
 function rankPrograms(programs) {
   programs.forEach((program, i) => {
@@ -327,7 +327,7 @@ function rank(program) {
   return program;
 }
 
-module.exports.syncNew = async (event: any) => {
+module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     init();
 
@@ -349,7 +349,7 @@ module.exports.syncNew = async (event: any) => {
     console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
   }
-};
+});
 
 async function syncChannels(channels: any, zip?: string) {
   // channels may have minor channel, so get main channel number
@@ -379,7 +379,7 @@ async function syncChannels(channels: any, zip?: string) {
   let dbResult = await Program.batchPut(transformedPrograms);
 }
 
-module.exports.syncDescriptions = async (event: any) => {
+module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event => {
   // find programs by unique programID without descriptions
   init();
   const maxPrograms = 3;
@@ -434,7 +434,7 @@ module.exports.syncDescriptions = async (event: any) => {
     }
   }
   return respond(200);
-};
+});
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];

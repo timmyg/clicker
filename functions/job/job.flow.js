@@ -2,7 +2,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
-const { respond, Invoke } = require('serverless-helpers');
+const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 declare class process {
   static env: {
@@ -19,11 +19,11 @@ class GameStatus {
   description: string;
 }
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
-};
+});
 
-module.exports.controlCenterDailyInit = async (event: any) => {
+module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async event => {
   const regions = ['Cincinnati'];
   const invoke = new Invoke();
   const { data: locations } = await invoke
@@ -56,9 +56,9 @@ module.exports.controlCenterDailyInit = async (event: any) => {
     }
   }
   return respond(200);
-};
+});
 
-module.exports.updateGameStatus = async (event: any) => {
+module.exports.updateGameStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   // TODO shouldnt be all games
@@ -106,9 +106,9 @@ module.exports.updateGameStatus = async (event: any) => {
   //   console.error(e);
   //   return respond(400, e);
   // }
-};
+});
 
-module.exports.controlCenter = async (event: any) => {
+module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   let games = await base('Games')
@@ -280,7 +280,7 @@ module.exports.controlCenter = async (event: any) => {
   }
 
   return respond(200, { changedCount, waitingCount });
-};
+});
 
 function getChannelForZone(index) {
   const initChannels = [206, 209, 614, 208, 212, 219];

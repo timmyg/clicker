@@ -15,12 +15,13 @@
     "jest": "^24.1.0",
     "serverless": "^1.36.3",
     "serverless-deployment-bucket": "^1.1.0",
-    "serverless-prune-plugin": "^1.4.0"
+    "serverless-prune-plugin": "^1.4.0",
+    "serverless-sentry": "^1.2.0"
   },
   "dependencies": {
     "airtable": "^0.7.1",
     "dotenv": "^6.2.0",
     "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.10"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
   }
 }
