@@ -19,6 +19,7 @@ provider:
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage}
@@ -40,6 +41,8 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
   tableLocation: locations-${self:custom.stage}
 resources:
   Resources:
