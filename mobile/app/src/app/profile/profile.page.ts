@@ -23,6 +23,8 @@ import { ToastOptions } from '@ionic/core';
 import { AppService } from '../core/services/app.service';
 import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
 import { ICurrentConfig } from 'cordova-plugin-ionic/dist/IonicCordova';
+import { WalletPage } from '../wallet/wallet.page';
+import { ReferralPage } from '../referral/referral.page';
 
 @Component({
   selector: 'app-profile',
@@ -38,6 +40,7 @@ export class ProfilePage {
   sub2: Subscription;
   showRatingLink = false;
   loginModal;
+  referralModal;
   rating = {
     cookieName: 'rating',
     given: 'given',
@@ -110,6 +113,16 @@ export class ProfilePage {
     this.sub2 = this.platform.backButton.pipe(first()).subscribe(() => {
       this.intercom.hide();
     });
+  }
+
+  async openReferral() {
+    this.referralModal = await this.modalController.create({
+      component: ReferralPage,
+    });
+    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+      if (this.referralModal) this.referralModal.close();
+    });
+    return await this.referralModal.present();
   }
 
   onModify(reservation: Reservation) {

@@ -39,6 +39,11 @@ export const getUserAuthToken = createSelector(
   fromUser.getUserAuthToken,
 );
 
+export const getUserReferralCode = createSelector(
+  getUserState,
+  fromUser.getUserReferralCode,
+);
+
 export const getUserTokenCount = createSelector(
   getUserState,
   fromUser.getUserTokenCount,

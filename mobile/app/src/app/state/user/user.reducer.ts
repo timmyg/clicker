@@ -6,6 +6,7 @@ export interface State {
   me: User;
   tokens: number;
   card: Card;
+  referralCode: string;
   geo: {
     latitude: number;
     longitude: number;
@@ -19,6 +20,7 @@ export const initialState: State = {
   me: null,
   tokens: null,
   card: null,
+  referralCode: null,
   geo: null,
   authToken: null,
   loading: false,
@@ -46,6 +48,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       };
 
     case fromUser.LOAD_SUCCESS:
+      console.log(action);
       return {
         ...state,
         loading: false,
@@ -54,6 +57,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
     case fromUser.LOAD_WALLET_SUCCESS:
       state.tokens = action.payload.tokens;
       state.card = action.payload.card;
+      state.referralCode = action.payload.referralCode;
       return {
         ...state,
         loading: false,
@@ -88,6 +92,7 @@ export const getUserId = (state: State) => state.me.sub;
 export const getUserTokenCount = (state: State) => state.tokens;
 export const getUserAuthToken = (state: State) => state.authToken;
 export const getUserCard = (state: State) => state.card;
+export const getUserReferralCode = (state: State) => state.referralCode;
 export const getUserGeolocation = (state: State) => state.geo;
 export const getUserLocations = (state: State) =>
   state.me &&

@@ -56,6 +56,16 @@ module.exports.create = async (event: any) => {
   return respond(201, { token });
 };
 
+module.exports.referred = async (event: any) => {
+  const { code } = getBody(event);
+  // get user
+  // check if already referred
+  // return 400 with error already referred
+  // add token to user, save
+  // add alert for referrer (get referred by code)
+  return respond(200);
+};
+
 module.exports.wallet = async (event: any) => {
   const userId = getUserId(event);
   let user = await User.queryOne('id')
