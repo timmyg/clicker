@@ -405,6 +405,8 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
 
   descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
 
+  console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
+
   const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {

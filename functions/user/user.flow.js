@@ -67,6 +67,11 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.referred = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
   // get user
+  const userId = getUserId(event);
+  const user = await User.queryOne('id')
+    .eq(userId)
+    .exec();
+
   // check if already referred
   // return 400 with error already referred
   // add token to user, save
