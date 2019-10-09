@@ -1,7 +1,7 @@
 // @flow
 const axios = require('axios');
 const { respond, getPathParameters, getBody } = require('serverless-helpers');
-const Sentry = require('@sentry/node');
+// const Sentry = require('@sentry/node');
 require('dotenv').config();
 
 class SiLeague {
@@ -49,8 +49,8 @@ class GameStatus {
 }
 
 module.exports.getStatus = async (event: any) => {
-  console.log(process.env.sentryDsnEndpoint);
-  Sentry.init({ dsn: process.env.sentryDsnEndpoint });
+  // console.log(process.env.sentryDsnEndpoint);
+  // Sentry.init({ dsn: process.env.sentryDsnEndpoint });
   myUndefinedFunction();
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
