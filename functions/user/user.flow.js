@@ -69,8 +69,7 @@ module.exports.wallet = async (event: any) => {
     const referralCode = Math.random()
       .toString(36)
       .substr(2, 5);
-    await User.update({ id: userId }, { referralCode });
-    user.referralCode = referralCode;
+    user = await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
   }
 
   // this shouldnt typically happen, but could in dev environments when database cleared
