@@ -49,6 +49,7 @@ class GameStatus {
 }
 
 module.exports.getStatus = async (event: any) => {
+  console.log(process.env.sentryDsnEndpoint);
   Sentry.init({ dsn: process.env.sentryDsnEndpoint });
   myUndefinedFunction();
   const { url: webUrl } = getBody(event);
