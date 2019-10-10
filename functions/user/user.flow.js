@@ -65,7 +65,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(201, { token });
 });
 
-module.exports.referred = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
   // get user
   const userId = getUserId(event);

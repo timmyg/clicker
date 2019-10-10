@@ -7,6 +7,7 @@ export interface State {
   tokens: number;
   card: Card;
   referralCode: string;
+  referredByCode: string;
   geo: {
     latitude: number;
     longitude: number;
@@ -21,6 +22,7 @@ export const initialState: State = {
   tokens: null,
   card: null,
   referralCode: null,
+  referredByCode: null,
   geo: null,
   authToken: null,
   loading: false,
@@ -58,6 +60,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       state.tokens = action.payload.tokens;
       state.card = action.payload.card;
       state.referralCode = action.payload.referralCode;
+      state.referredByCode = action.payload.referredByCode;
       return {
         ...state,
         loading: false,

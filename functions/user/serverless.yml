@@ -214,3 +214,15 @@ functions:
               - partner
               - authorization
               - content-type
+  referral:
+    handler: user.referral
+    events:
+      - http:
+          path: 'referral'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

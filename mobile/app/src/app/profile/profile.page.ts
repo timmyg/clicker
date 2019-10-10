@@ -23,7 +23,6 @@ import { ToastOptions } from '@ionic/core';
 import { AppService } from '../core/services/app.service';
 import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
 import { ICurrentConfig } from 'cordova-plugin-ionic/dist/IonicCordova';
-import { WalletPage } from '../wallet/wallet.page';
 import { ReferralPage } from '../referral/referral.page';
 
 @Component({

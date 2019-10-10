@@ -25,6 +25,9 @@ export const DELETE_CARD_FAIL = '[USER] Delete Card Fail';
 export const ADD_FUNDS = '[USER] Add Funds';
 export const ADD_FUNDS_SUCCESS = '[USER] Add Funds Success';
 export const ADD_FUNDS_FAIL = '[USER] Add Funds Fail';
+export const ADD_REFERRAL = '[USER] Add Referral';
+export const ADD_REFERRAL_SUCCESS = '[USER] Add Referral Success';
+export const ADD_REFERRAL_FAIL = '[USER] Add Referral Fail';
 
 export class Load implements Action {
   readonly type = LOAD;
@@ -138,6 +141,21 @@ export class AddFundsFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class AddReferral implements Action {
+  readonly type = ADD_REFERRAL;
+  constructor(public code: string) {}
+}
+
+export class AddReferralSuccess implements Action {
+  readonly type = ADD_REFERRAL_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class AddReferralFail implements Action {
+  readonly type = ADD_REFERRAL_FAIL;
+  constructor(public payload: any) {}
+}
+
 export type UserActions =
   | Load
   | LoadSuccess
@@ -155,4 +173,7 @@ export type UserActions =
   | DeleteCardFail
   | AddFunds
   | AddFundsSuccess
-  | AddFundsFail;
+  | AddFundsFail
+  | AddReferral
+  | AddReferralSuccess
+  | AddReferralFail;
