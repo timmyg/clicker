@@ -95,6 +95,13 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   await User.update({ id: userId }, { referredByCode: code });
   await User.update({ id: referrerUser.id }, { $ADD: { tokens: 1, spent: 0 } });
 
+  const text = '*New referral*';
+  await new Invoke()
+    .service('message')
+    .name('sendApp')
+    .body({ text })
+    .go();
+
   return respond(200);
 });
 
