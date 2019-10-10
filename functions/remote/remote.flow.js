@@ -65,8 +65,10 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
-      let text = `_${eventName}_ @ ${reservation.location.name}`;
-      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${reservation.minutes} mins, TV ${reservation.box.label})`;
+      let text = `*${eventName}* @ ${reservation.location.name}`;
+      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${
+        reservation.minutes
+      } mins, TV ${reservation.box.label})`;
       const invoke = new Invoke();
       await invoke
         .service('message')
@@ -76,7 +78,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const text = `_${eventName}_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
+      const text = `*${eventName}* @ ${reservation.location.name} to ${
+        reservation.program.title
+      } on ${channel} (*Zone ${reservation.box.zone}*)`;
       const invoke = new Invoke();
       await invoke
         .service('message')
@@ -86,7 +90,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const text = `_${eventName}_ @ ${reservation.location.name} (*Zone ${reservation.box.zone}*, Channel ${channel})`;
+      const text = `*${eventName}* @ ${reservation.location.name} to ${
+        reservation.program.title
+      } on ${channel} (*Zone ${reservation.box.zone}*)`;
       const invoke = new Invoke();
       await invoke
         .service('message')

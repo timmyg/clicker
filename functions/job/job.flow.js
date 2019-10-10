@@ -72,9 +72,9 @@ module.exports.updateGameStatus = RavenLambdaWrapper.handler(Raven, async event 
         console.log('allGames', allGames.length);
         if (allGames.length) {
           for (const game of allGames) {
+            const siWebUrl: string = game.get('Scores Link');
             try {
               console.log({ game });
-              const siWebUrl: string = game.get('Scores Link');
               const gameOver: boolean = game.get('Game Over');
               const blowout: boolean = game.get('Blowout');
               const gameId: string = game.id;
@@ -97,6 +97,8 @@ module.exports.updateGameStatus = RavenLambdaWrapper.handler(Raven, async event 
               // }
             } catch (e) {
               console.error('failed to get score', e);
+              // throw "Parameter is not a number!";
+              throw new Error(`failed to get score: ${siWebUrl}`);
             }
           }
           fetchNextPage();
