@@ -12,7 +12,7 @@
     <h3>Every time you invite a friend, you both get a free token.</h3>
   </ion-text>
   <ion-row margin-top flex align-items-center>
-    <span margin-end> 👨‍👩‍👧‍👦 Share your invite code: </span> <b>{{ referralCode$ | async }}</b>
+    <span margin-end> 👨‍👩‍👧‍👦 Share your invite code: </span> <b class="selectable">{{ referralCode$ | async }}</b>
   </ion-row>
   <ion-row *ngIf="!(this.referred$ | async); else alreadyReferred" margin-top>
     <!-- <ion-item> -->
