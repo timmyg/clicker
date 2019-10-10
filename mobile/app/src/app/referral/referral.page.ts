@@ -34,7 +34,7 @@ export class ReferralPage implements OnInit {
     this.modalController.dismiss();
   }
   onInviteCode() {
-    this.store.dispatch(new fromUser.AddReferralSuccess(this.invitedByCode));
+    this.store.dispatch(new fromUser.AddReferral(this.invitedByCode));
     this.actions$
       .pipe(
         ofType(fromUser.ADD_REFERRAL_SUCCESS),

@@ -34,6 +34,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
     case fromUser.LOAD:
     case fromUser.LOAD_WALLET:
     case fromUser.DELETE_CARD:
+    case fromUser.ADD_REFERRAL:
       return {
         ...state,
         loading: true,
@@ -70,6 +71,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       return {
         ...state,
       };
+    case fromUser.ADD_REFERRAL_SUCCESS:
     case fromUser.DELETE_CARD_SUCCESS:
       return {
         ...state,
@@ -78,6 +80,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
     case fromUser.LOAD_FAIL:
     case fromUser.LOAD_WALLET_FAIL:
     case fromUser.DELETE_CARD_FAIL:
+    case fromUser.ADD_REFERRAL_FAIL:
       return {
         ...state,
         loading: false,
