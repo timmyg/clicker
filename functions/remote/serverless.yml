@@ -10,8 +10,6 @@ provider:
     stage: ${self:custom.stage}
     losantAppId: ${env:LOSANT_APP_ID}
     losantAccessToken: ${env:LOSANT_ACCESS_TOKEN}
-    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
-    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -22,6 +20,7 @@ provider:
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -39,6 +38,8 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
 functions:
   health:
     handler: remote.health

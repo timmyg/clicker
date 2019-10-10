@@ -9,8 +9,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableLocation: ${self:custom.tableLocation}
-    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
-    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -21,6 +19,7 @@ provider:
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage}
@@ -42,6 +41,8 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
   tableLocation: locations-${self:custom.stage}
 resources:
   Resources:

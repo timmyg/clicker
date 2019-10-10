@@ -13,7 +13,6 @@ provider:
     twilioAccountSid: ${env:TWILIO_ACCOUNT_SID}
     twilioAuthToken: ${env:TWILIO_AUTH_TOKEN}
     twilioServiceSid: ${env:TWILIO_SERVICE_SID}
-    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -25,6 +24,7 @@ provider:
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -46,6 +46,8 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
   tableUser: users-${self:custom.stage}
   stripeSecretKey:
     prod: ${env:STRIPE_SECRET_KEY}
@@ -205,6 +207,18 @@ functions:
     events:
       - http:
           path: 'verify'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  referral:
+    handler: user.referral
+    events:
+      - http:
+          path: 'referral'
           method: post
           cors:
             origin: '*'

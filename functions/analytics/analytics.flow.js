@@ -1,9 +1,9 @@
 // @flow
 require('dotenv').config();
 const axios = require('axios');
-const { respond, getBody } = require('serverless-helpers');
+const { respond, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
-module.exports.track = async (event: any) => {
+module.exports.track = RavenLambdaWrapper.handler(Raven, async event => {
   const { userId, name, data } = getBody(event);
   // add in time
   data.date = new Date().toISOString();
@@ -14,10 +14,14 @@ module.exports.track = async (event: any) => {
     },
   };
 
-  await axios.post('https://api.segment.io/v1/track', body, options);
+  console.log('https://api.segment.io/v1/track', body, options);
+  console.time('track event');
+  const result = await axios.post('https://api.segment.io/v1/track', body, options);
+  console.timeEnd('track event');
+  console.log(result);
   return respond(200);
-};
+});
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
-};
+});

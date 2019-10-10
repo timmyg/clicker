@@ -1,0 +1,26 @@
+{
+  "name": "message",
+  "version": "1.0.0",
+  "description": "",
+  "main": "message.js",
+  "scripts": {
+    "build": "npx flow-remove-types message.flow.js -o message.js",
+    "test": "npm run build && jest --coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
+    "jest": "^24.1.0",
+    "serverless": "^1.36.3",
+    "serverless-domain-manager": "^2.6.13",
+    "serverless-prune-plugin": "^1.4.0",
+    "serverless-sentry": "^1.2.0"
+  },
+  "dependencies": {
+    "@slack/webhook": "^5.0.2",
+    "dotenv": "^6.2.0",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
+  }
+}

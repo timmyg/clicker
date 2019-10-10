@@ -6,6 +6,12 @@ export interface State {
   me: User;
   tokens: number;
   card: Card;
+  referralCode: string;
+  referredByCode: string;
+  geo: {
+    latitude: number;
+    longitude: number;
+  };
   authToken: string;
   loading: boolean;
   error: string;
@@ -15,6 +21,9 @@ export const initialState: State = {
   me: null,
   tokens: null,
   card: null,
+  referralCode: null,
+  referredByCode: null,
+  geo: null,
   authToken: null,
   loading: false,
   error: null,
@@ -25,9 +34,20 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
     case fromUser.LOAD:
     case fromUser.LOAD_WALLET:
     case fromUser.DELETE_CARD:
+    case fromUser.ADD_REFERRAL:
       return {
         ...state,
         loading: true,
+      };
+
+    case fromUser.SET_GEOLOCATION:
+      return {
+        ...state,
+        geo: {
+          latitude: action.latitude,
+          longitude: action.longitude,
+        },
+        // loading: true,
       };
 
     case fromUser.LOAD_SUCCESS:
@@ -39,6 +59,8 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
     case fromUser.LOAD_WALLET_SUCCESS:
       state.tokens = action.payload.tokens;
       state.card = action.payload.card;
+      state.referralCode = action.payload.referralCode;
+      state.referredByCode = action.payload.referredByCode;
       return {
         ...state,
         loading: false,
@@ -48,6 +70,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       return {
         ...state,
       };
+    case fromUser.ADD_REFERRAL_SUCCESS:
     case fromUser.DELETE_CARD_SUCCESS:
       return {
         ...state,
@@ -56,6 +79,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
     case fromUser.LOAD_FAIL:
     case fromUser.LOAD_WALLET_FAIL:
     case fromUser.DELETE_CARD_FAIL:
+    case fromUser.ADD_REFERRAL_FAIL:
       return {
         ...state,
         loading: false,
@@ -73,6 +97,9 @@ export const getUserId = (state: State) => state.me.sub;
 export const getUserTokenCount = (state: State) => state.tokens;
 export const getUserAuthToken = (state: State) => state.authToken;
 export const getUserCard = (state: State) => state.card;
+export const getUserReferralCode = (state: State) => state.referralCode;
+export const isReferred = (state: State) => !!state.referredByCode;
+export const getUserGeolocation = (state: State) => state.geo;
 export const getUserLocations = (state: State) =>
   state.me &&
   state.me['https://mobile.tryclicker.com/app_metadata'] &&

@@ -64,6 +64,10 @@ export class UserService {
     return this.httpClient.post<any>(`${this.prefix}/replenish`, plan);
   }
 
+  addReferral(code: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.prefix}/referral`, { code });
+  }
+
   async setToken(token: string) {
     return await this.storage.set(storage.token, token);
   }

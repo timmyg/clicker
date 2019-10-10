@@ -1,11 +1,18 @@
 // @flow
 const dynamoose = require('dynamoose');
-const { respond, getBody, getPathParameters, getUserId } = require('serverless-helpers');
+const {
+  respond,
+  getBody,
+  getPathParameters,
+  getUserId,
+  Invoke,
+  Raven,
+  RavenLambdaWrapper,
+} = require('serverless-helpers');
 const { stripeSecretKey } = process.env;
 const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
-const { IncomingWebhook } = require('@slack/webhook');
 const initialTokens = 1;
 const key = 'clikr';
 
@@ -13,7 +20,6 @@ declare class process {
   static env: {
     stage: string,
     stripeSecretKey: string,
-    slackAppWebhookUrl: string,
     tableUser: string,
     twilioAccountSid: string,
     twilioAuthToken: string,
@@ -32,6 +38,8 @@ const User = dynamoose.model(
     phone: String,
     card: Object, // set in api
     spent: Number,
+    referralCode: String,
+    referredByCode: String,
     tokens: {
       type: Number,
       required: true,
@@ -45,24 +53,73 @@ const User = dynamoose.model(
   },
 );
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
-};
+});
 
-module.exports.create = async (event: any) => {
+module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const id = uuid();
   await User.create({ id, tokens: initialTokens });
   const token = jwt.sign({ sub: id, guest: true }, key);
 
   return respond(201, { token });
-};
+});
 
-module.exports.wallet = async (event: any) => {
+module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
+  const { code } = getBody(event);
+  // get user
+  const userId = getUserId(event);
+  const user = await User.queryOne('id')
+    .eq(userId)
+    .exec();
+
+  const referrerUsers = await User.scan('referralCode')
+    .eq(code)
+    .all()
+    .exec();
+  const referrerUser = referrerUsers[0];
+
+  console.log({ user });
+  console.log({ referrerUser });
+
+  if (!referrerUser) {
+    return respond(400, 'Sorry, invalid referral code', 'code.invalid');
+  } else if (user.referredByCode) {
+    return respond(400, 'Sorry, you have already been referred', 'user.redeemed');
+  } else if (user.id === referrerUser.id) {
+    return respond(400, 'Sorry, you cannot redeem your own code', 'user.same');
+  }
+
+  // add token to each user, save
+  await User.update({ id: userId }, { $ADD: { tokens: 1, spent: 0 } });
+  await User.update({ id: userId }, { referredByCode: code });
+  await User.update({ id: referrerUser.id }, { $ADD: { tokens: 1, spent: 0 } });
+
+  const text = '*New referral*';
+  await new Invoke()
+    .service('message')
+    .name('sendApp')
+    .body({ text })
+    .go();
+
+  return respond(200);
+});
+
+module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   let user = await User.queryOne('id')
     .eq(userId)
     .exec();
   console.log({ user });
+
+  // generate referral code if none
+  console.log(user);
+  if (!user.referralCode) {
+    const referralCode = Math.random()
+      .toString(36)
+      .substr(2, 5);
+    user = await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
+  }
 
   // this shouldnt typically happen, but could in dev environments when database cleared
   if (!user) {
@@ -79,9 +136,9 @@ module.exports.wallet = async (event: any) => {
     }
   }
   return respond(200, user);
-};
+});
 
-module.exports.updateCard = async (event: any) => {
+module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { token: stripeCardToken } = getBody(event);
 
@@ -109,9 +166,9 @@ module.exports.updateCard = async (event: any) => {
     console.error(e);
     return respond(400, e);
   }
-};
+});
 
-module.exports.removeCard = async (event: any) => {
+module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
 
   const { stripeCustomer } = await User.queryOne('id')
@@ -123,9 +180,9 @@ module.exports.removeCard = async (event: any) => {
   const response = await stripe.customers.deleteSource(stripeCustomer, cardToken);
 
   return respond(200, response);
-};
+});
 
-module.exports.replenish = async (event: any) => {
+module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const userId = getUserId(event);
     const plan = getBody(event);
@@ -152,38 +209,20 @@ module.exports.replenish = async (event: any) => {
       { returnValues: 'ALL_NEW' },
     );
 
-    const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
-    const title = `Money Added to Wallet! ${process.env.stage !== 'prod' ? process.env.stage : ''}`;
-    const color = 'good'; // good, warning, danger
-    await appWebhook.send({
-      attachments: [
-        {
-          title,
-          fallback: title,
-          color,
-          fields: [
-            {
-              title: 'Amount',
-              value: dollars,
-              short: true,
-            },
-            {
-              title: 'User',
-              value: user.phone,
-              short: true,
-            },
-          ],
-        },
-      ],
-    });
+    const title = `$${dollars} Added to Wallet! (${user.phone}, ${user.id})`;
+    await new Invoke()
+      .service('message')
+      .name('sendApp')
+      .body({ text })
+      .go();
 
     return respond(200, updatedUser);
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.charge = async (event: any) => {
+module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { token, amount, email, company, name } = getBody(event);
 
@@ -211,9 +250,9 @@ module.exports.charge = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.subscribe = async (event: any) => {
+module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { token, email, company, name, start, plan } = getBody(event);
 
@@ -243,9 +282,9 @@ module.exports.subscribe = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.transaction = async (event: any) => {
+module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
   let user = await User.queryOne('id')
@@ -260,9 +299,9 @@ module.exports.transaction = async (event: any) => {
     console.error('Insufficient Funds');
     return respond(400, 'Insufficient Funds');
   }
-};
+});
 
-module.exports.alias = async (event: any) => {
+module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
   const { fromId, toId } = getPathParameters(event);
 
   // get existing users
@@ -297,9 +336,9 @@ module.exports.alias = async (event: any) => {
   // TODO audit transaction
 
   return respond(201, user);
-};
+});
 
-module.exports.verifyStart = async (event: any) => {
+module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
@@ -311,9 +350,9 @@ module.exports.verifyStart = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
-module.exports.verify = async (event: any) => {
+module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
@@ -329,7 +368,7 @@ module.exports.verify = async (event: any) => {
   } catch (e) {
     return respond(400, e);
   }
-};
+});
 
 async function getToken(phone) {
   const users = await User.scan('phone')

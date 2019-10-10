@@ -1,23 +1,21 @@
 // @flow
 require('dotenv').config();
 const Airtable = require('airtable');
-const { IncomingWebhook } = require('@slack/webhook');
-const { respond } = require('serverless-helpers');
+const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 declare class process {
   static env: {
-    slackControlCenterWebhookUrl: string,
     airtableKey: string,
     airtableBase: string,
     stage: string,
   };
 }
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
-};
+});
 
-module.exports.checkControlCenterEvents = async (event: any) => {
+module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, async event => {
   // check if any scheduled events for control center today
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   // find games scheduled for the next 24 hours
@@ -37,25 +35,19 @@ module.exports.checkControlCenterEvents = async (event: any) => {
     .all();
   console.log(`found ${games.length} games`);
   if (!games.length) {
-    const title = 'Control Center Scheduling';
-    const text = `No games scheduled today ${process.env.stage !== 'prod' ? process.env.stage : ''}`;
+    // const title = 'Control Center Scheduling';
+    const text = `No games scheduled today`;
     const color = process.env.stage === 'prod' ? 'danger' : null;
-    await sendControlCenterSlack(title, text, color);
+    await sendControlCenterSlack(text);
   }
   return respond(200);
-};
+});
 
-async function sendControlCenterSlack(title, text, color, fields) {
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
-  await controlCenterWebhook.send({
-    attachments: [
-      {
-        title,
-        text,
-        fallback: text,
-        color,
-        fields: fields,
-      },
-    ],
-  });
+async function sendControlCenterSlack(text) {
+  const invoke = new Invoke();
+  await invoke
+    .service('message')
+    .name('sendControlCenter')
+    .body({ text })
+    .go();
 }

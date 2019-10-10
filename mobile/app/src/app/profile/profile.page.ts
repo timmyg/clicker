@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
-import { getUser, getLoading as getWalletLoading } from '../state/user';
+import { getUser, getLoading as getWalletLoading, isLoggedIn } from '../state/user';
 import { ModalController, AlertController, ToastController, Platform, ActionSheetController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as fromReservation from '../state/reservation/reservation.actions';
@@ -23,6 +23,7 @@ import { ToastOptions } from '@ionic/core';
 import { AppService } from '../core/services/app.service';
 import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
 import { ICurrentConfig } from 'cordova-plugin-ionic/dist/IonicCordova';
+import { ReferralPage } from '../referral/referral.page';
 
 @Component({
   selector: 'app-profile',
@@ -38,6 +39,9 @@ export class ProfilePage {
   sub2: Subscription;
   showRatingLink = false;
   loginModal;
+  referralModal;
+  isLoggedIn$: Observable<boolean>;
+  isLoggedIn: boolean;
   rating = {
     cookieName: 'rating',
     given: 'given',
@@ -66,20 +70,30 @@ export class ProfilePage {
     this.user$ = this.store.select(getUser);
     this.isReservationsLoading$ = this.store.select(getReservationLoading);
     this.isWalletLoading$ = this.store.select(getWalletLoading);
+    this.isLoggedIn$ = this.store.select(isLoggedIn);
+    this.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
   }
 
   ngOnInit() {
     this.store.dispatch(new fromReservation.GetAll());
     this.platform.backButton.pipe(first()).subscribe(() => {
       // android
-      if (this.loginModal) this.loginModal.close();
+      if (this.loginModal) {
+        this.loginModal.close();
+      }
     });
     this.configureRating();
   }
 
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
-    if (this.sub2) this.sub2.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+    if (this.sub2) {
+      this.sub2.unsubscribe();
+    }
   }
 
   async configureRating() {
@@ -96,7 +110,9 @@ export class ProfilePage {
       component: LoginComponent,
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      if (this.loginModal) this.loginModal.close();
+      if (this.loginModal) {
+        this.loginModal.close();
+      }
     });
     return await this.loginModal.present();
   }

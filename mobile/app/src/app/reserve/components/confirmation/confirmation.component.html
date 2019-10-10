@@ -1,4 +1,4 @@
-<ion-card *ngIf="(reservation$ | async)">
+<ion-card *ngIf="reservation$ | async">
   <ion-card-content>
     <div>
       <label> Location: </label> <span>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</span>
@@ -29,7 +29,7 @@
           <ion-spinner name="crescent" class="center"></ion-spinner>
         </ion-row>
         <!-- <ng-template #appLoaded> -->
-        <ion-item *ngIf="isEditMode && !isAppLoading">
+        <!-- <ion-item *ngIf="isEditMode && !isAppLoading">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe0.minutes }} minutes</span>
             <div flex align-items-center>
@@ -38,8 +38,8 @@
             </div>
           </ion-label>
           <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting || isAppLoading" checked></ion-radio>
-        </ion-item>
-        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
+        </ion-item> -->
+        <ion-item *ngFor="let timeframe of timeframes$ | async">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>
@@ -67,7 +67,7 @@
       (click)="onConfirm(reservation)"
       id="confirm"
       slot="end"
-      [disabled]="saving || insufficientFunds() || isAppLoading"
+      [disabled]="saving || insufficientFunds() || isAppLoading || outOfRange"
       margin-top
       align-items-center
     >
@@ -85,6 +85,12 @@
         Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please
         <span *ngIf="!isLoggedIn"><a [routerLink]="'/tabs/profile'">login</a> and </span> <span>add funds</span>.
+      </ion-text>
+    </ion-row>
+    <ion-row class="ion-text-center" *ngIf="outOfRange" margin-top>
+      <ion-text color="danger">
+        Sorry, you are too far away from
+        <b>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</b> to change the channel.
       </ion-text>
     </ion-row>
   </ion-card-content>
