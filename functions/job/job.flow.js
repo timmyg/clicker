@@ -101,8 +101,9 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
         throw new Error(`failed to get score: ${siWebUrl}`);
       }
     }
-    fetchNextPage();
+    // fetchNextPage();
   }
+  return respond(200);
   //   },
   //   err => {
   //     if (err) {
