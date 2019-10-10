@@ -413,7 +413,8 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     try {
       const url = `${directvEndpoint}/program/flip/${programId}`;
       console.log(url);
-      const result = await axios.get(url);
+      const config = { timeout: 1000 };
+      const result = await axios.get(url, config);
       const { programDetail } = result.data;
       const { description } = programDetail;
 
