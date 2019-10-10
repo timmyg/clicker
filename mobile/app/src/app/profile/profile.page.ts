@@ -134,7 +134,9 @@ export class ProfilePage {
         component: ReferralPage,
       });
       this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-        if (this.referralModal) this.referralModal.close();
+        if (this.referralModal) {
+          this.referralModal.close();
+        }
       });
       return await this.referralModal.present();
     } else {

@@ -7,32 +7,33 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <p class="ion-text-center">Get a free token every time you invite a friend.</p>
-  <ion-row>
-    <ion-col size="9">
-      <ion-item>
-        <ion-label position="stacked">Share your invite code.</ion-label>
-        <ion-input readonly>
-          <b>{{ referralCode$ | async }}</b>
-        </ion-input>
-      </ion-item>
-    </ion-col>
+<ion-content padding-horizontal>
+  <ion-text color="primary" class="ion-text-center">
+    <h3>Every time you invite a friend, you both get a free token.</h3>
+  </ion-text>
+  <ion-row margin-top flex align-items-center>
+    <span margin-end> 👨‍👩‍👧‍👦 Share your invite code: </span> <b>{{ referralCode$ | async }}</b>
   </ion-row>
-  <ion-row *ngIf="!(this.referred$ | async); else alreadyReferred">
-    <ion-col size="9"
-      ><ion-item>
-        <ion-label position="stacked">Invited? Enter code here.</ion-label>
-        <ion-input maxlength="5" [(ngModel)]="invitedByCode"></ion-input>
+  <ion-row *ngIf="!(this.referred$ | async); else alreadyReferred" margin-top>
+    <!-- <ion-item> -->
+    <ion-col size="8">
+      <ion-item no-padding>
+        <ion-label position="floating">✉️ Invited? Enter code here.</ion-label>
+        <ion-input size="large " maxlength="5" [(ngModel)]="invitedByCode"></ion-input>
       </ion-item>
     </ion-col>
-    <ion-col flex align-items-end justify-content-bottom>
+    <ion-col size="4" flex align-items-end justify-content-bottom>
       <ion-button
         (click)="onInviteCode()"
         [disabled]="(isLoading$ | async) || (!invitedByCode || !invitedByCode.length)"
         >Submit</ion-button
       >
     </ion-col>
+    <!-- </ion-item> -->
   </ion-row>
-  <ng-template #alreadyReferred> 👌 You received a free token from inputting a friend's invite code. </ng-template>
+  <ion-row margin-top>
+    <ng-template #alreadyReferred>
+      <div margin-top>👌 You received a free token from inputting a friend's invite code.</div>
+    </ng-template>
+  </ion-row>
 </ion-content>

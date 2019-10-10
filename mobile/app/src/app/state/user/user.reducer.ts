@@ -51,7 +51,6 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       };
 
     case fromUser.LOAD_SUCCESS:
-      console.log(action);
       return {
         ...state,
         loading: false,

@@ -59,10 +59,11 @@ export class ReferralPage implements OnInit {
         take(1),
       )
       .subscribe(async (result: any) => {
+        console.log(result);
         let message = 'Something went wrong. Please try again.';
-        if (result.error.code === 'code.invalid') {
+        if (result.payload.error.code === 'code.invalid') {
           message = 'Invalid code. Please try again.';
-        } else if (result.error.code === 'user.same') {
+        } else if (result.payload.error.code === 'user.same') {
           message = 'You cannot redeem your own invite code. 👀';
         }
         const whoops = await this.toastController.create({
