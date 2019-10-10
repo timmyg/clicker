@@ -73,10 +73,11 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
 
-  const referrerUser = await User.scan('referralCode')
+  const referrerUsers = await User.scan('referralCode')
     .eq(code)
     .all()
     .exec();
+  const referrerUser = referrerUsers[0];
 
   console.log({ user });
   console.log({ referrerUser });
