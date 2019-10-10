@@ -35,22 +35,21 @@
 
   <ion-grid padding-horizontal padding-top size="12">
     <!-- <ion-row margin-bottom> <b>My Reservations</b> </ion-row> -->
-    <ion-row *ngIf="isReservationsLoading$ | async; else ready" margin-vertical>
+    <ion-row *ngIf="(isReservationsLoading$ | async); else ready" margin-vertical>
       <ion-spinner name="crescent" class="center"></ion-spinner>
     </ion-row>
     <ng-template #ready>
       <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
-        <div *ngFor="let r of reservations$ | async">
+        <div *ngFor="let r of (reservations$ | async)">
           <app-reservation [reservation]="r" (onModify)="onModify($event)"></app-reservation>
         </div>
       </div>
       <ng-template #empty>
         <div padding-horizontal class="ion-text-center"><p>No active reservations</p></div>
       </ng-template>
-      <p class="ion-text-center"><a (click)="createNewReservation('link')">Change the channel</a></p>
-      <p class="ion-text-center"><a (click)="openFeedback()">Contact us</a></p>
-      <p class="ion-text-center"><a (click)="openReferral()">🎁 Get Free Tokens</a></p>
-      <p class="ion-text-center"><a *ngIf="showRatingLink" (click)="rate()">Rate this app</a></p>
+      <p class="ion-text-center"><a (click)="createNewReservation('link')">📺 Change the channel</a></p>
+      <p class="ion-text-center"><a (click)="openFeedback()">💬 Contact us</a></p>
+      <p class="ion-text-center"><a *ngIf="showRatingLink" (click)="rate()">⭐ Rate this app</a></p>
     </ng-template>
   </ion-grid>
 </ion-content>

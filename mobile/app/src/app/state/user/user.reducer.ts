@@ -47,7 +47,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
           latitude: action.latitude,
           longitude: action.longitude,
         },
-        loading: true,
+        // loading: true,
       };
 
     case fromUser.LOAD_SUCCESS:

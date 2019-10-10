@@ -1,3 +1,5 @@
+import { ReferralPageModule } from './../referral/referral.module';
+import { ReferralPage } from './../referral/referral.page';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -67,6 +69,7 @@ const routes: Routes = [
     WalletModule,
     MomentModule,
     AuthModule,
+    ReferralPageModule,
     RouterModule.forChild(routes),
   ],
   declarations: [
@@ -83,6 +86,6 @@ const routes: Routes = [
     LocationComponent,
   ],
   providers: [Deploy],
-  entryComponents: [LoginComponent, InfoComponent, WalletPage, SuggestComponent],
+  entryComponents: [LoginComponent, InfoComponent, WalletPage, SuggestComponent, ReferralPage],
 })
 export class ReservePageModule {}

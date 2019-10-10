@@ -1,9 +1,11 @@
+import { ReferralPage } from './../../../referral/referral.page';
+import { LoginComponent } from 'src/app/auth/login/login.component';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
 import { Observable, Subscription, BehaviorSubject, forkJoin } from 'rxjs';
 import { getAllLocations, getLoading } from 'src/app/state/location';
-import { getUserLocations, getUserRoles } from 'src/app/state/user';
+import { getUserLocations, getUserRoles, isLoggedIn } from 'src/app/state/user';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
@@ -66,7 +68,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
   disableButton = false;
   sub: Subscription;
   milesRadius = 100;
+  isLoggedIn$: Observable<boolean>;
+  isLoggedIn: boolean;
   suggestModal;
+  referralModal;
+  loginModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -88,6 +94,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.reserveService.emitTitle(this.title);
     this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
+    this.isLoggedIn$ = this.store.select(isLoggedIn);
+    this.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
     this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(() => {
       this.showHidden = !this.showHidden;
       if (this.showHidden) {
@@ -293,6 +303,43 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async forceAllow() {
     await this.storage.remove(permissionGeolocation.name);
     location.reload();
+  }
+
+  async openReferral() {
+    if (this.isLoggedIn) {
+      this.referralModal = await this.modalController.create({
+        component: ReferralPage,
+      });
+      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+        if (this.referralModal) {
+          this.referralModal.close();
+        }
+      });
+      return await this.referralModal.present();
+    } else {
+      const toast = await this.toastController.create({
+        message: `✋ You must be logged in to get free tokens.`,
+        duration: 4000,
+        buttons: [
+          {
+            side: 'end',
+            text: 'Login',
+            handler: async () => {
+              this.loginModal = await this.modalController.create({
+                component: LoginComponent,
+              });
+              this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+                if (this.loginModal) {
+                  this.loginModal.close();
+                }
+              });
+              return await this.loginModal.present();
+            },
+          },
+        ],
+      });
+      toast.present();
+    }
   }
 
   onLocationClick(location: Location) {

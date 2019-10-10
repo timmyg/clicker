@@ -128,43 +128,6 @@ export class ProfilePage {
     });
   }
 
-  async openReferral() {
-    if (this.isLoggedIn) {
-      this.referralModal = await this.modalController.create({
-        component: ReferralPage,
-      });
-      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-        if (this.referralModal) {
-          this.referralModal.close();
-        }
-      });
-      return await this.referralModal.present();
-    } else {
-      const toast = await this.toastController.create({
-        message: `✋ You must be logged in to get free tokens.`,
-        duration: 4000,
-        buttons: [
-          {
-            side: 'end',
-            text: 'Login',
-            handler: async () => {
-              this.loginModal = await this.modalController.create({
-                component: LoginComponent,
-              });
-              this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-                if (this.loginModal) {
-                  this.loginModal.close();
-                }
-              });
-              return await this.loginModal.present();
-            },
-          },
-        ],
-      });
-      toast.present();
-    }
-  }
-
   onModify(reservation: Reservation) {
     if (reservation.minutes > 0) {
       const endTime = moment(reservation.end);
