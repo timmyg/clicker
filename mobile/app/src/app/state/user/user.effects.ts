@@ -99,7 +99,7 @@ export class UserEffects {
     switchMap((action: UserActions.AddReferral) =>
       this.userService.addReferral(action.code).pipe(
         switchMap((result: any) => [new UserActions.AddReferralSuccess(result), new UserActions.LoadWallet()]),
-        catchError((err: UserActions.AddReferralFail) => of(new UserActions.AddReferralFail(err))),
+        catchError((err: UserActions.AddReferralFail) => of(new UserActions.AddReferralFail(err.payload))),
       ),
     ),
   );

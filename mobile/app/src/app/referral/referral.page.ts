@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { Observable } from 'rxjs';
-import { getUserReferralCode, isReferred } from '../state/user';
+import { getUserReferralCode, isReferred, getLoading } from '../state/user';
 import { ModalController, ToastController } from '@ionic/angular';
 import * as fromUser from '../state/user/user.actions';
 import { Actions, ofType } from '@ngrx/effects';
@@ -16,6 +16,7 @@ import { take } from 'rxjs/operators';
 export class ReferralPage implements OnInit {
   referralCode$: Observable<string>;
   referred$: Observable<boolean>;
+  isLoading$: Observable<boolean>;
   invitedByCode: string;
 
   constructor(
@@ -26,6 +27,7 @@ export class ReferralPage implements OnInit {
   ) {
     this.referralCode$ = this.store.select(getUserReferralCode);
     this.referred$ = this.store.select(isReferred);
+    this.isLoading$ = this.store.select(getLoading);
   }
 
   ngOnInit() {}
@@ -56,9 +58,15 @@ export class ReferralPage implements OnInit {
         ofType(fromUser.ADD_REFERRAL_FAIL),
         take(1),
       )
-      .subscribe(async () => {
+      .subscribe(async (result: any) => {
+        let message = 'Something went wrong. Please try again.';
+        if (result.error.code === 'code.invalid') {
+          message = 'Invalid code. Please try again.';
+        } else if (result.error.code === 'user.same') {
+          message = 'You cannot redeem your own invite code. 👀';
+        }
         const whoops = await this.toastController.create({
-          message: 'Something went wrong. Please try again.',
+          message,
           color: 'danger',
           duration: 4000,
           cssClass: 'ion-text-center',

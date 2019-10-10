@@ -19,7 +19,7 @@
       </ion-item>
     </ion-col>
   </ion-row>
-  <ion-row *ngIf="!(this.referred$ | async)">
+  <ion-row *ngIf="!(this.referred$ | async); else alreadyReferred">
     <ion-col size="9"
       ><ion-item>
         <ion-label position="stacked">Invited? Enter code here.</ion-label>
@@ -27,7 +27,12 @@
       </ion-item>
     </ion-col>
     <ion-col flex align-items-end justify-content-bottom>
-      <ion-button (click)="onInviteCode()">Submit</ion-button>
+      <ion-button
+        (click)="onInviteCode()"
+        [disabled]="(isLoading$ | async) || (!invitedByCode || !invitedByCode.length)"
+        >Submit</ion-button
+      >
     </ion-col>
   </ion-row>
+  <ng-template #alreadyReferred> 👌 You received a free token from inputting a friend's invite code. </ng-template>
 </ion-content>
