@@ -307,39 +307,13 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) ${
-      process.env.stage !== 'prod' ? process.env.stage : ''
-    }`;
-    const color = 'warning'; // good, warning, danger
-    const attachments = [
-      {
-        title,
-        fallback: title,
-        color,
-        fields: [
-          {
-            title: 'From',
-            value: originalChannel,
-            short: true,
-          },
-          {
-            title: 'To',
-            value: major,
-            short: true,
-          },
-          {
-            title: 'Zone',
-            value: location.boxes[i].zone,
-            short: true,
-          },
-        ],
-      },
-    ];
-    const invoke2 = new Invoke();
-    await invoke2
+    const text = `Manual Zap @ ${location.name} (${
+      location.neighborhood
+    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    await new Invoke()
       .service('message')
       .name('sendControlCenter')
-      .body({ attachments })
+      .body({ text })
       .go();
   }
 
@@ -402,20 +376,11 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   location.connected = true;
   await location.save();
 
-  const title = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
-  const color = 'good'; // good, warning, danger
-  const attachments = [
-    {
-      title,
-      fallback: title,
-      color,
-    },
-  ];
-  const invoke = new Invoke();
-  await invoke
+  const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
+  await new Invoke()
     .service('message')
     .name('sendAntenna')
-    .body({ attachments })
+    .body({ text })
     .go();
 
   return respond(200, 'ok');
@@ -431,20 +396,11 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   location.connected = false;
   await location.save();
 
-  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
-  const color = 'danger'; // good, warning, danger
-  const attachments = [
-    {
-      title,
-      fallback: title,
-      color,
-    },
-  ];
-  const invoke = new Invoke();
-  await invoke
+  const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
+  await new Invoke()
     .service('message')
     .name('sendAntenna')
-    .body({ attachments })
+    .body({ text })
     .go();
   return respond(200, 'ok');
 });

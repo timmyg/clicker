@@ -157,69 +157,25 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
         if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* on *${dependencyGameNotes} (${dependencyChannel})* ${
-            process.env.stage !== 'prod' ? process.env.stage : ''
-          }`;
-          const attachments = [
-            {
-              title,
-              text,
-              fallback: text,
-              color,
-              fields: [
-                {
-                  title: 'Zone',
-                  value: zones.join(' '),
-                  short: true,
-                },
-                {
-                  title: 'Game Status',
-                  value: dependencyGameStatus,
-                  short: true,
-                },
-              ],
-            },
-          ];
-          const invoke = new Invoke();
-          await invoke
+          const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* (${dependencyGameStatus}) on *${dependencyGameNotes} (${dependencyChannel})* (Zones ${zones.join(
+            ', ',
+          )})`;
+          await new Invoke()
             .service('message')
             .name('sendControlCenter')
-            .body({ attachments })
+            .body({ text })
             .go();
           continue;
         } else if (lockedUntil === 'Game Over' && !gameOver) {
           console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for *game over* of *${dependencyGameNotes} (${dependencyChannel})* ${
-            process.env.stage !== 'prod' ? process.env.stage : ''
-          }`;
-          const title = 'Control Center';
-          const color = process.env.stage === 'prod' ? 'warning' : null; // good, warning, danger
-          const attachments = [
-            {
-              title,
-              text,
-              fallback: text,
-              color,
-              fields: [
-                {
-                  title: 'Zone',
-                  value: zones.join(' '),
-                  short: true,
-                },
-                {
-                  title: 'Game Status',
-                  value: dependencyGameStatus,
-                  short: true,
-                },
-              ],
-            },
-          ];
-          const invoke = new Invoke();
-          await invoke
+          const text = `*${gameNotes} (${channel})* waiting for *game over* (${dependencyGameStatus}) on *${dependencyGameNotes} (${dependencyChannel})* (Zones ${zones.join(
+            ', ',
+          )})`;
+          await new Invoke()
             .service('message')
             .name('sendControlCenter')
-            .body({ attachments })
+            .body({ text })
             .go();
           continue;
         }
