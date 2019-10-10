@@ -83,11 +83,11 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ referrerUser });
 
   if (!referrerUser) {
-    return respond(400, 'Sorry, invalid referral code');
+    return respond(400, 'Sorry, invalid referral code', 'code.invalid');
   }
 
   if (user.referredByCode) {
-    return respond(400, 'Sorry, you have already been referred');
+    return respond(400, 'Sorry, you have already been referred', 'user.redeemed');
   }
 
   // add token to each user, save
