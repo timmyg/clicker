@@ -93,7 +93,7 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   // add token to each user, save
   await User.update({ id: userId }, { $ADD: { tokens: 1, spent: 0 } });
   await User.update({ id: userId }, { referredByCode: code });
-  await User.update({ id: referrerUser.userId }, { $ADD: { tokens: 1, spent: 0 } });
+  await User.update({ id: referrerUser.id }, { $ADD: { tokens: 1, spent: 0 } });
 
   return respond(200);
 });

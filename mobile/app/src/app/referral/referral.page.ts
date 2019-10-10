@@ -33,6 +33,7 @@ export class ReferralPage implements OnInit {
   onCloseClick() {
     this.modalController.dismiss();
   }
+
   onInviteCode() {
     this.store.dispatch(new fromUser.AddReferral(this.invitedByCode));
     this.actions$
@@ -45,8 +46,10 @@ export class ReferralPage implements OnInit {
           message: 'Success! We added a token to both your accounts!',
           duration: 4000,
           cssClass: 'ion-text-center',
+          color: 'success',
         });
         success.present();
+        this.modalController.dismiss();
       });
     this.actions$
       .pipe(
