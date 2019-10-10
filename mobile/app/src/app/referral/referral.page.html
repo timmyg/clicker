@@ -19,7 +19,7 @@
       </ion-item>
     </ion-col>
   </ion-row>
-  <ion-row>
+  <ion-row *ngIf="!(this.referred$ | async)">
     <ion-col size="9"
       ><ion-item>
         <ion-label position="stacked">Invited? Enter code here.</ion-label>

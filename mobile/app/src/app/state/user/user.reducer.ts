@@ -96,6 +96,7 @@ export const getUserTokenCount = (state: State) => state.tokens;
 export const getUserAuthToken = (state: State) => state.authToken;
 export const getUserCard = (state: State) => state.card;
 export const getUserReferralCode = (state: State) => state.referralCode;
+export const isReferred = (state: State) => !!state.referredByCode;
 export const getUserGeolocation = (state: State) => state.geo;
 export const getUserLocations = (state: State) =>
   state.me &&

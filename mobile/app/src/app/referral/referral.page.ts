@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../state/app.reducer';
 import { Observable } from 'rxjs';
-import { getUserReferralCode } from '../state/user';
+import { getUserReferralCode, isReferred } from '../state/user';
 import { ModalController, ToastController } from '@ionic/angular';
 import * as fromUser from '../state/user/user.actions';
 import { Actions, ofType } from '@ngrx/effects';
@@ -15,6 +15,7 @@ import { take } from 'rxjs/operators';
 })
 export class ReferralPage implements OnInit {
   referralCode$: Observable<string>;
+  referred$: Observable<boolean>;
   invitedByCode: string;
 
   constructor(
@@ -24,6 +25,7 @@ export class ReferralPage implements OnInit {
     private toastController: ToastController,
   ) {
     this.referralCode$ = this.store.select(getUserReferralCode);
+    this.referred$ = this.store.select(isReferred);
   }
 
   ngOnInit() {}

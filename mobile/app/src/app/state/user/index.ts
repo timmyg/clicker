@@ -44,6 +44,11 @@ export const getUserReferralCode = createSelector(
   fromUser.getUserReferralCode,
 );
 
+export const isReferred = createSelector(
+  getUserState,
+  fromUser.isReferred,
+);
+
 export const getUserTokenCount = createSelector(
   getUserState,
   fromUser.getUserTokenCount,

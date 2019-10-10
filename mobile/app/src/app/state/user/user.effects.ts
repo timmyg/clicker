@@ -98,7 +98,7 @@ export class UserEffects {
     ofType(UserActions.ADD_REFERRAL),
     switchMap((action: UserActions.AddReferral) =>
       this.userService.addReferral(action.code).pipe(
-        switchMap((result: any) => [new UserActions.AddReferralSuccess(result)]),
+        switchMap((result: any) => [new UserActions.AddReferralSuccess(result), new UserActions.LoadWallet()]),
         catchError((err: UserActions.AddReferralFail) => of(new UserActions.AddReferralFail(err))),
       ),
     ),
