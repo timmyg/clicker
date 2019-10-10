@@ -84,14 +84,15 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
 
   if (!referrerUser) {
     return respond(400, 'Sorry, invalid referral code', 'code.invalid');
-  }
-
-  if (user.referredByCode) {
+  } else if (user.referredByCode) {
     return respond(400, 'Sorry, you have already been referred', 'user.redeemed');
+  } else if (user.userId === referrerUser.userId) {
+    return respond(400, 'Sorry, you cannot redeem your own code', 'user.same');
   }
 
   // add token to each user, save
   await User.update({ id: userId }, { $ADD: { tokens: 1, spent: 0 } });
+  await User.update({ id: userId }, { referredByCode: code });
   await User.update({ id: referrerUser.userId }, { $ADD: { tokens: 1, spent: 0 } });
 
   return respond(200);
