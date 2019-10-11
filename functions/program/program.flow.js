@@ -430,15 +430,16 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
       console.log('updating', programsToUpdate.length, 'programs');
       const response = await Program.batchPut(programsToUpdate);
     } catch (e) {
+      // swallow, and try again next time
       console.log('sync description failed');
       console.error(e);
-      // TODO duplicate codde
-      const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
-      programsToUpdate.forEach((part, index, arr) => {
-        // arr[index]['description'] = description;
-        arr[index]['synced'] = false;
-      });
-      const response = await Program.batchPut(programsToUpdate);
+      // // TODO duplicate codde
+      // const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
+      // programsToUpdate.forEach((part, index, arr) => {
+      //   // arr[index]['description'] = description;
+      //   arr[index]['synced'] = false;
+      // });
+      // const response = await Program.batchPut(programsToUpdate);
     }
   }
   return respond(200);
