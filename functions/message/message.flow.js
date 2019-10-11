@@ -48,7 +48,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function sendSlack(webhook, text, attachments) {
-  const stage = `_${process.env.stage !== 'prod' ? process.env.stage : ''}_`;
+  const stage = process.env.stage !== 'prod' ? `_${process.env.stage}_` : '';
   text = `${text} ${stage}`;
   if (attachments && attachments[0] && attachments[0].title) {
     attachments[0].title = `${attachments[0].title} ${stage}`;
