@@ -2,15 +2,13 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
-const { respond, Invoke } = require('serverless-helpers');
-const { IncomingWebhook } = require('@slack/webhook');
+const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 declare class process {
   static env: {
     stage: string,
     airtableKey: string,
     airtableBase: string,
-    slackControlCenterWebhookUrl: string,
   };
 }
 
@@ -21,11 +19,11 @@ class GameStatus {
   description: string;
 }
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
-};
+});
 
-module.exports.controlCenterDailyInit = async (event: any) => {
+module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async event => {
   const regions = ['Cincinnati'];
   const invoke = new Invoke();
   const { data: locations } = await invoke
@@ -58,56 +56,70 @@ module.exports.controlCenterDailyInit = async (event: any) => {
     }
   }
   return respond(200);
-};
+});
 
-module.exports.updateGameStatus = async (event: any) => {
+module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  console.log('searching for games to change');
-  // TODO shouldnt be all games
-  try {
-    let allGames = await base('Games')
-      .select({
-        view: 'Score Update',
-      })
-      .eachPage(async (allGames, fetchNextPage) => {
-        console.log('allGames', allGames.length);
-        if (allGames.length) {
-          for (const game of allGames) {
-            console.log({ game });
-            const siWebUrl: string = game.get('Scores Link');
-            const gameOver: boolean = game.get('Game Over');
-            const blowout: boolean = game.get('Blowout');
-            const gameId: string = game.id;
-            const invoke = new Invoke();
-            const { data } = await invoke
-              .service('game')
-              .name('getStatus')
-              .body({ url: siWebUrl })
-              .headers(event.headers)
-              .go();
-            console.log({ data });
-            const gameStatus: GameStatus = data;
-            console.log({ gameStatus });
-            await base('Games').update(gameId, {
-              'Game Status': gameStatus.description,
-              'Game Over': gameStatus.ended,
-              Started: gameStatus.started,
-              Blowout: gameStatus.blowout,
-            });
-            // }
-          }
-          fetchNextPage();
-        }
-      });
-    return respond(200);
-  } catch (e) {
-    console.error(e);
-    return respond(400, e);
+  console.log('searching for games to update score');
+  // try {
+  let allGames = await base('Games')
+    .select({
+      view: 'Score Update',
+    })
+    .all();
+  // .eachPage(
+  // async (allGames, fetchNextPage) => {
+  console.log('allGames', allGames.length);
+  if (allGames.length) {
+    for (const game of allGames) {
+      const siWebUrl: string = game.get('Scores Link');
+      try {
+        console.log({ game });
+        const gameOver: boolean = game.get('Game Over');
+        const blowout: boolean = game.get('Blowout');
+        const gameId: string = game.id;
+        const invoke = new Invoke();
+        const { data } = await invoke
+          .service('game')
+          .name('getStatus')
+          .body({ url: siWebUrl })
+          .headers(event.headers)
+          .go();
+        console.log({ data });
+        const gameStatus: GameStatus = data;
+        console.log({ gameStatus });
+        await base('Games').update(gameId, {
+          'Game Status': gameStatus.description,
+          'Game Over': gameStatus.ended,
+          Started: gameStatus.started,
+          Blowout: gameStatus.blowout || false,
+        });
+        // }
+      } catch (e) {
+        console.error('failed to get score', e);
+        // throw "Parameter is not a number!";
+        throw new Error(`failed to get score: ${siWebUrl}`);
+      }
+    }
+    // fetchNextPage();
   }
-};
+  return respond(200);
+  //   },
+  //   err => {
+  //     if (err) {
+  //       return respond(400, err);
+  //     }
+  //     return respond(200);
+  //   },
+  // );
 
-module.exports.controlCenter = async (event: any) => {
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
+  // } catch (e) {
+  //   console.error(e);
+  //   return respond(400, e);
+  // }
+});
+
+module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
   let games = await base('Games')
@@ -148,64 +160,26 @@ module.exports.controlCenter = async (event: any) => {
         if (lockedUntil === 'Blowout' && !blowout && !gameOver) {
           console.log(`waiting on blowout:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* on *${dependencyGameNotes} (${dependencyChannel})* ${
-            process.env.stage !== 'prod' ? process.env.stage : ''
-          }`;
-          const title = 'Control Center';
-          const color = process.env.stage === 'prod' ? 'warning' : null; // good, warning, danger
-          await controlCenterWebhook.send({
-            attachments: [
-              {
-                title,
-                text,
-                fallback: text,
-                color,
-                fields: [
-                  {
-                    title: 'Zone',
-                    value: zones.join(' '),
-                    short: true,
-                  },
-                  {
-                    title: 'Game Status',
-                    value: dependencyGameStatus,
-                    short: true,
-                  },
-                ],
-              },
-            ],
-          });
+          const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* (${dependencyGameStatus}) on *${dependencyGameNotes} (${dependencyChannel})* (Zones ${zones.join(
+            ', ',
+          )})`;
+          await new Invoke()
+            .service('message')
+            .name('sendControlCenter')
+            .body({ text })
+            .go();
           continue;
         } else if (lockedUntil === 'Game Over' && !gameOver) {
           console.log(`waiting on game over:`, dependencyGame.get('Title (Calculated)'));
           waitingCount++;
-          const text = `*${gameNotes} (${channel})* waiting for *game over* of *${dependencyGameNotes} (${dependencyChannel})* ${
-            process.env.stage !== 'prod' ? process.env.stage : ''
-          }`;
-          const title = 'Control Center';
-          const color = process.env.stage === 'prod' ? 'warning' : null; // good, warning, danger
-          await controlCenterWebhook.send({
-            attachments: [
-              {
-                title,
-                text,
-                fallback: text,
-                color,
-                fields: [
-                  {
-                    title: 'Zone',
-                    value: zones.join(' '),
-                    short: true,
-                  },
-                  {
-                    title: 'Game Status',
-                    value: dependencyGameStatus,
-                    short: true,
-                  },
-                ],
-              },
-            ],
-          });
+          const text = `*${gameNotes} (${channel})* waiting for *game over* (${dependencyGameStatus}) on *${dependencyGameNotes} (${dependencyChannel})* (Zones ${zones.join(
+            ', ',
+          )})`;
+          await new Invoke()
+            .service('message')
+            .name('sendControlCenter')
+            .body({ text })
+            .go();
           continue;
         }
       }
@@ -273,7 +247,7 @@ module.exports.controlCenter = async (event: any) => {
   }
 
   return respond(200, { changedCount, waitingCount });
-};
+});
 
 function getChannelForZone(index) {
   const initChannels = [206, 209, 614, 208, 212, 219];

@@ -23,8 +23,8 @@ export class LocationService {
     return this.httpClient.get<Location[]>(url, { params });
   }
 
-  get(locationId: string): Observable<Location> {
-    return this.httpClient.get<Location>(`${this.prefix}/${locationId}`);
+  get(locationId: string, latitude: number, longitude: number): Observable<Location> {
+    return this.httpClient.get<Location>(`${this.prefix}/${locationId}?latitude=${latitude}&longitude=${longitude}`);
   }
 
   turnOn(locationId: string, autotune: boolean): Observable<any> {

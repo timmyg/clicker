@@ -17,6 +17,8 @@ import { WalletModule } from '../wallet/wallet.module';
 import { WalletPage } from '../wallet/wallet.page';
 import { CoinsComponent } from '../wallet/coins/coins.component';
 import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
+import { ReferralPageModule } from '../referral/referral.module';
+import { ReferralPage } from '../referral/referral.page';
 
 const routes: Routes = [
   {
@@ -33,13 +35,14 @@ const routes: Routes = [
     IonicModule,
     MomentModule,
     WalletModule,
+    ReferralPageModule,
     FontAwesomeModule,
     AuthModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
   ],
   declarations: [ProfilePage, ReservationComponent, FeatureFlag],
-  entryComponents: [LoginComponent, WalletPage, CoinsComponent],
+  entryComponents: [LoginComponent, WalletPage, CoinsComponent, ReferralPage],
   providers: [Deploy],
 })
 export class ProfilePageModule {}

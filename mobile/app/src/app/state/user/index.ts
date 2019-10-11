@@ -29,9 +29,24 @@ export const getUserId = createSelector(
   fromUser.getUserId,
 );
 
+export const getUserGeolocation = createSelector(
+  getUserState,
+  fromUser.getUserGeolocation,
+);
+
 export const getUserAuthToken = createSelector(
   getUserState,
   fromUser.getUserAuthToken,
+);
+
+export const getUserReferralCode = createSelector(
+  getUserState,
+  fromUser.getUserReferralCode,
+);
+
+export const isReferred = createSelector(
+  getUserState,
+  fromUser.isReferred,
 );
 
 export const getUserTokenCount = createSelector(

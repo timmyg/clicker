@@ -93,7 +93,7 @@ export class SetForUpdate implements Action {
 
 export class SetLocation implements Action {
   readonly type = SET_RESERVATION_LOCATION;
-  constructor(public payload: Location) {}
+  constructor(public location: Location, public latitude: number, public longitude: number) {}
 }
 
 export class SetLocationSuccess implements Action {

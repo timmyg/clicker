@@ -1,15 +1,12 @@
 // @flow
 const losantApi = require('losant-rest');
-const { respond, getBody, Invoke } = require('serverless-helpers');
-const { IncomingWebhook } = require('@slack/webhook');
+const { respond, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 declare class process {
   static env: {
     stage: string,
     losantAccessToken: string,
     losantAppId: string,
-    slackControlCenterWebhookUrl: string,
-    slackAppWebhookUrl: string,
   };
 }
 
@@ -36,11 +33,11 @@ class LosantApi {
   }
 }
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
-};
+});
 
-module.exports.command = async (event: any) => {
+module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { command, key, reservation, source } = getBody(event);
     const { losantId, id: locationId } = reservation.location;
@@ -64,95 +61,38 @@ module.exports.command = async (event: any) => {
       .go();
     console.timeEnd('update channel');
 
-    const appWebhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
-    const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
     let eventName, userId;
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
-      const title = `${eventName} @ ${reservation.location.name} ${
-        process.env.stage !== 'prod' ? process.env.stage : ''
-      }`;
-      const text = `Zapped to ${reservation.program.title} on ${reservation.program.channelTitle}`;
-      const color = '#0091ea'; // good, warning, danger
-      await appWebhook.send({
-        attachments: [
-          {
-            title,
-            fallback: title,
-            color,
-            text,
-            fields: [
-              {
-                title: 'Minutes',
-                value: reservation.minutes,
-                short: true,
-              },
-              {
-                title: 'TV Label',
-                value: reservation.box.label,
-                short: true,
-              },
-            ],
-          },
-        ],
-      });
+      let text = `*${eventName}* @ ${reservation.location.name}`;
+      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${reservation.minutes} mins, TV ${reservation.box.label})`;
+      const invoke = new Invoke();
+      await invoke
+        .service('message')
+        .name('sendApp')
+        .body({ text })
+        .go();
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const title = `${eventName} @ ${reservation.location.name} ${
-        process.env.stage !== 'prod' ? process.env.stage : ''
-      }`;
-      const color = '#0091ea'; // good, warning, danger
-      await controlCenterWebhook.send({
-        attachments: [
-          {
-            title,
-            fallback: title,
-            color,
-            fields: [
-              {
-                title: 'Channel',
-                value: channel,
-                short: true,
-              },
-              {
-                title: 'Zone',
-                value: reservation.box.zone,
-                short: true,
-              },
-            ],
-          },
-        ],
-      });
+      const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
+      const invoke = new Invoke();
+      await invoke
+        .service('message')
+        .name('sendControlCenter')
+        .body({ text })
+        .go();
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const title = `${eventName} @ ${reservation.location.name} ${
-        process.env.stage !== 'prod' ? process.env.stage : ''
-      }`;
-      const color = '#0091ea'; // good, warning, danger
-      await controlCenterWebhook.send({
-        attachments: [
-          {
-            title,
-            fallback: title,
-            color,
-            fields: [
-              {
-                title: 'Channel',
-                value: channel,
-                short: true,
-              },
-              {
-                title: 'Zone',
-                value: reservation.box.zone,
-                short: true,
-              },
-            ],
-          },
-        ],
-      });
+      const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
+      const invoke = new Invoke();
+      await invoke
+        .service('message')
+        .name('sendControlCenter')
+        .body({ text })
+        .go();
     }
 
     const name = eventName;
@@ -188,9 +128,9 @@ module.exports.command = async (event: any) => {
     console.error(e);
     return respond(400, `Could not tune: ${e.stack}`);
   }
-};
+});
 
-module.exports.checkBoxInfo = async (event: any) => {
+module.exports.checkBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { losantId, boxId, ip, client } = getBody(event);
     console.log({ losantId, boxId, ip, client });
@@ -204,9 +144,9 @@ module.exports.checkBoxInfo = async (event: any) => {
     console.error(e);
     return respond(400, `Could not checkBoxInfo: ${e.stack}`);
   }
-};
+});
 
-module.exports.debug = async (event: any) => {
+module.exports.debug = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { command, payload, losantId } = getBody(event);
     const api = new LosantApi();
@@ -217,4 +157,4 @@ module.exports.debug = async (event: any) => {
     console.error(e);
     return respond(400, `Could not tune: ${e.stack}`);
   }
-};
+});

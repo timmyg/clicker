@@ -28,6 +28,8 @@
 #     stage: ${self:custom.stage}
 #     createRoute53Record: true
 #     endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
 #   tableThroughputs:
 #     prod: 5
 #     default: 1

@@ -1,17 +1,14 @@
 // @flow
-const { respond, getBody, getPathParameters, Invoke } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
-const { IncomingWebhook } = require('@slack/webhook');
 require('dotenv').config({ path: '../.env.example' });
 
 declare class process {
   static env: {
     stage: string,
-    slackAntennaWebhookUrl: string,
-    slackControlCenterWebhookUrl: string,
     tableLocation: string,
   };
 }
@@ -55,7 +52,7 @@ const Location = dynamoose.model(
     packages: [String],
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
-    zip: { type: Number, required: true },
+    zip: { type: String, required: true },
     geo: {
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },
@@ -78,7 +75,7 @@ const Location = dynamoose.model(
   },
 );
 
-module.exports.all = async (event: any) => {
+module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   const { partner } = event.headers;
@@ -110,9 +107,9 @@ module.exports.all = async (event: any) => {
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   return respond(200, sorted);
-};
+});
 
-module.exports.get = async (event: any) => {
+module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -140,21 +137,43 @@ module.exports.get = async (event: any) => {
     });
   }
 
-  return respond(200, location);
-};
+  // delete location.losantId;
 
-module.exports.create = async (event: any) => {
+  // set distance
+  console.log(event);
+  if (event.queryStringParameters) {
+    const { latitude, longitude } = event.queryStringParameters;
+    console.log({ latitude, longitude });
+    const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
+    console.log(
+      { latitude: +latitude, longitude: +longitude },
+      { latitude: locationLatitude, longitude: locationLongitude },
+    );
+    const meters = geolib.getDistanceSimple(
+      { latitude: +latitude, longitude: +longitude },
+      { latitude: locationLatitude, longitude: locationLongitude },
+    );
+    const miles = geolib.convertUnit('mi', meters);
+    const roundedMiles = Math.round(10 * miles) / 10;
+    location.distance = roundedMiles;
+  }
+
+  return respond(200, location);
+});
+
+module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const body = getBody(event);
+    console.log(body);
     const location = await Location.create(body);
     return respond(201, location);
   } catch (e) {
     console.error(e);
     return respond(400, e);
   }
-};
+});
 
-module.exports.update = async (event: any) => {
+module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { id } = getPathParameters(event);
     const body = getBody(event);
@@ -165,9 +184,9 @@ module.exports.update = async (event: any) => {
     console.error(e);
     return respond(400, e);
   }
-};
+});
 
-module.exports.setBoxes = async (event: any) => {
+module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { boxes, ip } = getBody(event);
   const { id } = getPathParameters(event);
 
@@ -203,9 +222,9 @@ module.exports.setBoxes = async (event: any) => {
   await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
 
   return respond(201, updatedLocation);
-};
+});
 
-module.exports.setBoxReserved = async (event: any) => {
+module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
 
@@ -219,9 +238,9 @@ module.exports.setBoxReserved = async (event: any) => {
   await location.save();
 
   return respond(200);
-};
+});
 
-module.exports.setBoxFree = async (event: any) => {
+module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -234,9 +253,9 @@ module.exports.setBoxFree = async (event: any) => {
   await location.save();
 
   return respond(200);
-};
+});
 
-module.exports.updateChannel = async (event: any) => {
+module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { channel, source } = getBody(event);
 
@@ -250,13 +269,11 @@ module.exports.updateChannel = async (event: any) => {
   await location.save();
 
   return respond(200);
-};
+});
 
-module.exports.saveBoxInfo = async (event: any) => {
+module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { major } = getBody(event);
-
-  const controlCenterWebhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
 
   const location = await Location.queryOne('id')
     .eq(locationId)
@@ -290,42 +307,20 @@ module.exports.saveBoxInfo = async (event: any) => {
       .go();
     console.timeEnd('track event');
 
-    const title = `Manual Zap @ ${location.name} (${location.neighborhood}) ${
-      process.env.stage !== 'prod' ? process.env.stage : ''
-    }`;
-    const color = 'warning'; // good, warning, danger
-    await controlCenterWebhook.send({
-      attachments: [
-        {
-          title,
-          fallback: title,
-          color,
-          fields: [
-            {
-              title: 'From',
-              value: originalChannel,
-              short: true,
-            },
-            {
-              title: 'To',
-              value: major,
-              short: true,
-            },
-            {
-              title: 'Zone',
-              value: location.boxes[i].zone,
-              short: true,
-            },
-          ],
-        },
-      ],
-    });
+    const text = `Manual Zap @ ${location.name} (${
+      location.neighborhood
+    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    await new Invoke()
+      .service('message')
+      .name('sendControlCenter')
+      .body({ text })
+      .go();
   }
 
   return respond(200);
-};
+});
 
-module.exports.setLabels = async (event: any) => {
+module.exports.setLabels = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);
   const location = await Location.queryOne('id')
@@ -338,9 +333,9 @@ module.exports.setLabels = async (event: any) => {
   await Location.update({ id }, { boxes: updatedBoxes }, { returnValues: 'ALL_NEW' });
 
   return respond(200, boxes);
-};
+});
 
-module.exports.identifyBoxes = async (event: any) => {
+module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -369,9 +364,9 @@ module.exports.identifyBoxes = async (event: any) => {
   }
   await Location.update({ id }, { boxes });
   return respond(200, `hello`);
-};
+});
 
-module.exports.connected = async (event: any) => {
+module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
   const locations = await Location.scan('losantId')
     .eq(losantId)
@@ -381,25 +376,17 @@ module.exports.connected = async (event: any) => {
   location.connected = true;
   await location.save();
 
-  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Connected @ ${location.name} (${location.neighborhood}) ${
-    process.env.stage !== 'prod' ? process.env.stage : ''
-  }`;
-  const color = 'good'; // good, warning, danger
-  await antennaWebhook.send({
-    attachments: [
-      {
-        title,
-        fallback: title,
-        color,
-      },
-    ],
-  });
+  const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
+  await new Invoke()
+    .service('message')
+    .name('sendAntenna')
+    .body({ text })
+    .go();
 
   return respond(200, 'ok');
-};
+});
 
-module.exports.disconnected = async (event: any) => {
+module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
   const locations = await Location.scan('losantId')
     .eq(losantId)
@@ -409,24 +396,16 @@ module.exports.disconnected = async (event: any) => {
   location.connected = false;
   await location.save();
 
-  const antennaWebhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
-  const title = `Antenna Disconnected @ ${location.name} (${location.neighborhood}) ${
-    process.env.stage !== 'prod' ? process.env.stage : ''
-  }`;
-  const color = 'danger'; // good, warning, danger
-  await antennaWebhook.send({
-    attachments: [
-      {
-        title,
-        fallback: title,
-        color,
-      },
-    ],
-  });
+  const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
+  await new Invoke()
+    .service('message')
+    .name('sendAntenna')
+    .body({ text })
+    .go();
   return respond(200, 'ok');
-};
+});
 
-module.exports.allOff = async (event: any) => {
+module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -454,9 +433,9 @@ module.exports.allOff = async (event: any) => {
     console.log('turned off box', box);
   }
   return respond(200, 'ok');
-};
+});
 
-module.exports.allOn = async (event: any) => {
+module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -485,9 +464,9 @@ module.exports.allOn = async (event: any) => {
     console.log('turned on', box);
   }
   return respond(200, 'ok');
-};
+});
 
-module.exports.checkAllBoxesInfo = async (event: any) => {
+module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   // const { id } = getPathParameters(event);
   let allLocations = await Location.scan().exec();
 
@@ -512,9 +491,9 @@ module.exports.checkAllBoxesInfo = async (event: any) => {
     }
   }
   return respond(200, 'ok');
-};
+});
 
-module.exports.controlCenterLocationsByRegion = async (event: any) => {
+module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven, async event => {
   const { regions } = getPathParameters(event);
   console.log(regions);
   if (!regions || !regions.length) {
@@ -533,8 +512,8 @@ module.exports.controlCenterLocationsByRegion = async (event: any) => {
     .exec();
   console.log({ locations });
   return respond(200, locations);
-};
+});
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
-};
+});

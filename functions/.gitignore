@@ -6,6 +6,7 @@ game.js
 job.js
 lead.js
 location.js
+message.js
 program.js
 remote.js
 reservation.js

@@ -5,6 +5,7 @@ const routes: Routes = [
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
   { path: 'reserve', loadChildren: './reserve/reserve.module#ReservePageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  // { path: 'referral', loadChildren: './referral/referral.module#ReferralPageModule' },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],

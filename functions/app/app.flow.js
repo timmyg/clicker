@@ -2,7 +2,7 @@
 require('dotenv').config();
 const axios = require('axios');
 
-const { respond } = require('serverless-helpers');
+const { respond, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const plans = [
   { tokens: 2, dollars: 10, id: 'bb23310b-3fec-4873-8cdf-279ffcd31b32' },
   { tokens: 5, dollars: 20, id: '40167d6a-1626-456a-8a35-f60c91c05120' },
@@ -10,21 +10,21 @@ const plans = [
 ];
 const timeframes = [{ tokens: 0, minutes: 0 }, { tokens: 1, minutes: 30 }, { tokens: 2, minutes: 60 }];
 
-module.exports.health = async (event: any) => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
-};
+});
 
-module.exports.buy = async (event: any) => {
+module.exports.buy = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, plans);
-};
+});
 
-module.exports.timeframes = async (event: any) => {
+module.exports.timeframes = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters.locationId);
   // locationId should be available in query params
   return respond(200, timeframes);
-};
+});
 
-// module.exports.blogPostUpdated = async (event: any) => {
+// module.exports.blogPostUpdated = RavenLambdaWrapper.handler(Raven, async event => {
 //   const stage = process.env.stage;
 //   console.log(stage);
 //   if (stage === 'prod') {
@@ -32,4 +32,4 @@ module.exports.timeframes = async (event: any) => {
 //     return respond(200, 'ok');
 //   }
 //   return respond(400);
-// };
+// });

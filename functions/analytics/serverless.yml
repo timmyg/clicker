@@ -12,6 +12,7 @@ provider:
 plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
+  - serverless-sentry
 
 custom:
   stage: ${opt:stage}
@@ -23,6 +24,8 @@ custom:
     prod: ${env:SEGMENT_WRITE_KEY}
     release: ${env:SEGMENT_WRITE_KEY_DEV}
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
 functions:
   health:
     handler: analytics.health

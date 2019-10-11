@@ -1,6 +1,6 @@
 // @flow
 const axios = require('axios');
-const { respond, invokeFunctionSync, getPathParameters, getBody } = require('serverless-helpers');
+const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 require('dotenv').config();
 
 class SiLeague {
@@ -47,7 +47,7 @@ class GameStatus {
   description: string;
 }
 
-module.exports.getStatus = async (event: any) => {
+module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
 
@@ -58,7 +58,7 @@ module.exports.getStatus = async (event: any) => {
   const gameStatus: GameStatus = transformGame(result.data);
 
   return respond(200, gameStatus);
-};
+});
 
 function transformGame(result: SiResult): GameStatus {
   const game = result.data;

@@ -1,3 +1,5 @@
+import { ReferralPageModule } from './../referral/referral.module';
+import { ReferralPage } from './../referral/referral.page';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -23,6 +25,7 @@ import { WalletPage } from '../wallet/wallet.page';
 import { AuthModule } from '../auth/auth.module';
 import { LoginComponent } from '../auth/login/login.component';
 import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
+import { SuggestComponent } from './components/locations/suggest/suggest.component';
 
 const routes: Routes = [
   {
@@ -66,6 +69,7 @@ const routes: Routes = [
     WalletModule,
     MomentModule,
     AuthModule,
+    ReferralPageModule,
     RouterModule.forChild(routes),
   ],
   declarations: [
@@ -78,9 +82,10 @@ const routes: Routes = [
     ProgramsFilterPipe,
     LocationsFilterPipe,
     InfoComponent,
+    SuggestComponent,
     LocationComponent,
   ],
   providers: [Deploy],
-  entryComponents: [LoginComponent, InfoComponent, WalletPage],
+  entryComponents: [LoginComponent, InfoComponent, WalletPage, SuggestComponent, ReferralPage],
 })
 export class ReservePageModule {}

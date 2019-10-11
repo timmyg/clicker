@@ -12,6 +12,7 @@ export const LOAD_WALLET = '[USER] Load Wallet';
 export const LOAD_WALLET_SUCCESS = '[USER] Load Wallet Success';
 export const LOAD_WALLET_FAIL = '[USER] Load Wallet Fail';
 export const SET_AUTH_TOKEN = '[USER] Set Auth Token';
+export const SET_GEOLOCATION = '[USER] Set Geolocation';
 export const ALIAS = '[USER] Alias';
 export const ALIAS_SUCCESS = '[USER] Alias Success';
 export const ALIAS_FAIL = '[USER] Alias Fail';
@@ -24,6 +25,9 @@ export const DELETE_CARD_FAIL = '[USER] Delete Card Fail';
 export const ADD_FUNDS = '[USER] Add Funds';
 export const ADD_FUNDS_SUCCESS = '[USER] Add Funds Success';
 export const ADD_FUNDS_FAIL = '[USER] Add Funds Fail';
+export const ADD_REFERRAL = '[USER] Add Referral';
+export const ADD_REFERRAL_SUCCESS = '[USER] Add Referral Success';
+export const ADD_REFERRAL_FAIL = '[USER] Add Referral Fail';
 
 export class Load implements Action {
   readonly type = LOAD;
@@ -70,6 +74,11 @@ export class LoadWalletFail implements Action {
 export class SetAuthToken implements Action {
   readonly type = SET_AUTH_TOKEN;
   constructor(public payload: string) {}
+}
+
+export class SetGeolocation implements Action {
+  readonly type = SET_GEOLOCATION;
+  constructor(public latitude: number, public longitude: number) {}
 }
 
 export class Alias implements Action {
@@ -132,6 +141,21 @@ export class AddFundsFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class AddReferral implements Action {
+  readonly type = ADD_REFERRAL;
+  constructor(public code: string) {}
+}
+
+export class AddReferralSuccess implements Action {
+  readonly type = ADD_REFERRAL_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class AddReferralFail implements Action {
+  readonly type = ADD_REFERRAL_FAIL;
+  constructor(public payload: any) {}
+}
+
 export type UserActions =
   | Load
   | LoadSuccess
@@ -140,6 +164,7 @@ export type UserActions =
   | LoadWalletSuccess
   | LoadWalletFail
   | SetAuthToken
+  | SetGeolocation
   | UpdateCard
   | UpdateCardSuccess
   | UpdateCardFail
@@ -148,4 +173,7 @@ export type UserActions =
   | DeleteCardFail
   | AddFunds
   | AddFundsSuccess
-  | AddFundsFail;
+  | AddFundsFail
+  | AddReferral
+  | AddReferralSuccess
+  | AddReferralFail;

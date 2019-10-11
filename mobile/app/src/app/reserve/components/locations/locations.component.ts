@@ -1,16 +1,18 @@
+import { ReferralPage } from './../../../referral/referral.page';
+import { LoginComponent } from 'src/app/auth/login/login.component';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from 'src/app/state/location/location.model';
 import { ReserveService } from '../../reserve.service';
 import { Observable, Subscription, BehaviorSubject, forkJoin } from 'rxjs';
 import { getAllLocations, getLoading } from 'src/app/state/location';
-import { getUserLocations, getUserRoles } from 'src/app/state/user';
+import { getUserLocations, getUserRoles, isLoggedIn } from 'src/app/state/user';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../state/app.reducer';
 import * as fromLocation from '../../../state/location/location.actions';
 import * as fromUser from '../../../state/user/user.actions';
 import * as fromReservation from '../../../state/reservation/reservation.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, ActionSheetController, ToastController, Platform } from '@ionic/angular';
+import { NavController, ActionSheetController, ToastController, Platform, ModalController } from '@ionic/angular';
 import { first, take } from 'rxjs/operators';
 import { Reservation } from 'src/app/state/reservation/reservation.model';
 import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
@@ -22,6 +24,7 @@ import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
 import { Intercom } from 'ng-intercom';
 import { GeolocationOptions } from '@ionic-native/geolocation/ngx';
+import { SuggestComponent } from './suggest/suggest.component';
 
 const permissionGeolocation = {
   name: 'permission.geolocation',
@@ -64,12 +67,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
   showHidden = false;
   disableButton = false;
   sub: Subscription;
-  milesRadius = 5;
+  milesRadius = 100;
+  isLoggedIn$: Observable<boolean>;
+  isLoggedIn: boolean;
+  suggestModal;
+  referralModal;
+  loginModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
     public actionSheetController: ActionSheetController,
     public toastController: ToastController,
+    public modalController: ModalController,
     public reserveService: ReserveService,
     private router: Router,
     private route: ActivatedRoute,
@@ -85,6 +94,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.reserveService.emitTitle(this.title);
     this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
+    this.isLoggedIn$ = this.store.select(isLoggedIn);
+    this.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
     this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(() => {
       this.showHidden = !this.showHidden;
       if (this.showHidden) {
@@ -181,13 +194,20 @@ export class LocationsComponent implements OnDestroy, OnInit {
 
   async suggestLocation() {
     // await this.intercom.boot({ app_id: environment.intercom.appId });
-    await this.intercom.showNewMessage();
-    this.intercom.onHide(() => {
-      this.intercom.update({ hide_default_launcher: true });
+    // await this.intercom.showNewMessage();
+    // this.intercom.onHide(() => {
+    //   this.intercom.update({ hide_default_launcher: true });
+    // });
+    // this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+    //   this.intercom.hide();
+    // });
+    this.suggestModal = await this.modalController.create({
+      component: SuggestComponent,
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      this.intercom.hide();
+      if (this.suggestModal) this.suggestModal.close();
     });
+    return await this.suggestModal.present();
   }
 
   async allowLocation() {
@@ -246,12 +266,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
     ) {
       await Geolocation.getCurrentPosition(geolocationOptions)
         .then(response => {
+          const { latitude, longitude } = response.coords;
+          console.log(latitude, longitude);
+          this.store.dispatch(new fromUser.SetGeolocation(latitude, longitude));
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;
           this.geolocationDeclined = false;
           this.disableButton = false;
           this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
-          const { latitude, longitude } = response.coords;
           this.userGeolocation = { latitude, longitude };
           this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
           this.reserveService.emitShowingLocations();
@@ -283,10 +305,49 @@ export class LocationsComponent implements OnDestroy, OnInit {
     location.reload();
   }
 
+  async openReferral() {
+    if (this.isLoggedIn) {
+      this.referralModal = await this.modalController.create({
+        component: ReferralPage,
+      });
+      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+        if (this.referralModal) {
+          this.referralModal.close();
+        }
+      });
+      return await this.referralModal.present();
+    } else {
+      const toast = await this.toastController.create({
+        message: `✋ You must be logged in to get free tokens.`,
+        duration: 4000,
+        buttons: [
+          {
+            side: 'end',
+            text: 'Login',
+            handler: async () => {
+              this.loginModal = await this.modalController.create({
+                component: LoginComponent,
+              });
+              this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+                if (this.loginModal) {
+                  this.loginModal.close();
+                }
+              });
+              return await this.loginModal.present();
+            },
+          },
+        ],
+      });
+      toast.present();
+    }
+  }
+
   onLocationClick(location: Location) {
     this.waiting = true;
     this.reserveService.emitCloseSearch();
-    this.store.dispatch(new fromReservation.SetLocation(location));
+    console.log(location);
+    const { latitude, longitude } = this.userGeolocation;
+    this.store.dispatch(new fromReservation.SetLocation(location, latitude, longitude));
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())

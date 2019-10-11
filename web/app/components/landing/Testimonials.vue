@@ -49,13 +49,13 @@
               <div class="testimonial-item-content">
                 <p
                   class="text-sm mb-24"
-                >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud labore et dolore magna aliqua.</p>
+                >Clicker TV has been such a huge help to my staff. It has allowed them to focus on bartending and waiting on our customers without having to worry about adjusting the TVs all day.</p>
               </div>
               <div class="testimonial-item-footer has-top-divider">
                 <div class="testimonial-item-name h6 m-0">Patrick</div>
                 <div class="testimonial-item-link text-xs">
                   <a target="_none" href="http://www.queencityexchange.com/">Queen City Exchange</a>
-                  <p class="muted">General Manager</p>
+                  <p class="muted">Managing Partner</p>
                 </div>
               </div>
             </div>

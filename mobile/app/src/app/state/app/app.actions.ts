@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Plan } from './plan.model';
 import { Timeframe } from './timeframe.model';
-import { Location } from '../location/location.model';
 
 export const SET_PARTNER = '[APP] Set Partner';
 export const SET_PARTNER_SUCCESS = '[APP] Set Partner Success';
@@ -14,6 +13,9 @@ export const LOAD_TIMEFRAMES_SUCCESS = '[APP] Load Timeframes Success';
 export const LOAD_TIMEFRAMES_FAIL = '[APP] Load Timeframes Fail';
 export const CLEAR_TIMEFRAMES = '[APP] Clear Timeframes';
 export const CLEAR_PLANS = '[APP] Clear Plans';
+export const SEND_MESSAGE = '[APP] Send Message';
+export const SEND_MESSAGE_SUCCESS = '[APP] Send Message Success';
+export const SEND_MESSAGE_FAIL = '[APP] Send Message Fail';
 
 export class SetPartner implements Action {
   readonly type = SET_PARTNER;
@@ -65,6 +67,21 @@ export class ClearPlans implements Action {
   readonly type = CLEAR_PLANS;
 }
 
+export class SendMessage implements Action {
+  readonly type = SEND_MESSAGE;
+  constructor(public payload: string) {}
+}
+
+export class SendMessageSuccess implements Action {
+  readonly type = SEND_MESSAGE_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class SendMessageFail implements Action {
+  readonly type = SEND_MESSAGE_FAIL;
+  constructor(public payload: any) {}
+}
+
 export type AppActions =
   | SetPartner
   | SetPartnerSuccess
@@ -76,4 +93,7 @@ export type AppActions =
   | LoadTimeframesSuccess
   | LoadTimeframesFail
   | ClearTimeframes
-  | ClearPlans;
+  | ClearPlans
+  | SendMessage
+  | SendMessageSuccess
+  | SendMessageFail;
