@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  stage: 'prod',
   apiBaseUrl: 'https://api.tryclicker.com',
   packageId: 'com.teamclicker.app',
   auth0: {
