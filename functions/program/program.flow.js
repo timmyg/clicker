@@ -408,6 +408,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
   console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
 
   const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
+  console.log({ uniqueProgramIds });
   // call endpoint for each program
   for (const programId of uniqueProgramIds) {
     try {
@@ -415,16 +416,18 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
       console.log(url);
       const config = { timeout: 1000 };
       const result = await axios.get(url, config);
-      const { programDetail } = result.data;
-      const { description } = programDetail;
+      const { description } = result.data.programDetail;
+      console.log({ description });
 
       const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
+
+      console.log('programsToUpdate:', programsToUpdate.length);
 
       programsToUpdate.forEach((part, index, arr) => {
         arr[index]['description'] = description;
         arr[index]['synced'] = true;
       });
-      console.log('updating', 2, 'programs');
+      console.log('updating', programsToUpdate.length, 'programs');
       const response = await Program.batchPut(programsToUpdate);
     } catch (e) {
       console.log('sync description failed');
