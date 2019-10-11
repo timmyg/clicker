@@ -16,4 +16,7 @@ export const environment = {
   segment: {
     writeKey: 'Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I',
   },
+  sentry: {
+    dsn: 'https://0c8d9e0468744ff789f544918d02e952@sentry.io/1777153',
+  },
 };
