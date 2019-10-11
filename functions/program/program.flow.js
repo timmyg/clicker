@@ -424,6 +424,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
         arr[index]['description'] = description;
         arr[index]['synced'] = true;
       });
+      console.log('updating', 2, 'programs');
       const response = await Program.batchPut(programsToUpdate);
     } catch (e) {
       console.log('sync description failed');
