@@ -389,8 +389,10 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     .gt(moment().unix() * 1000)
     .filter('synced')
     .null()
-    // .not()
-    // .eq(true)
+    .and()
+    .filter('programId')
+    .not()
+    .contains('_') // cant get description on this for some reason
     .all()
     .exec();
 
@@ -416,6 +418,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     for (const programId of uniqueProgramIds) {
       const url = `${directvEndpoint}/program/flip/${programId}`;
       const config = { timeout: 1000 };
+      console.log('add', url);
       calls.push(axios.get(url, config));
     }
     console.timeEnd('create calls');
