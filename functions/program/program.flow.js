@@ -425,7 +425,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     console.time('call');
     const results = await Promise.all(calls);
     console.timeEnd('call');
-    await processDescriptionResults(results);
+    await processDescriptionResults(results, descriptionlessPrograms);
   } catch (e) {
     // swallow, and try again next time
     console.log('sync description failed');
@@ -441,7 +441,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
   return respond(200);
 });
 
-async function processDescriptionResults(results) {
+async function processDescriptionResults(results, descriptionlessPrograms) {
   console.time('save to db');
   for (const result of results) {
     const { description } = result.data.programDetail;
