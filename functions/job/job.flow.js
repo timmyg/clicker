@@ -25,8 +25,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async event => {
   const regions = ['Cincinnati'];
-  const invoke = new Invoke();
-  const { data: locations } = await invoke
+  const { data: locations } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')
     .pathParams({ regions })
@@ -45,8 +44,7 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
         },
       };
       const source = 'control center daily';
-      const invoke = new Invoke();
-      await invoke
+      await new Invoke()
         .service('remote')
         .name('command')
         .body({ reservation, command, source })
@@ -167,6 +165,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .service('message')
             .name('sendControlCenter')
             .body({ text })
+            .async()
             .go();
           continue;
         } else if (lockedUntil === 'Game Over' && !gameOver) {
@@ -179,6 +178,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .service('message')
             .name('sendControlCenter')
             .body({ text })
+            .async()
             .go();
           continue;
         }
@@ -186,14 +186,13 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
 
       console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
-      const invoke = new Invoke();
-      const result = await invoke
+      const { data } = await new Invoke()
         .service('location')
         .name('controlCenterLocationsByRegion')
         .pathParams({ regions })
         .headers(event.headers)
         .go();
-      const locations = result.data;
+      const { locations } = data;
 
       console.log(`found ${locations.length} locations`);
       // loop through locations
@@ -227,8 +226,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
           console.log('box', box.label, box.ip);
           console.log('channel', channel);
           const source = 'control center';
-          const invoke = new Invoke();
-          await invoke
+          await new Invoke()
             .service('remote')
             .name('command')
             .body({ reservation, command, source })
