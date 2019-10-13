@@ -444,7 +444,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
 async function processDescriptionResults(results, descriptionlessPrograms) {
   console.time('save to db');
   for (const result of results) {
-    const { description } = result.data.programDetail;
+    const { description, tmsProgramID: programId } = result.data.programDetail;
     console.log({ description });
 
     const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
