@@ -65,7 +65,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       eventName = 'App Zap';
       userId = reservation.userId;
       let text = `*${eventName}* @ ${reservation.location.name}`;
-      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${reservation.minutes} mins, TV ${reservation.box.label})`;
+      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${
+        reservation.minutes
+      } mins, TV ${reservation.box.label}, user ${userId.substr(userId.length - 5)})`;
       await new Invoke()
         .service('message')
         .name('sendApp')

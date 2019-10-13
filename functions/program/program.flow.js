@@ -409,40 +409,54 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
   const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
   console.log({ uniqueProgramIds });
   // call endpoint for each program
-  for (const programId of uniqueProgramIds) {
-    try {
+  const calls = [];
+  // let results;
+  try {
+    console.time('create calls');
+    for (const programId of uniqueProgramIds) {
       const url = `${directvEndpoint}/program/flip/${programId}`;
-      console.log(url);
       const config = { timeout: 1000 };
-      const result = await axios.get(url, config);
-      const { description } = result.data.programDetail;
-      console.log({ description });
-
-      const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
-
-      console.log('programsToUpdate:', programsToUpdate.length);
-
-      programsToUpdate.forEach((part, index, arr) => {
-        arr[index]['description'] = description;
-        arr[index]['synced'] = true;
-      });
-      console.log('updating', programsToUpdate.length, 'programs');
-      const response = await Program.batchPut(programsToUpdate);
-    } catch (e) {
-      // swallow, and try again next time
-      console.log('sync description failed');
-      console.error(e);
-      // // TODO duplicate codde
-      // const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
-      // programsToUpdate.forEach((part, index, arr) => {
-      //   // arr[index]['description'] = description;
-      //   arr[index]['synced'] = false;
-      // });
-      // const response = await Program.batchPut(programsToUpdate);
+      calls.push(axios.get(url, config));
     }
+    console.timeEnd('create calls');
+    console.time('call');
+    const results = await Promise.all(calls);
+    console.timeEnd('call');
+    await processDescriptionResults(results);
+  } catch (e) {
+    // swallow, and try again next time
+    console.log('sync description failed');
+    console.error(e);
+    // // TODO duplicate codde
+    // const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
+    // programsToUpdate.forEach((part, index, arr) => {
+    //   // arr[index]['description'] = description;
+    //   arr[index]['synced'] = false;
+    // });
+    // const response = await Program.batchPut(programsToUpdate);
   }
   return respond(200);
 });
+
+async function processDescriptionResults(results) {
+  console.time('save to db');
+  for (const result of results) {
+    const { description } = result.data.programDetail;
+    console.log({ description });
+
+    const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
+
+    console.log('programsToUpdate:', programsToUpdate.length);
+
+    programsToUpdate.forEach((part, index, arr) => {
+      arr[index]['description'] = description;
+      arr[index]['synced'] = true;
+    });
+    console.log('updating', programsToUpdate.length, 'programs');
+    const response = await Program.batchPut(programsToUpdate);
+  }
+  console.timeEnd('save to db');
+}
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
