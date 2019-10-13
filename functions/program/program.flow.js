@@ -423,9 +423,12 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     }
     console.timeEnd('create calls');
     console.time('call');
-    const results = await Promise.all(calls);
+    // const results = await Promise.all(calls);
+    const results = await Promise.all(calls.map(p => p.catch(e => e)));
+    const validResults = results.filter(result => !(result instanceof Error));
+
     console.timeEnd('call');
-    await processDescriptionResults(results, descriptionlessPrograms);
+    await processDescriptionResults(validResults, descriptionlessPrograms);
   } catch (e) {
     // swallow, and try again next time
     console.log('sync description failed');
