@@ -510,6 +510,6 @@ module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven
   return respond(200, locations);
 });
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.health = async (event: any) => {
   return respond(200, 'ok');
-});
+};
