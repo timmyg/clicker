@@ -381,7 +381,7 @@ async function syncChannels(channels: any, zip?: string) {
 module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event => {
   // find programs by unique programID without descriptions
   init();
-  const maxPrograms = 30;
+  const maxPrograms = 10;
   let descriptionlessPrograms = await Program.scan('description')
     .null()
     .and()
