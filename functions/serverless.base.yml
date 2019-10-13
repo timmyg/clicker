@@ -1,6 +1,7 @@
 # frameworkVersion: '>=1.1.0 <2.0.0'
 # provider:
 #   name: aws
+memorySize: 128
 #   runtime: nodejs8.10
 #   deploymentBucket:
 #     name: serverless-deploys-clicker
@@ -28,8 +29,8 @@
 #     stage: ${self:custom.stage}
 #     createRoute53Record: true
 #     endpointType: 'edge'
-  sentry:
-    dsn: ${env:SENTRY_DSN_ENDPOINT}
+sentry:
+  dsn: ${env:SENTRY_DSN_ENDPOINT}
 #   tableThroughputs:
 #     prod: 5
 #     default: 1
