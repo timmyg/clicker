@@ -417,7 +417,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     console.time('create calls');
     for (const programId of uniqueProgramIds) {
       const url = `${directvEndpoint}/program/flip/${programId}`;
-      const config = { timeout: 1000 };
+      const config = { timeout: 2000 };
       console.log('add', url);
       calls.push(axios.get(url, config));
     }
