@@ -130,7 +130,7 @@ functions:
       - schedule: rate(30 minutes)
   syncDescriptions:
     handler: program.syncDescriptions
-    # timeout: 10
+    timeout: 12
     events:
       - http:
           path: 'sync/descriptions'
