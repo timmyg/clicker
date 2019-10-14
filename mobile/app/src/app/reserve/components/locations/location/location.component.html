@@ -12,6 +12,7 @@
             <ion-chip color="primary" *ngIf="location.announcement">
               <label color="primary"> {{ location.announcement }}</label></ion-chip
             >
+            <ion-chip color="secondary" *ngIf="location.openTvs"> <label color="secondary"> Open TVs</label></ion-chip>
           </span>
           <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
