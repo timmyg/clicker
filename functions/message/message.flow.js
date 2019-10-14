@@ -11,6 +11,7 @@ declare class process {
     slackAntennaWebhookUrl: string,
     slackAppWebhookUrl: string,
     slackLandingWebhookUrl: string,
+    slackSandboxWebhookUrl: string,
   };
 }
 
@@ -53,8 +54,16 @@ async function sendSlack(webhook, text, attachments) {
   if (attachments && attachments[0] && attachments[0].title) {
     attachments[0].title = `${attachments[0].title} ${stage}`;
   }
-  await webhook.send({
-    text,
-    attachments,
-  });
+  if (stage === 'prod') {
+    await webhook.send({
+      text,
+      attachments,
+    });
+  } else {
+    const sandboxWebhook = new IncomingWebhook(process.env.slackSandboxWebhookUrl);
+    await sandboxWebhook.send({
+      text,
+      attachments,
+    });
+  }
 }
