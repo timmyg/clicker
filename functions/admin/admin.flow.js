@@ -44,10 +44,10 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
 });
 
 async function sendControlCenterSlack(text) {
-  const invoke = new Invoke();
-  await invoke
+  await new Invoke()
     .service('message')
     .name('sendControlCenter')
     .body({ text })
+    .async()
     .go();
 }

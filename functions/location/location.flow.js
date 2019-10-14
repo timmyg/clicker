@@ -298,8 +298,7 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       locationNeighborhood: location.neighborhood,
     };
     console.time('track event');
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('analytics')
       .name('track')
       .body({ userId, name, data })
@@ -307,13 +306,12 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    const text = `Manual Zap @ ${location.name} (${
-      location.neighborhood
-    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
     await new Invoke()
       .service('message')
       .name('sendControlCenter')
       .body({ text })
+      .async()
       .go();
   }
 
@@ -354,8 +352,7 @@ module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => 
         channel: box.setupChannel,
       },
     };
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('remote')
       .name('command')
       .body({ reservation, command })
@@ -381,6 +378,7 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
     .service('message')
     .name('sendAntenna')
     .body({ text })
+    .async()
     .go();
 
   return respond(200, 'ok');
@@ -401,6 +399,7 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
     .service('message')
     .name('sendAntenna')
     .body({ text })
+    .async()
     .go();
   return respond(200, 'ok');
 });
@@ -423,8 +422,7 @@ module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
       },
     };
     console.log('turning off box', box);
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('remote')
       .name('command')
       .body({ reservation, command, key })
@@ -453,8 +451,7 @@ module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
       },
     };
     console.log('turning on box', box);
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('remote')
       .name('command')
       .body({ reservation, command, key })
@@ -481,8 +478,7 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
         client,
       };
       if (losantId.length > 3) {
-        const invoke = new Invoke();
-        await invoke
+        await new Invoke()
           .service('remote')
           .name('checkBoxInfo')
           .body(body)
@@ -514,6 +510,6 @@ module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven
   return respond(200, locations);
 });
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.health = async (event: any) => {
   return respond(200, 'ok');
-});
+};

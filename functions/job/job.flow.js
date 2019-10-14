@@ -25,8 +25,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async event => {
   const regions = ['Cincinnati'];
-  const invoke = new Invoke();
-  const { data: locations } = await invoke
+  const { data: locations } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')
     .pathParams({ regions })
@@ -45,8 +44,7 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
         },
       };
       const source = 'control center daily';
-      const invoke = new Invoke();
-      await invoke
+      await new Invoke()
         .service('remote')
         .name('command')
         .body({ reservation, command, source })
@@ -139,7 +137,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
       console.log(game);
       const waitOn: string[] = game.get('Wait On');
       const regions: string[] = game.get('Regions');
-      const channel: string = game.get('Channel');
+      const channel: number = game.get('Channel Number');
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
       const gameNotes: string = game.get('Notes');
@@ -153,7 +151,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
         const dependencyGameNotes = dependencyGame.get('Notes');
-        const dependencyChannel: string = dependencyGame.get('Channel');
+        const dependencyChannel: number = dependencyGame.get('Channel Number');
         const dependencyZones: number[] = dependencyGame.get('TV Zones');
         const dependencyGameStatus: string = dependencyGame.get('Game Status');
         // lockedUntil is either Blowout or Game Over
@@ -167,6 +165,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .service('message')
             .name('sendControlCenter')
             .body({ text })
+            .async()
             .go();
           continue;
         } else if (lockedUntil === 'Game Over' && !gameOver) {
@@ -179,6 +178,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .service('message')
             .name('sendControlCenter')
             .body({ text })
+            .async()
             .go();
           continue;
         }
@@ -186,14 +186,12 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
 
       console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
-      const invoke = new Invoke();
-      const result = await invoke
+      const { data: locations } = await new Invoke()
         .service('location')
         .name('controlCenterLocationsByRegion')
         .pathParams({ regions })
         .headers(event.headers)
         .go();
-      const locations = result.data;
 
       console.log(`found ${locations.length} locations`);
       // loop through locations
@@ -218,8 +216,8 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             location,
             box,
             program: {
-              channel: channel.split('-')[0],
-              channelMinor: channel.split('-')[1],
+              channel: channel.toString().split('.')[0],
+              channelMinor: channel.toString().split('.')[1],
             },
           };
           console.log('⚡ ⚡ tuning...');
@@ -227,8 +225,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
           console.log('box', box.label, box.ip);
           console.log('channel', channel);
           const source = 'control center';
-          const invoke = new Invoke();
-          await invoke
+          await new Invoke()
             .service('remote')
             .name('command')
             .body({ reservation, command, source })

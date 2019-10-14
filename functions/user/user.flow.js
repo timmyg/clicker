@@ -100,6 +100,7 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
     .service('message')
     .name('sendApp')
     .body({ text })
+    .async()
     .go();
 
   return respond(200);
@@ -214,6 +215,7 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
       .service('message')
       .name('sendApp')
       .body({ text })
+      .async()
       .go();
 
     return respond(200, updatedUser);

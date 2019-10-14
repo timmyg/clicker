@@ -2,6 +2,7 @@ service: job
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
+  memorySize: 128
   region: eu-central-1 # Germany
   versionFunctions: false
   runtime: nodejs8.10
