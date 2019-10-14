@@ -95,7 +95,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     console.log(l);
     console.log(l.boxes);
     if (l.boxes) {
-      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate() >= 0));
+      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate()) < 0);
     }
   });
 
