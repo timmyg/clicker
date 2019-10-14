@@ -98,7 +98,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     .headers(event.headers)
     .go();
   console.timeEnd('ensure location active');
-  console.log(locationResult);
+  // console.log(locationResult);
   const locationResultBody = data;
   if (!locationResultBody.active) {
     return respond(400, 'Sorry, location inactive');
