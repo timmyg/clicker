@@ -186,13 +186,12 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
 
       console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
-      const { data } = await new Invoke()
+      const { data: locations } = await new Invoke()
         .service('location')
         .name('controlCenterLocationsByRegion')
         .pathParams({ regions })
         .headers(event.headers)
         .go();
-      const { locations } = data;
 
       console.log(`found ${locations.length} locations`);
       // loop through locations
