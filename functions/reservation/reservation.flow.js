@@ -91,16 +91,15 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 
   // ensure location is active
   console.time('ensure location active');
-  let invoke = new Invoke();
-  const locationResult = await invoke
+  const { data } = await new Invoke()
     .service('location')
     .name('get')
     .pathParams({ id: reservation.location.id })
     .headers(event.headers)
     .go();
   console.timeEnd('ensure location active');
-  console.log(locationResult);
-  const locationResultBody = locationResult.data;
+  // console.log(locationResult);
+  const locationResultBody = data;
   if (!locationResultBody.active) {
     return respond(400, 'Sorry, location inactive');
   }
@@ -116,8 +115,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('mark box reserved');
   // mark box reserved
-  invoke = new Invoke();
-  await invoke
+  await new Invoke()
     .service('location')
     .name('setBoxReserved')
     .body({ end: reservation.end })
@@ -129,8 +127,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 
   // deduct from user
   console.time('deduct transaction');
-  invoke = new Invoke();
-  const result = await invoke
+  const result = await new Invoke()
     .service('user')
     .name('transaction')
     .body({ tokens: cost })
@@ -147,8 +144,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('remote command');
   const command = 'tune';
   const source = 'app';
-  invoke = new Invoke();
-  await invoke
+  await new Invoke()
     .service('remote')
     .name('command')
     .body({ reservation, command, source })
@@ -195,8 +191,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('mark box reserved');
   // mark box reserved
-  let invoke = new Invoke();
-  await invoke
+  await new Invoke()
     .service('location')
     .name('setBoxReserved')
     .body({ end: updatedReservation.end })
@@ -208,18 +203,16 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 
   // deduct from user
   console.time('deduct transaction');
-  invoke = new Invoke();
-  const result = await invoke
+  const { statusCode, data } = await new Invoke()
     .service('user')
     .name('transaction')
     .body({ tokens: updatedReservation.cost })
     .headers(event.headers)
     .go();
   console.timeEnd('deduct transaction');
-  const statusCode = result.statusCode;
   if (statusCode >= 400) {
     // TODO mark not reserved
-    const message = result.data.message;
+    const message = data.message;
     return respond(statusCode, message);
   }
 
@@ -227,8 +220,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('remote command');
   const command = 'tune';
   const source = 'app';
-  invoke = new Invoke();
-  await invoke
+  await new Invoke()
     .service('remote')
     .name('command')
     .body({ reservation, command, source })
@@ -291,8 +283,7 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
   await Reservation.update({ id, userId }, { cancelled: true });
 
   // mark box free
-  const invoke = new Invoke();
-  await invoke
+  await new Invoke()
     .service('location')
     .name('setBoxFree')
     .pathParams({ id: reservation.location.id, boxId: reservation.box.id })

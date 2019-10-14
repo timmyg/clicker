@@ -69,6 +69,7 @@ const Location = dynamoose.model(
     notes: String,
     // calculated fields
     distance: Number,
+    openTvs: Boolean,
   },
   {
     timestamps: true,
@@ -88,6 +89,16 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     console.log('lat/lng', latitude, longitude);
   }
   let allLocations = await Location.scan().exec();
+
+  // set whether open tv's
+  allLocations.forEach((l, i, locations) => {
+    console.log(l);
+    console.log(l.boxes);
+    if (l.boxes) {
+      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate()) < 0);
+    }
+  });
+
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     delete l.losantId;
@@ -106,6 +117,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+
   return respond(200, sorted);
 });
 
@@ -298,8 +310,7 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       locationNeighborhood: location.neighborhood,
     };
     console.time('track event');
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('analytics')
       .name('track')
       .body({ userId, name, data })
@@ -311,9 +322,10 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       location.neighborhood
     }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
     await new Invoke()
-      .service('message')
+      .service('notification')
       .name('sendControlCenter')
       .body({ text })
+      .async()
       .go();
   }
 
@@ -354,8 +366,7 @@ module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => 
         channel: box.setupChannel,
       },
     };
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('remote')
       .name('command')
       .body({ reservation, command })
@@ -378,9 +389,10 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
 
   const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
   await new Invoke()
-    .service('message')
+    .service('notification')
     .name('sendAntenna')
     .body({ text })
+    .async()
     .go();
 
   return respond(200, 'ok');
@@ -398,9 +410,10 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
 
   const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
   await new Invoke()
-    .service('message')
+    .service('notification')
     .name('sendAntenna')
     .body({ text })
+    .async()
     .go();
   return respond(200, 'ok');
 });
@@ -423,8 +436,7 @@ module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
       },
     };
     console.log('turning off box', box);
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('remote')
       .name('command')
       .body({ reservation, command, key })
@@ -453,8 +465,7 @@ module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
       },
     };
     console.log('turning on box', box);
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('remote')
       .name('command')
       .body({ reservation, command, key })
@@ -481,8 +492,7 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
         client,
       };
       if (losantId.length > 3) {
-        const invoke = new Invoke();
-        await invoke
+        await new Invoke()
           .service('remote')
           .name('checkBoxInfo')
           .body(body)
@@ -514,6 +524,6 @@ module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven
   return respond(200, locations);
 });
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.health = async (event: any) => {
   return respond(200, 'ok');
-});
+};

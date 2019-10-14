@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  stage: 'release',
   apiBaseUrl: 'https://api-release.tryclicker.com',
   packageId: 'com.teamclicker.app',
   auth0: {
@@ -14,5 +15,8 @@ export const environment = {
   },
   segment: {
     writeKey: 'VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ',
+  },
+  sentry: {
+    dsn: 'https://0c8d9e0468744ff789f544918d02e952@sentry.io/1777153',
   },
 };

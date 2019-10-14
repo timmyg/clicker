@@ -4,7 +4,7 @@
   "description": "",
   "main": "message.js",
   "scripts": {
-    "build": "npx flow-remove-types message.flow.js -o message.js",
+    "build": "npx flow-remove-types notification.flow.js -o notification.js",
     "test": "npm run build && jest --coverage"
   },
   "author": "",

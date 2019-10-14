@@ -5,7 +5,7 @@ functions/game
 functions/job
 functions/lead
 functions/location
-functions/message
+functions/notification
 functions/program
 functions/remote
 functions/reservation

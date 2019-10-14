@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -23,6 +23,23 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { SegmentModule } from 'ngx-segment-analytics';
 import { Globals } from './globals';
+
+import * as Sentry from '@sentry/browser';
+
+console.log(environment.sentry.dsn, environment.stage);
+Sentry.init({
+  dsn: environment.sentry.dsn,
+  environment: environment.stage,
+});
+
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+  handleError(error) {
+    const eventId = Sentry.captureException(error.originalError || error);
+    Sentry.showReportDialog({ eventId });
+  }
+}
 
 export function checkParams(store: Store<AppState>): Function {
   return () =>
@@ -94,6 +111,8 @@ export function initUserStuff(store: Store<AppState>): Function {
     },
     Geolocation,
     Diagnostic,
+    // SentryErrorHandler,
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
   ],
   bootstrap: [AppComponent],
 })
