@@ -69,6 +69,7 @@ const Location = dynamoose.model(
     notes: String,
     // calculated fields
     distance: Number,
+    openTvs: Boolean,
   },
   {
     timestamps: true,
@@ -106,6 +107,12 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+
+  // check if open tv's
+  allLocations.forEach((l, i, locations) => {
+    locations[i].openTvs = true;
+  });
+
   return respond(200, sorted);
 });
 
