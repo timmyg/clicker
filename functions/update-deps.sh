@@ -3,7 +3,7 @@
 # manually run this to update a dependency in all functions
 
 # Declare an array of string with type
-declare -a StringArray=("admin" "analytics" "app" "game" "job" "lead" "location" "message" "program" "remote" "reservation" "user")
+declare -a StringArray=("admin" "analytics" "app" "game" "job" "lead" "location" "notification" "program" "remote" "reservation" "user")
  
 # Iterate the string array using for loop
 for val in ${StringArray[@]}; do

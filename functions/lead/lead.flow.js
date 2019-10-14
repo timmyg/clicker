@@ -13,7 +13,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const { email } = body;
   const text = `*New Landing Signup*: ${email}`;
   await new Invoke()
-    .service('message')
+    .service('notification')
     .name('sendLanding')
     .body({ text })
     .async()

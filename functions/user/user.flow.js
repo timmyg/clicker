@@ -97,7 +97,7 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
 
   const text = '*New referral*';
   await new Invoke()
-    .service('message')
+    .service('notification')
     .name('sendApp')
     .body({ text })
     .async()
@@ -212,7 +212,7 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
 
     const text = `$${dollars} Added to Wallet! (${user.phone}, user: ${userId.substr(userId.length - 5)})`;
     await new Invoke()
-      .service('message')
+      .service('notification')
       .name('sendApp')
       .body({ text })
       .async()

@@ -162,7 +162,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             ', ',
           )})`;
           await new Invoke()
-            .service('message')
+            .service('notification')
             .name('sendControlCenter')
             .body({ text })
             .async()
@@ -175,7 +175,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             ', ',
           )})`;
           await new Invoke()
-            .service('message')
+            .service('notification')
             .name('sendControlCenter')
             .body({ text })
             .async()

@@ -1,4 +1,4 @@
-service: message
+service: notification
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
@@ -30,7 +30,7 @@ custom:
     develop: api-develop.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: messages
+    basePath: notifications
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true
@@ -39,7 +39,7 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
 functions:
   sendAntenna:
-    handler: message.sendAntenna
+    handler: notification.sendAntenna
     events:
       - http:
           path: ''
@@ -51,7 +51,7 @@ functions:
               - authorization
               - content-type
   sendApp:
-    handler: message.sendApp
+    handler: notification.sendApp
     events:
       - http:
           path: 'app'
@@ -63,7 +63,7 @@ functions:
               - authorization
               - content-type
   sendControlCenter:
-    handler: message.sendControlCenter
+    handler: notification.sendControlCenter
     events:
       - http:
           path: ''
@@ -75,7 +75,7 @@ functions:
               - authorization
               - content-type
   sendLanding:
-    handler: message.sendLanding
+    handler: notification.sendLanding
     events:
       - http:
           path: ''
@@ -87,7 +87,7 @@ functions:
               - authorization
               - content-type
   health:
-    handler: message.health
+    handler: notification.health
     events:
       - http:
           path: health

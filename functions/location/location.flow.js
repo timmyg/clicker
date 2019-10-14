@@ -306,9 +306,11 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    const text = `Manual Zap @ ${location.name} (${
+      location.neighborhood
+    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
     await new Invoke()
-      .service('message')
+      .service('notification')
       .name('sendControlCenter')
       .body({ text })
       .async()
@@ -375,7 +377,7 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
 
   const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
   await new Invoke()
-    .service('message')
+    .service('notification')
     .name('sendAntenna')
     .body({ text })
     .async()
@@ -396,7 +398,7 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
 
   const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
   await new Invoke()
-    .service('message')
+    .service('notification')
     .name('sendAntenna')
     .body({ text })
     .async()

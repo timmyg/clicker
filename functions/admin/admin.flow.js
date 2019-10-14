@@ -44,7 +44,7 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
 
 async function sendControlCenterSlack(text) {
   await new Invoke()
-    .service('message')
+    .service('notification')
     .name('sendControlCenter')
     .body({ text })
     .async()

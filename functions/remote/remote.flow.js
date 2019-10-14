@@ -69,7 +69,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
         reservation.minutes
       } mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)})`;
       await new Invoke()
-        .service('message')
+        .service('notification')
         .name('sendApp')
         .body({ text })
         .async()
@@ -79,7 +79,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       userId = 'system';
       const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
       await new Invoke()
-        .service('message')
+        .service('notification')
         .name('sendControlCenter')
         .body({ text })
         .async()
@@ -89,7 +89,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       userId = 'system';
       const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
       await new Invoke()
-        .service('message')
+        .service('notification')
         .name('sendControlCenter')
         .body({ text })
         .async()
