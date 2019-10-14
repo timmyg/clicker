@@ -209,7 +209,7 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
       { returnValues: 'ALL_NEW' },
     );
 
-    const title = `$${dollars} Added to Wallet! (${user.phone}, ${user.id})`;
+    const text = `$${dollars} Added to Wallet! (${user.phone}, ${user.id})`;
     await new Invoke()
       .service('message')
       .name('sendApp')
