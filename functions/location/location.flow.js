@@ -111,7 +111,9 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   // check if open tv's
   allLocations.forEach((l, i, locations) => {
     // locations[i].openTvs = true;
-    locations[i].openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate() < 0));
+    if (l.boxes) {
+      locations[i].openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate() < 0));
+    }
   });
 
   return respond(200, sorted);
