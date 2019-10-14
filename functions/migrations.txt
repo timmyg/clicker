@@ -3,4 +3,4 @@
 3. update airtable columns with started/ended/blowout
 4. add airtable columns: Locked Until, Wait On, Completed -> Zapped, descriptions
 5. zip to string
-5. airtable - Channel to Channel Number header name
+6. airtable - Channel to Channel Number header name
