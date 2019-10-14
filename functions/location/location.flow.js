@@ -89,6 +89,16 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     console.log('lat/lng', latitude, longitude);
   }
   let allLocations = await Location.scan().exec();
+
+  // set whether open tv's
+  allLocations.forEach((l, i, locations) => {
+    console.log(l);
+    console.log(l.boxes);
+    if (l.boxes) {
+      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate() < 0));
+    }
+  });
+
   allLocations.forEach((l, i, locations) => {
     delete l.boxes;
     delete l.losantId;
@@ -107,16 +117,6 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
-
-  // check if open tv's
-  allLocations.forEach((l, i, locations) => {
-    // locations[i].openTvs = true;
-    console.log(l);
-    console.log(l.boxes);
-    if (locations[i].boxes) {
-      locations[i].openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate() < 0));
-    }
-  });
 
   return respond(200, sorted);
 });
