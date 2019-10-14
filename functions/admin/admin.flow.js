@@ -34,11 +34,10 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
     })
     .all();
   console.log(`found ${games.length} games`);
-  if (!games.length) {
-    // const title = 'Control Center Scheduling';
-    const text = `No games scheduled today`;
-    const color = process.env.stage === 'prod' ? 'danger' : null;
-    await sendControlCenterSlack(text);
+  if (!!games.length) {
+    await sendControlCenterSlack(`*${games.length}* scheduled today`);
+  } else {
+    await sendControlCenterSlack(`No games scheduled today`);
   }
   return respond(200);
 });

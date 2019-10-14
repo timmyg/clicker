@@ -168,14 +168,13 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
-  const { data } = await new Invoke()
+  console.log({ locationId });
+  const { data: location } = await new Invoke()
     .service('location')
     .name('get')
     .pathParams({ id: locationId })
     .headers(event.headers)
     .go();
-
-  const { location } = data;
 
   init();
   const initialChannels = nationalChannels;

@@ -117,6 +117,7 @@ functions:
   syncNew:
     handler: program.syncNew
     timeout: 20
+    memorySize: 1024
     events:
       - http:
           path: 'sync'
