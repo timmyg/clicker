@@ -137,7 +137,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
       console.log(game);
       const waitOn: string[] = game.get('Wait On');
       const regions: string[] = game.get('Regions');
-      const channel: number = game.get('Channel');
+      const channel: number = game.get('Channel Number');
       const gamePackage: string = game.get('Package');
       const zones: number[] = game.get('TV Zones');
       const gameNotes: string = game.get('Notes');
@@ -151,7 +151,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
         const dependencyGameNotes = dependencyGame.get('Notes');
-        const dependencyChannel: number = dependencyGame.get('Channel');
+        const dependencyChannel: number = dependencyGame.get('Channel Number');
         const dependencyZones: number[] = dependencyGame.get('TV Zones');
         const dependencyGameStatus: string = dependencyGame.get('Game Status');
         // lockedUntil is either Blowout or Game Over
