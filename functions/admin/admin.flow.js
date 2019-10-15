@@ -35,7 +35,7 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
     .all();
   console.log(`found ${games.length} games`);
   if (!!games.length) {
-    await sendControlCenterSlack(`*${games.length}* scheduled today`);
+    await sendControlCenterSlack(`*${games.length}* games scheduled today`);
   } else {
     await sendControlCenterSlack(`No games scheduled today`);
   }
