@@ -168,17 +168,19 @@ export class ReservePage {
         return this.showToast(`capacitor only`);
       }
       const channel = 'Master';
-      const x = await this.deploy.configure({ channel });
-      console.log(x);
-      this.showToast(`switch to channel: ${channel}`);
+      await this.deploy.configure({ channel });
+      await this.deploy.sync({ updateMethod: 'auto' });
+      this.showToast(`🕵️‍♀ switch to channel: ${channel}`);
     } else if (this.channelsClick === 14) {
       const channel = 'Develop';
       await this.deploy.configure({ channel });
-      this.showToast(`switch to channel: ${channel}`);
+      await this.deploy.sync({ updateMethod: 'auto' });
+      this.showToast(`🕵️‍♀ switch to channel: ${channel}`);
     } else if (this.channelsClick === 21) {
       const channel = 'Production';
       await this.deploy.configure({ channel });
-      this.showToast(`switch to channel: ${channel}`);
+      await this.deploy.sync({ updateMethod: 'auto' });
+      this.showToast(`🕵️‍♀ switch to channel: ${channel}`);
       this.channelsClick = 0;
     }
   }
