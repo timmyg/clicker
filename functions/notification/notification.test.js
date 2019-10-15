@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '../.env.example' });
-const file = require('./message');
+const file = require('./notification');
 
 test('smoke test', () => {
   const response = file.health();

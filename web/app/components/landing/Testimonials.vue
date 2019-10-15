@@ -65,3 +65,9 @@
     </div>
   </section>
 </template>
+
+<style lang="scss" scoped>
+.tiles-wrap {
+  justify-content: space-evenly;
+}
+</style>

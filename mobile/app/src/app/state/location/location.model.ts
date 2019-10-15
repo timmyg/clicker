@@ -12,6 +12,7 @@ export interface Location {
   ip: string;
   zip: number;
   free?: boolean;
+  openTvs?: boolean;
   active?: boolean;
   connected?: boolean;
   hidden?: boolean;

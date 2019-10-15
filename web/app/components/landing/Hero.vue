@@ -15,7 +15,8 @@
                 v-scroll-reveal="{ delay: 200 , origin: 'left'}"
               >We guarantee the most compelling local and national sports are always on your TVs, taking that responsibility off your staff.</p>
               <div v-scroll-reveal="{ delay: 400 }">
-                <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a>
+                <!-- <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a> -->
+                <SignupForm />
               </div>
             </div>
             <div
@@ -33,14 +34,20 @@
 
 <script>
 import Header from '@/components/layouts/Header';
+import SignupForm from '@/components/landing/SignupForm';
 export default {
-  components: { Header },
+  components: { Header, SignupForm },
 };
 </script>
 
 <style lang="scss" scoped>
-.hero div.hero-inner {
-  padding-top: 96px;
+.hero {
+  .hero-content {
+    z-index: 1;
+  }
+  div.hero-inner {
+    padding-top: 96px;
+  }
 }
 
 // > large

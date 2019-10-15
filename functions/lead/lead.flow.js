@@ -12,11 +12,11 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   const { email } = body;
   const text = `*New Landing Signup*: ${email}`;
-  const invoke = new Invoke();
-  await invoke
-    .service('message')
+  await new Invoke()
+    .service('notification')
     .name('sendLanding')
     .body({ text })
+    .async()
     .go();
   if (stage === 'prod') {
     const hubspotContact = await createHubspotContact(email);

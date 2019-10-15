@@ -11,6 +11,7 @@ declare class process {
     slackAntennaWebhookUrl: string,
     slackAppWebhookUrl: string,
     slackLandingWebhookUrl: string,
+    slackSandboxWebhookUrl: string,
   };
 }
 
@@ -48,13 +49,21 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function sendSlack(webhook, text, attachments) {
-  const stage = `_${process.env.stage !== 'prod' ? process.env.stage : ''}_`;
+  const stage = process.env.stage !== 'prod' ? `_${process.env.stage}_` : '';
   text = `${text} ${stage}`;
   if (attachments && attachments[0] && attachments[0].title) {
     attachments[0].title = `${attachments[0].title} ${stage}`;
   }
-  await webhook.send({
-    text,
-    attachments,
-  });
+  if (stage === 'prod') {
+    await webhook.send({
+      text,
+      attachments,
+    });
+  } else {
+    const sandboxWebhook = new IncomingWebhook(process.env.slackSandboxWebhookUrl);
+    await sandboxWebhook.send({
+      text,
+      attachments,
+    });
+  }
 }

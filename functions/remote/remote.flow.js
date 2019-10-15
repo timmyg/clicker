@@ -51,8 +51,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     console.timeEnd('change channel');
 
     console.time('update channel');
-    const invoke = new Invoke();
-    await invoke
+    await new Invoke()
       .service('location')
       .name('updateChannel')
       .body({ channel, source })
@@ -66,32 +65,34 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       eventName = 'App Zap';
       userId = reservation.userId;
       let text = `*${eventName}* @ ${reservation.location.name}`;
-      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${reservation.minutes} mins, TV ${reservation.box.label})`;
-      const invoke = new Invoke();
-      await invoke
-        .service('message')
+      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${
+        reservation.minutes
+      } mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)})`;
+      await new Invoke()
+        .service('notification')
         .name('sendApp')
         .body({ text })
+        .async()
         .go();
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
       const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
-      const invoke = new Invoke();
-      await invoke
-        .service('message')
+      await new Invoke()
+        .service('notification')
         .name('sendControlCenter')
         .body({ text })
+        .async()
         .go();
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
       const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
-      const invoke = new Invoke();
-      await invoke
-        .service('message')
+      await new Invoke()
+        .service('notification')
         .name('sendControlCenter')
         .body({ text })
+        .async()
         .go();
     }
 
@@ -114,8 +115,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     };
 
     console.time('track event');
-    const invokeAnalytics = new Invoke();
-    await invokeAnalytics
+    await new Invoke()
       .service('analytics')
       .name('track')
       .body({ userId, name, data })
