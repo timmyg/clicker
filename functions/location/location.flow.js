@@ -40,6 +40,7 @@ const Location = dynamoose.model(
         notes: String,
         active: Boolean,
         channel: Number,
+        channelChangeAt: Date,
         channelSource: {
           type: String,
           enum: ['app', 'control center', 'manual', 'control center daily'],
@@ -278,6 +279,7 @@ module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => 
   const i = location.boxes.findIndex(b => b.id === boxId);
   location.boxes[i]['channel'] = channel;
   location.boxes[i]['channelSource'] = source;
+  location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
   await location.save();
 
   return respond(200);
@@ -299,6 +301,7 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   if (originalChannel !== major) {
     location.boxes[i]['channel'] = major;
     location.boxes[i]['channelSource'] = 'manual';
+    location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
     await location.save();
     const userId = 'system';
     const name = 'Manual Zap';
@@ -318,9 +321,7 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    const text = `Manual Zap @ ${location.name} (${
-      location.neighborhood
-    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
     await new Invoke()
       .service('notification')
       .name('sendControlCenter')
