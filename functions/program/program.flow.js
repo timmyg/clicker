@@ -185,7 +185,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
       .add(25, 'minutes')
       .unix() * 1000;
 
-  console.time('current + next Programming');
+  console.time('current + next programming setup queries');
 
   const programsNationalQuery = Program.scan()
     .filter('start')
@@ -234,16 +234,21 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(location.zip)
     .all()
     .exec();
+  console.timeEnd('current + next programming setup queries');
 
+  console.time('current + next programming run query');
   const [programsNational, programsLocal, programsNationalNext, programsLocalNext] = await Promise.all([
     programsNationalQuery,
     programsLocalQuery,
     programsNationalNextQuery,
     programsLocalNextQuery,
   ]);
+  console.time('current + next programming run query');
+
   let currentPrograms = [...programsNational, ...programsLocal];
   const nextPrograms = [...programsNationalNext, ...programsLocalNext];
 
+  console.time('current + next programming combine');
   currentPrograms.forEach((program, i) => {
     const nextProgram = nextPrograms.find(np => np.channel === program.channel && np.programId !== program.programId);
     if (nextProgram) {
@@ -251,6 +256,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
       currentPrograms[i].nextProgramStart = nextProgram.start;
     }
   });
+  console.time('current + next programming combine');
 
   console.time('remove excluded');
   console.log('exclude', location.channels);
