@@ -22,7 +22,7 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
   let games = await base('Games')
     .select({
       view: 'Scheduled',
-      filterByFormula: `{Started Hours Ago} >= 0 && {Started Hours Ago} < -14`,
+      filterByFormula: `AND( {Started Hours Ago} >= 0, {Started Hours Ago} < -14 )`,
     })
     .all();
   console.log(`found ${games.length} games`);
