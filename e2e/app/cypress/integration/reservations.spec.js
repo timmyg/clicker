@@ -1,6 +1,26 @@
 Cypress.config('pageLoadTimeout', 12000);
 Cypress.config('defaultCommandTimeout', 12000);
 
+beforeEach(done => {
+  cy.log('I run before every test in every spec file!!!!!!');
+  indexedDB.deleteDatabase('_ionicstorage');
+  const dbName = '_ionicstorage';
+  const req = indexedDB.open(dbName, 1);
+  req.onsuccess = event => {
+    db.createObjectStore('customers');
+    // const objectStore = db.createObjectStore('_ionickv');
+    // let transaction = db.transaction('_ionicstorage', 'readwrite');
+    var db = event.target.result;
+    var transaction = db.transaction(['customers'], 'readwrite');
+    var objectStore = transaction.objectStore('customers');
+
+    var request2 = objectStore.add(customer);
+    request2.onsuccess = function(event) {
+      done();
+    };
+  };
+});
+
 describe('creating reservations', () => {
   it('should create a single reservation', () => {
     // cy.clearCookies();
@@ -30,7 +50,6 @@ describe('creating reservations', () => {
     //   console.log('Error', request.error);
     // };
 
-    const dbName = '_ionicstorage';
     // cy.wrap(
     //   new Cypress.Promise((resolve, reject) => {
     //     const req = indexedDB.open(dbName, 1);
@@ -55,7 +74,7 @@ describe('creating reservations', () => {
     //   Cypress.storage.set('count', 44);
     // };
 
-    localStorage.setItem('onboarded', true);
+    // localStorage.setItem('onboarded', true);
 
     const baseUrl = 'https://release.mobile.tryclicker.com';
     // const baseUrl = 'http://localhost:4100';
