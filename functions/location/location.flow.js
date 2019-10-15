@@ -120,6 +120,94 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
 
   return respond(200, sorted);
 });
+module.exports.all2 = async (event: any) => {
+  let latitude, longitude;
+  const pathParams = getPathParameters(event);
+  const { partner } = event.headers;
+  const milesRadius =
+    event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
+
+  if (pathParams) {
+    latitude = pathParams.latitude;
+    longitude = pathParams.longitude;
+    console.log('lat/lng', latitude, longitude);
+  }
+  let allLocations = await Location.scan().exec();
+
+  // set whether open tv's
+  allLocations.forEach((l, i, locations) => {
+    console.log(l);
+    console.log(l.boxes);
+    if (l.boxes) {
+      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate()) < 0);
+    }
+  });
+
+  allLocations.forEach((l, i, locations) => {
+    delete l.boxes;
+    delete l.losantId;
+    if (latitude && longitude) {
+      const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
+      const meters = geolib.getDistanceSimple(
+        { latitude, longitude },
+        { latitude: locationLatitude, longitude: locationLongitude },
+      );
+      const miles = geolib.convertUnit('mi', meters);
+      const roundedMiles = Math.round(10 * miles) / 10;
+      locations[i].distance = roundedMiles;
+    }
+  });
+  if (milesRadius) {
+    allLocations = allLocations.filter(l => l.distance <= milesRadius);
+  }
+  const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+
+  return respond(200, sorted);
+};
+module.exports.all3 = RavenLambdaWrapper.handler(Raven, async event => {
+  let latitude, longitude;
+  const pathParams = getPathParameters(event);
+  const { partner } = event.headers;
+  const milesRadius =
+    event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
+
+  if (pathParams) {
+    latitude = pathParams.latitude;
+    longitude = pathParams.longitude;
+    console.log('lat/lng', latitude, longitude);
+  }
+  let allLocations = await Location.scan().exec();
+
+  // set whether open tv's
+  allLocations.forEach((l, i, locations) => {
+    console.log(l);
+    console.log(l.boxes);
+    if (l.boxes) {
+      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate()) < 0);
+    }
+  });
+
+  allLocations.forEach((l, i, locations) => {
+    delete l.boxes;
+    delete l.losantId;
+    if (latitude && longitude) {
+      const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
+      const meters = geolib.getDistanceSimple(
+        { latitude, longitude },
+        { latitude: locationLatitude, longitude: locationLongitude },
+      );
+      const miles = geolib.convertUnit('mi', meters);
+      const roundedMiles = Math.round(10 * miles) / 10;
+      locations[i].distance = roundedMiles;
+    }
+  });
+  if (milesRadius) {
+    allLocations = allLocations.filter(l => l.distance <= milesRadius);
+  }
+  const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
+
+  return respond(200, sorted);
+});
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);

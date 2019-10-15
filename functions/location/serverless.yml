@@ -86,6 +86,31 @@ functions:
               - partner
               - authorization
               - content-type
+  all2:
+    handler: location.all2
+    events:
+      - http:
+          path: ''
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  all3:
+    handler: location.all3
+    memorySize: 1024
+    events:
+      - http:
+          path: ''
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   allByGeolocation:
     handler: location.all
     events:

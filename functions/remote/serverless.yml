@@ -56,6 +56,7 @@ functions:
               - content-type
   command:
     handler: remote.command
+    memorySize: 512
     events:
       - http:
           path: '/command'
