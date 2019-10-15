@@ -90,7 +90,7 @@ functions:
     handler: location.all2
     events:
       - http:
-          path: ''
+          path: '2'
           method: get
           cors:
             origin: '*'
@@ -103,7 +103,7 @@ functions:
     memorySize: 1024
     events:
       - http:
-          path: ''
+          path: '3'
           method: get
           cors:
             origin: '*'
