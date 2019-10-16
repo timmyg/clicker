@@ -218,13 +218,19 @@ jobs:
   e2e/app:
     working_directory: ~/clicker/e2e/app
     docker:
-      - image: circleci/node:8.10
+      - image: cypress/base:10
     steps:
       - checkout:
           path: ~/clicker
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install dependencies
           command: npm i
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
       - run:
           name: Run e2e tests
           branches:
