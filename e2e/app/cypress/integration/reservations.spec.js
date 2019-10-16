@@ -12,8 +12,8 @@ beforeEach(async done => {
   openRequest.onupgradeneeded = function(e) {
     var db = e.target.result;
     if (!db.objectStoreNames.contains(storeName)) {
-      var storeOS = db.createObjectStore(storeName, { keyPath: 'name' });
-      // var storeOS = db.createObjectStore(storeName);
+      // var storeOS = db.createObjectStore(storeName, { keyPath: 'name' });
+      var storeOS = db.createObjectStore(storeName);
     }
   };
   openRequest.onsuccess = function(e) {
@@ -38,12 +38,17 @@ beforeEach(async done => {
       created: new Date().getTime(),
     };
 
-    var request = store.add(item);
+    // var request = store.add(item);
+    var request = store.add(true, 'onboarded');
+    var request2 = store.add(true, 'permission.geolocation');
 
     request.onerror = function(e) {
       console.log('Error', e.target.error.name);
     };
     request.onsuccess = function(e) {
+      console.log('Woot! Did it');
+    };
+    request2.onsuccess = function(e) {
       console.log('Woot! Did it');
       done();
     };
