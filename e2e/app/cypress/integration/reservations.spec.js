@@ -1,24 +1,53 @@
 Cypress.config('pageLoadTimeout', 12000);
 Cypress.config('defaultCommandTimeout', 12000);
 
-beforeEach(done => {
-  cy.log('I run before every test in every spec file!!!!!!');
-  indexedDB.deleteDatabase('_ionicstorage');
+beforeEach(async done => {
   const dbName = '_ionicstorage';
-  const req = indexedDB.open(dbName, 1);
-  req.onsuccess = event => {
-    db.createObjectStore('customers');
-    // const objectStore = db.createObjectStore('_ionickv');
-    // let transaction = db.transaction('_ionicstorage', 'readwrite');
-    var db = event.target.result;
-    var transaction = db.transaction(['customers'], 'readwrite');
-    var objectStore = transaction.objectStore('customers');
+  const storeName = '_ionickv';
+  indexedDB.deleteDatabase(dbName);
+  var db;
 
-    var request2 = objectStore.add(customer);
-    request2.onsuccess = function(event) {
+  var openRequest = indexedDB.open(dbName, 1);
+
+  openRequest.onupgradeneeded = function(e) {
+    var db = e.target.result;
+    if (!db.objectStoreNames.contains(storeName)) {
+      var storeOS = db.createObjectStore(storeName, { keyPath: 'name' });
+      // var storeOS = db.createObjectStore(storeName);
+    }
+  };
+  openRequest.onsuccess = function(e) {
+    console.log('running onsuccess');
+    db = e.target.result;
+    addItem();
+  };
+  openRequest.onerror = function(e) {
+    console.log('onerror!');
+    console.dir(e);
+  };
+
+  function addItem() {
+    var transaction = db.transaction([storeName], 'readwrite');
+    var store = transaction.objectStore(storeName);
+    var item = {
+      // onboared: true,
+      name: 'banana',
+      value: '4',
+      price: '$2.99',
+      description: 'It is a purple banana!',
+      created: new Date().getTime(),
+    };
+
+    var request = store.add(item);
+
+    request.onerror = function(e) {
+      console.log('Error', e.target.error.name);
+    };
+    request.onsuccess = function(e) {
+      console.log('Woot! Did it');
       done();
     };
-  };
+  }
 });
 
 describe('creating reservations', () => {
@@ -26,53 +55,6 @@ describe('creating reservations', () => {
     // cy.clearCookies();
     // cy.clearLocalStorage();
     cy.viewport('iphone-6+');
-    // indexedDB.deleteDatabase('_ionicstorage');
-    // const db = indexedDB.open('_ionicstorage', 2);
-    // const store = db.createObjectStore('_ionickv');
-
-    // let transaction = db.transaction('_ionicstorage', 'readwrite');
-    // let books = transaction.objectStore('books'); // (2)
-
-    // let book = {
-    //   id: 'js',
-    //   price: 10,
-    //   created: new Date(),
-    // };
-
-    // let request = books.add(book); // (3)
-
-    // request.onsuccess = function() {
-    //   // (4)
-    //   console.log('Book added to the store', request.result);
-    // };
-
-    // request.onerror = function() {
-    //   console.log('Error', request.error);
-    // };
-
-    // cy.wrap(
-    //   new Cypress.Promise((resolve, reject) => {
-    //     const req = indexedDB.open(dbName, 1);
-    //     req.onerror = reject;
-    //     req.onsuccess = event => {
-    //       resolve(event.target.result);
-    //     };
-    //   }),
-    //   { log: false },
-    // ).then(db => {
-    //   cy.log('Opened DB');
-    //   Cypress.storage.set('count', 44);
-    //   // TODO create object store
-    //   // TODO save "count" item to 100
-    // });
-    // indexedDB.deleteDatabase(dbName);
-    // const req = indexedDB.open(dbName, 1);
-    // // req.onerror = reject;
-    // req.onsuccess = event => {
-    //   console.log(event.target.result);
-    //   // resolve(event.target.result);
-    //   Cypress.storage.set('count', 44);
-    // };
 
     // localStorage.setItem('onboarded', true);
 

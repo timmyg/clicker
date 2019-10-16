@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "cypress": "^3.4.1"
+  },
+  "dependencies": {
+    "indexed-db-utilities": "^2.1.1"
   }
 }
