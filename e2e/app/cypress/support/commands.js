@@ -20,7 +20,8 @@ Cypress.Commands.add('landingPage', callback => {
           console.log(fakeLocation);
           return cb(fakeLocation);
         });
-        setTimeout(() => callback(), 5000);
+        // todo setTimeout shouldnt be needed here
+        setTimeout(() => callback(), 3000);
       },
     });
   });
