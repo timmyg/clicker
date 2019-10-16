@@ -2,11 +2,13 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const axios = require('axios');
 
 declare class process {
   static env: {
     airtableKey: string,
     airtableBase: string,
+    circleToken: string,
     stage: string,
   };
 }
@@ -39,6 +41,24 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
   } else {
     await sendControlCenterSlack(`No games scheduled today`);
   }
+  return respond(200);
+});
+
+module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event => {
+  const { circleToken } = process.env;
+  const axios = require('axios');
+
+  const body = { 'build_parameters[CIRCLE_JOB]': 'e2e/app' };
+  const options = {
+    auth: {
+      username: circleToken,
+    },
+  };
+  const result = await axios.post(
+    'https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/develop',
+    body,
+    options,
+  );
   return respond(200);
 });
 
