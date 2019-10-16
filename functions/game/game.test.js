@@ -70,7 +70,7 @@ describe('transformGame', () => {
       expect(ended).toBeFalsy();
       expect(description).toBe('BOU 4 @ ARS 1 (83:41 2nd)');
     });
-    test('soccer: la liga', () => {});
+    test.skip('soccer: la liga', () => {});
   });
 
   describe('correctly identifies active, non-blowout game', () => {
