@@ -161,6 +161,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
           const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* (${dependencyGameStatus}) on *${dependencyGameNotes} (${dependencyChannel})* (Zones ${zones.join(
             ', ',
           )})`;
+          
           await new Invoke()
             .service('notification')
             .name('sendControlCenter')
