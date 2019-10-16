@@ -231,7 +231,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}-cypress
           paths:
             - ./node_modules
-            - /root/.cache/Cypress/3.4.1/Cypress/Cypress
+            - /root/.cache/Cypress/3.4.1/Cypress
       - run:
           name: Run e2e tests
           branches:
