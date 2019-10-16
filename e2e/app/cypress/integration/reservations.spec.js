@@ -54,6 +54,7 @@ context('Reservations', () => {
       };
     }
   });
+  
 
   it('should create a single reservation', () => {
     // cy.clearCookies();
