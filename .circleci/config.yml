@@ -215,3 +215,22 @@ jobs:
             fi
             tar zcvf $filename *
             aws s3 cp $filename s3://clicker-antenna/app/
+  e2e/app:
+    working_directory: ~/clicker/e2e/app
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - checkout:
+          path: ~/clicker
+      - run:
+          name: Install dependencies
+          command: npm i
+      - run:
+          name: Run e2e tests
+          branches:
+            only:
+              - master
+              - release
+              - develop
+          command: |
+            npm run test:ci
