@@ -27,6 +27,7 @@ Cypress.Commands.add('landingPage', callback => {
   });
 });
 
+
 Cypress.Commands.add('initialSetup', callback => {
   cy.viewport('iphone-6+');
   const dbName = '_ionicstorage';
