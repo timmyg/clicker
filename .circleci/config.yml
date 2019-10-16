@@ -222,16 +222,16 @@ jobs:
     steps:
       - checkout:
           path: ~/clicker
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}-cypress
+      # - restore_cache:
+      #     key: dependency-cache-{{ checksum "package.json" }}-cypress
       - run:
           name: Install dependencies
           command: npm i
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}-cypress
-          paths:
-            - ./node_modules
-            - /root/.cache/Cypress/3.4.1/Cypress
+      # - save_cache:
+      #     key: dependency-cache-{{ checksum "package.json" }}-cypress
+      #     paths:
+      #       - ./node_modules
+      #       - /root/.cache/Cypress/3.4.1/Cypress
       - run:
           name: Run e2e tests
           branches:
