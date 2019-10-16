@@ -238,7 +238,6 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           # cache NPM modules and the folder with the Cypress binary
           paths:
-            - ~/.npm
             - ~/.cache
             - ./node_modules
       # - save_cache:
