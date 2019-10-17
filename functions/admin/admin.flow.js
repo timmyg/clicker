@@ -47,13 +47,15 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
 
 module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event => {
   const { circleToken } = process.env;
-  const axios = require('axios');
 
   let data = new FormData();
   data.append('build_parameters[CIRCLE_JOB]', 'e2e/app');
   const options = {
     auth: {
       username: circleToken,
+    },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
   // TODO update to master branch
