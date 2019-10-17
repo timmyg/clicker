@@ -48,7 +48,8 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
   const { circleToken } = process.env;
   const axios = require('axios');
 
-  const body = { 'build_parameters[CIRCLE_JOB]': 'e2e/app' };
+  const bodyFormData = new FormData();
+  bodyFormData.set('build_parameters[CIRCLE_JOB]', 'e2e/app');
   const options = {
     auth: {
       username: circleToken,
@@ -57,7 +58,7 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
   // TODO update to master branch
   const result = await axios.post(
     'https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/develop',
-    body,
+    bodyFormData,
     options,
   );
   return respond(200);
