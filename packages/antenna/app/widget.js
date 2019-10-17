@@ -65,7 +65,7 @@ class Widget {
     try {
       const context = this;
       // Listen for commands from Losant
-      this.device.on('command', command => {
+      this.device.on('command', async command => {
         logger.info({ command });
         const { name, payload } = command;
         const { ip } = payload;
@@ -110,7 +110,21 @@ class Widget {
               return;
             });
             break;
-          // available endpoints
+          case 'info.current.all':
+            logger.info('info.current.all!!');
+            const boxes = [];
+            for (const box of boxes) {
+              try {
+                const { boxId, client } = box;
+                const response = await this.remote.getTuned(client || '0');
+                logger.info(JSON.stringify(response), box);
+                boxes.push({ boxId, response });
+              } catch (e) {
+                logger.error(JSON.stringify(err));
+              }
+              context.api.saveBoxesInfo(boxes);
+            }
+            break;
           case 'options':
             this.remote.getOptions((err, response) => {
               if (err) return logger.error(err);

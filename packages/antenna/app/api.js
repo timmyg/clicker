@@ -53,6 +53,15 @@ class Api {
       return console.error(error);
     }
   }
+
+  async saveBoxesInfo(boxes) {
+    try {
+      const res = await this.axios.post(`/locations/${this.locationId}/boxes/info`, boxes);
+      return res.data;
+    } catch (error) {
+      return console.error(error);
+    }
+  }
 }
 
 module.exports = Api;

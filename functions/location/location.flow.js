@@ -283,6 +283,12 @@ module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200);
 });
 
+module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
+  const { boxes } = getBody(event);
+  const { boxId, response } = boxes;
+  console.log(boxId, response);
+  return respond(200);
+});
 module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { major } = getBody(event);
@@ -480,24 +486,24 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
   let allLocations = await Location.scan().exec();
 
   for (const location of allLocations) {
+    const { losantId } = location;
+    const body = {
+      losantId,
+      boxes: [],
+    };
     for (const box of location.boxes) {
       if (!!box.zone) {
-        const { losantId } = location;
+        // ensure box has a zone to only track control center boxes
         const { id: boxId, ip, clientAddress: client } = box;
-        const body = {
-          losantId,
-          boxId,
-          ip,
-          client,
-        };
-        if (losantId.length > 3) {
-          await new Invoke()
-            .service('remote')
-            .name('checkBoxInfo')
-            .body(body)
-            .go();
-        }
+        boxes.push({ boxId, ip, client });
       }
+    }
+    if (losantId.length > 3) {
+      await new Invoke()
+        .service('remote')
+        .name('checkBoxesInfo')
+        .body(body)
+        .go();
     }
   }
   return respond(200, 'ok');
