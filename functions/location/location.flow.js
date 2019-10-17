@@ -505,6 +505,7 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
         .service('remote')
         .name('checkBoxesInfo')
         .body(body)
+        .async()
         .go();
     }
   }

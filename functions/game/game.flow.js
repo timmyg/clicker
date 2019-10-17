@@ -54,10 +54,15 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
 
   const method = 'get';
   const options = { method, url: apiUrl };
-  const result = await axios(options);
-  const gameStatus: GameStatus = transformGame(result.data);
+  try {
+    const result = await axios(options);
+    const gameStatus: GameStatus = transformGame(result.data);
 
-  return respond(200, gameStatus);
+    return respond(200, gameStatus);
+  } catch (e) {
+    console.error(`failed to get score: ${apiUrl}`);
+    return respond(400);
+  }
 });
 
 function transformGame(result: SiResult): GameStatus {
