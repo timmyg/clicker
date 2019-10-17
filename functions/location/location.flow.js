@@ -324,7 +324,9 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    const text = `Manual Zap @ ${location.name} (${
+      location.neighborhood
+    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
     await new Invoke()
       .service('notification')
       .name('sendControlCenter')
@@ -495,10 +497,10 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
       if (!!box.zone) {
         // ensure box has a zone to only track control center boxes
         const { id: boxId, ip, clientAddress: client } = box;
-        boxes.push({ boxId, ip, client });
+        body.boxes.push({ boxId, ip, client });
       }
     }
-    if (losantId.length > 3) {
+    if (losantId.length > 3 && !!body.boxes.length) {
       await new Invoke()
         .service('remote')
         .name('checkBoxesInfo')
