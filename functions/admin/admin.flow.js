@@ -2,8 +2,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-const axios = require('axios');
-const FormData = require('form-data');
+const request = require('request');
 
 declare class process {
   static env: {
@@ -48,22 +47,22 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
 module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event => {
   const { circleToken } = process.env;
 
-  let data = new FormData();
-  data.append('build_parameters[CIRCLE_JOB]', 'e2e/app');
+  // use request package, axios sucks with form data
   const options = {
+    method: 'POST',
+    url: 'https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/develop',
+    form: { 'build_parameters[CIRCLE_JOB]': 'e2e/app' },
     auth: {
-      username: circleToken,
-    },
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      user: circleToken,
     },
   };
-  // TODO update to master branch
-  const result = await axios.post(
-    'https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/develop',
-    data,
-    options,
-  );
+
+  request(options, function(error, response, body) {
+    if (error) throw new Error(error);
+
+    console.log(body);
+  });
+
   return respond(200);
 });
 
