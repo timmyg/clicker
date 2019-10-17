@@ -481,20 +481,22 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
 
   for (const location of allLocations) {
     for (const box of location.boxes) {
-      const { losantId } = location;
-      const { id: boxId, ip, clientAddress: client } = box;
-      const body = {
-        losantId,
-        boxId,
-        ip,
-        client,
-      };
-      if (losantId.length > 3) {
-        await new Invoke()
-          .service('remote')
-          .name('checkBoxInfo')
-          .body(body)
-          .go();
+      if (!!box.zone) {
+        const { losantId } = location;
+        const { id: boxId, ip, clientAddress: client } = box;
+        const body = {
+          losantId,
+          boxId,
+          ip,
+          client,
+        };
+        if (losantId.length > 3) {
+          await new Invoke()
+            .service('remote')
+            .name('checkBoxInfo')
+            .body(body)
+            .go();
+        }
       }
     }
   }
