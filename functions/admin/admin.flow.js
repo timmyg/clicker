@@ -2,7 +2,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-const request = require('request');
+const request = require('async-request');
 
 declare class process {
   static env: {
@@ -57,13 +57,9 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
     },
   };
 
-  request(options, function(error, response, body) {
-    if (error) throw new Error(error);
+  const response = await request(options);
 
-    console.log(body);
-  });
-
-  return respond(200);
+  return respond(200, response);
 });
 
 async function sendControlCenterSlack(text) {
