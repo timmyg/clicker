@@ -2,7 +2,7 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-const request = require('async-request');
+const rp = require('request-promise');
 
 declare class process {
   static env: {

@@ -21,8 +21,9 @@
   },
   "dependencies": {
     "airtable": "^0.7.1",
-    "async-request": "^1.2.0",
     "dotenv": "^6.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
   }
 }
