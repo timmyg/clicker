@@ -94,9 +94,6 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
         });
         // }
       } catch (e) {
-        console.error('failed to get score', e);
-        // throw "Parameter is not a number!";
-        // throw new Error(`failed to get score: ${siWebUrl}`);
         Raven.captureException(e);
       }
     }

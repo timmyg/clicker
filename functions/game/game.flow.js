@@ -61,6 +61,7 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
     return respond(200, gameStatus);
   } catch (e) {
     console.error(`failed to get score: ${apiUrl}`);
+    Raven.captureException(e);
     return respond(400);
   }
 });
