@@ -79,7 +79,7 @@ functions:
               - partner
               - authorization
               - content-type
-  checkBoxInfo:
+  checkBoxesInfo:
     handler: remote.checkBoxesInfo
     events:
       - http:
