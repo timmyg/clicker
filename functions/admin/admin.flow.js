@@ -49,8 +49,8 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
   const { circleToken } = process.env;
   const axios = require('axios');
 
-  const data = new FormData();
-  data.set('build_parameters[CIRCLE_JOB]', 'e2e/app');
+  let data = new FormData();
+  data.append('build_parameters[CIRCLE_JOB]', 'e2e/app');
   const options = {
     auth: {
       username: circleToken,
