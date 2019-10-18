@@ -48,7 +48,7 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
   const { circleToken } = process.env;
 
   // use request package, axios sucks with form data
-  const url = 'https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/develop';
+  const url = 'https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/master';
   const options = {
     method: 'POST',
     form: { 'build_parameters[CIRCLE_JOB]': 'e2e/app' },

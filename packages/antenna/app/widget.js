@@ -122,8 +122,8 @@ class Widget {
               } catch (e) {
                 logger.error(JSON.stringify(err));
               }
-              context.api.saveBoxesInfo(boxes);
             }
+            context.api.saveBoxesInfo(boxes);
             break;
           case 'options':
             this.remote.getOptions((err, response) => {

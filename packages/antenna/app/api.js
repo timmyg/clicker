@@ -56,7 +56,7 @@ class Api {
 
   async saveBoxesInfo(boxes) {
     try {
-      const res = await this.axios.post(`/locations/${this.locationId}/boxes/info`, boxes);
+      const res = await this.axios.post(`/locations/${this.locationId}/boxes/info`, { boxes });
       return res.data;
     } catch (error) {
       return console.error(error);
