@@ -250,6 +250,7 @@ jobs:
       #       - /root/.cache/Cypress/3.4.1/Cypress
       - run:
           name: Run e2e tests
+          no_output_timeout: 3m
           branches:
             only:
               - master
