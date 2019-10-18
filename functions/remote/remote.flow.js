@@ -130,6 +130,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+// deprecated
 module.exports.checkBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { losantId, boxId, ip, client } = getBody(event);
@@ -143,6 +144,22 @@ module.exports.checkBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   } catch (e) {
     console.error(e);
     return respond(400, `Could not checkBoxInfo: ${e.stack}`);
+  }
+});
+
+module.exports.checkBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
+  try {
+    const { losantId, boxes } = getBody(event);
+    console.log({ losantId, boxes });
+    const api = new LosantApi();
+    const payload = { boxes };
+
+    const command = 'info.current.all';
+    await api.sendCommand(command, losantId, payload);
+    return respond();
+  } catch (e) {
+    console.error(e);
+    return respond(400, `Could not checkBoxesInfo: ${e.stack}`);
   }
 });
 

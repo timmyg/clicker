@@ -1,0 +1,4219 @@
+{
+  "status": "success",
+  "data": {
+    "id": 2146651,
+    "league": { "name": "English Premier League", "abbreviation": "EPL" },
+    "start": { "local": "2019-10-06T14:00:00", "utc": "2019-10-06T13:00:00", "epoch": 1570366800 },
+    "tv": "CNBC",
+    "tv_stations": [
+      {
+        "tv_station_id": 28,
+        "name": "CNBC",
+        "call_letters": "CNBC",
+        "network_type": { "network_type_id": 1, "name": "National" },
+        "country": { "country_id": 1, "name": "United States", "abbreviation": "USA" }
+      }
+    ],
+    "watch": {
+      "name": "Fubo",
+      "text": "Watch Live on",
+      "url": "https://www.fubo.tv/watch/English-Premier-League?irmp=376635&utm_source=Aff&utm_medium=SI&utm_campaign=EPL",
+      "tracking": { "Scoreboard": "&utm_term=Scoreboard&irad=360511", "Schedule": "&utm_term=Schedule&irad=360690" },
+      "logo": {
+        "base": "https://cdn-s3.si.com/s3fs-public/logos/",
+        "cuts": {
+          "default": "fubo_40x14_orange.png",
+          "38x14": "fubo_38x14_orange.png",
+          "40x14": "fubo_40x14_orange.png",
+          "76x28": "fubo_76x28_orange.png",
+          "80x28": "fubo_80x28_orange.png"
+        }
+      },
+      "station": {
+        "tv_station_id": 28,
+        "name": "CNBC",
+        "call_letters": "CNBC",
+        "network_type": { "network_type_id": 1, "name": "National" },
+        "country": { "country_id": 1, "name": "United States", "abbreviation": "USA" }
+      }
+    },
+    "venue": { "name": "Emirates Stadium", "city": "London", "country": { "name": "England", "abbreviation": "ENG" } },
+    "status": {
+      "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" },
+      "time": { "minutes": 83, "seconds": 41, "additionalMinutes": 0 },
+      "announcedInjuryTime": null,
+      "underReview": false,
+      "name": "In-Progress",
+      "id": 2,
+      "is_active": true,
+      "defending_team_id": 6145
+    },
+    "teams": [
+      {
+        "id": 6145,
+        "name": "Arsenal",
+        "abbreviation": "ARS",
+        "location": { "name": "Arsenal", "type": "home" },
+        "title": "Arsenal",
+        "formation": "433",
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+          "cuts": {
+            "default": "ars_50.png",
+            "50x50": "ars_50.png",
+            "100x100": "ars_100.png",
+            "100x100_light": "ars_100_stroke.png",
+            "360x360": "ars_360.png",
+            "250x250": "ars_250.png",
+            "150x150": "ars_150.png",
+            "40x40": "ars_40.png",
+            "40x40_light": "ars_40_stroke.png"
+          }
+        },
+        "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+        "slug": "soccer/team/arsenal",
+        "record": { "wins": 3, "losses": 1, "ties": 3, "percentage": ".643", "points": 12 },
+        "score": 1,
+        "shots": 3,
+        "is_winner": false,
+        "linescores": [
+          { "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "score": 1, "shots": 3 },
+          { "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" } }
+        ],
+        "taxonomy": {
+          "teams": "soccer-arsenal",
+          "airship": [
+            { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+            { "name": "Half", "tag": "events::soccer-arsenal-2" },
+            { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+            { "name": "Final", "tag": "events::soccer-arsenal-4" },
+            { "name": "Team News", "tag": "teams::soccer-arsenal" }
+          ]
+        },
+        "leaders": {
+          "goals": {
+            "name": "goals",
+            "abbreviation": "G",
+            "value": 1,
+            "players": [
+              {
+                "name": { "display": "David Luiz", "last": "David Luiz" },
+                "uniform": "23",
+                "image": {
+                  "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/players/",
+                  "cuts": {
+                    "default": "409128-84x74.png",
+                    "84x74": "409128-84x74.png",
+                    "300x300": "409128-300x300.png"
+                  }
+                },
+                "id": 409128,
+                "league": { "name": "English Premier League", "abbreviation": "EPL" }
+              }
+            ]
+          },
+          "saves": { "name": "saves", "abbreviation": "SV" },
+          "assists": {
+            "name": "assists",
+            "abbreviation": "A",
+            "value": 1,
+            "players": [
+              {
+                "name": { "display": "Nicolas Pepe", "last": "Pepe" },
+                "uniform": "19",
+                "image": {
+                  "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/players/",
+                  "cuts": {
+                    "default": "920986-84x74.png",
+                    "84x74": "920986-84x74.png",
+                    "300x300": "920986-300x300.png"
+                  }
+                },
+                "id": 920986,
+                "league": { "name": "English Premier League", "abbreviation": "EPL" }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 8260,
+        "name": "Bournemouth",
+        "abbreviation": "BOU",
+        "location": { "name": "Bournemouth", "type": "away" },
+        "title": "Bournemouth",
+        "formation": "442",
+        "logo": {
+          "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+          "cuts": {
+            "default": "bou_50.png",
+            "50x50": "bou_50.png",
+            "100x100": "bou_100.png",
+            "100x100_light": "bou_100_stroke.png",
+            "360x360": "bou_360.png",
+            "250x250": "bou_250.png",
+            "150x150": "bou_150.png",
+            "40x40": "bou_40.png",
+            "40x40_light": "bou_40_stroke.png"
+          }
+        },
+        "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+        "slug": "soccer/team/bournemouth",
+        "record": { "wins": 3, "losses": 2, "ties": 2, "percentage": ".571", "points": 11 },
+        "score": 4,
+        "shots": 2,
+        "is_winner": false,
+        "linescores": [
+          { "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "score": 0, "shots": 2 },
+          { "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" } }
+        ],
+        "taxonomy": {
+          "teams": "soccer-bournemouth",
+          "airship": [
+            { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+            { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+            { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+            { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+            { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+          ]
+        },
+        "leaders": {
+          "goals": { "name": "goals", "abbreviation": "G" },
+          "saves": { "name": "saves", "abbreviation": "SV" },
+          "assists": { "name": "assists", "abbreviation": "A" }
+        }
+      }
+    ],
+    "alert_types": [
+      { "name": "Game Start", "airship": "events::1570320000-2146651-1" },
+      { "name": "Half", "airship": "events::1570320000-2146651-2" },
+      { "name": "Scoring Play", "airship": "events::1570320000-2146651-3" },
+      { "name": "Final", "airship": "events::1570320000-2146651-4" }
+    ],
+    "last_play": {
+      "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+      "time": "24:41",
+      "text": "Corner kick taken by Dani Ceballos"
+    },
+    "scoring_summaries": [
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "goals": [
+          {
+            "time": "9:07",
+            "minute": 9,
+            "team_id": 6145,
+            "text": "David Luiz scored a goal with a Header shot assisted by Nicolas Pepe and celebrated by Shirt Over Head",
+            "current_score": { "home": 1, "away": 0 },
+            "player": {
+              "name": { "last": "David Luiz", "display": "David Luiz" },
+              "uniform": "23",
+              "image": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/players/",
+                "cuts": { "default": "409128-84x74.png", "84x74": "409128-84x74.png", "300x300": "409128-300x300.png" }
+              },
+              "id": 409128
+            },
+            "league": { "name": "English Premier League", "abbreviation": "EPL" },
+            "assisting_player": {
+              "name": { "last": "Pepe", "display": "Nicolas Pepe" },
+              "uniform": "19",
+              "image": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/players/",
+                "cuts": { "default": "920986-84x74.png", "84x74": "920986-84x74.png", "300x300": "920986-300x300.png" }
+              },
+              "id": 920986
+            },
+            "short_text": "David Luiz (Arsenal) 9'"
+          }
+        ]
+      }
+    ],
+    "box_scores": [
+      {
+        "team_id": 6145,
+        "team_stats": {
+          "minutes_played": 24,
+          "goals": 1,
+          "own_goals": 0,
+          "assists": 1,
+          "shots": {
+            "total": 3,
+            "inside_box": null,
+            "outside_box": null,
+            "blocked": null,
+            "shot_result": [
+              { "shot_result_id": 6, "name": "Bottom/Right", "shots": 1, "goals": 0 },
+              { "shot_result_id": 23, "name": "Blocked", "shots": 1, "goals": 0 },
+              { "shot_result_id": 51, "name": "Off Target", "shots": 1, "goals": 0 },
+              { "shot_result_id": null, "name": null, "shots": 2, "goals": 1 }
+            ]
+          },
+          "shots_on_goal": 1,
+          "shots_on_goal_percentage": ".333",
+          "saves": 0,
+          "crosses": 10,
+          "cross_breakdown": { "successful": null, "percentage": null },
+          "penalty_kicks": { "shots": 0, "goals": 0 },
+          "fouls_committed": 2,
+          "fouls_suffered": 0,
+          "yellow_cards": 0,
+          "red_cards": 0,
+          "offsides": 0,
+          "corner_kicks": 7,
+          "clears": 7,
+          "free_kick": 0,
+          "throw_ins": 10,
+          "wood_work": 0,
+          "touches": {
+            "total": 168,
+            "passes": 115,
+            "passes_attempted": 138,
+            "passes_received": 115,
+            "passes_missed": 23,
+            "pass_completion_percentage": ".833",
+            "interceptions": 0,
+            "blocks": 2,
+            "pass_length": { "short": 27, "long": 83 },
+            "pass_direction": { "forward": 45, "forward_percentage": ".469", "backward": 51, "right": 42, "left": 50 },
+            "pass_location": {
+              "own_half": { "total": 75, "attempted": 88, "percentage": ".852" },
+              "opponent_half": { "total": 40, "attempted": 50, "percentage": ".800" }
+            }
+          },
+          "catches": 0,
+          "punches": 0,
+          "tackles": 5,
+          "attacks": { "left": 4, "center": 2, "right": 8, "longball": 0 },
+          "aerial_duels": { "total": 9, "won": 8, "percentage": ".889" },
+          "ground_duels": { "total": 1, "won": 0, "percentage": ".000" },
+          "possession_percentage": "64",
+          "possession_percentage_breakdown": {
+            "field_half": { "own": "64", "opponent": "36" },
+            "field_third": { "own": "33", "middle": "41", "opponent": "26" },
+            "attacking_side": { "left": "31", "center": "16", "right": "53" }
+          }
+        },
+        "goaltenders": [
+          {
+            "player": { "player_id": 554725, "shirt_name": "Leno", "display_name": "Bernd Leno", "uniform": "1" },
+            "shots_on_goal_faced": 0,
+            "position": { "position_id": 1, "name": "Goalkeeper", "abbreviation": "GK" },
+            "is_game_started": true,
+            "is_winning_goaltender": null,
+            "is_losing_goaltender": null,
+            "is_tying_goaltender": null,
+            "is_on_pitch": true,
+            "cumulative_record": { "wins": 6, "losses": 2, "ties": 6 },
+            "shots_faced": 2,
+            "goals_allowed": 0,
+            "saves": 0,
+            "penalty_kicks": { "shots_faced": 0, "goals_allowed": 0, "saves": 0 },
+            "is_shutout": false,
+            "catches": 0,
+            "punches": 0,
+            "crosses_against": { "total": 3, "claimed": 0 }
+          }
+        ],
+        "players": [
+          {
+            "player": { "player_id": 554725, "shirt_name": "Leno", "display_name": "Bernd Leno", "uniform": "1" },
+            "position": { "position_id": 1, "name": "Goalkeeper", "abbreviation": "GK" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 1,
+            "touches": {
+              "total": 11,
+              "passes": 9,
+              "completed_passes": 6,
+              "passes_received": 9,
+              "completion_percentage": ".667",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 1, "long": 5 },
+            "possession_advanced": -49,
+            "tackles": 0,
+            "average_position": "HP6"
+          },
+          {
+            "player": {
+              "player_id": 692237,
+              "shirt_name": "Chambers",
+              "display_name": "Calum Chambers",
+              "uniform": "21"
+            },
+            "position": { "position_id": 4, "name": "Defender", "abbreviation": "D" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 1,
+            "cross_breakdown": { "successful": 0, "percentage": ".000" },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 2, "won": 1, "percentage": ".500" },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 2,
+            "touches": {
+              "total": 21,
+              "passes": 13,
+              "completed_passes": 9,
+              "passes_received": 8,
+              "completion_percentage": ".692",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 0, "long": 5 },
+            "possession_advanced": 65,
+            "tackles": 1,
+            "average_position": "VC21"
+          },
+          {
+            "player": {
+              "player_id": 349081,
+              "shirt_name": "Papastathopoulos",
+              "display_name": "Papastathopoulos",
+              "uniform": "5"
+            },
+            "position": { "position_id": 4, "name": "Defender", "abbreviation": "D" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 2, "won": 2, "percentage": "1.000" },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 2,
+            "goal_mouth_blocks": 0,
+            "formation": 3,
+            "touches": {
+              "total": 18,
+              "passes": 15,
+              "completed_passes": 11,
+              "passes_received": 12,
+              "completion_percentage": ".733",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 1, "long": 11 },
+            "possession_advanced": -49,
+            "tackles": 0,
+            "average_position": "HW15"
+          },
+          {
+            "player": {
+              "player_id": 409128,
+              "shirt_name": "David Luiz",
+              "display_name": "David Luiz",
+              "uniform": "23"
+            },
+            "position": { "position_id": 4, "name": "Defender", "abbreviation": "D" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 1,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 1,
+            "shots_on_goal": 1,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 4,
+            "touches": {
+              "total": 16,
+              "passes": 15,
+              "completed_passes": 14,
+              "passes_received": 15,
+              "completion_percentage": ".933",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 3, "long": 11 },
+            "possession_advanced": -30,
+            "tackles": 0,
+            "average_position": "HK20"
+          },
+          {
+            "player": {
+              "player_id": 644835,
+              "shirt_name": "Kolasinac",
+              "display_name": "Sead Kolasinac",
+              "uniform": "31"
+            },
+            "position": { "position_id": 4, "name": "Defender", "abbreviation": "D" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 1,
+            "cross_breakdown": { "successful": 0, "percentage": ".000" },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 1,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 2, "won": 2, "percentage": "1.000" },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 5,
+            "touches": {
+              "total": 17,
+              "passes": 14,
+              "completed_passes": 13,
+              "passes_received": 12,
+              "completion_percentage": ".929",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 7, "long": 6 },
+            "possession_advanced": 11,
+            "tackles": 1,
+            "average_position": "HE25"
+          },
+          {
+            "player": {
+              "player_id": 824517,
+              "shirt_name": "Ceballos",
+              "display_name": "Dani Ceballos",
+              "uniform": "8"
+            },
+            "position": { "position_id": 3, "name": "Midfielder", "abbreviation": "M" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 2,
+            "cross_breakdown": { "successful": null, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 1,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 4,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 6,
+            "touches": {
+              "total": 18,
+              "passes": 16,
+              "completed_passes": 15,
+              "passes_received": 10,
+              "completion_percentage": ".938",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 2, "long": 11 },
+            "possession_advanced": 29,
+            "tackles": 0,
+            "average_position": "VQ22"
+          },
+          {
+            "player": { "player_id": 552969, "shirt_name": "Xhaka", "display_name": "Granit Xhaka", "uniform": "34" },
+            "position": { "position_id": 3, "name": "Midfielder", "abbreviation": "M" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 2, "won": 2, "percentage": "1.000" },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 7,
+            "touches": {
+              "total": 20,
+              "passes": 17,
+              "completed_passes": 15,
+              "passes_received": 15,
+              "completion_percentage": ".882",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 6, "long": 9 },
+            "possession_advanced": 5,
+            "tackles": 1,
+            "average_position": "HK25"
+          },
+          {
+            "player": {
+              "player_id": 956887,
+              "shirt_name": "Guendouzi",
+              "display_name": "Matteo Guendouzi",
+              "uniform": "29"
+            },
+            "position": { "position_id": 3, "name": "Midfielder", "abbreviation": "M" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 1,
+            "cross_breakdown": { "successful": 0, "percentage": ".000" },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 8,
+            "touches": {
+              "total": 15,
+              "passes": 14,
+              "completed_passes": 12,
+              "passes_received": 10,
+              "completion_percentage": ".857",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 2, "long": 10 },
+            "possession_advanced": 32,
+            "tackles": 1,
+            "average_position": "HU24"
+          },
+          {
+            "player": { "player_id": 920986, "shirt_name": "Pepe", "display_name": "Nicolas Pepe", "uniform": "19" },
+            "position": { "position_id": 2, "name": "Forward", "abbreviation": "F" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 1,
+            "key_passes": 1,
+            "chances_created": 2,
+            "shots": 1,
+            "shots_on_goal": 0,
+            "crosses": 2,
+            "cross_breakdown": { "successful": 0, "percentage": ".000" },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 1, "won": 1, "percentage": "1.000" },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 3,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 9,
+            "touches": {
+              "total": 10,
+              "passes": 6,
+              "completed_passes": 4,
+              "passes_received": 5,
+              "completion_percentage": ".667",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 0, "long": 4 },
+            "possession_advanced": 6,
+            "tackles": 1,
+            "average_position": "VD14"
+          },
+          {
+            "player": {
+              "player_id": 459605,
+              "shirt_name": "Aubameyang",
+              "display_name": "Pierre-Emerick Aubameyang",
+              "uniform": "14"
+            },
+            "position": { "position_id": 2, "name": "Forward", "abbreviation": "F" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 1,
+            "shots_on_goal": 0,
+            "crosses": 2,
+            "cross_breakdown": { "successful": 0, "percentage": ".000" },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 1, "won": 0, "percentage": ".000" },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 10,
+            "touches": {
+              "total": 12,
+              "passes": 11,
+              "completed_passes": 9,
+              "passes_received": 10,
+              "completion_percentage": ".818",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 2, "long": 7 },
+            "possession_advanced": 31,
+            "tackles": 0,
+            "average_position": "VJ13"
+          },
+          {
+            "player": { "player_id": 964741, "shirt_name": "Saka", "display_name": "Bukayo Saka", "uniform": "77" },
+            "position": { "position_id": 2, "name": "Forward", "abbreviation": "F" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 2,
+            "chances_created": 2,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 1,
+            "cross_breakdown": { "successful": 0, "percentage": ".000" },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 11,
+            "touches": {
+              "total": 8,
+              "passes": 8,
+              "completed_passes": 7,
+              "passes_received": 9,
+              "completion_percentage": ".875",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 3, "long": 4 },
+            "possession_advanced": 16,
+            "tackles": 0,
+            "average_position": "VU17"
+          }
+        ],
+        "bench_players": [
+          {
+            "player": {
+              "player_id": 852216,
+              "shirt_name": "Torreira",
+              "display_name": "Lucas Torreira",
+              "uniform": "11"
+            },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 997505, "shirt_name": "Willock", "display_name": "Joe Willock", "uniform": "28" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 868107, "shirt_name": "Holding", "display_name": "Rob Holding", "uniform": "16" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": {
+              "player_id": 861535,
+              "shirt_name": "Tierney",
+              "display_name": "Kieran Tierney",
+              "uniform": "3"
+            },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": {
+              "player_id": 860879,
+              "shirt_name": "Maitland-Niles",
+              "display_name": "Ainsley Maitland-Niles",
+              "uniform": "15"
+            },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": {
+              "player_id": 1173039,
+              "shirt_name": "Martinelli",
+              "display_name": "Gabriel Martinelli",
+              "uniform": "35"
+            },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": {
+              "player_id": 587614,
+              "shirt_name": "Martinez",
+              "display_name": "Emiliano Martinez",
+              "uniform": "26"
+            },
+            "yellow_cards": 0,
+            "red_cards": 0
+          }
+        ]
+      },
+      {
+        "team_id": 8260,
+        "team_stats": {
+          "minutes_played": 24,
+          "goals": 0,
+          "own_goals": 0,
+          "assists": 0,
+          "shots": {
+            "total": 2,
+            "inside_box": 2,
+            "outside_box": 0,
+            "blocked": 0,
+            "shot_result": [{ "shot_result_id": 51, "name": "Off Target", "shots": 2, "goals": 0 }]
+          },
+          "shots_on_goal": 0,
+          "shots_on_goal_percentage": ".000",
+          "saves": 0,
+          "crosses": 3,
+          "cross_breakdown": { "successful": 0, "blocked": 1, "percentage": ".000" },
+          "penalty_kicks": { "shots": 0, "goals": 0 },
+          "fouls_committed": 0,
+          "fouls_suffered": 2,
+          "yellow_cards": 1,
+          "red_cards": 0,
+          "offsides": 0,
+          "corner_kicks": 1,
+          "clears": 9,
+          "free_kick": 2,
+          "throw_ins": 5,
+          "wood_work": 0,
+          "touches": {
+            "total": 96,
+            "passes": 23,
+            "passes_attempted": 41,
+            "passes_received": 23,
+            "passes_missed": 18,
+            "pass_completion_percentage": ".561",
+            "interceptions": 1,
+            "blocks": 7,
+            "pass_length": { "short": 8, "long": 24 },
+            "pass_direction": { "forward": 14, "forward_percentage": ".500", "backward": 14, "right": 14, "left": 14 },
+            "pass_location": {
+              "own_half": { "total": 13, "attempted": 23, "percentage": ".565" },
+              "opponent_half": { "total": 10, "attempted": 18, "percentage": ".556" }
+            }
+          },
+          "catches": 0,
+          "punches": 0,
+          "tackles": 3,
+          "attacks": { "left": 5, "center": 2, "right": 0, "longball": 0 },
+          "aerial_duels": { "total": 3, "won": 3, "percentage": "1.000" },
+          "ground_duels": { "total": 1, "won": 1, "percentage": "1.000" },
+          "possession_percentage": "36",
+          "possession_percentage_breakdown": {
+            "field_half": { "own": "52", "opponent": "48" },
+            "field_third": { "own": "31", "middle": "48", "opponent": "21" },
+            "attacking_side": { "left": "43", "center": "43", "right": "14" }
+          }
+        },
+        "goaltenders": [
+          {
+            "player": {
+              "player_id": 914903,
+              "shirt_name": "Ramsdale",
+              "display_name": "Aaron Ramsdale",
+              "uniform": "12"
+            },
+            "shots_on_goal_faced": 1,
+            "position": { "position_id": 1, "name": "Goalkeeper", "abbreviation": "GK" },
+            "is_game_started": true,
+            "is_winning_goaltender": null,
+            "is_losing_goaltender": null,
+            "is_tying_goaltender": null,
+            "is_on_pitch": true,
+            "cumulative_record": { "wins": 6, "losses": 4, "ties": 4 },
+            "shots_faced": 3,
+            "goals_allowed": 1,
+            "saves": 0,
+            "penalty_kicks": { "shots_faced": 0, "goals_allowed": 0, "saves": 0 },
+            "is_shutout": false,
+            "catches": 0,
+            "punches": 0,
+            "crosses_against": { "total": 10, "claimed": 0 }
+          }
+        ],
+        "players": [
+          {
+            "player": {
+              "player_id": 914903,
+              "shirt_name": "Ramsdale",
+              "display_name": "Aaron Ramsdale",
+              "uniform": "12"
+            },
+            "position": { "position_id": 1, "name": "Goalkeeper", "abbreviation": "GK" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 1,
+            "touches": {
+              "total": 6,
+              "passes": 1,
+              "completed_passes": 1,
+              "passes_received": 0,
+              "completion_percentage": "1.000",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 0, "long": 1 },
+            "possession_advanced": -2,
+            "tackles": 0,
+            "average_position": "VO3"
+          },
+          {
+            "player": { "player_id": 838362, "shirt_name": "Stacey", "display_name": "Jack Stacey", "uniform": "17" },
+            "position": { "position_id": 3, "name": "Midfielder", "abbreviation": "M" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 1,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 2,
+            "touches": {
+              "total": 1,
+              "passes": 1,
+              "completed_passes": 1,
+              "passes_received": 1,
+              "completion_percentage": "1.000",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 0, "long": 1 },
+            "possession_advanced": 3,
+            "tackles": 0,
+            "average_position": "VW11"
+          },
+          {
+            "player": { "player_id": 478351, "shirt_name": "Cook", "display_name": "Steve Cook", "uniform": "3" },
+            "position": { "position_id": 4, "name": "Defender", "abbreviation": "D" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 3,
+            "touches": {
+              "total": 4,
+              "passes": 3,
+              "completed_passes": 1,
+              "passes_received": 2,
+              "completion_percentage": ".333",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 0, "long": 1 },
+            "possession_advanced": -5,
+            "tackles": 0,
+            "average_position": "VN14"
+          },
+          {
+            "player": { "player_id": 722770, "shirt_name": "Ake", "display_name": "Nathan Ake", "uniform": "5" },
+            "position": { "position_id": 4, "name": "Defender", "abbreviation": "D" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 4,
+            "touches": {
+              "total": 7,
+              "passes": 6,
+              "completed_passes": 4,
+              "passes_received": 2,
+              "completion_percentage": ".667",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 3, "long": 2 },
+            "possession_advanced": 12,
+            "tackles": 0,
+            "average_position": "VG11"
+          },
+          {
+            "player": { "player_id": 789184, "shirt_name": "Rico", "display_name": "Diego Rico", "uniform": "21" },
+            "position": { "position_id": 4, "name": "Defender", "abbreviation": "D" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 2,
+            "chances_created": 2,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 3,
+            "cross_breakdown": { "successful": 0, "percentage": ".000" },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 2, "won": 2, "percentage": "1.000" },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 1,
+            "clears": 2,
+            "goal_mouth_blocks": 0,
+            "formation": 5,
+            "touches": {
+              "total": 14,
+              "passes": 10,
+              "completed_passes": 5,
+              "passes_received": 2,
+              "completion_percentage": ".500",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 2, "long": 7 },
+            "possession_advanced": 33,
+            "tackles": 2,
+            "average_position": "VC21"
+          },
+          {
+            "player": { "player_id": 794736, "shirt_name": "Wilson", "display_name": "Harry Wilson", "uniform": "22" },
+            "position": { "position_id": 3, "name": "Midfielder", "abbreviation": "M" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 6,
+            "touches": {
+              "total": 1,
+              "passes": 1,
+              "completed_passes": 1,
+              "passes_received": 0,
+              "completion_percentage": "1.000",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 0, "long": 1 },
+            "possession_advanced": -2,
+            "tackles": 0,
+            "average_position": "HA19"
+          },
+          {
+            "player": { "player_id": 729608, "shirt_name": "Lerma", "display_name": "Jefferson Lerma", "uniform": "8" },
+            "position": { "position_id": 3, "name": "Midfielder", "abbreviation": "M" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 2,
+            "goal_mouth_blocks": 0,
+            "formation": 7,
+            "touches": {
+              "total": 11,
+              "passes": 9,
+              "completed_passes": 6,
+              "passes_received": 7,
+              "completion_percentage": ".667",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 1, "long": 8 },
+            "possession_advanced": 49,
+            "tackles": 0,
+            "average_position": "VO22"
+          },
+          {
+            "player": {
+              "player_id": 824848,
+              "shirt_name": "Billing",
+              "display_name": "Philip Billing",
+              "uniform": "29"
+            },
+            "position": { "position_id": 3, "name": "Midfielder", "abbreviation": "M" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 1,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 1, "won": 1, "percentage": "1.000" },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 2,
+            "goal_mouth_blocks": 0,
+            "formation": 8,
+            "touches": {
+              "total": 4,
+              "passes": 1,
+              "completed_passes": 1,
+              "passes_received": 1,
+              "completion_percentage": "1.000",
+              "interceptions": 1,
+              "blocks": 1
+            },
+            "pass_length": { "short": 1, "long": 0 },
+            "possession_advanced": 7,
+            "tackles": 0,
+            "average_position": "VK20"
+          },
+          {
+            "player": { "player_id": 523401, "shirt_name": "King", "display_name": "Joshua King", "uniform": "7" },
+            "position": { "position_id": 2, "name": "Forward", "abbreviation": "F" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 1,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 1,
+            "goal_mouth_blocks": 0,
+            "formation": 9,
+            "touches": {
+              "total": 6,
+              "passes": 4,
+              "completed_passes": 1,
+              "passes_received": 4,
+              "completion_percentage": ".250",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 1, "long": 0 },
+            "possession_advanced": 3,
+            "tackles": 1,
+            "average_position": "HX21"
+          },
+          {
+            "player": { "player_id": 531746, "shirt_name": "Wilson", "display_name": "Callum Wilson", "uniform": "13" },
+            "position": { "position_id": 2, "name": "Forward", "abbreviation": "F" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 0,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 1,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 0, "won": 0, "percentage": null },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 10,
+            "touches": {
+              "total": 1,
+              "passes": 1,
+              "completed_passes": 1,
+              "passes_received": 0,
+              "completion_percentage": "1.000",
+              "interceptions": 0,
+              "blocks": 0
+            },
+            "pass_length": { "short": 0, "long": 1 },
+            "possession_advanced": -5,
+            "tackles": 0,
+            "average_position": "VN13"
+          },
+          {
+            "player": {
+              "player_id": 853823,
+              "shirt_name": "Solanke",
+              "display_name": "Dominic Solanke",
+              "uniform": "9"
+            },
+            "position": { "position_id": 2, "name": "Forward", "abbreviation": "F" },
+            "is_game_started": true,
+            "minutes_played": 24,
+            "goals": 0,
+            "own_goals": 0,
+            "assists": 0,
+            "key_passes": 0,
+            "chances_created": 0,
+            "shots": 1,
+            "shots_on_goal": 0,
+            "crosses": 0,
+            "cross_breakdown": { "successful": 0, "percentage": null },
+            "penalty_kicks": { "shots": 0, "goals": 0, "won": 0 },
+            "fouls_committed": 0,
+            "fouls_suffered": 0,
+            "yellow_cards": 0,
+            "red_cards": 0,
+            "aerial_duels": { "total": 1, "won": 1, "percentage": "1.000" },
+            "ground_duels": { "total": 0, "won": 0, "percentage": null },
+            "is_on_pitch": true,
+            "offsides": 0,
+            "corner_kicks": 0,
+            "clears": 0,
+            "goal_mouth_blocks": 0,
+            "formation": 11,
+            "touches": {
+              "total": 6,
+              "passes": 4,
+              "completed_passes": 1,
+              "passes_received": 4,
+              "completion_percentage": ".250",
+              "interceptions": 0,
+              "blocks": 1
+            },
+            "pass_length": { "short": 0, "long": 2 },
+            "possession_advanced": 42,
+            "tackles": 0,
+            "average_position": "HP16"
+          }
+        ],
+        "bench_players": [
+          {
+            "player": {
+              "player_id": 905549,
+              "shirt_name": "Danjuma",
+              "display_name": "Arnaut Danjuma",
+              "uniform": "14"
+            },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 838714, "shirt_name": "Cook", "display_name": "Lewis Cook", "uniform": "16" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 956874, "shirt_name": "Kelly", "display_name": "Lloyd Kelly", "uniform": "26" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 572359, "shirt_name": "Fraser", "display_name": "Ryan Fraser", "uniform": "24" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 423385, "shirt_name": "Francis", "display_name": "Simon Francis", "uniform": "2" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 408111, "shirt_name": "Surman", "display_name": "Andrew Surman", "uniform": "6" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "player": { "player_id": 345024, "shirt_name": "Boruc", "display_name": "Artur Boruc", "uniform": "1" },
+            "yellow_cards": 0,
+            "red_cards": 0
+          }
+        ],
+        "cards": [
+          {
+            "time": "13:45",
+            "minutes": 13,
+            "color": "yellow",
+            "player": { "playerId": 824848, "shirtName": "Billing", "displayName": "Philip Billing", "uniform": "29" },
+            "reason": { "bookingReasonId": 17, "name": "Reckless Foul" }
+          }
+        ]
+      }
+    ],
+    "play_by_play": [
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "1:00",
+        "sequence_number": 5,
+        "play_event": { "play_event_id": 21, "name": "Start Half" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "1st Half started",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "1:27",
+        "sequence_number": 29,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 22, "y": 70 },
+        "play_text": "Throw-in taken by Diego Rico",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "1:42",
+        "sequence_number": 37,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "2:17",
+        "sequence_number": 73,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "2:36",
+        "sequence_number": 101,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "3:12",
+        "sequence_number": 132,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "3:45",
+        "sequence_number": 168,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 956887,
+          "shirt_name": "Guendouzi",
+          "display_name": "Matteo Guendouzi",
+          "uniform": "29"
+        },
+        "defensive_player": { "player_id": 722770, "shirt_name": "Ake", "display_name": "Nathan Ake", "uniform": "5" },
+        "field_coordinates": { "x": 104, "y": 47 },
+        "play_text": "Cross by Matteo Guendouzi",
+        "corner_kick_result": { "corner_kick_result_id": 27, "name": "Blocked" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "4:10",
+        "sequence_number": 186,
+        "play_event": { "play_event_id": 46, "name": "Goal Kick" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 914903,
+          "shirt_name": "Ramsdale",
+          "display_name": "Aaron Ramsdale",
+          "uniform": "12"
+        },
+        "field_coordinates": { "x": 99, "y": 39 },
+        "play_text": "Goal kick taken by Aaron Ramsdale",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "4:32",
+        "sequence_number": 213,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 964741,
+          "shirt_name": "Saka",
+          "display_name": "Bukayo Saka",
+          "uniform": "77"
+        },
+        "defensive_player": {
+          "player_id": 838362,
+          "shirt_name": "Stacey",
+          "display_name": "Jack Stacey",
+          "uniform": "17"
+        },
+        "field_coordinates": { "x": 103, "y": 14 },
+        "play_text": "Cross by Bukayo Saka",
+        "corner_kick_result": { "corner_kick_result_id": 27, "name": "Blocked" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "4:52",
+        "sequence_number": 219,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824517,
+          "shirt_name": "Ceballos",
+          "display_name": "Dani Ceballos",
+          "uniform": "8"
+        },
+        "field_coordinates": { "x": 105, "y": 0 },
+        "play_text": "Short Pass Corner kick taken by Dani Ceballos from the Left (from attacking side) Corner: Completed Pass",
+        "corner_kick_result": { "corner_kick_result_id": 20, "name": "Completed Pass" },
+        "cross_type": { "cross_type_id": 1, "name": "Left (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "5:14",
+        "sequence_number": 243,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 459605,
+          "shirt_name": "Aubameyang",
+          "display_name": "Pierre-Emerick Aubameyang",
+          "uniform": "14"
+        },
+        "field_coordinates": { "x": 103, "y": 63 },
+        "play_text": "Cross by Pierre-Emerick Aubameyang",
+        "corner_kick_result": { "corner_kick_result_id": 3, "name": "Defended" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "5:38",
+        "sequence_number": 250,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824517,
+          "shirt_name": "Ceballos",
+          "display_name": "Dani Ceballos",
+          "uniform": "8"
+        },
+        "field_coordinates": { "x": 105, "y": 70 },
+        "play_text": "Inswinging Corner kick taken by Dani Ceballos from the Right (from attacking side) Corner: Defended",
+        "corner_kick_result": { "corner_kick_result_id": 3, "name": "Defended" },
+        "cross_type": { "cross_type_id": 2, "name": "Right (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "5:38",
+        "sequence_number": 250,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824517,
+          "shirt_name": "Ceballos",
+          "display_name": "Dani Ceballos",
+          "uniform": "8"
+        },
+        "field_coordinates": { "x": 105, "y": 70 },
+        "play_text": "Cross by Dani Ceballos",
+        "cross_type": { "cross_type_id": 2, "name": "Right (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "5:55",
+        "sequence_number": 265,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 70, "y": 70 },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "6:28",
+        "sequence_number": 299,
+        "play_event": { "play_event_id": 19, "name": "Shot" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 459605,
+          "shirt_name": "Aubameyang",
+          "display_name": "Pierre-Emerick Aubameyang",
+          "uniform": "14"
+        },
+        "assisting_player": {
+          "player_id": 964741,
+          "shirt_name": "Saka",
+          "display_name": "Bukayo Saka",
+          "uniform": "77"
+        },
+        "field_coordinates": { "x": 87, "y": 20 },
+        "play_text": "Shot taken by Pierre-Emerick Aubameyang",
+        "goal_mouth_zone": { "goal_mouth_zone_id": 4, "name": "Bottom/Right" },
+        "shot_type": { "shot_type_id": 3, "name": "Header" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "6:59",
+        "sequence_number": 311,
+        "play_event": { "play_event_id": 46, "name": "Goal Kick" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 914903,
+          "shirt_name": "Ramsdale",
+          "display_name": "Aaron Ramsdale",
+          "uniform": "12"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Goal kick taken by Aaron Ramsdale",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "8:35",
+        "sequence_number": 410,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 102, "y": 59 },
+        "play_text": "Cross by Calum Chambers",
+        "corner_kick_result": { "corner_kick_result_id": 3, "name": "Defended" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "9:04",
+        "sequence_number": 426,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "field_coordinates": { "x": 105, "y": 70 },
+        "play_text": "High Drive Corner kick taken by Nicolas Pepe from the Right (from attacking side) Corner: On Target",
+        "corner_kick_result": { "corner_kick_result_id": 1, "name": "On Target" },
+        "cross_type": { "cross_type_id": 2, "name": "Right (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "9:04",
+        "sequence_number": 426,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "field_coordinates": { "x": 105, "y": 70 },
+        "play_text": "Cross by Nicolas Pepe: On Target",
+        "corner_kick_result": { "corner_kick_result_id": 1, "name": "On Target" },
+        "cross_type": { "cross_type_id": 2, "name": "Right (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "9:06",
+        "sequence_number": 428,
+        "play_event": { "play_event_id": 20, "name": "Shot on Goal" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 0,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 409128,
+          "shirt_name": "David Luiz",
+          "display_name": "David Luiz",
+          "uniform": "23"
+        },
+        "assisting_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "field_coordinates": { "x": 97, "y": 39 },
+        "play_text": "Shot on goal by David Luiz",
+        "shot_type": { "shot_type_id": 3, "name": "Header" },
+        "shot_result": { "shot_result_id": 7, "name": "Goal" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "9:07",
+        "sequence_number": 430,
+        "play_event": { "play_event_id": 11, "name": "Goal" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 409128,
+          "shirt_name": "David Luiz",
+          "display_name": "David Luiz",
+          "uniform": "23"
+        },
+        "assisting_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "David Luiz scored a goal with a Header shot assisted by Nicolas Pepe and celebrated by Shirt Over Head",
+        "celebration_type": { "celebration_type_id": 4, "name": "Shirt Over Head" },
+        "shot_type": { "shot_type_id": 3, "name": "Header" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "12:00",
+        "sequence_number": 551,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 90, "y": 70 },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "12:22",
+        "sequence_number": 563,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 79, "y": 70 },
+        "play_text": "Throw-in taken by Diego Rico",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "12:43",
+        "sequence_number": 576,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 57, "y": 70 },
+        "play_text": "Throw-in taken by Diego Rico",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "13:05",
+        "sequence_number": 591,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 30, "y": 70 },
+        "play_text": "Throw-in taken by Diego Rico",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "13:35",
+        "sequence_number": 629,
+        "play_event": { "play_event_id": 8, "name": "Foul" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 644835,
+          "shirt_name": "Kolasinac",
+          "display_name": "Sead Kolasinac",
+          "uniform": "31"
+        },
+        "defensive_player": {
+          "player_id": 838362,
+          "shirt_name": "Stacey",
+          "display_name": "Jack Stacey",
+          "uniform": "17"
+        },
+        "field_coordinates": { "x": 96, "y": 15 },
+        "play_text": "Foul called on Sead Kolasinac",
+        "foul_type": { "foul_type_id": 1, "name": "Foul" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "13:45",
+        "sequence_number": 639,
+        "play_event": { "play_event_id": 2, "name": "Caution" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824848,
+          "shirt_name": "Billing",
+          "display_name": "Philip Billing",
+          "uniform": "29"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Yellow card given to Philip Billing (Reckless Foul)",
+        "booking_reason": { "booking_reason_id": 17, "name": "Reckless Foul" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "14:16",
+        "sequence_number": 643,
+        "play_event": { "play_event_id": 9, "name": "Free Kick" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 914903,
+          "shirt_name": "Ramsdale",
+          "display_name": "Aaron Ramsdale",
+          "uniform": "12"
+        },
+        "field_coordinates": { "x": 94, "y": 17 },
+        "play_text": "Free kick taken by Aaron Ramsdale",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "14:44",
+        "sequence_number": 668,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "defensive_player": {
+          "player_id": 956887,
+          "shirt_name": "Guendouzi",
+          "display_name": "Matteo Guendouzi",
+          "uniform": "29"
+        },
+        "field_coordinates": { "x": 4, "y": 59 },
+        "play_text": "Cross by Diego Rico",
+        "corner_kick_result": { "corner_kick_result_id": 27, "name": "Blocked" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "15:05",
+        "sequence_number": 689,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 0, "y": 70 },
+        "play_text": "High Drive Corner kick taken by Diego Rico from the Left (from attacking side) Corner",
+        "cross_type": { "cross_type_id": 1, "name": "Left (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "15:05",
+        "sequence_number": 689,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 0, "y": 70 },
+        "play_text": "Cross by Diego Rico: Off Target",
+        "corner_kick_result": { "corner_kick_result_id": 2, "name": "Off Target" },
+        "cross_type": { "cross_type_id": 1, "name": "Left (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "15:07",
+        "sequence_number": 690,
+        "play_event": { "play_event_id": 19, "name": "Shot" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 523401,
+          "shirt_name": "King",
+          "display_name": "Joshua King",
+          "uniform": "7"
+        },
+        "assisting_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 9, "y": 25 },
+        "play_text": "Shot taken by Joshua King",
+        "shot_type": { "shot_type_id": 3, "name": "Header" },
+        "shot_result": { "shot_result_id": 51, "name": "Off Target" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "15:29",
+        "sequence_number": 715,
+        "play_event": { "play_event_id": 46, "name": "Goal Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": { "player_id": 554725, "shirt_name": "Leno", "display_name": "Bernd Leno", "uniform": "1" },
+        "field_coordinates": { "x": 78, "y": 67 },
+        "play_text": "Goal kick taken by Bernd Leno",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "15:59",
+        "sequence_number": 720,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 72, "y": 70 },
+        "play_text": "Throw-in taken by Diego Rico",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "16:41",
+        "sequence_number": 753,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "17:05",
+        "sequence_number": 781,
+        "play_event": { "play_event_id": 8, "name": "Foul" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824517,
+          "shirt_name": "Ceballos",
+          "display_name": "Dani Ceballos",
+          "uniform": "8"
+        },
+        "defensive_player": {
+          "player_id": 531746,
+          "shirt_name": "Wilson",
+          "display_name": "Callum Wilson",
+          "uniform": "13"
+        },
+        "field_coordinates": { "x": 23, "y": 60 },
+        "play_text": "Foul called on Dani Ceballos resulting in Set Piece",
+        "foul_type": { "foul_type_id": 1, "name": "Foul" },
+        "foul_result": { "foul_result_id": 3, "name": "Set Piece" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "17:50",
+        "sequence_number": 801,
+        "play_event": { "play_event_id": 9, "name": "Free Kick" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 27, "y": 58 },
+        "play_text": "Free kick taken by Diego Rico resulting in Cross",
+        "free_kick_result": { "free_kick_result_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "17:50",
+        "sequence_number": 801,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 27, "y": 58 },
+        "play_text": "Cross by Diego Rico: Off Target",
+        "corner_kick_result": { "corner_kick_result_id": 2, "name": "Off Target" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "17:51",
+        "sequence_number": 802,
+        "play_event": { "play_event_id": 19, "name": "Shot" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 853823,
+          "shirt_name": "Solanke",
+          "display_name": "Dominic Solanke",
+          "uniform": "9"
+        },
+        "assisting_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 7, "y": 34 },
+        "play_text": "Shot taken by Dominic Solanke",
+        "shot_type": { "shot_type_id": 3, "name": "Header" },
+        "shot_result": { "shot_result_id": 51, "name": "Off Target" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "18:19",
+        "sequence_number": 806,
+        "play_event": { "play_event_id": 46, "name": "Goal Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": { "player_id": 554725, "shirt_name": "Leno", "display_name": "Bernd Leno", "uniform": "1" },
+        "field_coordinates": { "x": 67, "y": 65 },
+        "play_text": "Goal kick taken by Bernd Leno",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "18:34",
+        "sequence_number": 812,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 63, "y": 70 },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "18:55",
+        "sequence_number": 817,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "field_coordinates": { "x": 105, "y": 70 },
+        "play_text": "Short Pass Corner kick taken by Nicolas Pepe from the Right (from attacking side) Corner: Completed Pass",
+        "corner_kick_result": { "corner_kick_result_id": 20, "name": "Completed Pass" },
+        "cross_type": { "cross_type_id": 2, "name": "Right (from attacking side) Corner" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "19:03",
+        "sequence_number": 828,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "defensive_player": { "player_id": 722770, "shirt_name": "Ake", "display_name": "Nathan Ake", "uniform": "5" },
+        "field_coordinates": { "x": 82, "y": 61 },
+        "play_text": "Cross by Nicolas Pepe",
+        "corner_kick_result": { "corner_kick_result_id": 11, "name": "Clearance In Play" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "19:49",
+        "sequence_number": 879,
+        "play_event": { "play_event_id": 19, "name": "Shot" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "assisting_player": {
+          "player_id": 964741,
+          "shirt_name": "Saka",
+          "display_name": "Bukayo Saka",
+          "uniform": "77"
+        },
+        "field_coordinates": { "x": 90, "y": 44 },
+        "play_text": "Shot taken by Nicolas Pepe",
+        "shot_type": { "shot_type_id": 1, "name": "Left Foot" },
+        "shot_result": { "shot_result_id": 51, "name": "Off Target" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "20:18",
+        "sequence_number": 899,
+        "play_event": { "play_event_id": 46, "name": "Goal Kick" },
+        "team_id": 8260,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 914903,
+          "shirt_name": "Ramsdale",
+          "display_name": "Aaron Ramsdale",
+          "uniform": "12"
+        },
+        "field_coordinates": { "x": 103, "y": 34 },
+        "play_text": "Goal kick taken by Aaron Ramsdale",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "20:37",
+        "sequence_number": 914,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 68, "y": 70 },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "21:28",
+        "sequence_number": 964,
+        "play_event": { "play_event_id": 47, "name": "Throw-In" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 692237,
+          "shirt_name": "Chambers",
+          "display_name": "Calum Chambers",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Throw-in taken by Calum Chambers",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "22:08",
+        "sequence_number": 1010,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 644835,
+          "shirt_name": "Kolasinac",
+          "display_name": "Sead Kolasinac",
+          "uniform": "31"
+        },
+        "defensive_player": {
+          "player_id": 824848,
+          "shirt_name": "Billing",
+          "display_name": "Philip Billing",
+          "uniform": "29"
+        },
+        "field_coordinates": { "x": 85, "y": 16 },
+        "play_text": "Cross by Sead Kolasinac",
+        "corner_kick_result": { "corner_kick_result_id": 12, "name": "Clearance Out of Play" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "22:34",
+        "sequence_number": 1029,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824517,
+          "shirt_name": "Ceballos",
+          "display_name": "Dani Ceballos",
+          "uniform": "8"
+        },
+        "defensive_player": {
+          "player_id": 729608,
+          "shirt_name": "Lerma",
+          "display_name": "Jefferson Lerma",
+          "uniform": "8"
+        },
+        "field_coordinates": { "x": 96, "y": 44 },
+        "play_text": "Corner kick taken by Dani Ceballos",
+        "corner_kick_result": { "corner_kick_result_id": 11, "name": "Clearance In Play" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "22:46",
+        "sequence_number": 1042,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 459605,
+          "shirt_name": "Aubameyang",
+          "display_name": "Pierre-Emerick Aubameyang",
+          "uniform": "14"
+        },
+        "defensive_player": {
+          "player_id": 789184,
+          "shirt_name": "Rico",
+          "display_name": "Diego Rico",
+          "uniform": "21"
+        },
+        "field_coordinates": { "x": 99, "y": 61 },
+        "play_text": "Cross by Pierre-Emerick Aubameyang",
+        "corner_kick_result": { "corner_kick_result_id": 27, "name": "Blocked" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "23:14",
+        "sequence_number": 1064,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "field_coordinates": { "x": 95, "y": 63 },
+        "play_text": "Corner kick taken by Nicolas Pepe",
+        "corner_kick_result": { "corner_kick_result_id": 20, "name": "Completed Pass" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "23:16",
+        "sequence_number": 1068,
+        "play_event": { "play_event_id": 6, "name": "Cross" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824517,
+          "shirt_name": "Ceballos",
+          "display_name": "Dani Ceballos",
+          "uniform": "8"
+        },
+        "field_coordinates": { "x": 99, "y": 62 },
+        "play_text": "Cross by Dani Ceballos",
+        "corner_kick_result": { "corner_kick_result_id": 3, "name": "Defended" },
+        "cross_type": { "cross_type_id": 6, "name": "Cross" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "23:21",
+        "sequence_number": 1072,
+        "play_event": { "play_event_id": 19, "name": "Shot" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "field_coordinates": { "x": 102, "y": 38 },
+        "play_text": "Shot",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "23:38",
+        "sequence_number": 1095,
+        "play_event": { "play_event_id": 19, "name": "Shot" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "defensive_player": { "player_id": 478351, "shirt_name": "Cook", "display_name": "Steve Cook", "uniform": "3" },
+        "field_coordinates": { "x": 96, "y": 32 },
+        "play_text": "Shot against Steve Cook",
+        "shot_result": { "shot_result_id": 23, "name": "Blocked" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "24:23",
+        "sequence_number": 1128,
+        "play_event": { "play_event_id": 83, "name": "Video Review (VAR)" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 920986,
+          "shirt_name": "Pepe",
+          "display_name": "Nicolas Pepe",
+          "uniform": "19"
+        },
+        "field_coordinates": { "x": null, "y": null },
+        "play_text": "Penalty Decision decision upheld after review",
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145,
+        "var": { "reason_id": 3, "reason": "Penalty Decision", "result_id": 1, "result": "Upheld", "duration": "11" }
+      },
+      {
+        "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" },
+        "time": "24:41",
+        "sequence_number": 1138,
+        "play_event": { "play_event_id": 5, "name": "Corner Kick" },
+        "team_id": 6145,
+        "away_score": 0,
+        "home_score": 1,
+        "away_shootout_score": null,
+        "home_shootout_score": null,
+        "offensive_player": {
+          "player_id": 824517,
+          "shirt_name": "Ceballos",
+          "display_name": "Dani Ceballos",
+          "uniform": "8"
+        },
+        "defensive_player": {
+          "player_id": 729608,
+          "shirt_name": "Lerma",
+          "display_name": "Jefferson Lerma",
+          "uniform": "8"
+        },
+        "field_coordinates": { "x": 99, "y": 27 },
+        "play_text": "Corner kick taken by Dani Ceballos",
+        "corner_kick_result": { "corner_kick_result_id": 12, "name": "Clearance Out of Play" },
+        "key_moment_sequence_number": null,
+        "defending_x_zero_team_id": 6145
+      }
+    ],
+    "links": [],
+    "recent": {
+      "ARS": [
+        {
+          "id": 2146639,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-09-30T20:00:00", "utc": "2019-09-30T19:00:00", "epoch": "1569870000" },
+          "tv": "NBCS",
+          "venue": {
+            "city": "Manchester",
+            "venueId": 5206,
+            "name": "Old Trafford",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 6157,
+              "name": "Manchester United",
+              "abbreviation": "MUN",
+              "location": { "name": "Manchester United", "type": "home" },
+              "title": "Manchester United",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "mun_50.png",
+                  "50x50": "mun_50.png",
+                  "100x100": "mun_100.png",
+                  "100x100_light": "mun_100_stroke.png",
+                  "360x360": "mun_360.png",
+                  "250x250": "mun_250.png",
+                  "150x150": "mun_150.png",
+                  "40x40": "mun_40.png",
+                  "40x40_light": "mun_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#DD1E2B", "secondary": "#FEE433" },
+              "slug": "soccer/team/manchester-united",
+              "record": { "wins": 2, "percentage": ".500", "losses": 2, "ties": 3, "points": 9 },
+              "score": 1,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 5 },
+                { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 11 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-manchester-united",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-manchester-united-1" },
+                  { "name": "Half", "tag": "events::soccer-manchester-united-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-manchester-united-3" },
+                  { "name": "Final", "tag": "events::soccer-manchester-united-4" },
+                  { "name": "Team News", "tag": "teams::soccer-manchester-united" }
+                ]
+              }
+            },
+            {
+              "id": "6145",
+              "name": "Arsenal",
+              "abbreviation": "ARS",
+              "location": { "name": "Arsenal", "type": "away" },
+              "title": "Arsenal",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "ars_50.png",
+                  "50x50": "ars_50.png",
+                  "100x100": "ars_100.png",
+                  "100x100_light": "ars_100_stroke.png",
+                  "360x360": "ars_360.png",
+                  "250x250": "ars_250.png",
+                  "150x150": "ars_150.png",
+                  "40x40": "ars_40.png",
+                  "40x40_light": "ars_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+              "slug": "soccer/team/arsenal",
+              "record": { "wins": 3, "percentage": ".643", "losses": 1, "ties": 3, "points": 12 },
+              "score": 1,
+              "is_winner": false,
+              "linescores": [
+                { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 4 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 6 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-arsenal",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                  { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                  { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                  { "name": "Team News", "tag": "teams::soccer-arsenal" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146606,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-09-22T16:30:00", "utc": "2019-09-22T15:30:00", "epoch": "1569166200" },
+          "tv": "PLP",
+          "venue": {
+            "city": "London",
+            "venueId": 5570,
+            "name": "Emirates Stadium",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 6145,
+              "name": "Arsenal",
+              "abbreviation": "ARS",
+              "location": { "name": "Arsenal", "type": "home" },
+              "title": "Arsenal",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "ars_50.png",
+                  "50x50": "ars_50.png",
+                  "100x100": "ars_100.png",
+                  "100x100_light": "ars_100_stroke.png",
+                  "360x360": "ars_360.png",
+                  "250x250": "ars_250.png",
+                  "150x150": "ars_150.png",
+                  "40x40": "ars_40.png",
+                  "40x40_light": "ars_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+              "slug": "soccer/team/arsenal",
+              "record": { "wins": 3, "percentage": ".667", "losses": 1, "ties": 2, "points": 11 },
+              "score": 3,
+              "is_winner": true,
+              "linescores": [
+                { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 6 },
+                { "score": 3, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 15 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-arsenal",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                  { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                  { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                  { "name": "Team News", "tag": "teams::soccer-arsenal" }
+                ]
+              }
+            },
+            {
+              "id": "6144",
+              "name": "Aston Villa",
+              "abbreviation": "AVL",
+              "location": { "name": "Aston Villa", "type": "away" },
+              "title": "Aston Villa",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "avl_50.png",
+                  "50x50": "avl_50.png",
+                  "100x100": "avl_100.png",
+                  "100x100_light": "avl_100_stroke.png",
+                  "360x360": "avl_360.png",
+                  "250x250": "avl_250.png",
+                  "150x150": "avl_150.png",
+                  "40x40": "avl_40.png",
+                  "40x40_light": "avl_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#000000", "secondary": "#ffffff" },
+              "slug": "soccer/team/aston-villa",
+              "record": { "wins": 1, "percentage": ".250", "losses": 4, "ties": 1, "points": 4 },
+              "score": 2,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 7 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 7 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-aston-villa",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-aston-villa-1" },
+                  { "name": "Half", "tag": "events::soccer-aston-villa-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-aston-villa-3" },
+                  { "name": "Final", "tag": "events::soccer-aston-villa-4" },
+                  { "name": "Team News", "tag": "teams::soccer-aston-villa" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146731,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-09-15T16:30:00", "utc": "2019-09-15T15:30:00", "epoch": "1568561400" },
+          "tv": "NBCS",
+          "venue": {
+            "city": "Watford",
+            "venueId": 5569,
+            "name": "Vicarage Road",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 6148,
+              "name": "Watford",
+              "abbreviation": "WAT",
+              "location": { "name": "Watford", "type": "home" },
+              "title": "Watford",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "wat_50.png",
+                  "50x50": "wat_50.png",
+                  "100x100": "wat_100.png",
+                  "100x100_light": "wat_100_stroke.png",
+                  "360x360": "wat_360.png",
+                  "250x250": "wat_250.png",
+                  "150x150": "wat_150.png",
+                  "40x40": "wat_40.png",
+                  "40x40_light": "wat_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#EA2530", "secondary": "#000000" },
+              "slug": "soccer/team/watford",
+              "record": { "wins": 0, "percentage": ".200", "losses": 3, "ties": 2, "points": 2 },
+              "score": 2,
+              "is_winner": false,
+              "linescores": [
+                { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 8 },
+                { "score": 2, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 23 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-watford",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-watford-1" },
+                  { "name": "Half", "tag": "events::soccer-watford-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-watford-3" },
+                  { "name": "Final", "tag": "events::soccer-watford-4" },
+                  { "name": "Team News", "tag": "teams::soccer-watford" }
+                ]
+              }
+            },
+            {
+              "id": "6145",
+              "name": "Arsenal",
+              "abbreviation": "ARS",
+              "location": { "name": "Arsenal", "type": "away" },
+              "title": "Arsenal",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "ars_50.png",
+                  "50x50": "ars_50.png",
+                  "100x100": "ars_100.png",
+                  "100x100_light": "ars_100_stroke.png",
+                  "360x360": "ars_360.png",
+                  "250x250": "ars_250.png",
+                  "150x150": "ars_150.png",
+                  "40x40": "ars_40.png",
+                  "40x40_light": "ars_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+              "slug": "soccer/team/arsenal",
+              "record": { "wins": 2, "percentage": ".600", "losses": 1, "ties": 2, "points": 8 },
+              "score": 2,
+              "is_winner": false,
+              "linescores": [
+                { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 3 },
+                { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 4 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-arsenal",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                  { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                  { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                  { "name": "Team News", "tag": "teams::soccer-arsenal" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146630,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-09-01T16:30:00", "utc": "2019-09-01T15:30:00", "epoch": "1567351800" },
+          "tv": "NBCS",
+          "venue": {
+            "city": "London",
+            "venueId": 5570,
+            "name": "Emirates Stadium",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 6145,
+              "name": "Arsenal",
+              "abbreviation": "ARS",
+              "location": { "name": "Arsenal", "type": "home" },
+              "title": "Arsenal",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "ars_50.png",
+                  "50x50": "ars_50.png",
+                  "100x100": "ars_100.png",
+                  "100x100_light": "ars_100_stroke.png",
+                  "360x360": "ars_360.png",
+                  "250x250": "ars_250.png",
+                  "150x150": "ars_150.png",
+                  "40x40": "ars_40.png",
+                  "40x40_light": "ars_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+              "slug": "soccer/team/arsenal",
+              "record": { "wins": 2, "percentage": ".625", "losses": 1, "ties": 1, "points": 7 },
+              "score": 2,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 9 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 17 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-arsenal",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                  { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                  { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                  { "name": "Team News", "tag": "teams::soccer-arsenal" }
+                ]
+              }
+            },
+            {
+              "id": "6154",
+              "name": "Tottenham Hotspur",
+              "abbreviation": "TOT",
+              "location": { "name": "Tottenham Hotspur", "type": "away" },
+              "title": "Tottenham Hotspur",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "tot_50.png",
+                  "50x50": "tot_50.png",
+                  "100x100": "tot_100.png",
+                  "100x100_light": "tot_100_stroke.png",
+                  "360x360": "tot_360.png",
+                  "250x250": "tot_250.png",
+                  "150x150": "tot_150.png",
+                  "40x40": "tot_40.png",
+                  "40x40_light": "tot_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#FBFBFB", "secondary": "#021E55" },
+              "slug": "soccer/team/tottenham-hotspur",
+              "record": { "wins": 1, "percentage": ".500", "losses": 1, "ties": 2, "points": 5 },
+              "score": 2,
+              "is_winner": false,
+              "linescores": [
+                { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 8 },
+                { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 5 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-tottenham-hotspur",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-tottenham-hotspur-1" },
+                  { "name": "Half", "tag": "events::soccer-tottenham-hotspur-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-tottenham-hotspur-3" },
+                  { "name": "Final", "tag": "events::soccer-tottenham-hotspur-4" },
+                  { "name": "Team News", "tag": "teams::soccer-tottenham-hotspur" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146615,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-08-24T17:30:00", "utc": "2019-08-24T16:30:00", "epoch": "1566664200" },
+          "tv": "NBC",
+          "venue": {
+            "city": "Liverpool",
+            "venueId": 5204,
+            "name": "Anfield",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 6140,
+              "name": "Liverpool",
+              "abbreviation": "LIV",
+              "location": { "name": "Liverpool", "type": "home" },
+              "title": "Liverpool",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "liv_50.png",
+                  "50x50": "liv_50.png",
+                  "100x100": "liv_100.png",
+                  "100x100_light": "liv_100_stroke.png",
+                  "360x360": "liv_360.png",
+                  "250x250": "liv_250.png",
+                  "150x150": "liv_150.png",
+                  "40x40": "liv_40.png",
+                  "40x40_light": "liv_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#CE0A2D", "secondary": "#18A298" },
+              "slug": "soccer/team/liverpool",
+              "record": { "wins": 3, "percentage": "1.000", "losses": 0, "ties": 0, "points": 9 },
+              "score": 3,
+              "is_winner": true,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 15 },
+                { "score": 2, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 10 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-liverpool",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-liverpool-1" },
+                  { "name": "Half", "tag": "events::soccer-liverpool-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-liverpool-3" },
+                  { "name": "Final", "tag": "events::soccer-liverpool-4" },
+                  { "name": "Team News", "tag": "teams::soccer-liverpool" }
+                ]
+              }
+            },
+            {
+              "id": "6145",
+              "name": "Arsenal",
+              "abbreviation": "ARS",
+              "location": { "name": "Arsenal", "type": "away" },
+              "title": "Arsenal",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "ars_50.png",
+                  "50x50": "ars_50.png",
+                  "100x100": "ars_100.png",
+                  "100x100_light": "ars_100_stroke.png",
+                  "360x360": "ars_360.png",
+                  "250x250": "ars_250.png",
+                  "150x150": "ars_150.png",
+                  "40x40": "ars_40.png",
+                  "40x40_light": "ars_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+              "slug": "soccer/team/arsenal",
+              "record": { "wins": 2, "percentage": ".667", "losses": 1, "ties": 0, "points": 6 },
+              "score": 1,
+              "is_winner": false,
+              "linescores": [
+                { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 5 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 4 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-arsenal",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                  { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                  { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                  { "name": "Team News", "tag": "teams::soccer-arsenal" }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "BOU": [
+        {
+          "id": 2146626,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-09-28T15:00:00", "utc": "2019-09-28T14:00:00", "epoch": "1569679200" },
+          "tv": "PLP",
+          "venue": {
+            "city": "Bournemouth",
+            "venueId": 6143,
+            "name": "Vitality Stadium",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 8260,
+              "name": "Bournemouth",
+              "abbreviation": "BOU",
+              "location": { "name": "Bournemouth", "type": "home" },
+              "title": "Bournemouth",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "bou_50.png",
+                  "50x50": "bou_50.png",
+                  "100x100": "bou_100.png",
+                  "100x100_light": "bou_100_stroke.png",
+                  "360x360": "bou_360.png",
+                  "250x250": "bou_250.png",
+                  "150x150": "bou_150.png",
+                  "40x40": "bou_40.png",
+                  "40x40_light": "bou_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+              "slug": "soccer/team/bournemouth",
+              "record": { "wins": 3, "percentage": ".571", "losses": 2, "ties": 2, "points": 11 },
+              "score": 2,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 3 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 10 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-bournemouth",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                  { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                  { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                  { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+                ]
+              }
+            },
+            {
+              "id": "6143",
+              "name": "West Ham United",
+              "abbreviation": "WHU",
+              "location": { "name": "West Ham United", "type": "away" },
+              "title": "West Ham United",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "whu_50.png",
+                  "50x50": "whu_50.png",
+                  "100x100": "whu_100.png",
+                  "100x100_light": "whu_100_stroke.png",
+                  "360x360": "whu_360.png",
+                  "250x250": "whu_250.png",
+                  "150x150": "whu_150.png",
+                  "40x40": "whu_40.png",
+                  "40x40_light": "whu_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#5F233B", "secondary": "#559AC4" },
+              "slug": "soccer/team/west-ham-united",
+              "record": { "wins": 3, "percentage": ".643", "losses": 1, "ties": 3, "points": 12 },
+              "score": 2,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 7 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 10 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-west-ham-united",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-west-ham-united-1" },
+                  { "name": "Half", "tag": "events::soccer-west-ham-united-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-west-ham-united-3" },
+                  { "name": "Final", "tag": "events::soccer-west-ham-united-4" },
+                  { "name": "Team News", "tag": "teams::soccer-west-ham-united" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146622,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-09-20T20:00:00", "utc": "2019-09-20T19:00:00", "epoch": "1569006000" },
+          "tv": "NBCS",
+          "venue": {
+            "city": "Southampton",
+            "venueId": 5246,
+            "name": "St. Mary's Stadium",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 7128,
+              "name": "Southampton",
+              "abbreviation": "SOU",
+              "location": { "name": "Southampton", "type": "home" },
+              "title": "Southampton",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "sou_50.png",
+                  "50x50": "sou_50.png",
+                  "100x100": "sou_100.png",
+                  "100x100_light": "sou_100_stroke.png",
+                  "360x360": "sou_360.png",
+                  "250x250": "sou_250.png",
+                  "150x150": "sou_150.png",
+                  "40x40": "sou_40.png",
+                  "40x40_light": "sou_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#1F1F1F", "secondary": "#D10A11" },
+              "slug": "soccer/team/southampton",
+              "record": { "wins": 2, "percentage": ".417", "losses": 3, "ties": 1, "points": 7 },
+              "score": 1,
+              "is_winner": false,
+              "linescores": [
+                { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 10 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 15 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-southampton",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-southampton-1" },
+                  { "name": "Half", "tag": "events::soccer-southampton-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-southampton-3" },
+                  { "name": "Final", "tag": "events::soccer-southampton-4" },
+                  { "name": "Team News", "tag": "teams::soccer-southampton" }
+                ]
+              }
+            },
+            {
+              "id": "8260",
+              "name": "Bournemouth",
+              "abbreviation": "BOU",
+              "location": { "name": "Bournemouth", "type": "away" },
+              "title": "Bournemouth",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "bou_50.png",
+                  "50x50": "bou_50.png",
+                  "100x100": "bou_100.png",
+                  "100x100_light": "bou_100_stroke.png",
+                  "360x360": "bou_360.png",
+                  "250x250": "bou_250.png",
+                  "150x150": "bou_150.png",
+                  "40x40": "bou_40.png",
+                  "40x40_light": "bou_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+              "slug": "soccer/team/bournemouth",
+              "record": { "wins": 3, "percentage": ".583", "losses": 2, "ties": 1, "points": 10 },
+              "score": 3,
+              "is_winner": true,
+              "linescores": [
+                { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 4 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 2 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-bournemouth",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                  { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                  { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                  { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146678,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-09-15T14:00:00", "utc": "2019-09-15T13:00:00", "epoch": "1568552400" },
+          "tv": "NBCS",
+          "venue": {
+            "city": "Bournemouth",
+            "venueId": 6143,
+            "name": "Vitality Stadium",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 8260,
+              "name": "Bournemouth",
+              "abbreviation": "BOU",
+              "location": { "name": "Bournemouth", "type": "home" },
+              "title": "Bournemouth",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "bou_50.png",
+                  "50x50": "bou_50.png",
+                  "100x100": "bou_100.png",
+                  "100x100_light": "bou_100_stroke.png",
+                  "360x360": "bou_360.png",
+                  "250x250": "bou_250.png",
+                  "150x150": "bou_150.png",
+                  "40x40": "bou_40.png",
+                  "40x40_light": "bou_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+              "slug": "soccer/team/bournemouth",
+              "record": { "wins": 2, "percentage": ".500", "losses": 2, "ties": 1, "points": 7 },
+              "score": 3,
+              "is_winner": true,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 10 },
+                { "score": 2, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 3 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-bournemouth",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                  { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                  { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                  { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+                ]
+              }
+            },
+            {
+              "id": "6149",
+              "name": "Everton",
+              "abbreviation": "EVE",
+              "location": { "name": "Everton", "type": "away" },
+              "title": "Everton",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "eve_50.png",
+                  "50x50": "eve_50.png",
+                  "100x100": "eve_100.png",
+                  "100x100_light": "eve_100_stroke.png",
+                  "360x360": "eve_360.png",
+                  "250x250": "eve_250.png",
+                  "150x150": "eve_150.png",
+                  "40x40": "eve_40.png",
+                  "40x40_light": "eve_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#06265D", "secondary": "#E3E4E6" },
+              "slug": "soccer/team/everton",
+              "record": { "wins": 2, "percentage": ".500", "losses": 2, "ties": 1, "points": 7 },
+              "score": 1,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 7 },
+                { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 7 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-everton",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-everton-1" },
+                  { "name": "Half", "tag": "events::soccer-everton-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-everton-3" },
+                  { "name": "Final", "tag": "events::soccer-everton-4" },
+                  { "name": "Team News", "tag": "teams::soccer-everton" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146656,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-08-31T15:00:00", "utc": "2019-08-31T14:00:00", "epoch": "1567260000" },
+          "tv": "PLP",
+          "venue": {
+            "city": "Leicester",
+            "venueId": 5438,
+            "name": "King Power Stadium",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 7127,
+              "name": "Leicester City",
+              "abbreviation": "LEI",
+              "location": { "name": "Leicester City", "type": "home" },
+              "title": "Leicester City",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "lei_50.png",
+                  "50x50": "lei_50.png",
+                  "100x100": "lei_100.png",
+                  "100x100_light": "lei_100_stroke.png",
+                  "360x360": "lei_360.png",
+                  "250x250": "lei_250.png",
+                  "150x150": "lei_150.png",
+                  "40x40": "lei_40.png",
+                  "40x40_light": "lei_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#0A559E", "secondary": "#FBBD31" },
+              "slug": "soccer/team/leicester-city",
+              "record": { "wins": 2, "percentage": ".750", "losses": 0, "ties": 2, "points": 8 },
+              "score": 3,
+              "is_winner": true,
+              "linescores": [
+                { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 7 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 6 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-leicester-city",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-leicester-city-1" },
+                  { "name": "Half", "tag": "events::soccer-leicester-city-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-leicester-city-3" },
+                  { "name": "Final", "tag": "events::soccer-leicester-city-4" },
+                  { "name": "Team News", "tag": "teams::soccer-leicester-city" }
+                ]
+              }
+            },
+            {
+              "id": "8260",
+              "name": "Bournemouth",
+              "abbreviation": "BOU",
+              "location": { "name": "Bournemouth", "type": "away" },
+              "title": "Bournemouth",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "bou_50.png",
+                  "50x50": "bou_50.png",
+                  "100x100": "bou_100.png",
+                  "100x100_light": "bou_100_stroke.png",
+                  "360x360": "bou_360.png",
+                  "250x250": "bou_250.png",
+                  "150x150": "bou_150.png",
+                  "40x40": "bou_40.png",
+                  "40x40_light": "bou_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+              "slug": "soccer/team/bournemouth",
+              "record": { "wins": 1, "percentage": ".375", "losses": 2, "ties": 1, "points": 4 },
+              "score": 1,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 6 },
+                { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 2 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-bournemouth",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                  { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                  { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                  { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 2146609,
+          "event_type": { "id": "1", "name": "Regular Season" },
+          "league": { "name": "English Premier League", "abbreviation": "EPL" },
+          "start": { "local": "2019-08-25T14:00:00", "utc": "2019-08-25T13:00:00", "epoch": "1566738000" },
+          "tv": "NBCS",
+          "venue": {
+            "city": "Bournemouth",
+            "venueId": 6143,
+            "name": "Vitality Stadium",
+            "country": { "abbreviation": "ENG", "name": "England" }
+          },
+          "status": { "name": "Final", "id": 4, "is_active": false },
+          "teams": [
+            {
+              "id": 8260,
+              "name": "Bournemouth",
+              "abbreviation": "BOU",
+              "location": { "name": "Bournemouth", "type": "home" },
+              "title": "Bournemouth",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "bou_50.png",
+                  "50x50": "bou_50.png",
+                  "100x100": "bou_100.png",
+                  "100x100_light": "bou_100_stroke.png",
+                  "360x360": "bou_360.png",
+                  "250x250": "bou_250.png",
+                  "150x150": "bou_150.png",
+                  "40x40": "bou_40.png",
+                  "40x40_light": "bou_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+              "slug": "soccer/team/bournemouth",
+              "record": { "wins": 1, "percentage": ".500", "losses": 1, "ties": 1, "points": 4 },
+              "score": 1,
+              "is_winner": false,
+              "linescores": [
+                { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 5 },
+                { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 5 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-bournemouth",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                  { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                  { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                  { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+                ]
+              }
+            },
+            {
+              "id": "6158",
+              "name": "Manchester City",
+              "abbreviation": "MCI",
+              "location": { "name": "Manchester City", "type": "away" },
+              "title": "Manchester City",
+              "logo": {
+                "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+                "cuts": {
+                  "default": "mci_50.png",
+                  "50x50": "mci_50.png",
+                  "100x100": "mci_100.png",
+                  "100x100_light": "mci_100_stroke.png",
+                  "360x360": "mci_360.png",
+                  "250x250": "mci_250.png",
+                  "150x150": "mci_150.png",
+                  "40x40": "mci_40.png",
+                  "40x40_light": "mci_40_stroke.png"
+                }
+              },
+              "color": { "primary": "#98C5E9", "secondary": "#00285E" },
+              "slug": "soccer/team/manchester-city",
+              "record": { "wins": 2, "percentage": ".833", "losses": 0, "ties": 1, "points": 7 },
+              "score": 3,
+              "is_winner": true,
+              "linescores": [
+                { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 11 },
+                { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 8 }
+              ],
+              "taxonomy": {
+                "teams": "soccer-manchester-city",
+                "airship": [
+                  { "name": "Game Start", "tag": "events::soccer-manchester-city-1" },
+                  { "name": "Half", "tag": "events::soccer-manchester-city-2" },
+                  { "name": "Scoring Plays", "tag": "events::soccer-manchester-city-3" },
+                  { "name": "Final", "tag": "events::soccer-manchester-city-4" },
+                  { "name": "Team News", "tag": "teams::soccer-manchester-city" }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "head_to_head": [
+      {
+        "id": 2050415,
+        "event_type": { "id": "1", "name": "Regular Season" },
+        "league": { "name": "English Premier League", "abbreviation": "EPL" },
+        "start": { "local": "2019-02-27T19:45:00", "utc": "2019-02-27T19:45:00", "epoch": "1551296700" },
+        "tv": "PLP",
+        "venue": {
+          "city": "London",
+          "venueId": 5570,
+          "name": "Emirates Stadium",
+          "country": { "abbreviation": "ENG", "name": "England" }
+        },
+        "status": { "name": "Final", "id": 4, "is_active": false },
+        "teams": [
+          {
+            "id": 6145,
+            "name": "Arsenal",
+            "abbreviation": "ARS",
+            "location": { "name": "Arsenal", "type": "home" },
+            "title": "Arsenal",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "ars_50.png",
+                "50x50": "ars_50.png",
+                "100x100": "ars_100.png",
+                "100x100_light": "ars_100_stroke.png",
+                "360x360": "ars_360.png",
+                "250x250": "ars_250.png",
+                "150x150": "ars_150.png",
+                "40x40": "ars_40.png",
+                "40x40_light": "ars_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+            "slug": "soccer/team/arsenal",
+            "record": { "wins": 17, "percentage": ".696", "losses": 6, "ties": 5, "points": 56 },
+            "score": 5,
+            "is_winner": true,
+            "linescores": [
+              { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 6 },
+              { "score": 3, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 10 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-arsenal",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                { "name": "Team News", "tag": "teams::soccer-arsenal" }
+              ]
+            }
+          },
+          {
+            "id": "8260",
+            "name": "Bournemouth",
+            "abbreviation": "BOU",
+            "location": { "name": "Bournemouth", "type": "away" },
+            "title": "Bournemouth",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "bou_50.png",
+                "50x50": "bou_50.png",
+                "100x100": "bou_100.png",
+                "100x100_light": "bou_100_stroke.png",
+                "360x360": "bou_360.png",
+                "250x250": "bou_250.png",
+                "150x150": "bou_150.png",
+                "40x40": "bou_40.png",
+                "40x40_light": "bou_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+            "slug": "soccer/team/bournemouth",
+            "record": { "wins": 10, "percentage": ".429", "losses": 14, "ties": 4, "points": 34 },
+            "score": 1,
+            "is_winner": false,
+            "linescores": [
+              { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 5 },
+              { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 8 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-bournemouth",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": 2050161,
+        "event_type": { "id": "1", "name": "Regular Season" },
+        "league": { "name": "English Premier League", "abbreviation": "EPL" },
+        "start": { "local": "2018-11-25T13:30:00", "utc": "2018-11-25T13:30:00", "epoch": "1543152600" },
+        "tv": "NBCS",
+        "venue": {
+          "city": "Bournemouth",
+          "venueId": 6143,
+          "name": "Vitality Stadium",
+          "country": { "abbreviation": "ENG", "name": "England" }
+        },
+        "status": { "name": "Final", "id": 4, "is_active": false },
+        "teams": [
+          {
+            "id": 8260,
+            "name": "Bournemouth",
+            "abbreviation": "BOU",
+            "location": { "name": "Bournemouth", "type": "home" },
+            "title": "Bournemouth",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "bou_50.png",
+                "50x50": "bou_50.png",
+                "100x100": "bou_100.png",
+                "100x100_light": "bou_100_stroke.png",
+                "360x360": "bou_360.png",
+                "250x250": "bou_250.png",
+                "150x150": "bou_150.png",
+                "40x40": "bou_40.png",
+                "40x40_light": "bou_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+            "slug": "soccer/team/bournemouth",
+            "record": { "wins": 6, "percentage": ".538", "losses": 5, "ties": 2, "points": 20 },
+            "score": 1,
+            "is_winner": false,
+            "linescores": [
+              { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 4 },
+              { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 7 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-bournemouth",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+              ]
+            }
+          },
+          {
+            "id": "6145",
+            "name": "Arsenal",
+            "abbreviation": "ARS",
+            "location": { "name": "Arsenal", "type": "away" },
+            "title": "Arsenal",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "ars_50.png",
+                "50x50": "ars_50.png",
+                "100x100": "ars_100.png",
+                "100x100_light": "ars_100_stroke.png",
+                "360x360": "ars_360.png",
+                "250x250": "ars_250.png",
+                "150x150": "ars_150.png",
+                "40x40": "ars_40.png",
+                "40x40_light": "ars_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+            "slug": "soccer/team/arsenal",
+            "record": { "wins": 8, "percentage": ".731", "losses": 2, "ties": 3, "points": 27 },
+            "score": 2,
+            "is_winner": true,
+            "linescores": [
+              { "score": 1, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 10 },
+              { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 10 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-arsenal",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                { "name": "Team News", "tag": "teams::soccer-arsenal" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": 1913183,
+        "event_type": { "id": "1", "name": "Regular Season" },
+        "league": { "name": "English Premier League", "abbreviation": "EPL" },
+        "start": { "local": "2018-01-14T13:30:00", "utc": "2018-01-14T13:30:00", "epoch": "1515936600" },
+        "tv": "NBCS",
+        "venue": {
+          "city": "Bournemouth",
+          "venueId": 6143,
+          "name": "Vitality Stadium",
+          "country": { "abbreviation": "ENG", "name": "England" }
+        },
+        "status": { "name": "Final", "id": 4, "is_active": false },
+        "teams": [
+          {
+            "id": 8260,
+            "name": "Bournemouth",
+            "abbreviation": "BOU",
+            "location": { "name": "Bournemouth", "type": "home" },
+            "title": "Bournemouth",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "bou_50.png",
+                "50x50": "bou_50.png",
+                "100x100": "bou_100.png",
+                "100x100_light": "bou_100_stroke.png",
+                "360x360": "bou_360.png",
+                "250x250": "bou_250.png",
+                "150x150": "bou_150.png",
+                "40x40": "bou_40.png",
+                "40x40_light": "bou_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+            "slug": "soccer/team/bournemouth",
+            "record": { "wins": 6, "percentage": ".391", "losses": 11, "ties": 6, "points": 24 },
+            "score": 2,
+            "is_winner": true,
+            "linescores": [
+              { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 5 },
+              { "score": 2, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 8 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-bournemouth",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+              ]
+            }
+          },
+          {
+            "id": "6145",
+            "name": "Arsenal",
+            "abbreviation": "ARS",
+            "location": { "name": "Arsenal", "type": "away" },
+            "title": "Arsenal",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "ars_50.png",
+                "50x50": "ars_50.png",
+                "100x100": "ars_100.png",
+                "100x100_light": "ars_100_stroke.png",
+                "360x360": "ars_360.png",
+                "250x250": "ars_250.png",
+                "150x150": "ars_150.png",
+                "40x40": "ars_40.png",
+                "40x40_light": "ars_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+            "slug": "soccer/team/arsenal",
+            "record": { "wins": 11, "percentage": ".609", "losses": 6, "ties": 6, "points": 39 },
+            "score": 1,
+            "is_winner": false,
+            "linescores": [
+              { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 7 },
+              { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 5 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-arsenal",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                { "name": "Team News", "tag": "teams::soccer-arsenal" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": 1913003,
+        "event_type": { "id": "1", "name": "Regular Season" },
+        "league": { "name": "English Premier League", "abbreviation": "EPL" },
+        "start": { "local": "2017-09-09T15:00:00", "utc": "2017-09-09T14:00:00", "epoch": "1504965600" },
+        "tv": "NBCS",
+        "venue": {
+          "city": "London",
+          "venueId": 5570,
+          "name": "Emirates Stadium",
+          "country": { "abbreviation": "ENG", "name": "England" }
+        },
+        "status": { "name": "Final", "id": 4, "is_active": false },
+        "teams": [
+          {
+            "id": 6145,
+            "name": "Arsenal",
+            "abbreviation": "ARS",
+            "location": { "name": "Arsenal", "type": "home" },
+            "title": "Arsenal",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "ars_50.png",
+                "50x50": "ars_50.png",
+                "100x100": "ars_100.png",
+                "100x100_light": "ars_100_stroke.png",
+                "360x360": "ars_360.png",
+                "250x250": "ars_250.png",
+                "150x150": "ars_150.png",
+                "40x40": "ars_40.png",
+                "40x40_light": "ars_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+            "slug": "soccer/team/arsenal",
+            "record": { "wins": 2, "percentage": ".500", "losses": 2, "ties": 0, "points": 6 },
+            "score": 3,
+            "is_winner": true,
+            "linescores": [
+              { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 8 },
+              { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 9 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-arsenal",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                { "name": "Team News", "tag": "teams::soccer-arsenal" }
+              ]
+            }
+          },
+          {
+            "id": "8260",
+            "name": "Bournemouth",
+            "abbreviation": "BOU",
+            "location": { "name": "Bournemouth", "type": "away" },
+            "title": "Bournemouth",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "bou_50.png",
+                "50x50": "bou_50.png",
+                "100x100": "bou_100.png",
+                "100x100_light": "bou_100_stroke.png",
+                "360x360": "bou_360.png",
+                "250x250": "bou_250.png",
+                "150x150": "bou_150.png",
+                "40x40": "bou_40.png",
+                "40x40_light": "bou_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+            "slug": "soccer/team/bournemouth",
+            "record": { "wins": 0, "percentage": ".000", "losses": 4, "ties": 0, "points": 0 },
+            "score": 0,
+            "is_winner": false,
+            "linescores": [
+              { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 0 },
+              { "score": 0, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 7 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-bournemouth",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": 1643259,
+        "event_type": { "id": "1", "name": "Regular Season" },
+        "league": { "name": "English Premier League", "abbreviation": "EPL" },
+        "start": { "local": "2017-01-03T19:45:00", "utc": "2017-01-03T19:45:00", "epoch": "1483472700" },
+        "tv": "NBCS",
+        "venue": {
+          "city": "Bournemouth",
+          "venueId": 6143,
+          "name": "Vitality Stadium",
+          "country": { "abbreviation": "ENG", "name": "England" }
+        },
+        "status": { "name": "Final", "id": 4, "is_active": false },
+        "teams": [
+          {
+            "id": 8260,
+            "name": "Bournemouth",
+            "abbreviation": "BOU",
+            "location": { "name": "Bournemouth", "type": "home" },
+            "title": "Bournemouth",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "bou_50.png",
+                "50x50": "bou_50.png",
+                "100x100": "bou_100.png",
+                "100x100_light": "bou_100_stroke.png",
+                "360x360": "bou_360.png",
+                "250x250": "bou_250.png",
+                "150x150": "bou_150.png",
+                "40x40": "bou_40.png",
+                "40x40_light": "bou_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#DD1E2B", "secondary": "#000000" },
+            "slug": "soccer/team/bournemouth",
+            "record": { "wins": 7, "percentage": ".450", "losses": 9, "ties": 4, "points": 25 },
+            "score": 3,
+            "is_winner": false,
+            "linescores": [
+              { "score": 2, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 7 },
+              { "score": 1, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 5 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-bournemouth",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-bournemouth-1" },
+                { "name": "Half", "tag": "events::soccer-bournemouth-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-bournemouth-3" },
+                { "name": "Final", "tag": "events::soccer-bournemouth-4" },
+                { "name": "Team News", "tag": "teams::soccer-bournemouth" }
+              ]
+            }
+          },
+          {
+            "id": "6145",
+            "name": "Arsenal",
+            "abbreviation": "ARS",
+            "location": { "name": "Arsenal", "type": "away" },
+            "title": "Arsenal",
+            "logo": {
+              "base": "https://cdn-s3.si.com/s3fs-public/teams/soccer/epl/logos/",
+              "cuts": {
+                "default": "ars_50.png",
+                "50x50": "ars_50.png",
+                "100x100": "ars_100.png",
+                "100x100_light": "ars_100_stroke.png",
+                "360x360": "ars_360.png",
+                "250x250": "ars_250.png",
+                "150x150": "ars_150.png",
+                "40x40": "ars_40.png",
+                "40x40_light": "ars_40_stroke.png"
+              }
+            },
+            "color": { "primary": "#C70527", "secondary": "#0A1E57" },
+            "slug": "soccer/team/arsenal",
+            "record": { "wins": 12, "percentage": ".725", "losses": 3, "ties": 5, "points": 41 },
+            "score": 3,
+            "is_winner": false,
+            "linescores": [
+              { "score": 0, "period": { "id": 1, "name": "1st", "unit": "Half", "full_name": "1st" }, "shots": 3 },
+              { "score": 3, "period": { "id": 2, "name": "2nd", "unit": "Half", "full_name": "2nd" }, "shots": 11 }
+            ],
+            "taxonomy": {
+              "teams": "soccer-arsenal",
+              "airship": [
+                { "name": "Game Start", "tag": "events::soccer-arsenal-1" },
+                { "name": "Half", "tag": "events::soccer-arsenal-2" },
+                { "name": "Scoring Plays", "tag": "events::soccer-arsenal-3" },
+                { "name": "Final", "tag": "events::soccer-arsenal-4" },
+                { "name": "Team News", "tag": "teams::soccer-arsenal" }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "editorial": { "has_preview": true, "has_recap": false, "has_bullets": false, "has_odds": false }
+  }
+}

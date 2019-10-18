@@ -193,6 +193,18 @@ functions:
               - partner
               - authorization
               - content-type
+  saveBoxesInfo:
+    handler: location.saveBoxesInfo
+    events:
+      - http:
+          path: '{id}/boxes/info'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   setBoxReserved:
     handler: location.setBoxReserved
     events:

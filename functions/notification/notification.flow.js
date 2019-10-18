@@ -2,7 +2,6 @@
 require('dotenv').config();
 const { respond, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
-const stage = process.env.stage;
 
 declare class process {
   static env: {

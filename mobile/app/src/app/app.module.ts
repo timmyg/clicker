@@ -26,7 +26,6 @@ import { Globals } from './globals';
 
 import * as Sentry from '@sentry/browser';
 
-console.log(environment.sentry.dsn, environment.stage);
 Sentry.init({
   dsn: environment.sentry.dsn,
   environment: environment.stage,

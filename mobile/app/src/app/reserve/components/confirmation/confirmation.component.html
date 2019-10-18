@@ -1,4 +1,4 @@
-<ion-card *ngIf="reservation$ | async">
+<ion-card *ngIf="(reservation$ | async)">
   <ion-card-content>
     <div>
       <label> Location: </label> <span>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</span>
@@ -39,7 +39,7 @@
           </ion-label>
           <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting || isAppLoading" checked></ion-radio>
         </ion-item> -->
-        <ion-item *ngFor="let timeframe of timeframes$ | async">
+        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>
@@ -67,7 +67,7 @@
       (click)="onConfirm(reservation)"
       id="confirm"
       slot="end"
-      [disabled]="saving || insufficientFunds() || isAppLoading || outOfRange"
+      [disabled]="saving || insufficientFunds() || isAppLoading || outOfRange || isInitializing"
       margin-top
       align-items-center
     >
