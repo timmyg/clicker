@@ -56,6 +56,7 @@ functions:
               - content-type
   command:
     handler: remote.command
+    memorySize: 512
     events:
       - http:
           path: '/command'
@@ -71,6 +72,18 @@ functions:
     events:
       - http:
           path: '/box/info'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  checkBoxesInfo:
+    handler: remote.checkBoxesInfo
+    events:
+      - http:
+          path: '/boxes/info'
           method: post
           cors:
             origin: '*'

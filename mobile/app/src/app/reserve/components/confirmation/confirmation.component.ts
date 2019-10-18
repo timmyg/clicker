@@ -42,6 +42,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   outOfRange: boolean;
   isAppLoading$: Observable<boolean>;
   isAppLoading: boolean;
+  isInitializing = true;
   sub: Subscription;
   timeframe0: Timeframe = {
     minutes: 0,
@@ -92,6 +93,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         if (this.reservation.location.free) {
           this.reservation.cost = 0;
           this.reservation.minutes = 0;
+          this.isInitializing = false;
         } else {
           this.timeframes$
             .pipe(
@@ -104,6 +106,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
                 this.reservation.cost = timeframe.tokens;
                 this.reservation.minutes = timeframe.minutes;
               }
+              this.isInitializing = false;
             });
         }
         this.route.queryParams.subscribe(params => {
@@ -139,6 +142,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   onConfirm() {
+    console.log('onconfirm');
     const { reservation: r } = this;
     this.saving = true;
     this.isEditMode
@@ -149,6 +153,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       .pipe(ofType(fromReservation.CREATE_RESERVATION_SUCCESS, fromReservation.UPDATE_RESERVATION_SUCCESS))
       .pipe(first())
       .subscribe(() => {
+        console.log('success');
         if (this.isEditMode) {
           this.segment.track(this.globals.events.reservation.updated, {
             minutes: r.minutes,

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npx flow-remove-types game.flow.js -o game.js",
     "test": "npm run build && jest --coverage",
+    "test:specific": "npm run build && jest -t='soccer'",
     "invoke:score": "serverless invoke local --function getStatus --path ../.resources/data/si-url.json"
   },
   "author": "",

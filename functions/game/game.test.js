@@ -44,6 +44,33 @@ describe('transformGame', () => {
       expect(ended).toBeFalsy();
       expect(description).toBe('NYM 0 @ Col 7 (Bottom 8)');
     });
+    test('nhl', () => {
+      const data = require('../.resources/games/blowout/nhl.json');
+      const { started, blowout, ended, description } = transformGame(data);
+      expect(started).toBeTruthy();
+      expect(blowout).toBeTruthy();
+      expect(ended).toBeFalsy();
+      expect(description).toBe('Det 2 @ Mon 5 (7:20 3rd)');
+    });
+    test('wnba', () => {
+      const data = require('../.resources/games/blowout/wnba.json');
+      const { started, blowout, ended, description } = transformGame(data);
+      expect(started).toBeTruthy();
+      expect(blowout).toBeTruthy();
+      expect(ended).toBeFalsy();
+      expect(description).toBe('Con 94 @ Was 62 (5:55 4th)');
+    });
+    test('soccer: premier league', () => {
+      // https://stats.api.si.com/v1/soccer/game_detail?league=epl&id=2146651&box_score=true&play_by_play=true&add_records=true&roster=true
+      // https://www.si.com/epl/game/2146651/live
+      const data = require('../.resources/games/blowout/epl.json');
+      const { started, blowout, ended, description } = transformGame(data);
+      expect(started).toBeTruthy();
+      expect(blowout).toBeTruthy();
+      expect(ended).toBeFalsy();
+      expect(description).toBe('BOU 4 @ ARS 1 (83:41 2nd)');
+    });
+    test.skip('soccer: la liga', () => {});
   });
 
   describe('correctly identifies active, non-blowout game', () => {

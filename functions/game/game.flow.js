@@ -22,6 +22,7 @@ class SiStatus {
     unit: string, // Quarter
     time: string, // 8:04
   };
+  time: { minutes: number, seconds: number, additionalMinutes: number }; // soccer
   inning: number; // 1
   name: string; // Final, Pre-Game
   is_active: boolean; // false
@@ -53,11 +54,16 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
 
   const method = 'get';
   const options = { method, url: apiUrl };
-  console.log({ apiUrl });
-  const result = await axios(options);
-  const gameStatus: GameStatus = transformGame(result.data);
+  try {
+    const result = await axios(options);
+    const gameStatus: GameStatus = transformGame(result.data);
 
-  return respond(200, gameStatus);
+    return respond(200, gameStatus);
+  } catch (e) {
+    console.error(`failed to get score: ${apiUrl}`);
+    Raven.captureException(e);
+    return respond(400);
+  }
 });
 
 function transformGame(result: SiResult): GameStatus {
@@ -65,7 +71,6 @@ function transformGame(result: SiResult): GameStatus {
   const gameStatus = new GameStatus();
   const { name: status } = game.status;
 
-  console.log({ status });
   // set started, ended
   if (status === 'Final') {
     gameStatus.started = true;
@@ -87,48 +92,49 @@ function transformGame(result: SiResult): GameStatus {
       // 6:00 left in 4th quarter and 17+ point difference
       const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
       const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 17;
-      console.log('NCAAF!!!!', homeTeam.score, awayTeam.score);
-      if (isNearEnd && isBlowout) {
-        gameStatus.blowout = true;
-      }
+      gameStatus.blowout = isNearEnd && isBlowout;
     } else if (leageAbbreviation === 'NFL') {
       // 6:00 left in 4th quarter and 17+ point difference
       const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
       const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 17;
-      if (isNearEnd && isBlowout) {
-        gameStatus.blowout = true;
-      }
+      gameStatus.blowout = isNearEnd && isBlowout;
     } else if (leageAbbreviation === 'MLB') {
       // 8th inning and 5+ run difference
       const isNearEnd = game.status.inning >= 8;
       const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 5;
-      if (isNearEnd && isBlowout) {
-        gameStatus.blowout = true;
-      }
+      gameStatus.blowout = isNearEnd && isBlowout;
     } else if (leageAbbreviation === 'NCAAB') {
       // 8:00 left in 2nd half and 20+ point difference
       const isNearEnd = game.status.period.id === 2 && +game.status.period.time.split(':')[0] <= 8;
       const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 20;
-      if (isNearEnd && isBlowout) {
-        gameStatus.blowout = true;
-      }
-    } else if (leageAbbreviation === 'NBA') {
+      gameStatus.blowout = isNearEnd && isBlowout;
+    } else if (['NBA', 'WNBA'].includes(leageAbbreviation)) {
       // 6:00 left in 4th quarter and 25+ point difference
       const isNearEnd = game.status.period.id === 4 && +game.status.period.time.split(':')[0] <= 6;
       const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 25;
-      if (isNearEnd && isBlowout) {
-        gameStatus.blowout = true;
-      }
+      gameStatus.blowout = isNearEnd && isBlowout;
+    } else if (['EPL'].includes(leageAbbreviation)) {
+      // 80th minutes and 3+ goal difference
+      const isNearEnd = game.status.period.id === 2 && +game.status.time.minutes >= 80;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 3;
+      gameStatus.blowout = isNearEnd && isBlowout;
+    } else if (['NHL'].includes(leageAbbreviation)) {
+      // 3rd period, 8 minutes and 3+ goal difference
+      const isNearEnd = game.status.period.id === 3 && +game.status.period.time.split(':')[0] <= 8;
+      const isBlowout = Math.abs(homeTeam.score - awayTeam.score) >= 3;
+      gameStatus.blowout = isNearEnd && isBlowout;
     }
   }
 
   // set description
   gameStatus.description = `${awayTeam.abbreviation} ${awayTeam.score} @ ${homeTeam.abbreviation} ${homeTeam.score}`;
   if (status === 'In-Progress') {
-    if (['NFL', 'NCAAF', 'NCAAB', 'NBA'].includes(leageAbbreviation)) {
+    if (['NFL', 'NCAAF', 'NCAAB', 'NBA', 'WNBA', 'NHL'].includes(leageAbbreviation)) {
       gameStatus.description += ` (${game.status.period.time} ${game.status.period.name})`;
     } else if (['MLB'].includes(leageAbbreviation)) {
       gameStatus.description += ` (${game.status.inning_division} ${game.status.inning})`;
+    } else if (['EPL'].includes(leageAbbreviation)) {
+      gameStatus.description += ` (${game.status.time.minutes}:${game.status.time.seconds} ${game.status.period.name})`;
     }
   } else if (status === 'Final') {
     gameStatus.description += ` (Final)`;

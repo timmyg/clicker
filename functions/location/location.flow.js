@@ -285,6 +285,62 @@ module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200);
 });
 
+module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id: locationId } = getPathParameters(event);
+  const { boxes } = getBody(event);
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  for (const box of boxes) {
+    const { boxId, response } = boxes;
+    console.log(boxId, response);
+
+    const { major } = response;
+
+    const i = location.boxes.findIndex(b => b.id === boxId);
+    console.log('box', location.boxes[i], major);
+    const originalChannel = location.boxes[i]['channel'];
+    console.log('original channel', originalChannel);
+    console.log('current channel', major);
+    if (originalChannel !== major) {
+      location.boxes[i]['channel'] = major;
+      location.boxes[i]['channelSource'] = 'manual';
+      await location.save();
+      const userId = 'system';
+      const name = 'Manual Zap';
+      const data = {
+        from: originalChannel,
+        to: major,
+        locationId: location.id,
+        locationName: location.name,
+        locationNeighborhood: location.neighborhood,
+      };
+      console.time('track event');
+      await new Invoke()
+        .service('analytics')
+        .name('track')
+        .body({ userId, name, data })
+        .async()
+        .go();
+      console.timeEnd('track event');
+
+      const text = `Manual Zap @ ${location.name} (${
+        location.neighborhood
+      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      await new Invoke()
+        .service('notification')
+        .name('sendControlCenter')
+        .body({ text })
+        .async()
+        .go();
+    }
+  }
+
+  return respond(200);
+});
+
+// deprecated
 module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { major } = getBody(event);
@@ -483,22 +539,25 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
   let allLocations = await Location.scan().exec();
 
   for (const location of allLocations) {
+    const { losantId } = location;
+    const body = {
+      losantId,
+      boxes: [],
+    };
     for (const box of location.boxes) {
-      const { losantId } = location;
-      const { id: boxId, ip, clientAddress: client } = box;
-      const body = {
-        losantId,
-        boxId,
-        ip,
-        client,
-      };
-      if (losantId.length > 3) {
-        await new Invoke()
-          .service('remote')
-          .name('checkBoxInfo')
-          .body(body)
-          .go();
+      if (!!box.zone) {
+        // ensure box has a zone to only track control center boxes
+        const { id: boxId, ip, clientAddress: client } = box;
+        body.boxes.push({ boxId, ip, client });
       }
+    }
+    if (losantId.length > 3 && !!body.boxes.length) {
+      await new Invoke()
+        .service('remote')
+        .name('checkBoxesInfo')
+        .body(body)
+        .async()
+        .go();
     }
   }
   return respond(200, 'ok');

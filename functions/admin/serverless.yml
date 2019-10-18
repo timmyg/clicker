@@ -9,6 +9,7 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
+    circleToken: ${env:CIRCLE_TOKEN}
     airtableKey: ${env:AIRTABLE_KEY}
     airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
   iamRoleStatements:
@@ -64,6 +65,19 @@ functions:
       - schedule: cron(0 12 * * ? *) # every day @ 8am eastern
       - http:
           path: check/control-center
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  runEndToEndTests:
+    handler: admin.runEndToEndTests
+    events:
+      - schedule: cron(0 10 * * ? *) # every day @ 6am eastern
+      - http:
+          path: e2e
           method: post
           cors:
             origin: '*'

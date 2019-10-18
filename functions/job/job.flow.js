@@ -94,9 +94,7 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
         });
         // }
       } catch (e) {
-        console.error('failed to get score', e);
-        // throw "Parameter is not a number!";
-        throw new Error(`failed to get score: ${siWebUrl}`);
+        Raven.captureException(e);
       }
     }
     // fetchNextPage();
@@ -161,6 +159,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
           const text = `*${gameNotes} (${channel})* waiting for *game over/blowout* (${dependencyGameStatus}) on *${dependencyGameNotes} (${dependencyChannel})* (Zones ${zones.join(
             ', ',
           )})`;
+
           await new Invoke()
             .service('notification')
             .name('sendControlCenter')
