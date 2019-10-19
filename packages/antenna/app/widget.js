@@ -120,10 +120,10 @@ class Widget {
                 const { boxId, client, ip } = box;
                 const _remote = new DirecTV.Remote(ip);
                 console.log('get tuned');
-                const response = await _remote.getTunedSync(client || '0');
-                // console.log({ response });
-                logger.info(response);
-                boxesInfo.push(response);
+                const info = await _remote.getTunedSync(client || '0');
+                // console.log({ info });
+                logger.info(boxId, info);
+                boxesInfo.push({ boxId, info });
               } catch (e) {
                 logger.error(JSON.stringify(err));
               }

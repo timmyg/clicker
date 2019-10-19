@@ -79,6 +79,18 @@ functions:
               - partner
               - authorization
               - content-type
+  checkBoxesInfo:
+    handler: remote.checkBoxesInfo
+    events:
+      - http:
+          path: '/boxes/info'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   debug:
     handler: remote.debug
     events:

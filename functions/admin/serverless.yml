@@ -75,8 +75,7 @@ functions:
   runEndToEndTests:
     handler: admin.runEndToEndTests
     events:
-      - schedule: cron(0 12 * * ? *) # every day @ 8am eastern
-      - schedule: rate(1 hour) # every hour, for testing
+      - schedule: cron(0 10 * * ? *) # every day @ 6am eastern
       - http:
           path: e2e
           method: post
