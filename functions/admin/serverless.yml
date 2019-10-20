@@ -85,3 +85,15 @@ functions:
               - partner
               - authorization
               - content-type
+  logChannelChange:
+    handler: admin.logChannelChange
+    events:
+      - http:
+          path: channel-change
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

@@ -331,6 +331,23 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .body({ text })
         .async()
         .go();
+
+      await new Invoke()
+        .service('admin')
+        .name('logChannelChange')
+        .body({
+          location: `${location.name} (${location.neighborhood})`,
+          zone: box.zone,
+          from: originalChannel,
+          to: major,
+          time: new Date(),
+          type: name,
+          boxId,
+        })
+        .async()
+        .go();
+
+      // TODO log via airtable
     }
   }
 
