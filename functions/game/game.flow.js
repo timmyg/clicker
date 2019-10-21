@@ -151,9 +151,9 @@ function transformSIUrl(webUrl: string): string {
   let sport = urlParts[3];
   if (sport === 'college-football') {
     sport = 'ncaaf';
-    apiUrl.push(sport);
-    apiUrl.push(`game_detail?id=${urlParts[5]}`);
-  } else if (['epl', 'mls', 'la liga', 'serie-a'].includes(decodeURIComponent(sport))) {
+  }
+
+  if (['epl', 'mls', 'la-liga', 'serie-a'].includes(decodeURIComponent(sport))) {
     apiUrl.push('soccer');
     apiUrl.push(`game_detail?id=${urlParts[5]}&league=${sport}`);
   } else {

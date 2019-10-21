@@ -17,6 +17,11 @@ describe('transformSIUrl', () => {
       'https://stats.api.si.com/v1/soccer/game_detail?id=2170270&league=serie-a',
     );
   });
+  test('la liga', () => {
+    expect(transformSIUrl('https://www.si.com/la-liga/game/2170270')).toEqual(
+      'https://stats.api.si.com/v1/soccer/game_detail?id=2170270&league=la-liga',
+    );
+  });
 });
 
 describe('transformGame', () => {
