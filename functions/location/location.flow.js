@@ -201,6 +201,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { boxes, ip } = getBody(event);
+  console.log({ boxes, ip });
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
