@@ -123,6 +123,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
+    console.log('to', reservation.program.channel);
     await new Invoke()
       .service('admin')
       .name('logChannelChange')
