@@ -213,7 +213,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 
   let updatedLocation;
   location.boxes = location.boxes || [];
-  boxes.forEach(box => {
+  for (const box of boxes) {
     box.clientAddress = box.clientAddr;
     box.ip = ip;
     const existingBox =
@@ -221,7 +221,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
       box.id = uuid();
-      box.active = true;
+      // box.active = true;
       // set label to locationName or random 2 alphanumeric characters
       box.label =
         box.locationName ||
@@ -230,6 +230,15 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
           .substr(2, 2);
       console.log('add box with label', id, box);
       location.boxes.push(box);
+      const text = `*New DirecTV Box Added* @ ${location.name} (${
+        location.neighborhood
+      }): ${box.id}`
+      await new Invoke()
+        .service('notification')
+        .name('sendAntenna')
+        .body({ text })
+        .async()
+        .go();
     }
   });
   await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
@@ -326,7 +335,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${
+        location.neighborhood
+      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -393,7 +404,9 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    const text = `Manual Zap @ ${location.name} (${
+      location.neighborhood
+    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
     await new Invoke()
       .service('notification')
       .name('sendControlCenter')
