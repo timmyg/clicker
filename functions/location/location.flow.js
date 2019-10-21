@@ -230,9 +230,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
           .substr(2, 2);
       console.log('add box with label', id, box);
       location.boxes.push(box);
-      const text = `*New DirecTV Box Added* @ ${location.name} (${
-        location.neighborhood
-      }): ${box.id}`
+      const text = `*New DirecTV Box Added* @ ${location.name} (${location.neighborhood}): ${box.id}`;
       await new Invoke()
         .service('notification')
         .name('sendAntenna')
@@ -240,7 +238,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         .async()
         .go();
     }
-  });
+  }
   await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
 
   return respond(201, updatedLocation);
