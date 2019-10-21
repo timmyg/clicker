@@ -1,7 +1,6 @@
 // @flow
 const losantApi = require('losant-rest');
 const { respond, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-const Airtable = require('airtable');
 
 declare class process {
   static env: {
@@ -124,7 +123,6 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    // TODO log via airtable
     await new Invoke()
       .service('admin')
       .name('logChannelChange')
