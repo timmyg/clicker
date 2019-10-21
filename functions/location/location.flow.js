@@ -288,15 +288,16 @@ module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => 
 module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
   const { boxes } = getBody(event);
+  console.log(boxes);
   const location = await Location.queryOne('id')
     .eq(locationId)
     .exec();
 
   for (const box of boxes) {
-    const { boxId, response } = boxes;
-    console.log(boxId, response);
+    const { boxId, info } = boxes;
+    console.log(boxId, info);
 
-    const { major } = response;
+    const { major } = info;
 
     const i = location.boxes.findIndex(b => b.id === boxId);
     console.log('box', location.boxes[i], major);
@@ -325,15 +326,30 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${
-        location.neighborhood
-      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
         .body({ text })
         .async()
         .go();
+
+      await new Invoke()
+        .service('admin')
+        .name('logChannelChange')
+        .body({
+          location: `${location.name} (${location.neighborhood})`,
+          zone: box.zone,
+          from: originalChannel,
+          to: major,
+          time: new Date(),
+          type: name,
+          boxId,
+        })
+        .async()
+        .go();
+
+      // TODO log via airtable
     }
   }
 

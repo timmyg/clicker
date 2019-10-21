@@ -123,6 +123,22 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
+    console.log('to', reservation.program.channel);
+    await new Invoke()
+      .service('admin')
+      .name('logChannelChange')
+      .body({
+        location: `${reservation.location.name} (${reservation.location.neighborhood})`,
+        zone: reservation.box.zone,
+        //  from:,
+        to: reservation.program.channel,
+        time: new Date(),
+        type: eventName,
+        boxId: reservation.box.id,
+      })
+      .async()
+      .go();
+
     return respond();
   } catch (e) {
     console.error(e);

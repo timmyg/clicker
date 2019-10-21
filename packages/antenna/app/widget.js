@@ -66,10 +66,11 @@ class Widget {
       const context = this;
       // Listen for commands from Losant
       this.device.on('command', async command => {
+        console.log({ command });
         logger.info({ command });
         const { name, payload } = command;
         const { ip } = payload;
-        this.remote = new DirecTV.Remote(ip);
+        if (ip) this.remote = new DirecTV.Remote(ip);
         switch (name) {
           case 'tune':
             this.remote.tune(payload.channel, payload.channelMinor, payload.client, err => {
@@ -112,18 +113,23 @@ class Widget {
             break;
           case 'info.current.all':
             logger.info('info.current.all!!');
-            const boxes = [];
+            const { boxes } = payload;
+            const boxesInfo = [];
             for (const box of boxes) {
               try {
-                const { boxId, client } = box;
-                const response = await this.remote.getTuned(client || '0');
-                logger.info(JSON.stringify(response), box);
-                boxes.push({ boxId, response });
+                const { boxId, client, ip } = box;
+                const _remote = new DirecTV.Remote(ip);
+                console.log('get tuned');
+                const info = await _remote.getTunedSync(client || '0');
+                // console.log({ info });
+                logger.info(boxId, info);
+                boxesInfo.push({ boxId, info });
               } catch (e) {
                 logger.error(JSON.stringify(err));
               }
             }
-            context.api.saveBoxesInfo(boxes);
+            console.log('saveBoxesInfo', { boxesInfo });
+            context.api.saveBoxesInfo(boxesInfo);
             break;
           case 'options':
             this.remote.getOptions((err, response) => {
