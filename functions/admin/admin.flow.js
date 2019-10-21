@@ -65,7 +65,7 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
 
 module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event => {
   const { location, zone, from, to, time, type, boxId } = getBody(event);
-
+  console.log({ location, zone, from, to, time, type, boxId });
   console.time('send to airtable');
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   await base('Channel Changes').create(
@@ -73,7 +73,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
       Location: location,
       Zone: zone,
       From: from,
-      To: to,
+      To: to.toString(),
       Time: time,
       Type: type,
       'Box Id': boxId,
