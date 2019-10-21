@@ -4,7 +4,7 @@ provider:
   name: aws
   memorySize: 128
   versionFunctions: false
-  runtime: nodejs8.10
+  runtime: nodejs10.x
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
@@ -227,3 +227,4 @@ functions:
               - partner
               - authorization
               - content-type
+

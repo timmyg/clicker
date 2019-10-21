@@ -1,7 +1,7 @@
 // @flow
 require('dotenv').config();
 const Airtable = require('airtable');
-const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const request = require('request-promise');
 
 declare class process {
@@ -38,10 +38,11 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
 });
 
 module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event => {
-  const { circleToken } = process.env;
+  const { circleToken, stage } = process.env;
 
+  const branch = stage === 'prod' ? 'master' : stage;
   // use request package, axios sucks with form data
-  const url = 'https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/master';
+  const url = `https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/${branch}`;
   const options = {
     method: 'POST',
     form: { 'build_parameters[CIRCLE_JOB]': 'e2e/app' },
@@ -53,6 +54,28 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
   const response = await request(url, options);
 
   return respond(200, response);
+});
+
+module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event => {
+  const { location, zone, from, to, time, type, boxId } = getBody(event);
+  console.log({ location, zone, from, to, time, type, boxId });
+  console.time('send to airtable');
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  await base('Channel Changes').create(
+    {
+      Location: location,
+      Zone: zone,
+      From: from,
+      To: to.toString(),
+      Time: time,
+      Type: type,
+      'Box Id': boxId,
+    },
+    { typecast: true },
+  );
+  console.timeEnd('send to airtable');
+
+  return respond(200);
 });
 
 async function sendControlCenterSlack(text) {
