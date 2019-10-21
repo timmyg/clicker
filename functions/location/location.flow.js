@@ -238,6 +238,8 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         .body({ text })
         .async()
         .go();
+    } else {
+      console.log('existing box', box.ip);
     }
   }
   await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
