@@ -230,7 +230,8 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
           .toString(36)
           .substr(2, 2);
       console.log('add new box!', box.ip);
-      location.boxes.push(box);
+      await Location.update({ id }, { $ADD: { boxes: [box] } });
+      // location.boxes.push(box);
       const text = `*New DirecTV Box Added* @ ${location.name} (${location.neighborhood}): ${box.id}`;
       await new Invoke()
         .service('notification')
@@ -242,7 +243,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
       console.log('existing box', box.ip);
     }
   }
-  await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
+  // await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
 
   return respond(201, updatedLocation);
 });
