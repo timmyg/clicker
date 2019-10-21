@@ -229,7 +229,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         Math.random()
           .toString(36)
           .substr(2, 2);
-      console.log('add box with label', id, box);
+      console.log('add new box!', box.ip);
       location.boxes.push(box);
       const text = `*New DirecTV Box Added* @ ${location.name} (${location.neighborhood}): ${box.id}`;
       await new Invoke()
