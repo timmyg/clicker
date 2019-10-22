@@ -161,7 +161,7 @@ export class WalletPage {
               userId,
               { paid: true },
               {
-                Intercom: { hideDefaultLauncher: true },
+                // Intercom: { hideDefaultLauncher: true },
               },
             );
           });
