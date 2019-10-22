@@ -38,7 +38,7 @@ const Location = dynamoose.model(
         end: Date,
         zone: String,
         notes: String,
-        active: Boolean,
+        appActive: Boolean,
         channel: Number,
         channelChangeAt: Date,
         channelSource: {
@@ -141,7 +141,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     });
     await location.save();
 
-    location.boxes = location.boxes.filter(b => b.active);
+    location.boxes = location.boxes.filter(b => b.appActive);
 
     // filter out inactive boxes
     // sort boxes alphabetically
