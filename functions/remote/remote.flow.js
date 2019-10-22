@@ -163,6 +163,20 @@ module.exports.checkBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  try {
+    const { losantId } = getBody(event);
+    const api = new LosantApi();
+
+    const command = 'sync.boxes';
+    await api.sendCommand(command, losantId, {});
+    return respond();
+  } catch (e) {
+    console.error(e);
+    return respond(400, `Could not checkBoxInfo: ${e.stack}`);
+  }
+});
+
 module.exports.checkBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const { losantId, boxes } = getBody(event);

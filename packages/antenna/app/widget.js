@@ -157,6 +157,7 @@ class Widget {
             break;
           case 'sync.boxes':
             await this.syncIpsAndBoxes();
+            return logger.info('sync.boxes');
           case 'health':
             return logger.info('healthy');
           default:

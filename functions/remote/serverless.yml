@@ -91,6 +91,8 @@ functions:
               - partner
               - authorization
               - content-type
+  syncWidgetBoxes:
+    handler: remote.syncWidgetBoxes
   debug:
     handler: remote.debug
     events:
@@ -103,4 +105,3 @@ functions:
               - partner
               - authorization
               - content-type
-
