@@ -53,7 +53,7 @@ const nationalChannels: number[] = [
   605, //SPMN
   606, //OTDR
   221, //CBSSN // premium
-  // 245, //TNT
+  245, //TNT
   247, //TBS
   //, 661 //FSOHhannelMinor: 1 },
   //, 600 //SMXHD
