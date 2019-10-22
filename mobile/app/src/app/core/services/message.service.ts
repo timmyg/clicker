@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class MessageService {
-  private prefix = `messages`;
+  private prefix = `notifications`;
   constructor(private httpClient: HttpClient) {}
 
   send(text: string): Observable<boolean> {

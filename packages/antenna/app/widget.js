@@ -17,7 +17,7 @@ class Widget {
     this.init();
   }
 
-  async findIpsAndBoxes() {
+  async syncIpsAndBoxes() {
     const context = this;
     logger.info('about to search ips....');
     browser.browser({}, (error, device) => {
@@ -155,6 +155,8 @@ class Widget {
               return logger.info('mode', response);
             });
             break;
+          case 'sync.boxes':
+            await this.syncIpsAndBoxes();
           case 'health':
             return logger.info('healthy');
           default:
@@ -174,7 +176,7 @@ class Widget {
    */
   async init() {
     // await this.api.register();
-    await this.findIpsAndBoxes();
+    await this.syncIpsAndBoxes();
     this.device.connect(error => {
       if (error) {
         logger.error(error);
