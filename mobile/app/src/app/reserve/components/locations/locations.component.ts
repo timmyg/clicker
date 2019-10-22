@@ -22,7 +22,7 @@ const { Geolocation } = Plugins;
 import { Storage } from '@ionic/storage';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from 'src/app/globals';
-import { Intercom } from 'ng-intercom';
+// import { Intercom } from 'ng-intercom';
 import { GeolocationOptions } from '@ionic-native/geolocation/ngx';
 import { SuggestComponent } from './suggest/suggest.component';
 
@@ -87,7 +87,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private storage: Storage,
     private segment: SegmentService,
     private globals: Globals,
-    public intercom: Intercom,
+    // public intercom: Intercom,
     public platform: Platform,
   ) {
     this.locations$ = this.store.select(getAllLocations);

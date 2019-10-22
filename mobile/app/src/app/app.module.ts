@@ -5,7 +5,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { IntercomModule } from 'ng-intercom';
+// import { IntercomModule } from 'ng-intercom';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -81,10 +81,10 @@ export function initUserStuff(store: Store<AppState>): Function {
     AppRoutingModule,
     StateModule.forRoot(),
     CoreModule.forRoot(),
-    IntercomModule.forRoot({
-      appId: environment.intercom.appId, // from your Intercom config
-      updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
-    }),
+    // IntercomModule.forRoot({
+    //   appId: environment.intercom.appId, // from your Intercom config
+    //   updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
+    // }),
   ],
   providers: [
     Globals,
