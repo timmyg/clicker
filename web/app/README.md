@@ -1,7 +1,3 @@
-# blog
-
-> clicker blog
-
 ## Build Setup
 
 ```bash
