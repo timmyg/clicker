@@ -16,7 +16,7 @@ import { getUserId } from './state/user';
 import { Globals } from './globals';
 import { first } from 'rxjs/operators';
 import { version } from '../../package.json';
-import { Intercom } from 'ng-intercom';
+// import { Intercom } from 'ng-intercom';
 import { environment } from 'src/environments/environment';
 import { AppService } from './core/services/app.service';
 
@@ -33,7 +33,7 @@ export class AppComponent {
     private store: Store<fromStore.AppState>,
     private segment: SegmentService,
     private globals: Globals,
-    public intercom: Intercom,
+    // public intercom: Intercom,
     public appService: AppService,
   ) {
     this.partner$ = this.store.select(getPartner);
@@ -57,8 +57,8 @@ export class AppComponent {
               },
             );
             await this.segment.track(this.globals.events.opened);
-            await this.intercom.boot({ app_id: environment.intercom.appId });
-            await this.intercom.update({ hide_default_launcher: true });
+            // await this.intercom.boot({ app_id: environment.intercom.appId });
+            // await this.intercom.update({ hide_default_launcher: true });
             await SplashScreen.hide();
           });
       } catch (e) {}

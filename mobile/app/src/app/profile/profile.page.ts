@@ -12,7 +12,7 @@ import * as fromUser from '../state/user/user.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../state/user/user.model';
 import * as moment from 'moment';
-import { Intercom } from 'ng-intercom';
+// import { Intercom } from 'ng-intercom';
 import { LoginComponent } from '../auth/login/login.component';
 import { UserService } from '../core/services/user.service';
 import { take, first } from 'rxjs/operators';
@@ -24,6 +24,7 @@ import { AppService } from '../core/services/app.service';
 import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
 import { ICurrentConfig } from 'cordova-plugin-ionic/dist/IonicCordova';
 import { ReferralPage } from '../referral/referral.page';
+declare var window: any;
 
 @Component({
   selector: 'app-profile',
@@ -56,7 +57,7 @@ export class ProfilePage {
     private storage: Storage,
     private router: Router,
     private route: ActivatedRoute,
-    public intercom: Intercom,
+    // public intercom: Intercom,
     public toastController: ToastController,
     public userService: UserService,
     private actions$: Actions,
@@ -119,12 +120,17 @@ export class ProfilePage {
 
   async openFeedback() {
     // await this.intercom.boot({ app_id: environment.intercom.appId });
-    await this.intercom.showNewMessage();
-    this.intercom.onHide(() => {
-      this.intercom.update({ hide_default_launcher: true });
-    });
-    this.sub2 = this.platform.backButton.pipe(first()).subscribe(() => {
-      this.intercom.hide();
+    // await this.intercom.showNewMessage();
+    // this.intercom.onHide(() => {
+    //   this.intercom.update({ hide_default_launcher: true });
+    // });
+    // this.sub2 = this.platform.backButton.pipe(first()).subscribe(() => {
+    //   this.intercom.hide();
+    // });
+    window.drift.on('ready', function(api) {
+      console.log(api);
+      // api.widget.show();
+      api.openChat();
     });
   }
 
