@@ -1,13 +1,27 @@
 require('dotenv').config({ path: '../.env.example' });
 const { transformGame, transformSIUrl } = require('./game');
 
-test('transformSIUrl', () => {
-  expect(transformSIUrl('https://www.si.com/nfl/game/2142137')).toEqual(
-    'https://stats.api.si.com/v1/nfl/game_detail?id=2142137',
-  );
-  expect(transformSIUrl('https://www.si.com/college-football/game/2126203')).toEqual(
-    'https://stats.api.si.com/v1/ncaaf/game_detail?id=2126203',
-  );
+describe('transformSIUrl', () => {
+  test('nfl', () => {
+    expect(transformSIUrl('https://www.si.com/nfl/game/2142137')).toEqual(
+      'https://stats.api.si.com/v1/nfl/game_detail?id=2142137',
+    );
+  });
+  test('ncaaf', () => {
+    expect(transformSIUrl('https://www.si.com/college-football/game/2126203')).toEqual(
+      'https://stats.api.si.com/v1/ncaaf/game_detail?id=2126203',
+    );
+  });
+  test('serie-a', () => {
+    expect(transformSIUrl('https://www.si.com/serie-a/game/2170270')).toEqual(
+      'https://stats.api.si.com/v1/soccer/game_detail?id=2170270&league=serie-a',
+    );
+  });
+  test('la liga', () => {
+    expect(transformSIUrl('https://www.si.com/la-liga/game/2170270')).toEqual(
+      'https://stats.api.si.com/v1/soccer/game_detail?id=2170270&league=la-liga',
+    );
+  });
 });
 
 describe('transformGame', () => {
