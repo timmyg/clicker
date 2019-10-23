@@ -113,6 +113,7 @@ class Widget {
             break;
           case 'info.current.all':
             logger.info('info.current.all!!');
+            logger.info(boxes);
             const { boxes } = payload;
             const boxesInfo = [];
             for (const box of boxes) {
