@@ -1,4 +1,5 @@
 const DirecTV = require('directv-remote');
+const async = require('async');
 const { Device } = require('losant-mqtt');
 const logger = require('./logger');
 const Api = require('./api');
@@ -112,24 +113,32 @@ class Widget {
             });
             break;
           case 'info.current.all':
-            logger.info('info.current.all!!', payload);
+            // logger.info('info.current.all!!', payload);
             const { boxes } = payload;
-            logger.info(boxes);
+            logger.info('info.current.all!!', 'boxes', boxes.length);
             const boxesInfo = [];
-            for (const box of boxes) {
-              try {
+            async.each(
+              boxes,
+              function(box, callback) {
                 const { boxId, client, ip } = box;
                 const _remote = new DirecTV.Remote(ip);
-                logger.info(`get tuned for box: ${boxId}`);
-                const info = await _remote.getTunedSync(client || '0');
-                logger.info('info returned', info);
-                boxesInfo.push({ boxId, info });
-              } catch (e) {
-                logger.error(JSON.stringify(err));
-              }
-            }
-            console.log('saveBoxesInfo', { boxesInfo });
-            context.api.saveBoxesInfo(boxesInfo);
+                logger.info('getTuned', { boxId, client, ip });
+                _remote.getTuned(client || '0', (err, response) => {
+                  if (err) return logger.error(JSON.stringify(err));
+                  boxesInfo.push({ boxId, info: response });
+                  callback();
+                });
+              },
+              function(err) {
+                if (err) {
+                  logger.error('error!!', err);
+                } else {
+                  console.log('saveBoxesInfo!!!', JSON.stringify(boxesInfo));
+                  context.api.saveBoxesInfo(boxesInfo);
+                }
+              },
+            );
+
             break;
           case 'options':
             this.remote.getOptions((err, response) => {
