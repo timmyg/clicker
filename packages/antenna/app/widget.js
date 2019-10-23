@@ -112,7 +112,7 @@ class Widget {
             });
             break;
           case 'info.current.all':
-            logger.info('info.current.all!!');
+            logger.info('info.current.all!!', payload);
             const { boxes } = payload;
             logger.info(boxes);
             const boxesInfo = [];
