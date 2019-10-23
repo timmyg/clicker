@@ -90,4 +90,17 @@ functions:
               - partner
               - authorization
               - content-type
-
+  syncLocationsBoxes:
+    handler: job.syncLocationsBoxes
+    timeout: 30
+    events:
+      - schedule: cron(59 10 * * ? *) # every day @ 6:59am eastern
+      - http:
+          path: 'boxes/sync'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

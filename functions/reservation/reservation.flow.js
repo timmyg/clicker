@@ -105,7 +105,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   }
   // ensure tv isnt already reserved
   const tv = locationResultBody.boxes.find(b => b.id === reservation.box.id);
-  if (!tv || !tv.active || (tv.reserved && moment(tv.end).unix() > moment().unix())) {
+  if (!tv || !tv.appActive || (tv.reserved && moment(tv.end).unix() > moment().unix())) {
     console.log(tv);
     return respond(400, 'Sorry, tv is not available for reservation');
   }

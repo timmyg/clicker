@@ -38,8 +38,9 @@ const Location = dynamoose.model(
         end: Date,
         zone: String,
         notes: String,
-        active: Boolean,
+        appActive: Boolean,
         channel: Number,
+        channelChangeAt: Date,
         channelSource: {
           type: String,
           enum: ['app', 'control center', 'manual', 'control center daily'],
@@ -140,7 +141,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     });
     await location.save();
 
-    location.boxes = location.boxes.filter(b => b.active);
+    location.boxes = location.boxes.filter(b => b.appActive);
 
     // filter out inactive boxes
     // sort boxes alphabetically
@@ -200,6 +201,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { boxes, ip } = getBody(event);
+  console.log({ boxes, ip });
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -212,7 +214,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 
   let updatedLocation;
   location.boxes = location.boxes || [];
-  boxes.forEach(box => {
+  for (const box of boxes) {
     box.clientAddress = box.clientAddr;
     box.ip = ip;
     const existingBox =
@@ -220,18 +222,28 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
       location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
     if (!existingBox) {
       box.id = uuid();
-      box.active = true;
+      // box.active = true;
       // set label to locationName or random 2 alphanumeric characters
       box.label =
         box.locationName ||
         Math.random()
           .toString(36)
           .substr(2, 2);
-      console.log('add box with label', id, box);
-      location.boxes.push(box);
+      console.log('add new box!', box.ip);
+      await Location.update({ id }, { $ADD: { boxes: [box] } });
+      // location.boxes.push(box);
+      const text = `*New DirecTV Box Added* @ ${location.name} (${location.neighborhood}): ${box.id}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendAntenna')
+        .body({ text })
+        .async()
+        .go();
+    } else {
+      console.log('existing box', box.ip);
     }
-  });
-  await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
+  }
+  // await Location.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
 
   return respond(201, updatedLocation);
 });
@@ -278,6 +290,7 @@ module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => 
   const i = location.boxes.findIndex(b => b.id === boxId);
   location.boxes[i]['channel'] = channel;
   location.boxes[i]['channelSource'] = source;
+  location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
   await location.save();
 
   return respond(200);
@@ -324,7 +337,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${
+        location.neighborhood
+      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -371,6 +386,7 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   if (originalChannel !== major) {
     location.boxes[i]['channel'] = major;
     location.boxes[i]['channelSource'] = 'manual';
+    location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
     await location.save();
     const userId = 'system';
     const name = 'Manual Zap';
@@ -390,7 +406,9 @@ module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
     console.timeEnd('track event');
 
-    const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+    const text = `Manual Zap @ ${location.name} (${
+      location.neighborhood
+    }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
     await new Invoke()
       .service('notification')
       .name('sendControlCenter')

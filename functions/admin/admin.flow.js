@@ -24,20 +24,13 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
   let games = await base('Games')
     .select({
       view: 'Scheduled',
-      // filterByFormula: `{Game Start} <= DATEADD(TODAY(),1,'d')`,
-      filterByFormula: `DATETIME_DIFF(
-                          DATETIME_FORMAT(
-                              SET_TIMEZONE({Game Start}, 'America/New_York')
-                              , 'M/D/YYYY h:mm'),
-                          DATETIME_FORMAT(
-                              SET_TIMEZONE(NOW(), 'America/New_York'),
-                               'M/D/YYYY h:mm')
-                        , 'hours')`,
+      filterByFormula: `AND( {Started Hours Ago} <= 0, {Started Hours Ago} > -14 )`,
     })
     .all();
   console.log(`found ${games.length} games`);
+  console.log(games);
   if (!!games.length) {
-    await sendControlCenterSlack(`*${games.length}* scheduled today`);
+    await sendControlCenterSlack(`*${games.length}* games scheduled today`);
   } else {
     await sendControlCenterSlack(`No games scheduled today`);
   }

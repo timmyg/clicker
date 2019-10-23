@@ -56,6 +56,26 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
   return respond(200);
 });
 
+module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  const regions = ['Cincinnati'];
+  const { data: locations } = await new Invoke()
+    .service('location')
+    .name('controlCenterLocationsByRegion')
+    .pathParams({ regions })
+    .headers(event.headers)
+    .go();
+  for (location of locations) {
+    const { losantId }  = location;
+    await new Invoke()
+      .service('remote')
+      .name('syncWidgetBoxes')
+      .body({ losantId })
+      .async()
+      .go();
+  }
+  return respond(200);
+});
+
 module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to update score');
