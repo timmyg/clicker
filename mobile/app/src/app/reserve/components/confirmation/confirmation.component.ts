@@ -48,6 +48,8 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     minutes: 0,
     tokens: 0,
   };
+  overideDistanceClicks = 0;
+  overrideDistanceDisable = false;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -212,5 +214,13 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     const timeframe = e.detail.value;
     this.reservation.cost = timeframe.tokens;
     this.reservation.minutes = timeframe.minutes;
+  }
+
+  onClickOverrideDistance() {
+    this.overideDistanceClicks++;
+    if (this.overideDistanceClicks === 7) {
+      this.overrideDistanceDisable = true;
+      this.overideDistanceClicks = 0;
+    }
   }
 }
