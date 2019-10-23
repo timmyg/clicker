@@ -8,7 +8,9 @@
 #   - copy-env-vars.service
 #   - antenna.service
 
-# setup.sh  
+# run this on the raspberry pi
+#   - `sudo sh /boot/setup.sh`
+#   - run pitunnel script, if desired
 
 echo "move copy-env-vars.service, antenna.service to /etc/systemd/system folder"
 mv /boot/copy-env-vars.service /boot/antenna.service /etc/systemd/system
@@ -42,6 +44,6 @@ echo "creating complete file"
 sudo echo "complete! $(date '+%d/%m/%Y %H:%M:%S')" > /boot/setup-complete.txt
 echo "done"
 
-echo "TODO pitunnel if wanted!"
+echo "TODO: install pitunnel if wanted!"
 
 echo "done!"

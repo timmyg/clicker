@@ -2,6 +2,7 @@
 require('dotenv').config();
 const { respond, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
+const { stage } = process.env;
 
 declare class process {
   static env: {
@@ -48,7 +49,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function sendSlack(webhook, text, attachments) {
-  const { stage } = process.env;
+  // const { stage } = process.env;
   const stageText = stage !== 'prod' ? `_${stage}_` : '';
   text = `${text} ${stageText}`;
   if (attachments && attachments[0] && attachments[0].title) {

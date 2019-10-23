@@ -146,20 +146,17 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-// deprecated
-module.exports.checkBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    const { losantId, boxId, ip, client } = getBody(event);
-    console.log({ losantId, boxId, ip, client });
+    const { losantId } = getBody(event);
     const api = new LosantApi();
-    const payload = { boxId, ip, client };
 
-    const command = 'info.current';
-    await api.sendCommand(command, losantId, payload);
+    const command = 'sync.boxes';
+    await api.sendCommand(command, losantId, {});
     return respond();
   } catch (e) {
     console.error(e);
-    return respond(400, `Could not checkBoxInfo: ${e.stack}`);
+    return respond(400, `Could not syncWidgetBoxes: ${e.stack}`);
   }
 });
 

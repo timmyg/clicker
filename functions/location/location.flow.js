@@ -305,7 +305,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .exec();
 
   for (const box of boxes) {
-    const { boxId, info } = boxes;
+    const { boxId, info } = box;
     console.log(boxId, info);
 
     const { major } = info;
