@@ -93,16 +93,16 @@ functions:
               - content-type
   syncWidgetBoxes:
     handler: remote.syncWidgetBoxes
-    events:
-      - http:
-          path: 'boxes/sync'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
+    # events:
+    #   - http:
+    #       path: 'boxes/sync'
+    #       method: post
+    #       cors:
+    #         origin: '*'
+    #         headers:
+    #           - partner
+    #           - authorization
+    #           - content-type
   debug:
     handler: remote.debug
     events:
