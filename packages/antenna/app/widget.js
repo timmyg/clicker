@@ -17,7 +17,7 @@ class Widget {
     this.init();
   }
 
-  async findIpsAndBoxes() {
+  async syncIpsAndBoxes() {
     const context = this;
     logger.info('about to search ips....');
     browser.browser({}, (error, device) => {
@@ -119,10 +119,9 @@ class Widget {
               try {
                 const { boxId, client, ip } = box;
                 const _remote = new DirecTV.Remote(ip);
-                console.log('get tuned');
+                logger.info(`get tuned for box: ${boxId}`);
                 const info = await _remote.getTunedSync(client || '0');
-                // console.log({ info });
-                logger.info(boxId, info);
+                logger.info({ info });
                 boxesInfo.push({ boxId, info });
               } catch (e) {
                 logger.error(JSON.stringify(err));
@@ -155,6 +154,9 @@ class Widget {
               return logger.info('mode', response);
             });
             break;
+          case 'sync.boxes':
+            await this.syncIpsAndBoxes();
+            return logger.info('sync.boxes');
           case 'health':
             return logger.info('healthy');
           default:
@@ -174,7 +176,7 @@ class Widget {
    */
   async init() {
     // await this.api.register();
-    await this.findIpsAndBoxes();
+    await this.syncIpsAndBoxes();
     this.device.connect(error => {
       if (error) {
         logger.error(error);
