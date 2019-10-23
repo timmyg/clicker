@@ -65,11 +65,19 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
     .headers(event.headers)
     .go();
   for (location of locations) {
-    const { losantId }  = location;
+    const { losantId } = location;
+    console.log(`sync box (${location.name}):`, { losantId });
     await new Invoke()
       .service('remote')
       .name('syncWidgetBoxes')
       .body({ losantId })
+      .async()
+      .go();
+    const text = `Boxes Synced @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
       .async()
       .go();
   }

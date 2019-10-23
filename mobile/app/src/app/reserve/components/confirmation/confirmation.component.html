@@ -69,7 +69,9 @@
       (click)="onConfirm(reservation)"
       id="confirm"
       slot="end"
-      [disabled]="saving || insufficientFunds() || isAppLoading || outOfRange || isInitializing"
+      [disabled]="
+        saving || insufficientFunds() || isAppLoading || (outOfRange && !overrideDistanceDisable) || isInitializing
+      "
       margin-top
       align-items-center
     >
@@ -90,7 +92,7 @@
       </ion-text>
     </ion-row>
     <ion-row class="ion-text-center" *ngIf="outOfRange" margin-top>
-      <ion-text color="danger">
+      <ion-text color="danger" (click)="onClickOverrideDistance()">
         Sorry, you are too far away from
         <b>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</b> to change the channel.
       </ion-text>
