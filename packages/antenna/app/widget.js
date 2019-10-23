@@ -1,4 +1,5 @@
 const DirecTV = require('directv-remote');
+const async = require('async');
 const { Device } = require('losant-mqtt');
 const logger = require('./logger');
 const Api = require('./api');
@@ -116,20 +117,58 @@ class Widget {
             const { boxes } = payload;
             logger.info(boxes);
             const boxesInfo = [];
-            for (const box of boxes) {
-              try {
+            // for (const box of boxes) {
+            //   try {
+            //     const { boxId, client, ip } = box;
+            //     const _remote = new DirecTV.Remote(ip);
+            //     logger.info(`get tuned for box: ${boxId}`);
+            //     const info = await _remote.getTunedSync(client || '0');
+            //     logger.info('info returned', info);
+            //     boxesInfo.push({ boxId, info });
+            //   } catch (e) {
+            //     logger.error(JSON.stringify(err));
+            //   }
+            // }
+
+            async.each(
+              boxes,
+              function(box, callback) {
+                // Perform operation on file here.
+                // console.log('Processing file ' + file);
+
+                // if (file.length > 32) {
+                //   console.log('This file name is too long');
+                //   callback('File name too long');
+                // } else {
+                //   // Do work to process file here
+                //   console.log('File processed');
+                //   callback();
+                // }
                 const { boxId, client, ip } = box;
                 const _remote = new DirecTV.Remote(ip);
-                logger.info(`get tuned for box: ${boxId}`);
-                const info = await _remote.getTunedSync(client || '0');
-                logger.info('info returned', info);
-                boxesInfo.push({ boxId, info });
-              } catch (e) {
-                logger.error(JSON.stringify(err));
-              }
-            }
-            console.log('saveBoxesInfo', { boxesInfo });
-            context.api.saveBoxesInfo(boxesInfo);
+                _remote.getTuned(client || '0', (err, response) => {
+                  if (err) return logger.error(JSON.stringify(err));
+                  logger.info('response! ! !', response);
+                  // logger.info(JSON.stringify(response), payload);
+                  // context.api.saveBoxInfo(payload.boxId, response);
+                  // return;
+                  boxesInfo.push({ boxId, info });
+                  callback();
+                });
+              },
+              function(err) {
+                // if any of the file processing produced an error, err would equal that error
+                if (err) {
+                  // One of the iterations produced an error.
+                  // All processing will now stop.
+                  // console.log('A file failed to process');
+                } else {
+                  // console.log('All files have been processed successfully');
+                  console.log('saveBoxesInfo!!!', { boxesInfo });
+                  context.api.saveBoxesInfo(boxesInfo);
+                }
+              },
+            );
             break;
           case 'options':
             this.remote.getOptions((err, response) => {
