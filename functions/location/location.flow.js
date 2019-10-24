@@ -302,6 +302,7 @@ module.exports.updateChannels = RavenLambdaWrapper.handler(Raven, async event =>
   const location = await Location.queryOne('id')
     .eq(locationId)
     .exec();
+  console.log(locationId, boxes, location);
 
   for (const box of boxes) {
     const { channel, source, boxId } = box;
