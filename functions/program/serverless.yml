@@ -116,8 +116,8 @@ functions:
               - content-type
   syncNew:
     handler: program.syncNew
-    timeout: 20
     memorySize: 1024
+    timeout: 20
     events:
       - http:
           path: 'sync'
@@ -131,7 +131,8 @@ functions:
       - schedule: rate(30 minutes)
   syncDescriptions:
     handler: program.syncDescriptions
-    timeout: 12
+    memorySize: 1024
+    timeout: 20
     events:
       - http:
           path: 'sync/descriptions'
@@ -155,4 +156,3 @@ functions:
               - partner
               - authorization
               - content-type
-
