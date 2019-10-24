@@ -92,6 +92,8 @@ functions:
               - content-type
   getAll:
     handler: program.getAll
+    memorySize: 1024
+    timeout: 20
     events:
       - http:
           path: 'location/{locationId}'
