@@ -305,7 +305,9 @@ module.exports.updateChannels = RavenLambdaWrapper.handler(Raven, async event =>
 
   for (const box of boxes) {
     const { channel, source, boxId } = box;
+    console.log({ channel, source, boxId });
     const i = location.boxes.findIndex(b => b.id === boxId);
+    console.log(i);
     location.boxes[i]['channel'] = channel;
     location.boxes[i]['channelSource'] = source;
     location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
