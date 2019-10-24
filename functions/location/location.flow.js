@@ -296,6 +296,25 @@ module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200);
 });
 
+module.exports.updateChannels = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id: locationId } = getPathParameters(event);
+  const boxes = getBody(event);
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  for (const box of boxes) {
+    const { channel, source, boxId } = box;
+    const i = location.boxes.findIndex(b => b.id === boxId);
+    location.boxes[i]['channel'] = channel;
+    location.boxes[i]['channelSource'] = source;
+    location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
+  }
+  await location.save();
+
+  return respond(200);
+});
+
 module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
   const { boxes } = getBody(event);
@@ -304,6 +323,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .eq(locationId)
     .exec();
 
+  const boxUpdates = [];
   for (const box of boxes) {
     const { boxId, info } = box;
     console.log(boxId, info);
@@ -316,9 +336,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
     if (originalChannel !== major) {
-      location.boxes[i]['channel'] = major;
-      location.boxes[i]['channelSource'] = 'manual';
-      await location.save();
+      boxUpdates.push({ channel: major, source: 'manual', boxId });
+
+      console.time('track event');
       const userId = 'system';
       const name = 'Manual Zap';
       const data = {
@@ -328,7 +348,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         locationName: location.name,
         locationNeighborhood: location.neighborhood,
       };
-      console.time('track event');
       await new Invoke()
         .service('analytics')
         .name('track')
@@ -364,54 +383,13 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     }
   }
 
-  return respond(200);
-});
-
-// deprecated
-module.exports.saveBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id: locationId, boxId } = getPathParameters(event);
-  const { major } = getBody(event);
-
-  const location = await Location.queryOne('id')
-    .eq(locationId)
-    .exec();
-
-  const i = location.boxes.findIndex(b => b.id === boxId);
-  console.log('box', location.boxes[i], major);
-  const originalChannel = location.boxes[i]['channel'];
-  console.log('original channel', originalChannel);
-  console.log('current channel', major);
-  if (originalChannel !== major) {
-    location.boxes[i]['channel'] = major;
-    location.boxes[i]['channelSource'] = 'manual';
-    location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
-    await location.save();
-    const userId = 'system';
-    const name = 'Manual Zap';
-    const data = {
-      from: originalChannel,
-      to: major,
-      locationId: location.id,
-      locationName: location.name,
-      locationNeighborhood: location.neighborhood,
-    };
-    console.time('track event');
-    await new Invoke()
-      .service('analytics')
-      .name('track')
-      .body({ userId, name, data })
-      .async()
-      .go();
-    console.timeEnd('track event');
-
-    const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendControlCenter')
-      .body({ text })
-      .async()
-      .go();
-  }
+  await new Invoke()
+    .service('location')
+    .name('updateChannels')
+    .body(boxUpdates)
+    .pathParams({ id: locationId })
+    .async()
+    .go();
 
   return respond(200);
 });

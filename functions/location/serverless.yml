@@ -241,18 +241,6 @@ functions:
               - partner
               - authorization
               - content-type
-  saveBoxInfo:
-    handler: location.saveBoxInfo
-    events:
-      - http:
-          path: '{id}/boxes/{boxId}/info'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   allOff:
     handler: location.allOff
     events:
@@ -303,4 +291,3 @@ functions:
               - partner
               - authorization
               - content-type
-
