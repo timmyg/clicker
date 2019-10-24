@@ -65,7 +65,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
     {
       Location: location,
       Zone: zone,
-      From: from.toString(),
+      From: from ? from.toString() : null,
       To: to.toString(),
       Time: time,
       Type: type,
