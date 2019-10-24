@@ -381,18 +381,21 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         })
         .async()
         .go();
-
-      // TODO log via airtable
     }
   }
 
-  await new Invoke()
-    .service('location')
-    .name('updateChannels')
-    .body(boxUpdates)
-    .pathParams({ id: locationId })
-    .async()
-    .go();
+  if (!!boxUpdates.length) {
+    // use updateChannels rather than updateChannel due to there
+    // being an asyncronous issue if it's called multiple times
+    // dues to boxes being an array and not able to update it directly
+    await new Invoke()
+      .service('location')
+      .name('updateChannels')
+      .body(boxUpdates)
+      .pathParams({ id: locationId })
+      .async()
+      .go();
+  }
 
   return respond(200);
 });
