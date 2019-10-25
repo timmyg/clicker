@@ -162,7 +162,7 @@ describe('transformGame', () => {
       expect(started).toBeFalsy();
       expect(blowout).toBeFalsy();
       expect(ended).toBeFalsy();
-      expect(description).toBe('Hou 83 @ Uta 74 (Pre-Game)');
+      expect(description).toBe('Atl 0 @ Det 0 (Pre-Game)');
     });
     test('ncaa football', () => {
       const data = require('../.resources/games/upcoming/ncaaf.json');
