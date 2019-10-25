@@ -279,23 +279,6 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id: locationId, boxId } = getPathParameters(event);
-  const { channel, source } = getBody(event);
-
-  const location = await Location.queryOne('id')
-    .eq(locationId)
-    .exec();
-
-  const i = location.boxes.findIndex(b => b.id === boxId);
-  location.boxes[i]['channel'] = channel;
-  location.boxes[i]['channelSource'] = source;
-  location.boxes[i]['channelChangeAt'] = moment().unix() * 1000;
-  await location.save();
-
-  return respond(200);
-});
-
 module.exports.updateChannels = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
   const boxes = getBody(event);

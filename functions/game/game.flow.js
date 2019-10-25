@@ -127,7 +127,9 @@ function transformGame(result: SiResult): GameStatus {
   }
 
   // set description
-  gameStatus.description = `${awayTeam.abbreviation} ${awayTeam.score} @ ${homeTeam.abbreviation} ${homeTeam.score}`;
+  gameStatus.description = `${awayTeam.abbreviation} ${awayTeam.score || 0} @ ${
+    homeTeam.abbreviation
+  } ${homeTeam.score || 0}`;
   if (status === 'In-Progress') {
     if (['NFL', 'NCAAF', 'NCAAB', 'NBA', 'WNBA', 'NHL'].includes(leageAbbreviation)) {
       gameStatus.description += ` (${game.status.period.time} ${game.status.period.name})`;
