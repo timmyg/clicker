@@ -1,5 +1,6 @@
 // @flow
 const dynamoose = require('dynamoose');
+const AWS = require('aws-sdk');
 const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
@@ -16,6 +17,7 @@ declare class process {
     tableProgram: string,
     tableProgramArea: string,
     stage: string,
+    mySnsTopicArn: string,
   };
 }
 
@@ -447,6 +449,40 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     // const response = await Program.batchPut(programsToUpdate);
   }
   return respond(200);
+});
+
+module.exports.publish = RavenLambdaWrapper.handler(Raven, async event => {
+  // if (process.env.IS_OFFLINE) {
+  //   snsOpts.endpoint = 'http://127.0.0.1:4002';
+  // }
+
+  const sns = new AWS.SNS({ region: 'us-east-1' });
+
+  const messageData = {
+    Message: event.body,
+    TopicArn: process.env.mySnsTopicArn,
+  };
+
+  console.log('PUBLISHING MESSAGE TO SNS:', messageData);
+
+  try {
+    await sns.publish(messageData).promise();
+    console.log('PUBLISHED MESSAGE TO SNS:', messageData);
+    // return jsonResponse.ok({});
+    return respond(200, messageData);
+  } catch (err) {
+    console.log(err);
+    // return jsonResponse.error(err);
+    return respond(400, err);
+  }
+});
+
+module.exports.consume = RavenLambdaWrapper.handler(Raven, async event => {
+  let message = event.Records[0].Sns.Message;
+
+  console.log('Received MESSAGE: ' + message);
+
+  return message;
 });
 
 async function processDescriptionResults(results, descriptionlessPrograms) {

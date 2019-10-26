@@ -19,6 +19,11 @@ provider:
         - lambda:InvokeFunction
         - lambda:InvokeAsync
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - SNS:Publish
+      Resource: { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.mySnsTopic}" ] ]  }
+
 
 plugins:
   - serverless-domain-manager
@@ -49,6 +54,12 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  mySnsTopic: "${self:service}-${self:provider.stage}-sns-consume"
+    mySnsTopicArn:
+      # local:
+      #   "arn:aws:sns:us-east-1:123456789012:${self:custom.mySnsTopic}"
+      deployed:
+      { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.mySnsTopic}" ] ]  }
 resources:
   Resources:
     ProgramTable:
@@ -158,3 +169,16 @@ functions:
               - partner
               - authorization
               - content-type
+  consume:
+    handler: program.consume
+    events:
+      - sns: ${self:custom.mySnsTopic}
+  publish:
+    handler: program.publish
+    events:
+      - http:
+          path: publish
+          method: post
+          cors: true
+    environment:
+      mySnsTopicArn: ${self:custom.mySnsTopicArn.${self:provider.stage}}
