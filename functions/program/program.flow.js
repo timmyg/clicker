@@ -452,6 +452,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
 });
 
 module.exports.publish = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('publish', process.env.mySnsTopicArn);
   // if (process.env.IS_OFFLINE) {
   //   snsOpts.endpoint = 'http://127.0.0.1:4002';
   // }
