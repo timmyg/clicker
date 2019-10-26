@@ -59,7 +59,7 @@ custom:
       # local:
       #   "arn:aws:sns:us-east-1:123456789012:${self:custom.mySnsTopic}"
       deployed:
-      { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.mySnsTopic}" ] ]  }
+        { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:custom.mySnsTopic}" ] ]  }
 resources:
   Resources:
     ProgramTable:
@@ -181,4 +181,5 @@ functions:
           method: post
           cors: true
     environment:
-      mySnsTopicArn: ${self:custom.mySnsTopicArn.${self:provider.stage}}
+      # mySnsTopicArn: ${self:custom.mySnsTopicArn.${self:provider.stage}}
+      mySnsTopicArn: ${self:custom.mySnsTopicArn.deployed}
