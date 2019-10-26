@@ -482,6 +482,7 @@ module.exports.consume = RavenLambdaWrapper.handler(Raven, async event => {
   let message = event.Records[0].Sns.Message;
 
   console.log('Received MESSAGE: ' + message);
+  console.log(message && message.test ? message.test : 'no test');
 
   return message;
 });
