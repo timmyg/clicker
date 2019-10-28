@@ -16,7 +16,7 @@ declare class process {
     tableProgram: string,
     tableProgramArea: string,
     stage: string,
-    mySnsTopicArn: string,
+    newProgramTopicArn: string,
   };
 }
 
@@ -377,8 +377,8 @@ async function syncChannels(channels: any, zip?: string) {
   let { schedule } = result.data;
   let allPrograms = build(schedule, zip);
   let transformedPrograms = buildProgramObjects(allPrograms);
-  let dbResult = await Program.batchPut(transformedPrograms);
-  console.log({ transformedPrograms });
+  // let dbResult = await Program.batchPut(transformedPrograms);
+  // console.log({ transformedPrograms });
 
   // get program ids, publish to sns topic to update description
   const programIds = transformedPrograms.map(({ id }) => id);
@@ -386,11 +386,12 @@ async function syncChannels(channels: any, zip?: string) {
   const sns = new AWS.SNS({ region: 'us-east-1' });
   for (const programId of programIds) {
     const messageData = {
-      Message: { programId },
-      TopicArn: process.env.mySnsTopicArn,
+      Message: JSON.stringify({ programId }),
+      TopicArn: process.env.newProgramTopicArn,
     };
 
     try {
+      console.log('publish', process.env.newProgramTopicArn);
       await sns.publish(messageData).promise();
     } catch (e) {
       console.error(e);

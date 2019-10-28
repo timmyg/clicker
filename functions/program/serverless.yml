@@ -146,6 +146,9 @@ functions:
     handler: program.syncNew
     memorySize: 1024
     timeout: 20
+    environment:
+      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
+      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
     events:
       - http:
           path: 'sync'
@@ -188,13 +191,10 @@ functions:
     handler: program.consume
     events:
       - sns: ${self:custom.newProgramTopic}
-  publish:
-    handler: program.publish
-    events:
-      - http:
-          path: publish
-          method: post
-          cors: true
-    environment:
-      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
-      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
+  # publish:
+  #   handler: program.publish
+  #   events:
+  #     - http:
+  #         path: publish
+  #         method: post
+  #         cors: true
