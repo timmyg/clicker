@@ -377,7 +377,7 @@ async function syncChannels(channels: any, zip?: string) {
   let { schedule } = result.data;
   let allPrograms = build(schedule, zip);
   let transformedPrograms = buildProgramObjects(allPrograms);
-  // let dbResult = await Program.batchPut(transformedPrograms);
+  let dbResult = await Program.batchPut(transformedPrograms);
   // console.log({ transformedPrograms });
 
   // get program ids, publish to sns topic to update description
@@ -488,13 +488,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
 
 module.exports.consume = RavenLambdaWrapper.handler(Raven, async event => {
   const data = event.Records[0].Sns.Message;
-  // data.programId =
-
-  console.log('Received MESSAGE: ', typeof data, data, data.programId);
-  console.log(JSON.parse(data));
   console.log(JSON.parse(data).programId);
-  // console.log(message && message.test ? message.test : 'no test');
-
   return;
 });
 
