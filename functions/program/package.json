@@ -17,7 +17,6 @@
   "dependencies": {
     "aws-sdk": "^2.556.0",
     "axios": "^0.18.0",
-    "dotenv": "^6.2.0",
     "dynamoose": "^1.5.2",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
@@ -30,6 +29,7 @@
     "jest": "^24.1.0",
     "serverless": "^1.37.0",
     "serverless-domain-manager": "^2.6.13",
+    "serverless-dotenv-plugin": "^2.1.1",
     "serverless-prune-plugin": "^1.4.0",
     "serverless-sentry": "^1.2.0"
   }

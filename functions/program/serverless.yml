@@ -25,13 +25,17 @@ provider:
       Resource:
         {
           'Fn::Join':
-            ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.mySnsTopic}']],
+            [
+              '',
+              ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
+            ],
         }
 
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -57,14 +61,19 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
-  mySnsTopic: '${self:service}-${self:provider.stage}-sns-consume'
-  mySnsTopicArn:
+  dotenv:
+    basePath: ../
+  newProgramTopic: '${self:service}-${self:provider.stage}-sns-consume'
+  newProgramTopicArn:
     # local:
-    #   "arn:aws:sns:us-east-1:123456789012:${self:custom.mySnsTopic}"
+    #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
     deployed:
       {
         'Fn::Join':
-          ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.mySnsTopic}']],
+          [
+            '',
+            ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
+          ],
       }
 resources:
   Resources:
@@ -178,7 +187,7 @@ functions:
   consume:
     handler: program.consume
     events:
-      - sns: ${self:custom.mySnsTopic}
+      - sns: ${self:custom.newProgramTopic}
   publish:
     handler: program.publish
     events:
@@ -187,5 +196,5 @@ functions:
           method: post
           cors: true
     environment:
-      # mySnsTopicArn: ${self:custom.mySnsTopicArn.${self:provider.stage}}
-      mySnsTopicArn: ${self:custom.mySnsTopicArn.deployed}
+      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
+      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}

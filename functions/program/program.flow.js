@@ -8,7 +8,6 @@ const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgramArea;
-require('dotenv').config();
 
 declare class process {
   static env: {
@@ -373,13 +372,30 @@ async function syncChannels(channels: any, zip?: string) {
   const method = 'get';
   console.log('getting channels....', params, headers);
   let result = await axios({ method, url, params, headers });
-  console.log({ result });
+  // console.log({ result });
 
   let { schedule } = result.data;
   let allPrograms = build(schedule, zip);
   let transformedPrograms = buildProgramObjects(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
-  console.log({ dbResult });
+  console.log({ transformedPrograms });
+
+  // get program ids, publish to sns topic to update description
+  const programIds = transformedPrograms.map(({ id }) => id);
+
+  const sns = new AWS.SNS({ region: 'us-east-1' });
+  for (const programId of programIds) {
+    const messageData = {
+      Message: { programId },
+      TopicArn: process.env.mySnsTopicArn,
+    };
+
+    try {
+      await sns.publish(messageData).promise();
+    } catch (e) {
+      console.error(e);
+    }
+  }
 }
 
 module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event => {
@@ -473,10 +489,10 @@ module.exports.consume = RavenLambdaWrapper.handler(Raven, async event => {
   const data = event.Records[0].Sns.Message;
   // data.programId =
 
-  // console.log('Received MESSAGE: ' + message);
+  console.log('Received MESSAGE: ' + data.programId);
   // console.log(message && message.test ? message.test : 'no test');
 
-  return message;
+  return;
 });
 
 async function processDescriptionResults(results, descriptionlessPrograms) {
