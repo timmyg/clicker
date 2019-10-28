@@ -63,7 +63,7 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  newProgramTopic: '${self:service}-${self:provider.stage}-sns-consume'
+  newProgramTopic: '${self:service}-${self:provider.stage}-sns-new-program'
   newProgramTopicArn:
     # local:
     #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
