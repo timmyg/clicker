@@ -1,4 +1,3 @@
-require('dotenv').config({ path: '../.env.example' });
 const moment = require('moment');
 const {
   build,
