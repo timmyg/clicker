@@ -43,13 +43,11 @@ const nationalChannels: number[] = [
   217, //TNNSHD
   215, //NHLHD
   216, //NBAHD
-
-  // optional channels, but leave for syncing
   218, //GOLF
   602, //TVG
   612, //ACCN
   618, //FS2
-  620, //FS2
+  620, //beIn Sports
   610, //BTN
   611, //SECHD
   605, //SPMN
@@ -57,8 +55,6 @@ const nationalChannels: number[] = [
   221, //CBSSN // premium
   245, //TNT
   247, //TBS
-  //, 661 //FSOHhannelMinor: 1 },
-  //, 600 //SMXHD
   701, //NFLMX // 4 game mix
   702, //NFLMX // 8 game mix
   703, //NFLRZ // Redzone (premium)
@@ -383,6 +379,7 @@ async function syncChannels(channels: any, zip?: string) {
   let allPrograms = build(schedule, zip);
   let transformedPrograms = buildProgramObjects(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
+  console.log({ dbResult });
 }
 
 module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event => {
@@ -451,38 +448,33 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
   return respond(200);
 });
 
-module.exports.publish = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('publish', process.env.mySnsTopicArn);
-  // if (process.env.IS_OFFLINE) {
-  //   snsOpts.endpoint = 'http://127.0.0.1:4002';
-  // }
+// module.exports.publish = RavenLambdaWrapper.handler(Raven, async event => {
+//   console.log('publish', process.env.mySnsTopicArn);
 
-  const sns = new AWS.SNS({ region: 'us-east-1' });
+//   const sns = new AWS.SNS({ region: 'us-east-1' });
+//   const messageData = {
+//     Message: event.body,
+//     TopicArn: process.env.mySnsTopicArn,
+//   };
 
-  const messageData = {
-    Message: event.body,
-    TopicArn: process.env.mySnsTopicArn,
-  };
-
-  console.log('PUBLISHING MESSAGE TO SNS:', messageData);
-
-  try {
-    await sns.publish(messageData).promise();
-    console.log('PUBLISHED MESSAGE TO SNS:', messageData);
-    // return jsonResponse.ok({});
-    return respond(200, messageData);
-  } catch (err) {
-    console.log(err);
-    // return jsonResponse.error(err);
-    return respond(400, err);
-  }
-});
+//   try {
+//     await sns.publish(messageData).promise();
+//     console.log('PUBLISHED MESSAGE TO SNS:', messageData);
+//     // return jsonResponse.ok({});
+//     return respond(200, messageData);
+//   } catch (err) {
+//     console.log(err);
+//     // return jsonResponse.error(err);
+//     return respond(400, err);
+//   }
+// });
 
 module.exports.consume = RavenLambdaWrapper.handler(Raven, async event => {
-  let message = event.Records[0].Sns.Message;
+  const data = event.Records[0].Sns.Message;
+  // data.programId =
 
-  console.log('Received MESSAGE: ' + message);
-  console.log(message && message.test ? message.test : 'no test');
+  // console.log('Received MESSAGE: ' + message);
+  // console.log(message && message.test ? message.test : 'no test');
 
   return message;
 });
