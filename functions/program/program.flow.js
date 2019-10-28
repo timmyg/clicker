@@ -490,7 +490,7 @@ module.exports.consume = RavenLambdaWrapper.handler(Raven, async event => {
   const data = event.Records[0].Sns.Message;
   // data.programId =
 
-  console.log('Received MESSAGE: ' + data.programId);
+  console.log('Received MESSAGE: ', data, data.programId);
   // console.log(message && message.test ? message.test : 'no test');
 
   return;
