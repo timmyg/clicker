@@ -404,12 +404,16 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   const options = {
     // timeout: 2000
   };
-  const result = await axios.get(url, options);
+  try {
+    const result = await axios.get(url, options);
 
-  const { description } = result.data.programDetail;
+    const { description } = result.data.programDetail;
 
-  const response = await Program.update({ id }, { description });
-  console.log({ response });
+    const response = await Program.update({ id }, { description });
+    console.log({ response });
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 // async function processDescriptionResult(result) {
