@@ -372,7 +372,7 @@ async function syncChannels(areaChannels: number[], zip: string) {
 module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   console.log(event.Records[0].Sns.Message);
-  const { id, programmingId } = JSON.parse(event.Records[0].Sns.Message);
+  const { id, programmingId, start } = JSON.parse(event.Records[0].Sns.Message);
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = {
     timeout: 2000,
@@ -386,7 +386,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     const { description } = result.data.programDetail;
 
     console.log('update', { id }, { description });
-    const response = await Program.update({ id }, { description });
+    const response = await Program.update({ id, start }, { description });
     // await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
     console.log({ response });
   } catch (e) {
