@@ -84,9 +84,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: start
+            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: start
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
@@ -96,7 +100,7 @@ resources:
         TableName: ${self:custom.tableProgramArea}
         AttributeDefinitions:
           - AttributeName: zip
-            AttributeType: N
+            AttributeType: S
         KeySchema:
           - AttributeName: zip
             KeyType: HASH

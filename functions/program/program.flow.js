@@ -104,7 +104,7 @@ function init() {
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
-      zip: Number,
+      zip: String,
       // dynamic fields
       nextProgramTitle: String,
       nextProgramStart: Date,
@@ -130,7 +130,7 @@ function init() {
     process.env.tableProgramArea,
     {
       zip: {
-        type: Number,
+        type: String,
         hashKey: true,
       },
       channels: [Number],
@@ -184,31 +184,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming setup queries');
 
-  const programsNationalQuery = Program.scan()
-    .filter('start')
-    .lt(now)
-    .and()
-    .filter('end')
-    .gt(now)
-    .and()
-    .filter('zip')
-    .null()
-    .all()
-    .exec();
-
-  const programsNationalNextQuery = Program.scan()
-    .filter('start')
-    .lt(in25Mins)
-    .and()
-    .filter('end')
-    .gt(in25Mins)
-    .and()
-    .filter('zip')
-    .null()
-    .all()
-    .exec();
-
-  const programsLocalQuery = Program.scan()
+  const programsQuery = Program.scan()
     .filter('start')
     .lt(now)
     .and()
@@ -220,7 +196,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .all()
     .exec();
 
-  const programsLocalNextQuery = Program.scan()
+  const programsNextQuery = Program.scan()
     .filter('start')
     .lt(in25Mins)
     .and()
@@ -235,10 +211,8 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming run query');
   const [programsNational, programsLocal, programsNationalNext, programsLocalNext] = await Promise.all([
-    programsNationalQuery,
-    programsLocalQuery,
-    programsNationalNextQuery,
-    programsLocalNextQuery,
+    programsQuery,
+    programsNextQuery,
   ]);
   console.time('current + next programming run query');
 
@@ -370,7 +344,7 @@ async function syncChannels(areaChannels: number[], zip: string) {
 
   const params = { channels: channelsString, startTime, hours };
   const headers = {
-    Cookie: `dtve-prospect-zip=${zip || zipDefault};`,
+    Cookie: `dtve-prospect-zip=${zip};`,
   };
   const method = 'get';
   console.log('getting channels....', params, headers);
@@ -435,7 +409,7 @@ function buildProgramObjects(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, zip?: string) {
+function build(dtvSchedule: any, zip: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
