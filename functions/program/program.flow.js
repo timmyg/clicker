@@ -401,7 +401,9 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   init();
   const { id, programmingId } = JSON.parse(event.Records[0].Sns.Message);
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
-  const options = { timeout: 2000 };
+  const options = {
+    // timeout: 2000
+  };
   const result = await axios.get(url, options);
 
   const { description } = result.data.programDetail;
