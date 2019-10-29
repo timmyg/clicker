@@ -210,14 +210,11 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming run query');
-  const [programsNational, programsLocal, programsNationalNext, programsLocalNext] = await Promise.all([
-    programsQuery,
-    programsNextQuery,
-  ]);
+  const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
   console.time('current + next programming run query');
 
-  let currentPrograms = [...programsNational, ...programsLocal];
-  const nextPrograms = [...programsNationalNext, ...programsLocalNext];
+  let currentPrograms = programs;
+  const nextPrograms = programsNext;
 
   console.time('current + next programming combine');
   currentPrograms.forEach((program, i) => {
