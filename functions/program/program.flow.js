@@ -402,17 +402,26 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   const { id, programmingId } = JSON.parse(event.Records[0].Sns.Message);
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = {
-    // timeout: 2000
+    timeout: 2000,
   };
   try {
+    console.log({ url }, { options });
+    console.log('calling');
     const result = await axios.get(url, options);
+    console.log('result');
 
     const { description } = result.data.programDetail;
 
+    console.log('update', { id }, { description });
     const response = await Program.update({ id }, { description });
     console.log({ response });
   } catch (e) {
+    if (e.response && e.response.status === 404) {
+      console.log('404!!');
+      return console.error(e);
+    }
     console.error(e);
+    throw e;
   }
 });
 
