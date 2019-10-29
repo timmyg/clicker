@@ -397,73 +397,8 @@ async function syncChannels(channels: any, zip?: string) {
   }
 }
 
-module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event => {
-  // find programs by unique programID without descriptions
-  init();
-  // const maxPrograms = 10;
-  // let descriptionlessPrograms = await Program.scan('description')
-  //   .null()
-  //   .and()
-  //   .filter('end')
-  //   .gt(moment().unix() * 1000)
-  //   .filter('synced')
-  //   .null()
-  //   .and()
-  //   .filter('programId')
-  //   .not()
-  //   .contains('_') // cant get description on this for some reason
-  //   .all()
-  //   .exec();
-
-  // if (!descriptionlessPrograms.length) {
-  //   return respond(204);
-  // }
-
-  // descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
-  //   return a.start - b.start;
-  // });
-
-  // descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
-
-  // console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
-
-  // const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
-  // console.log({ uniqueProgramIds });
-  // // call endpoint for each program
-  // const calls = [];
-  // // let results;
-  try {
-    console.time('create calls');
-    for (const programId of uniqueProgramIds) {
-      const url = `${directvEndpoint}/program/flip/${programId}`;
-      const options = { timeout: 2000 };
-      console.log('add', url);
-      calls.push(axios.get(url, options));
-    }
-    console.timeEnd('create calls');
-    console.time('call');
-    // const results = await Promise.all(calls);
-    const results = await Promise.all(calls.map(p => p.catch(e => e)));
-    const validResults = results.filter(result => !(result instanceof Error));
-
-    console.timeEnd('call');
-    await processDescriptionResult(id, programId, description);
-  } catch (e) {
-    // swallow, and try again next time
-    console.log('sync description failed');
-    console.error(e);
-    // // TODO duplicate codde
-    // const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
-    // programsToUpdate.forEach((part, index, arr) => {
-    //   // arr[index]['description'] = description;
-    //   arr[index]['synced'] = false;
-    // });
-    // const response = await Program.batchPut(programsToUpdate);
-  }
-  return respond(200);
-});
-
 module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id, programmingId } = JSON.parse(event.Records[0].Sns.Message);
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = { timeout: 2000 };

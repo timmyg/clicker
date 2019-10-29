@@ -160,21 +160,6 @@ functions:
               - authorization
               - content-type
       - schedule: rate(30 minutes)
-  syncDescriptions:
-    handler: program.syncDescriptions
-    memorySize: 1024
-    timeout: 20
-    events:
-      - http:
-          path: 'sync/descriptions'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-      - schedule: rate(5 minutes)
   createArea:
     handler: program.createArea
     events:
