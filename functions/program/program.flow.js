@@ -416,26 +416,6 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   }
 });
 
-// async function processDescriptionResult(result) {
-//   // console.time('save to db');
-//   // for (const result of results) {
-//   const { description, tmsProgramID: programId } = result.data.programDetail;
-//   console.log({ description });
-
-//   // const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
-
-//   // console.log('programsToUpdate:', programsToUpdate.length);
-
-//   // programsToUpdate.forEach((part, index, arr) => {
-//   //   arr[index]['description'] = description;
-//   //   arr[index]['synced'] = true;
-//   // });
-//   // console.log('updating', programsToUpdate.length, 'programs');
-//   const response = await Program.update({ id, programId });
-//   // }
-//   console.timeEnd('saved to db', response);
-// }
-
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
   programs.forEach(p => {
