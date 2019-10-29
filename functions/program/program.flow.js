@@ -390,7 +390,7 @@ async function syncChannels(channels: any, zip?: string) {
 
     try {
       console.log('publish', process.env.newProgramTopicArn);
-      // await sns.publish(messageData).promise();
+      await sns.publish(messageData).promise();
     } catch (e) {
       console.error(e);
     }
