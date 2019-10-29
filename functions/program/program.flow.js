@@ -371,6 +371,7 @@ async function syncChannels(areaChannels: number[], zip: string) {
 
 module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
   init();
+  console.log(event.Records[0].Sns.Message);
   const { id, programmingId } = JSON.parse(event.Records[0].Sns.Message);
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = {
