@@ -390,7 +390,7 @@ async function syncChannels(channels: any, zip?: string) {
 
     try {
       console.log('publish', process.env.newProgramTopicArn);
-      await sns.publish(messageData).promise();
+      // await sns.publish(messageData).promise();
     } catch (e) {
       console.error(e);
     }
@@ -414,6 +414,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
 
     console.log('update', { id }, { description });
     const response = await Program.update({ id }, { description });
+    // await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
     console.log({ response });
   } catch (e) {
     if (e.response && e.response.status === 404) {
