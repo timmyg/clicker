@@ -100,7 +100,7 @@ function init() {
       live: Boolean,
       repeat: Boolean,
       sports: Boolean,
-      programId: String, // "SH000296530000" - use this to get summary
+      programmingId: String, // "SH000296530000" - use this to get summary
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
@@ -247,7 +247,9 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming combine');
   currentPrograms.forEach((program, i) => {
-    const nextProgram = nextPrograms.find(np => np.channel === program.channel && np.programId !== program.programId);
+    const nextProgram = nextPrograms.find(
+      np => np.channel === program.channel && np.programmingId !== program.programmingId,
+    );
     if (nextProgram) {
       currentPrograms[i].nextProgramTitle = nextProgram.title;
       currentPrograms[i].nextProgramStart = nextProgram.start;
@@ -372,21 +374,17 @@ async function syncChannels(channels: any, zip?: string) {
   const method = 'get';
   console.log('getting channels....', params, headers);
   let result = await axios({ method, url, params, headers });
-  // console.log({ result });
 
   let { schedule } = result.data;
   let allPrograms = build(schedule, zip);
   let transformedPrograms = buildProgramObjects(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
-  // console.log({ transformedPrograms });
 
   // get program ids, publish to sns topic to update description
-  const programIds = transformedPrograms.map(({ id }) => id);
-
   const sns = new AWS.SNS({ region: 'us-east-1' });
-  for (const programId of programIds) {
+  for (const program of transformedPrograms) {
     const messageData = {
-      Message: JSON.stringify({ programId }),
+      Message: JSON.stringify(program),
       TopicArn: process.env.newProgramTopicArn,
     };
 
@@ -402,38 +400,38 @@ async function syncChannels(channels: any, zip?: string) {
 module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event => {
   // find programs by unique programID without descriptions
   init();
-  const maxPrograms = 10;
-  let descriptionlessPrograms = await Program.scan('description')
-    .null()
-    .and()
-    .filter('end')
-    .gt(moment().unix() * 1000)
-    .filter('synced')
-    .null()
-    .and()
-    .filter('programId')
-    .not()
-    .contains('_') // cant get description on this for some reason
-    .all()
-    .exec();
+  // const maxPrograms = 10;
+  // let descriptionlessPrograms = await Program.scan('description')
+  //   .null()
+  //   .and()
+  //   .filter('end')
+  //   .gt(moment().unix() * 1000)
+  //   .filter('synced')
+  //   .null()
+  //   .and()
+  //   .filter('programId')
+  //   .not()
+  //   .contains('_') // cant get description on this for some reason
+  //   .all()
+  //   .exec();
 
-  if (!descriptionlessPrograms.length) {
-    return respond(204);
-  }
+  // if (!descriptionlessPrograms.length) {
+  //   return respond(204);
+  // }
 
-  descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
-    return a.start - b.start;
-  });
+  // descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
+  //   return a.start - b.start;
+  // });
 
-  descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
+  // descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
 
-  console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
+  // console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
 
-  const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
-  console.log({ uniqueProgramIds });
-  // call endpoint for each program
-  const calls = [];
-  // let results;
+  // const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
+  // console.log({ uniqueProgramIds });
+  // // call endpoint for each program
+  // const calls = [];
+  // // let results;
   try {
     console.time('create calls');
     for (const programId of uniqueProgramIds) {
@@ -449,7 +447,7 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
     const validResults = results.filter(result => !(result instanceof Error));
 
     console.timeEnd('call');
-    await processDescriptionResults(validResults, descriptionlessPrograms);
+    await processDescriptionResult(id, programId, description);
   } catch (e) {
     // swallow, and try again next time
     console.log('sync description failed');
@@ -465,52 +463,37 @@ module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event 
   return respond(200);
 });
 
-// module.exports.publish = RavenLambdaWrapper.handler(Raven, async event => {
-//   console.log('publish', process.env.mySnsTopicArn);
+module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id, programmingId } = JSON.parse(event.Records[0].Sns.Message);
+  const url = `${directvEndpoint}/program/flip/${programmingId}`;
+  const options = { timeout: 2000 };
+  const result = await axios.get(url, options);
 
-//   const sns = new AWS.SNS({ region: 'us-east-1' });
-//   const messageData = {
-//     Message: event.body,
-//     TopicArn: process.env.mySnsTopicArn,
-//   };
+  const { description } = result.data.programDetail;
 
-//   try {
-//     await sns.publish(messageData).promise();
-//     console.log('PUBLISHED MESSAGE TO SNS:', messageData);
-//     // return jsonResponse.ok({});
-//     return respond(200, messageData);
-//   } catch (err) {
-//     console.log(err);
-//     // return jsonResponse.error(err);
-//     return respond(400, err);
-//   }
-// });
-
-module.exports.consume = RavenLambdaWrapper.handler(Raven, async event => {
-  const data = event.Records[0].Sns.Message;
-  console.log(JSON.parse(data).programId);
-  return;
+  const response = await Program.update({ id }, { description });
+  console.log({ response });
 });
 
-async function processDescriptionResults(results, descriptionlessPrograms) {
-  console.time('save to db');
-  for (const result of results) {
-    const { description, tmsProgramID: programId } = result.data.programDetail;
-    console.log({ description });
+// async function processDescriptionResult(result) {
+//   // console.time('save to db');
+//   // for (const result of results) {
+//   const { description, tmsProgramID: programId } = result.data.programDetail;
+//   console.log({ description });
 
-    const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
+//   // const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
 
-    console.log('programsToUpdate:', programsToUpdate.length);
+//   // console.log('programsToUpdate:', programsToUpdate.length);
 
-    programsToUpdate.forEach((part, index, arr) => {
-      arr[index]['description'] = description;
-      arr[index]['synced'] = true;
-    });
-    console.log('updating', programsToUpdate.length, 'programs');
-    const response = await Program.batchPut(programsToUpdate);
-  }
-  console.timeEnd('save to db');
-}
+//   // programsToUpdate.forEach((part, index, arr) => {
+//   //   arr[index]['description'] = description;
+//   //   arr[index]['synced'] = true;
+//   // });
+//   // console.log('updating', programsToUpdate.length, 'programs');
+//   const response = await Program.update({ id, programId });
+//   // }
+//   console.timeEnd('saved to db', response);
+// }
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
@@ -525,8 +508,8 @@ function build(dtvSchedule: any, zip?: string) {
   const programs = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
-      program.programId = program.programID;
-      if (program.programId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
+      program.programmingId = program.programID;
+      if (program.programmingId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
@@ -564,8 +547,8 @@ function build(dtvSchedule: any, zip?: string) {
 }
 
 function generateId(program: any) {
-  const { programId, zip } = program;
-  const id = programId + (zip || '');
+  const { programmingId, zip } = program;
+  const id = programmingId + (zip || '');
   // console.log(id, uuid.DNS);
   return uuid(id, uuid.DNS);
 }

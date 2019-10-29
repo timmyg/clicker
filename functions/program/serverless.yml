@@ -187,14 +187,7 @@ functions:
               - partner
               - authorization
               - content-type
-  consume:
-    handler: program.consume
+  consumeNewProgram:
+    handler: program.consumeNewProgram
     events:
       - sns: ${self:custom.newProgramTopic}
-  # publish:
-  #   handler: program.publish
-  #   events:
-  #     - http:
-  #         path: publish
-  #         method: post
-  #         cors: true
