@@ -22,7 +22,7 @@ declare class process {
 
 class programAreaType {
   zip: string;
-  channels: [number];
+  channels: number[];
 }
 
 const minorChannels: number[] = [661];
@@ -335,10 +335,10 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
     init();
 
     // sync national channels
-    console.log('sync national channels');
-    await syncChannels(nationalChannels);
+    // console.log('sync national channels');
+    // await syncChannels(nationalChannels);
 
-    // sync local channels
+    // sync local/national channels
     const programAreas: programAreaType[] = await ProgramArea.scan()
       .all()
       .exec();
@@ -354,8 +354,9 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-async function syncChannels(channels: any, zip?: string) {
+async function syncChannels(areaChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
+  const channels = nationalChannels.concat(areaChannels);
   const channelsString = getChannels(channels).join(',');
 
   const url = `${directvEndpoint}/channelschedule`;
