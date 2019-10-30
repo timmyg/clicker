@@ -401,6 +401,7 @@ async function syncChannels(areaChannels: number[], zip: string) {
 
 module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('consume');
+  console.log(event);
   init();
   console.log(event.Records[0].Sns.Message);
   const { id, programmingId, start } = JSON.parse(event.Records[0].Sns.Message);
