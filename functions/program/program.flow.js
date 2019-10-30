@@ -421,7 +421,9 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     if (!!program) {
       program.description = description;
       console.log('saving program...');
-      await program.save();
+      console.log(program);
+      // await program.save();
+      await updateProgram(program);
       console.log('program saved');
     } else {
       console.log('no program by id:', id);
@@ -437,6 +439,20 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     throw e.response;
   }
 });
+
+async function updateProgram(data) {
+  const AWS = require('aws-sdk');
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName: process.env.tableProgram,
+    Item: data,
+  };
+  try {
+    await docClient.put(params).promise();
+  } catch (err) {
+    return err;
+  }
+}
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
