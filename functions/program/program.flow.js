@@ -314,8 +314,13 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
       .all()
       .exec();
     for (const area of programAreas) {
-      console.log(`sync local channels: ${area.zip}`);
-      await syncChannels(area.channels, area.zip);
+      // console.log(`sync local channels: ${area.zip}`);
+      await new Invoke()
+        .service('program')
+        .name('syncByZip')
+        .body({ zip: area.zip, localChannels: area.channels })
+        .async()
+        .go();
     }
 
     return respond(201);
@@ -323,6 +328,12 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
     console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
   }
+});
+
+module.exports.syncByZip = RavenLambdaWrapper.handler(Raven, async event => {
+  const { zip, localChannels } = getBody(event);
+  await syncChannels(localChannels, zip);
+  respond(200);
 });
 
 async function syncChannels(areaChannels: number[], zip: string) {

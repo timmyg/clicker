@@ -208,6 +208,9 @@ functions:
               - authorization
               - content-type
       - schedule: rate(30 minutes)
+  syncByZip:
+    handler: program.syncByZip
+    timeout: 20
   createArea:
     handler: program.createArea
     events:
