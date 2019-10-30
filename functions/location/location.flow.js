@@ -12,7 +12,7 @@ declare class process {
   };
 }
 function init() {
-  const Location = dynamoose.model(
+  Location = dynamoose.model(
     process.env.tableLocation,
     {
       id: {

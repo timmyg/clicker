@@ -21,7 +21,7 @@ declare class process {
 }
 
 function init() {
-  const Reservation = dynamoose.model(
+  Reservation = dynamoose.model(
     process.env.tableReservation,
     {
       userId: {
