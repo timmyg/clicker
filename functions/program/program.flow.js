@@ -465,14 +465,11 @@ function build(dtvSchedule: any, zip: string) {
         program.repeat = program.repeat;
         program.zip = zip;
         program.id = generateId(program);
-        program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
-        program.end = new Date(
-          parseInt(
-            moment(program.airTime)
-              .add(program.durationMins, 'minutes')
-              .unix() * 1000,
-          ),
-        );
+        program.start = moment(program.airTime).unix() * 1000;
+        program.end =
+          moment(program.airTime)
+            .add(program.durationMins, 'minutes')
+            .unix() * 1000;
         programs.push(program);
       }
     });
