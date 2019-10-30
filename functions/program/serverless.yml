@@ -194,9 +194,6 @@ functions:
     handler: program.syncNew
     memorySize: 1024
     timeout: 60
-    environment:
-      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
-      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
     events:
       - http:
           path: 'sync'
@@ -211,6 +208,9 @@ functions:
   syncByZip:
     handler: program.syncByZip
     timeout: 20
+    environment:
+      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
+      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
   createArea:
     handler: program.createArea
     events:
