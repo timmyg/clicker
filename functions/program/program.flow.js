@@ -417,7 +417,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
 
     const { description } = result.data.programDetail;
 
-    console.log('update', { id }, { description });
+    console.log('update', { id, start }, { description });
     const response = await Program.update({ id, start }, { description });
     // await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
     console.log({ response });
