@@ -410,17 +410,21 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     timeout: 2000,
   };
   try {
-    // console.log({ url }, { options });
-    // console.log('calling');
     const result = await axios.get(url, options);
-    // console.log('result');
-
     const { description } = result.data.programDetail;
-
     console.log('update', { id, start }, { description });
-    const response = await Program.update({ id, start }, { description });
-    // await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
-    console.log({ response });
+    // const response = await Program.update({ id, start }, { description });
+    let program = await Program.queryOne('id')
+      .eq(id)
+      .exec();
+    console.log({ program });
+    if (!!program) {
+      program.description = description;
+      await program.save();
+      console.log('program saved');
+    } else {
+      console.log('no program by id:', id);
+    }
   } catch (e) {
     if (e.response && e.response.status === 404) {
       console.log('404!!');
