@@ -1,7 +1,6 @@
 // @flow
 const axios = require('axios');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-require('dotenv').config();
 
 class SiLeague {
   name: string; // Major League Baseball, College Football

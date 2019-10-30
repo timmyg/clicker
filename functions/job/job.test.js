@@ -1,4 +1,3 @@
-require('dotenv').config({ path: '../.env.example' });
 const { getChannelForZone, health } = require('./job');
 
 test('smoke test', () => {

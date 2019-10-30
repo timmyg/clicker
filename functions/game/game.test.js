@@ -1,4 +1,3 @@
-require('dotenv').config({ path: '../.env.example' });
 const { transformGame, transformSIUrl } = require('./game');
 
 describe('transformSIUrl', () => {

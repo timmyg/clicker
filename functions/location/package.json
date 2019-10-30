@@ -22,7 +22,6 @@
     "dynamoose": "^1.7.2",
     "geolib": "^2.0.24",
     "moment": "^2.24.0",
-    "serverless-dotenv-plugin": "^2.1.1",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
   },
   "devDependencies": {
@@ -31,6 +30,7 @@
     "jest": "^24.0.0",
     "serverless": "^1.42.2",
     "serverless-domain-manager": "^2.6.13",
+    "serverless-dotenv-plugin": "^2.1.1",
     "serverless-prune-plugin": "^1.4.0",
     "serverless-sentry": "^1.2.0"
   }

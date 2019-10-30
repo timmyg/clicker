@@ -27,37 +27,40 @@ declare class process {
   };
 }
 
-const User = dynamoose.model(
-  process.env.tableUser,
-  {
-    id: {
-      type: String,
-      default: uuid,
+function init() {
+  const User = dynamoose.model(
+    process.env.tableUser,
+    {
+      id: {
+        type: String,
+        default: uuid,
+      },
+      stripeCustomer: String,
+      phone: String,
+      card: Object, // set in api
+      spent: Number,
+      referralCode: String,
+      referredByCode: String,
+      tokens: {
+        type: Number,
+        required: true,
+      },
+      aliasedTo: {
+        type: String,
+      },
     },
-    stripeCustomer: String,
-    phone: String,
-    card: Object, // set in api
-    spent: Number,
-    referralCode: String,
-    referredByCode: String,
-    tokens: {
-      type: Number,
-      required: true,
+    {
+      timestamps: true,
     },
-    aliasedTo: {
-      type: String,
-    },
-  },
-  {
-    timestamps: true,
-  },
-);
+  );
+}
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const id = uuid();
   await User.create({ id, tokens: initialTokens });
   const token = jwt.sign({ sub: id, guest: true }, key);
@@ -66,6 +69,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { code } = getBody(event);
   // get user
   const userId = getUserId(event);
@@ -107,6 +111,7 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const userId = getUserId(event);
   let user = await User.queryOne('id')
     .eq(userId)
@@ -140,6 +145,7 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const userId = getUserId(event);
   const { token: stripeCardToken } = getBody(event);
 
@@ -170,6 +176,7 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const userId = getUserId(event);
 
   const { stripeCustomer } = await User.queryOne('id')
@@ -184,6 +191,7 @@ module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   try {
     const userId = getUserId(event);
     const plan = getBody(event);
@@ -225,6 +233,7 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   try {
     const { token, amount, email, company, name } = getBody(event);
 
@@ -255,6 +264,7 @@ module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   try {
     const { token, email, company, name, start, plan } = getBody(event);
 
@@ -287,6 +297,7 @@ module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const userId = getUserId(event);
   const { tokens } = getBody(event);
   let user = await User.queryOne('id')
@@ -304,6 +315,7 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { fromId, toId } = getPathParameters(event);
 
   // get existing users
@@ -341,6 +353,7 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
@@ -355,6 +368,7 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);

@@ -4,7 +4,6 @@ const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
-require('dotenv').config({ path: '../.env.example' });
 
 declare class process {
   static env: {
@@ -12,72 +11,74 @@ declare class process {
     tableLocation: string,
   };
 }
-
-const Location = dynamoose.model(
-  process.env.tableLocation,
-  {
-    id: {
-      type: String,
-      default: uuid,
-      hashKey: true,
-    },
-    losantId: {
-      type: String,
-      required: true,
-    },
-    boxes: [
-      {
-        id: String,
-        clientAddress: String, // dtv calls this clientAddr
-        locationName: String, // dtv name
-        label: String, // physical label id on tv (defaults to locationName)
-        tunerBond: Boolean, // not sure what this is
-        setupChannel: Number,
-        ip: String,
-        reserved: Boolean,
-        end: Date,
-        zone: String,
-        notes: String,
-        appActive: Boolean,
-        channel: Number,
-        channelChangeAt: Date,
-        channelSource: {
-          type: String,
-          enum: ['app', 'control center', 'manual', 'control center daily'],
-        },
+function init() {
+  const Location = dynamoose.model(
+    process.env.tableLocation,
+    {
+      id: {
+        type: String,
+        default: uuid,
+        hashKey: true,
       },
-    ],
-    channels: {
-      exclude: [String],
+      losantId: {
+        type: String,
+        required: true,
+      },
+      boxes: [
+        {
+          id: String,
+          clientAddress: String, // dtv calls this clientAddr
+          locationName: String, // dtv name
+          label: String, // physical label id on tv (defaults to locationName)
+          tunerBond: Boolean, // not sure what this is
+          setupChannel: Number,
+          ip: String,
+          reserved: Boolean,
+          end: Date,
+          zone: String,
+          notes: String,
+          appActive: Boolean,
+          channel: Number,
+          channelChangeAt: Date,
+          channelSource: {
+            type: String,
+            enum: ['app', 'control center', 'manual', 'control center daily'],
+          },
+        },
+      ],
+      channels: {
+        exclude: [String],
+      },
+      packages: [String],
+      name: { type: String, required: true },
+      neighborhood: { type: String, required: true },
+      zip: { type: String, required: true },
+      geo: {
+        latitude: { type: Number, required: true },
+        longitude: { type: Number, required: true },
+      },
+      free: Boolean,
+      img: String,
+      region: String,
+      active: Boolean,
+      hidden: Boolean,
+      connected: Boolean,
+      setup: Boolean,
+      controlCenter: Boolean,
+      announcement: String,
+      notes: String,
+      // calculated fields
+      distance: Number,
+      openTvs: Boolean,
     },
-    packages: [String],
-    name: { type: String, required: true },
-    neighborhood: { type: String, required: true },
-    zip: { type: String, required: true },
-    geo: {
-      latitude: { type: Number, required: true },
-      longitude: { type: Number, required: true },
+    {
+      timestamps: true,
     },
-    free: Boolean,
-    img: String,
-    region: String,
-    active: Boolean,
-    hidden: Boolean,
-    connected: Boolean,
-    setup: Boolean,
-    controlCenter: Boolean,
-    announcement: String,
-    notes: String,
-    // calculated fields
-    distance: Number,
-    openTvs: Boolean,
-  },
-  {
-    timestamps: true,
-  },
-);
+  );
+}
 
 module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   const { partner } = event.headers;
@@ -123,6 +124,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -175,6 +177,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   try {
     const body = getBody(event);
     console.log(body);
@@ -187,6 +190,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   try {
     const { id } = getPathParameters(event);
     const body = getBody(event);
@@ -200,6 +204,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { boxes, ip } = getBody(event);
   console.log({ boxes, ip });
   const { id } = getPathParameters(event);
@@ -249,6 +254,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
 
@@ -265,6 +271,7 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
 });
 
 module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id: locationId, boxId } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -280,6 +287,7 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.updateChannels = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id: locationId } = getPathParameters(event);
   const boxes = getBody(event);
   const location = await Location.queryOne('id')
@@ -302,6 +310,7 @@ module.exports.updateChannels = RavenLambdaWrapper.handler(Raven, async event =>
 });
 
 module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id: locationId } = getPathParameters(event);
   const { boxes } = getBody(event);
   console.log(boxes);
@@ -342,7 +351,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${
+        location.neighborhood
+      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -384,6 +395,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 });
 
 module.exports.setLabels = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);
   const location = await Location.queryOne('id')
@@ -399,6 +411,7 @@ module.exports.setLabels = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -429,6 +442,7 @@ module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => 
 });
 
 module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { losantId } = getPathParameters(event);
   const locations = await Location.scan('losantId')
     .eq(losantId)
@@ -450,6 +464,7 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { losantId } = getPathParameters(event);
   const locations = await Location.scan('losantId')
     .eq(losantId)
@@ -470,6 +485,7 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -499,6 +515,7 @@ module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id } = getPathParameters(event);
 
   const location = await Location.queryOne('id')
@@ -529,6 +546,7 @@ module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   // const { id } = getPathParameters(event);
   let allLocations = await Location.scan().exec();
 
@@ -559,6 +577,7 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
 });
 
 module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { regions } = getPathParameters(event);
   console.log(regions);
   if (!regions || !regions.length) {
