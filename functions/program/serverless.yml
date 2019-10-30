@@ -222,6 +222,7 @@ functions:
               - content-type
   consumeNewProgram:
     memorySize: 512
+    timeout: 20
     handler: program.consumeNewProgram
     description: Consume new program queue and add description
     reservedConcurrency: 5
