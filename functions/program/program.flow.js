@@ -316,7 +316,7 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
     for (const area of programAreas) {
       // console.log(`sync local channels: ${area.zip}`);
       await new Invoke()
-        .service('program')
+        .service('programs')
         .name('syncByZip')
         .body({ zip: area.zip, localChannels: area.channels })
         .async()
