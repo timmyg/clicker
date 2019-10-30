@@ -52,18 +52,18 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  # newProgramTopic: '${self:service}-${self:provider.stage}-sns-new-program'
-  # newProgramTopicArn:
-  #   # local:
-  #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
-  #   deployed:
-  #     {
-  #       'Fn::Join':
-  #         [
-  #           '',
-  #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
-  #         ],
-  #     }
+  newProgramTopic: '${self:service}-${self:provider.stage}-new-program-topic'
+  newProgramTopicArn:
+    #   # local:
+    #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
+    deployed:
+      {
+        'Fn::Join':
+          [
+            '',
+            ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
+          ],
+      }
 resources:
   Resources:
     newProgramTopic:
@@ -183,9 +183,9 @@ functions:
     handler: program.syncNew
     memorySize: 1024
     timeout: 20
-    # environment:
-    #   # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
-    #   newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
+    environment:
+      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
+      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
     events:
       - http:
           path: 'sync'
