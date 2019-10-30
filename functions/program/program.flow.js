@@ -434,7 +434,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
       return respond(200);
     }
     console.error(e);
-    throw e;
+    throw e.response;
   }
 });
 
