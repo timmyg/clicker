@@ -18,6 +18,7 @@ plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -37,6 +38,8 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
 functions:
   sendAntenna:
     handler: notification.sendAntenna
@@ -98,4 +101,3 @@ functions:
               - partner
               - authorization
               - content-type
-

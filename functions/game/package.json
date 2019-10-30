@@ -16,6 +16,7 @@
     "dotenv": "^6.2.0",
     "moment": "^2.24.0",
     "raven": "^2.6.4",
+    "serverless-dotenv-plugin": "^2.1.1",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
     "uuid": "^3.3.2"
   },

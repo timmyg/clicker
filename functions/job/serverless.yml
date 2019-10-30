@@ -23,6 +23,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage}
@@ -35,6 +36,8 @@ custom:
     develop: ${env:AIRTABLE_BASE_DEV}
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
 functions:
   health:
     handler: job.health
