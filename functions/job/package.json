@@ -19,7 +19,7 @@
     "serverless-sentry": "^1.2.0"
   },
   "dependencies": {
-    "airtable": "^0.7.1",
+    "airtable": "^0.7.2",
     "dotenv": "^6.2.0",
     "moment": "^2.24.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
