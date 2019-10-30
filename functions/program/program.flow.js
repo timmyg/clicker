@@ -369,7 +369,38 @@ async function syncChannels(areaChannels: number[], zip: string) {
   }
 }
 
+// module.exports.consumeNewProgramFunction = RavenLambdaWrapper.handler(Raven, async event => {
+//   init();
+//   // console.log(event.Records[0].Sns.Message);
+//   const { id, programmingId, start } = JSON.parse(event.Records[0].Sns.Message);
+//   const url = `${directvEndpoint}/program/flip/${programmingId}`;
+//   const options = {
+//     timeout: 2000,
+//   };
+//   try {
+//     console.log({ url }, { options });
+//     console.log('calling');
+//     const result = await axios.get(url, options);
+//     console.log('result');
+
+//     const { description } = result.data.programDetail;
+
+//     console.log('update', { id }, { description });
+//     const response = await Program.update({ id, start }, { description });
+//     // await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
+//     console.log({ response });
+//   } catch (e) {
+//     if (e.response && e.response.status === 404) {
+//       console.log('404!!');
+//       return console.error(e);
+//     }
+//     console.error(e);
+//     throw e;
+//   }
+// });
+
 module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('consume');
   init();
   console.log(event.Records[0].Sns.Message);
   const { id, programmingId, start } = JSON.parse(event.Records[0].Sns.Message);

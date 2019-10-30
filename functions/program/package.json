@@ -10,7 +10,7 @@
     "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",
     "invoke:programming:area:get": "serverless invoke local --function getAreaProgramming --path ../.resources/data/programming-area.json",
     "invoke:syncNew": "serverless invoke local --function syncNew",
-    "invoke:syncDescriptions": "serverless invoke local --function syncDescriptions"
+    "invoke:consumeNewProgram": "serverless invoke local --function consumeNewProgramFunction  --path ../.resources/data/new-program.json"
   },
   "author": "",
   "license": "ISC",

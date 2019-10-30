@@ -19,17 +19,17 @@ provider:
         - lambda:InvokeFunction
         - lambda:InvokeAsync
       Resource: '*'
-    - Effect: Allow
-      Action:
-        - SNS:Publish
-      Resource:
-        {
-          'Fn::Join':
-            [
-              '',
-              ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
-            ],
-        }
+    # - Effect: Allow
+    #   Action:
+    #     - SNS:Publish
+    #   Resource:
+    #     {
+    #       'Fn::Join':
+    #         [
+    #           '',
+    #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
+    #         ],
+    #     }
 
 plugins:
   - serverless-domain-manager
@@ -63,20 +63,64 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  newProgramTopic: '${self:service}-${self:provider.stage}-sns-new-program'
-  newProgramTopicArn:
-    # local:
-    #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
-    deployed:
-      {
-        'Fn::Join':
-          [
-            '',
-            ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
-          ],
-      }
+  # newProgramTopic: '${self:service}-${self:provider.stage}-sns-new-program'
+  # newProgramTopicArn:
+  #   # local:
+  #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
+  #   deployed:
+  #     {
+  #       'Fn::Join':
+  #         [
+  #           '',
+  #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
+  #         ],
+  #     }
 resources:
   Resources:
+    newProgramTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:service}-${self:provider.stage}-new-program
+    newProgramQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:provider.stage}-new-program
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt
+            - newProgramDLQ
+            - Arn
+          maxReceiveCount: 3
+    newProgramDLQ: # dead letter queue
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:provider.stage}-new-program-dlq
+    snsToNewProgramQueueSqsPolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: 'allow-sns-messages'
+              Effect: Allow
+              Principal: '*'
+              Resource: !GetAtt
+                - newProgramQueue
+                - Arn
+              Action: 'SQS:SendMessage'
+              Condition:
+                ArnEquals:
+                  'aws:SourceArn': !Ref newProgramTopic
+        Queues:
+          - Ref: newProgramQueue
+    newProgramQueueSubscription:
+      Type: 'AWS::SNS::Subscription'
+      Properties:
+        TopicArn: !Ref newProgramTopic
+        Endpoint: !GetAtt
+          - newProgramQueue
+          - Arn
+        Protocol: sqs
+        RawMessageDelivery: 'true'
     ProgramTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -178,5 +222,25 @@ functions:
               - content-type
   consumeNewProgram:
     handler: program.consumeNewProgram
+    description: Consume new program queue and add description
+    reservedConcurrency: 5
     events:
-      - sns: ${self:custom.newProgramTopic}
+      - sqs:
+          arn: !GetAtt
+            - newProgramQueue
+            - Arn
+          batchSize: 1
+    # events:
+    # - sns: ${self:custom.newProgramTopic}
+  # consumeNewProgramFunction:
+  #   handler: program.consumeNewProgramFunction
+  #   events:
+  #     - http:
+  #         path: 'area'
+  #         method: post
+  #         cors:
+  #           origin: '*'
+  #           headers:
+  #             - partner
+  #             - authorization
+  #             - content-type
