@@ -193,7 +193,7 @@ functions:
   syncNew:
     handler: program.syncNew
     memorySize: 1024
-    timeout: 20
+    timeout: 60
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
