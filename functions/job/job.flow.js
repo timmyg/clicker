@@ -155,6 +155,27 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
   // }
 });
 
+// class locationUpdate {
+//   locationId: string;
+//   updates: {
+
+//   }
+// }
+
+// class boxUpdates {
+//   locations: locationUpdate[];
+//   build(): locationUpdate[] {
+//     return null;
+//   }
+// }
+
+class locationBoxUpdate {
+  locationId: string;
+  channel: number;
+  boxId: string;
+  source: string;
+}
+
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
@@ -171,6 +192,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   let waitingCount = 0;
   if (games.length) {
     // loop through games
+    const boxUpdates: locationBoxUpdate[] = [];
     for (const game of games) {
       console.log(game);
       const waitOn: string[] = game.get('Wait On');
@@ -235,7 +257,6 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
       console.log(`found ${locations.length} locations`);
       // loop through locations
       for (const location of locations) {
-        const boxUpdates = [];
         // ensure location has package for game
         if (gamePackage && (!location.packages || !location.packages.includes(gamePackage))) {
           console.log(`${location.name} doesn't have ${gamePackage} package`);
@@ -273,7 +294,13 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .async()
             .go();
 
-          boxUpdates.push({ channel: reservation.program.channel, source, boxId: reservation.box.id });
+          const update: locationBoxUpdate = {
+            locationId: location.id,
+            channel: reservation.program.channel,
+            source,
+            boxId: reservation.box.id,
+          };
+          boxUpdates.push(update);
           changedCount++;
         }
 

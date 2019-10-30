@@ -221,6 +221,7 @@ functions:
               - authorization
               - content-type
   consumeNewProgram:
+    memorySize: 512
     handler: program.consumeNewProgram
     description: Consume new program queue and add description
     reservedConcurrency: 5
