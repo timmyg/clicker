@@ -80,11 +80,11 @@ resources:
     newProgramTopic:
       Type: AWS::SNS::Topic
       Properties:
-        TopicName: ${self:service}-${self:provider.stage}-new-program
+        TopicName: ${self:service}-${self:provider.stage}-new-program-topic
     newProgramQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:service}-${self:provider.stage}-new-program
+        QueueName: ${self:service}-${self:provider.stage}-new-program-queue
         RedrivePolicy:
           deadLetterTargetArn: !GetAtt
             - newProgramDLQ
@@ -93,7 +93,7 @@ resources:
     newProgramDLQ: # dead letter queue
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:service}-${self:provider.stage}-new-program-dlq
+        QueueName: ${self:service}-${self:provider.stage}-new-program-queue-dlq
     snsToNewProgramQueueSqsPolicy:
       Type: AWS::SQS::QueuePolicy
       Properties:
