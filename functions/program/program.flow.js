@@ -87,6 +87,7 @@ function init() {
         type: String,
         hashKey: true,
       },
+      start: { type: Number, rangeKey: true },
       // expires: Number,
       channel: Number,
       channelMinor: Number,
@@ -95,7 +96,6 @@ function init() {
       episodeTitle: String, // "Oklahoma State at Kansas"
       description: String,
       durationMins: Number, // mins
-      start: Number,
       end: Number,
       live: Boolean,
       repeat: Boolean,
