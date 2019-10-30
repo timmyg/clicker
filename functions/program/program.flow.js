@@ -331,6 +331,7 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncByZip = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { zip, localChannels } = getBody(event);
   await syncChannels(localChannels, zip);
   respond(200);
