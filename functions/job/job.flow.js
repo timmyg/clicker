@@ -192,7 +192,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   let waitingCount = 0;
   if (games.length) {
     // loop through games
-    const boxUpdates: locationBoxUpdate[] = [];
+    const boxUpdates = []; // locationBoxUpdate[]
     for (const game of games) {
       console.log(game);
       const waitOn: string[] = game.get('Wait On');
@@ -294,7 +294,8 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .async()
             .go();
 
-          const update: locationBoxUpdate = {
+          const update = {
+            // locationBoxUpdate
             locationId: location.id,
             channel: reservation.program.channel,
             source,
