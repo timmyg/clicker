@@ -420,6 +420,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     console.log({ program });
     if (!!program) {
       program.description = description;
+      console.log('saving program...');
       await program.save();
       console.log('program saved');
     } else {
