@@ -19,17 +19,6 @@ provider:
         - lambda:InvokeFunction
         - lambda:InvokeAsync
       Resource: '*'
-    # - Effect: Allow
-    #   Action:
-    #     - SNS:Publish
-    #   Resource:
-    #     {
-    #       'Fn::Join':
-    #         [
-    #           '',
-    #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
-    #         ],
-    #     }
 
 plugins:
   - serverless-domain-manager
@@ -90,7 +79,7 @@ resources:
             - newProgramDLQ
             - Arn
           maxReceiveCount: 3
-    newProgramDLQ: # dead letter queue
+    newProgramDLQ:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:service}-${self:provider.stage}-new-program-queue-dlq
@@ -194,9 +183,9 @@ functions:
     handler: program.syncNew
     memorySize: 1024
     timeout: 20
-    environment:
-      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
-      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
+    # environment:
+    #   # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
+    #   newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
     events:
       - http:
           path: 'sync'
