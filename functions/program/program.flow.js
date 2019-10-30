@@ -403,7 +403,6 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   console.log('consume');
   console.log(event);
   init();
-  console.log(event.Records[0].body);
   const { id, programmingId, start } = JSON.parse(event.Records[0].body);
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = {
@@ -411,6 +410,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   };
   try {
     const result = await axios.get(url, options);
+    console.log('result.data.programDetail', result.data.programDetail);
     const { description } = result.data.programDetail;
     console.log('update', { id, start }, { description });
     // const response = await Program.update({ id, start }, { description });
