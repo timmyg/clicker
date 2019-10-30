@@ -95,8 +95,8 @@ function init() {
       episodeTitle: String, // "Oklahoma State at Kansas"
       description: String,
       durationMins: Number, // mins
-      start: Date,
-      end: Date,
+      start: Number,
+      end: Number,
       live: Boolean,
       repeat: Boolean,
       sports: Boolean,
@@ -107,7 +107,7 @@ function init() {
       zip: String,
       // dynamic fields
       nextProgramTitle: String,
-      nextProgramStart: Date,
+      nextProgramStart: Number,
       points: Number,
       synced: Boolean, // synced with description from separate endpoint
     },
@@ -410,10 +410,10 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     timeout: 2000,
   };
   try {
-    console.log({ url }, { options });
-    console.log('calling');
+    // console.log({ url }, { options });
+    // console.log('calling');
     const result = await axios.get(url, options);
-    console.log('result');
+    // console.log('result');
 
     const { description } = result.data.programDetail;
 
