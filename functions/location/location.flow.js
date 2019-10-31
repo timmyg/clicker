@@ -325,7 +325,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .eq(locationId)
     .exec();
 
-  const boxUpdates = [];
   for (const box of boxes) {
     const { boxId, info } = box;
     console.log(boxId, info);
@@ -338,7 +337,14 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
     if (originalChannel !== major) {
-      boxUpdates.push({ channel: major, source: 'manual', boxId });
+      // boxUpdates.push({ channel: major, source: 'manual', boxId });
+      await new Invoke()
+        .service('location')
+        .name('updateBoxChannel')
+        .body({ channel: major, source: 'manual' })
+        .pathParams({ id: location.id, boxId })
+        .async()
+        .go();
 
       console.time('track event');
       const userId = 'system';
@@ -389,19 +395,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .async()
         .go();
     }
-  }
-
-  if (!!boxUpdates.length) {
-    // use updateChannels rather than updateChannel due to there
-    // being an asyncronous issue if it's called multiple times
-    // dues to boxes being an array and not able to update it directly
-    await new Invoke()
-      .service('location')
-      .name('updateChannels')
-      .body(boxUpdates)
-      .pathParams({ id: locationId })
-      .async()
-      .go();
   }
 
   return respond(200);
@@ -616,15 +609,14 @@ module.exports.health = async (event: any) => {
 };
 
 module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async event => {
-  // console.log("hello");
   init();
   const { id: locationId, boxId } = getPathParameters(event);
-  const { index, channel, source } = getBody(event);
+  const { channel, source } = getBody(event);
 
   const location = await Location.queryOne('id')
     .eq(locationId)
     .exec();
-  const boxIndex = location.boxes.findIndex(b => b.id === boxId)
+  const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   await updateLocationBoxChannel(locationId, boxIndex, channel, source);
   return respond(200);
 });
@@ -636,8 +628,19 @@ async function updateLocationBoxChannel(locationId, boxIndex, channel: number, s
     TableName: process.env.tableLocation,
     Key: { id: locationId },
     ReturnValues: 'ALL_NEW',
-    UpdateExpression: 'set boxes[' + boxIndex + '].channel = :channel, boxes[' + boxIndex + '].channelSource = :channelSource, boxes[' + boxIndex + '].channelChangeAt = :channelChangeAt',
-    ExpressionAttributeValues: { ':channel': channel, ':channelSource': source, ':channelChangeAt': moment().unix() * 1000 },
+    UpdateExpression:
+      'set boxes[' +
+      boxIndex +
+      '].channel = :channel, boxes[' +
+      boxIndex +
+      '].channelSource = :channelSource, boxes[' +
+      boxIndex +
+      '].channelChangeAt = :channelChangeAt',
+    ExpressionAttributeValues: {
+      ':channel': channel,
+      ':channelSource': source,
+      ':channelChangeAt': moment().unix() * 1000,
+    },
   };
   console.log({ params });
   try {
