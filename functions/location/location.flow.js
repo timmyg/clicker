@@ -358,7 +358,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${
+        location.neighborhood
+      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -612,3 +614,31 @@ module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven
 module.exports.health = async (event: any) => {
   return respond(200, 'ok');
 };
+
+module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id: locationId } = getPathParameters(event);
+  const { index, channel } = getBody(event);
+  await updateLocationBoxChannel(locationId, index, channel);
+  respond(200);
+});
+
+async function updateLocationBoxChannel(locationId, index, channel: number) {
+  console.log({ description });
+  const AWS = require('aws-sdk');
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName: process.env.tableLocation,
+    Key: { id: locationId },
+    ReturnValues: 'ALL_NEW',
+    UpdateExpression: 'set boxes[' + index + '].channel = :channel',
+    ExpressionAttributeValues: { ':channel': channel },
+  };
+  console.log({ params });
+  try {
+    const x = await docClient.update(params).promise();
+    console.log({ x });
+  } catch (err) {
+    console.log({ err });
+    return err;
+  }
+}

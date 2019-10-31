@@ -234,6 +234,18 @@ functions:
               - content-type
   updateChannels:
     handler: location.updateChannels
+    events:
+      - http:
+          path: '{id}/box'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  updateChannels:
+    handler: location.updateChannels
   allOff:
     handler: location.allOff
     events:
