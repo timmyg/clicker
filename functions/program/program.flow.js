@@ -429,7 +429,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     // let program = await Program.queryOne('id')
     //   .eq(id)
     //   .exec();
-    let program = await getProgram(id);
+    let program = await getProgram(id, start);
     console.log({ program });
     if (!!program) {
       program.description = description;
@@ -467,12 +467,12 @@ async function updateProgram(data) {
   }
 }
 
-async function getProgram(id) {
+async function getProgram(id, start) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
     TableName: process.env.tableProgram,
-    Key: { id },
+    Key: { id, start },
   };
   try {
     const data = await docClient.get(params).promise();

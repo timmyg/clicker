@@ -228,7 +228,7 @@ functions:
     timeout: 20
     handler: program.consumeNewProgram
     description: Consume new program queue and add description
-    reservedConcurrency: 5
+    reservedConcurrency: 2
     events:
       - sqs:
           arn: !GetAtt
