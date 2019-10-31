@@ -49,13 +49,6 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
         .body({ reservation, command, source })
         .async()
         .go();
-      await new Invoke()
-        .service('location')
-        .name('updateBoxChannel')
-        .body({ channel: reservation.program.channel, source })
-        .pathParams({ id: location.id, boxId: box.id })
-        .async()
-        .go();
       i++;
     }
   }
@@ -134,27 +127,6 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
     // fetchNextPage();
   }
   return respond(200);
-  //   },
-  //   err => {
-  //     if (err) {
-  //       return respond(400, err);
-  //     }
-  //     return respond(200);
-  //   },
-  // );
-
-  // } catch (e) {
-  //   console.error(e);
-  //   return respond(400, e);
-  // }
-});
-
-class locationBoxUpdate {
-  locationId: string;
-  channel: number;
-  boxId: string;
-  source: string;
-}
 
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -270,14 +242,6 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .name('command')
             .body({ reservation, command, source })
             .headers(event.headers)
-            .async()
-            .go();
-
-          await new Invoke()
-            .service('location')
-            .name('updateBoxChannel')
-            .body({ channel: reservation.program.channel, source })
-            .pathParams({ id: location.id, boxId: reservation.box.id })
             .async()
             .go();
           changedCount++;

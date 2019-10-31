@@ -156,30 +156,6 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
   console.timeEnd('remote command');
 
-  console.time('update channel');
-  await new Invoke()
-    .service('location')
-    .name('updateBoxChannel')
-    .body({ channel: reservation.program.channel, source })
-    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
-    .async()
-    .go();
-  console.timeEnd('update channel');
-
-  // console.time('track event');
-  // await track({
-  //   userId: reservation.userId,
-  //   event: 'Reservation Created',
-  //   properties: {
-  //     program: reservation.program,
-  //     box: reservation.box,
-  //     location: reservation.location,
-  //     cost: reservation.cost,
-  //     minutes: reservation.minutes,
-  //   },
-  // });
-  // console.timeEnd('track event');
-
   return respond(201, reservation);
 });
 
@@ -242,30 +218,6 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     .async()
     .go();
   console.timeEnd('remote command');
-
-  console.time('update channel');
-  await new Invoke()
-    .service('location')
-    .name('updateBoxChannel')
-    .body({ channel: reservation.program.channel, source: 'manual' })
-    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
-    .async()
-    .go();
-  console.timeEnd('update channel');
-
-  // console.time('track event');
-  // await track({
-  //   userId: reservation.userId,
-  //   event: 'Reservation Updated',
-  //   properties: {
-  //     program: reservation.program,
-  //     box: reservation.box,
-  //     location: reservation.location,
-  //     cost: reservation.cost,
-  //     minutes: reservation.minutes,
-  //   },
-  // });
-  // console.timeEnd('track event');
 
   return respond(200, `nice`);
 });
