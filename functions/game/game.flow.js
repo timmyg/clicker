@@ -52,7 +52,7 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const apiUrl = transformSIUrl(webUrl);
 
   const method = 'get';
-  const options = { method, url: apiUrl };
+  const options = { method, url: apiUrl, timeout: 2000 };
   try {
     const result = await axios(options);
     const gameStatus: GameStatus = transformGame(result.data);
