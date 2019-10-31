@@ -342,7 +342,7 @@ async function syncChannels(areaChannels: number[], zip: string) {
   const channels = nationalChannels.concat(areaChannels);
   const channelsString = getChannels(channels).join(',');
   const hoursAgoStart = 4;
-  const hoursInFuture = 8;
+  const hoursFromStart = 8;
 
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()
@@ -352,7 +352,7 @@ async function syncChannels(areaChannels: number[], zip: string) {
     .seconds(0)
     .toString();
 
-  const params = { channels: channelsString, startTime, hours: hoursInFuture };
+  const params = { channels: channelsString, startTime, hours: hoursFromStart };
   const headers = {
     Cookie: `dtve-prospect-zip=${zip};`,
   };
