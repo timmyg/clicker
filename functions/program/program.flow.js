@@ -461,7 +461,8 @@ async function updateProgram(data) {
     Item: data,
   };
   try {
-    await docClient.put(params).promise();
+    const x = await docClient.put(params).promise();
+    console.log({ x });
   } catch (err) {
     return err;
   }
