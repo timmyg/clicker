@@ -480,8 +480,10 @@ async function updateProgram(id, description) {
     ExpressionAttributeValues: { ':newdescription': description },
   };
   try {
-    await docClient.update(params).promise();
+    const x = await docClient.update(params).promise();
+    console.log({ x });
   } catch (err) {
+    console.log({ err });
     return err;
   }
 }
