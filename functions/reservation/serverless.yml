@@ -23,6 +23,7 @@ plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -46,6 +47,8 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
   tableReservation: reservations-${self:custom.stage}
 resources:
   Resources:
@@ -152,4 +155,3 @@ functions:
               - partner
               - authorization
               - content-type
-

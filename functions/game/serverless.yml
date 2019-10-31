@@ -22,6 +22,7 @@ plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -45,6 +46,8 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
 functions:
   health:
     handler: game.health
@@ -69,4 +72,3 @@ functions:
               - partner
               - authorization
               - content-type
-

@@ -1,5 +1,4 @@
 // @flow
-require('dotenv').config();
 const Airtable = require('airtable');
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const request = require('request-promise');

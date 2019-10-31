@@ -1,5 +1,4 @@
 // @flow
-require('dotenv').config();
 const axios = require('axios');
 
 const { respond, Raven, RavenLambdaWrapper } = require('serverless-helpers');

@@ -1,5 +1,4 @@
 // @flow
-require('dotenv').config();
 const { respond, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.hubspotApiKey });

@@ -1,5 +1,6 @@
 // @flow
 const dynamoose = require('dynamoose');
+const AWS = require('aws-sdk');
 const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
@@ -7,7 +8,6 @@ const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 let Program, ProgramArea;
-require('dotenv').config();
 
 declare class process {
   static env: {
@@ -16,12 +16,13 @@ declare class process {
     tableProgram: string,
     tableProgramArea: string,
     stage: string,
+    newProgramTopicArn: string,
   };
 }
 
 class programAreaType {
   zip: string;
-  channels: [number];
+  channels: number[];
 }
 
 const minorChannels: number[] = [661];
@@ -41,13 +42,11 @@ const nationalChannels: number[] = [
   217, //TNNSHD
   215, //NHLHD
   216, //NBAHD
-
-  // optional channels, but leave for syncing
   218, //GOLF
   602, //TVG
   612, //ACCN
   618, //FS2
-  620, //FS2
+  620, //beIn Sports
   610, //BTN
   611, //SECHD
   605, //SPMN
@@ -55,8 +54,6 @@ const nationalChannels: number[] = [
   221, //CBSSN // premium
   245, //TNT
   247, //TBS
-  //, 661 //FSOHhannelMinor: 1 },
-  //, 600 //SMXHD
   701, //NFLMX // 4 game mix
   702, //NFLMX // 8 game mix
   703, //NFLRZ // Redzone (premium)
@@ -90,6 +87,7 @@ function init() {
         type: String,
         hashKey: true,
       },
+      start: { type: Number, rangeKey: true },
       // expires: Number,
       channel: Number,
       channelMinor: Number,
@@ -98,19 +96,18 @@ function init() {
       episodeTitle: String, // "Oklahoma State at Kansas"
       description: String,
       durationMins: Number, // mins
-      start: Date,
-      end: Date,
+      end: Number,
       live: Boolean,
       repeat: Boolean,
       sports: Boolean,
-      programId: String, // "SH000296530000" - use this to get summary
+      programmingId: String, // "SH000296530000" - use this to get summary
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
-      zip: Number,
+      zip: String,
       // dynamic fields
       nextProgramTitle: String,
-      nextProgramStart: Date,
+      nextProgramStart: Number,
       points: Number,
       synced: Boolean, // synced with description from separate endpoint
     },
@@ -133,7 +130,7 @@ function init() {
     process.env.tableProgramArea,
     {
       zip: {
-        type: Number,
+        type: String,
         hashKey: true,
       },
       channels: [Number],
@@ -187,31 +184,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming setup queries');
 
-  const programsNationalQuery = Program.scan()
-    .filter('start')
-    .lt(now)
-    .and()
-    .filter('end')
-    .gt(now)
-    .and()
-    .filter('zip')
-    .null()
-    .all()
-    .exec();
-
-  const programsNationalNextQuery = Program.scan()
-    .filter('start')
-    .lt(in25Mins)
-    .and()
-    .filter('end')
-    .gt(in25Mins)
-    .and()
-    .filter('zip')
-    .null()
-    .all()
-    .exec();
-
-  const programsLocalQuery = Program.scan()
+  const programsQuery = Program.scan()
     .filter('start')
     .lt(now)
     .and()
@@ -223,7 +196,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .all()
     .exec();
 
-  const programsLocalNextQuery = Program.scan()
+  const programsNextQuery = Program.scan()
     .filter('start')
     .lt(in25Mins)
     .and()
@@ -237,20 +210,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming run query');
-  const [programsNational, programsLocal, programsNationalNext, programsLocalNext] = await Promise.all([
-    programsNationalQuery,
-    programsLocalQuery,
-    programsNationalNextQuery,
-    programsLocalNextQuery,
-  ]);
+  const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
   console.time('current + next programming run query');
 
-  let currentPrograms = [...programsNational, ...programsLocal];
-  const nextPrograms = [...programsNationalNext, ...programsLocalNext];
+  let currentPrograms = programs;
+  const nextPrograms = programsNext;
 
   console.time('current + next programming combine');
   currentPrograms.forEach((program, i) => {
-    const nextProgram = nextPrograms.find(np => np.channel === program.channel && np.programId !== program.programId);
+    const nextProgram = nextPrograms.find(
+      np => np.channel === program.channel && np.programmingId !== program.programmingId,
+    );
     if (nextProgram) {
       currentPrograms[i].nextProgramTitle = nextProgram.title;
       currentPrograms[i].nextProgramStart = nextProgram.start;
@@ -336,16 +306,21 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
     init();
 
     // sync national channels
-    console.log('sync national channels');
-    await syncChannels(nationalChannels);
+    // console.log('sync national channels');
+    // await syncChannels(nationalChannels);
 
-    // sync local channels
+    // sync local/national channels
     const programAreas: programAreaType[] = await ProgramArea.scan()
       .all()
       .exec();
     for (const area of programAreas) {
-      console.log(`sync local channels: ${area.zip}`);
-      await syncChannels(area.channels, area.zip);
+      console.log(`sync local channels: ${area.zip} for channels ${area.channels.join(', ')}`);
+      await new Invoke()
+        .service('programs')
+        .name('syncByZip')
+        .body({ zip: area.zip, localChannels: area.channels })
+        .async()
+        .go();
     }
 
     return respond(201);
@@ -355,118 +330,180 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-async function syncChannels(channels: any, zip?: string) {
+module.exports.syncByZip = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
+  const { zip, localChannels } = getBody(event);
+  await syncChannels(localChannels, zip);
+  respond(200);
+});
+
+async function syncChannels(areaChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
+  const channels = nationalChannels.concat(areaChannels);
   const channelsString = getChannels(channels).join(',');
+  const hoursAgoStart = 4;
+  const hoursFromStart = 8;
 
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()
     .utc()
-    .subtract(4, 'hours')
+    .subtract(hoursAgoStart, 'hours')
     .minutes(0)
     .seconds(0)
     .toString();
-  const hours = 8;
 
-  const params = { channels: channelsString, startTime, hours };
+  const params = { channels: channelsString, startTime, hours: hoursFromStart };
   const headers = {
-    Cookie: `dtve-prospect-zip=${zip || zipDefault};`,
+    Cookie: `dtve-prospect-zip=${zip};`,
   };
   const method = 'get';
   console.log('getting channels....', params, headers);
   let result = await axios({ method, url, params, headers });
-  console.log({ result });
 
   let { schedule } = result.data;
   let allPrograms = build(schedule, zip);
   let transformedPrograms = buildProgramObjects(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
+
+  // get program ids, publish to sns topic to update description
+  const sns = new AWS.SNS({ region: 'us-east-1' });
+  for (const program of transformedPrograms) {
+    const messageData = {
+      Message: JSON.stringify(program),
+      TopicArn: process.env.newProgramTopicArn,
+    };
+
+    try {
+      console.log('publish', process.env.newProgramTopicArn);
+      await sns.publish(messageData).promise();
+    } catch (e) {
+      console.error(e);
+    }
+  }
 }
 
-module.exports.syncDescriptions = RavenLambdaWrapper.handler(Raven, async event => {
-  // find programs by unique programID without descriptions
+// module.exports.consumeNewProgramFunction = RavenLambdaWrapper.handler(Raven, async event => {
+//   init();
+//   // console.log(event.Records[0].Sns.Message);
+//   const { id, programmingId, start } = JSON.parse(event.Records[0].Sns.Message);
+//   const url = `${directvEndpoint}/program/flip/${programmingId}`;
+//   const options = {
+//     timeout: 2000,
+//   };
+//   try {
+//     console.log({ url }, { options });
+//     console.log('calling');
+//     const result = await axios.get(url, options);
+//     console.log('result');
+
+//     const { description } = result.data.programDetail;
+
+//     console.log('update', { id }, { description });
+//     const response = await Program.update({ id, start }, { description });
+//     // await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
+//     console.log({ response });
+//   } catch (e) {
+//     if (e.response && e.response.status === 404) {
+//       console.log('404!!');
+//       return console.error(e);
+//     }
+//     console.error(e);
+//     throw e;
+//   }
+// });
+
+module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('consume');
+  console.log(event);
   init();
-  const maxPrograms = 10;
-  let descriptionlessPrograms = await Program.scan('description')
-    .null()
-    .and()
-    .filter('end')
-    .gt(moment().unix() * 1000)
-    .filter('synced')
-    .null()
-    .and()
-    .filter('programId')
-    .not()
-    .contains('_') // cant get description on this for some reason
-    .all()
-    .exec();
-
-  if (!descriptionlessPrograms.length) {
-    return respond(204);
-  }
-
-  descriptionlessPrograms = descriptionlessPrograms.sort((a, b) => {
-    return a.start - b.start;
-  });
-
-  descriptionlessPrograms = descriptionlessPrograms.slice(0, maxPrograms);
-
-  console.log('descriptionlessPrograms:', descriptionlessPrograms.length);
-
-  const uniqueProgramIds = [...new Set(descriptionlessPrograms.map(p => p.programId))];
-  console.log({ uniqueProgramIds });
-  // call endpoint for each program
-  const calls = [];
-  // let results;
+  const { id, programmingId, start } = JSON.parse(event.Records[0].body);
+  const url = `${directvEndpoint}/program/flip/${programmingId}`;
+  const options = {
+    timeout: 2000,
+  };
   try {
-    console.time('create calls');
-    for (const programId of uniqueProgramIds) {
-      const url = `${directvEndpoint}/program/flip/${programId}`;
-      const options = { timeout: 2000 };
-      console.log('add', url);
-      calls.push(axios.get(url, options));
-    }
-    console.timeEnd('create calls');
-    console.time('call');
-    // const results = await Promise.all(calls);
-    const results = await Promise.all(calls.map(p => p.catch(e => e)));
-    const validResults = results.filter(result => !(result instanceof Error));
+    const result = await axios.get(url, options);
+    console.log('result.data.programDetail', result.data.programDetail);
+    const { description } = result.data.programDetail;
+    console.log('update', { id, start }, { description });
+    // const response = await Program.update({ id, start }, { description });
+    // let program = await Program.queryOne('id')
+    //   .eq(id)
+    //   .exec();
 
-    console.timeEnd('call');
-    await processDescriptionResults(validResults, descriptionlessPrograms);
+    let program = await getProgram(id, start);
+    console.log({ program });
+    if (!!program.id) {
+      // is not null, is {} if doesnt exist
+      // program.description = description;
+      console.log('saving program...');
+      console.log(program);
+      // await program.save();
+      await updateProgram(id, start, description);
+      console.log('program saved');
+    } else {
+      console.log('no program by id:', id);
+    }
+    return respond(200);
   } catch (e) {
-    // swallow, and try again next time
-    console.log('sync description failed');
+    if (e.response && e.response.status === 404) {
+      console.log('404!!');
+      console.error(e);
+      return respond(200);
+    }
     console.error(e);
-    // // TODO duplicate codde
-    // const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
-    // programsToUpdate.forEach((part, index, arr) => {
-    //   // arr[index]['description'] = description;
-    //   arr[index]['synced'] = false;
-    // });
-    // const response = await Program.batchPut(programsToUpdate);
+    throw e.response;
   }
-  return respond(200);
 });
 
-async function processDescriptionResults(results, descriptionlessPrograms) {
-  console.time('save to db');
-  for (const result of results) {
-    const { description, tmsProgramID: programId } = result.data.programDetail;
-    console.log({ description });
-
-    const programsToUpdate = descriptionlessPrograms.filter(p => p.programId === programId);
-
-    console.log('programsToUpdate:', programsToUpdate.length);
-
-    programsToUpdate.forEach((part, index, arr) => {
-      arr[index]['description'] = description;
-      arr[index]['synced'] = true;
-    });
-    console.log('updating', programsToUpdate.length, 'programs');
-    const response = await Program.batchPut(programsToUpdate);
+// async function updateProgram(data) {
+//   const AWS = require('aws-sdk');
+//   const docClient = new AWS.DynamoDB.DocumentClient();
+//   var params = {
+//     TableName: process.env.tableProgram,
+//     Item: data,
+//   };
+//   try {
+//     console.log('. . .');
+//     const x = await docClient.put(params).promise();
+//     console.log({ x });
+//   } catch (err) {
+//     return err;
+//   }
+// }
+// async function abstraction
+async function updateProgram(id, start, description) {
+  console.log({ description });
+  const AWS = require('aws-sdk');
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName: process.env.tableProgram,
+    Key: { id, start },
+    UpdateExpression: 'set description = :newdescription',
+    ExpressionAttributeValues: { ':newdescription': description },
+  };
+  try {
+    const x = await docClient.update(params).promise();
+    console.log({ x });
+  } catch (err) {
+    console.log({ err });
+    return err;
   }
-  console.timeEnd('save to db');
+}
+
+async function getProgram(id, start) {
+  const AWS = require('aws-sdk');
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName: process.env.tableProgram,
+    Key: { id, start },
+  };
+  try {
+    const data = await docClient.get(params).promise();
+    return data;
+  } catch (err) {
+    return err;
+  }
 }
 
 function buildProgramObjects(programs) {
@@ -477,13 +514,13 @@ function buildProgramObjects(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, zip?: string) {
+function build(dtvSchedule: any, zip: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
     channel.schedules.forEach(program => {
-      program.programId = program.programID;
-      if (program.programId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
+      program.programmingId = program.programID;
+      if (program.programmingId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
@@ -503,14 +540,11 @@ function build(dtvSchedule: any, zip?: string) {
         program.repeat = program.repeat;
         program.zip = zip;
         program.id = generateId(program);
-        program.start = new Date(parseInt(moment(program.airTime).unix() * 1000));
-        program.end = new Date(
-          parseInt(
-            moment(program.airTime)
-              .add(program.durationMins, 'minutes')
-              .unix() * 1000,
-          ),
-        );
+        program.start = moment(program.airTime).unix() * 1000;
+        program.end =
+          moment(program.airTime)
+            .add(program.durationMins, 'minutes')
+            .unix() * 1000;
         programs.push(program);
       }
     });
@@ -521,8 +555,8 @@ function build(dtvSchedule: any, zip?: string) {
 }
 
 function generateId(program: any) {
-  const { programId, zip } = program;
-  const id = programId + (zip || '');
+  const { programmingId, zip } = program;
+  const id = programmingId + (zip || '');
   // console.log(id, uuid.DNS);
   return uuid(id, uuid.DNS);
 }

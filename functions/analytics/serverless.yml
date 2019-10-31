@@ -14,6 +14,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage}
@@ -27,6 +28,8 @@ custom:
     develop: ${env:SEGMENT_WRITE_KEY_DEV}
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
 functions:
   health:
     handler: analytics.health
@@ -53,4 +56,3 @@ functions:
               - partner
               - authorization
               - content-type
-
