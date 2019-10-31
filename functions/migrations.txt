@@ -7,3 +7,4 @@
 7. location.boxes active -> appActive
 8. reset antennas for new box syncing endpoints
 9. drop programs stack, new program area tables (zip changed to string)
+

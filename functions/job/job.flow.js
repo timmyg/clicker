@@ -127,6 +127,7 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
     // fetchNextPage();
   }
   return respond(200);
+});
 
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
