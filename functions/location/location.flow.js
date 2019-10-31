@@ -360,6 +360,12 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .body({ text })
         .async()
         .go();
+      await new Invoke()
+        .service('notification')
+        .name('sendTasks')
+        .body({ text, importance: 1 })
+        .async()
+        .go();
 
       await new Invoke()
         .service('admin')
