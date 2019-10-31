@@ -56,7 +56,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function sendSlack(webhook: string, text: string, importance: number) {
-  console.log(text, important);
+  console.log(text, importance);
   let emoji;
   switch (importance) {
     case 1:
