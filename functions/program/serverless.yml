@@ -63,7 +63,7 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  newProgramTopic: '${self:service}-${self:provider.stage}-new-program-topic'
+  newProgramTopic: '${self:service}-${self:custom.stage}-new-program-topic'
   newProgramTopicArn:
     #   # local:
     #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
@@ -80,11 +80,11 @@ resources:
     newProgramTopic:
       Type: AWS::SNS::Topic
       Properties:
-        TopicName: ${self:service}-${self:provider.stage}-new-program-topic
+        TopicName: ${self:service}-${self:custom.stage}-new-program-topic
     newProgramQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:service}-${self:provider.stage}-new-program-queue
+        QueueName: ${self:service}-${self:custom.stage}-new-program-queue
         RedrivePolicy:
           deadLetterTargetArn: !GetAtt
             - newProgramDLQ
@@ -93,7 +93,7 @@ resources:
     newProgramDLQ:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:service}-${self:provider.stage}-new-program-queue-dlq
+        QueueName: ${self:service}-${self:custom.stage}-new-program-queue-dlq
     snsToNewProgramQueueSqsPolicy:
       Type: AWS::SQS::QueuePolicy
       Properties:
