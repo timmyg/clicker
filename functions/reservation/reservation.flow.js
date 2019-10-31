@@ -72,15 +72,6 @@ function init() {
     },
   );
 }
-// ServiceSchema.method('getBaseFeature', async function () {
-//   var {Feature} = require("./index");
-//   var feature = await Feature.query("serviceId").eq(this.id).filter({type: "base"}).exec();
-//   if (feature.length != 0)
-//   {
-//     return feature[0];
-//   }
-//   return false;
-// });
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);

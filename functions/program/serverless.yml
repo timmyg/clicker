@@ -238,17 +238,3 @@ functions:
             - newProgramQueue
             - Arn
           batchSize: 1
-    # events:
-    # - sns: ${self:custom.newProgramTopic}
-  # consumeNewProgramFunction:
-  #   handler: program.consumeNewProgramFunction
-  #   events:
-  #     - http:
-  #         path: 'area'
-  #         method: post
-  #         cors:
-  #           origin: '*'
-  #           headers:
-  #             - partner
-  #             - authorization
-  #             - content-type
