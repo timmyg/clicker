@@ -232,11 +232,11 @@ functions:
               - partner
               - authorization
               - content-type
-  updateChannel:
-    handler: location.updateChannel
+  updateBoxChannel:
+    handler: location.updateBoxChannel
     events:
       - http:
-          path: '{id}/box'
+          path: '{id}/box/channel'
           method: post
           cors:
             origin: '*'

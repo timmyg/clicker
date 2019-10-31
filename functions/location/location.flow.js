@@ -615,7 +615,7 @@ module.exports.health = async (event: any) => {
   return respond(200, 'ok');
 };
 
-module.exports.updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
   const { index, channel } = getBody(event);
   await updateLocationBoxChannel(locationId, index, channel);
