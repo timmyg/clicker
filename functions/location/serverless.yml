@@ -232,8 +232,8 @@ functions:
               - partner
               - authorization
               - content-type
-  updateChannels:
-    handler: location.updateChannels
+  updateChannel:
+    handler: location.updateChannel
     events:
       - http:
           path: '{id}/box'
