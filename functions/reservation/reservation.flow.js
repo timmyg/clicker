@@ -157,17 +157,13 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('remote command');
 
   console.time('update channel');
-  console.log('updateChannels');
-  console.log([{ channel: reservation.program.channel, boxId: reservation.box.id, source }]);
-  console.log({ id: reservation.location.id });
   await new Invoke()
     .service('location')
-    .name('updateChannels')
-    .body([{ channel: reservation.program.channel, boxId: reservation.box.id, source }])
-    .pathParams({ id: reservation.location.id })
+    .name('updateBoxChannel')
+    .body({ channel: reservation.program.channel, source })
+    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
-  // boxUpdates.push({ channel: major, source: 'manual', boxId });
   console.timeEnd('update channel');
 
   // console.time('track event');
@@ -250,9 +246,9 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('update channel');
   await new Invoke()
     .service('location')
-    .name('updateChannels')
-    .body([{ channel: reservation.program.channel, boxId: reservation.box.id, source }])
-    .pathParams({ id: reservation.location.id })
+    .name('updateBoxChannel')
+    .body({ channel: reservation.program.channel, source: 'manual' })
+    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
   console.timeEnd('update channel');

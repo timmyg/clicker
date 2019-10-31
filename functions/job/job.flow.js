@@ -31,7 +31,6 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
     .headers(event.headers)
     .go();
   for (location of locations) {
-    const boxUpdates = [];
     const boxes = location.boxes.filter(b => b.zone).sort((a, b) => a.zone - b.zone);
     let i = 0;
     for (const box of boxes) {
@@ -50,18 +49,14 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
         .body({ reservation, command, source })
         .async()
         .go();
-      boxUpdates.push({ channel: reservation.program.channel, source, boxId: reservation.box.id });
-      i++;
-    }
-
-    if (!!boxUpdates.length) {
       await new Invoke()
         .service('location')
-        .name('updateChannels')
-        .body(boxUpdates)
-        .pathParams({ id: location.id })
+        .name('updateBoxChannel')
+        .body({ channel: reservation.program.channel, source })
+        .pathParams({ id: location.id, boxId: box.id })
         .async()
         .go();
+      i++;
     }
   }
   return respond(200);
@@ -154,20 +149,6 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
   // }
 });
 
-// class locationUpdate {
-//   locationId: string;
-//   updates: {
-
-//   }
-// }
-
-// class boxUpdates {
-//   locations: locationUpdate[];
-//   build(): locationUpdate[] {
-//     return null;
-//   }
-// }
-
 class locationBoxUpdate {
   locationId: string;
   channel: number;
@@ -191,7 +172,6 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   let waitingCount = 0;
   if (games.length) {
     // loop through games
-    const boxUpdates = []; // locationBoxUpdate[]
     for (const game of games) {
       console.log(game);
       const waitOn: string[] = game.get('Wait On');
@@ -293,25 +273,14 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .async()
             .go();
 
-          const update = {
-            // locationBoxUpdate
-            locationId: location.id,
-            channel: reservation.program.channel,
-            source,
-            boxId: reservation.box.id,
-          };
-          boxUpdates.push(update);
-          changedCount++;
-        }
-
-        if (!!boxUpdates.length) {
           await new Invoke()
             .service('location')
-            .name('updateChannels')
-            .body(boxUpdates)
-            .pathParams({ id: location.id })
+            .name('updateBoxChannel')
+            .body({ channel: reservation.program.channel, source })
+            .pathParams({ id: location.id, boxId: reservation.box.id })
             .async()
             .go();
+          changedCount++;
         }
       }
       // mark game as completed on airtable
