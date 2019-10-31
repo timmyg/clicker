@@ -624,7 +624,7 @@ module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async event 
 });
 
 async function updateLocationBoxChannel(locationId, index, channel: number) {
-  console.log({ description });
+  console.log(locationId, index, channel);
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
