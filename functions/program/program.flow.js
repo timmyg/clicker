@@ -432,7 +432,8 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
 
     let program = await getProgram(id, start);
     console.log({ program });
-    if (!!program) {
+    if (!!program.id) {
+      // is not null, is {} if doesnt exist
       // program.description = description;
       console.log('saving program...');
       console.log(program);
