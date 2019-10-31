@@ -314,8 +314,13 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
       .all()
       .exec();
     for (const area of programAreas) {
-      console.log(`sync local channels: ${area.zip}`);
-      await syncChannels(area.channels, area.zip);
+      console.log(`sync local channels: ${area.zip} for channels ${area.channels.join(', ')}`);
+      await new Invoke()
+        .service('programs')
+        .name('syncByZip')
+        .body({ zip: area.zip, localChannels: area.channels })
+        .async()
+        .go();
     }
 
     return respond(201);
@@ -323,6 +328,13 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
     console.error(e);
     return respond(400, `Could not create: ${e.stack}`);
   }
+});
+
+module.exports.syncByZip = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
+  const { zip, localChannels } = getBody(event);
+  await syncChannels(localChannels, zip);
+  respond(200);
 });
 
 async function syncChannels(areaChannels: number[], zip: string) {
@@ -414,14 +426,19 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     const { description } = result.data.programDetail;
     console.log('update', { id, start }, { description });
     // const response = await Program.update({ id, start }, { description });
-    let program = await Program.queryOne('id')
-      .eq(id)
-      .exec();
+    // let program = await Program.queryOne('id')
+    //   .eq(id)
+    //   .exec();
+
+    let program = await getProgram(id, start);
     console.log({ program });
-    if (!!program) {
-      program.description = description;
+    if (!!program.id) {
+      // is not null, is {} if doesnt exist
+      // program.description = description;
       console.log('saving program...');
-      await program.save();
+      console.log(program);
+      // await program.save();
+      await updateProgram(id, start, description);
       console.log('program saved');
     } else {
       console.log('no program by id:', id);
@@ -437,6 +454,56 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     throw e.response;
   }
 });
+
+// async function updateProgram(data) {
+//   const AWS = require('aws-sdk');
+//   const docClient = new AWS.DynamoDB.DocumentClient();
+//   var params = {
+//     TableName: process.env.tableProgram,
+//     Item: data,
+//   };
+//   try {
+//     console.log('. . .');
+//     const x = await docClient.put(params).promise();
+//     console.log({ x });
+//   } catch (err) {
+//     return err;
+//   }
+// }
+// async function abstraction
+async function updateProgram(id, start, description) {
+  console.log({ description });
+  const AWS = require('aws-sdk');
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName: process.env.tableProgram,
+    Key: { id, start },
+    UpdateExpression: 'set description = :newdescription',
+    ExpressionAttributeValues: { ':newdescription': description },
+  };
+  try {
+    const x = await docClient.update(params).promise();
+    console.log({ x });
+  } catch (err) {
+    console.log({ err });
+    return err;
+  }
+}
+
+async function getProgram(id, start) {
+  const AWS = require('aws-sdk');
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName: process.env.tableProgram,
+    Key: { id, start },
+  };
+  try {
+    const data = await docClient.get(params).promise();
+    return data;
+  } catch (err) {
+    return err;
+  }
+}
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];

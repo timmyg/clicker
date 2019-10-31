@@ -194,9 +194,6 @@ functions:
     handler: program.syncNew
     memorySize: 1024
     timeout: 60
-    environment:
-      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
-      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
     events:
       - http:
           path: 'sync'
@@ -208,6 +205,12 @@ functions:
               - authorization
               - content-type
       - schedule: rate(30 minutes)
+  syncByZip:
+    handler: program.syncByZip
+    timeout: 60
+    environment:
+      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
+      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
   createArea:
     handler: program.createArea
     events:
@@ -225,7 +228,7 @@ functions:
     timeout: 20
     handler: program.consumeNewProgram
     description: Consume new program queue and add description
-    reservedConcurrency: 5
+    reservedConcurrency: 2
     events:
       - sqs:
           arn: !GetAtt
