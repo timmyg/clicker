@@ -432,7 +432,10 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     //   .exec();
 
     let program = await getProgram(id, start);
-    console.log({ program });
+    console.log('program?');
+    console.log(program);
+    console.log(program.id);
+    console.log(!!program.id);
     if (!!program.id) {
       // is not null, is {} if doesnt exist
       // program.description = description;
