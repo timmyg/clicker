@@ -45,7 +45,7 @@ custom:
   tableProgram: programs-${self:custom.stage}
   tableProgramArea: programs-area-${self:custom.stage}
   tableThroughputs:
-    prod: 2
+    prod: 5
     default: 1
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
