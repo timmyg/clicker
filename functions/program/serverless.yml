@@ -207,7 +207,7 @@ functions:
       - schedule: rate(30 minutes)
   syncByZip:
     handler: program.syncByZip
-    timeout: 20
+    timeout: 60
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
