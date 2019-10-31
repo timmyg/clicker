@@ -15,6 +15,7 @@ const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 const initialTokens = 1;
 const key = 'clikr';
+let User;
 
 declare class process {
   static env: {

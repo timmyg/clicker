@@ -192,7 +192,6 @@ functions:
               - content-type
   syncNew:
     handler: program.syncNew
-    memorySize: 1024
     timeout: 60
     events:
       - http:
@@ -204,9 +203,13 @@ functions:
               - partner
               - authorization
               - content-type
-      - schedule: rate(30 minutes)
+      # - schedule: rate(60 minutes)
+      - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
+      - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
+      - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
   syncByZip:
     handler: program.syncByZip
+    memorySize: 1024
     timeout: 60
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}

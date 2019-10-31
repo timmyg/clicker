@@ -341,17 +341,18 @@ async function syncChannels(areaChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
   const channels = nationalChannels.concat(areaChannels);
   const channelsString = getChannels(channels).join(',');
+  const hoursAgoStart = 4;
+  const hoursInFuture = 8;
 
   const url = `${directvEndpoint}/channelschedule`;
   const startTime = moment()
     .utc()
-    .subtract(4, 'hours')
+    .subtract(hoursAgoStart, 'hours')
     .minutes(0)
     .seconds(0)
     .toString();
-  const hours = 8;
 
-  const params = { channels: channelsString, startTime, hours };
+  const params = { channels: channelsString, startTime, hours: hoursInFuture };
   const headers = {
     Cookie: `dtve-prospect-zip=${zip};`,
   };

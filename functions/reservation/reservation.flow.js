@@ -12,6 +12,7 @@ const {
   RavenLambdaWrapper,
 } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+let Reservation;
 
 declare class process {
   static env: {

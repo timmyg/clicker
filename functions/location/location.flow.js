@@ -4,6 +4,7 @@ const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
+let Location;
 
 declare class process {
   static env: {
@@ -244,6 +245,12 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         .body({ text })
         .async()
         .go();
+      await new Invoke()
+        .service('notification')
+        .name('sendTasks')
+        .body({ text, importance: 1 })
+        .async()
+        .go();
     } else {
       console.log('existing box', box.ip);
     }
@@ -351,9 +358,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${
-        location.neighborhood
-      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
