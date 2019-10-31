@@ -616,23 +616,28 @@ module.exports.health = async (event: any) => {
 };
 
 module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log("hello");
-  const { id: locationId } = getPathParameters(event);
-  const { index, channel } = getBody(event);
-  await updateLocationBoxChannel(locationId, index, channel);
+  // console.log("hello");
+  init();
+  const { id: locationId, boxId } = getPathParameters(event);
+  const { index, channel, source } = getBody(event);
+
+  const location = await Location.queryOne('id')
+    .eq(locationId)
+    .exec();
+  const boxIndex = location.boxes.findIndex(b => b.id === boxId)
+  await updateLocationBoxChannel(locationId, boxIndex, channel, source);
   return respond(200);
 });
 
-async function updateLocationBoxChannel(locationId, index, channel: number) {
-  console.log(locationId, index, channel);
+async function updateLocationBoxChannel(locationId, boxIndex, channel: number, source) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
     TableName: process.env.tableLocation,
     Key: { id: locationId },
     ReturnValues: 'ALL_NEW',
-    UpdateExpression: 'set boxes[' + index + '].channel = :channel',
-    ExpressionAttributeValues: { ':channel': channel },
+    UpdateExpression: 'set boxes[' + boxIndex + '].channel = :channel, boxes[' + boxIndex + '].channelSource = :channelSource, boxes[' + boxIndex + '].channelChangeAt = :channelChangeAt',
+    ExpressionAttributeValues: { ':channel': channel, ':channelSource': source, ':channelChangeAt': moment().unix() * 1000 },
   };
   console.log({ params });
   try {

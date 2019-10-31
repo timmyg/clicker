@@ -236,7 +236,7 @@ functions:
     handler: location.updateBoxChannel
     events:
       - http:
-          path: '{id}/box/channel'
+          path: '{id}/box/{boxId}/channel'
           method: post
           cors:
             origin: '*'
