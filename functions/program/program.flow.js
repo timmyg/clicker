@@ -429,6 +429,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     // let program = await Program.queryOne('id')
     //   .eq(id)
     //   .exec();
+
     let program = await getProgram(id, start);
     console.log({ program });
     if (!!program) {
@@ -461,6 +462,7 @@ async function updateProgram(data) {
     Item: data,
   };
   try {
+    console.log('. . .');
     const x = await docClient.put(params).promise();
     console.log({ x });
   } catch (err) {
