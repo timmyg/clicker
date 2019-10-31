@@ -68,7 +68,7 @@ async function sendSlack(webhook: string, text: string, importance: number) {
     default:
       break;
   }
-  console.log({ emohi });
+  console.log({ emoji });
   const stageText = stage !== 'prod' ? `_${stage}_` : '';
   text = `${emoji ? `${emoji} ` : ''}${text} ${stageText}`;
   console.log({ text });
