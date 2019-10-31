@@ -56,15 +56,18 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function sendSlack(webhook: string, text: string, importance: number) {
+  console.log(text, important);
   let emoji;
   switch (importance) {
     case 1:
-      return (emoji = ':bangbang: ');
+      return (emoji = ':bangbang:');
     case 2:
-      return (emoji = ':exclamation: ');
+      return (emoji = ':exclamation:');
+    // default:
+    //   return (emoji = null);
   }
   const stageText = stage !== 'prod' ? `_${stage}_` : '';
-  text = `${emoji}${text} ${stageText}`;
+  text = `${emoji ? `${emoji} ` : ''}${text} ${stageText}`;
 
   if (stage === 'prod') {
     await webhook.send({
