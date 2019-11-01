@@ -194,6 +194,10 @@ functions:
     handler: program.syncNew
     timeout: 60
     events:
+      # - schedule: rate(60 minutes)
+      - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
+      - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
+      - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
       - http:
           path: 'sync'
           method: post
@@ -203,10 +207,6 @@ functions:
               - partner
               - authorization
               - content-type
-      # - schedule: rate(60 minutes)
-      - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
-      - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
-      - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
   syncByZip:
     handler: program.syncByZip
     memorySize: 1024
