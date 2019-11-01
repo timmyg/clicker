@@ -86,15 +86,15 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: ${self:custom.tableThroughput}
               WriteCapacityUnits: ${self:custom.tableThroughput}
-          - IndexName: referralCodeGlobalSecondaryIndex
-            KeySchema:
-              - AttributeName: referralCode
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.tableThroughput}
-              WriteCapacityUnits: ${self:custom.tableThroughput}
+          # - IndexName: referralCodeGlobalSecondaryIndex
+          #   KeySchema:
+          #     - AttributeName: referralCode
+          #       KeyType: HASH
+          #   Projection:
+          #     ProjectionType: KEYS_ONLY
+          #   ProvisionedThroughput:
+          #     ReadCapacityUnits: ${self:custom.tableThroughput}
+          #     WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
