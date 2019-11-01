@@ -364,6 +364,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
   // get program ids, publish to sns topic to update description
   const sns = new AWS.SNS({ region: 'us-east-1' });
+  let i = 0;
   for (const program of transformedPrograms) {
     const messageData = {
       Message: JSON.stringify(program),
@@ -371,12 +372,13 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     };
 
     try {
-      console.log('publish', process.env.newProgramTopicArn);
+      i++;
       await sns.publish(messageData).promise();
     } catch (e) {
       console.error(e);
     }
   }
+  console.log(i, 'topics published to:', process.env.newProgramTopicArn);
 }
 
 // module.exports.consumeNewProgramFunction = RavenLambdaWrapper.handler(Raven, async event => {
