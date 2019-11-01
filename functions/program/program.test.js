@@ -16,9 +16,11 @@ test('smoke test', () => {
 });
 
 test('generateId generates the same id when same program', () => {
+  const region1 = 'cincinnati';
   const program = {
     chNum: 206,
     airTime: moment().toDate(),
+    region: region1,
   };
   const program1Id = generateId(program);
   const program2Id = generateId(program);
@@ -26,15 +28,15 @@ test('generateId generates the same id when same program', () => {
 });
 
 test('generateId generates different ids when different programs', () => {
-  const zip1 = '45212';
-  const zip2 = '45202';
+  const region1 = 'cincinnati';
+  const region2 = 'chicago';
   const program1 = {
     chNum: 206,
-    zip: zip1,
+    region: region1,
   };
   const program2 = {
     chNum: 206,
-    zip: zip2,
+    region: region2,
   };
   const program1Id = generateId(program1);
   const program2Id = generateId(program2);
@@ -48,7 +50,9 @@ test('build programs', () => {
   });
   const response = build(data.schedule, null, ['324', '661-1']);
   // console.log({ response });
-  expect(response[0]).toHaveProperty('id');
+  expect(response[0]).toHaveProperty('region');
+  expect(response[0]).toHaveProperty('start');
+  expect(response[0]).toHaveProperty('end');
   expect(response.length).toBe(129);
 });
 

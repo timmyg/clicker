@@ -130,6 +130,8 @@ resources:
             AttributeType: N
           - AttributeName: end
             AttributeType: N
+          - AttributeName: id
+            AttributeType: N
         KeySchema:
           - AttributeName: region
             KeyType: HASH
@@ -141,6 +143,15 @@ resources:
             - AttributeName: region
               KeyType: HASH
             - AttributeName: end
+              KeyType: RANGE
+          Projection:
+            ProjectionType: KEYS_ONLY
+        LocalSecondaryIndexes:
+          - IndexName: idIndex
+          KeySchema:
+            - AttributeName: region
+              KeyType: HASH
+            - AttributeName: id
               KeyType: RANGE
           Projection:
             ProjectionType: KEYS_ONLY

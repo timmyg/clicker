@@ -20,11 +20,11 @@ declare class process {
   };
 }
 
-class region {
-  name: string;
-  defaultZip: string;
-  localChannels: number[];
-}
+type region = {
+  name: string,
+  defaultZip: string,
+  localChannels: number[],
+};
 
 const allRegions: region[] = [{ name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 661] }];
 const minorChannels: number[] = [661];
@@ -290,7 +290,7 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
 
     for (const region of allRegions) {
       const { defaultZip, name, localChannels } = region;
-      console.log(`sync local channels: ${name}/${zip} for channels ${localChannels.join(', ')}`);
+      console.log(`sync local channels: ${name}/${defaultZip} for channels ${localChannels.join(', ')}`);
       await new Invoke()
         .service('programs')
         .name('syncByRegion')
@@ -521,9 +521,8 @@ function build(dtvSchedule: any, regionName: string) {
 }
 
 function generateId(program: any) {
-  const { programmingId, zip } = program;
-  const id = programmingId + (zip || '');
-  // console.log(id, uuid.DNS);
+  const { programmingId, region } = program;
+  const id = programmingId + region;
   return uuid(id, uuid.DNS);
 }
 
