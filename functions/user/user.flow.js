@@ -119,8 +119,14 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
   console.log({ user });
 
+  // this shouldnt typically happen, but could in dev environments when database cleared
+  if (!user) {
+    // const userId = uuid();
+    console.log('creating user', userId, initialTokens);
+    user = await User.create({ id: userId, tokens: initialTokens });
+  }
+
   // generate referral code if none
-  console.log(user);
   if (!user.referralCode) {
     const referralCode = Math.random()
       .toString(36)
@@ -128,12 +134,6 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
     user = await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
   }
 
-  // this shouldnt typically happen, but could in dev environments when database cleared
-  if (!user) {
-    // const userId = uuid();
-    console.log('creating user', userId, initialTokens);
-    user = await User.create({ id: userId, tokens: initialTokens });
-  }
   console.log({ user });
 
   if (user.stripeCustomer) {
