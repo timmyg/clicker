@@ -79,11 +79,10 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
 
-  const referrerUsers = await User.scan('referralCode')
+  const referrerUser = await User.queryOne('referralCode')
     .eq(code)
     .all()
     .exec();
-  const referrerUser = referrerUsers[0];
 
   console.log({ user });
   console.log({ referrerUser });
@@ -389,12 +388,12 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function getToken(phone) {
-  const users = await User.scan('phone')
+  const user = await User.queryOne('phone')
     .eq(phone)
     .all()
     .exec();
-  if (users && users.length) {
-    const { id } = users[0];
+  if (user) {
+    const { id } = user;
     return jwt.sign({ sub: id }, key);
   } else {
     const user = await User.create({ phone, tokens: 0 });
