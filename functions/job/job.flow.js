@@ -23,7 +23,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async event => {
-  const regions = ['Cincinnati'];
+  const regions = ['cincinnati'];
   const { data: locations } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')
@@ -56,7 +56,7 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
 });
 
 module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  const regions = ['Cincinnati'];
+  const regions = ['cincinnati'];
   const { data: locations } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')

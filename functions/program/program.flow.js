@@ -20,15 +20,15 @@ declare class process {
   };
 }
 
-class programAreaType {
-  zip: string;
-  channels: number[];
+class region {
+  name: string;
+  defaultZip: string;
+  localChannels: number[];
 }
 
+const allRegions: region[] = [{ name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 661] }];
 const minorChannels: number[] = [661];
-
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB'];
-
 const nationalChannels: number[] = [
   206, //ESPN
   209, //ESPN2
@@ -77,7 +77,6 @@ const nationalChannels: number[] = [
   //, 105 //LIVE4K
   //, 106 //LIVE4K2
 ];
-const zipDefault = 45202;
 
 function init() {
   Program = dynamoose.model(
@@ -88,7 +87,6 @@ function init() {
         hashKey: true,
       },
       start: { type: Number, rangeKey: true },
-      // expires: Number,
       channel: Number,
       channelMinor: Number,
       channelTitle: String,
@@ -104,7 +102,7 @@ function init() {
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
-      zip: String,
+      region: String,
       // dynamic fields
       nextProgramTitle: String,
       nextProgramStart: Number,
@@ -126,40 +124,25 @@ function init() {
       },
     },
   );
-  ProgramArea = dynamoose.model(
-    process.env.tableProgramArea,
-    {
-      zip: {
-        type: String,
-        hashKey: true,
-      },
-      channels: [Number],
-    },
-    {
-      timestamps: true,
-    },
-  );
+  // ProgramArea = dynamoose.model(
+  //   process.env.tableProgramArea,
+  //   {
+  //     zip: {
+  //       type: String,
+  //       hashKey: true,
+  //     },
+  //     channels: [Number],
+  //   },
+  //   {
+  //     timestamps: true,
+  //   },
+  // );
 }
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('hi', process.env.tableProgram);
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 });
-
-module.exports.createArea = RavenLambdaWrapper.handler(Raven, async event => {
-  const { zip, channels } = getBody(event);
-  init();
-  const programArea = await ProgramArea.create({ zip, channels });
-  return respond(200, programArea);
-});
-
-module.exports.getProgramAreas = async () => {
-  init();
-  const programAreas = await ProgramArea.scan()
-    .all()
-    .exec();
-  return respond(200, programAreas);
-};
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
@@ -305,24 +288,16 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     init();
 
-    // sync national channels
-    // console.log('sync national channels');
-    // await syncChannels(nationalChannels);
-
-    // sync local/national channels
-    const programAreas: programAreaType[] = await ProgramArea.scan()
-      .all()
-      .exec();
-    for (const area of programAreas) {
-      console.log(`sync local channels: ${area.zip} for channels ${area.channels.join(', ')}`);
+    for (const region of allRegions) {
+      const { defaultZip, name, localChannels } = region;
+      console.log(`sync local channels: ${name}/${zip} for channels ${localChannels.join(', ')}`);
       await new Invoke()
         .service('programs')
-        .name('syncByZip')
-        .body({ zip: area.zip, localChannels: area.channels })
+        .name('syncByRegion')
+        .body({ name, localChannels, defaultZip })
         .async()
         .go();
     }
-
     return respond(201);
   } catch (e) {
     console.error(e);
@@ -330,16 +305,16 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.syncByZip = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
   init();
-  const { zip, localChannels } = getBody(event);
-  await syncChannels(localChannels, zip);
+  const { name, defaultZip, localChannels } = getBody(event);
+  await syncChannels(name, localChannels, defaultZip);
   respond(200);
 });
 
-async function syncChannels(areaChannels: number[], zip: string) {
+async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
-  const channels = nationalChannels.concat(areaChannels);
+  const channels = nationalChannels.concat(regionChannels);
   const channelsString = getChannels(channels).join(',');
   const hoursAgoStart = 4;
   const hoursFromStart = 8;
@@ -361,7 +336,7 @@ async function syncChannels(areaChannels: number[], zip: string) {
   let result = await axios({ method, url, params, headers });
 
   let { schedule } = result.data;
-  let allPrograms = build(schedule, zip);
+  let allPrograms = build(schedule, regionName);
   let transformedPrograms = buildProgramObjects(allPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
 
@@ -426,29 +401,14 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     console.log('result.data.programDetail', result.data.programDetail);
     const { description } = result.data.programDetail;
     console.log('update', { id, start }, { description });
-    // const response = await Program.update({ id, start }, { description });
-    // let program = await Program.queryOne('id')
-    //   .eq(id)
-    //   .exec();
 
-    let program = await getProgram(id, start);
-    // console.log('program?');
-    // console.log(program);
-    // console.log(program.id);
-    // console.log(!!program.id);
-    // console.log(program.Item);
-    // console.log(program.Item.id);
-    if (!!program.id) {
-      // is not null, is {} if doesnt exist
-      // program.description = description;
-      console.log('saving program...');
-      console.log(program);
-      // await program.save();
-      await updateProgram(id, start, description);
-      console.log('program saved');
-    } else {
-      console.log('no program by id:', id);
-    }
+    // let program = await getProgram(id, start);
+    // if (!!program.id) {
+    await updateProgram(id, start, description);
+    //   console.log('program saved');
+    // } else {
+    //   console.log('no program by id:', id);
+    // }
     return respond(200);
   } catch (e) {
     if (e.response && e.response.status === 404) {
@@ -485,7 +445,8 @@ async function updateProgram(id, start, description) {
     TableName: process.env.tableProgram,
     Key: { id, start },
     UpdateExpression: 'set description = :newdescription',
-    ExpressionAttributeValues: { ':newdescription': description },
+    ConditionExpression: 'id = :id',
+    ExpressionAttributeValues: { ':newdescription': description, ':id': id },
   };
   try {
     const x = await docClient.update(params).promise();
@@ -496,20 +457,20 @@ async function updateProgram(id, start, description) {
   }
 }
 
-async function getProgram(id, start) {
-  const AWS = require('aws-sdk');
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  var params = {
-    TableName: process.env.tableProgram,
-    Key: { id, start },
-  };
-  try {
-    const data = await docClient.get(params).promise();
-    return data.Item;
-  } catch (err) {
-    return err;
-  }
-}
+// async function getProgram(id, start) {
+//   const AWS = require('aws-sdk');
+//   const docClient = new AWS.DynamoDB.DocumentClient();
+//   var params = {
+//     TableName: process.env.tableProgram,
+//     Key: { id, start },
+//   };
+//   try {
+//     const data = await docClient.get(params).promise();
+//     return data.Item;
+//   } catch (err) {
+//     return err;
+//   }
+// }
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
@@ -519,7 +480,7 @@ function buildProgramObjects(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, zip: string) {
+function build(dtvSchedule: any, regionName: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
@@ -543,7 +504,7 @@ function build(dtvSchedule: any, zip: string) {
 
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
-        program.zip = zip;
+        program.region = regionName;
         program.id = generateId(program);
         program.start = moment(program.airTime).unix() * 1000;
         program.end =

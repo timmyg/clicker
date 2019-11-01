@@ -10,7 +10,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
-    tableProgramArea: ${self:custom.tableProgramArea}
     serviceName: ${self:service}
   iamRoleStatements:
     - Effect: 'Allow'
@@ -43,7 +42,6 @@ custom:
     automatic: true
     number: 3
   tableProgram: programs-${self:custom.stage}
-  tableProgramArea: programs-area-${self:custom.stage}
   tableThroughputs:
     prod: 5
     default: 1
@@ -126,28 +124,27 @@ resources:
       Properties:
         TableName: ${self:custom.tableProgram}
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: region
             AttributeType: S
           - AttributeName: start
             AttributeType: N
+          - AttributeName: end
+            AttributeType: N
         KeySchema:
-          - AttributeName: id
+          - AttributeName: region
             KeyType: HASH
           - AttributeName: start
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
-    ProgramAreaTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableProgramArea}
-        AttributeDefinitions:
-          - AttributeName: zip
-            AttributeType: S
-        KeySchema:
-          - AttributeName: zip
-            KeyType: HASH
+        LocalSecondaryIndexes:
+          - IndexName: endIndex
+          KeySchema:
+            - AttributeName: region
+              KeyType: HASH
+            - AttributeName: end
+              KeyType: RANGE
+          Projection:
+            ProjectionType: KEYS_ONLY
+
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
@@ -178,18 +175,6 @@ functions:
               - partner
               - authorization
               - content-type
-  getProgramAreas:
-    handler: program.getProgramAreas
-    events:
-      - http:
-          path: 'areas'
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncNew:
     handler: program.syncNew
     timeout: 60
@@ -207,25 +192,13 @@ functions:
               - partner
               - authorization
               - content-type
-  syncByZip:
-    handler: program.syncByZip
+  syncByRegion:
+    handler: program.syncByRegion
     memorySize: 1024
     timeout: 60
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
-  createArea:
-    handler: program.createArea
-    events:
-      - http:
-          path: 'area'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   consumeNewProgram:
     memorySize: 512
     timeout: 20
