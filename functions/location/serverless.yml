@@ -57,24 +57,24 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          # - AttributeName: losantId
-          #   AttributeType: S
+          - AttributeName: losantId
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-        # GlobalSecondaryIndexes:
-        #   - IndexName: losantIdGlobalIndex
-        #     KeySchema:
-        #       - AttributeName: losantId
-        #         KeyType: HASH
-        #     Projection:
-        #       ProjectionType: KEYS_ONLY
-        #     ProvisionedThroughput:
-        #       ReadCapacityUnits: ${self:custom.tableThroughput}
-        #       WriteCapacityUnits: ${self:custom.tableThroughput}
+        GlobalSecondaryIndexes:
+          - IndexName: losantIdGlobalIndex
+            KeySchema:
+              - AttributeName: losantId
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.tableThroughput}
+              WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
