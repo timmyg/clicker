@@ -354,9 +354,11 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('1');
   init();
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
+  console.log('2', twilioAccountSid, twilioAuthToken, twilioServiceSid);
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
   try {
