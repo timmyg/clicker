@@ -340,9 +340,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${
-        location.neighborhood
-      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -426,11 +424,10 @@ module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => 
 module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const { losantId } = getPathParameters(event);
-  const locations = await Location.scan('losantId')
+  const location = await Location.queryOne('losantId')
     .eq(losantId)
     .all()
     .exec();
-  const location = locations[0];
   location.connected = true;
   await location.save();
 
@@ -448,11 +445,10 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const { losantId } = getPathParameters(event);
-  const locations = await Location.scan('losantId')
+  const location = await Location.queryOne('losantId')
     .eq(losantId)
     .all()
     .exec();
-  const location = locations[0];
   location.connected = false;
   await location.save();
 
