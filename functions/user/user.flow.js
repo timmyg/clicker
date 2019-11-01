@@ -360,8 +360,10 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const client = require('twilio')(twilioAccountSid, twilioAuthToken);
 
   try {
+    console.log(twilioServiceSid, phone);
+    console.log('call...');
     const response = await client.verify.services(twilioServiceSid).verifications.create({ to: phone, channel: 'sms' });
-    console.log(response);
+    console.log({ response });
     return respond(201, response);
   } catch (e) {
     return respond(400, e);
