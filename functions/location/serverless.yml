@@ -65,17 +65,16 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-
-        GlobalSecondaryIndexes:
-          - IndexName: losantIdGlobalIndex
-            KeySchema:
-              - AttributeName: losantId
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.tableThroughput}
-              WriteCapacityUnits: ${self:custom.tableThroughput}
+        # GlobalSecondaryIndexes:
+        #   - IndexName: losantIdGlobalIndex
+        #     KeySchema:
+        #       - AttributeName: losantId
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: ${self:custom.tableThroughput}
+        #       WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
