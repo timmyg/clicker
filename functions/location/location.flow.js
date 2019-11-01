@@ -75,6 +75,7 @@ function init() {
     },
     {
       timestamps: true,
+      update: true,
     },
   );
 }
