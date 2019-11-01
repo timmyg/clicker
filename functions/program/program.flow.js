@@ -413,7 +413,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   console.log('consume');
   console.log(event);
   init();
-  const { id, programmingId, start } = JSON.parse(event.Records[0].body);
+  const { id, programmingId, region } = JSON.parse(event.Records[0].body);
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = {
     timeout: 2000,
@@ -422,11 +422,11 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     const result = await axios.get(url, options);
     console.log('result.data.programDetail', result.data.programDetail);
     const { description } = result.data.programDetail;
-    console.log('update', { id, start }, { description });
+    console.log('update', { id, region }, { description });
 
-    // let program = await getProgram(id, start);
+    // let program = await getProgram(id, region);
     // if (!!program.id) {
-    await updateProgram(id, start, description);
+    await updateProgram(id, region, description);
     //   console.log('program saved');
     // } else {
     //   console.log('no program by id:', id);
