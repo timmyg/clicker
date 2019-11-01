@@ -25,6 +25,7 @@ function init() {
         type: String,
         required: true,
         index: true,
+        global: true,
       },
       boxes: [
         {
