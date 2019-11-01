@@ -131,7 +131,7 @@ resources:
           - AttributeName: end
             AttributeType: N
           - AttributeName: id
-            AttributeType: N
+            AttributeType: S
         KeySchema:
           - AttributeName: region
             KeyType: HASH
@@ -189,10 +189,10 @@ functions:
     handler: program.syncNew
     timeout: 60
     events:
-      # - schedule: rate(60 minutes)
-      - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
-      - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
-      - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
+      - schedule: rate(60 minutes)
+      # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
+      # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
+      # - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
       - http:
           path: 'sync'
           method: post
