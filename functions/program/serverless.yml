@@ -135,9 +135,17 @@ resources:
         KeySchema:
           - AttributeName: region
             KeyType: HASH
-          - AttributeName: start
+          - AttributeName: id
             KeyType: RANGE
         LocalSecondaryIndexes:
+          - IndexName: startIndex
+            KeySchema:
+              - AttributeName: region
+                KeyType: HASH
+              - AttributeName: start
+                KeyType: RANGE
+            Projection:
+              ProjectionType: KEYS_ONLY
           - IndexName: endIndex
             KeySchema:
               - AttributeName: region
@@ -146,15 +154,6 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: KEYS_ONLY
-          - IndexName: idIndex
-            KeySchema:
-              - AttributeName: region
-                KeyType: HASH
-              - AttributeName: id
-                KeyType: RANGE
-            Projection:
-              ProjectionType: KEYS_ONLY
-
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
