@@ -359,6 +359,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   let { schedule } = result.data;
   let allPrograms = build(schedule, regionName);
   let transformedPrograms = buildProgramObjects(allPrograms);
+  console.log(transformedPrograms);
   let dbResult = await Program.batchPut(transformedPrograms);
 
   // get program ids, publish to sns topic to update description
