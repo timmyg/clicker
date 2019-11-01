@@ -13,6 +13,7 @@ const { stripeSecretKey } = process.env;
 const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
+const twilio = require('twilio');
 const initialTokens = 1;
 const key = 'clikr';
 let User;
@@ -359,7 +360,7 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   console.log('2', twilioAccountSid, twilioAuthToken, twilioServiceSid);
-  const client = require('twilio')(twilioAccountSid, twilioAuthToken);
+  const client = new twilio(twilioAccountSid, twilioAuthToken);
   console.log('3', client);
   try {
     console.log('4');
@@ -377,7 +378,7 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   // init();
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
-  const client = require('twilio')(twilioAccountSid, twilioAuthToken);
+  const client = new twilio(twilioAccountSid, twilioAuthToken);
 
   try {
     const result = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
