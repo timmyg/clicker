@@ -306,28 +306,49 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
-  init();
   const { name, defaultZip, localChannels } = getBody(event);
   await syncChannels(name, localChannels, defaultZip);
   respond(200);
 });
 
 async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
+  init();
   // channels may have minor channel, so get main channel number
   const channels = nationalChannels.concat(regionChannels);
   const channelsString = getChannels(channels).join(',');
-  const hoursAgoStart = 4;
-  const hoursFromStart = 8;
+
+  // get latest program
+  const latestProgram = await Program.queryOne('region')
+    .eq(regionName)
+    .where('start')
+    .descending()
+    .exec();
+
+  console.log({ latestProgram });
+
+  let totalHours, startTime;
+  // if programs, take the largest start time, add 1 minutes and start from there and get two hours of programming
+  if (latestProgram) {
+    startTime = moment(latestProgram.start)
+      .utc()
+      .add(1, 'minute')
+      .toString();
+    totalHours = 2;
+  } else {
+    // if no programs, get 4 hours ago and pull 6 hours
+    const startHoursFromNow = -4;
+    totalHours = 6;
+    startTime = moment()
+      .utc()
+      .add(startHoursFromNow, 'hours')
+      .minutes(0)
+      .seconds(0)
+      .toString();
+  }
 
   const url = `${directvEndpoint}/channelschedule`;
-  const startTime = moment()
-    .utc()
-    .subtract(hoursAgoStart, 'hours')
-    .minutes(0)
-    .seconds(0)
-    .toString();
 
-  const params = { channels: channelsString, startTime, hours: hoursFromStart };
+  const params = { channels: channelsString, startTime, hours: totalHours };
   const headers = {
     Cookie: `dtve-prospect-zip=${zip};`,
   };
