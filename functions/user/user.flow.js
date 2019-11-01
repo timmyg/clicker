@@ -355,6 +355,7 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = new twilio(twilioAccountSid, twilioAuthToken);
@@ -367,6 +368,7 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = new twilio(twilioAccountSid, twilioAuthToken);
