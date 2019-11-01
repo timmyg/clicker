@@ -355,19 +355,11 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('1');
-  // init();
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
-  console.log('2', twilioAccountSid, twilioAuthToken, twilioServiceSid);
   const client = new twilio(twilioAccountSid, twilioAuthToken);
-  console.log('3', client);
   try {
-    console.log('4');
-    console.log(twilioServiceSid, phone);
-    console.log('call...');
     const response = await client.verify.services(twilioServiceSid).verifications.create({ to: phone, channel: 'sms' });
-    console.log({ response });
     return respond(201, response);
   } catch (e) {
     return respond(400, e);
@@ -375,14 +367,12 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
-  // init();
   const { phone, code } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = new twilio(twilioAccountSid, twilioAuthToken);
 
   try {
     const result = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
-    console.log(result);
     if (result.status === 'approved') {
       const token = await getToken(phone);
       return respond(201, { token });
