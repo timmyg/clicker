@@ -66,12 +66,29 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: phone
+            AttributeType: S
+          - AttributeName: referralCode
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
+        GlobalSecondaryIndexes:
+          - IndexName: phoneGlobalSeconddaryIndex
+            KeySchema:
+              - AttributeName: id
+                KeyType: HASH
+              - AttributeName: phone
+                KeyType: RANGE
+          - IndexName: referralCodeGlobalSeconddaryIndex
+            KeySchema:
+              - AttributeName: id
+                KeyType: HASH
+              - AttributeName: referralCode
+                KeyType: RANGE
 
 functions:
   health:
