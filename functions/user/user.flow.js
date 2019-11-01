@@ -374,12 +374,14 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     console.log(twilioAccountSid, twilioAuthToken, twilioServiceSid, phone, code);
     const result = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
+    console.log({ result });
     if (result.status === 'approved') {
       const token = await getToken(phone);
       return respond(201, { token });
     }
     return respond(400, 'denied');
   } catch (e) {
+    console.error(e);
     return respond(400, e);
   }
 });
