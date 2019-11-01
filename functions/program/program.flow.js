@@ -459,13 +459,13 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
 //   }
 // }
 // async function abstraction
-async function updateProgram(id, start, description) {
+async function updateProgram(id, region, description) {
   console.log({ description });
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
     TableName: process.env.tableProgram,
-    Key: { id, start },
+    Key: { id, region },
     UpdateExpression: 'set description = :newdescription',
     ConditionExpression: 'id = :id',
     ExpressionAttributeValues: { ':newdescription': description, ':id': id },
