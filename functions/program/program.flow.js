@@ -82,11 +82,13 @@ function init() {
   Program = dynamoose.model(
     process.env.tableProgram,
     {
-      id: {
+      region: {
         type: String,
         hashKey: true,
       },
       start: { type: Number, rangeKey: true },
+      end: { type: Number, index: true },
+      id: String,
       channel: Number,
       channelMinor: Number,
       channelTitle: String,
@@ -94,7 +96,6 @@ function init() {
       episodeTitle: String, // "Oklahoma State at Kansas"
       description: String,
       durationMins: Number, // mins
-      end: Number,
       live: Boolean,
       repeat: Boolean,
       sports: Boolean,
@@ -102,7 +103,6 @@ function init() {
       channelCategories: [String], // ["Sports Channels"]
       subcategories: [String], // ["Basketball"]
       mainCategory: String, // "Sports"
-      region: String,
       // dynamic fields
       nextProgramTitle: String,
       nextProgramStart: Number,
@@ -167,27 +167,27 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming setup queries');
 
-  const programsQuery = Program.scan()
+  const programsQuery = Program.query()
     .filter('start')
     .lt(now)
     .and()
     .filter('end')
     .gt(now)
     .and()
-    .filter('zip')
-    .eq(location.zip)
+    .filter('region')
+    .eq(location.region)
     .all()
     .exec();
 
-  const programsNextQuery = Program.scan()
+  const programsNextQuery = Program.query()
     .filter('start')
     .lt(in25Mins)
     .and()
     .filter('end')
     .gt(in25Mins)
     .and()
-    .filter('zip')
-    .eq(location.zip)
+    .filter('region')
+    .eq(location.region)
     .all()
     .exec();
   console.timeEnd('current + next programming setup queries');
