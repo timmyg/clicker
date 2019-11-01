@@ -35,12 +35,13 @@ function init() {
       id: {
         type: String,
         default: uuid,
+        hashKey: true,
       },
+      phone: { type: String, index: true },
+      referralCode: { type: String, index: true },
       stripeCustomer: String,
-      phone: String,
       card: Object, // set in api
       spent: Number,
-      referralCode: String,
       referredByCode: String,
       tokens: {
         type: Number,
