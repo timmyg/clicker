@@ -13,11 +13,13 @@ provider:
     slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
     slackLandingWebhookUrl: ${env:SLACK_LANDING_WEBHOOK_URL}
     slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
+    slackTasksWebhookUrl: ${env:SLACK_TASKS_WEBHOOK_URL}
     slackSandboxWebhookUrl: ${env:SLACK_SANDBOX_WEBHOOK_URL}
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -37,6 +39,8 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
 functions:
   sendAntenna:
     handler: notification.sendAntenna
@@ -86,6 +90,8 @@ functions:
               - partner
               - authorization
               - content-type
+  sendTasks:
+    handler: notification.sendTasks
   health:
     handler: notification.health
     events:
@@ -98,4 +104,3 @@ functions:
               - partner
               - authorization
               - content-type
-

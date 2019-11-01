@@ -1,7 +1,6 @@
 // @flow
 const axios = require('axios');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-require('dotenv').config();
 
 class SiLeague {
   name: string; // Major League Baseball, College Football
@@ -53,7 +52,7 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const apiUrl = transformSIUrl(webUrl);
 
   const method = 'get';
-  const options = { method, url: apiUrl };
+  const options = { method, url: apiUrl, timeout: 2000 };
   try {
     const result = await axios(options);
     const gameStatus: GameStatus = transformGame(result.data);
@@ -127,7 +126,9 @@ function transformGame(result: SiResult): GameStatus {
   }
 
   // set description
-  gameStatus.description = `${awayTeam.abbreviation} ${awayTeam.score} @ ${homeTeam.abbreviation} ${homeTeam.score}`;
+  gameStatus.description = `${awayTeam.abbreviation} ${awayTeam.score || 0} @ ${
+    homeTeam.abbreviation
+  } ${homeTeam.score || 0}`;
   if (status === 'In-Progress') {
     if (['NFL', 'NCAAF', 'NCAAB', 'NBA', 'WNBA', 'NHL'].includes(leageAbbreviation)) {
       gameStatus.description += ` (${game.status.period.time} ${game.status.period.name})`;

@@ -1,223 +1,126 @@
 {
   "status": "success",
   "data": {
-    "id": 2041893,
-    "league": {
-      "name": "National Basketball Assoc.",
-      "abbreviation": "NBA"
-    },
-    "series_game_number": 4,
-    "is_if_necessary": false,
-    "start": {
-      "local": "2018-05-06T18:00:00",
-      "utc": "2018-05-07T00:00:00",
-      "epoch": 1525651200
-    },
-    "tv": "TNT",
+    "id": 2177095,
+    "league": { "name": "National Basketball Assoc.", "abbreviation": "NBA" },
+    "start": { "local": "2019-10-24T19:00:00", "utc": "2019-10-24T23:00:00", "epoch": 1571958000 },
+    "tv": "FSDT",
     "tv_stations": [
       {
-        "tv_station_id": 84,
-        "name": "TNT",
-        "call_letters": "TNT",
-        "network_type": {
-          "network_type_id": 1,
-          "name": "National"
-        },
-        "country": {
-          "country_id": 1,
-          "name": "United States",
-          "abbreviation": "USA"
-        }
+        "tv_station_id": 25,
+        "name": "Fox Sports - Detroit",
+        "call_letters": "FSDT",
+        "network_type": { "network_type_id": 2, "name": "Regional" },
+        "country": { "country_id": 1, "name": "United States", "abbreviation": "USA" }
       },
       {
-        "tv_station_id": 913,
-        "name": "Movistar Deportes",
-        "call_letters": "MvD",
-        "network_type": {
-          "network_type_id": 1,
-          "name": "National"
-        },
-        "country": {
-          "country_id": 39,
-          "name": "Spain",
-          "abbreviation": "ESP"
-        }
+        "tv_station_id": 30,
+        "name": "Fox Sports - Southeast",
+        "call_letters": "FSSE",
+        "network_type": { "network_type_id": 2, "name": "Regional" },
+        "country": { "country_id": 1, "name": "United States", "abbreviation": "USA" }
       }
     ],
+    "tickets": {},
     "venue": {
-      "name": "Vivint Smart Home Arena",
-      "city": "Salt Lake City",
-      "state": {
-        "name": "Utah",
-        "abbreviation": "UT"
-      },
-      "country": {
-        "name": "United States",
-        "abbreviation": "USA"
-      }
+      "name": "Little Caesars Arena",
+      "city": "Detroit",
+      "state": { "name": "Michigan", "abbreviation": "MI" },
+      "country": { "name": "United States", "abbreviation": "USA" }
     },
-    "status": {
-      "period": {
-        "id": 4,
-        "name": "4th",
-        "unit": "Quarter",
-        "full_name": "4th",
-        "time": "8:04"
-      },
-      "name": "Pre-Game",
-      "id": 2,
-      "is_active": false
-    },
-    "event_round": {
-      "title": "Second Round",
-      "status": "Rockets lead 2-1",
-      "name": "Second Round: Game 4 - Rockets lead 2-1",
-      "games_in_series": 7,
-      "game_number": 4
-    },
+    "status": { "id": 1, "name": "Pre-Game", "is_break": true, "is_active": false, "is_live": false },
+    "event_round": null,
     "teams": [
       {
-        "id": 26,
-        "name": "Jazz",
-        "abbreviation": "Uta",
-        "playoff_seed": 5,
-        "location": {
-          "name": "Utah",
-          "type": "home"
+        "slug": "nba/team/detroit-pistons",
+        "id": 8,
+        "name": "Pistons",
+        "abbreviation": "Det",
+        "location": { "name": "Detroit", "type": "home" },
+        "title": "Detroit Pistons",
+        "venue": { "name": "Little Caesars Arena", "city": "Detroit", "state": "MI" },
+        "league": { "name": "National Basketball Assoc.", "abbreviation": "NBA" },
+        "conference": { "name": "Eastern Conference", "abbreviation": "Eastern" },
+        "division": "Central Division",
+        "taxonomy": {
+          "teams": "nba-detroit-pistons",
+          "airship": [
+            { "name": "Game Start", "tag": "events::nba-detroit-pistons-1" },
+            { "name": "Quarter", "tag": "events::nba-detroit-pistons-2" },
+            { "name": "Final", "tag": "events::nba-detroit-pistons-4" },
+            { "name": "Team News", "tag": "teams::nba-detroit-pistons" }
+          ]
         },
-        "title": "Utah Jazz",
         "logo": {
           "base": "https://cdn-s3.si.com/s3fs-public/teams/basketball/nba/logos/",
           "cuts": {
-            "default": "jazz_50.png",
-            "50x50": "jazz_50.png",
-            "100x100": "jazz_100.png",
-            "100x100_light": "jazz_100_stroke.png",
-            "360x360": "jazz_360.png",
-            "250x250": "jazz_250.png",
-            "150x150": "jazz_150.png",
-            "40x40": "jazz_40.png",
-            "40x40_light": "jazz_40_stroke.png"
+            "default": "pistons_50.png",
+            "40x40": "pistons_40.png",
+            "40x40_light": "pistons_40_stroke.png",
+            "50x50": "pistons_50.png",
+            "100x100": "pistons_100.png",
+            "100x100_light": "pistons_100_stroke.png",
+            "150x150": "pistons_150.png",
+            "250x250": "pistons_250.png",
+            "360x360": "pistons_360.png"
           }
         },
-        "color": {
-          "primary": "#002b5c",
-          "secondary": "#00471b"
-        },
-        "slug": "nba/team/utah-jazz",
-        "series": {
-          "wins": 1,
-          "losses": 2,
-          "ties": 0,
-          "is_series_winner": false
-        },
-        "score": 74,
-        "is_winner": false,
-        "taxonomy": {
-          "teams": "nba-utah-jazz",
-          "airship": [
-            {
-              "name": "Game Start",
-              "tag": "events::nba-utah-jazz-1"
-            },
-            {
-              "name": "Quarter",
-              "tag": "events::nba-utah-jazz-2"
-            },
-            {
-              "name": "Final",
-              "tag": "events::nba-utah-jazz-4"
-            },
-            {
-              "name": "Team News",
-              "tag": "teams::nba-utah-jazz"
-            }
-          ]
-        }
+        "color": { "primary": "#006bb6", "secondary": "#ed174c" },
+        "record": { "wins": 1, "losses": 0, "percentage": " 1.000" },
+        "is_winner": false
       },
       {
-        "id": 10,
-        "name": "Rockets",
-        "abbreviation": "Hou",
-        "playoff_seed": 1,
-        "location": {
-          "name": "Houston",
-          "type": "away"
+        "slug": "nba/team/atlanta-hawks",
+        "id": 1,
+        "name": "Hawks",
+        "abbreviation": "Atl",
+        "location": { "name": "Atlanta", "type": "away" },
+        "title": "Atlanta Hawks",
+        "venue": { "name": "State Farm Arena", "city": "Atlanta", "state": "GA" },
+        "league": { "name": "National Basketball Assoc.", "abbreviation": "NBA" },
+        "conference": { "name": "Eastern Conference", "abbreviation": "Eastern" },
+        "division": "Southeast Division",
+        "taxonomy": {
+          "teams": "nba-atlanta-hawks",
+          "airship": [
+            { "name": "Game Start", "tag": "events::nba-atlanta-hawks-1" },
+            { "name": "Quarter", "tag": "events::nba-atlanta-hawks-2" },
+            { "name": "Final", "tag": "events::nba-atlanta-hawks-4" },
+            { "name": "Team News", "tag": "teams::nba-atlanta-hawks" }
+          ]
         },
-        "title": "Houston Rockets",
         "logo": {
           "base": "https://cdn-s3.si.com/s3fs-public/teams/basketball/nba/logos/",
           "cuts": {
-            "default": "rockets_50.png",
-            "50x50": "rockets_50.png",
-            "100x100": "rockets_100.png",
-            "100x100_light": "rockets_100_stroke.png",
-            "360x360": "rockets_360.png",
-            "250x250": "rockets_250.png",
-            "150x150": "rockets_150.png",
-            "40x40": "rockets_40.png",
-            "40x40_light": "rockets_40_stroke.png"
+            "default": "hawks_50.png",
+            "40x40": "hawks_40.png",
+            "40x40_light": "hawks_40_stroke.png",
+            "50x50": "hawks_50.png",
+            "100x100": "hawks_100.png",
+            "100x100_light": "hawks_100_stroke.png",
+            "150x150": "hawks_150.png",
+            "250x250": "hawks_250.png",
+            "360x360": "hawks_360.png"
           }
         },
-        "color": {
-          "primary": "#ce1141",
-          "secondary": "#c4ced4"
-        },
-        "slug": "nba/team/houston-rockets",
-        "series": {
-          "wins": 2,
-          "losses": 1,
-          "ties": 0,
-          "is_series_winner": false
-        },
-        "score": 83,
-        "is_winner": false,
-        "taxonomy": {
-          "teams": "nba-houston-rockets",
-          "airship": [
-            {
-              "name": "Game Start",
-              "tag": "events::nba-houston-rockets-1"
-            },
-            {
-              "name": "Quarter",
-              "tag": "events::nba-houston-rockets-2"
-            },
-            {
-              "name": "Final",
-              "tag": "events::nba-houston-rockets-4"
-            },
-            {
-              "name": "Team News",
-              "tag": "teams::nba-houston-rockets"
-            }
-          ]
-        }
+        "color": { "primary": "#e03a3e", "secondary": "#c1d32f" },
+        "record": { "wins": 0, "losses": 0 },
+        "is_winner": false
       }
     ],
     "alert_types": [
-      {
-        "name": "Game Start",
-        "airship": "events::1525651200-2041893-1"
-      },
-      {
-        "name": "Quarter",
-        "airship": "events::1525651200-2041893-2"
-      },
-      {
-        "name": "Final",
-        "airship": "events::1525651200-2041893-4"
-      }
+      { "name": "Game Start", "airship": "events::1571958000-2177095-1" },
+      { "name": "Quarter", "airship": "events::1571958000-2177095-2" },
+      { "name": "Final", "airship": "events::1571958000-2177095-4" }
     ],
-    "event_type": {
-      "id": "2",
-      "name": "Postseason"
-    },
-    "editorial": {
-      "has_preview": true,
-      "has_recap": false,
-      "has_bullets": true,
-      "has_odds": true
-    }
+    "editorial": { "has_preview": true, "has_recap": false, "has_bullets": false, "has_odds": false },
+    "last_play": null,
+    "links": [
+      { "name": "Recap", "url": "https://www.si.com/nba/game/2177095", "id": 1 },
+      { "name": "Box Score", "url": "https://www.si.com/nba/game/2177095/box-score", "id": 2 },
+      { "name": "Play-by-Play", "url": "https://www.si.com/nba/game/2177095/play-by-play", "id": 3 }
+    ],
+    "box_scores": [],
+    "play_by_play": []
   }
 }

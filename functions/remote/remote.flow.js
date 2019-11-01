@@ -50,16 +50,6 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     await api.sendCommand(command, losantId, { client, channel, channelMinor, ip, key });
     console.timeEnd('change channel');
 
-    console.time('update channel');
-    await new Invoke()
-      .service('location')
-      .name('updateChannel')
-      .body({ channel, source })
-      .pathParams({ id: locationId, boxId })
-      .async()
-      .go();
-    console.timeEnd('update channel');
-
     let eventName, userId;
     if (source === 'app') {
       eventName = 'App Zap';
@@ -95,6 +85,14 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
         .async()
         .go();
     }
+
+    await new Invoke()
+      .service('location')
+      .name('updateBoxChannel')
+      .body({ channel, source })
+      .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
+      .async()
+      .go();
 
     const name = eventName;
     const data = {

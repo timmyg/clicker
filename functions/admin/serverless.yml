@@ -23,6 +23,7 @@ plugins:
   - serverless-deployment-bucket
   - serverless-domain-manager
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage}
@@ -46,6 +47,8 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
 functions:
   health:
     handler: admin.health
@@ -97,4 +100,3 @@ functions:
               - partner
               - authorization
               - content-type
-

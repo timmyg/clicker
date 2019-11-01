@@ -1,5 +1,4 @@
 // @flow
-require('dotenv').config();
 const Airtable = require('airtable');
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const request = require('request-promise');
@@ -65,7 +64,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
     {
       Location: location,
       Zone: zone,
-      From: from.toString(),
+      From: from ? from.toString() : null,
       To: to.toString(),
       Time: time,
       Type: type,

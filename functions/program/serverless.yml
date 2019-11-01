@@ -19,11 +19,23 @@ provider:
         - lambda:InvokeFunction
         - lambda:InvokeAsync
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - SNS:Publish
+      Resource:
+        {
+          'Fn::Join':
+            [
+              '',
+              ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
+            ],
+        }
 
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -33,7 +45,7 @@ custom:
   tableProgram: programs-${self:custom.stage}
   tableProgramArea: programs-area-${self:custom.stage}
   tableThroughputs:
-    prod: 2
+    prod: 5
     default: 1
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
@@ -49,8 +61,66 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
+  newProgramTopic: '${self:service}-${self:custom.stage}-new-program-topic'
+  newProgramTopicArn:
+    #   # local:
+    #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
+    deployed:
+      {
+        'Fn::Join':
+          [
+            '',
+            ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
+          ],
+      }
 resources:
   Resources:
+    newProgramTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:service}-${self:custom.stage}-new-program-topic
+    newProgramQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.stage}-new-program-queue
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt
+            - newProgramDLQ
+            - Arn
+          maxReceiveCount: 3
+    newProgramDLQ:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.stage}-new-program-queue-dlq
+    snsToNewProgramQueueSqsPolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: 'allow-sns-messages'
+              Effect: Allow
+              Principal: '*'
+              Resource: !GetAtt
+                - newProgramQueue
+                - Arn
+              Action: 'SQS:SendMessage'
+              Condition:
+                ArnEquals:
+                  'aws:SourceArn': !Ref newProgramTopic
+        Queues:
+          - Ref: newProgramQueue
+    newProgramQueueSubscription:
+      Type: 'AWS::SNS::Subscription'
+      Properties:
+        TopicArn: !Ref newProgramTopic
+        Endpoint: !GetAtt
+          - newProgramQueue
+          - Arn
+        Protocol: sqs
+        RawMessageDelivery: 'true'
     ProgramTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -58,9 +128,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: start
+            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: start
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
@@ -70,7 +144,7 @@ resources:
         TableName: ${self:custom.tableProgramArea}
         AttributeDefinitions:
           - AttributeName: zip
-            AttributeType: N
+            AttributeType: S
         KeySchema:
           - AttributeName: zip
             KeyType: HASH
@@ -92,6 +166,8 @@ functions:
               - content-type
   getAll:
     handler: program.getAll
+    memorySize: 1024
+    timeout: 20
     events:
       - http:
           path: 'location/{locationId}'
@@ -116,9 +192,12 @@ functions:
               - content-type
   syncNew:
     handler: program.syncNew
-    memorySize: 1024
-    timeout: 20
+    timeout: 60
     events:
+      # - schedule: rate(60 minutes)
+      - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
+      - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
+      - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
       - http:
           path: 'sync'
           method: post
@@ -128,22 +207,13 @@ functions:
               - partner
               - authorization
               - content-type
-      - schedule: rate(30 minutes)
-  syncDescriptions:
-    handler: program.syncDescriptions
+  syncByZip:
+    handler: program.syncByZip
     memorySize: 1024
-    timeout: 20
-    events:
-      - http:
-          path: 'sync/descriptions'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-      - schedule: rate(5 minutes)
+    timeout: 60
+    environment:
+      # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
+      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
   createArea:
     handler: program.createArea
     events:
@@ -156,3 +226,15 @@ functions:
               - partner
               - authorization
               - content-type
+  consumeNewProgram:
+    memorySize: 512
+    timeout: 20
+    handler: program.consumeNewProgram
+    description: Consume new program queue and add description
+    reservedConcurrency: 2
+    events:
+      - sqs:
+          arn: !GetAtt
+            - newProgramQueue
+            - Arn
+          batchSize: 1

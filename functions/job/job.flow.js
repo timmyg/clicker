@@ -1,5 +1,4 @@
 // @flow
-require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
@@ -128,19 +127,6 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
     // fetchNextPage();
   }
   return respond(200);
-  //   },
-  //   err => {
-  //     if (err) {
-  //       return respond(400, err);
-  //     }
-  //     return respond(200);
-  //   },
-  // );
-
-  // } catch (e) {
-  //   console.error(e);
-  //   return respond(400, e);
-  // }
 });
 
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {

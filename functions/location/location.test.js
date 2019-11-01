@@ -1,4 +1,3 @@
-require('dotenv').config({ path: '../.env.example' });
 const file = require('./location');
 
 test('smoke test', () => {

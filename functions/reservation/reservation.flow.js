@@ -12,6 +12,7 @@ const {
   RavenLambdaWrapper,
 } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+let Reservation;
 
 declare class process {
   static env: {
@@ -20,71 +21,64 @@ declare class process {
   };
 }
 
-const Reservation = dynamoose.model(
-  process.env.tableReservation,
-  {
-    userId: {
-      type: String,
-      hashKey: true,
-      required: true,
-      set: val => {
-        return decodeURI(val).replace('sms|', '');
+function init() {
+  Reservation = dynamoose.model(
+    process.env.tableReservation,
+    {
+      userId: {
+        type: String,
+        hashKey: true,
+        required: true,
+        set: val => {
+          return decodeURI(val).replace('sms|', '');
+        },
       },
+      id: {
+        type: String,
+        rangeKey: true,
+        default: uuid,
+      },
+      location: {
+        id: { type: String, required: true },
+        losantId: { type: String, required: true },
+        name: { type: String, required: true },
+        neighborhood: { type: String, required: true },
+        zip: { type: String, required: true },
+        ip: { type: String, required: true },
+        img: { type: String, required: true },
+      },
+      box: {
+        id: { type: String, required: true },
+        ip: { type: String, required: true },
+        clientAddress: { type: String, required: true },
+        locationName: { type: String, required: true },
+        label: { type: String, required: true },
+      },
+      program: {
+        id: { type: String, required: true },
+        channel: { type: Number, required: true },
+        channelMinor: { type: Number },
+        channelTitle: { type: String, required: true },
+        title: { type: String, required: true },
+      },
+      cost: { type: Number, required: true },
+      minutes: { type: Number, required: true },
+      start: Date,
+      end: Date,
+      cancelled: Boolean,
     },
-    id: {
-      type: String,
-      rangeKey: true,
-      default: uuid,
+    {
+      timestamps: true,
     },
-    location: {
-      id: { type: String, required: true },
-      losantId: { type: String, required: true },
-      name: { type: String, required: true },
-      neighborhood: { type: String, required: true },
-      zip: { type: String, required: true },
-      ip: { type: String, required: true },
-      img: { type: String, required: true },
-    },
-    box: {
-      id: { type: String, required: true },
-      ip: { type: String, required: true },
-      clientAddress: { type: String, required: true },
-      locationName: { type: String, required: true },
-      label: { type: String, required: true },
-    },
-    program: {
-      id: { type: String, required: true },
-      channel: { type: Number, required: true },
-      channelMinor: { type: Number },
-      channelTitle: { type: String, required: true },
-      title: { type: String, required: true },
-    },
-    cost: { type: Number, required: true },
-    minutes: { type: Number, required: true },
-    start: Date,
-    end: Date,
-    cancelled: Boolean,
-  },
-  {
-    timestamps: true,
-  },
-);
-
-// ServiceSchema.method('getBaseFeature', async function () {
-//   var {Feature} = require("./index");
-//   var feature = await Feature.query("serviceId").eq(this.id).filter({type: "base"}).exec();
-//   if (feature.length != 0)
-//   {
-//     return feature[0];
-//   }
-//   return false;
-// });
+  );
+}
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   let reservation = getBody(event);
   const { cost } = reservation;
   reservation.userId = getUserId(event);
@@ -153,24 +147,11 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
   console.timeEnd('remote command');
 
-  // console.time('track event');
-  // await track({
-  //   userId: reservation.userId,
-  //   event: 'Reservation Created',
-  //   properties: {
-  //     program: reservation.program,
-  //     box: reservation.box,
-  //     location: reservation.location,
-  //     cost: reservation.cost,
-  //     minutes: reservation.minutes,
-  //   },
-  // });
-  // console.timeEnd('track event');
-
   return respond(201, reservation);
 });
 
 module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const { id } = getPathParameters(event);
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
@@ -229,24 +210,11 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
   console.timeEnd('remote command');
 
-  // console.time('track event');
-  // await track({
-  //   userId: reservation.userId,
-  //   event: 'Reservation Updated',
-  //   properties: {
-  //     program: reservation.program,
-  //     box: reservation.box,
-  //     location: reservation.location,
-  //     cost: reservation.cost,
-  //     minutes: reservation.minutes,
-  //   },
-  // });
-  // console.timeEnd('track event');
-
   return respond(200, `nice`);
 });
 
 module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const userId = getUserId(event);
   const userReservations = await Reservation.query('userId')
     .eq(userId)
@@ -267,6 +235,7 @@ module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const userId = getUserId(event);
   const params = getPathParameters(event);
   const { id } = params;
@@ -276,6 +245,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const userId = getUserId(event);
   const { id } = getPathParameters(event);
 
