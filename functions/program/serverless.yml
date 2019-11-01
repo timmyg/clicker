@@ -138,7 +138,7 @@ resources:
           - AttributeName: start
             KeyType: RANGE
         LocalSecondaryIndexes:
-          - IndexName: endIndex
+        - IndexName: endIndex
           KeySchema:
             - AttributeName: region
               KeyType: HASH
@@ -147,7 +147,7 @@ resources:
           Projection:
             ProjectionType: KEYS_ONLY
         LocalSecondaryIndexes:
-          - IndexName: idIndex
+        - IndexName: idIndex
           KeySchema:
             - AttributeName: region
               KeyType: HASH
