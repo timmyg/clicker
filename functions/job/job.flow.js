@@ -1,5 +1,4 @@
 // @flow
-require('dotenv').config();
 const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
@@ -32,7 +31,6 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
     .headers(event.headers)
     .go();
   for (location of locations) {
-    const boxUpdates = [];
     const boxes = location.boxes.filter(b => b.zone).sort((a, b) => a.zone - b.zone);
     let i = 0;
     for (const box of boxes) {
@@ -51,18 +49,7 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
         .body({ reservation, command, source })
         .async()
         .go();
-      boxUpdates.push({ channel: reservation.program.channel, source, boxId: reservation.box.id });
       i++;
-    }
-
-    if (!!boxUpdates.length) {
-      await new Invoke()
-        .service('location')
-        .name('updateChannels')
-        .body(boxUpdates)
-        .pathParams({ id: location.id })
-        .async()
-        .go();
     }
   }
   return respond(200);
@@ -140,19 +127,6 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
     // fetchNextPage();
   }
   return respond(200);
-  //   },
-  //   err => {
-  //     if (err) {
-  //       return respond(400, err);
-  //     }
-  //     return respond(200);
-  //   },
-  // );
-
-  // } catch (e) {
-  //   console.error(e);
-  //   return respond(400, e);
-  // }
 });
 
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
@@ -235,7 +209,6 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
       console.log(`found ${locations.length} locations`);
       // loop through locations
       for (const location of locations) {
-        const boxUpdates = [];
         // ensure location has package for game
         if (gamePackage && (!location.packages || !location.packages.includes(gamePackage))) {
           console.log(`${location.name} doesn't have ${gamePackage} package`);
@@ -272,19 +245,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
             .headers(event.headers)
             .async()
             .go();
-
-          boxUpdates.push({ channel: reservation.program.channel, source, boxId: reservation.box.id });
           changedCount++;
-        }
-
-        if (!!boxUpdates.length) {
-          await new Invoke()
-            .service('location')
-            .name('updateChannels')
-            .body(boxUpdates)
-            .pathParams({ id: location.id })
-            .async()
-            .go();
         }
       }
       // mark game as completed on airtable
