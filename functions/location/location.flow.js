@@ -340,9 +340,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${
-        location.neighborhood
-      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -613,7 +611,7 @@ async function updateLocationBoxChannel(locationId, boxIndex, channel: number, s
       boxIndex +
       '].channelChangeAt = :channelChangeAt',
     ExpressionAttributeValues: {
-      ':channel': channel,
+      ':channel': parseInt(channel),
       ':channelSource': source,
       ':channelChangeAt': moment().unix() * 1000,
     },
