@@ -612,7 +612,7 @@ async function updateLocationBoxChannel(locationId, boxIndex, channel: number, s
       boxIndex +
       '].channelChangeAt = :channelChangeAt',
     ExpressionAttributeValues: {
-      ':channel': channel,
+      ':channel': parseInt(channel),
       ':channelSource': source,
       ':channelChangeAt': moment().unix() * 1000,
     },
