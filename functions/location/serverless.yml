@@ -66,7 +66,7 @@ resources:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
         GlobalSecondaryIndexes:
-          - IndexName: losantIdGlobalIndex
+          - IndexName: losantIdGlobalIndex2
             KeySchema:
               - AttributeName: losantId
                 KeyType: HASH
