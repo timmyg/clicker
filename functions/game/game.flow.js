@@ -178,7 +178,7 @@ module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, asyn
 async function getGame(start, network) {
   var params = {
     TableName: process.env.tableGame,
-    Key: { start, 'broadcast.network': network },
+    Key: { start, network },
   };
   try {
     console.log({ params });
@@ -213,6 +213,7 @@ async function createGames(games: any[]) {
   const docClient = new AWS.DynamoDB.DocumentClient();
   const dbGames = [];
   games.forEach(game => {
+    game.network = game.broadcast.network;
     dbGames.push({
       PutRequest: {
         Item: game,
