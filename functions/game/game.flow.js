@@ -177,7 +177,7 @@ module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, asyn
 async function getGame(start, network) {
   var params = {
     TableName: process.env.tableGame,
-    Key: { start, network },
+    Key: { start, 'broadcast.network': network },
   };
   try {
     const data = await docClient.get(params).promise();
