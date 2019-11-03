@@ -10,6 +10,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     serviceName: ${self:service}
+    tableGame: ${self:custom.tableGame}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -26,6 +27,7 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  tableGame: games-${self:custom.stage}
   prune:
     automatic: true
     number: 3
@@ -48,6 +50,45 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
+resources:
+  Resources:
+    GamesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableGame}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+          - AttributeName: broadcast.network
+            AttributeType: S
+          - AttributeName: start_time
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
+        GlobalSecondaryIndexes:
+          - IndexName: networkGlobalIndex
+            KeySchema:
+              - AttributeName: broadcast.network
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.tableThroughput}
+              WriteCapacityUnits: ${self:custom.tableThroughput}
+        GlobalSecondaryIndexes:
+          - IndexName: startTimeGlobalIndex
+            KeySchema:
+              - AttributeName: start_time
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.tableThroughput}
+              WriteCapacityUnits: ${self:custom.tableThroughput}
 functions:
   health:
     handler: game.health
@@ -65,6 +106,18 @@ functions:
     events:
       - http:
           path: 'score'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  sync:
+    handler: game.sync
+    events:
+      - http:
+          path: 'sync'
           method: post
           cors:
             origin: '*'

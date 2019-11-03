@@ -1,5 +1,6 @@
 // @flow
 const axios = require('axios');
+const AWS = require('aws-sdk');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 class SiLeague {
@@ -48,6 +49,7 @@ class GameStatus {
 }
 
 module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('getstatus');
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
 
@@ -55,6 +57,7 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const options = { method, url: apiUrl, timeout: 2000 };
   try {
     const result = await axios(options);
+    console.log(result.data);
     const gameStatus: GameStatus = transformGame(result.data);
 
     return respond(200, gameStatus);
@@ -162,6 +165,50 @@ function transformSIUrl(webUrl: string): string {
     apiUrl.push(`game_detail?id=${urlParts[5]}`);
   }
   return apiUrl.join('/');
+}
+
+module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('sync');
+  const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard/nfl?bookIds=30,15';
+  const method = 'get';
+  const options = { method, url: apiUrl, timeout: 2000 };
+  try {
+    const { data } = await axios(options);
+    console.log({ data });
+    const { games } = data;
+    await createGames(games);
+    return respond(200);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+async function createGames(games: any[]) {
+  const tableGame = process.env.tableGame;
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const dbGames = [];
+  games.forEach(game => {
+    dbGames.push({
+      PutRequest: {
+        Item: game,
+      },
+    });
+  });
+  console.log({ dbGames });
+
+  const params = {
+    RequestItems: {
+      [tableGame]: dbGames,
+    },
+  };
+  console.log({ params });
+
+  try {
+    const x = await docClient.batchWrite(params).promise();
+    console.log({ x });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 module.exports.transformSIUrl = transformSIUrl;
