@@ -182,12 +182,13 @@ async function getGame(start, network) {
   };
   try {
     console.log({ params });
+    const docClient = new AWS.DynamoDB.DocumentClient();
     const data = await docClient.get(params).promise();
     console.log({ data });
     return data.Item;
   } catch (e) {
     console.error(e);
-    return err;
+    return e;
   }
 }
 
