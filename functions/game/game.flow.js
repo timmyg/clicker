@@ -214,6 +214,7 @@ async function createGames(games: any[]) {
   const dbGames = [];
   games.forEach(game => {
     game.network = game.broadcast.network;
+    console.log({ game });
     dbGames.push({
       PutRequest: {
         Item: game,
