@@ -79,7 +79,6 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: ${self:custom.tableThroughput}
               WriteCapacityUnits: ${self:custom.tableThroughput}
-        GlobalSecondaryIndexes:
           - IndexName: startTimeGlobalIndex
             KeySchema:
               - AttributeName: start_time
