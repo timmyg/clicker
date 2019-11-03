@@ -167,6 +167,27 @@ function transformSIUrl(webUrl: string): string {
   return apiUrl.join('/');
 }
 
+module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
+  const { start, network } = getBody(event);
+  const game = await getGame(start, network);
+  respond(200, game);
+});
+
+// async function abstraction
+async function getGame(start, network) {
+  var params = {
+    TableName: process.env.tableGame,
+    Key: { start, network },
+  };
+  try {
+    const data = await docClient.get(params).promise();
+    console.log({ data });
+    return data.Item;
+  } catch (err) {
+    return err;
+  }
+}
+
 module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('sync');
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard/nfl?bookIds=30,15';
