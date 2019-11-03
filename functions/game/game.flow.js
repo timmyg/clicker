@@ -169,6 +169,7 @@ function transformSIUrl(webUrl: string): string {
 
 module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
   const { start, network } = event.queryStringParameters;
+  console.log({ start, network });
   const game = await getGame(start, network);
   respond(200, game);
 });
@@ -180,6 +181,7 @@ async function getGame(start, network) {
     Key: { start, 'broadcast.network': network },
   };
   try {
+    console.log({ params });
     const data = await docClient.get(params).promise();
     console.log({ data });
     return data.Item;
