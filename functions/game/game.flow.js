@@ -185,7 +185,8 @@ async function getGame(start, network) {
     const data = await docClient.get(params).promise();
     console.log({ data });
     return data.Item;
-  } catch (err) {
+  } catch (e) {
+    console.error(e);
     return err;
   }
 }
