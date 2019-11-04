@@ -192,17 +192,59 @@ async function getGame(start, network) {
   }
 }
 
+class actionNetworkRequest {
+  sport: string;
+  responseField: string; // games/competitions
+  params: [{ key: string, value: string }];
+}
 module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('sync');
-  const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard/nfl?bookIds=30,15';
+  const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+
+  const actionSports: actionNetworkRequest[] = [];
+  actionSports.push({ sport: 'ncaab', params: [{ division: 'D1' }] });
+  actionSports.push({ sport: 'ncaaf', params: [{ division: 'FBS' }] });
+  actionSports.push({ sport: 'nfl' });
+  actionSports.push({ sport: 'mlb' });
+  actionSports.push({ sport: 'nhl' });
+  actionSports.push({ sport: 'soccer' });
+  actionSports.push({ sport: 'pga' });
+  actionSports.push({ sport: 'boxing' });
+  // const urls = [
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/ncaab?division=D1&tournament=0&bookIds=30,15&date=20191105',
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/nfl?bookIds=30,15',
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/ncaaf?division=FBS&bookIds=30,15',
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=30,15',
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/nhl?bookIds=30,15&date=20191104',
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/soccer?bookIds=30,15&date=20191104',
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/pga?bookIds=30,15', // competitions not games
+  //   'https://api.actionnetwork.com/web/v1/scoreboard/boxing?bookIds=30,15', // competitions not games
+  // ];
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
   try {
-    const { data } = await axios(options);
-    console.log({ data });
-    const { games } = data;
-    await createGames(games);
-    return respond(200);
+    const requests = [];
+    const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+    actionSports.forEach((actionSport: actionNetworkRequest) => {
+      const url = `${actionBaseUrl}/${actionSport.sport}`;
+      const params = actionSports.params;
+      console.log(url, params);
+      requests.push(axios.get(url, { params }));
+    });
+
+    Promise.all(requests).then(function(values) {
+      values.forEach(v => {
+        // console.log(v.games || v.competitions);
+        console.log(v.data.games ? v.data.games.length : '');
+        console.log(v.data.competitions ? v.data.competitions.length : '');
+      });
+      return respond(200);
+    });
+    // const { data } = await axios(options);
+    // console.log({ data });
+    // const { games } = data;
+    // await createGames(games);
+    // return respond(200);
   } catch (e) {
     console.error(e);
   }
