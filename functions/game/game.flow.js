@@ -2,6 +2,35 @@
 const axios = require('axios');
 const AWS = require('aws-sdk');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+let Game;
+
+function init() {
+  Game = dynamoose.model(
+    process.env.tableGame,
+    {
+      id: {
+        type: Number,
+        hashKey: true,
+      },
+      network: { type: String, index: true, global: true },
+      start_time: { type: String, index: true, global: true },
+    },
+    {
+      timestamps: true,
+      expires: {
+        ttl: 86400,
+        attribute: 'expires',
+        returnExpiredItems: false,
+        defaultExpires: x => {
+          // expire 9 hours after start
+          return moment(x.start_time)
+            .add(9, 'hours')
+            .toDate();
+        },
+      },
+    },
+  );
+}
 
 class SiLeague {
   name: string; // Major League Baseball, College Football
@@ -210,16 +239,6 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   actionSports.push({ sport: 'soccer' });
   actionSports.push({ sport: 'pga' });
   actionSports.push({ sport: 'boxing' });
-  // const urls = [
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/ncaab?division=D1&tournament=0&bookIds=30,15&date=20191105',
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/nfl?bookIds=30,15',
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/ncaaf?division=FBS&bookIds=30,15',
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=30,15',
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/nhl?bookIds=30,15&date=20191104',
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/soccer?bookIds=30,15&date=20191104',
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/pga?bookIds=30,15', // competitions not games
-  //   'https://api.actionnetwork.com/web/v1/scoreboard/boxing?bookIds=30,15', // competitions not games
-  // ];
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
   try {
@@ -228,53 +247,46 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
     actionSports.forEach((actionSport: actionNetworkRequest) => {
       const url = `${actionBaseUrl}/${actionSport.sport}`;
       const params = actionSports.params;
-      console.log(url, params);
       requests.push(axios.get(url, { params }));
     });
 
-    Promise.all(requests).then(function(values) {
-      values.forEach(v => {
-        // console.log(v.games || v.competitions);
-        console.log(v.data.games ? v.data.games.length : '');
-        console.log(v.data.competitions ? v.data.competitions.length : '');
+    Promise.all(requests).then(async responses => {
+      const allEvents = [];
+      responses.forEach(response => {
+        const events = response.data.games ? response.data.games : response.data.competitions;
+        allEvents.push(...events);
       });
+      await createAll(allEvents);
       return respond(200);
     });
-    // const { data } = await axios(options);
-    // console.log({ data });
-    // const { games } = data;
-    // await createGames(games);
-    // return respond(200);
   } catch (e) {
     console.error(e);
   }
 });
 
-async function createGames(games: any[]) {
+async function createAll(events: any[]) {
   const tableGame = process.env.tableGame;
   const docClient = new AWS.DynamoDB.DocumentClient();
-  const dbGames = [];
-  games.forEach(game => {
-    game.network = game.broadcast.network;
-    console.log({ game });
-    dbGames.push({
+  const dbEvents = [];
+  events.forEach(event => {
+    event.network = event.broadcast ? event.broadcast.network : null;
+    console.log(event.network, event.start_time);
+    dbEvents.push({
       PutRequest: {
-        Item: game,
+        Item: event,
       },
     });
   });
-  console.log({ dbGames });
 
   const params = {
     RequestItems: {
-      [tableGame]: dbGames,
+      [tableGame]: dbEvents,
     },
   };
-  console.log({ params });
 
   try {
-    const x = await docClient.batchWrite(params).promise();
-    console.log({ x });
+    const result = await docClient.batchWrite(params).promise();
+    console.log({ result });
   } catch (e) {
     console.error(e);
   }

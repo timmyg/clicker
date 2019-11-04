@@ -64,26 +64,24 @@ resources:
           - AttributeName: start_time
             AttributeType: S
         KeySchema:
-          - AttributeName: network
-            KeyType: HASH
           - AttributeName: id
-            KeyType: RANGE
+            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-        LocalSecondaryIndexes:
-          - IndexName: startLocalIndex
+        GlobalSecondaryIndexes:
+          - IndexName: startTimeGlobalIndex
             KeySchema:
-              - AttributeName: network
-                KeyType: HASH
               - AttributeName: start_time
-                KeyType: RANGE
+                KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
-        GlobalSecondaryIndexes:
-          - IndexName: idGlobalIndex
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.tableThroughput}
+              WriteCapacityUnits: ${self:custom.tableThroughput}
+          - IndexName: networkGlobalIndex
             KeySchema:
-              - AttributeName: id
+              - AttributeName: network
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
