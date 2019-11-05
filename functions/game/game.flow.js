@@ -248,7 +248,7 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
 
   const actionSports: actionNetworkRequest[] = [];
-  actionSports.push({ sport: 'ncaab', params: [{ division: 'D1' }] });
+  // actionSports.push({ sport: 'ncaab', params: [{ division: 'D1' }] });
   actionSports.push({ sport: 'ncaaf', params: [{ division: 'FBS' }] });
   actionSports.push({ sport: 'nfl' });
   actionSports.push({ sport: 'mlb' });
