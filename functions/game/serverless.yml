@@ -59,8 +59,8 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
-          - AttributeName: network
-            AttributeType: S
+          # - AttributeName: network
+          #   AttributeType: S
           - AttributeName: start_time
             AttributeType: S
         KeySchema:
