@@ -8,7 +8,7 @@
     "test": "npm run build && jest --coverage",
     "test:specific": "npm run build && jest -t='soccer'",
     "invoke:score": "serverless invoke local --function getStatus --path ../.resources/data/si-url.json",
-    "invoke:sync": "serverless invoke local --function sync"
+    "invoke:sync": "serverless invoke local --function sync --stage develop"
   },
   "author": "",
   "license": "ISC",

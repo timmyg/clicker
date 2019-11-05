@@ -272,9 +272,10 @@ async function createAll(events: any[]) {
   const tableGame = process.env.tableGame;
   const docClient = new AWS.DynamoDB.DocumentClient();
   const dbEvents = [];
+  events = events.slice(0, 25);
   events.forEach(event => {
     event.network = event.broadcast ? event.broadcast.network : null;
-    console.log(event.network, event.start_time);
+    console.log(event.start_time, event.id);
     dbEvents.push({
       PutRequest: {
         Item: event,

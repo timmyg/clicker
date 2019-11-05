@@ -59,28 +59,37 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
-          - AttributeName: network
-            AttributeType: S
+          # - AttributeName: network
+          #   AttributeType: S
           - AttributeName: start_time
             AttributeType: S
         KeySchema:
           - AttributeName: start_time
             KeyType: HASH
-          - AttributeName: network
+          - AttributeName: id
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-        GlobalSecondaryIndexes:
-          - IndexName: idGlobalIndex
-            KeySchema:
-              - AttributeName: id
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.tableThroughput}
-              WriteCapacityUnits: ${self:custom.tableThroughput}
+        # GlobalSecondaryIndexes:
+        #   - IndexName: idGlobalIndex
+        #     KeySchema:
+        #       - AttributeName: id
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: ${self:custom.tableThroughput}
+        #       WriteCapacityUnits: ${self:custom.tableThroughput}
+        # - IndexName: networkGlobalIndex
+        #   KeySchema:
+        #     - AttributeName: network
+        #       KeyType: HASH
+        #   Projection:
+        #     ProjectionType: KEYS_ONLY
+        #   ProvisionedThroughput:
+        #     ReadCapacityUnits: ${self:custom.tableThroughput}
+        #     WriteCapacityUnits: ${self:custom.tableThroughput}
 functions:
   health:
     handler: game.health
