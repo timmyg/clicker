@@ -256,11 +256,13 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
         const events = response.data.games ? response.data.games : response.data.competitions;
         allEvents.push(...events);
       });
+      console.log('await...');
       await createAll(allEvents);
       return respond(200);
     });
   } catch (e) {
     console.error(e);
+    return respond(400, e);
   }
 });
 
