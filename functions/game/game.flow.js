@@ -270,17 +270,16 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
       requests.push(axios.get(url, { params }));
     });
 
-    Promise.all(requests).then(async responses => {
-      console.log('responses', responses.length);
-      const allEvents = [];
-      responses.forEach(response => {
-        const events = response.data.games ? response.data.games : response.data.competitions;
-        allEvents.push(...events);
-      });
-      console.log('await...');
-      await createAll(allEvents);
-      return respond(200);
+    const responses = await Promise.all(requests);
+    console.log('responses', responses.length);
+    const allEvents = [];
+    responses.forEach(response => {
+      const events = response.data.games ? response.data.games : response.data.competitions;
+      allEvents.push(...events);
     });
+    console.log('await...');
+    await createAll(allEvents);
+    return respond(200);
   } catch (e) {
     console.error(e);
     return respond(400, e);
@@ -288,6 +287,7 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function createAll(events: any[]) {
+  console.log('createAll');
   const tableGame = process.env.tableGame;
   const docClient = new AWS.DynamoDB.DocumentClient();
   const dbEvents = [];
