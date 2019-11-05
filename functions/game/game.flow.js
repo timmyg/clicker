@@ -230,7 +230,7 @@ type actionNetworkRequest = {
 };
 module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   init();
-  const allGames = await Games.scan().exec();
+  const allGames = await Game.scan().exec();
 
   if (games && games.length) {
     const allGamesDescending = allGames.sort((a, b) => b.id - a.id);
