@@ -57,8 +57,8 @@ resources:
       Properties:
         TableName: ${self:custom.tableGame}
         AttributeDefinitions:
-          # - AttributeName: id
-          #   AttributeType: N
+          - AttributeName: id
+            AttributeType: N
           # - AttributeName: network
           #   AttributeType: S
           - AttributeName: start_time
@@ -66,8 +66,8 @@ resources:
         KeySchema:
           - AttributeName: start_time
             KeyType: HASH
-          # - AttributeName: id
-          #   KeyType: RANGE
+          - AttributeName: id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
