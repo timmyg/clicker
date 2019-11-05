@@ -233,7 +233,7 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allGames = await Game.scan().exec();
 
-  const date = moment().toDate();
+  let date = moment().toDate();
   if (allGames && allGames.length) {
     const allGamesDescending = allGames.sort((a, b) => b.id - a.id);
     const latestGame = allGamesDescending[0];
