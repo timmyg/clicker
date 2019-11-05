@@ -184,6 +184,8 @@ function transformSIUrl(webUrl: string): string {
   let sport = urlParts[3];
   if (sport === 'college-football') {
     sport = 'ncaaf';
+  } else if (sport === 'college-basketball') {
+    sport = 'ncaab';
   }
 
   if (['epl', 'mls', 'la-liga', 'serie-a'].includes(decodeURIComponent(sport))) {
