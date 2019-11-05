@@ -6,6 +6,11 @@ describe('transformSIUrl', () => {
       'https://stats.api.si.com/v1/nfl/game_detail?id=2142137',
     );
   });
+  test('ncaab', () => {
+    expect(transformSIUrl('https://www.si.com/college-basketball/game/2188784')).toEqual(
+      'https://stats.api.si.com/v1/ncaab/game_detail?id=2188784',
+    );
+  });
   test('ncaaf', () => {
     expect(transformSIUrl('https://www.si.com/college-football/game/2126203')).toEqual(
       'https://stats.api.si.com/v1/ncaaf/game_detail?id=2126203',
