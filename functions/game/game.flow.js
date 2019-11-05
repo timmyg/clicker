@@ -229,6 +229,7 @@ type actionNetworkRequest = {
   params?: any[],
 };
 module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const allGames = await Games.scan().exec();
 
   if (games && games.length) {
