@@ -1,6 +1,7 @@
 // @flow
 const axios = require('axios');
 const dynamoose = require('dynamoose');
+const moment = require('moment');
 const AWS = require('aws-sdk');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 let Game;
@@ -232,10 +233,15 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allGames = await Game.scan().exec();
 
+  const date = moment().toDate();
   if (allGames && allGames.length) {
     const allGamesDescending = allGames.sort((a, b) => b.id - a.id);
     const latestGame = allGamesDescending[0];
     console.log({ latestGame });
+    // if latest game is today, pull tomorrows games
+    date = moment(latestGame.start_time)
+      .add(1, 'd')
+      .toDate();
   }
 
   console.log('sync');
@@ -257,7 +263,8 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
     const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
     actionSports.forEach((actionSport: actionNetworkRequest) => {
       const url = `${actionBaseUrl}/${actionSport.sport}`;
-      const params = actionSports.params;
+      const queryDate = moment(date).format('YYYYMMDD');
+      const params = [...actionSports.params, { date: queryDate }];
       requests.push(axios.get(url, { params }));
     });
 
@@ -292,8 +299,11 @@ async function createAll(events: any[]) {
     });
   });
 
-  const params = {};
-  params.RequestItems[tableGame] = dbEvents;
+  const params = {
+    RequestItems: {
+      [tableGame]: dbEvents,
+    },
+  };
 
   try {
     const result = await docClient.batchWrite(params).promise();
