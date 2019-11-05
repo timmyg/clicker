@@ -117,6 +117,7 @@ functions:
   sync:
     handler: game.sync
     timeout: 20
+    - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
     events:
       - http:
           path: 'sync'
