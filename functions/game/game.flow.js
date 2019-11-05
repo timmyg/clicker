@@ -270,7 +270,7 @@ async function createAll(events: any[]) {
   const dbEvents = [];
   events.forEach(event => {
     event.network = event.broadcast ? event.broadcast.network : null;
-    console.log(event.network, event.start_time);
+    console.log(event.start_time, event.network);
     dbEvents.push({
       PutRequest: {
         Item: event,
