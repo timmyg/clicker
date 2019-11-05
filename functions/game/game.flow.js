@@ -235,7 +235,7 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
 
   let date = moment().toDate();
   if (allGames && allGames.length) {
-    const allGamesDescending = allGames.sort((a, b) => b.id - a.id);
+    const allGamesDescending = allGames.sort((a, b) => b.start_time.localeCompare(a.start_time));
     const latestGame = allGamesDescending[0];
     console.log({ latestGame });
     // if latest game is today, pull tomorrows games
@@ -264,7 +264,9 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
     actionSports.forEach((actionSport: actionNetworkRequest) => {
       const url = `${actionBaseUrl}/${actionSport.sport}`;
       const queryDate = moment(date).format('YYYYMMDD');
-      const params = [...actionSports.params, { date: queryDate }];
+      const params = actionSports.params;
+      params.push({ date: queryDate });
+      console.log(params);
       requests.push(axios.get(url, { params }));
     });
 
