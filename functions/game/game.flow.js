@@ -271,6 +271,7 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
     });
 
     Promise.all(requests).then(async responses => {
+      console.log('responses', responses.length);
       const allEvents = [];
       responses.forEach(response => {
         const events = response.data.games ? response.data.games : response.data.competitions;

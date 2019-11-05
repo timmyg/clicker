@@ -116,6 +116,7 @@ functions:
               - content-type
   sync:
     handler: game.sync
+    timeout: 20
     events:
       - http:
           path: 'sync'
