@@ -1,5 +1,6 @@
 // @flow
 const axios = require('axios');
+const dynamoose = require('dynamoose');
 const AWS = require('aws-sdk');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 let Game;
@@ -8,12 +9,12 @@ function init() {
   Game = dynamoose.model(
     process.env.tableGame,
     {
+      start_time: { type: String, hashKey: true },
       id: {
         type: Number,
-        hashKey: true,
+        rangeKey: true,
       },
-      network: { type: String, index: true, global: true },
-      start_time: { type: String, index: true, global: true },
+      network: { type: String },
     },
     {
       timestamps: true,
@@ -223,12 +224,19 @@ async function getGame(start, network) {
   }
 }
 
-class actionNetworkRequest {
-  sport: string;
-  responseField: string; // games/competitions
-  params: [{ key: string, value: string }];
-}
+type actionNetworkRequest = {
+  sport: string,
+  params?: any[],
+};
 module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
+  const allGames = await Games.scan().exec();
+
+  if (games && games.length) {
+    const allGamesDescending = allGames.sort((a, b) => b.id - a.id);
+    const latestGame = allGamesDescending[0];
+    console.log({ latestGame });
+  }
+
   console.log('sync');
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
 
@@ -283,11 +291,8 @@ async function createAll(events: any[]) {
     });
   });
 
-  const params = {
-    RequestItems: {
-      [tableGame]: dbEvents,
-    },
-  };
+  const params = {};
+  params.RequestItems[tableGame] = dbEvents;
 
   try {
     const result = await docClient.batchWrite(params).promise();
