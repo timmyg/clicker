@@ -264,7 +264,7 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
     actionSports.forEach((actionSport: actionNetworkRequest) => {
       const url = `${actionBaseUrl}/${actionSport.sport}`;
       const queryDate = moment(date).format('YYYYMMDD');
-      const params = actionSports.params || [];
+      const params = actionSport.params || [];
       params.push({ date: queryDate });
       console.log(params);
       requests.push(axios.get(url, { params }));
