@@ -292,7 +292,7 @@ async function createAll(events: any[]) {
   const docClient = new AWS.DynamoDB.DocumentClient();
   const dbEvents = [];
   events = events.slice(0, 25);
-  events.forEach(event => {
+  for (const event of events) {
     event.network = event.broadcast ? event.broadcast.network : null;
     console.log(event.start_time, event.id);
     dbEvents.push({
@@ -300,19 +300,17 @@ async function createAll(events: any[]) {
         Item: event,
       },
     });
-  });
-
-  const params = {
-    RequestItems: {
-      [tableGame]: dbEvents,
-    },
-  };
-
-  try {
-    const result = await docClient.batchWrite(params).promise();
-    console.log({ result });
-  } catch (e) {
-    console.error(e);
+    const params = {
+      RequestItems: {
+        [tableGame]: dbEvents,
+      },
+    };
+    try {
+      const result = await docClient.batchWrite(params).promise();
+      console.log({ result });
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
 
