@@ -295,14 +295,15 @@ async function createAll(events: any[]) {
   });
 
   while (!!events.length) {
-    console.log('creating', events.length);
     const dbEvents = events.slice(0, 25);
+    console.log('creating', dbEvents.length);
     const params = {
       RequestItems: {
         [tableGame]: dbEvents,
       },
     };
     try {
+      console.log({ params });
       const result = await docClient.batchWrite(params).promise();
       console.log({ result });
     } catch (e) {
