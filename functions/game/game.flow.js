@@ -229,19 +229,28 @@ type actionNetworkRequest = {
   sport: string,
   params?: any[],
 };
-module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allGames = await Game.scan().exec();
 
-  let date = moment().toDate();
+  const datesToPull = [];
   if (allGames && allGames.length) {
     const allGamesDescending = allGames.sort((a, b) => b.start_time.localeCompare(a.start_time));
     const latestGame = allGamesDescending[0];
     console.log({ latestGame });
-    // if latest game is today, pull tomorrows games
-    date = moment(latestGame.start_time)
+    // get one day more than largest start time
+    const dayAfterFurthestGame = moment(latestGame.start_time)
       .add(1, 'd')
       .toDate();
+    datesToPull.push(dayAfterFurthestGame);
+  } else {
+    // if no data, get today and tomorrow
+    datesToPull.push(moment().toDate());
+    datesToPull.push(
+      moment()
+        .add(1, 'd')
+        .toDate(),
+    );
   }
 
   console.log('sync');
@@ -258,32 +267,35 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
   actionSports.push({ sport: 'boxing' });
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
-  try {
-    const requests = [];
-    const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
-    actionSports.forEach((actionSport: actionNetworkRequest) => {
-      const url = `${actionBaseUrl}/${actionSport.sport}`;
-      const queryDate = moment(date).format('YYYYMMDD');
-      const params = actionSport.params || {};
-      params.date = queryDate;
-      console.log(url, { params });
-      requests.push(axios.get(url, { params }));
-    });
+  console.log({ datesToPull });
+  for (const date of datesToPull) {
+    try {
+      const requests = [];
+      const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+      actionSports.forEach((actionSport: actionNetworkRequest) => {
+        const url = `${actionBaseUrl}/${actionSport.sport}`;
+        const queryDate = moment(date).format('YYYYMMDD');
+        const params = actionSport.params || {};
+        params.date = queryDate;
+        console.log(url, { params });
+        requests.push(axios.get(url, { params }));
+      });
 
-    const responses = await Promise.all(requests);
-    console.log('responses', responses.length);
-    const allEvents = [];
-    responses.forEach(response => {
-      const events = response.data.games ? response.data.games : response.data.competitions;
-      allEvents.push(...events);
-    });
-    console.log('await...');
-    await createAll(allEvents);
-    return respond(200);
-  } catch (e) {
-    console.error(e);
-    return respond(400, e);
+      const responses = await Promise.all(requests);
+      console.log('responses', responses.length);
+      const allEvents = [];
+      responses.forEach(response => {
+        const events = response.data.games ? response.data.games : response.data.competitions;
+        allEvents.push(...events);
+      });
+      console.log('await...');
+      await createAll(allEvents);
+    } catch (e) {
+      console.error(e);
+      return respond(400, e);
+    }
   }
+  return respond(200);
 });
 
 async function createAll(events: any[]) {

@@ -115,8 +115,8 @@ functions:
               - authorization
               - content-type
   sync:
-    handler: game.sync
-    timeout: 20
+    handler: game.syncSchedule
+    timeout: 30
     events:
       - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
       - http:
