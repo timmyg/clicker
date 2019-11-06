@@ -288,18 +288,15 @@ module.exports.sync = RavenLambdaWrapper.handler(Raven, async event => {
 
 async function createAll(events: any[]) {
   console.log('createAll:', events.length);
-  const tableGame = process.env.tableGame;
+  const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
-  const dbEvents = [];
-  events = events.slice(0, 25);
-  for (const event of events) {
+  events.forEach(event => {
     event.network = event.broadcast ? event.broadcast.network : null;
-    console.log(event.start_time, event.id);
-    dbEvents.push({
-      PutRequest: {
-        Item: event,
-      },
-    });
+  });
+
+  while (!!events.length) {
+    console.log('creating', events.length);
+    const dbEvents = events.slice(0, 25);
     const params = {
       RequestItems: {
         [tableGame]: dbEvents,
