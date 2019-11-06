@@ -15,7 +15,7 @@ function init() {
         type: Number,
         rangeKey: true,
       },
-      network: { type: String },
+      // network: { type: String },
     },
     {
       timestamps: true,
@@ -323,7 +323,8 @@ async function createAll(events: any[]) {
     try {
       console.log({ params });
       console.log(JSON.stringify(dbEvents));
-      const result = await docClient.batchWrite(params).promise();
+      // const result = await docClient.batchWrite(params).promise();
+      const result = Game.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
       console.error(e);
