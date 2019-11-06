@@ -299,7 +299,12 @@ async function createAll(events: any[]) {
     console.log('creating', dbEvents.length);
     const params = {
       RequestItems: {
-        [tableGame]: dbEvents,
+        // [tableGame]: dbEvents,
+        [tableGame]: dbEvents.map(item => ({
+          PutRequest: {
+            Item: item,
+          },
+        })),
       },
     };
     try {
