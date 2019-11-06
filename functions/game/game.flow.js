@@ -295,7 +295,7 @@ async function createAll(events: any[]) {
   });
 
   while (!!events.length) {
-    const dbEvents = events.slice(0, 25);
+    const dbEvents = events.splice(0, 25);
     console.log('creating:', dbEvents.length);
     console.log('remaining:', events.length);
     const params = {
