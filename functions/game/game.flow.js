@@ -19,6 +19,7 @@ function init() {
     },
     {
       timestamps: true,
+      saveUnknown: true,
       expires: {
         ttl: 86400,
         attribute: 'expires',
@@ -288,7 +289,6 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
         const events = response.data.games ? response.data.games : response.data.competitions;
         allEvents.push(...events);
       });
-      console.log('await...');
       await createAll(allEvents);
     } catch (e) {
       console.error(e);
@@ -324,7 +324,7 @@ async function createAll(events: any[]) {
       console.log({ params });
       console.log(JSON.stringify(dbEvents));
       // const result = await docClient.batchWrite(params).promise();
-      const result = Game.batchPut(dbEvents);
+      const result = await Game.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
       console.error(e);
