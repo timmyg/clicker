@@ -304,10 +304,12 @@ async function createAll(events: any[]) {
   const docClient = new AWS.DynamoDB.DocumentClient();
   console.log({ events });
   events.forEach((event, i) => {
-    console.log(event, i);
+    console.log(event);
+    console.log(this);
+    console.log(i);
     const thisEvent = this[i];
-    this[i].network = thisEvent.broadcast ? thisEvent.broadcast.network : null;
-    this[i] = clean(thisEvent);
+    this[i].network = event.broadcast ? event.broadcast.network : null;
+    this[i] = clean(event);
   }, events);
   console.log('cleaned');
   console.log({ events });
