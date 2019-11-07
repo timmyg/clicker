@@ -307,9 +307,9 @@ async function createAll(events: any[]) {
     console.log(event);
     console.log(this);
     console.log(i);
-    const thisEvent = this[i];
-    this[i].network = event.broadcast ? event.broadcast.network : null;
-    this[i] = clean(event);
+    // const thisEvent = this[i];
+    events[i].network = event.broadcast ? event.broadcast.network : null;
+    events[i] = clean(event);
   }, events);
   console.log('cleaned');
   console.log({ events });
