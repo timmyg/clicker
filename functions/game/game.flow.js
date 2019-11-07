@@ -310,16 +310,16 @@ async function createAll(events: any[]) {
     const dbEvents = events.splice(0, 25);
     console.log('creating:', dbEvents.length);
     console.log('remaining:', events.length);
-    const params = {
-      RequestItems: {
-        // [tableGame]: dbEvents,
-        [tableGame]: dbEvents.map(item => ({
-          PutRequest: {
-            Item: item,
-          },
-        })),
-      },
-    };
+    // const params = {
+    //   RequestItems: {
+    //     // [tableGame]: dbEvents,
+    //     [tableGame]: dbEvents.map(item => ({
+    //       PutRequest: {
+    //         Item: item,
+    //       },
+    //     })),
+    //   },
+    // };
     try {
       console.log({ params });
       console.log(JSON.stringify(dbEvents));
