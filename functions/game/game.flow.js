@@ -321,7 +321,7 @@ async function createAll(events: any[]) {
     //   },
     // };
     try {
-      console.log({ params });
+      // console.log({ params });
       console.log(JSON.stringify(dbEvents));
       // const result = await docClient.batchWrite(params).promise();
       const result = await Game.batchPut(dbEvents);
