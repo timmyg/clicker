@@ -331,7 +331,7 @@ async function createAll(events: any[]) {
       // };
       // const result = await docClient.batchWrite(params).promise();
 
-      console.log({ params });
+      // console.log({ params });
       console.log(JSON.stringify(dbEvents));
 
       // remove all null fields, due to https://github.com/dynamoosejs/dynamoose/pull/682
