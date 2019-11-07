@@ -302,34 +302,51 @@ async function createAll(events: any[]) {
   console.log('createAll:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
-  events.forEach(event => {
-    event.network = event.broadcast ? event.broadcast.network : null;
+  console.log({ events });
+  events.forEach((event, i) => {
+    this[i].network = event.broadcast ? event.broadcast.network : null;
+    this[i] = clean(event);
   });
+  console.log('cleaned');
+  console.log({ events });
 
   while (!!events.length) {
-    const dbEvents = events.splice(0, 25);
-    console.log('creating:', dbEvents.length);
-    console.log('remaining:', events.length);
-    // const params = {
-    //   RequestItems: {
-    //     // [tableGame]: dbEvents,
-    //     [tableGame]: dbEvents.map(item => ({
-    //       PutRequest: {
-    //         Item: item,
-    //       },
-    //     })),
-    //   },
-    // };
     try {
-      // console.log({ params });
-      console.log(JSON.stringify(dbEvents));
+      const dbEvents = events.splice(0, 25);
+      console.log('creating:', dbEvents.length);
+      console.log('remaining:', events.length);
+      // const params = {
+      //   RequestItems: {
+      //     // [tableGame]: dbEvents,
+      //     [tableGame]: dbEvents.map(item => ({
+      //       PutRequest: {
+      //         Item: item,
+      //       },
+      //     })),
+      //   },
+      // };
       // const result = await docClient.batchWrite(params).promise();
+
+      console.log({ params });
+      console.log(JSON.stringify(dbEvents));
+
+      // remove all null fields, due to https://github.com/dynamoosejs/dynamoose/pull/682
+
       const result = await Game.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
       console.error(e);
     }
   }
+}
+
+function clean(obj) {
+  for (var propName in obj) {
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName];
+    }
+  }
+  return obj;
 }
 
 module.exports.transformSIUrl = transformSIUrl;
