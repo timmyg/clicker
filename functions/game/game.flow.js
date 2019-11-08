@@ -225,7 +225,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   const activeGames = await Game.query('status')
     .eq('inprogress')
     .exec();
-  respond(200, { activeGames });
+  return respond(200, { activeGames });
 });
 
 // async function abstraction
