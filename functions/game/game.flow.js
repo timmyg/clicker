@@ -24,8 +24,9 @@ function init() {
       status: {
         type: String,
         required: true,
-        index: true,
-        global: true,
+        index: {
+          global: true,
+        },
       },
     },
     {
