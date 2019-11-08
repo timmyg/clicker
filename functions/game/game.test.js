@@ -201,7 +201,7 @@ describe('transformGame', () => {
       expect(Array.isArray(result.odds)).toBeFalsy();
       expect(result.odds).not.toHaveProperty('draw');
       expect(result.teams[0].standings).toBeFalsy();
-      expect(result.odds).toBeTruthy();
+      expect(result.odds.mlAway).toBe(-165);
       console.log({ result });
     });
   });

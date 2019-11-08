@@ -328,6 +328,7 @@ function cleanupEvents(events: any[]) {
 
     allEvents[i]['start'] = allEvents[i]['start_time'];
     delete allEvents[i]['startTime'];
+    console.log('odddds', typeof allEvents[i]['odds'], allEvents[i]['odds']);
   });
   console.log('e', events.length);
   events = camelcase(events, { deep: true });
