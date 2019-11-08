@@ -196,9 +196,10 @@ describe('transformGame', () => {
   describe('cleanupEvents', () => {
     test('cleans up game', () => {
       const data = require('../.resources/action-network/game.json');
-      const [result] = cleanupEvents(data);
+      const [result] = cleanupEvents([data]);
       expect(result.boxscore).toBeFalsy();
       expect(Array.isArray(result.odds)).toBeFalsy();
+      expect(result.odds).not.toHaveProperty('draw');
       expect(result.teams[0].standings).toBeFalsy();
       expect(result.odds).toBeTruthy();
       console.log({ result });
