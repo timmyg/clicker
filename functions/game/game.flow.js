@@ -378,3 +378,4 @@ async function createAll(events: any[]) {
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
+
