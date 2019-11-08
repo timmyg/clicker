@@ -232,9 +232,13 @@ type actionNetworkRequest = {
   sport: string,
   params?: any[],
 };
+
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('a');
   init();
+  console.log('b');
   const allGames = await Game.scan().exec();
+  console.log('c');
 
   const datesToPull = [];
   if (allGames && allGames.length) {
