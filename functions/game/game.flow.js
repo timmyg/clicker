@@ -17,7 +17,7 @@ function init() {
         type: Number,
         rangeKey: true,
       },
-      // network: { type: String },
+      odds: { type: Object },
     },
     {
       timestamps: true,
@@ -315,7 +315,6 @@ function cleanupEvents(events: any[]) {
   console.log('e', events.length);
   events.forEach((event, i, allEvents) => {
     // console.log(allEvents[i]);
-    allEvents[i] = pickBy(allEvents[i]);
     if (allEvents[i]['odds'] && allEvents[i]['odds'].length) {
       allEvents[i]['odds'] = pickBy(allEvents[i]['odds'][0]);
     }
@@ -331,7 +330,10 @@ function cleanupEvents(events: any[]) {
 
     allEvents[i]['start'] = allEvents[i]['start_time'];
     delete allEvents[i]['startTime'];
-    console.log('odddds', typeof allEvents[i]['odds'], allEvents[i]['odds']);
+
+    allEvents[i] = pickBy(allEvents[i]);
+
+    console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
   });
   console.log('e', events.length);
   events = camelcase(events, { deep: true });
