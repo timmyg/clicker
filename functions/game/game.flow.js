@@ -312,8 +312,13 @@ function cleanupEvents(events: any[]) {
   events.forEach((event, i, allEvents) => {
     allEvents[i]['odds'] = allEvents[i]['odds'] ? allEvents[i]['odds'][0] : null;
     allEvents[i] = pickBy(allEvents[i]);
-    delete allEvents[i]['odds'];
+    // delete allEvents[i]['odds'];
     // delete allEvents[i]['teams'];
+    if (allEvents[i]['teams']) {
+      allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
+        delete allEvents[i]['teams'][indexTeam]['standings'];
+      });
+    }
 
     allEvents[i]['start'] = allEvents[i]['start_time'];
     delete allEvents[i]['startTime'];
@@ -329,13 +334,7 @@ async function createAll(events: any[]) {
   console.log('createAll:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
-  // console.log({ events });
-  // events.forEach((event, i) => {
-  //   events[i].network = event.broadcast ? event.broadcast.network : null;
-  //   events[i] = clean(event);
-  // }, events);
   console.log('cleaned');
-  // console.log({ events });
 
   while (!!events.length) {
     try {
@@ -378,4 +377,3 @@ async function createAll(events: any[]) {
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
-
