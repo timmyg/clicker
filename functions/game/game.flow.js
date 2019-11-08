@@ -12,7 +12,7 @@ function init() {
   Game = dynamoose.model(
     process.env.tableGame,
     {
-      start_time: { type: String, hashKey: true },
+      start: { type: String, hashKey: true },
       id: {
         type: Number,
         rangeKey: true,
@@ -28,7 +28,7 @@ function init() {
         returnExpiredItems: false,
         defaultExpires: x => {
           // expire 9 hours after start
-          return moment(x.start_time)
+          return moment(x.start)
             .add(9, 'hours')
             .toDate();
         },
@@ -238,11 +238,11 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
 
   const datesToPull = [];
   if (allGames && allGames.length) {
-    const allGamesDescending = allGames.sort((a, b) => b.start_time.localeCompare(a.start_time));
+    const allGamesDescending = allGames.sort((a, b) => b.start.localeCompare(a.start));
     const latestGame = allGamesDescending[0];
     console.log({ latestGame });
     // get one day more than largest start time
-    const dayAfterFurthestGame = moment(latestGame.start_time)
+    const dayAfterFurthestGame = moment(latestGame.start)
       .add(1, 'd')
       .toDate();
     datesToPull.push(dayAfterFurthestGame);
@@ -307,36 +307,35 @@ function removeEmpty(obj) {
   });
 }
 
-async function createAll(events: any[]) {
+function cleanupEvents(events: any[]) {
+  console.log('e', events.length);
   events.forEach((event, i, allEvents) => {
     allEvents[i]['odds'] = allEvents[i]['odds'] ? allEvents[i]['odds'][0] : null;
     allEvents[i] = pickBy(allEvents[i]);
     delete allEvents[i]['odds'];
-    delete allEvents[i]['teams'];
+    // delete allEvents[i]['teams'];
 
-    allEvents[i]['start'] = allEvents[i]['startTime'];
+    allEvents[i]['start'] = allEvents[i]['start_time'];
     delete allEvents[i]['startTime'];
-    // remove null values
-    // Object.keys(allEvents[i]).forEach(key => {
-    //   if (allEvents[i][key] && typeof allEvents[i][key] === 'object') removeEmpty(allEvents[i][key]);
-    //   // recurse
-    //   else if (allEvents[i][key] == null) delete allEvents[i][key]; // delete
-    // });
-    // Object.keys(allEvents[i]).forEach(key => allEvents[i][key] == null && delete allEvents[i][key]);
   });
+  console.log('e', events.length);
   events = camelcase(events, { deep: true });
-  // console.log(events[4], events[4].odds.length);
+  console.log('e', events.length);
+  return events;
+}
 
+async function createAll(events: any[]) {
+  events = cleanupEvents(events);
   console.log('createAll:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
-  console.log({ events });
+  // console.log({ events });
   // events.forEach((event, i) => {
   //   events[i].network = event.broadcast ? event.broadcast.network : null;
   //   events[i] = clean(event);
   // }, events);
   console.log('cleaned');
-  console.log({ events });
+  // console.log({ events });
 
   while (!!events.length) {
     try {
