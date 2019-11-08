@@ -17,6 +17,12 @@ function init() {
         type: Number,
         rangeKey: true,
       },
+      status: {
+        type: String,
+        required: true,
+        index: true,
+        global: true,
+      },
     },
     {
       timestamps: true,
@@ -202,30 +208,38 @@ function transformSIUrl(webUrl: string): string {
   return apiUrl.join('/');
 }
 
-module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
-  const { start, network } = event.queryStringParameters;
-  console.log({ start, network });
-  const game = await getGame(start, network);
-  respond(200, game);
+// module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { start, network } = event.queryStringParameters;
+//   console.log({ start, network });
+//   const game = await getGame(start, network);
+//   respond(200, game);
+// });
+
+module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
+  const activeGames = await Game.query('status')
+    .eq('inprogress')
+    .exec();
+  respond(200, { activeGames });
 });
 
 // async function abstraction
-async function getGame(start, network) {
-  var params = {
-    TableName: process.env.tableGame,
-    Key: { start, network },
-  };
-  try {
-    console.log({ params });
-    const docClient = new AWS.DynamoDB.DocumentClient();
-    const data = await docClient.get(params).promise();
-    console.log({ data });
-    return data.Item;
-  } catch (e) {
-    console.error(e);
-    return e;
-  }
-}
+// async function getGame(start, network) {
+//   var params = {
+//     TableName: process.env.tableGame,
+//     Key: { start, network },
+//   };
+//   try {
+//     console.log({ params });
+//     const docClient = new AWS.DynamoDB.DocumentClient();
+//     const data = await docClient.get(params).promise();
+//     console.log({ data });
+//     return data.Item;
+//   } catch (e) {
+//     console.error(e);
+//     return e;
+//   }
+// }
 
 type actionNetworkRequest = {
   sport: string,
