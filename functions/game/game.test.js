@@ -1,4 +1,4 @@
-const { transformGame, transformSIUrl } = require('./game');
+const { cleanupEvents, transformGame, transformSIUrl } = require('./game');
 
 describe('transformSIUrl', () => {
   test('nfl', () => {
@@ -191,6 +191,17 @@ describe('transformGame', () => {
       expect(blowout).toBeFalsy();
       expect(ended).toBeFalsy();
       expect(description).toBe('LAA 0 @ NYY 0 (Pre-Game)');
+    });
+  });
+  describe('cleanupEvents', () => {
+    test('cleans up game', () => {
+      const data = require('../.resources/action-network/game.json');
+      const [result] = cleanupEvents(data);
+      expect(result.boxscore).toBeFalsy();
+      expect(Array.isArray(result.odds)).toBeFalsy();
+      expect(result.teams[0].standings).toBeFalsy();
+      expect(result.odds).toBeTruthy();
+      console.log({ result });
     });
   });
 });

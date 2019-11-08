@@ -1,0 +1,151 @@
+[
+  {
+    "id": 69612,
+    "status": "complete",
+    "statusDisplay": "Final",
+    "startTime": "2019-11-08T01:00:00.000Z",
+    "awayTeamId": 276,
+    "homeTeamId": 273,
+    "winningTeamId": 276,
+    "leagueName": "ncaaf",
+    "type": "reg",
+    "season": 2019,
+    "coverage": "full",
+    "isFree": true,
+    "awayRotationNumber": 111,
+    "homeRotationNumber": 112,
+    "teams": [
+      {
+        "id": 273,
+        "fullName": "South Florida Bulls",
+        "displayName": "S. Florida",
+        "shortName": "Bulls",
+        "location": "S. Florida",
+        "abbr": "USF",
+        "logo": "https://static.sprtactn.co/teamlogos/ncaaf/100/usf.png",
+        "primaryColor": "00573c",
+        "secondaryColor": "dfd0a5",
+        "conferenceType": "AAC",
+        "divisionType": "FBS"
+      },
+      {
+        "id": 276,
+        "fullName": "Temple Owls",
+        "displayName": "Temple",
+        "shortName": "Owls",
+        "location": "Temple",
+        "abbr": "TEM",
+        "logo": "https://static.sprtactn.co/teamlogos/ncaaf/100/tem.png",
+        "primaryColor": "990033",
+        "secondaryColor": "000000",
+        "conferenceType": "AAC",
+        "divisionType": "FBS"
+      }
+    ],
+    "lastPlay": {
+      "text": "End of Game",
+      "type": "game_over",
+      "clock": "0:00",
+      "possession": 276,
+      "homeWinPct": null,
+      "overWinPct": null,
+      "homeSpreadWinPct": null
+    },
+    "boxscore": {
+      "clock": "00:00",
+      "period": 4,
+      "linescore": [
+        {
+          "id": 1,
+          "abbr": "1",
+          "displayName": "1st",
+          "fullName": "1st Quarter",
+          "awayPoints": 0,
+          "homePoints": 0
+        },
+        {
+          "id": 2,
+          "abbr": "2",
+          "displayName": "2nd",
+          "fullName": "2nd Quarter",
+          "awayPoints": 7,
+          "homePoints": 0
+        },
+        {
+          "id": 3,
+          "abbr": "3",
+          "displayName": "3rd",
+          "fullName": "3rd Quarter",
+          "awayPoints": 7,
+          "homePoints": 7
+        },
+        {
+          "id": 4,
+          "abbr": "4",
+          "displayName": "4th",
+          "fullName": "4th Quarter",
+          "awayPoints": 3,
+          "homePoints": 0
+        }
+      ],
+      "situation": {
+        "down": 2,
+        "distance": 11,
+        "yardline": 83,
+        "isRedzone": true,
+        "possession": 276,
+        "yardlineText": "USF 17",
+        "startYardline": 84,
+        "yardsToEndzone": 17,
+        "display": "2nd & 11 @ USF 17",
+        "displayShort": "2nd & 11"
+      },
+      "awayTimeouts": 2,
+      "homeTimeouts": 2,
+      "totalAwayPoints": 17,
+      "totalHomePoints": 7,
+      "totalAwayFirsthalfPoints": 7,
+      "totalHomeFirsthalfPoints": 0,
+      "totalAwaySecondhalfPoints": 10,
+      "totalHomeSecondhalfPoints": 7
+    },
+    "odds": {
+      "mlAway": -110,
+      "mlHome": -110,
+      "spreadAway": 1,
+      "spreadHome": -1,
+      "spreadAwayLine": -105,
+      "spreadHomeLine": -107,
+      "over": -110,
+      "under": -110,
+      "total": 49.5,
+      "awayTotal": 25.5,
+      "awayOver": -110,
+      "awayUnder": -120,
+      "homeTotal": 24.5,
+      "homeOver": -115,
+      "homeUnder": -130,
+      "mlHomePublic": 56,
+      "mlAwayPublic": 44,
+      "spreadHomePublic": 46,
+      "spreadAwayPublic": 54,
+      "totalUnderPublic": 37,
+      "totalOverPublic": 63,
+      "mlHomeMoney": 59,
+      "mlAwayMoney": 41,
+      "spreadHomeMoney": 60,
+      "spreadAwayMoney": 40,
+      "totalOverMoney": 50,
+      "totalUnderMoney": 50,
+      "numBets": 14715,
+      "bookId": 15,
+      "type": "game",
+      "inserted": "2019-11-08T01:03:00.743395+00:00"
+    },
+    "broadcast": {
+      "network": "ESPN",
+      "satellite": "206"
+    },
+    "start": "2019-11-08T01:00:00.000Z"
+  }
+]

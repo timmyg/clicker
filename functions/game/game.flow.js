@@ -310,8 +310,10 @@ function removeEmpty(obj) {
 function cleanupEvents(events: any[]) {
   console.log('e', events.length);
   events.forEach((event, i, allEvents) => {
-    allEvents[i]['odds'] = allEvents[i]['odds'] ? pickBy(allEvents[i]['odds'][0]) : null;
+    console.log(allEvents[i]);
+    // allEvents[i]['odds'] = allEvents[i]['odds'] ? pickBy(allEvents[i]['odds'][0]) : null;
     allEvents[i] = pickBy(allEvents[i]);
+    delete allEvents[i]['boxscore'];
     // delete allEvents[i]['odds'];
     // delete allEvents[i]['teams'];
     if (allEvents[i]['teams']) {
@@ -377,3 +379,4 @@ async function createAll(events: any[]) {
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
+module.exports.cleanupEvents = cleanupEvents;
