@@ -9,6 +9,10 @@ const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = requi
 let Game;
 
 function init() {
+  dynamoose.setDefaults({
+    create: false,
+    update: false,
+  });
   Game = dynamoose.model(
     process.env.tableGame,
     {
@@ -26,7 +30,6 @@ function init() {
     },
     {
       timestamps: true,
-      update: true,
       saveUnknown: true,
       expires: {
         ttl: 86400,
