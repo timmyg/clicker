@@ -8,7 +8,7 @@
     "test": "npm run build && jest --coverage",
     "test:specific": "npm run build && jest -t='soccer'",
     "invoke:score": "serverless invoke local --function getStatus --path ../.resources/data/si-url.json",
-    "invoke:sync": "serverless invoke local --function sync --stage develop"
+    "invoke:syncSchedule": "serverless invoke local --function syncSchedule --stage develop"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +18,7 @@
     "camelcase-keys": "^6.1.0",
     "dotenv": "^6.2.0",
     "dynamoose": "^1.11.1",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "raven": "^2.6.4",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",

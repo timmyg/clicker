@@ -4,6 +4,7 @@ const camelcase = require('camelcase-keys');
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const AWS = require('aws-sdk');
+const { pickBy } = require('lodash');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 let Game;
 
@@ -287,8 +288,8 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
       console.log('responses', responses.length);
       const allEvents = [];
       responses.forEach(response => {
-        const events = response.data.games ? response.data.games : response.data.competitions;
-        allEvents.push(...events);
+        const responseEvents = response.data.games ? response.data.games : response.data.competitions;
+        allEvents.push(...responseEvents);
       });
       await createAll(allEvents);
     } catch (e) {
@@ -299,12 +300,32 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+function removeEmpty(obj) {
+  return Object.keys(obj).forEach(function(key) {
+    if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key]);
+    else if (obj[key] == null) delete obj[key];
+  });
+}
+
 async function createAll(events: any[]) {
   events.forEach((event, i, allEvents) => {
-    allEvents[i]['odds'] = allEvents[i]['odds'][0];
+    allEvents[i]['odds'] = allEvents[i]['odds'] ? allEvents[i]['odds'][0] : null;
+    allEvents[i] = pickBy(allEvents[i]);
+    delete allEvents[i]['odds'];
+    delete allEvents[i]['teams'];
+
+    allEvents[i]['start'] = allEvents[i]['startTime'];
+    delete allEvents[i]['startTime'];
+    // remove null values
+    // Object.keys(allEvents[i]).forEach(key => {
+    //   if (allEvents[i][key] && typeof allEvents[i][key] === 'object') removeEmpty(allEvents[i][key]);
+    //   // recurse
+    //   else if (allEvents[i][key] == null) delete allEvents[i][key]; // delete
+    // });
+    // Object.keys(allEvents[i]).forEach(key => allEvents[i][key] == null && delete allEvents[i][key]);
   });
-  const events = camelcase(events, { deep: true });
-  console.log(events[4], events[4].odds.length);
+  events = camelcase(events, { deep: true });
+  // console.log(events[4], events[4].odds.length);
 
   console.log('createAll:', events.length);
   const { tableGame } = process.env;

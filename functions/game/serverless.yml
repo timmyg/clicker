@@ -61,10 +61,10 @@ resources:
             AttributeType: N
           # - AttributeName: network
           #   AttributeType: S
-          - AttributeName: start_time
+          - AttributeName: start
             AttributeType: S
         KeySchema:
-          - AttributeName: start_time
+          - AttributeName: start
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
