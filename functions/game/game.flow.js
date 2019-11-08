@@ -26,6 +26,7 @@ function init() {
     },
     {
       timestamps: true,
+      update: true,
       saveUnknown: true,
       expires: {
         ttl: 86400,
