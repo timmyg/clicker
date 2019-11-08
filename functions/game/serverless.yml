@@ -50,6 +50,7 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
+    
 resources:
   Resources:
     GamesTable:
