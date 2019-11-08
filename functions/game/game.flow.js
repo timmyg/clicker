@@ -17,7 +17,6 @@ function init() {
         type: Number,
         rangeKey: true,
       },
-      odds: Object,
     },
     {
       timestamps: true,
@@ -314,12 +313,9 @@ function removeEmpty(obj) {
 function cleanupEvents(events: any[]) {
   console.log('e', events.length);
   events.forEach((event, i, allEvents) => {
-    // console.log(allEvents[i]);
     allEvents[i]['odds'] = allEvents[i]['odds'] ? pickBy(allEvents[i]['odds'][0]) : {};
-    // allEvents[i]['odds'] = allEvents[i]['odds'] ? pickBy(allEvents[i]['odds'][0]) : null;
+    allEvents[i]['lastPlay'] = allEvents[i]['lastPlay'] ? pickBy(allEvents[i]['lastPlay']) : {};
     delete allEvents[i]['boxscore'];
-    // delete allEvents[i]['odds'];
-    // delete allEvents[i]['teams'];
     if (allEvents[i]['teams']) {
       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
         delete allEvents[i]['teams'][indexTeam]['standings'];
