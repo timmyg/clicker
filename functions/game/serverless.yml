@@ -59,8 +59,8 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
-          # - AttributeName: network
-          #   AttributeType: S
+          - AttributeName: status
+            AttributeType: S
           - AttributeName: start
             AttributeType: S
         KeySchema:
@@ -71,16 +71,16 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
-        # GlobalSecondaryIndexes:
-        #   - IndexName: idGlobalIndex
-        #     KeySchema:
-        #       - AttributeName: id
-        #         KeyType: HASH
-        #     Projection:
-        #       ProjectionType: KEYS_ONLY
-        #     ProvisionedThroughput:
-        #       ReadCapacityUnits: ${self:custom.tableThroughput}
-        #       WriteCapacityUnits: ${self:custom.tableThroughput}
+        GlobalSecondaryIndexes:
+          - IndexName: statusGlobalIndex
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.tableThroughput}
+              WriteCapacityUnits: ${self:custom.tableThroughput}
         # - IndexName: networkGlobalIndex
         #   KeySchema:
         #     - AttributeName: network
