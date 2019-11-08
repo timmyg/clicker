@@ -1,5 +1,6 @@
 // @flow
 const axios = require('axios');
+const camelcase = require('camelcase-keys');
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const AWS = require('aws-sdk');
@@ -299,18 +300,20 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function createAll(events: any[]) {
+  events.forEach((event, i, allEvents) => {
+    allEvents[i]['odds'] = allEvents[i]['odds'][0];
+  });
+  const events = camelcase(events, { deep: true });
+  console.log(events[4], events[4].odds.length);
+
   console.log('createAll:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
   console.log({ events });
-  events.forEach((event, i) => {
-    console.log(event);
-    console.log(this);
-    console.log(i);
-    // const thisEvent = this[i];
-    events[i].network = event.broadcast ? event.broadcast.network : null;
-    events[i] = clean(event);
-  }, events);
+  // events.forEach((event, i) => {
+  //   events[i].network = event.broadcast ? event.broadcast.network : null;
+  //   events[i] = clean(event);
+  // }, events);
   console.log('cleaned');
   console.log({ events });
 
@@ -344,14 +347,14 @@ async function createAll(events: any[]) {
   }
 }
 
-function clean(obj) {
-  for (var propName in obj) {
-    if (obj[propName] === null || obj[propName] === undefined) {
-      delete obj[propName];
-    }
-  }
-  return obj;
-}
+// function clean(obj) {
+//   for (var propName in obj) {
+//     if (obj[propName] === null || obj[propName] === undefined) {
+//       delete obj[propName];
+//     }
+//   }
+//   return obj;
+// }
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
