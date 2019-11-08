@@ -260,7 +260,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
 });
 
 function getChannelForZone(index) {
-  const initChannels = [206, 209, 614, 208, 212, 219];
+  const initChannels = [206, 209, 208, 212, 219];
   return initChannels[index % initChannels.length];
 }
 
