@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import axios from 'axios';
 import Header from './layouts/Header';
 import LayoutBasic from '@/components/layouts/Basic';
 export default Vue.extend({
@@ -44,24 +45,30 @@ export default Vue.extend({
     },
     loadScoreboard() {
       this.loading = true;
-      this.$http
-        .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
-        .then(response => {
-          this.games = response.json()
-          console.log(response.clone().json());
-          console.log(response.json());
-          // console.log(response.data.json());
-          console.log(response.body);
-          console.log(response.data);
-          // console.log(response.body.json());
-          // // console.log(response.text());
-          this.loading = false;
-        })
-        .catch(e => {
-          console.error(e);
-          this.loading = false;
-          this.error = true;
-        });
+      // this.$http
+      //   .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
+      //   .then(response => {
+      //     this.games = response.json()
+      //     console.log(response.clone().json());
+      //     console.log(response.json());
+      //     // console.log(response.data.json());
+      //     console.log(response.body);
+      //     console.log(response.data);
+      //     // console.log(response.body.json());
+      //     // // console.log(response.text());
+      //     this.loading = false;
+      //   })
+      //   .catch(e => {
+      //     console.error(e);
+      //     this.loading = false;
+      //     this.error = true;
+      //   });
+          axios
+      .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
+      .then(response => {
+        console.log(response)
+        this.games = response
+      })
     }
   }
 });
