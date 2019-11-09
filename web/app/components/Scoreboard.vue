@@ -12,7 +12,7 @@
         </thead>
         <tr v-for="game in games" v-bind:key="game.id">
           <td>{{game.awayTeam}} @ {{game.homeTeam}}</td>
-          <td>{{game.status}}</td>
+          <td>{{game.statusDisplay}}</td>
         </tr>
       </table>
     </section>
@@ -68,6 +68,7 @@ export default Vue.extend({
       .then(response => {
         console.log(response.data)
         this.games = response.data
+        this.loading = true;
       })
     }
   }
