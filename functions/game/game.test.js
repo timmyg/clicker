@@ -200,6 +200,8 @@ describe('transformGame', () => {
       expect(result.boxscore).toBeFalsy();
       expect(Array.isArray(result.odds)).toBeFalsy();
       expect(result.odds).not.toHaveProperty('draw');
+      expect(result).toHaveProperty('awayTeam');
+      expect(result).toHaveProperty('homeTeam');
       expect(result.teams[0].standings).toBeFalsy();
       expect(result.odds.mlAway).toBe(-165);
       console.log({ result });
