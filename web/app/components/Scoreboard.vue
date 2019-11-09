@@ -66,8 +66,8 @@ export default Vue.extend({
           axios
       .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
       .then(response => {
-        console.log(response)
-        this.games = response
+        console.log(response.data)
+        this.games = response.data
       })
     }
   }
