@@ -77,7 +77,11 @@ resources:
               - AttributeName: status
                 KeyType: HASH
             Projection:
-              ProjectionType: KEYS_ONLY
+              NonKeyAttributes:
+                - awayTeam
+                - homeTeam
+                - statusDisplay
+              ProjectionType: INCLUDE
             ProvisionedThroughput:
               ReadCapacityUnits: ${self:custom.tableThroughput}
               WriteCapacityUnits: ${self:custom.tableThroughput}
