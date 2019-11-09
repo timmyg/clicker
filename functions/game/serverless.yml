@@ -153,3 +153,15 @@ functions:
               - partner
               - authorization
               - content-type
+  scoreboard:
+    handler: game.scoreboard
+    events:
+      - http:
+          path: scoreboard
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type

@@ -239,6 +239,14 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, { inProgressEvents });
 });
 
+module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
+  const allGames = await Game.query('status')
+    .eq('inprogress')
+    .exec();
+  return respond(200, allGames);
+});
+
 type actionNetworkRequest = {
   sport: string,
   params?: any[],
