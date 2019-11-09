@@ -18,7 +18,6 @@ provider:
         - lambda:InvokeFunction
         - lambda:InvokeAsync
       Resource: '*'
-
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
