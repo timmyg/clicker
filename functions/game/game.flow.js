@@ -332,6 +332,8 @@ function cleanupEvents(events: any[]) {
       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
         delete allEvents[i]['teams'][indexTeam]['standings'];
       });
+      allEvents[i]['awayTeam'] = allEvents[i]['teams'][0]['displayName'];
+      allEvents[i]['homeTeam'] = allEvents[i]['teams'][1]['displayName'];
     }
 
     allEvents[i]['start'] = allEvents[i]['start_time'];
