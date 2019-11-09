@@ -28,6 +28,13 @@ function init() {
           global: true,
         },
       },
+      odds: Object,
+      competitions: [
+        {
+          required: false,
+          competitors: [Object],
+        },
+      ],
     },
     {
       timestamps: true,
@@ -222,29 +229,15 @@ function transformSIUrl(webUrl: string): string {
 
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
-  const activeGames = await Game.query('status')
-    .eq('inprogress')
-    .exec();
-  return respond(200, { activeGames });
+  const allEvents = await pullFromActionNetwork([moment().toDate()]);
+  console.log('allEvents', allEvents.length);
+  const inProgressEvents = allEvents.filter(e => e.status === 'inprogress');
+  if (inProgressEvents && inProgressEvents.length) {
+    console.log('inProgressEvents', inProgressEvents.length);
+    await updateGames(inProgressEvents);
+  }
+  return respond(200, { inProgressEvents });
 });
-
-// async function abstraction
-// async function getGame(start, network) {
-//   var params = {
-//     TableName: process.env.tableGame,
-//     Key: { start, network },
-//   };
-//   try {
-//     console.log({ params });
-//     const docClient = new AWS.DynamoDB.DocumentClient();
-//     const data = await docClient.get(params).promise();
-//     console.log({ data });
-//     return data.Item;
-//   } catch (e) {
-//     console.error(e);
-//     return e;
-//   }
-// }
 
 type actionNetworkRequest = {
   sport: string,
@@ -252,12 +245,10 @@ type actionNetworkRequest = {
 };
 
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('a');
   init();
-  console.log('b');
+  console.log('get games...');
   const allGames = await Game.scan().exec();
-  console.log('c');
-
+  console.log('existingGames:', allGames.length);
   const datesToPull = [];
   if (allGames && allGames.length) {
     const allGamesDescending = allGames.sort((a, b) => b.start.localeCompare(a.start));
@@ -277,10 +268,21 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
         .toDate(),
     );
   }
-
   console.log('sync');
-  const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+  const allEvents = await pullFromActionNetwork(datesToPull);
+  await updateGames(allEvents);
+  return respond(200);
+});
 
+function removeEmpty(obj) {
+  return Object.keys(obj).forEach(function(key) {
+    if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key]);
+    else if (obj[key] == null) delete obj[key];
+  });
+}
+
+async function pullFromActionNetwork(dates: Date[]) {
+  const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
   const actionSports: actionNetworkRequest[] = [];
   actionSports.push({ sport: 'ncaab', params: { division: 'D1' } });
   actionSports.push({ sport: 'ncaaf', params: { division: 'FBS' } });
@@ -292,8 +294,8 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   actionSports.push({ sport: 'boxing' });
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
-  console.log({ datesToPull });
-  for (const date of datesToPull) {
+  console.log({ dates });
+  for (const date of dates) {
     try {
       const requests = [];
       const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
@@ -308,25 +310,16 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
 
       const responses = await Promise.all(requests);
       console.log('responses', responses.length);
-      const allEvents = [];
+      const all = [];
       responses.forEach(response => {
         const responseEvents = response.data.games ? response.data.games : response.data.competitions;
-        allEvents.push(...responseEvents);
+        all.push(...responseEvents);
       });
-      await createAll(allEvents);
+      return all;
     } catch (e) {
       console.error(e);
-      return respond(400, e);
     }
   }
-  return respond(200);
-});
-
-function removeEmpty(obj) {
-  return Object.keys(obj).forEach(function(key) {
-    if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key]);
-    else if (obj[key] == null) delete obj[key];
-  });
 }
 
 function cleanupEvents(events: any[]) {
@@ -346,17 +339,17 @@ function cleanupEvents(events: any[]) {
 
     allEvents[i] = pickBy(allEvents[i]);
 
-    console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
+    // console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
   });
-  console.log('e', events.length);
+  // console.log('e', events.length);
   events = camelcase(events, { deep: true });
-  console.log('e', events.length);
+  // console.log('e', events.length);
   return events;
 }
 
-async function createAll(events: any[]) {
+async function updateGames(events: any[]) {
   events = cleanupEvents(events);
-  console.log('createAll:', events.length);
+  console.log('updateGames:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
   console.log('cleaned');
@@ -366,23 +359,7 @@ async function createAll(events: any[]) {
       const dbEvents = events.splice(0, 25);
       console.log('creating:', dbEvents.length);
       console.log('remaining:', events.length);
-      // const params = {
-      //   RequestItems: {
-      //     // [tableGame]: dbEvents,
-      //     [tableGame]: dbEvents.map(item => ({
-      //       PutRequest: {
-      //         Item: item,
-      //       },
-      //     })),
-      //   },
-      // };
-      // const result = await docClient.batchWrite(params).promise();
-
-      // console.log({ params });
-      console.log(JSON.stringify(dbEvents));
-
-      // remove all null fields, due to https://github.com/dynamoosejs/dynamoose/pull/682
-
+      // console.log(JSON.stringify(dbEvents));
       const result = await Game.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
@@ -390,15 +367,6 @@ async function createAll(events: any[]) {
     }
   }
 }
-
-// function clean(obj) {
-//   for (var propName in obj) {
-//     if (obj[propName] === null || obj[propName] === undefined) {
-//       delete obj[propName];
-//     }
-//   }
-//   return obj;
-// }
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;

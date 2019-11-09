@@ -143,6 +143,7 @@ functions:
   syncScores:
     handler: game.syncScores
     events:
+      - schedule: rate(5 minutes)
       - http:
           path: sync/scores
           method: post
