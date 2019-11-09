@@ -2,18 +2,19 @@
   <layout-basic>
     <Header v-bind:subtitle="'Scoreboard'"></Header>
     <section class="main container">
-    		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th> Game </th>
-					<th> Status</th>
-				</tr>
-			</thead>
-			<tr v-for="game in games" v-bind:key="game.id">
-				<td>{{game.awayTeam}} @ {{game.homeTeam}}</td>
-				<td>{{game.status}}</td>
-			</tr>
-		</table>
+      <span class="right" v-if="!loading" v-on:click="refresh()">refresh</span>
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th> Game </th>
+            <th> Status</th>
+          </tr>
+        </thead>
+        <tr v-for="game in games" v-bind:key="game.id">
+          <td>{{game.awayTeam}} @ {{game.homeTeam}}</td>
+          <td>{{game.status}}</td>
+        </tr>
+      </table>
     </section>
   </layout-basic>
 </template>
@@ -35,7 +36,14 @@ export default Vue.extend({
     }
   },
   mounted () {
-    this.loading = true;
+    this.loadScoreboard()
+  },
+  methods: {
+    refresh(value) {
+      this.loadScoreboard()
+    },
+    loadScoreboard() {
+      this.loading = true;
       this.$http
         .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
         .then((response) => {
@@ -49,46 +57,20 @@ export default Vue.extend({
           this.loading = false;
           this.error = true;
         });
+    }
   }
 });
 </script>
 
 <style lang="scss" scoped>
-.card {
-  height: 100%;
-}
-.card-wrapper {
-  padding: 20px 10px;
-  .card {
-    background: #eeeeee;
-
-    header {
-      text-align: center;
-      padding-bottom: 20px;
-    }
-  }
+.right {
+  float: right;
 }
 header.site-header {
   margin-bottom: 40px;
 }
-img {
-  max-width: 200px;
-  max-height: 100px;
-  margin: 0 auto;
-}
+
 section.main {
   padding-top: 100px;
-}
-
-.colors {
-  .color {
-    height: 80px;
-    width: 80px;
-    color: white;
-    border-radius: 6px;
-    text-align: center;
-    display: inline-block;
-    font-weight: bold;
-  }
 }
 </style>
