@@ -47,7 +47,7 @@ export default Vue.extend({
       this.$http
         .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
         .then(response => {
-          this.games = response.data
+          this.games = response.json()
           console.log(response.clone().json());
           console.log(response.json());
           // console.log(response.data.json());
