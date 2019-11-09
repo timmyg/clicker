@@ -46,11 +46,16 @@ export default Vue.extend({
       this.loading = true;
       this.$http
         .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
-        .then((response) => {
-          console.log(response);
+        .then(response => {
+          this.games = response.data
+          console.log(response.clone().json());
+          console.log(response.json());
+          // console.log(response.data.json());
           console.log(response.body);
+          console.log(response.data);
+          // console.log(response.body.json());
+          // // console.log(response.text());
           this.loading = false;
-          this.games = response.body;
         })
         .catch(e => {
           console.error(e);
