@@ -2,12 +2,13 @@
   <layout-basic>
     <Header v-bind:subtitle="'Scoreboard'"></Header>
     <section class="main container">
-      <span class="right" v-if="!loading" v-on:click="refresh()">refresh</span>
-    	<table class="table table-bordered">
+      <a href class="right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
+      <span class="right" v-else>refreshing...</span>
+      <table class="table table-bordered">
         <thead>
           <tr>
-            <th> Game </th>
-            <th> Status</th>
+            <th>Game</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tr v-for="game in games" v-bind:key="game.id">
@@ -29,19 +30,21 @@ export default Vue.extend({
     Header,
     LayoutBasic,
   },
-  data () {
+  data() {
     return {
       loading: false,
       games: null,
-      error: null
-    }
+      error: null,
+    };
   },
-  mounted () {
-    this.loadScoreboard()
+  mounted() {
+    this.loadScoreboard();
   },
   methods: {
-    refresh(value) {
-      this.loadScoreboard()
+    refresh(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      this.loadScoreboard();
     },
     loadScoreboard() {
       this.loading = true;
@@ -63,15 +66,13 @@ export default Vue.extend({
       //     this.loading = false;
       //     this.error = true;
       //   });
-          axios
-      .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
-      .then(response => {
-        console.log(response.data)
-        this.games = response.data
-        this.loading = true;
-      })
-    }
-  }
+      axios.get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`).then(response => {
+        console.log(response.data);
+        this.games = response.data;
+        this.loading = false;
+      });
+    },
+  },
 });
 </script>
 
