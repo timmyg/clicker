@@ -231,7 +231,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allEvents = await pullFromActionNetwork([moment().toDate()]);
   console.log('allEvents', allEvents.length);
-  const inProgressEvents = allEvents.filter(e => e.status === 'inprogress');
+  const inProgressEvents = allEvents.filter(e => e.status !== 'scheduled' && e.status !== 'time-tbd');
   if (inProgressEvents && inProgressEvents.length) {
     console.log('inProgressEvents', inProgressEvents.length);
     await updateGames(inProgressEvents);
