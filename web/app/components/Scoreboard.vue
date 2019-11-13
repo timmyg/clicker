@@ -17,15 +17,17 @@
         <div v-for="game in games" v-bind:key="game.id" class="wrapper">
           <span class="status">{{game.statusDisplay}}</span>
           <br />
-          <span>
-            {{game.awayTeam}}
-            <b>{{game.boxscore.totalAwayPoints}}</b>
-          </span>
-          <br />
-          <span>
-            {{game.homeTeam}}
-            <b>{{game.boxscore.totalHomePoints}}</b>
-          </span>
+          <div class="inner">
+            <span>
+              {{game.awayTeam}}
+              <b>{{game.boxscore.totalAwayPoints}}</b>
+            </span>
+            <br />
+            <span>
+              {{game.homeTeam}}
+              <b>{{game.boxscore.totalHomePoints}}</b>
+            </span>
+          </div>
         </div>
       </div>
       <br />
@@ -91,18 +93,22 @@ section.main {
 }
 .status {
   font-size: 12px;
+  float: right;
 }
 .wrapper {
   display: inline-block;
   margin-right: 32px;
-  border: 1px solid lightgrey;
-  border-radius: 10px;
-  padding: 2px 8px;
   min-width: 160px;
+  .inner {
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    padding: 2px 8px;
+  }
 }
 .league {
   display: block;
   font-size: 12px;
+  text-transform: uppercase;
 }
 .league-wrapper {
   margin-bottom: 16px;
