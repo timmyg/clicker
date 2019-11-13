@@ -29,9 +29,16 @@ function init() {
         },
       },
       odds: Object,
+      lastPlay: Object,
+      boxscore: Object,
+      teams: [
+        {
+          standings: Object,
+        },
+      ],
       competitions: [
         {
-          required: false,
+          // required: false,
           competitors: [Object],
         },
       ],
@@ -337,10 +344,12 @@ function cleanupEvents(events: any[]) {
   events.forEach((event, i, allEvents) => {
     allEvents[i]['odds'] = allEvents[i]['odds'] ? pickBy(allEvents[i]['odds'][0]) : {};
     allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? pickBy(allEvents[i]['last_play']) : {};
-    delete allEvents[i]['boxscore'];
+    allEvents[i]['boxscore'] = pickBy(allEvents[i]['boxscore']);
     if (allEvents[i]['teams']) {
       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
-        delete allEvents[i]['teams'][indexTeam]['standings'];
+        // delete allEvents[i]['teams'][indexTeam]['standings'];
+        // delete allEvents[i]['teams'][indexTeam]['standings'];
+        allEvents[i]['teams'][indexTeam]['standings'] = pickBy(allEvents[i]['teams'][indexTeam]['standings']);
       });
       console.log(allEvents[i]['teams'][0]['display_name']);
       console.log(allEvents[i]['teams'][1]['display_name']);
