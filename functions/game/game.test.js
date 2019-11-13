@@ -197,13 +197,16 @@ describe('transformGame', () => {
     test('cleans up game', () => {
       const data = require('../.resources/action-network/game.json');
       const [result] = cleanupEvents([data]);
-      expect(result.boxscore).toBeFalsy();
+      expect(result.boxscore).toBeTruthy();
+      expect(result.lastPlay).toBeTruthy();
       expect(Array.isArray(result.odds)).toBeFalsy();
       expect(result.odds).not.toHaveProperty('draw');
       expect(result).toHaveProperty('awayTeam');
       expect(result).toHaveProperty('homeTeam');
-      expect(result.teams[0].standings).toBeFalsy();
-      expect(result.odds.mlAway).toBe(-165);
+      expect(result.teams[0].standings).toBeTruthy();
+      expect(result.teams[1].standings).toBeTruthy();
+      expect(result.odds.mlAway).toBe(575);
+      expect(result.odds.total).toBe(56);
       console.log({ result });
     });
   });
