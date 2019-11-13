@@ -3,10 +3,14 @@
     <Header v-bind:subtitle="'Scoreboard'"></Header>
     <section class="main container">
       <div class="refresh-wrapper">
-        <a href class="right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
-        <span class="right" v-else>refreshing...</span>
+        <a href class="link right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
+        <a class="link right" v-else disabled>refreshing...</a>
       </div>
-      <div v-for="(games, leagueName) in gamesByLeague" v-bind:key="leagueName">
+      <div
+        v-for="(games, leagueName) in gamesByLeague"
+        v-bind:key="leagueName"
+        class="league-wrapper"
+      >
         <div class="league">
           <em>{{leagueName}}</em>
         </div>
@@ -90,14 +94,31 @@ section.main {
 }
 .wrapper {
   display: inline-block;
-  padding-right: 32px;
+  margin-right: 32px;
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  padding: 2px 8px;
+  min-width: 160px;
 }
 .league {
   display: block;
   font-size: 12px;
 }
+.league-wrapper {
+  margin-bottom: 16px;
+}
 .refresh-wrapper {
   display: block;
   height: 40px;
+  .link {
+    text-transform: capitalize;
+    // border: 1px solid #0091e8;
+    // padding: 4px 8px;
+    // border-radius: 6px;
+    color: #0091e8;
+    text-transform: capitalize;
+    // line-height: inherit;
+    font-size: 14px;
+  }
 }
 </style>
