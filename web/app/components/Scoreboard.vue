@@ -6,29 +6,26 @@
         <a href class="right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
         <span class="right" v-else>refreshing...</span>
       </div>
-      <!-- <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Game</th>
-            <th>Status</th>
-          </tr>
-      </thead>-->
-      <div v-for="game in games" v-bind:key="game.id" class="wrapper">
-        <span class="status">{{game.statusDisplay}}</span>
-        <br />
-        <span>
-          {{game.awayTeam}}
-          <b>{{game.boxscore.totalAwayPoints}}</b>
-        </span>
-        <br />
-        <span>
-          {{game.homeTeam}}
-          <b>{{game.boxscore.totalHomePoints}}</b>
-        </span>
+      <div v-for="(games, leagueName) in gamesByLeague" v-bind:key="leagueName">
+        <div class="league">
+          <em>{{leagueName}}</em>
+        </div>
+        <div v-for="game in games" v-bind:key="game.id" class="wrapper">
+          <span class="status">{{game.statusDisplay}}</span>
+          <br />
+          <span>
+            {{game.awayTeam}}
+            <b>{{game.boxscore.totalAwayPoints}}</b>
+          </span>
+          <br />
+          <span>
+            {{game.homeTeam}}
+            <b>{{game.boxscore.totalHomePoints}}</b>
+          </span>
+        </div>
       </div>
       <br />
       <br />
-      <!-- </table> -->
     </section>
   </layout-basic>
 </template>
@@ -46,7 +43,7 @@ export default Vue.extend({
   data() {
     return {
       loading: false,
-      games: null,
+      gamesByLeague: null,
       error: null,
     };
   },
@@ -61,28 +58,16 @@ export default Vue.extend({
     },
     loadScoreboard() {
       this.loading = true;
-      // this.$http
-      //   .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`)
-      //   .then(response => {
-      //     this.games = response.json()
-      //     console.log(response.clone().json());
-      //     console.log(response.json());
-      //     // console.log(response.data.json());
-      //     console.log(response.body);
-      //     console.log(response.data);
-      //     // console.log(response.body.json());
-      //     // // console.log(response.text());
-      //     this.loading = false;
-      //   })
-      //   .catch(e => {
-      //     console.error(e);
-      //     this.loading = false;
-      //     this.error = true;
-      //   });
       axios.get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`).then(response => {
         console.log(response.data);
         this.games = response.data;
         this.loading = false;
+        // const key = 'leagueName';
+        this.gamesByLeague = response.data.reduce(function(rv, x) {
+          (rv[x['leagueName']] = rv[x['leagueName']] || []).push(x);
+          return rv;
+        }, {});
+        console.log('!!', this.gamesByLeague);
       });
     },
   },
@@ -106,6 +91,10 @@ section.main {
 .wrapper {
   display: inline-block;
   padding-right: 32px;
+}
+.league {
+  display: block;
+  font-size: 12px;
 }
 .refresh-wrapper {
   display: block;
