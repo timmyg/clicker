@@ -4,18 +4,22 @@
     <section class="main container">
       <a href class="right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
       <span class="right" v-else>refreshing...</span>
-      <table class="table table-bordered">
+      <!-- <table class="table table-bordered">
         <thead>
           <tr>
             <th>Game</th>
             <th>Status</th>
           </tr>
-        </thead>
-        <tr v-for="game in games" v-bind:key="game.id">
-          <td>{{game.awayTeam}} @ {{game.homeTeam}}</td>
-          <td>{{game.statusDisplay}}</td>
-        </tr>
-      </table>
+      </thead>-->
+      <div v-for="game in games" v-bind:key="game.id">
+        <span>{{game.statusDisplay}}</span>
+        <br />
+        <span>{{game.awayTeam}} <b>{{game.boxscore.totalAwayPoints}}<b/></span>
+        <br />
+        <span>{{game.homeTeam}} <b>{{game.boxscore.totalHomePoints}}</b></span>
+      </div>
+      <br /><br />
+      <!-- </table> -->
     </section>
   </layout-basic>
 </template>
