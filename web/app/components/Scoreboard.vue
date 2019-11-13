@@ -2,8 +2,10 @@
   <layout-basic>
     <Header v-bind:subtitle="'Scoreboard'"></Header>
     <section class="main container">
-      <a href class="right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
-      <span class="right" v-else>refreshing...</span>
+      <div class="refresh-wrapper">
+        <a href class="right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
+        <span class="right" v-else>refreshing...</span>
+      </div>
       <!-- <table class="table table-bordered">
         <thead>
           <tr>
@@ -11,14 +13,21 @@
             <th>Status</th>
           </tr>
       </thead>-->
-      <div v-for="game in games" v-bind:key="game.id">
-        <span>{{game.statusDisplay}}</span>
+      <div v-for="game in games" v-bind:key="game.id" class="wrapper">
+        <span class="status">{{game.statusDisplay}}</span>
         <br />
-        <span>{{game.awayTeam}} <b>{{game.boxscore.totalAwayPoints}}<b/></span>
+        <span>
+          {{game.awayTeam}}
+          <b>{{game.boxscore.totalAwayPoints}}</b>
+        </span>
         <br />
-        <span>{{game.homeTeam}} <b>{{game.boxscore.totalHomePoints}}</b></span>
+        <span>
+          {{game.homeTeam}}
+          <b>{{game.boxscore.totalHomePoints}}</b>
+        </span>
       </div>
-      <br /><br />
+      <br />
+      <br />
       <!-- </table> -->
     </section>
   </layout-basic>
@@ -90,5 +99,16 @@ header.site-header {
 
 section.main {
   padding-top: 100px;
+}
+.status {
+  font-size: 12px;
+}
+.wrapper {
+  display: inline-block;
+  padding-right: 32px;
+}
+.refresh-wrapper {
+  display: block;
+  height: 40px;
 }
 </style>
