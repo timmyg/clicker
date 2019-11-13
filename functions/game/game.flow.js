@@ -27,7 +27,7 @@ function init() {
         index: {
           global: true,
         },
-      },
+      }, // complete, inprogress, scheduled
       odds: Object,
       lastPlay: Object,
       boxscore: Object,
