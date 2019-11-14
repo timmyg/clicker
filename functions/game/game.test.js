@@ -203,9 +203,10 @@ describe('transformGame', () => {
       expect(result.odds).not.toHaveProperty('draw');
       expect(result).toHaveProperty('awayTeam');
       expect(result).toHaveProperty('homeTeam');
-<<<<<<< HEAD
-      expect(result.teams[0].standings).toBeFalsy();
-      expect(result.odds.mlAway).toBe(-165);
+      expect(result.teams[0].standings).toBeTruthy();
+      expect(result.teams[1].standings).toBeTruthy();
+      expect(result.odds.mlAway).toBe(575);
+      expect(result.odds.total).toBe(56);
     });
   });
   describe('getInProgressGames', () => {
@@ -213,13 +214,6 @@ describe('transformGame', () => {
       const data = require('../.resources/action-network/games-in-progress.json');
       const result = getInProgressGames(data);
       expect(result.length).toBe(34);
-=======
-      expect(result.teams[0].standings).toBeTruthy();
-      expect(result.teams[1].standings).toBeTruthy();
-      expect(result.odds.mlAway).toBe(575);
-      expect(result.odds.total).toBe(56);
-      console.log({ result });
->>>>>>> 89367d79785fbbbbeb500e71f5992aa3b6416882
     });
   });
 });

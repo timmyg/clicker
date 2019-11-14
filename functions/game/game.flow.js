@@ -238,6 +238,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allEvents = await pullFromActionNetwork([moment().toDate()]);
   console.log('allEvents', allEvents.length);
+  console.log('json', JSON.stringify(allEvents));
   const inProgressEvents = getInProgressGames(allEvents);
   if (inProgressEvents && inProgressEvents.length) {
     console.log('inProgressEvents', inProgressEvents.length);
@@ -365,7 +366,7 @@ function cleanupEvents(events: any[]) {
     delete allEvents[i]['startTime'];
 
     allEvents[i] = _.pickBy(allEvents[i], _.identity);
-    console.log(allEvents[i]);
+    // console.log(allEvents[i]);
 
     // console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
   });
