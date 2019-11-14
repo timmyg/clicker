@@ -231,7 +231,8 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allEvents = await pullFromActionNetwork([moment().toDate()]);
   console.log('allEvents', allEvents.length);
-  const inProgressEvents = allEvents.filter(e => e.status === 'inprogress');
+  // const inProgressEvents = allEvents.filter(e => e.status === 'inprogress');
+  const inProgressEvents = getInProgressGames(allEvents);
   if (inProgressEvents && inProgressEvents.length) {
     console.log('inProgressEvents', inProgressEvents.length);
     await updateGames(inProgressEvents);
@@ -289,6 +290,10 @@ function removeEmpty(obj) {
   });
 }
 
+function getInProgressGames(response) {
+  return response.filter(e => e.status === 'inprogress');
+}
+
 async function pullFromActionNetwork(dates: Date[]) {
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
   const actionSports: actionNetworkRequest[] = [];
@@ -331,7 +336,7 @@ async function pullFromActionNetwork(dates: Date[]) {
 }
 
 function cleanupEvents(events: any[]) {
-  console.log('e', events.length);
+  // console.log('e', events.length);
   events.forEach((event, i, allEvents) => {
     allEvents[i]['odds'] = allEvents[i]['odds'] ? pickBy(allEvents[i]['odds'][0]) : {};
     allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? pickBy(allEvents[i]['last_play']) : {};
@@ -340,12 +345,12 @@ function cleanupEvents(events: any[]) {
       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
         delete allEvents[i]['teams'][indexTeam]['standings'];
       });
-      console.log(allEvents[i]['teams'][0]['display_name']);
-      console.log(allEvents[i]['teams'][1]['display_name']);
+      // console.log(allEvents[i]['teams'][0]['display_name']);
+      // console.log(allEvents[i]['teams'][1]['display_name']);
       allEvents[i]['awayTeam'] = allEvents[i]['teams'][0]['display_name'];
       allEvents[i]['homeTeam'] = allEvents[i]['teams'][1]['display_name'];
     }
-    console.log(allEvents[i]);
+    // console.log(allEvents[i]);
     allEvents[i]['start'] = allEvents[i]['start_time'];
     delete allEvents[i]['startTime'];
 
@@ -383,3 +388,4 @@ async function updateGames(events: any[]) {
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
 module.exports.cleanupEvents = cleanupEvents;
+module.exports.getInProgressGames = getInProgressGames;

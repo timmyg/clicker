@@ -1,4 +1,4 @@
-const { cleanupEvents, transformGame, transformSIUrl } = require('./game');
+const { cleanupEvents, getInProgressGames, transformGame, transformSIUrl } = require('./game');
 
 describe('transformSIUrl', () => {
   test('nfl', () => {
@@ -204,7 +204,13 @@ describe('transformGame', () => {
       expect(result).toHaveProperty('homeTeam');
       expect(result.teams[0].standings).toBeFalsy();
       expect(result.odds.mlAway).toBe(-165);
-      console.log({ result });
+    });
+  });
+  describe('getInProgressGames', () => {
+    test('gets only in-progress games', () => {
+      const data = require('../.resources/action-network/games-in-progress.json');
+      const result = getInProgressGames(data);
+      expect(result.length).toBe(34);
     });
   });
 });
