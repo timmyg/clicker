@@ -4,7 +4,7 @@ const camelcase = require('camelcase-keys');
 const dynamoose = require('dynamoose');
 const moment = require('moment');
 const AWS = require('aws-sdk');
-const { pickBy } = require('lodash');
+const _ = require('lodash');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 let Game;
 
@@ -27,11 +27,18 @@ function init() {
         index: {
           global: true,
         },
-      },
+      }, // complete, inprogress, scheduled
       odds: Object,
+      lastPlay: Object,
+      boxscore: Object,
+      teams: [
+        {
+          standings: Object,
+        },
+      ],
       competitions: [
         {
-          required: false,
+          // required: false,
           competitors: [Object],
         },
       ],
@@ -231,7 +238,6 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allEvents = await pullFromActionNetwork([moment().toDate()]);
   console.log('allEvents', allEvents.length);
-  // const inProgressEvents = allEvents.filter(e => e.status === 'inprogress');
   const inProgressEvents = getInProgressGames(allEvents);
   if (inProgressEvents && inProgressEvents.length) {
     console.log('inProgressEvents', inProgressEvents.length);
@@ -242,9 +248,11 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   init();
+  console.time('inprogress scores');
   const allGames = await Game.query('status')
     .eq('inprogress')
     .exec();
+  console.timeEnd('inprogress scores');
   return respond(200, allGames);
 });
 
@@ -335,26 +343,29 @@ async function pullFromActionNetwork(dates: Date[]) {
   }
 }
 
+// dynamoose isnt liking null values -> https://github.com/dynamoosejs/dynamoose/pull/682
 function cleanupEvents(events: any[]) {
   // console.log('e', events.length);
   events.forEach((event, i, allEvents) => {
-    allEvents[i]['odds'] = allEvents[i]['odds'] ? pickBy(allEvents[i]['odds'][0]) : {};
-    allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? pickBy(allEvents[i]['last_play']) : {};
-    delete allEvents[i]['boxscore'];
+    allEvents[i]['odds'] = allEvents[i]['odds'] ? _.pickBy(allEvents[i]['odds'][0]) : {};
+    allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? _.pickBy(allEvents[i]['last_play']) : {};
+    allEvents[i]['boxscore'] = allEvents[i]['boxscore'] ? _.pickBy(allEvents[i]['boxscore']) : {};
     if (allEvents[i]['teams']) {
       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
-        delete allEvents[i]['teams'][indexTeam]['standings'];
+        // delete allEvents[i]['teams'][indexTeam]['standings'];
+        // delete allEvents[i]['teams'][indexTeam]['standings'];
+        allEvents[i]['teams'][indexTeam]['standings'] = _.pickBy(allEvents[i]['teams'][indexTeam]['standings']);
       });
       // console.log(allEvents[i]['teams'][0]['display_name']);
       // console.log(allEvents[i]['teams'][1]['display_name']);
       allEvents[i]['awayTeam'] = allEvents[i]['teams'][0]['display_name'];
       allEvents[i]['homeTeam'] = allEvents[i]['teams'][1]['display_name'];
     }
-    // console.log(allEvents[i]);
     allEvents[i]['start'] = allEvents[i]['start_time'];
     delete allEvents[i]['startTime'];
 
-    allEvents[i] = pickBy(allEvents[i]);
+    allEvents[i] = _.pickBy(allEvents[i], _.identity);
+    console.log(allEvents[i]);
 
     // console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
   });

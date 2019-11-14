@@ -75,9 +75,12 @@
             <ul class="list-reset">
               <!-- <li>
                 <a href="/blog">Blog</a>
-              </li> -->
+              </li>-->
               <li>
                 <a href="/brand">Brand</a>
+              </li>
+              <li>
+                <a href="/scoreboard">Scoreboard</a>
               </li>
               <li>
                 <a href="/privacy">Privacy</a>
