@@ -254,6 +254,7 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   //   .eq('inprogress')
   //   .exec();
   const allGames = await Game.scan().exec();
+  console.log(allGames.length);
   const sortedGames = [];
   sortedGames.push(allGames.filter(g => g.status === 'inprogress'));
   console.log(1);
