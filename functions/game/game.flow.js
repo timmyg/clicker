@@ -324,8 +324,8 @@ async function pullFromActionNetwork(dates: Date[]) {
   actionSports.push({ sport: 'mlb' });
   actionSports.push({ sport: 'nhl' });
   actionSports.push({ sport: 'soccer' });
-  actionSports.push({ sport: 'pga' });
-  actionSports.push({ sport: 'boxing' });
+  // actionSports.push({ sport: 'pga' });
+  // actionSports.push({ sport: 'boxing' });
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
   console.log({ dates });
