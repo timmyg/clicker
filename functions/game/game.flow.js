@@ -249,12 +249,19 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   init();
-  console.time('inprogress scores');
-  const allGames = await Game.query('status')
-    .eq('inprogress')
-    .exec();
-  console.timeEnd('inprogress scores');
-  return respond(200, allGames);
+  console.time('all scores');
+  // const allGames = await Game.query('status')
+  //   .eq('inprogress')
+  //   .exec();
+  const allGames = await Game.scan().exec();
+  const sortedGames = [];
+  sortedGames.push(allGames.filter(g => g.status === 'inprogress'));
+  sortedGames.push(allGames.filter(g => g.status === 'complete'));
+  sortedGames.push(allGames.filter(g => g.status === 'scheduled'));
+  sortedGames.push(allGames.filter(g => !['inprogress', 'complete', 'scheduled'].includes(g.status)));
+
+  // console.timeEnd('all scores');
+  return respond(200, sortedGames);
 });
 
 type actionNetworkRequest = {

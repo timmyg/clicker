@@ -11,23 +11,24 @@
         v-bind:key="leagueName"
         class="league-wrapper"
       >
-        <div class="league">
-          <em>{{leagueName}}</em>
-        </div>
-        <div v-for="game in games" v-bind:key="game.id" class="wrapper">
-          <span class="status">{{game.statusDisplay}}</span>
-          <br />
-          <div class="inner">
-            <span>
-              {{game.awayTeam}}
-              <b>{{game.boxscore.totalAwayPoints}}</b>
-            </span>
-            <br />
-            <span>
-              {{game.homeTeam}}
-              <b>{{game.boxscore.totalHomePoints}}</b>
-            </span>
+        <div class="league">{{leagueName}}</div>
+        <div v-for="game in games" v-bind:key="game.id" class="game flex">
+          <!-- <div class="inner"> -->
+          <div class="column team away">
+            <img :src="game.teams[0].logo" />
+            <span class="name">{{game.teams[0].displayName}}</span>
           </div>
+          <div class="column status">
+            <span
+              class="score"
+            >{{game.boxscore.totalAwayPoints}} - {{game.boxscore.totalHomePoints}}</span>
+            <div class="status">{{game.statusDisplay}}</div>
+          </div>
+          <div class="column team home">
+            <img :src="game.teams[1].logo" />
+            <span class="name">{{game.teams[1].displayName}}</span>
+          </div>
+          <!-- </div> -->
         </div>
       </div>
       <br />
@@ -84,34 +85,72 @@ export default Vue.extend({
 .right {
   float: right;
 }
-header.site-header {
-  margin-bottom: 40px;
-}
+// header.site-header {
+//   margin-bottom: 40px;
+// }
 
 section.main {
   padding-top: 100px;
 }
-.status {
-  font-size: 12px;
-  float: right;
-}
-.wrapper {
-  display: inline-block;
-  margin-right: 32px;
-  min-width: 160px;
-  .inner {
-    border: 1px solid lightgrey;
-    border-radius: 10px;
-    padding: 2px 8px;
+.game {
+  display: flex;
+  margin-right: 15px;
+  min-width: 200px;
+  max-width: 33%;
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    .name {
+      line-height: 1.1;
+      margin-top: 10px;
+    }
+    .score {
+      font-size: 30px;
+    }
+    &.status,
+    &.team {
+      text-align: center;
+      font-size: 14px;
+    }
+  }
+  img {
+    width: 50px;
+    margin: 0 auto;
   }
 }
+
+// .status {
+//   font-size: 12px;
+//   float: right;
+// }
+// .wrapper {
+//   display: inline-block;
+//   margin-right: 32px;
+//   min-width: 160px;
+//   .inner {
+//     border: 1px solid lightgrey;
+//     border-radius: 4px;
+//     padding: 2px 8px;
+//     .score {
+//       float: right;
+//     }
+//     .name {
+//       padding-right: 16px;
+//     }
+//   }
+// }
+// .league {
+//   display: block;
+//   font-size: 12px;
+//   text-transform: uppercase;
+// }
 .league {
-  display: block;
-  font-size: 12px;
-  text-transform: uppercase;
-}
-.league-wrapper {
   margin-bottom: 16px;
+  color: lightgrey;
+  text-transform: uppercase;
+  font-style: normal;
 }
 .refresh-wrapper {
   display: block;

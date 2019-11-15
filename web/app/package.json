@@ -5,7 +5,7 @@
   "author": "tim@tryclicker.com",
   "private": true,
   "scripts": {
-    "start": "nuxt",
+    "start": "nuxt --port 4040",
     "build": "nuxt build",
     "start:prod": "npm run build && nuxt start",
     "generate": "nuxt generate",
