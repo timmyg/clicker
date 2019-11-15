@@ -256,11 +256,15 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   const allGames = await Game.scan().exec();
   const sortedGames = [];
   sortedGames.push(allGames.filter(g => g.status === 'inprogress'));
+  console.log(1);
   sortedGames.push(allGames.filter(g => g.status === 'complete'));
+  console.log(2);
   sortedGames.push(allGames.filter(g => g.status === 'scheduled'));
+  console.log(3);
   sortedGames.push(allGames.filter(g => !['inprogress', 'complete', 'scheduled'].includes(g.status)));
 
-  // console.timeEnd('all scores');
+  console.log(sortedGames.length);
+  console.timeEnd('all scores');
   return respond(200, sortedGames);
 });
 
