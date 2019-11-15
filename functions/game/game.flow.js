@@ -248,8 +248,8 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
-  init();
   console.time('all scores');
+  init();
   // const allGames = await Game.query('status')
   //   .eq('inprogress')
   //   .exec();
