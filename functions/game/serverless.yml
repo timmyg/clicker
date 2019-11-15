@@ -146,6 +146,7 @@ functions:
   #             - content-type
   syncScores:
     handler: game.syncScores
+    memorySize: 1024
     events:
       - schedule: rate(5 minutes)
       - http:

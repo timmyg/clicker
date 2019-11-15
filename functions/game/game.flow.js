@@ -9,6 +9,7 @@ const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = requi
 let Game;
 
 function init() {
+  console.log('init');
   dynamoose.setDefaults({
     create: false,
     update: false,
