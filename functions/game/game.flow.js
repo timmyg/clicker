@@ -254,7 +254,7 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
     init();
     console.log('get games');
     const allGames = await Game.query('status')
-      .eq('inprogress')
+      .eq('time-tbd')
       .exec();
     // const allGames = await Game.scan().exec();
     console.log(allGames.length);
@@ -271,7 +271,6 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
     // console.log(sortedGames.length);
     // console.timeEnd('all scores');
     return respond(200, allGames);
-    return respond;
   } catch (e) {
     console.error(e);
     respond(400, e);
