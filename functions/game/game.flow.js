@@ -250,26 +250,27 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    console.time('all scores');
+    // console.time('all scores');
     init();
-    // const allGames = await Game.query('status')
-    //   .eq('inprogress')
-    //   .exec();
-    const allGames = await Game.scan().exec();
-    console.log(allGames.length);
-    // const sortedGames = allGames;
-    const sortedGames = [];
-    sortedGames.push(...allGames.filter(g => g.status === 'inprogress'));
-    console.log(1);
-    sortedGames.push(...allGames.filter(g => g.status === 'complete'));
-    console.log(2);
-    sortedGames.push(...allGames.filter(g => g.status === 'scheduled'));
-    console.log(3);
-    sortedGames.push(...allGames.filter(g => !['inprogress', 'complete', 'scheduled'].includes(g.status)));
+    // // const allGames = await Game.query('status')
+    // //   .eq('inprogress')
+    // //   .exec();
+    // const allGames = await Game.scan().exec();
+    // console.log(allGames.length);
+    // // const sortedGames = allGames;
+    // const sortedGames = [];
+    // sortedGames.push(...allGames.filter(g => g.status === 'inprogress'));
+    // console.log(1);
+    // sortedGames.push(...allGames.filter(g => g.status === 'complete'));
+    // console.log(2);
+    // sortedGames.push(...allGames.filter(g => g.status === 'scheduled'));
+    // console.log(3);
+    // sortedGames.push(...allGames.filter(g => !['inprogress', 'complete', 'scheduled'].includes(g.status)));
 
-    console.log(sortedGames.length);
-    console.timeEnd('all scores');
-    return respond(200, sortedGames.length);
+    // console.log(sortedGames.length);
+    // console.timeEnd('all scores');
+    // return respond(200, sortedGames.length);
+    return respond(200, 'ok');
   } catch (e) {
     console.error(e);
     respond(400, e);
