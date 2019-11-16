@@ -250,13 +250,13 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    // console.time('all scores');
+    console.time('all scores');
     init();
     // // const allGames = await Game.query('status')
     // //   .eq('inprogress')
     // //   .exec();
-    // const allGames = await Game.scan().exec();
-    // console.log(allGames.length);
+    const allGames = await Game.scan().exec();
+    console.log(allGames.length);
     // // const sortedGames = allGames;
     // const sortedGames = [];
     // sortedGames.push(...allGames.filter(g => g.status === 'inprogress'));
@@ -269,8 +269,8 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
 
     // console.log(sortedGames.length);
     // console.timeEnd('all scores');
-    // return respond(200, sortedGames.length);
-    return respond(200, 'ok');
+    return respond(200, allGames);
+    return respond;
   } catch (e) {
     console.error(e);
     respond(400, e);
