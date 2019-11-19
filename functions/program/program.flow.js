@@ -327,11 +327,13 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   console.log({ latestProgram });
 
   let totalHours, startTime;
-  // if programs, take the largest start time, add 1 minutes and start from there and get two hours of programming
+  // if programs, take the largest start time, add 1 hour and start from there and get two hours of programming
+  //   add one hour because that seems like min duration for dtv api
+  //   (doesnt matter if you set to 5:00 or 5:59, same results until 6:00)
   if (latestProgram) {
     startTime = moment(latestProgram.start)
       .utc()
-      .add(1, 'minute')
+      .add(1, 'hour')
       .toString();
     totalHours = 2;
   } else {
@@ -380,36 +382,6 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   }
   console.log(i, 'topics published to:', process.env.newProgramTopicArn);
 }
-
-// module.exports.consumeNewProgramFunction = RavenLambdaWrapper.handler(Raven, async event => {
-//   init();
-//   // console.log(event.Records[0].Sns.Message);
-//   const { id, programmingId, start } = JSON.parse(event.Records[0].Sns.Message);
-//   const url = `${directvEndpoint}/program/flip/${programmingId}`;
-//   const options = {
-//     timeout: 2000,
-//   };
-//   try {
-//     console.log({ url }, { options });
-//     console.log('calling');
-//     const result = await axios.get(url, options);
-//     console.log('result');
-
-//     const { description } = result.data.programDetail;
-
-//     console.log('update', { id }, { description });
-//     const response = await Program.update({ id, start }, { description });
-//     // await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
-//     console.log({ response });
-//   } catch (e) {
-//     if (e.response && e.response.status === 404) {
-//       console.log('404!!');
-//       return console.error(e);
-//     }
-//     console.error(e);
-//     throw e;
-//   }
-// });
 
 module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('consume');
