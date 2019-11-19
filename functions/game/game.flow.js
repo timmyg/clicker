@@ -241,8 +241,8 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('allEvents', allEvents.length);
   // console.log('json', JSON.stringify(allEvents));
   const inProgressEvents = getInProgressGames(allEvents);
+  console.log('inProgressEvents', inProgressEvents.length);
   if (inProgressEvents && inProgressEvents.length) {
-    console.log('inProgressEvents', inProgressEvents.length);
     await updateGames(inProgressEvents);
   }
   return respond(200, { inProgressEvents });
