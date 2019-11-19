@@ -239,7 +239,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const allEvents = await pullFromActionNetwork([moment().toDate()]);
   console.log('allEvents', allEvents.length);
-  console.log('json', JSON.stringify(allEvents));
+  // console.log('json', JSON.stringify(allEvents));
   const inProgressEvents = getInProgressGames(allEvents);
   if (inProgressEvents && inProgressEvents.length) {
     console.log('inProgressEvents', inProgressEvents.length);
@@ -250,12 +250,15 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    console.time('all scores');
     init();
     console.log('get games');
+    console.time('all scores');
     const allGames = await Game.query('status')
-      .eq('time-tbd')
+      // .eq('time-tbd')
+      .eq('inprogress')
       .exec();
+    console.timeEnd('all scores');
+
     // const allGames = await Game.scan().exec();
     console.log(allGames.length);
     // // const sortedGames = allGames;
@@ -269,7 +272,6 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
     // sortedGames.push(...allGames.filter(g => !['inprogress', 'complete', 'scheduled'].includes(g.status)));
 
     // console.log(sortedGames.length);
-    // console.timeEnd('all scores');
     return respond(200, allGames);
   } catch (e) {
     console.error(e);
