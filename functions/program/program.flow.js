@@ -412,10 +412,10 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     if (e.response && e.response.status === 404) {
       console.log('404!!');
       console.error(e);
-      return respond(200);
     }
     console.error(e);
-    throw e;
+    // throw e;
+    return respond(400);
   }
 });
 
