@@ -400,7 +400,9 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
 
     // let program = await getProgram(id, region);
     // if (!!program.id) {
-    await updateProgram(id, region, description);
+    if (description && description.length) {
+      await updateProgram(id, region, description);
+    }
     //   console.log('program saved');
     // } else {
     //   console.log('no program by id:', id);
@@ -413,7 +415,7 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
       return respond(200);
     }
     console.error(e);
-    throw e.response;
+    throw e;
   }
 });
 

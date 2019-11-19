@@ -210,7 +210,7 @@ functions:
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
   consumeNewProgram:
     memorySize: 512
-    timeout: 20
+    # timeout: 20
     handler: program.consumeNewProgram
     description: Consume new program queue and add description
     reservedConcurrency: 1
