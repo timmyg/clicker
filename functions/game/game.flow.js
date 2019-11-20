@@ -29,25 +29,54 @@ function init() {
         index: {
           global: true,
         },
-      }, // complete, inprogress, scheduled
-      odds: Object,
-      lastPlay: Object,
-      boxscore: Object,
-      teams: [
-        {
-          standings: Object,
+      },
+      leagueName: String,
+      scoreboard: {
+        clock: String,
+        period: Number,
+      },
+      broadcast: {
+        network: String,
+      },
+      away: {
+        score: Number,
+        fullName: String,
+        logo: String,
+        book: {
+          moneyline: Number,
+          spread: Number,
         },
-      ],
-      competitions: [
-        {
-          // required: false,
-          competitors: [Object],
+      },
+      home: {
+        score: Number,
+        fullName: String,
+        logo: String,
+        book: {
+          moneyline: Number,
+          spread: Number,
         },
-      ],
+      },
+      book: {
+        total: Number,
+      },
+      // odds: Object,
+      // lastPlay: Object,
+      // boxscore: Object,
+      // teams: [
+      //   {
+      //     standings: Object,
+      //   },
+      // ],
+      // competitions: [
+      //   {
+      //     // required: false,
+      //     competitors: [Object],
+      //   },
+      // ],
     },
     {
       timestamps: true,
-      saveUnknown: true,
+      // saveUnknown: true,
       expires: {
         ttl: 86400,
         attribute: 'expires',
@@ -427,13 +456,25 @@ async function updateGames(events: any[]) {
   }
 }
 
-function transformGame2(game) {
+function transformGameV2(game) {
   const map = {
     status_display: 'statusDisplay',
+    league_name: 'leagueName',
+    status: 'status',
+    'boxscore.clock': 'scoreboard.clock',
+    'boxscore.period': 'scoreboard.period',
+    'broadcast.network': 'broadcast.network',
     'boxscore.total_away_points': 'away.score',
     'boxscore.total_home_points': 'home.score',
+    'odds[0].total': 'book.total',
     'teams[0].full_name': 'away.fullName',
     'teams[1].full_name': 'home.fullName',
+    'teams[0].logo': 'away.logo',
+    'teams[1].logo': 'home.logo',
+    'odds[0].ml_away': 'away.book.moneyline',
+    'odds[0].ml_home': 'home.book.moneyline',
+    'odds[0].spread_away': 'away.book.spread',
+    'odds[0].spread_home': 'home.book.spread',
   };
   return objectMapper(game, map);
 }
@@ -442,4 +483,4 @@ module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
 module.exports.cleanupEvents = cleanupEvents;
 module.exports.getInProgressGames = getInProgressGames;
-module.exports.transformGame2 = transformGame2;
+module.exports.transformGameV2 = transformGameV2;

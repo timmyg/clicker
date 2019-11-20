@@ -1,4 +1,4 @@
-const { cleanupEvents, getInProgressGames, transformGame, transformGame2, transformSIUrl } = require('./game');
+const { cleanupEvents, getInProgressGames, transformGame, transformGameV2, transformSIUrl } = require('./game');
 
 describe('transformSIUrl', () => {
   test('nfl', () => {
@@ -218,15 +218,25 @@ describe('transformGame', () => {
   });
 });
 
-describe('transformGame2', () => {
+describe('transformGameV2', () => {
   test('ncaa football', () => {
     const data = require('../.resources/action-network/game.json');
-    const result = transformGame2(data);
-    console.log({ result });
-    expect(result.statusDisplay).toBe('Final');
+    const result = transformGameV2(data);
+    expect(result.leagueName).toBe('ncaaf');
+    expect(result.status).toBe('complete');
+    expect(result.scoreboard.clock).toBe('00:00');
+    expect(result.scoreboard.period).toBe(4);
+    expect(result.broadcast.network).toBe('ESPN');
+    expect(result.book.total).toBe(56);
     expect(result.away.score).toBe(14);
-    expect(result.home.score).toBe(17);
     expect(result.away.fullName).toBe('Baylor Bears');
+    expect(result.away.logo).toBe('https://static.sprtactn.co/teamlogos/ncaaf/100/bay.png');
+    expect(result.away.book.moneyline).toBe(575);
+    expect(result.away.book.spread).toBe(18);
+    expect(result.home.score).toBe(17);
     expect(result.home.fullName).toBe('West Virginia Mountaineers');
+    expect(result.home.logo).toBe('https://static.sprtactn.co/teamlogos/ncaaf/100/wvu.png');
+    expect(result.home.book.moneyline).toBe(-850);
+    expect(result.home.book.spread).toBe(-18);
   });
 });
