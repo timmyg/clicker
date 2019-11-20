@@ -483,6 +483,5 @@ function transformGameV2(game) {
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
-module.exports.cleanupEvents = cleanupEvents;
 module.exports.getInProgressGames = getInProgressGames;
 module.exports.transformGameV2 = transformGameV2;

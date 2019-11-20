@@ -1,4 +1,4 @@
-const { cleanupEvents, getInProgressGames, transformGame, transformGameV2, transformSIUrl } = require('./game');
+const { getInProgressGames, transformGame, transformGameV2, transformSIUrl } = require('./game');
 
 describe('transformSIUrl', () => {
   test('nfl', () => {
@@ -191,22 +191,6 @@ describe('transformGame', () => {
       expect(blowout).toBeFalsy();
       expect(ended).toBeFalsy();
       expect(description).toBe('LAA 0 @ NYY 0 (Pre-Game)');
-    });
-  });
-  describe('cleanupEvents', () => {
-    test('cleans up game', () => {
-      const data = require('../.resources/action-network/game.json');
-      const [result] = cleanupEvents([data]);
-      expect(result.boxscore).toBeTruthy();
-      expect(result.lastPlay).toBeTruthy();
-      expect(Array.isArray(result.odds)).toBeFalsy();
-      expect(result.odds).not.toHaveProperty('draw');
-      expect(result).toHaveProperty('awayTeam');
-      expect(result).toHaveProperty('homeTeam');
-      expect(result.teams[0].standings).toBeTruthy();
-      expect(result.teams[1].standings).toBeTruthy();
-      expect(result.odds.mlAway).toBe(575);
-      expect(result.odds.total).toBe(56);
     });
   });
   describe('getInProgressGames', () => {
