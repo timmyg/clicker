@@ -403,40 +403,42 @@ async function pullFromActionNetwork(dates: Date[]) {
 }
 
 // dynamoose isnt liking null values -> https://github.com/dynamoosejs/dynamoose/pull/682
-function cleanupEvents(events: any[]) {
-  // console.log('e', events.length);
-  events.forEach((event, i, allEvents) => {
-    allEvents[i]['odds'] = allEvents[i]['odds'] ? _.pickBy(allEvents[i]['odds'][0]) : {};
-    allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? _.pickBy(allEvents[i]['last_play']) : {};
-    allEvents[i]['boxscore'] = allEvents[i]['boxscore'] ? _.pickBy(allEvents[i]['boxscore']) : {};
-    delete allEvents[i]['boxscore']['linescore'];
-    if (allEvents[i]['teams']) {
-      allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
-        // delete allEvents[i]['teams'][indexTeam]['standings'];
-        // delete allEvents[i]['teams'][indexTeam]['standings'];
-        allEvents[i]['teams'][indexTeam]['standings'] = _.pickBy(allEvents[i]['teams'][indexTeam]['standings']);
-      });
-      // console.log(allEvents[i]['teams'][0]['display_name']);
-      // console.log(allEvents[i]['teams'][1]['display_name']);
-      allEvents[i]['awayTeam'] = allEvents[i]['teams'][0]['display_name'];
-      allEvents[i]['homeTeam'] = allEvents[i]['teams'][1]['display_name'];
-    }
-    allEvents[i]['start'] = allEvents[i]['start_time'];
-    delete allEvents[i]['startTime'];
+// function cleanupEvents(events: any[]) {
+//   // console.log('e', events.length);
+//   events.forEach((event, i, allEvents) => {
+//     allEvents[i]['odds'] = allEvents[i]['odds'] ? _.pickBy(allEvents[i]['odds'][0]) : {};
+//     allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? _.pickBy(allEvents[i]['last_play']) : {};
+//     allEvents[i]['boxscore'] = allEvents[i]['boxscore'] ? _.pickBy(allEvents[i]['boxscore']) : {};
+//     delete allEvents[i]['boxscore']['linescore'];
+//     if (allEvents[i]['teams']) {
+//       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
+//         // delete allEvents[i]['teams'][indexTeam]['standings'];
+//         // delete allEvents[i]['teams'][indexTeam]['standings'];
+//         allEvents[i]['teams'][indexTeam]['standings'] = _.pickBy(allEvents[i]['teams'][indexTeam]['standings']);
+//       });
+//       // console.log(allEvents[i]['teams'][0]['display_name']);
+//       // console.log(allEvents[i]['teams'][1]['display_name']);
+//       allEvents[i]['awayTeam'] = allEvents[i]['teams'][0]['display_name'];
+//       allEvents[i]['homeTeam'] = allEvents[i]['teams'][1]['display_name'];
+//     }
+//     allEvents[i]['start'] = allEvents[i]['start_time'];
+//     delete allEvents[i]['startTime'];
 
-    allEvents[i] = _.pickBy(allEvents[i], _.identity);
-    // console.log(allEvents[i]);
+//     allEvents[i] = _.pickBy(allEvents[i], _.identity);
+//     // console.log(allEvents[i]);
 
-    // console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
-  });
-  // console.log('e', events.length);
-  events = camelcase(events, { deep: true });
-  // console.log('e', events.length);
-  return events;
-}
+//     // console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
+//   });
+//   // console.log('e', events.length);
+//   events = camelcase(events, { deep: true });
+//   // console.log('e', events.length);
+//   return events;
+// }
 
 async function updateGames(events: any[]) {
-  events = cleanupEvents(events);
+  events.forEach((part, index, eventsArray) => {
+    eventsArray[index] = transformGameV2(eventsArray[index]);
+  });
   console.log('updateGames:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
