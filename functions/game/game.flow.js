@@ -243,7 +243,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   const inProgressEvents = getInProgressGames(allEvents);
   console.log('inProgressEvents', inProgressEvents.length);
   if (inProgressEvents && inProgressEvents.length) {
-    console.log(JSON.stringify(inProgressEvents));
+    // console.log(JSON.stringify(inProgressEvents));
     await updateGames(inProgressEvents);
   }
   return respond(200, { inProgressEvents });
@@ -411,7 +411,7 @@ async function updateGames(events: any[]) {
       const dbEvents = events.splice(0, 25);
       console.log('creating:', dbEvents.length);
       console.log('remaining:', events.length);
-      // console.log(JSON.stringify(dbEvents));
+      console.log(JSON.stringify(dbEvents));
       const result = await Game.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
