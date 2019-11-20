@@ -464,6 +464,13 @@ function transformGameV2(game) {
   // set away, home teams
   game.away = game.teams.find(t => t.id === game.away_team_id);
   game.home = game.teams.find(t => t.id === game.home_team_id);
+  delete game.teams;
+
+  // attach rank, if available
+  const awayRank = game.ranks.find(gr => gr.team_id === game.away.id);
+  game.away.rank = awayRank ? awayRank.rank : null;
+  const homeRank = game.ranks.find(gr => gr.team_id === game.home.id);
+  game.home.rank = homeRank ? homeRank.rank : null;
 
   const map = {
     id: 'id',
@@ -482,20 +489,15 @@ function transformGameV2(game) {
     'home.logo': 'home.logo',
     'away.id': 'away.id',
     'home.id': 'home.id',
+    'away.rank': 'away.rank',
+    'home.rank': 'home.rank',
     'odds[0].total': 'book.total',
     'odds[0].ml_away': 'away.book.moneyline',
     'odds[0].ml_home': 'home.book.moneyline',
     'odds[0].spread_away': 'away.book.spread',
     'odds[0].spread_home': 'home.book.spread',
   };
-  const transformed = objectMapper(game, map);
-  // attach rank, if available
-  const awayRank = game.ranks.find(gr => gr.team_id === transformed.away.id);
-  transformed.away.rank = awayRank ? awayRank.rank : null;
-  const homeRank = game.ranks.find(gr => gr.team_id === transformed.home.id);
-  transformed.home.rank = homeRank ? homeRank.rank : null;
-  // attach
-  return transformed;
+  return objectMapper(game, map);
 }
 
 module.exports.transformSIUrl = transformSIUrl;
