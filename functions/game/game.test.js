@@ -206,6 +206,8 @@ describe('transformGameV2', () => {
   test('ncaa football', () => {
     const data = require('../.resources/action-network/game.json');
     const result = transformGameV2(data);
+    expect(result.id).toBe(69504);
+    expect(result.start).toBe('2019-11-01T00:00:00.000Z');
     expect(result.leagueName).toBe('ncaaf');
     expect(result.status).toBe('complete');
     expect(result.scoreboard.clock).toBe('00:00');

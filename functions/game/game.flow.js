@@ -460,6 +460,8 @@ async function updateGames(events: any[]) {
 
 function transformGameV2(game) {
   const map = {
+    id: 'id',
+    start_time: 'start',
     status_display: 'statusDisplay',
     league_name: 'leagueName',
     status: 'status',
