@@ -433,6 +433,7 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   const connected = true;
   const location = await Location.update({ losantId }, { connected }, { returnValues: 'ALL_NEW' });
 
+  console.log({ losantId }, { connected }, { returnValues: 'ALL_NEW' });
   const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
   await new Invoke()
     .service('notification')
