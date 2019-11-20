@@ -461,6 +461,10 @@ async function updateGames(events: any[]) {
 }
 
 function transformGameV2(game) {
+  // set away, home teams
+  game.away = game.teams.find(t => t.id === game.away_team_id);
+  game.home = game.teams.find(t => t.id === game.home_team_id);
+
   const map = {
     id: 'id',
     start_time: 'start',
@@ -472,23 +476,25 @@ function transformGameV2(game) {
     'broadcast.network': 'broadcast.network',
     'boxscore.total_away_points': 'away.score',
     'boxscore.total_home_points': 'home.score',
+    'away.full_name': 'away.fullName',
+    'home.full_name': 'home.fullName',
+    'away.logo': 'away.logo',
+    'home.logo': 'home.logo',
+    'away.id': 'away.id',
+    'home.id': 'home.id',
     'odds[0].total': 'book.total',
-    'teams[0].full_name': 'away.fullName',
-    'teams[1].full_name': 'home.fullName',
-    'teams[0].logo': 'away.logo',
-    'teams[1].logo': 'home.logo',
-    'teams[0].id': 'away.id',
-    'teams[1].id': 'home.id',
     'odds[0].ml_away': 'away.book.moneyline',
     'odds[0].ml_home': 'home.book.moneyline',
     'odds[0].spread_away': 'away.book.spread',
     'odds[0].spread_home': 'home.book.spread',
   };
   const transformed = objectMapper(game, map);
+  // attach rank, if available
   const awayRank = game.ranks.find(gr => gr.team_id === transformed.away.id);
   transformed.away.rank = awayRank ? awayRank.rank : null;
   const homeRank = game.ranks.find(gr => gr.team_id === transformed.home.id);
   transformed.home.rank = homeRank ? homeRank.rank : null;
+  // attach
   return transformed;
 }
 
