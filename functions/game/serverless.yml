@@ -147,6 +147,7 @@ functions:
   syncScores:
     handler: game.syncScores
     memorySize: 1024
+    timeout: 12
     events:
       - schedule: rate(5 minutes)
       - http:
