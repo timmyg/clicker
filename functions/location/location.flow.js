@@ -431,9 +431,11 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
 
   const connected = true;
-  const location = await Location.update({ losantId }, { connected }, { returnValues: 'ALL_NEW' });
+  const { id } = await Location.queryOne('losantId')
+    .eq(losantId)
+    .exec();
+  await Location.update({ id }, { connected }, { returnValues: 'ALL_NEW' });
 
-  console.log({ losantId }, { connected }, { returnValues: 'ALL_NEW' });
   const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
   await new Invoke()
     .service('notification')
@@ -450,7 +452,10 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
 
   const connected = false;
-  const location = await Location.update({ losantId }, { connected }, { returnValues: 'ALL_NEW' });
+  const { id } = await Location.queryOne('losantId')
+    .eq(losantId)
+    .exec();
+  await Location.update({ id }, { connected }, { returnValues: 'ALL_NEW' });
 
   const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
   await new Invoke()
