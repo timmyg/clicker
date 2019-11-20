@@ -374,6 +374,7 @@ function cleanupEvents(events: any[]) {
     allEvents[i]['odds'] = allEvents[i]['odds'] ? _.pickBy(allEvents[i]['odds'][0]) : {};
     allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? _.pickBy(allEvents[i]['last_play']) : {};
     allEvents[i]['boxscore'] = allEvents[i]['boxscore'] ? _.pickBy(allEvents[i]['boxscore']) : {};
+    delete allEvents[i]['boxscore']['linescore'];
     if (allEvents[i]['teams']) {
       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
         // delete allEvents[i]['teams'][indexTeam]['standings'];
