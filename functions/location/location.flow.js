@@ -24,8 +24,9 @@ function init() {
       losantId: {
         type: String,
         required: true,
-        index: true,
-        global: true,
+        index: {
+          global: true,
+        },
       },
       boxes: [
         {
