@@ -2,7 +2,7 @@
 const axios = require('axios');
 const camelcase = require('camelcase-keys');
 const dynamoose = require('dynamoose');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const AWS = require('aws-sdk');
 const _ = require('lodash');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
@@ -239,7 +239,8 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   // subtract 5 hrs so its not utc date
   const currentTime = moment()
-    .subtract(5, 'hours')
+    // .subtract(5, 'hours')
+    .tz('America/Los_Angeles')
     .toDate();
   const allEvents = await pullFromActionNetwork([currentTime]);
   console.log('allEvents', allEvents.length);
@@ -416,7 +417,7 @@ async function updateGames(events: any[]) {
       const dbEvents = events.splice(0, 25);
       console.log('creating:', dbEvents.length);
       console.log('remaining:', events.length);
-      console.log(JSON.stringify(dbEvents));
+      // console.log(JSON.stringify(dbEvents));
       const result = await Game.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
