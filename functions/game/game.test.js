@@ -1,4 +1,4 @@
-const { cleanupEvents, getInProgressGames, transformGame, transformSIUrl } = require('./game');
+const { cleanupEvents, getInProgressGames, transformGame, transformGame2, transformSIUrl } = require('./game');
 
 describe('transformSIUrl', () => {
   test('nfl', () => {
@@ -215,5 +215,18 @@ describe('transformGame', () => {
       const result = getInProgressGames(data);
       expect(result.length).toBe(34);
     });
+  });
+});
+
+describe('transformGame2', () => {
+  test('ncaa football', () => {
+    const data = require('../.resources/action-network/game.json');
+    const result = transformGame2(data);
+    console.log({ result });
+    expect(result.statusDisplay).toBe('Final');
+    expect(result.away.score).toBe(14);
+    expect(result.home.score).toBe(17);
+    expect(result.away.fullName).toBe('Baylor Bears');
+    expect(result.home.fullName).toBe('West Virginia Mountaineers');
   });
 });

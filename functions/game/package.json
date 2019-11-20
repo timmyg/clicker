@@ -22,6 +22,7 @@
     "dynamoose": "^1.11.1",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.27",
+    "object-mapper": "^6.0.1",
     "raven": "^2.6.4",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
     "uuid": "^3.3.2"

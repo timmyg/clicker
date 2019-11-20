@@ -4,6 +4,7 @@ const camelcase = require('camelcase-keys');
 const dynamoose = require('dynamoose');
 const moment = require('moment-timezone');
 const AWS = require('aws-sdk');
+const objectMapper = require('object-mapper');
 const _ = require('lodash');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 let Game;
@@ -426,7 +427,19 @@ async function updateGames(events: any[]) {
   }
 }
 
+function transformGame2(game) {
+  const map = {
+    status_display: 'statusDisplay',
+    'boxscore.total_away_points': 'away.score',
+    'boxscore.total_home_points': 'home.score',
+    'teams[0].full_name': 'away.fullName',
+    'teams[1].full_name': 'home.fullName',
+  };
+  return objectMapper(game, map);
+}
+
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
 module.exports.cleanupEvents = cleanupEvents;
 module.exports.getInProgressGames = getInProgressGames;
+module.exports.transformGame2 = transformGame2;
