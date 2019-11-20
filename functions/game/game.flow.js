@@ -237,7 +237,11 @@ function transformSIUrl(webUrl: string): string {
 
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
-  const allEvents = await pullFromActionNetwork([moment().toDate()]);
+  // subtract 5 hrs so its not utc date
+  const currentTime = moment()
+    .subtract(5, 'hours')
+    .toDate();
+  const allEvents = await pullFromActionNetwork([currentTime]);
   console.log('allEvents', allEvents.length);
   // console.log('json', JSON.stringify(allEvents));
   const inProgressEvents = getInProgressGames(allEvents);
@@ -246,7 +250,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
     // console.log(JSON.stringify(inProgressEvents));
     await updateGames(inProgressEvents);
   }
-  return respond(200, { inProgressEvents });
+  return respond(200, { inProgressEvents: inProgressEvents.length });
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
