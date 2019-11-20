@@ -61,30 +61,14 @@ function init() {
       book: {
         total: Number,
       },
-      // odds: Object,
-      // lastPlay: Object,
-      // boxscore: Object,
-      // teams: [
-      //   {
-      //     standings: Object,
-      //   },
-      // ],
-      // competitions: [
-      //   {
-      //     // required: false,
-      //     competitors: [Object],
-      //   },
-      // ],
     },
     {
       timestamps: true,
-      // saveUnknown: true,
       expires: {
         ttl: 86400,
         attribute: 'expires',
         returnExpiredItems: false,
         defaultExpires: x => {
-          // expire 9 hours after start
           return moment(x.start)
             .add(9, 'hours')
             .toDate();
@@ -269,18 +253,14 @@ function transformSIUrl(webUrl: string): string {
 
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
-  // subtract 5 hrs so its not utc date
   const currentTime = moment()
-    // .subtract(5, 'hours')
     .tz('America/Los_Angeles')
     .toDate();
   const allEvents = await pullFromActionNetwork([currentTime]);
   console.log('allEvents', allEvents.length);
-  // console.log('json', JSON.stringify(allEvents));
-  const inProgressEvents = getInProgressGames(allEvents);
+  const inProgressEvents = getUpdatedGames(allEvents);
   console.log('inProgressEvents', inProgressEvents.length);
   if (inProgressEvents && inProgressEvents.length) {
-    // console.log(JSON.stringify(inProgressEvents));
     await updateGames(inProgressEvents);
   }
   return respond(200, { inProgressEvents: inProgressEvents.length });
@@ -359,8 +339,8 @@ function removeEmpty(obj) {
   });
 }
 
-function getInProgressGames(response) {
-  return response.filter(e => e.status === 'inprogress');
+function getUpdatedGames(response) {
+  return response.filter(e => !['time-tbd', 'scheduled'].includes(e.status));
 }
 
 async function pullFromActionNetwork(dates: Date[]) {
@@ -502,5 +482,5 @@ function transformGameV2(game) {
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
-module.exports.getInProgressGames = getInProgressGames;
+module.exports.getUpdatedGames = getUpdatedGames;
 module.exports.transformGameV2 = transformGameV2;

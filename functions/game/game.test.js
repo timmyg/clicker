@@ -1,4 +1,4 @@
-const { getInProgressGames, transformGame, transformGameV2, transformSIUrl } = require('./game');
+const { getUpdatedGames, transformGame, transformGameV2, transformSIUrl } = require('./game');
 
 describe('transformSIUrl', () => {
   test('nfl', () => {
@@ -193,11 +193,11 @@ describe('transformGame', () => {
       expect(description).toBe('LAA 0 @ NYY 0 (Pre-Game)');
     });
   });
-  describe('getInProgressGames', () => {
+  describe('getUpdatedGames', () => {
     test('gets only in-progress games', () => {
       const data = require('../.resources/action-network/games-in-progress.json');
-      const result = getInProgressGames(data);
-      expect(result.length).toBe(34);
+      const result = getUpdatedGames(data);
+      expect(result.length).toBe(37);
     });
   });
 });
