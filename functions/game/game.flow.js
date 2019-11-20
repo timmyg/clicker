@@ -447,10 +447,12 @@ function transformGameV2(game) {
   delete game.teams;
 
   // attach rank, if available
-  const awayRank = game.ranks.find(gr => gr.team_id === game.away.id);
-  game.away.rank = awayRank ? awayRank.rank : null;
-  const homeRank = game.ranks.find(gr => gr.team_id === game.home.id);
-  game.home.rank = homeRank ? homeRank.rank : null;
+  if (!!game.ranks) {
+    const awayRank = game.ranks.find(gr => gr.team_id === game.away.id);
+    game.away.rank = awayRank ? awayRank.rank : null;
+    const homeRank = game.ranks.find(gr => gr.team_id === game.home.id);
+    game.home.rank = homeRank ? homeRank.rank : null;
+  }
 
   const map = {
     id: 'id',
