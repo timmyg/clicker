@@ -217,11 +217,13 @@ describe('transformGameV2', () => {
     expect(result.away.score).toBe(14);
     expect(result.away.fullName).toBe('Baylor Bears');
     expect(result.away.logo).toBe('https://static.sprtactn.co/teamlogos/ncaaf/100/bay.png');
+    expect(result.away.rank).toBe(12);
     expect(result.away.book.moneyline).toBe(575);
     expect(result.away.book.spread).toBe(18);
     expect(result.home.score).toBe(17);
     expect(result.home.fullName).toBe('West Virginia Mountaineers');
     expect(result.home.logo).toBe('https://static.sprtactn.co/teamlogos/ncaaf/100/wvu.png');
+    expect(result.home.rank).toBeFalsy();
     expect(result.home.book.moneyline).toBe(-850);
     expect(result.home.book.spread).toBe(-18);
   });

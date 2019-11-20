@@ -39,6 +39,7 @@ function init() {
         network: String,
       },
       away: {
+        id: Number,
         score: Number,
         fullName: String,
         logo: String,
@@ -48,6 +49,7 @@ function init() {
         },
       },
       home: {
+        id: Number,
         score: Number,
         fullName: String,
         logo: String,
@@ -475,12 +477,19 @@ function transformGameV2(game) {
     'teams[1].full_name': 'home.fullName',
     'teams[0].logo': 'away.logo',
     'teams[1].logo': 'home.logo',
+    'teams[0].id': 'away.id',
+    'teams[1].id': 'home.id',
     'odds[0].ml_away': 'away.book.moneyline',
     'odds[0].ml_home': 'home.book.moneyline',
     'odds[0].spread_away': 'away.book.spread',
     'odds[0].spread_home': 'home.book.spread',
   };
-  return objectMapper(game, map);
+  const transformed = objectMapper(game, map);
+  const awayRank = game.ranks.find(gr => gr.team_id === transformed.away.id);
+  transformed.away.rank = awayRank ? awayRank.rank : null;
+  const homeRank = game.ranks.find(gr => gr.team_id === transformed.home.id);
+  transformed.home.rank = homeRank ? homeRank.rank : null;
+  return transformed;
 }
 
 module.exports.transformSIUrl = transformSIUrl;

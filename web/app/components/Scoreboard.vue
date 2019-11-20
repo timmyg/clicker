@@ -15,18 +15,24 @@
         <div v-for="game in games" v-bind:key="game.id" class="game flex">
           <!-- <div class="inner"> -->
           <div class="column team away">
-            <img :src="game.teams[0].logo" />
-            <span class="name">{{game.teams[0].displayName}}</span>
+            <img :src="game.away.logo" />
+            <span class="name">
+              <span v-if="game.away.rank">({{game.away.rank}})&nbsp;</span>
+              {{game.away.fullName}}
+            </span>
           </div>
           <div class="column status">
             <span
               class="score"
-            >{{game.boxscore.totalAwayPoints}} - {{game.boxscore.totalHomePoints}}</span>
-            <div class="status">{{game.statusDisplay}}</div>
+            >{{game.away.score}} - {{game.home.score}}</span>
+            <div class="status">{{game.status}}</div>
           </div>
           <div class="column team home">
-            <img :src="game.teams[1].logo" />
-            <span class="name">{{game.teams[1].displayName}}</span>
+            <img :src="game.home.logo" />
+            <span class="name">
+              <span v-if="game.home.rank">({{game.home.rank}})&nbsp;</span>
+              {{game.home.fullName}}
+              </span>
           </div>
           <!-- </div> -->
         </div>
