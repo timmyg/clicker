@@ -120,6 +120,7 @@ functions:
               - content-type
   syncSchedule:
     handler: game.syncSchedule
+    memorySize: 1024
     timeout: 30
     events:
       - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
