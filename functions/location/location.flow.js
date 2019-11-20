@@ -26,6 +26,7 @@ function init() {
         required: true,
         index: {
           global: true,
+          project: true, // ProjectionType: ALL
         },
       },
       boxes: [
@@ -432,18 +433,21 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
 
   const connected = true;
-  const { id } = await Location.queryOne('losantId')
+  const location = await Location.queryOne('losantId')
     .eq(losantId)
     .exec();
-  await Location.update({ id }, { connected }, { returnValues: 'ALL_NEW' });
+  console.log({ location });
+  if (!!location) {
+    await Location.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
 
-  const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
-  await new Invoke()
-    .service('notification')
-    .name('sendAntenna')
-    .body({ text })
-    .async()
-    .go();
+    const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
 
   return respond(200, 'ok');
 });
@@ -453,18 +457,21 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
 
   const connected = false;
-  const { id } = await Location.queryOne('losantId')
+  const location = await Location.queryOne('losantId')
     .eq(losantId)
     .exec();
-  await Location.update({ id }, { connected }, { returnValues: 'ALL_NEW' });
+  console.log({ location });
+  if (!!location) {
+    await Location.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
 
-  const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
-  await new Invoke()
-    .service('notification')
-    .name('sendAntenna')
-    .body({ text })
-    .async()
-    .go();
+    const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
 
   return respond(200, 'ok');
 });
