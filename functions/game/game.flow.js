@@ -43,6 +43,7 @@ function init() {
         score: Number,
         fullName: String,
         logo: String,
+        rank: Number,
         book: {
           moneyline: Number,
           spread: Number,
@@ -53,6 +54,7 @@ function init() {
         score: Number,
         fullName: String,
         logo: String,
+        rank: Number,
         book: {
           moneyline: Number,
           spread: Number,

@@ -51,9 +51,9 @@ function init() {
           },
         },
       ],
-      channels: {
-        exclude: [String],
-      },
+      // channels: {
+      //   exclude: [String],
+      // },
       packages: [String],
       name: { type: String, required: true },
       neighborhood: { type: String, required: true },
@@ -345,9 +345,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${
-        location.neighborhood
-      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
