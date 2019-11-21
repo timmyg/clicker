@@ -21,7 +21,7 @@ plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
-  # - serverless-dotenv-plugin
+  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage}
@@ -45,8 +45,8 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
-  # dotenv:
-  #   basePath: ../
+  dotenv:
+    basePath: ../
   tableLocation: locations-${self:custom.stage}
 resources:
   Resources:
