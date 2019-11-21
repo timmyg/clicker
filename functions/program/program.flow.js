@@ -128,19 +128,6 @@ function init() {
       },
     },
   );
-  // ProgramArea = dynamoose.model(
-  //   process.env.tableProgramArea,
-  //   {
-  //     zip: {
-  //       type: String,
-  //       hashKey: true,
-  //     },
-  //     channels: [Number],
-  //   },
-  //   {
-  //     timestamps: true,
-  //   },
-  // );
 }
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
@@ -172,8 +159,8 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('current + next programming setup queries');
 
   console.log(location.region, now, in25Mins);
-  const programsQuery = Program.query()
-    .filter('region')
+  const programsQuery = Program.query('region')
+    // .filter('region')
     .eq(location.region)
     // .and()
     // .filter('start')
@@ -185,8 +172,8 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
   console.log(2);
 
-  const programsNextQuery = Program.query()
-    .filter('region')
+  const programsNextQuery = Program.query('region')
+    // .filter('region')
     .eq(location.region)
     .and()
     .filter('end')
@@ -201,6 +188,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming run query');
   const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
+  console.log(programs.length, programsNext.length);
   console.time('current + next programming run query');
 
   let currentPrograms = programs;
