@@ -26,7 +26,11 @@ type region = {
   localChannels: number[],
 };
 
-const allRegions: region[] = [{ name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 661] }];
+const allRegions: region[] = [
+  { name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 661] },
+  { name: 'chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
+  { name: 'nyc', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
+];
 const minorChannels: number[] = [661];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB'];
 const nationalChannels: number[] = [
