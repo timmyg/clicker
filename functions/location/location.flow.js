@@ -52,9 +52,27 @@ function init() {
         },
       ],
       channels: {
-        exclude: [String],
+        exclude: {
+          type: 'list',
+          list: [
+            {
+              type: 'string',
+            },
+          ],
+        },
       },
-      // packages: [String],
+      // packages: {
+      //   type: [String],
+      //   default: [],
+      // },
+      packages: {
+        type: 'list',
+        list: [
+          {
+            type: 'string',
+          },
+        ],
+      },
       name: { type: String, required: true },
       neighborhood: { type: String, required: true },
       // zip: { type: String, required: true },
