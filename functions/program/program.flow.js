@@ -175,14 +175,15 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const programsQuery = Program.query()
     .filter('region')
     .eq(location.region)
-    .and()
-    .filter('start')
-    .lt(now)
-    .and()
-    .filter('end')
-    .gt(now)
-    .all()
+    // .and()
+    // .filter('start')
+    // .lt(now)
+    // .and()
+    // .filter('end')
+    // .gt(now)
+    // .all()
     .exec();
+  console.log(2);
 
   const programsNextQuery = Program.query()
     .filter('region')
@@ -195,6 +196,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .lt(in25Mins)
     .all()
     .exec();
+  console.log(3);
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming run query');
