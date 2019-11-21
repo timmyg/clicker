@@ -126,10 +126,10 @@ resources:
         AttributeDefinitions:
           - AttributeName: region
             AttributeType: S
-          - AttributeName: start
-            AttributeType: N
-          - AttributeName: end
-            AttributeType: N
+          # - AttributeName: start
+          #   AttributeType: N
+          # - AttributeName: end
+          #   AttributeType: N
           - AttributeName: id
             AttributeType: S
         KeySchema:
@@ -137,34 +137,33 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
-        LocalSecondaryIndexes:
-          - IndexName: startLocalIndex
-            KeySchema:
-              - AttributeName: region
-                KeyType: HASH
-              - AttributeName: start
-                KeyType: RANGE
-            Projection:
-              ProjectionType: KEYS_ONLY
-          - IndexName: endLocalIndex
-            KeySchema:
-              - AttributeName: region
-                KeyType: HASH
-              - AttributeName: end
-                KeyType: RANGE
-            Projection:
-              ProjectionType: KEYS_ONLY
-        GlobalSecondaryIndexes:
-          - IndexName: regionGlobalIndex
-            KeySchema:
-              - AttributeName: region
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.tableThroughput}
-              WriteCapacityUnits: ${self:custom.tableThroughput}
-
+        # LocalSecondaryIndexes:
+        #   - IndexName: startLocalIndex
+        #     KeySchema:
+        #       - AttributeName: region
+        #         KeyType: HASH
+        #       - AttributeName: start
+        #         KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        #   - IndexName: endLocalIndex
+        #     KeySchema:
+        #       - AttributeName: region
+        #         KeyType: HASH
+        #       - AttributeName: end
+        #         KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        # GlobalSecondaryIndexes:
+        #   - IndexName: regionGlobalIndex
+        #     KeySchema:
+        #       - AttributeName: region
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: ALL
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: ${self:custom.tableThroughput}
+        #       WriteCapacityUnits: ${self:custom.tableThroughput}
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
