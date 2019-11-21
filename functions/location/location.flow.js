@@ -24,8 +24,10 @@ function init() {
       losantId: {
         type: String,
         required: true,
-        index: true,
-        global: true,
+        index: {
+          global: true,
+          project: true, // ProjectionType: ALL
+        },
       },
       boxes: [
         {
@@ -343,7 +345,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       console.timeEnd('track event');
 
-      const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+      const text = `Manual Zap @ ${location.name} (${
+        location.neighborhood
+      }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -427,20 +431,23 @@ module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => 
 module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const { losantId } = getPathParameters(event);
+
+  const connected = true;
   const location = await Location.queryOne('losantId')
     .eq(losantId)
-    .all()
     .exec();
-  location.connected = true;
-  await location.save();
+  console.log({ location });
+  if (!!location) {
+    await Location.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
 
-  const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
-  await new Invoke()
-    .service('notification')
-    .name('sendAntenna')
-    .body({ text })
-    .async()
-    .go();
+    const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
 
   return respond(200, 'ok');
 });
@@ -448,20 +455,24 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const { losantId } = getPathParameters(event);
+
+  const connected = false;
   const location = await Location.queryOne('losantId')
     .eq(losantId)
-    .all()
     .exec();
-  location.connected = false;
-  await location.save();
+  console.log({ location });
+  if (!!location) {
+    await Location.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
 
-  const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
-  await new Invoke()
-    .service('notification')
-    .name('sendAntenna')
-    .body({ text })
-    .async()
-    .go();
+    const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
+
   return respond(200, 'ok');
 });
 

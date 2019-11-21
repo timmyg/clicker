@@ -61,30 +61,14 @@ function init() {
       book: {
         total: Number,
       },
-      // odds: Object,
-      // lastPlay: Object,
-      // boxscore: Object,
-      // teams: [
-      //   {
-      //     standings: Object,
-      //   },
-      // ],
-      // competitions: [
-      //   {
-      //     // required: false,
-      //     competitors: [Object],
-      //   },
-      // ],
     },
     {
       timestamps: true,
-      // saveUnknown: true,
       expires: {
         ttl: 86400,
         attribute: 'expires',
         returnExpiredItems: false,
         defaultExpires: x => {
-          // expire 9 hours after start
           return moment(x.start)
             .add(9, 'hours')
             .toDate();
@@ -269,18 +253,14 @@ function transformSIUrl(webUrl: string): string {
 
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
-  // subtract 5 hrs so its not utc date
   const currentTime = moment()
-    // .subtract(5, 'hours')
     .tz('America/Los_Angeles')
     .toDate();
   const allEvents = await pullFromActionNetwork([currentTime]);
   console.log('allEvents', allEvents.length);
-  // console.log('json', JSON.stringify(allEvents));
-  const inProgressEvents = getInProgressGames(allEvents);
+  const inProgressEvents = getUpdatedGames(allEvents);
   console.log('inProgressEvents', inProgressEvents.length);
   if (inProgressEvents && inProgressEvents.length) {
-    // console.log(JSON.stringify(inProgressEvents));
     await updateGames(inProgressEvents);
   }
   return respond(200, { inProgressEvents: inProgressEvents.length });
@@ -359,8 +339,8 @@ function removeEmpty(obj) {
   });
 }
 
-function getInProgressGames(response) {
-  return response.filter(e => e.status === 'inprogress');
+function getUpdatedGames(response) {
+  return response.filter(e => !['time-tbd', 'scheduled'].includes(e.status));
 }
 
 async function pullFromActionNetwork(dates: Date[]) {
@@ -461,6 +441,19 @@ async function updateGames(events: any[]) {
 }
 
 function transformGameV2(game) {
+  // set away, home teams
+  game.away = game.teams.find(t => t.id === game.away_team_id);
+  game.home = game.teams.find(t => t.id === game.home_team_id);
+  delete game.teams;
+
+  // attach rank, if available
+  if (!!game.ranks) {
+    const awayRank = game.ranks.find(gr => gr.team_id === game.away.id);
+    game.away.rank = awayRank ? awayRank.rank : null;
+    const homeRank = game.ranks.find(gr => gr.team_id === game.home.id);
+    game.home.rank = homeRank ? homeRank.rank : null;
+  }
+
   const map = {
     id: 'id',
     start_time: 'start',
@@ -472,27 +465,24 @@ function transformGameV2(game) {
     'broadcast.network': 'broadcast.network',
     'boxscore.total_away_points': 'away.score',
     'boxscore.total_home_points': 'home.score',
+    'away.full_name': 'away.fullName',
+    'home.full_name': 'home.fullName',
+    'away.logo': 'away.logo',
+    'home.logo': 'home.logo',
+    'away.id': 'away.id',
+    'home.id': 'home.id',
+    'away.rank': 'away.rank',
+    'home.rank': 'home.rank',
     'odds[0].total': 'book.total',
-    'teams[0].full_name': 'away.fullName',
-    'teams[1].full_name': 'home.fullName',
-    'teams[0].logo': 'away.logo',
-    'teams[1].logo': 'home.logo',
-    'teams[0].id': 'away.id',
-    'teams[1].id': 'home.id',
     'odds[0].ml_away': 'away.book.moneyline',
     'odds[0].ml_home': 'home.book.moneyline',
     'odds[0].spread_away': 'away.book.spread',
     'odds[0].spread_home': 'home.book.spread',
   };
-  const transformed = objectMapper(game, map);
-  const awayRank = game.ranks.find(gr => gr.team_id === transformed.away.id);
-  transformed.away.rank = awayRank ? awayRank.rank : null;
-  const homeRank = game.ranks.find(gr => gr.team_id === transformed.home.id);
-  transformed.home.rank = homeRank ? homeRank.rank : null;
-  return transformed;
+  return objectMapper(game, map);
 }
 
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
-module.exports.getInProgressGames = getInProgressGames;
+module.exports.getUpdatedGames = getUpdatedGames;
 module.exports.transformGameV2 = transformGameV2;
