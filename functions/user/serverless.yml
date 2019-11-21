@@ -77,7 +77,7 @@ resources:
           ReadCapacityUnits: ${self:custom.tableThroughput}
           WriteCapacityUnits: ${self:custom.tableThroughput}
         GlobalSecondaryIndexes:
-          - IndexName: phoneGlobalSecondaryIndex
+          - IndexName: phoneGlobalIndex
             KeySchema:
               - AttributeName: phone
                 KeyType: HASH
@@ -86,7 +86,7 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: ${self:custom.tableThroughput}
               WriteCapacityUnits: ${self:custom.tableThroughput}
-          - IndexName: referralCodeGlobalSecondaryIndex
+          - IndexName: referralCodeGlobalIndex
             KeySchema:
               - AttributeName: referralCode
                 KeyType: HASH

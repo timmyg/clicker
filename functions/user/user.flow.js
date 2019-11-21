@@ -38,8 +38,18 @@ function init() {
         default: uuid,
         hashKey: true,
       },
-      phone: { type: String, index: true },
-      referralCode: { type: String, index: true },
+      phone: {
+        type: String,
+        index: {
+          global: true,
+        },
+      },
+      referralCode: {
+        type: String,
+        index: {
+          global: true,
+        },
+      },
       stripeCustomer: String,
       card: Object, // set in api
       spent: Number,
