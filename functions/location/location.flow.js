@@ -51,10 +51,10 @@ function init() {
           },
         },
       ],
-      // channels: {
-      //   exclude: [String],
-      // },
-      packages: [String],
+      channels: {
+        exclude: [String],
+      },
+      // packages: [String],
       name: { type: String, required: true },
       neighborhood: { type: String, required: true },
       // zip: { type: String, required: true },
