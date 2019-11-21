@@ -42,12 +42,14 @@ function init() {
         type: String,
         index: {
           global: true,
+          project: false,
         },
       },
       referralCode: {
         type: String,
         index: {
           global: true,
+          project: false,
         },
       },
       stripeCustomer: String,
