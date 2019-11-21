@@ -254,7 +254,8 @@ function transformSIUrl(webUrl: string): string {
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const currentTime = moment()
-    .tz('America/Los_Angeles')
+    // .tz('America/Los_Angeles')
+    .subtract(5, 'hours')
     .toDate();
   const allEvents = await pullFromActionNetwork([currentTime]);
   console.log('allEvents', allEvents.length);
