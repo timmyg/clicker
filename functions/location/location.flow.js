@@ -564,21 +564,23 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
       losantId,
       boxes: [],
     };
-    for (const box of location.boxes) {
-      if (!!box.zone) {
-        // ensure box has a zone to only track control center boxes
-        const { id: boxId, ip, clientAddress: client } = box;
-        body.boxes.push({ boxId, ip, client });
+    if (location.boxes) {
+      for (const box of location.boxes) {
+        if (!!box.zone) {
+          // ensure box has a zone to only track control center boxes
+          const { id: boxId, ip, clientAddress: client } = box;
+          body.boxes.push({ boxId, ip, client });
+        }
       }
-    }
-    if (losantId.length > 3 && !!body.boxes.length) {
-      console.log({ body });
-      await new Invoke()
-        .service('remote')
-        .name('checkBoxesInfo')
-        .body(body)
-        .async()
-        .go();
+      if (losantId.length > 3 && !!body.boxes.length) {
+        console.log({ body });
+        await new Invoke()
+          .service('remote')
+          .name('checkBoxesInfo')
+          .body(body)
+          .async()
+          .go();
+      }
     }
   }
   return respond(200, 'ok');
