@@ -198,7 +198,7 @@ functions:
     handler: program.syncNew
     timeout: 60
     events:
-      - schedule: rate(2 hours)
+      - schedule: rate(1 hour)
       # - schedule: rate(60 minutes)
       # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
       # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern

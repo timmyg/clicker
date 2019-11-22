@@ -15,26 +15,27 @@
         <div class="grid">
           <div v-for="game in games" v-bind:key="game.id" class="game col-6">
             <div class="row">
-            <div class="col-4 team away"> 
-              <img :src="game.away.logo" />
-              <span class="name">
-                <span v-if="game.away.rank">({{game.away.rank}})&nbsp;</span>
-                {{game.away.fullName}}
-              </span>
-            </div>
-            <div class="col-4 status">
-              <span
-                class="score"
-              >{{game.away.score}} - {{game.home.score}}</span>
-              <div class="status">{{game.status}}</div>
-            </div>
-            <div class="col-4 team home">
-              <img :src="game.home.logo" />
-              <span class="name">
-                <span v-if="game.home.rank">({{game.home.rank}})&nbsp;</span>
-                {{game.home.fullName}}
-                </span>
-            </div>
+              <div class="col-8">
+                <div class="team away"> 
+                  <img :src="game.away.logo" />
+                  <span> 
+                    <span v-if="game.away.rank">({{game.away.rank}})&nbsp;</span>
+                    <span class="name">{{game.away.fullName}}</span>
+                    <span class="score">{{game.away.score}}</span>
+                  </span>
+                </div>
+                <div class="team home">
+                  <img :src="game.home.logo" />
+                  <span>
+                    <span v-if="game.home.rank">({{game.home.rank}})&nbsp;</span>
+                    <span class="name">{{game.home.fullName}}  </span>
+                    <span class="score">{{game.home.score}}</span>
+                  </span>
+                </div>
+              </div> 
+                <div class="col-4 status">
+                  <div class="status">{{game.status}}</div>
+                </div>
             </div>
           </div>
         </div>
@@ -105,6 +106,7 @@ section.main {
 .game {
   img {
     width: 30px;
+    display: inline-block;
   }
 }
 // .game {
