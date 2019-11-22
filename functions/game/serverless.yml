@@ -53,6 +53,7 @@ resources:
   Resources:
     GamesTable:
       Type: 'AWS::DynamoDB::Table'
+      BillingMode: PAY_PER_REQUEST
       Properties:
         TableName: ${self:custom.tableGame}
         AttributeDefinitions:
@@ -67,9 +68,6 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
         GlobalSecondaryIndexes:
           - IndexName: statusGlobalIndex
             KeySchema:
@@ -82,9 +80,6 @@ resources:
               #   - statusDisplay
               # ProjectionType: INCLUDE
               ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.tableThroughput}
-              WriteCapacityUnits: ${self:custom.tableThroughput}
         # - IndexName: networkGlobalIndex
         #   KeySchema:
         #     - AttributeName: network

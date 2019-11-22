@@ -54,6 +54,7 @@ resources:
   Resources:
     ReservationTable:
       Type: 'AWS::DynamoDB::Table'
+      BillingMode: PAY_PER_REQUEST
       Properties:
         TableName: ${self:custom.tableReservation}
         AttributeDefinitions:
@@ -76,9 +77,9 @@ resources:
         #     ProvisionedThroughput:
         #       ReadCapacityUnits: 1
         #       WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
+        # ProvisionedThroughput:
+        #   ReadCapacityUnits: ${self:custom.tableThroughput}
+        #   WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:

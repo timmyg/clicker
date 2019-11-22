@@ -121,6 +121,7 @@ resources:
         RawMessageDelivery: 'true'
     ProgramTable:
       Type: 'AWS::DynamoDB::Table'
+      BillingMode: PAY_PER_REQUEST
       Properties:
         TableName: ${self:custom.tableProgram}
         BillingMode: PAY_PER_REQUEST
