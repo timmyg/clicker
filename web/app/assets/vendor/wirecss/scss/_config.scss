@@ -1,0 +1,80 @@
+// ----------------------
+//
+// SETTINGS
+//
+// ----------------------
+// ----------------------
+// Namespace
+//
+// To avoid conflicts, Wire used custom namespace,
+// Set 'wire-' to avoid conflicts with others frameworks. '' by default.
+// ----------------------
+$wire-namespace: '' !default;
+
+// ----------------------
+// Markup Mode
+//
+// Compile Wire.css with markup, if you only need extend
+// the styles in Sass, set this in 'false'.
+// Set 'true' or 'false'. True by default.
+// ----------------------
+$wire-markup: true !default;
+
+// ----------------------
+// Debug Mode
+//
+// Highlight markup errors.
+// Set 'true' or 'false'. False by default.
+// ----------------------
+$wire-debug: false !default;
+
+
+
+// ----------------------
+//
+// VARIABLES
+//
+// ----------------------
+// ----------------------
+// Defaults Sizes (Base 10 to simplify)
+// ----------------------
+$wire-font-size-base: 16 !default;
+$wire-line-height-base: 1.45 !default;
+$wire-border-radius: 3px !default;
+
+// ----------------------
+// Colors
+// ----------------------
+// ----------------------
+// Brand Colors
+// ----------------------
+$wire-color-primary: #48a8ce !default;
+$wire-color-secundary: #7c7c7c !default;
+$wire-color-alt: #e0e0e0 !default;
+$wire-link-color: $wire-color-primary !default;
+$wire-link-color-hover: darken($wire-color-primary, 30%) !default;
+$wire-button-bg: $wire-color-primary !default;
+$wire-button-color: #ffffff !default;
+$wire-button-alt-bg: $wire-color-alt !default;
+$wire-button-alt-color: $wire-color-secundary !default;
+$wire-form-input-border: #e0e0e0 !default;
+$wire-form-input-bg: #ffffff !default;
+$wire-table-tr-even-bg: #e5e5e5 !default;
+$wire-table-border-color: #d2d2d2 !default;
+
+// ----------------------
+// Grid
+// ----------------------
+$wire-max-columns: 12 !default;
+$wire-base-gutter: 2% !default;
+
+// ----------------------
+// Breakpoints
+// ----------------------
+$wire-breakpoints: (
+  "small": "screen and (max-width: 719px)",
+  "retina": "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dppx)",
+  "medium": "screen and (min-width: 720px) and (max-width: 1023px)",
+  "large": "screen and (min-width: 1024px)",
+  "huge": "screen and (min-width: 1200px)"
+) !default;

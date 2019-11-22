@@ -12,29 +12,31 @@
         class="league-wrapper"
       >
         <div class="league">{{leagueName}}</div>
-        <div v-for="game in games" v-bind:key="game.id" class="game flex">
-          <!-- <div class="inner"> -->
-          <div class="column team away">
-            <img :src="game.away.logo" />
-            <span class="name">
-              <span v-if="game.away.rank">({{game.away.rank}})&nbsp;</span>
-              {{game.away.fullName}}
-            </span>
-          </div>
-          <div class="column status">
-            <span
-              class="score"
-            >{{game.away.score}} - {{game.home.score}}</span>
-            <div class="status">{{game.status}}</div>
-          </div>
-          <div class="column team home">
-            <img :src="game.home.logo" />
-            <span class="name">
-              <span v-if="game.home.rank">({{game.home.rank}})&nbsp;</span>
-              {{game.home.fullName}}
+        <div class="grid">
+          <div v-for="game in games" v-bind:key="game.id" class="game col-6">
+            <div class="row">
+            <div class="col-4 team away"> 
+              <img :src="game.away.logo" />
+              <span class="name">
+                <span v-if="game.away.rank">({{game.away.rank}})&nbsp;</span>
+                {{game.away.fullName}}
               </span>
+            </div>
+            <div class="col-4 status">
+              <span
+                class="score"
+              >{{game.away.score}} - {{game.home.score}}</span>
+              <div class="status">{{game.status}}</div>
+            </div>
+            <div class="col-4 team home">
+              <img :src="game.home.logo" />
+              <span class="name">
+                <span v-if="game.home.rank">({{game.home.rank}})&nbsp;</span>
+                {{game.home.fullName}}
+                </span>
+            </div>
+            </div>
           </div>
-          <!-- </div> -->
         </div>
       </div>
       <br />
@@ -88,6 +90,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/vendor/wirecss/scss/wire.scss';
+
 .right {
   float: right;
 }
@@ -99,33 +103,38 @@ section.main {
   padding-top: 100px;
 }
 .game {
-  display: flex;
-  margin-right: 15px;
-  min-width: 200px;
-  max-width: 33%;
-  .column {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 100%;
-    flex: 1;
-    .name {
-      line-height: 1.1;
-      margin-top: 10px;
-    }
-    .score {
-      font-size: 30px;
-    }
-    &.status,
-    &.team {
-      text-align: center;
-      font-size: 14px;
-    }
-  }
   img {
-    width: 50px;
-    margin: 0 auto;
+    width: 30px;
   }
 }
+// .game {
+//   display: flex;
+//   margin-right: 15px;
+//   min-width: 200px;
+//   max-width: 33%;
+//   .column {
+//     display: flex;
+//     flex-direction: column;
+//     flex-basis: 100%;
+//     flex: 1;
+//     .name {
+//       line-height: 1.1;
+//       margin-top: 10px;
+//     }
+//     .score {
+//       font-size: 30px;
+//     }
+//     &.status,
+//     &.team {
+//       text-align: center;
+//       font-size: 14px;
+//     }
+//   }
+//   img {
+//     width: 50px;
+//     margin: 0 auto;
+//   }
+// }
 
 // .status {
 //   font-size: 12px;

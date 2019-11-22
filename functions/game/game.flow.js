@@ -41,7 +41,11 @@ function init() {
       away: {
         id: Number,
         score: Number,
-        fullName: String,
+        name: {
+          full: String,
+          short: String,
+          abbr: String,
+        },
         logo: String,
         rank: Number,
         book: {
@@ -52,7 +56,11 @@ function init() {
       home: {
         id: Number,
         score: Number,
-        fullName: String,
+        name: {
+          full: String,
+          short: String,
+          abbr: String,
+        },
         logo: String,
         rank: Number,
         book: {
@@ -468,8 +476,12 @@ function transformGameV2(game) {
     'broadcast.network': 'broadcast.network',
     'boxscore.total_away_points': 'away.score',
     'boxscore.total_home_points': 'home.score',
-    'away.full_name': 'away.fullName',
-    'home.full_name': 'home.fullName',
+    'away.full_name': 'away.name.full',
+    'home.full_name': 'home.name.full',
+    'away.abbr': 'away.name.abbr',
+    'home.abbr': 'home.name.abbr',
+    'away.short_name': 'away.name.short',
+    'home.short_name': 'home.name.short',
     'away.logo': 'away.logo',
     'home.logo': 'home.logo',
     'away.id': 'away.id',
