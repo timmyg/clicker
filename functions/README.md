@@ -1,15 +1,18 @@
-#### manual
+### functions
 
-1.  location `invoke:location:add`
-2.  location `invoke:location:update`
-3.  location `invoke:location:all`
-4.  location `invoke:location:boxes:add`
-5.  location `invoke:location:boxes:identify`
-6.  location `invoke:location:boxes:labels`
+##### migrating data via [dynamodump](https://github.com/bchew/dynamodump)
 
-#### startup
+backup
+```
+python3 dynamodump.py --mode backup --region us-east-1 --accessKey [access-key-here] --secretKey [secret-key-here] --srcTable reservations-prod --dataOnly
+```
 
-4.  receiver `invoke:receiver:upsert` (ip)
+restore to same environment
+```
+python3 dynamodump.py --mode restore --region us-east-1 --accessKey [access-key-here] --secretKey [secret-key-here] --srcTable locations-prod --dataOnly
+```
 
--- widget
-npm run invoke:register
+restore to different environment
+```
+python3 dynamodump.py --mode restore --region us-east-1 --accessKey [access-key-here] --secretKey [secret-key-here] --srcTable locations-prod --destTable locations-develop --dataOnly
+```
