@@ -10,7 +10,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
-    tableProgramArea: ${self:custom.tableProgramArea}
     serviceName: ${self:service}
   iamRoleStatements:
     - Effect: 'Allow'
@@ -43,7 +42,6 @@ custom:
     automatic: true
     number: 3
   tableProgram: programs-${self:custom.stage}
-  tableProgramArea: programs-area-${self:custom.stage}
   tableThroughputs:
     prod: 5
     default: 1
@@ -125,32 +123,51 @@ resources:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableProgram}
+        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
+          - AttributeName: region
+            AttributeType: S
+          # - AttributeName: start
+          #   AttributeType: N
+          # - AttributeName: end
+          #   AttributeType: N
           - AttributeName: id
             AttributeType: S
-          - AttributeName: start
-            AttributeType: N
         KeySchema:
-          - AttributeName: id
+          - AttributeName: region
             KeyType: HASH
-          - AttributeName: start
+          - AttributeName: id
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
-    ProgramAreaTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableProgramArea}
-        AttributeDefinitions:
-          - AttributeName: zip
-            AttributeType: S
-        KeySchema:
-          - AttributeName: zip
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
+        # LocalSecondaryIndexes:
+        #   - IndexName: startLocalIndex
+        #     KeySchema:
+        #       - AttributeName: region
+        #         KeyType: HASH
+        #       - AttributeName: start
+        #         KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        #   - IndexName: endLocalIndex
+        #     KeySchema:
+        #       - AttributeName: region
+        #         KeyType: HASH
+        #       - AttributeName: end
+        #         KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: KEYS_ONLY
+        # GlobalSecondaryIndexes:
+        #   - IndexName: regionGlobalIndex
+        #     KeySchema:
+        #       - AttributeName: region
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: ALL
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: ${self:custom.tableThroughput}
+        #       WriteCapacityUnits: ${self:custom.tableThroughput}
+        # ProvisionedThroughput:
+        #   ReadCapacityUnits: ${self:custom.tableThroughput}
+        #   WriteCapacityUnits: ${self:custom.tableThroughput}
 functions:
   health:
     handler: program.health
@@ -178,23 +195,12 @@ functions:
               - partner
               - authorization
               - content-type
-  getProgramAreas:
-    handler: program.getProgramAreas
-    events:
-      - http:
-          path: 'areas'
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncNew:
     handler: program.syncNew
     timeout: 60
     events:
       - schedule: rate(2 hours)
+      # - schedule: rate(60 minutes)
       # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
       # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
       # - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
@@ -207,31 +213,19 @@ functions:
               - partner
               - authorization
               - content-type
-  syncByZip:
-    handler: program.syncByZip
+  syncByRegion:
+    handler: program.syncByRegion
     memorySize: 1024
     timeout: 60
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
-  createArea:
-    handler: program.createArea
-    events:
-      - http:
-          path: 'area'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   consumeNewProgram:
     memorySize: 512
-    timeout: 20
+    # timeout: 20
     handler: program.consumeNewProgram
     description: Consume new program queue and add description
-    reservedConcurrency: 2
+    reservedConcurrency: 1
     events:
       - sqs:
           arn: !GetAtt

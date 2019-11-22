@@ -7,8 +7,8 @@
     "build": "npx flow-remove-types location.flow.js -o location.js",
     "test": "npm run build && jest --coverage",
     "invoke:health": "serverless invoke local --function health",
-    "invoke:all": "serverless invoke local --function all",
-    "invoke:add": "serverless invoke local --function create --path ../.resources/data/location-create.json",
+    "invoke:all": "serverless invoke local --function all --stage develop --path ../.resources/data/location-all.json",
+    "invoke:add": "serverless invoke local --function create --path ../.resources/data/location-all.json --stage develop",
     "invoke:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",
     "invoke:boxes:add": "serverless invoke local --function addBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:all": "serverless invoke local --function getBoxes --path ../.resources/data/boxes.json",
@@ -20,7 +20,7 @@
   "dependencies": {
     "aws-sdk": "^2.561.0",
     "dotenv": "^7.0.0",
-    "dynamoose": "^1.7.2",
+    "dynamoose": "^1.11.1",
     "geolib": "^2.0.24",
     "moment": "^2.24.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"

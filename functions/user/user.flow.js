@@ -36,12 +36,25 @@ function init() {
       id: {
         type: String,
         default: uuid,
+        hashKey: true,
+      },
+      phone: {
+        type: String,
+        index: {
+          global: true,
+          project: false,
+        },
+      },
+      referralCode: {
+        type: String,
+        index: {
+          global: true,
+          project: false,
+        },
       },
       stripeCustomer: String,
-      phone: String,
       card: Object, // set in api
       spent: Number,
-      referralCode: String,
       referredByCode: String,
       tokens: {
         type: Number,
@@ -79,11 +92,10 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
 
-  const referrerUsers = await User.scan('referralCode')
+  const referrerUser = await User.queryOne('referralCode')
     .eq(code)
     .all()
     .exec();
-  const referrerUser = referrerUsers[0];
 
   console.log({ user });
   console.log({ referrerUser });
@@ -120,8 +132,14 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
   console.log({ user });
 
+  // this shouldnt typically happen, but could in dev environments when database cleared
+  if (!user) {
+    // const userId = uuid();
+    console.log('creating user', userId, initialTokens);
+    user = await User.create({ id: userId, tokens: initialTokens });
+  }
+
   // generate referral code if none
-  console.log(user);
   if (!user.referralCode) {
     const referralCode = Math.random()
       .toString(36)
@@ -129,12 +147,6 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
     user = await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
   }
 
-  // this shouldnt typically happen, but could in dev environments when database cleared
-  if (!user) {
-    // const userId = uuid();
-    console.log('creating user', userId, initialTokens);
-    user = await User.create({ id: userId, tokens: initialTokens });
-  }
   console.log({ user });
 
   if (user.stripeCustomer) {
@@ -359,10 +371,8 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
   const client = new twilio(twilioAccountSid, twilioAuthToken);
-
   try {
     const response = await client.verify.services(twilioServiceSid).verifications.create({ to: phone, channel: 'sms' });
-    console.log(response);
     return respond(201, response);
   } catch (e) {
     return respond(400, e);
@@ -376,25 +386,27 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   const client = new twilio(twilioAccountSid, twilioAuthToken);
 
   try {
+    console.log(twilioAccountSid, twilioAuthToken, twilioServiceSid, phone, code);
     const result = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
-    console.log(result);
+    console.log({ result });
     if (result.status === 'approved') {
       const token = await getToken(phone);
       return respond(201, { token });
     }
     return respond(400, 'denied');
   } catch (e) {
+    console.error(e);
     return respond(400, e);
   }
 });
 
 async function getToken(phone) {
-  const users = await User.scan('phone')
+  const user = await User.queryOne('phone')
     .eq(phone)
     .all()
     .exec();
-  if (users && users.length) {
-    const { id } = users[0];
+  if (user) {
+    const { id } = user;
     return jwt.sign({ sub: id }, key);
   } else {
     const user = await User.create({ phone, tokens: 0 });

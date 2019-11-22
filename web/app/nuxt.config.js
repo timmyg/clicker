@@ -22,7 +22,10 @@ module.exports = {
   },
   modules: ['@nuxtjs/markdownit', '@nuxtjs/style-resources', '@nuxt/http', '@nuxtjs/dotenv'],
   plugins: ['~/plugins/vue-moment.js'],
-  css: ['~assets/scss/style.scss'],
+  css: [
+    '~assets/scss/style.scss',
+    // '@/assets/vendor/wirecss/scss/wire.scss'
+  ],
 
   /*
    ** Headers of the page

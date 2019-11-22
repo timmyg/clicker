@@ -1,6 +1,92 @@
 // @flow
 const axios = require('axios');
+const camelcase = require('camelcase-keys');
+const dynamoose = require('dynamoose');
+const moment = require('moment-timezone');
+const AWS = require('aws-sdk');
+const objectMapper = require('object-mapper');
+const _ = require('lodash');
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+let Game;
+
+function init() {
+  console.log('init');
+  dynamoose.setDefaults({
+    create: false,
+    update: false,
+  });
+  Game = dynamoose.model(
+    process.env.tableGame,
+    {
+      start: { type: String, hashKey: true },
+      id: {
+        type: Number,
+        rangeKey: true,
+      },
+      status: {
+        type: String,
+        required: true,
+        index: {
+          global: true,
+        },
+      },
+      leagueName: String,
+      scoreboard: {
+        clock: String,
+        period: Number,
+      },
+      broadcast: {
+        network: String,
+      },
+      away: {
+        id: Number,
+        score: Number,
+        name: {
+          full: String,
+          short: String,
+          abbr: String,
+        },
+        logo: String,
+        rank: Number,
+        book: {
+          moneyline: Number,
+          spread: Number,
+        },
+      },
+      home: {
+        id: Number,
+        score: Number,
+        name: {
+          full: String,
+          short: String,
+          abbr: String,
+        },
+        logo: String,
+        rank: Number,
+        book: {
+          moneyline: Number,
+          spread: Number,
+        },
+      },
+      book: {
+        total: Number,
+      },
+    },
+    {
+      timestamps: true,
+      expires: {
+        ttl: 86400,
+        attribute: 'expires',
+        returnExpiredItems: false,
+        defaultExpires: x => {
+          return moment(x.start)
+            .add(9, 'hours')
+            .toDate();
+        },
+      },
+    },
+  );
+}
 
 class SiLeague {
   name: string; // Major League Baseball, College Football
@@ -48,6 +134,7 @@ class GameStatus {
 }
 
 module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('getstatus');
   const { url: webUrl } = getBody(event);
   const apiUrl = transformSIUrl(webUrl);
 
@@ -55,6 +142,7 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const options = { method, url: apiUrl, timeout: 2000 };
   try {
     const result = await axios(options);
+    console.log(result.data);
     const gameStatus: GameStatus = transformGame(result.data);
 
     return respond(200, gameStatus);
@@ -166,6 +254,250 @@ function transformSIUrl(webUrl: string): string {
   return apiUrl.join('/');
 }
 
+// module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { start, network } = event.queryStringParameters;
+//   console.log({ start, network });
+//   const game = await getGame(start, network);
+//   respond(200, game);
+// });
+
+module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
+  const currentTime = moment()
+    // .tz('America/Los_Angeles')
+    .subtract(5, 'hours')
+    .toDate();
+  const allEvents = await pullFromActionNetwork([currentTime]);
+  console.log('allEvents', allEvents.length);
+  const inProgressEvents = getUpdatedGames(allEvents);
+  console.log('inProgressEvents', inProgressEvents.length);
+  if (inProgressEvents && inProgressEvents.length) {
+    await updateGames(inProgressEvents);
+  }
+  return respond(200, { inProgressEvents: inProgressEvents.length });
+});
+
+module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
+  try {
+    init();
+    console.log('get games');
+    console.time('all scores');
+    const allGames = await Game.query('status')
+      // .eq('time-tbd')
+      .eq('inprogress')
+      .exec();
+    console.timeEnd('all scores');
+
+    // const allGames = await Game.scan().exec();
+    console.log(allGames.length);
+    // // const sortedGames = allGames;
+    // const sortedGames = [];
+    // sortedGames.push(...allGames.filter(g => g.status === 'inprogress'));
+    // console.log(1);
+    // sortedGames.push(...allGames.filter(g => g.status === 'complete'));
+    // console.log(2);
+    // sortedGames.push(...allGames.filter(g => g.status === 'scheduled'));
+    // console.log(3);
+    // sortedGames.push(...allGames.filter(g => !['inprogress', 'complete', 'scheduled'].includes(g.status)));
+
+    // console.log(sortedGames.length);
+    return respond(200, allGames);
+  } catch (e) {
+    console.error(e);
+    respond(400, e);
+  }
+});
+
+type actionNetworkRequest = {
+  sport: string,
+  params?: any[],
+};
+
+module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
+  console.log('get games...');
+  const allGames = await Game.scan().exec();
+  console.log('existingGames:', allGames.length);
+  const datesToPull = [];
+  if (allGames && allGames.length) {
+    const allGamesDescending = allGames.sort((a, b) => b.start.localeCompare(a.start));
+    const latestGame = allGamesDescending[0];
+    console.log({ latestGame });
+    // get one day more than largest start time
+    const dayAfterFurthestGame = moment(latestGame.start)
+      .add(1, 'd')
+      .toDate();
+    datesToPull.push(dayAfterFurthestGame);
+  } else {
+    // if no data, get today and tomorrow
+    datesToPull.push(moment().toDate());
+    datesToPull.push(
+      moment()
+        .add(1, 'd')
+        .toDate(),
+    );
+  }
+  console.log('sync');
+  const allEvents = await pullFromActionNetwork(datesToPull);
+  await updateGames(allEvents);
+  return respond(200);
+});
+
+function removeEmpty(obj) {
+  return Object.keys(obj).forEach(function(key) {
+    if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key]);
+    else if (obj[key] == null) delete obj[key];
+  });
+}
+
+function getUpdatedGames(response) {
+  return response.filter(e => !['time-tbd', 'scheduled'].includes(e.status));
+}
+
+async function pullFromActionNetwork(dates: Date[]) {
+  const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+  const actionSports: actionNetworkRequest[] = [];
+  actionSports.push({ sport: 'ncaab', params: { division: 'D1' } });
+  actionSports.push({ sport: 'ncaaf', params: { division: 'FBS' } });
+  actionSports.push({ sport: 'nfl' });
+  actionSports.push({ sport: 'mlb' });
+  actionSports.push({ sport: 'nhl' });
+  actionSports.push({ sport: 'soccer' });
+  // actionSports.push({ sport: 'pga' });
+  // actionSports.push({ sport: 'boxing' });
+  const method = 'get';
+  const options = { method, url: apiUrl, timeout: 2000 };
+  console.log({ dates });
+  for (const date of dates) {
+    try {
+      const requests = [];
+      const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+      actionSports.forEach((actionSport: actionNetworkRequest) => {
+        const url = `${actionBaseUrl}/${actionSport.sport}`;
+        const queryDate = moment(date).format('YYYYMMDD');
+        const params = actionSport.params || {};
+        params.date = queryDate;
+        console.log(url, { params });
+        requests.push(axios.get(url, { params }));
+      });
+
+      const responses = await Promise.all(requests);
+      console.log('responses', responses.length);
+      const all = [];
+      responses.forEach(response => {
+        const responseEvents = response.data.games ? response.data.games : response.data.competitions;
+        all.push(...responseEvents);
+      });
+      return all;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+// dynamoose isnt liking null values -> https://github.com/dynamoosejs/dynamoose/pull/682
+// function cleanupEvents(events: any[]) {
+//   // console.log('e', events.length);
+//   events.forEach((event, i, allEvents) => {
+//     allEvents[i]['odds'] = allEvents[i]['odds'] ? _.pickBy(allEvents[i]['odds'][0]) : {};
+//     allEvents[i]['lastPlay'] = allEvents[i]['last_play'] ? _.pickBy(allEvents[i]['last_play']) : {};
+//     allEvents[i]['boxscore'] = allEvents[i]['boxscore'] ? _.pickBy(allEvents[i]['boxscore']) : {};
+//     delete allEvents[i]['boxscore']['linescore'];
+//     if (allEvents[i]['teams']) {
+//       allEvents[i]['teams'].forEach((team, indexTeam, allTeams) => {
+//         // delete allEvents[i]['teams'][indexTeam]['standings'];
+//         // delete allEvents[i]['teams'][indexTeam]['standings'];
+//         allEvents[i]['teams'][indexTeam]['standings'] = _.pickBy(allEvents[i]['teams'][indexTeam]['standings']);
+//       });
+//       // console.log(allEvents[i]['teams'][0]['display_name']);
+//       // console.log(allEvents[i]['teams'][1]['display_name']);
+//       allEvents[i]['awayTeam'] = allEvents[i]['teams'][0]['display_name'];
+//       allEvents[i]['homeTeam'] = allEvents[i]['teams'][1]['display_name'];
+//     }
+//     allEvents[i]['start'] = allEvents[i]['start_time'];
+//     delete allEvents[i]['startTime'];
+
+//     allEvents[i] = _.pickBy(allEvents[i], _.identity);
+//     // console.log(allEvents[i]);
+
+//     // console.log('odddds', allEvents[i]['odds'], allEvents[i]['broadcast']);
+//   });
+//   // console.log('e', events.length);
+//   events = camelcase(events, { deep: true });
+//   // console.log('e', events.length);
+//   return events;
+// }
+
+async function updateGames(events: any[]) {
+  events.forEach((part, index, eventsArray) => {
+    eventsArray[index] = transformGameV2(eventsArray[index]);
+  });
+  console.log('updateGames:', events.length);
+  const { tableGame } = process.env;
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  console.log('cleaned');
+
+  while (!!events.length) {
+    try {
+      const dbEvents = events.splice(0, 25);
+      console.log('creating:', dbEvents.length);
+      console.log('remaining:', events.length);
+      // console.log(JSON.stringify(dbEvents));
+      const result = await Game.batchPut(dbEvents);
+      console.log({ result });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+function transformGameV2(game) {
+  // set away, home teams
+  game.away = game.teams.find(t => t.id === game.away_team_id);
+  game.home = game.teams.find(t => t.id === game.home_team_id);
+  delete game.teams;
+
+  // attach rank, if available
+  if (!!game.ranks) {
+    const awayRank = game.ranks.find(gr => gr.team_id === game.away.id);
+    game.away.rank = awayRank ? awayRank.rank : null;
+    const homeRank = game.ranks.find(gr => gr.team_id === game.home.id);
+    game.home.rank = homeRank ? homeRank.rank : null;
+  }
+
+  const map = {
+    id: 'id',
+    start_time: 'start',
+    status_display: 'statusDisplay',
+    league_name: 'leagueName',
+    status: 'status',
+    'boxscore.clock': 'scoreboard.clock',
+    'boxscore.period': 'scoreboard.period',
+    'broadcast.network': 'broadcast.network',
+    'boxscore.total_away_points': 'away.score',
+    'boxscore.total_home_points': 'home.score',
+    'away.full_name': 'away.name.full',
+    'home.full_name': 'home.name.full',
+    'away.abbr': 'away.name.abbr',
+    'home.abbr': 'home.name.abbr',
+    'away.short_name': 'away.name.short',
+    'home.short_name': 'home.name.short',
+    'away.logo': 'away.logo',
+    'home.logo': 'home.logo',
+    'away.id': 'away.id',
+    'home.id': 'home.id',
+    'away.rank': 'away.rank',
+    'home.rank': 'home.rank',
+    'odds[0].total': 'book.total',
+    'odds[0].ml_away': 'away.book.moneyline',
+    'odds[0].ml_home': 'home.book.moneyline',
+    'odds[0].spread_away': 'away.book.spread',
+    'odds[0].spread_home': 'home.book.spread',
+  };
+  return objectMapper(game, map);
+}
+
 module.exports.transformSIUrl = transformSIUrl;
 module.exports.transformGame = transformGame;
-
+module.exports.getUpdatedGames = getUpdatedGames;
+module.exports.transformGameV2 = transformGameV2;

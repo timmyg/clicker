@@ -43,7 +43,7 @@ function init() {
         losantId: { type: String, required: true },
         name: { type: String, required: true },
         neighborhood: { type: String, required: true },
-        zip: { type: String, required: true },
+        // zip: { type: String, required: true },
         ip: { type: String, required: true },
         img: { type: String, required: true },
       },
