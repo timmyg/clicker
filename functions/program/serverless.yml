@@ -123,7 +123,6 @@ resources:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableProgram}
-        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: region
             AttributeType: S
@@ -165,9 +164,9 @@ resources:
         #     ProvisionedThroughput:
         #       ReadCapacityUnits: ${self:custom.tableThroughput}
         #       WriteCapacityUnits: ${self:custom.tableThroughput}
-        # ProvisionedThroughput:
-        #   ReadCapacityUnits: ${self:custom.tableThroughput}
-        #   WriteCapacityUnits: ${self:custom.tableThroughput}
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
 functions:
   health:
     handler: program.health
@@ -199,7 +198,7 @@ functions:
     handler: program.syncNew
     timeout: 60
     events:
-      - schedule: rate(1 hour)
+      - schedule: rate(2 hours)
       # - schedule: rate(60 minutes)
       # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
       # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern

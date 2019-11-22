@@ -304,13 +304,14 @@ module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async (event) =>
 async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
 	init();
 	// channels may have minor channel, so get main channel number
-	const channels = nationalChannels.concat(regionChannels);
+	const channels = regionChannels.concat(nationalChannels);
 	const channelsString = getChannels(channels).join(',');
 
 	// get latest program
+	console.log('querying region:', regionName);
 	const latestProgram = await Program.queryOne('region').eq(regionName).where('start').descending().exec();
 
-	console.log({ latestProgram });
+	console.log({ regionName, latestProgram });
 
 	let totalHours, startTime;
 	// if programs, take the largest start time, add 1 minute and start from there and get two hours of programming
@@ -324,8 +325,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 		const startHoursFromNow = -4;
 		totalHours = 8;
 		startTime = moment().utc().add(startHoursFromNow, 'hours').minutes(0).seconds(0).toString();
-  }
-  
+	}
 
 	const url = `${directvEndpoint}/channelschedule`;
 
