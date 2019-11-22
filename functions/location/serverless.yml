@@ -53,6 +53,7 @@ resources:
     LocationsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
+        BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableLocation}
         AttributeDefinitions:
           - AttributeName: id
@@ -62,9 +63,6 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
         GlobalSecondaryIndexes:
           - IndexName: losantIdGlobalIndex
             KeySchema:
@@ -72,9 +70,9 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.tableThroughput}
-              WriteCapacityUnits: ${self:custom.tableThroughput}
+            # ProvisionedThroughput:
+            #   ReadCapacityUnits: ${self:custom.tableThroughput}
+            #   WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
