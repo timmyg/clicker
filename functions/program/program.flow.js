@@ -322,7 +322,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 	} else {
 		// if no programs, get 4 hours ago and pull 6 hours
 		const startHoursFromNow = -4;
-		totalHours = 10;
+		totalHours = 8;
 		startTime = moment().utc().add(startHoursFromNow, 'hours').minutes(0).seconds(0).toString();
 	}
 
