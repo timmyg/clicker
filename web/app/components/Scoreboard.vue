@@ -19,7 +19,7 @@
                 <div class="team away"> 
                   <img :src="game.away.logo" />
                   <span> 
-                    <small v-if="game.away.rank">({{game.away.rank}})&nbsp;</small>
+                    <small v-if="game.away.rank">{{game.away.rank}}&nbsp;</small>
                     <span class="name">{{game.away.name.abbr}}</span>
                     <span class="score">{{game.away.score}}</span>
                   </span>
@@ -27,7 +27,7 @@
                 <div class="team home">
                   <img :src="game.home.logo" />
                   <span>
-                    <span v-if="game.home.rank">({{game.home.rank}})&nbsp;</span>
+                    <span v-if="game.home.rank">{{game.home.rank}}&nbsp;</span>
                     <span class="name">{{game.home.name.abbr}}  </span>
                     <span class="score">{{game.home.score}}</span>
                   </span>
@@ -35,6 +35,7 @@
               </div> 
                 <div class="col-4 status">
                   <div class="status">{{game.scoreboard.display}}</div>
+                  <small v-if="game.broadcast">{{game.broadcast.network}}</small>
                 </div>
             </div>
           </div>
