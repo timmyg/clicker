@@ -324,7 +324,8 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 		const startHoursFromNow = -4;
 		totalHours = 8;
 		startTime = moment().utc().add(startHoursFromNow, 'hours').minutes(0).seconds(0).toString();
-	}
+  }
+  
 
 	const url = `${directvEndpoint}/channelschedule`;
 
