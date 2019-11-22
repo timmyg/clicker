@@ -53,9 +53,9 @@ resources:
   Resources:
     GamesTable:
       Type: 'AWS::DynamoDB::Table'
-      BillingMode: PAY_PER_REQUEST
       Properties:
         TableName: ${self:custom.tableGame}
+        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N

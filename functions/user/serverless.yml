@@ -61,9 +61,9 @@ resources:
   Resources:
     UserTable:
       Type: 'AWS::DynamoDB::Table'
-      BillingMode: PAY_PER_REQUEST
       Properties:
         TableName: ${self:custom.tableUser}
+        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

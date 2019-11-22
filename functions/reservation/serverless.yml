@@ -54,8 +54,8 @@ resources:
   Resources:
     ReservationTable:
       Type: 'AWS::DynamoDB::Table'
-      BillingMode: PAY_PER_REQUEST
       Properties:
+        BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableReservation}
         AttributeDefinitions:
           - AttributeName: userId
