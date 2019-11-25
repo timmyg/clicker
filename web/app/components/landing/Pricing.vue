@@ -30,6 +30,8 @@
                         <b class="brand-font">Clicker TV</b> app
                       </span>
                     </li>
+                    <li class="is-checked">Allow customer controlled TVs</li>
+                    <li class="is-checked">Monetize your TVs via revenue sharing</li>
                     <li class="is-checked">TV layout strategy guidance</li>
                     <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">Email + chat support</li>
@@ -65,7 +67,7 @@
                         <b class="brand-font">Control Center</b> automatically manages your TVs
                       </span>
                     </li>
-                    <li class="is-checked">Sports programming guidance</li>
+                    <li class="is-checked">24 hr/day auto programming</li>
                     <li class="is-checked">Weekly email with upcoming TV sports schedule</li>
                     <li class="is-checked">TV layout strategy guidance</li>
                     <li class="is-checked">DirecTV wiring setup, if necessary</li>

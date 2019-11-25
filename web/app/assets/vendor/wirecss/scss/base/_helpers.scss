@@ -1,0 +1,109 @@
+// ----------------------
+//
+// HELPERS
+//
+// ----------------------
+// ----------------------
+// REM Calculation
+// rem(value, size)
+// Size attribute is optional
+// ----------------------
+@function rem($value)  {
+  $value: ($value / 10) * 1rem;
+  @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+// ----------------------
+// EMs Calculation
+// em(value, size)
+// Size attribute is optional
+// ----------------------
+@function em($value, $context: $wire-font-size-base) {
+  @return #{$value / $context}em;
+}
+
+// ----------------------
+// Clearfix
+// ----------------------
+@mixin clearfix() {
+  &:after,
+  &:before{
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@if $wire-markup == true{
+  .#{$wire-namespace}clearfix {
+    @include clearfix();
+  }
+}
+
+// ----------------------
+// Text Align
+// ----------------------
+$align-positions: left, center, right;
+@each $align-position in $align-positions{
+  @if $wire-markup == true {
+    .#{$wire-namespace}align-#{$align-position} {
+      text-align: $align-position;
+    }
+  }
+}
+
+// ----------------------
+// Hidden
+// ----------------------
+%hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
+@if $wire-markup == true{
+  .hidden {
+    @extend %hidden;
+  }
+}
+
+// ----------------------
+// Invisible
+// ----------------------
+%invisible {
+  visibility : hidden;
+}
+
+@if $wire-markup == true{
+  .invisible {
+    @extend %invisible;
+  }
+}
+
+// ----------------------
+// Show Elements on Device
+// ----------------------
+@each $breakpoint, $value in $wire-breakpoints {
+  @include mq($breakpoint) {
+    @if $wire-markup == true {
+      .#{$wire-namespace}visible-#{$breakpoint} {
+        display: block !important;
+      }
+    }
+  }
+}
+
+// ----------------------
+// Hide Elements on Device
+// ----------------------
+@each $breakpoint, $value in $wire-breakpoints {
+  @include mq($breakpoint) {
+    @if $wire-markup == true {
+      .#{$wire-namespace}hidden-#{$breakpoint} {
+        display: none !important;
+      }
+    }
+  }
+}

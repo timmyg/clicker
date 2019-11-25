@@ -7,14 +7,22 @@
     "build": "npx flow-remove-types game.flow.js -o game.js",
     "test": "npm run build && jest --coverage",
     "test:specific": "npm run build && jest -t='soccer'",
-    "invoke:score": "serverless invoke local --function getStatus --path ../.resources/data/si-url.json"
+    "invoke:score": "serverless invoke local --function getStatus --path ../.resources/data/si-url.json",
+    "invoke:syncSchedule": "serverless invoke local --function syncSchedule --stage develop",
+    "invoke:syncScores": "serverless invoke local --function syncScores --stage develop",
+    "invoke:scoreboard": "serverless invoke local --function scoreboard --stage develop"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "aws-sdk": "^2.562.0",
+    "axios": "^0.19.0",
+    "camelcase-keys": "^6.1.0",
     "dotenv": "^6.2.0",
-    "moment": "^2.24.0",
+    "dynamoose": "^1.11.1",
+    "lodash": "^4.17.15",
+    "moment-timezone": "^0.5.27",
+    "object-mapper": "^6.0.1",
     "raven": "^2.6.4",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
     "uuid": "^3.3.2"

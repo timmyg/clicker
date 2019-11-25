@@ -63,15 +63,39 @@ resources:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableUser}
+        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
+            AttributeType: S
+          - AttributeName: phone
+            AttributeType: S
+          - AttributeName: referralCode
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
+        # ProvisionedThroughput:
+        #   ReadCapacityUnits: ${self:custom.tableThroughput}
+        #   WriteCapacityUnits: ${self:custom.tableThroughput}
+        GlobalSecondaryIndexes:
+          - IndexName: phoneGlobalIndex
+            KeySchema:
+              - AttributeName: phone
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            # ProvisionedThroughput:
+            #   ReadCapacityUnits: ${self:custom.tableThroughput}
+            #   WriteCapacityUnits: ${self:custom.tableThroughput}
+          - IndexName: referralCodeGlobalIndex
+            KeySchema:
+              - AttributeName: referralCode
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            # ProvisionedThroughput:
+            #   ReadCapacityUnits: ${self:custom.tableThroughput}
+            #   WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:

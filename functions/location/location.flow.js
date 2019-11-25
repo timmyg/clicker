@@ -24,6 +24,10 @@ function init() {
       losantId: {
         type: String,
         required: true,
+        index: {
+          global: true,
+          project: true, // ProjectionType: ALL
+        },
       },
       boxes: [
         {
@@ -48,12 +52,30 @@ function init() {
         },
       ],
       channels: {
-        exclude: [String],
+        exclude: {
+          type: 'list',
+          list: [
+            {
+              type: 'string',
+            },
+          ],
+        },
       },
-      packages: [String],
+      // packages: {
+      //   type: [String],
+      //   default: [],
+      // },
+      packages: {
+        type: 'list',
+        list: [
+          {
+            type: 'string',
+          },
+        ],
+      },
       name: { type: String, required: true },
       neighborhood: { type: String, required: true },
-      zip: { type: String, required: true },
+      // zip: { type: String, required: true },
       geo: {
         latitude: { type: Number, required: true },
         longitude: { type: Number, required: true },
@@ -74,6 +96,7 @@ function init() {
     },
     {
       timestamps: true,
+      // update: true,
     },
   );
 }
@@ -424,21 +447,23 @@ module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => 
 module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const { losantId } = getPathParameters(event);
-  const locations = await Location.scan('losantId')
-    .eq(losantId)
-    .all()
-    .exec();
-  const location = locations[0];
-  location.connected = true;
-  await location.save();
 
-  const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
-  await new Invoke()
-    .service('notification')
-    .name('sendAntenna')
-    .body({ text })
-    .async()
-    .go();
+  const connected = true;
+  const location = await Location.queryOne('losantId')
+    .eq(losantId)
+    .exec();
+  console.log({ location });
+  if (!!location) {
+    await Location.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
+
+    const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
 
   return respond(200, 'ok');
 });
@@ -446,21 +471,24 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   init();
   const { losantId } = getPathParameters(event);
-  const locations = await Location.scan('losantId')
-    .eq(losantId)
-    .all()
-    .exec();
-  const location = locations[0];
-  location.connected = false;
-  await location.save();
 
-  const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
-  await new Invoke()
-    .service('notification')
-    .name('sendAntenna')
-    .body({ text })
-    .async()
-    .go();
+  const connected = false;
+  const location = await Location.queryOne('losantId')
+    .eq(losantId)
+    .exec();
+  console.log({ location });
+  if (!!location) {
+    await Location.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
+
+    const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
+
   return respond(200, 'ok');
 });
 
@@ -536,21 +564,23 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
       losantId,
       boxes: [],
     };
-    for (const box of location.boxes) {
-      if (!!box.zone) {
-        // ensure box has a zone to only track control center boxes
-        const { id: boxId, ip, clientAddress: client } = box;
-        body.boxes.push({ boxId, ip, client });
+    if (location.boxes) {
+      for (const box of location.boxes) {
+        if (!!box.zone) {
+          // ensure box has a zone to only track control center boxes
+          const { id: boxId, ip, clientAddress: client } = box;
+          body.boxes.push({ boxId, ip, client });
+        }
       }
-    }
-    if (losantId.length > 3 && !!body.boxes.length) {
-      console.log({ body });
-      await new Invoke()
-        .service('remote')
-        .name('checkBoxesInfo')
-        .body(body)
-        .async()
-        .go();
+      if (losantId.length > 3 && !!body.boxes.length) {
+        console.log({ body });
+        await new Invoke()
+          .service('remote')
+          .name('checkBoxesInfo')
+          .body(body)
+          .async()
+          .go();
+      }
     }
   }
   return respond(200, 'ok');
