@@ -7,7 +7,7 @@ provider:
   runtime: nodejs10.x
   deploymentBucket:
     name: serverless-deploys-clicker
-  environment:
+  environment: 
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
     serviceName: ${self:service}
