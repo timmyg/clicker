@@ -88,10 +88,11 @@ function init() {
 		{
 			region: {
 				type: String,
-				hashKey: true
+				hashKey: true,
+				index: true
 			},
 			id: { type: String, rangeKey: true },
-			start: Number,
+			start: { type: Number, rangeKey: true },
 			end: Number,
 			channel: Number,
 			channelMinor: Number,
@@ -297,7 +298,12 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async (event) => {
 
 module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async (event) => {
 	// init();
-	// const x = await Program.query('region').eq('cincinnati').where('start').descending().exec();
+	// const x = await Program.query('region')
+	// 	.using('startLocalIndex')
+	// 	.eq('cincinnati')
+	// 	.where('start')
+	// 	.descending()
+	// 	.exec();
 	// console.log(x[0]);
 	const { name, defaultZip, localChannels } = getBody(event);
 	await syncChannels(name, localChannels, defaultZip);
@@ -312,7 +318,13 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
 	// get latest program
 	console.log('querying region:', regionName);
-	const regionPrograms = await Program.query('region').eq(regionName).exec();
+	// const regionPrograms = await Program.query('region').eq(regionName).exec();
+	const regionPrograms = await Program.query('region')
+		.using('startLocalIndex')
+		.eq('cincinnati')
+		.where('start')
+		.descending()
+		.exec();
 
 	// console.log({ regionName, latestProgram });
 
