@@ -321,7 +321,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 	if (regionPrograms && regionPrograms.length) {
 		const regionProgramsSorted = regionPrograms.sort((a, b) => b.start - a.start);
 		startTime = moment(regionPrograms[0].start).utc().add(1, 'minute').toString();
-		totalHours = 1;
+		totalHours = 2;
 	} else {
 		// if no programs, get 4 hours ago and pull 6 hours
 		const startHoursFromNow = -4;
