@@ -296,9 +296,12 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async (event) => {
 });
 
 module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async (event) => {
-	const { name, defaultZip, localChannels } = getBody(event);
-	await syncChannels(name, localChannels, defaultZip);
-	respond(200);
+	init();
+	const x = await Program.query('region').eq('cincinnati').where('start').descending().exec();
+	console.log(x[0]);
+	// const { name, defaultZip, localChannels } = getBody(event);
+	// await syncChannels(name, localChannels, defaultZip);
+	// respond(200);
 });
 
 async function syncChannels(regionName: string, regionChannels: number[], zip: string) {

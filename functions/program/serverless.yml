@@ -127,8 +127,8 @@ resources:
         AttributeDefinitions:
           - AttributeName: region
             AttributeType: S
-          # - AttributeName: start
-          #   AttributeType: N
+          - AttributeName: start
+            AttributeType: N
           # - AttributeName: end
           #   AttributeType: N
           - AttributeName: id
