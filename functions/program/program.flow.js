@@ -309,7 +309,8 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
 	// get latest program
 	console.log('querying region:', regionName);
-	const latestPrograms = await Program.query('region').eq(regionName).where('start').descending().exec();
+	// const latestPrograms = await Program.query('region').eq(regionName).where('start').descending().exec();
+	const regionPrograms = await Program.query('region').eq(regionName).exec();
 
 	// console.log({ regionName, latestProgram });
 
@@ -317,8 +318,9 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 	// if programs, take the largest start time, add 1 minute and start from there and get two hours of programming
 	//   add one hour because that seems like min duration for dtv api
 	//   (doesnt matter if you set to 5:00 or 5:59, same results until 6:00)
-	if (latestPrograms && latestPrograms.length) {
-		startTime = moment(latestPrograms[0].start).utc().add(1, 'minute').toString();
+	if (regionPrograms && regionPrograms.length) {
+		const regionProgramsSorted = regionPrograms.sort((a, b) => b.start - a.start);
+		startTime = moment(regionPrograms[0].start).utc().add(1, 'minute').toString();
 		totalHours = 1;
 	} else {
 		// if no programs, get 4 hours ago and pull 6 hours
