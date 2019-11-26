@@ -13,28 +13,29 @@
       >
         <div class="league">{{leagueName}}</div>
         <div class="grid">
-          <div v-for="game in games" v-bind:key="game.id" class="game col-6">
+          <div v-for="game in games" v-bind:key="game.id" class="game col-3">
             <div class="row">
               <div class="col-8">
                 <div class="team away"> 
                   <img :src="game.away.logo" />
                   <span> 
-                    <span v-if="game.away.rank">({{game.away.rank}})&nbsp;</span>
-                    <span class="name">{{game.away.fullName}}</span>
+                    <small v-if="game.away.rank">{{game.away.rank}}&nbsp;</small>
+                    <span class="name">{{game.away.name.abbr}}</span>
                     <span class="score">{{game.away.score}}</span>
                   </span>
                 </div>
                 <div class="team home">
                   <img :src="game.home.logo" />
                   <span>
-                    <span v-if="game.home.rank">({{game.home.rank}})&nbsp;</span>
-                    <span class="name">{{game.home.fullName}}  </span>
+                    <span v-if="game.home.rank">{{game.home.rank}}&nbsp;</span>
+                    <span class="name">{{game.home.name.abbr}}  </span>
                     <span class="score">{{game.home.score}}</span>
                   </span>
                 </div>
               </div> 
                 <div class="col-4 status">
-                  <div class="status">{{game.status}}</div>
+                  <div class="status">{{game.scoreboard.display}}</div>
+                  <small v-if="game.broadcast">{{game.broadcast.network}}</small>
                 </div>
             </div>
           </div>
@@ -104,6 +105,7 @@ section.main {
   padding-top: 100px;
 }
 .game {
+  margin-bottom: 16px;
   img {
     width: 30px;
     display: inline-block;

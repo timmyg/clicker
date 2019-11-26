@@ -88,10 +88,11 @@ function init() {
 		{
 			region: {
 				type: String,
-				hashKey: true
+				hashKey: true,
+				index: true
 			},
 			id: { type: String, rangeKey: true },
-			start: Number,
+			start: { type: Number, rangeKey: true },
 			end: Number,
 			channel: Number,
 			channelMinor: Number,
@@ -296,6 +297,14 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async (event) => {
 });
 
 module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async (event) => {
+	// init();
+	// const x = await Program.query('region')
+	// 	.using('startLocalIndex')
+	// 	.eq('cincinnati')
+	// 	.where('start')
+	// 	.descending()
+	// 	.exec();
+	// console.log(x[0]);
 	const { name, defaultZip, localChannels } = getBody(event);
 	await syncChannels(name, localChannels, defaultZip);
 	respond(200);
@@ -309,7 +318,13 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
 	// get latest program
 	console.log('querying region:', regionName);
-	const latestPrograms = await Program.query('region').eq(regionName).where('start').descending().exec();
+	// const regionPrograms = await Program.query('region').eq(regionName).exec();
+	const regionPrograms = await Program.query('region')
+		.using('startLocalIndex')
+		.eq('cincinnati')
+		.where('start')
+		.descending()
+		.exec();
 
 	// console.log({ regionName, latestProgram });
 
@@ -317,9 +332,9 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 	// if programs, take the largest start time, add 1 minute and start from there and get two hours of programming
 	//   add one hour because that seems like min duration for dtv api
 	//   (doesnt matter if you set to 5:00 or 5:59, same results until 6:00)
-	if (latestPrograms && latestPrograms.length) {
-		startTime = moment(latestPrograms[0].start).utc().add(1, 'minute').toString();
-		totalHours = 1;
+	if (regionPrograms && regionPrograms.length) {
+		startTime = moment(regionPrograms[0].start).utc().add(1, 'hour').toString();
+		totalHours = 2;
 	} else {
 		// if no programs, get 4 hours ago and pull 6 hours
 		const startHoursFromNow = -4;
@@ -329,7 +344,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
 	const url = `${directvEndpoint}/channelschedule`;
 
-	const params = { channels: channelsString, startTime, hours: totalHours };
+	const params = { startTime, hours: totalHours, channels: channelsString };
 	const headers = {
 		Cookie: `dtve-prospect-zip=${zip};`
 	};
@@ -340,9 +355,11 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
 	let { schedule } = result.data;
 	let allPrograms = build(schedule, regionName);
+	console.log('allPrograms:', allPrograms.length);
 	let transformedPrograms = buildProgramObjects(allPrograms);
-	console.log(transformedPrograms);
+	console.log('transformedPrograms', transformedPrograms.length);
 	let dbResult = await Program.batchPut(transformedPrograms);
+	console.log(dbResult);
 
 	// get program ids, publish to sns topic to update description
 	const sns = new AWS.SNS({ region: 'us-east-1' });
