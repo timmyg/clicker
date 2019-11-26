@@ -21,7 +21,7 @@ plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
-  - serverless-dotenv-plugin
+  # - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage}
@@ -45,34 +45,24 @@ custom:
     endpointType: 'edge'
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
-  dotenv:
-    basePath: ../
+  # dotenv:
+  #   basePath: ../
   tableLocation: locations-${self:custom.stage}
 resources:
   Resources:
     LocationsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableLocation}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: losantId
-            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-        GlobalSecondaryIndexes:
-          - IndexName: losantIdGlobalIndex
-            KeySchema:
-              - AttributeName: losantId
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            # ProvisionedThroughput:
-            #   ReadCapacityUnits: ${self:custom.tableThroughput}
-            #   WriteCapacityUnits: ${self:custom.tableThroughput}
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
 
 functions:
   health:
