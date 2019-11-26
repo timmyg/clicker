@@ -69,6 +69,17 @@ function init() {
     },
     {
       timestamps: true,
+      expires: {
+        ttl: 86400,
+        attribute: 'expires',
+        returnExpiredItems: false,
+        defaultExpires: x => {
+          // expire 60 minutes after end
+          return moment(x.end)
+            .add(60, 'minutes')
+            .toDate();
+        },
+      },
     },
   );
 }
@@ -167,7 +178,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const reservation = await Reservation.update(
     { id, userId },
     { cost: updatedCost, minutes: updatedMinutes, program, end },
-    { returnValues: 'ALL_NEW' },
+    { returnValues: 'ALL_NEW', updateExpires: true },
   );
 
   console.time('mark box reserved');
@@ -250,7 +261,7 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
   const reservation = await Reservation.get({ id, userId });
-  await Reservation.update({ id, userId }, { cancelled: true });
+  await Reservation.update({ id, userId }, { cancelled: true }, { updateExpires: true });
 
   // mark box free
   await new Invoke()
