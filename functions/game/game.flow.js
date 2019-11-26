@@ -32,6 +32,7 @@ function init() {
 			},
 			leagueName: String,
 			scoreboard: {
+				display: String,
 				clock: String,
 				period: Number
 			},
@@ -464,7 +465,7 @@ function transformGameV2(game) {
 	const map = {
 		id: 'id',
 		start_time: 'start',
-		status_display: 'statusDisplay',
+		status_display: 'scoreboard.display',
 		league_name: 'leagueName',
 		status: 'status',
 		'boxscore.clock': 'scoreboard.clock',
