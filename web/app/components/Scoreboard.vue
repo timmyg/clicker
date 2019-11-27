@@ -106,9 +106,15 @@ section.main {
 }
 .game {
   margin-bottom: 16px;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  padding: 10px;
   img {
     width: 30px;
     display: inline-block;
+  }
+  .status {
+    text-align: right;
   }
 }
 // .game {
