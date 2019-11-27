@@ -266,18 +266,19 @@ function transformSIUrl(webUrl: string): string {
 // });
 
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async (event) => {
-	const currentTime = moment()
-		// .tz('America/Los_Angeles')
-		.subtract(5, 'hours')
-		.toDate();
+	const currentTime = moment().subtract(5, 'hours').toDate();
 	const allEvents = await pullFromActionNetwork([ currentTime ]);
-	console.log('allEvents', allEvents.length);
-	const inProgressEvents = getUpdatedGames(allEvents);
-	console.log('inProgressEvents', inProgressEvents.length);
-	if (inProgressEvents && inProgressEvents.length) {
-		await updateGames(inProgressEvents);
+	if (allEvents && allEvents.length) {
+		console.log('allEvents', allEvents.length);
+		const inProgressEvents = getUpdatedGames(allEvents);
+		console.log('inProgressEvents', inProgressEvents.length);
+		if (inProgressEvents && inProgressEvents.length) {
+			await updateGames(inProgressEvents);
+		}
+		return respond(200, { inProgressEvents: inProgressEvents.length });
+	} else {
+		return respond(200, { events: 0 });
 	}
-	return respond(200, { inProgressEvents: inProgressEvents.length });
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async (event) => {
