@@ -25,6 +25,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-sentry
   - serverless-dotenv-plugin
+  - serverless-plugin-tracing
 
 custom:
   stage: ${opt:stage}
