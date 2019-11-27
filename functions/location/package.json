@@ -18,7 +18,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.561.0",
+    "aws-sdk": "^2.580.0",
+    "aws-xray-sdk": "^2.5.0",
     "dotenv": "^7.0.0",
     "dynamoose": "^1.11.1",
     "geolib": "^2.0.24",
@@ -32,6 +33,7 @@
     "serverless": "^1.42.2",
     "serverless-domain-manager": "^2.6.13",
     "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-plugin-tracing": "^2.0.0",
     "serverless-prune-plugin": "^1.4.0",
     "serverless-sentry": "^1.2.0"
   }
