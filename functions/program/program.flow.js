@@ -1,6 +1,7 @@
 // @flow
 const dynamoose = require('dynamoose');
 const awsXRay = require('aws-xray-sdk');
+const AWS = require('aws-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const axios = require('axios');
 const moment = require('moment');
@@ -416,7 +417,6 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async (even
 });
 
 // async function updateProgram(data) {
-//   const AWS = require('aws-sdk');
 //   const docClient = new AWS.DynamoDB.DocumentClient();
 //   var params = {
 //     TableName: process.env.tableProgram,
