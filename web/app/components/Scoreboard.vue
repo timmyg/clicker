@@ -116,6 +116,7 @@ section.main {
       display: inline-block;
     }
     .status {
+      font-size: 15px;
       text-align: right;
     }
   }
