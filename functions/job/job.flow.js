@@ -2,6 +2,8 @@
 const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const awsXRay = require('aws-xray-sdk');
+const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 
 declare class process {
 	static env: {

@@ -1,6 +1,7 @@
 // @flow
 const dynamoose = require('dynamoose');
-const AWS = require('aws-sdk');
+const awsXRay = require('aws-xray-sdk');
+const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
@@ -82,52 +83,57 @@ const nationalChannels: number[] = [
 	//, 106 //LIVE4K2
 ];
 
-function init() {
-	Program = dynamoose.model(
-		process.env.tableProgram,
-		{
-			region: {
-				type: String,
-				hashKey: true,
-				index: true
-			},
-			id: { type: String, rangeKey: true },
-			start: { type: Number, rangeKey: true },
-			end: Number,
-			channel: Number,
-			channelMinor: Number,
-			channelTitle: String,
-			title: String, // "Oklahoma State @ Kansas"
-			episodeTitle: String, // "Oklahoma State at Kansas"
-			description: String,
-			durationMins: Number, // mins
-			live: Boolean,
-			repeat: Boolean,
-			sports: Boolean,
-			programmingId: String, // "SH000296530000" - use this to get summary
-			channelCategories: [ String ], // ["Sports Channels"]
-			subcategories: [ String ], // ["Basketball"]
-			mainCategory: String, // "Sports"
-			// dynamic fields
-			nextProgramTitle: String,
-			nextProgramStart: Number,
-			points: Number,
-			synced: Boolean // synced with description from separate endpoint
+if (process.env.NODE_ENV === 'test') {
+	dynamoose.AWS.config.update({
+		accessKeyId: 'test',
+		secretAccessKey: 'test',
+		region: 'test'
+	});
+}
+Program = dynamoose.model(
+	process.env.tableProgram,
+	{
+		region: {
+			type: String,
+			hashKey: true,
+			index: true
 		},
-		{
-			timestamps: true,
-			expires: {
-				ttl: 86400,
-				attribute: 'expires',
-				returnExpiredItems: false,
-				defaultExpires: (x) => {
-					// expire 30 minutes after end
-					return moment(x.end).add(30, 'minutes').toDate();
-				}
+		id: { type: String, rangeKey: true },
+		start: { type: Number, rangeKey: true },
+		end: Number,
+		channel: Number,
+		channelMinor: Number,
+		channelTitle: String,
+		title: String, // "Oklahoma State @ Kansas"
+		episodeTitle: String, // "Oklahoma State at Kansas"
+		description: String,
+		durationMins: Number, // mins
+		live: Boolean,
+		repeat: Boolean,
+		sports: Boolean,
+		programmingId: String, // "SH000296530000" - use this to get summary
+		channelCategories: [ String ], // ["Sports Channels"]
+		subcategories: [ String ], // ["Basketball"]
+		mainCategory: String, // "Sports"
+		// dynamic fields
+		nextProgramTitle: String,
+		nextProgramStart: Number,
+		points: Number,
+		synced: Boolean // synced with description from separate endpoint
+	},
+	{
+		timestamps: true,
+		expires: {
+			ttl: 86400,
+			attribute: 'expires',
+			returnExpiredItems: false,
+			defaultExpires: (x) => {
+				// expire 30 minutes after end
+				return moment(x.end).add(30, 'minutes').toDate();
 			}
 		}
-	);
-}
+	}
+);
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('hi', process.env.tableProgram);
@@ -146,7 +152,6 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async (event) => {
 		.headers(event.headers)
 		.go();
 
-	init();
 	const initialChannels = nationalChannels;
 	// get all programs for right now
 	const now = moment().unix() * 1000;
@@ -277,8 +282,6 @@ function rank(program) {
 
 module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async (event) => {
 	try {
-		init();
-
 		for (const region of allRegions) {
 			const { defaultZip, name, localChannels } = region;
 			console.log(`sync local channels: ${name}/${defaultZip} for channels ${localChannels.join(', ')}`);
@@ -297,7 +300,6 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async (event) => {
 });
 
 module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async (event) => {
-	// init();
 	// const x = await Program.query('region')
 	// 	.using('startLocalIndex')
 	// 	.eq('cincinnati')
@@ -311,7 +313,6 @@ module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async (event) =>
 });
 
 async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
-	init();
 	// channels may have minor channel, so get main channel number
 	const channels = regionChannels.concat(nationalChannels);
 	const channelsString = getChannels(channels).join(',');
@@ -383,7 +384,6 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('consume');
 	console.log(event);
-	init();
 	const { id, programmingId, region } = JSON.parse(event.Records[0].body);
 	const url = `${directvEndpoint}/program/flip/${programmingId}`;
 	const options = {

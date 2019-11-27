@@ -5,6 +5,7 @@ provider:
   memorySize: 128
   versionFunctions: false
   runtime: nodejs10.x
+  tracing: true
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
@@ -15,6 +16,7 @@ plugins:
   - serverless-deployment-bucket
   - serverless-sentry
   - serverless-dotenv-plugin
+  - serverless-plugin-tracing
 
 custom:
   stage: ${opt:stage}

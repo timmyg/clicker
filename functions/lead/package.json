@@ -16,10 +16,13 @@
     "serverless": "^1.36.3",
     "serverless-domain-manager": "^2.6.13",
     "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-plugin-tracing": "^2.0.0",
     "serverless-prune-plugin": "^1.4.0",
     "serverless-sentry": "^1.2.0"
   },
   "dependencies": {
+    "aws-sdk": "^2.580.0",
+    "aws-xray-sdk": "^2.5.0",
     "dotenv": "^6.2.0",
     "hubspot": "^2.0.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
