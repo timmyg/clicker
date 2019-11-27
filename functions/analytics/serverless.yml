@@ -8,6 +8,14 @@ provider:
   tracing: true
   deploymentBucket:
     name: serverless-deploys-clicker
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
   environment:
     stage: ${self:custom.stage}
     segmentWriteKey: ${self:custom.segmentKey.${self:custom.stage}}
