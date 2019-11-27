@@ -106,6 +106,7 @@ section.main {
 }
 .game-wrapper {
   margin-bottom: 16px;
+  padding-right: 8px;
   .game {
     border: 2px solid lightgrey;
     border-radius: 4px;
