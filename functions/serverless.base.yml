@@ -3,6 +3,7 @@
 #   name: aws
 memorySize: 128
 #   runtime: nodejs10.x
+  tracing: true
 #   deploymentBucket:
 #     name: serverless-deploys-clicker
 #   environment:
@@ -13,6 +14,8 @@ memorySize: 128
 #         - dynamodb:*
 #         - lambda:InvokeFunction
 #         - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
 #       Resource: '*'
 # plugins:
 #   - serverless-domain-manager

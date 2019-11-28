@@ -13,8 +13,8 @@
       >
         <div class="league">{{leagueName}}</div>
         <div class="grid">
-          <div v-for="game in games" v-bind:key="game.id" class="game col-3">
-            <div class="row">
+          <div v-for="game in games" v-bind:key="game.id" class="game-wrapper col-3">
+            <div class=" game row">
               <div class="col-8">
                 <div class="team away"> 
                   <img :src="game.away.logo" />
@@ -104,12 +104,24 @@ export default Vue.extend({
 section.main {
   padding-top: 100px;
 }
-.game {
+.game-wrapper {
   margin-bottom: 16px;
-  img {
-    width: 30px;
-    display: inline-block;
+  padding-right: 8px;
+  .game {
+    border: 2px solid lightgrey;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 6px;
+    img {
+      width: 30px;
+      display: inline-block;
+    }
+    .status {
+      font-size: 15px;
+      text-align: right;
+    }
   }
+
 }
 // .game {
 //   display: flex;

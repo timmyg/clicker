@@ -6,6 +6,7 @@ provider:
   region: eu-central-1 # Germany
   versionFunctions: false
   runtime: nodejs10.x
+  tracing: true
   deploymentBucket:
     name: serverless-deploys-clicker-eu-central-1
   environment:
@@ -18,12 +19,15 @@ provider:
         - dynamodb:*
         - lambda:InvokeFunction
         - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
       Resource: '*'
 plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
   - serverless-sentry
   - serverless-dotenv-plugin
+  - serverless-plugin-tracing
 
 custom:
   stage: ${opt:stage}

@@ -6,88 +6,91 @@ const moment = require('moment-timezone');
 const AWS = require('aws-sdk');
 const objectMapper = require('object-mapper');
 const _ = require('lodash');
+const awsXRay = require('aws-xray-sdk');
+const awsSdk = awsXRay.captureAWS(AWS);
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 let Game;
 
-function init() {
-	console.log('init');
-	dynamoose.setDefaults({
-		create: false,
-		update: false
+if (process.env.NODE_ENV === 'test') {
+	dynamoose.AWS.config.update({
+		accessKeyId: 'test',
+		secretAccessKey: 'test',
+		region: 'test'
 	});
-	Game = dynamoose.model(
-		process.env.tableGame,
-		{
-			start: { type: String, hashKey: true },
-			id: {
-				type: Number,
-				rangeKey: true
-			},
-			status: {
-				type: String,
-				required: true,
-				index: {
-					global: true
-				}
-			},
-			leagueName: String,
-			scoreboard: {
-				display: String,
-				clock: String,
-				period: Number
-			},
-			broadcast: {
-				network: String
-			},
-			away: {
-				id: Number,
-				score: Number,
-				name: {
-					full: String,
-					short: String,
-					abbr: String,
-					display: String
-				},
-				logo: String,
-				rank: Number,
-				book: {
-					moneyline: Number,
-					spread: Number
-				}
-			},
-			home: {
-				id: Number,
-				score: Number,
-				name: {
-					full: String,
-					short: String,
-					abbr: String,
-					display: String
-				},
-				logo: String,
-				rank: Number,
-				book: {
-					moneyline: Number,
-					spread: Number
-				}
-			},
-			book: {
-				total: Number
+}
+Game = dynamoose.model(
+	process.env.tableGame,
+	{
+		start: { type: String, hashKey: true },
+		id: {
+			type: Number,
+			rangeKey: true
+		},
+		status: {
+			type: String,
+			required: true,
+			index: {
+				global: true
 			}
 		},
-		{
-			timestamps: true,
-			expires: {
-				ttl: 86400,
-				attribute: 'expires',
-				returnExpiredItems: false,
-				defaultExpires: (x) => {
-					return moment(x.start).add(9, 'hours').toDate();
-				}
+		leagueName: String,
+		scoreboard: {
+			display: String,
+			clock: String,
+			period: Number
+		},
+		broadcast: {
+			network: String
+		},
+		away: {
+			id: Number,
+			score: Number,
+			name: {
+				full: String,
+				short: String,
+				abbr: String,
+				display: String
+			},
+			logo: String,
+			rank: Number,
+			book: {
+				moneyline: Number,
+				spread: Number
+			}
+		},
+		home: {
+			id: Number,
+			score: Number,
+			name: {
+				full: String,
+				short: String,
+				abbr: String,
+				display: String
+			},
+			logo: String,
+			rank: Number,
+			book: {
+				moneyline: Number,
+				spread: Number
+			}
+		},
+		book: {
+			total: Number
+		}
+	},
+	{
+		timestamps: true,
+		expires: {
+			ttl: 86400,
+			attribute: 'expires',
+			returnExpiredItems: false,
+			defaultExpires: (x) => {
+				return moment(x.start).add(9, 'hours').toDate();
 			}
 		}
-	);
-}
+	}
+);
+// }
 
 class SiLeague {
 	name: string; // Major League Baseball, College Football
@@ -263,24 +266,23 @@ function transformSIUrl(webUrl: string): string {
 // });
 
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async (event) => {
-	init();
-	const currentTime = moment()
-		// .tz('America/Los_Angeles')
-		.subtract(5, 'hours')
-		.toDate();
+	const currentTime = moment().subtract(5, 'hours').toDate();
 	const allEvents = await pullFromActionNetwork([ currentTime ]);
-	console.log('allEvents', allEvents.length);
-	const inProgressEvents = getUpdatedGames(allEvents);
-	console.log('inProgressEvents', inProgressEvents.length);
-	if (inProgressEvents && inProgressEvents.length) {
-		await updateGames(inProgressEvents);
+	if (allEvents && allEvents.length) {
+		console.log('allEvents', allEvents.length);
+		const inProgressEvents = getUpdatedGames(allEvents);
+		console.log('inProgressEvents', inProgressEvents.length);
+		if (inProgressEvents && inProgressEvents.length) {
+			await updateGames(inProgressEvents);
+		}
+		return respond(200, { inProgressEvents: inProgressEvents.length });
+	} else {
+		return respond(200, { events: 0 });
 	}
-	return respond(200, { inProgressEvents: inProgressEvents.length });
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async (event) => {
 	try {
-		init();
 		console.log('get games');
 		console.time('all scores');
 		const allGames = await Game.query('status')
@@ -315,7 +317,6 @@ type actionNetworkRequest = {
 };
 
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async (event) => {
-	init();
 	console.log('get games...');
 	const allGames = await Game.scan().exec();
 	console.log('existingGames:', allGames.length);
