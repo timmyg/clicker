@@ -76,6 +76,7 @@ functions:
               - content-type
   checkBoxesInfo:
     handler: remote.checkBoxesInfo
+    timeout: 12
     events:
       - http:
           path: '/boxes/info'
