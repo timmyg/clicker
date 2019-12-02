@@ -53,6 +53,7 @@ Location = dynamoose.model(
 				appActive: Boolean,
 				channel: Number,
 				channelChangeAt: Date,
+				updatedAt: Date,
 				channelSource: {
 					type: String,
 					enum: [ 'app', 'control center', 'manual', 'control center daily' ]
@@ -313,16 +314,17 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 		const originalChannel = location.boxes[i]['channel'];
 		console.log('original channel', originalChannel);
 		console.log('current channel', major);
+		
+		await new Invoke()
+			.service('location')
+			.name('updateBoxInfo')
+			.body({ channel: major, source: 'manual' })
+			.pathParams({ id: location.id, boxId })
+			.async()
+			.go();
+			
 		if (originalChannel !== major) {
-			await new Invoke()
-				.service('location')
-				.name('updateBoxChannel')
-				.body({ channel: major, source: 'manual' })
-				.pathParams({ id: location.id, boxId })
-				.async()
-				.go();
 
-			console.time('track event');
 			const userId = 'system';
 			const name = 'Manual Zap';
 			const data = {
@@ -333,7 +335,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 				locationNeighborhood: location.neighborhood
 			};
 			await new Invoke().service('analytics').name('track').body({ userId, name, data }).async().go();
-			console.timeEnd('track event');
 
 			const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location
 				.boxes[i].zone})`;
@@ -532,7 +533,7 @@ module.exports.health = async (event: any) => {
 	return respond(200, 'ok');
 };
 
-module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async (event) => {
+module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async (event) => {
 	const { id: locationId, boxId } = getPathParameters(event);
 	const { channel, source } = getBody(event);
 
@@ -544,23 +545,22 @@ module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async (event
 
 async function updateLocationBoxChannel(locationId, boxIndex, channel: number, source) {
 	const AWS = require('aws-sdk');
-	const docClient = new AWS.DynamoDB.DocumentClient();
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const now = moment().unix() * 1000;
 	var params = {
 		TableName: process.env.tableLocation,
 		Key: { id: locationId },
 		ReturnValues: 'ALL_NEW',
-		UpdateExpression:
-			'set boxes[' +
-			boxIndex +
-			'].channel = :channel, boxes[' +
-			boxIndex +
-			'].channelSource = :channelSource, boxes[' +
-			boxIndex +
-			'].channelChangeAt = :channelChangeAt',
-		ExpressionAttributeValues: {
-			':channel': parseInt(channel),
-			':channelSource': source,
-			':channelChangeAt': moment().unix() * 1000
+    UpdateExpression: `set 
+       boxes[${boxIndex}].channel = :channel,
+       boxes[${boxIndex}].channelSource = :channelSource,
+       boxes[${boxIndex}].channelChangeAt = :channelChangeAt,
+       boxes[${boxIndex}].updatedAt = :updatedAt`,
+    ExpressionAttributeValues: {
+      ':channel': parseInt(channel),
+      ':channelSource': source,
+      ':channelChangeAt': now,
+      ':updatedAt': now,
 		}
 	};
 	console.log({ params });
