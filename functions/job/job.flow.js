@@ -62,6 +62,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async (eve
 		.pathParams({ regions })
 		.headers(event.headers)
 		.go();
+	console.log('locations:', locations.length, regions);
 	for (location of locations) {
 		const { losantId } = location;
 		console.log(`sync box (${location.name}):`, { losantId });
