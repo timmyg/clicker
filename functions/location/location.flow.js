@@ -323,8 +323,12 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 			.async()
 			.go();
 
-		if (originalChannel !== major) {
-
+		// if channel is different and is a control center box
+		//  - track via analytics
+		//  - send slack notif
+		//  - send to airtable sheet
+		if (originalChannel !== major && location.boxes[i].zone) {
+			
 			const userId = 'system';
 			const name = 'Manual Zap';
 			const data = {
@@ -338,8 +342,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 
 			const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location
 				.boxes[i].zone})`;
-			await new Invoke().service('notification').name('sendControlCenter').body({ text }).async().go();
-			await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
+
+			// only log if it is a zone
+				await new Invoke().service('notification').name('sendControlCenter').body({ text }).async().go();
+				// await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
 
 			await new Invoke()
 				.service('admin')
