@@ -5,9 +5,10 @@ provider:
   memorySize: 128
   versionFunctions: false
   runtime: nodejs10.x
+  tracing: true
   deploymentBucket:
     name: serverless-deploys-clicker
-  environment:
+  environment: 
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
     serviceName: ${self:service}
@@ -17,6 +18,8 @@ provider:
         - dynamodb:*
         - lambda:InvokeFunction
         - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
       Resource: '*'
     - Effect: Allow
       Action:
@@ -35,6 +38,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-sentry
   - serverless-dotenv-plugin
+  - serverless-plugin-tracing
 
 custom:
   stage: ${opt:stage, self:provider.stage}

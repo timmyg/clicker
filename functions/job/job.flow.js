@@ -2,6 +2,8 @@
 const Airtable = require('airtable');
 const moment = require('moment');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const awsXRay = require('aws-xray-sdk');
+const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 
 declare class process {
 	static env: {
@@ -71,49 +73,56 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async (eve
 });
 
 module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async (event) => {
-	const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-	console.log('searching for games to update score');
-	// try {
-	let allGames = await base('Games')
-		.select({
-			view: 'Score Update'
-		})
-		.all();
-	// .eachPage(
-	// async (allGames, fetchNextPage) => {
-	console.log('allGames', allGames.length);
-	if (allGames.length) {
-		for (const game of allGames) {
-			const siWebUrl: string = game.get('Scores Link');
-			try {
-				console.log({ game });
-				const gameOver: boolean = game.get('Game Over');
-				const blowout: boolean = game.get('Blowout');
-				const gameId: string = game.id;
-				const invoke = new Invoke();
-				const { data } = await invoke
-					.service('game')
-					.name('getStatus')
-					.body({ url: siWebUrl })
-					.headers(event.headers)
-					.go();
-				console.log({ data });
-				const gameStatus: GameStatus = data;
-				console.log({ gameStatus });
-				await base('Games').update(gameId, {
-					'Game Status': gameStatus.description,
-					'Game Over': gameStatus.ended,
-					Started: gameStatus.started,
-					Blowout: gameStatus.blowout || false
-				});
-				// }
-			} catch (e) {
-				Raven.captureException(e);
+	try {
+		const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+		console.log('searching for games to update score');
+		// try {
+		let allGames = await base('Games')
+			.select({
+				view: 'Score Update'
+			})
+			.all();
+		// .eachPage(
+		// async (allGames, fetchNextPage) => {
+		console.log('allGames', allGames.length);
+		if (allGames.length) {
+			for (const game of allGames) {
+				const siWebUrl: string = game.get('Scores Link');
+				try {
+					console.log({ game });
+					const gameOver: boolean = game.get('Game Over');
+					const blowout: boolean = game.get('Blowout');
+					const gameId: string = game.id;
+					const invoke = new Invoke();
+					const { data } = await invoke
+						.service('game')
+						.name('getStatus')
+						.body({ url: siWebUrl })
+						.headers(event.headers)
+						.go();
+					console.log({ data });
+					const gameStatus: GameStatus = data;
+					console.log({ gameStatus });
+					await base('Games').update(gameId, {
+						'Game Status': gameStatus.description,
+						'Game Over': gameStatus.ended,
+						Started: gameStatus.started,
+						Blowout: gameStatus.blowout || false
+					});
+					// }
+				} catch (e) {
+					Raven.captureException(e);
+				}
 			}
+			// fetchNextPage();
 		}
-		// fetchNextPage();
+		return respond(200);
+	} catch (e) {
+		console.error(`failed to updateAllGamesStatus`);
+		console.error(e);
+		Raven.captureException(e);
+		return respond(400);
 	}
-	return respond(200);
 });
 
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async (event) => {

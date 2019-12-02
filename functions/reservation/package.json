@@ -18,6 +18,8 @@
   "license": "ISC",
   "dependencies": {
     "analytics-node": "^3.3.0",
+    "aws-sdk": "^2.580.0",
+    "aws-xray-sdk": "^2.5.0",
     "dotenv": "^8.0.0",
     "dynamoose": "^1.7.2",
     "moment": "^2.24.0",
@@ -30,6 +32,7 @@
     "serverless": "^1.36.3",
     "serverless-domain-manager": "^2.6.13",
     "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-plugin-tracing": "^2.0.0",
     "serverless-prune-plugin": "^1.4.0",
     "serverless-sentry": "^1.2.0"
   }

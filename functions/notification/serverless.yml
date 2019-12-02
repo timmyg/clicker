@@ -5,8 +5,17 @@ provider:
   memorySize: 128
   versionFunctions: false
   runtime: nodejs10.x
+  tracing: true
   deploymentBucket:
     name: serverless-deploys-clicker
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
   environment:
     stage: ${self:custom.stage}
     slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
@@ -20,6 +29,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-sentry
   - serverless-dotenv-plugin
+  - serverless-plugin-tracing
 
 custom:
   stage: ${opt:stage, self:provider.stage}
