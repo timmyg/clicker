@@ -325,9 +325,8 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 
 		// if channel is different and is a control center box
 		//  - track via analytics
-		//  - send slack notif
-		//  - send to airtable sheet
-		if (originalChannel !== major && location.boxes[i].zone) {
+		
+		if (originalChannel !== major) {
 			
 			const userId = 'system';
 			const name = 'Manual Zap';
@@ -340,27 +339,32 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 			};
 			await new Invoke().service('analytics').name('track').body({ userId, name, data }).async().go();
 
-			const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location
-				.boxes[i].zone})`;
+			// if control center or app box
+			//  - send slack notif
+			//  - send to airtable sheet
+			if (!!location.boxes[i].zone || location.boxes[i].appActive) {
 
-			// only log if it is a zone
+				const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location
+					.boxes[i].zone})`;
+
 				await new Invoke().service('notification').name('sendControlCenter').body({ text }).async().go();
 				// await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
 
-			await new Invoke()
-				.service('admin')
-				.name('logChannelChange')
-				.body({
-					location: `${location.name} (${location.neighborhood})`,
-					zone: box.zone,
-					from: originalChannel,
-					to: major,
-					time: new Date(),
-					type: name,
-					boxId
-				})
-				.async()
-				.go();
+				await new Invoke()
+					.service('admin')
+					.name('logChannelChange')
+					.body({
+						location: `${location.name} (${location.neighborhood})`,
+						zone: box.zone,
+						from: originalChannel,
+						to: major,
+						time: new Date(),
+						type: name,
+						boxId
+					})
+					.async()
+					.go();
+			}
 		}
 	}
 
