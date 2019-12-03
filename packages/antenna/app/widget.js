@@ -125,8 +125,16 @@ class Widget {
 								logger.info('getTuned', { boxId, client, ip });
 								_remote.getTuned(client || '0', (err, response) => {
 									if (err) {
-										// return callback(err);
 										logger.error('getTuned error!!', err);
+										if (err && err.message && err.message.includes('getaddrinfo ENOTFOUND')) {
+											logger.error('BAD IP ADDRESS');
+										} else if (
+											err &&
+											err.message &&
+											err.message.includes('Forbidden.Command not allowed.')
+										) {
+											logger.error('NEED TO ENABLE CURRENT PROGRAM ACCESS');
+										}
 									} else {
 										boxesInfo.push({ boxId, info: response });
 									}
@@ -134,17 +142,11 @@ class Widget {
 								});
 							},
 							function(err) {
-								// console.log('hello!', JSON.stringify(boxesInfo));
-								// if (err) {
-								// 	// console.log(err);
-								// 	logger.error('error!!', err);
-								// }
-								// else {
 								if (boxesInfo && boxesInfo.length) {
-									// console.log('saveBoxesInfo!!!', JSON.stringify(boxesInfo));
-									logger.error('saveBoxesInfo!!', boxesInfo);
+									logger.info('saveBoxesInfo!!', boxesInfo);
 									context.api.saveBoxesInfo(boxesInfo);
-									// }
+								} else {
+									logger.error('no boxes');
 								}
 							}
 						);
