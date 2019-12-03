@@ -246,8 +246,8 @@ functions:
               - partner
               - authorization
               - content-type
-  updateBoxChannel:
-    handler: location.updateBoxChannel
+  updateBoxInfo:
+    handler: location.updateBoxInfo
   allOff:
     handler: location.allOff
     events:
