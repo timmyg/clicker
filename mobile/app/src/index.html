@@ -71,7 +71,6 @@
       drift.on('ready', function(api) {
         drift.config({ enableWelcomeMessage: false });
         // hide the widget when it first loads
-        console.log('hide@');
         api.hideWelcomeMessage();
         api.widget.hide();
         // show the widget when you receive a message
