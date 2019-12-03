@@ -53,6 +53,7 @@ Location = dynamoose.model(
 				appActive: Boolean,
 				channel: Number,
 				channelChangeAt: Date,
+				updatedAt: Date,
 				channelSource: {
 					type: String,
 					enum: [ 'app', 'control center', 'manual', 'control center daily' ]
@@ -313,16 +314,20 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 		const originalChannel = location.boxes[i]['channel'];
 		console.log('original channel', originalChannel);
 		console.log('current channel', major);
-		if (originalChannel !== major) {
-			await new Invoke()
-				.service('location')
-				.name('updateBoxChannel')
-				.body({ channel: major, source: 'manual' })
-				.pathParams({ id: location.id, boxId })
-				.async()
-				.go();
+		
+		await new Invoke()
+			.service('location')
+			.name('updateBoxInfo')
+			.body({ channel: major, source: 'manual' })
+			.pathParams({ id: location.id, boxId })
+			.async()
+			.go();
 
-			console.time('track event');
+		// if channel is different and is a control center box
+		//  - track via analytics
+		
+		if (originalChannel !== major) {
+			
 			const userId = 'system';
 			const name = 'Manual Zap';
 			const data = {
@@ -333,27 +338,33 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 				locationNeighborhood: location.neighborhood
 			};
 			await new Invoke().service('analytics').name('track').body({ userId, name, data }).async().go();
-			console.timeEnd('track event');
 
-			const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location
-				.boxes[i].zone})`;
-			await new Invoke().service('notification').name('sendControlCenter').body({ text }).async().go();
-			await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
+			// if control center or app box
+			//  - send slack notif
+			//  - send to airtable sheet
+			if (!!location.boxes[i].zone || location.boxes[i].appActive) {
 
-			await new Invoke()
-				.service('admin')
-				.name('logChannelChange')
-				.body({
-					location: `${location.name} (${location.neighborhood})`,
-					zone: box.zone,
-					from: originalChannel,
-					to: major,
-					time: new Date(),
-					type: name,
-					boxId
-				})
-				.async()
-				.go();
+				const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location
+					.boxes[i].zone})`;
+
+				await new Invoke().service('notification').name('sendControlCenter').body({ text }).async().go();
+				// await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
+
+				await new Invoke()
+					.service('admin')
+					.name('logChannelChange')
+					.body({
+						location: `${location.name} (${location.neighborhood})`,
+						zone: box.zone,
+						from: originalChannel,
+						to: major,
+						time: new Date(),
+						type: name,
+						boxId
+					})
+					.async()
+					.go();
+			}
 		}
 	}
 
@@ -492,11 +503,8 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async (even
 		};
 		if (location.boxes) {
 			for (const box of location.boxes) {
-				if (!!box.zone) {
-					// ensure box has a zone to only track control center boxes
-					const { id: boxId, ip, clientAddress: client } = box;
-					body.boxes.push({ boxId, ip, client });
-				}
+				const { id: boxId, ip, clientAddress: client } = box;
+				body.boxes.push({ boxId, ip, client });
 			}
 			if (losantId.length > 3 && !!body.boxes.length) {
 				console.log({ body });
@@ -532,7 +540,7 @@ module.exports.health = async (event: any) => {
 	return respond(200, 'ok');
 };
 
-module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async (event) => {
+module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async (event) => {
 	const { id: locationId, boxId } = getPathParameters(event);
 	const { channel, source } = getBody(event);
 
@@ -544,23 +552,22 @@ module.exports.updateBoxChannel = RavenLambdaWrapper.handler(Raven, async (event
 
 async function updateLocationBoxChannel(locationId, boxIndex, channel: number, source) {
 	const AWS = require('aws-sdk');
-	const docClient = new AWS.DynamoDB.DocumentClient();
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const now = moment().unix() * 1000;
 	var params = {
 		TableName: process.env.tableLocation,
 		Key: { id: locationId },
 		ReturnValues: 'ALL_NEW',
-		UpdateExpression:
-			'set boxes[' +
-			boxIndex +
-			'].channel = :channel, boxes[' +
-			boxIndex +
-			'].channelSource = :channelSource, boxes[' +
-			boxIndex +
-			'].channelChangeAt = :channelChangeAt',
-		ExpressionAttributeValues: {
-			':channel': parseInt(channel),
-			':channelSource': source,
-			':channelChangeAt': moment().unix() * 1000
+    UpdateExpression: `set 
+       boxes[${boxIndex}].channel = :channel,
+       boxes[${boxIndex}].channelSource = :channelSource,
+       boxes[${boxIndex}].channelChangeAt = :channelChangeAt,
+       boxes[${boxIndex}].updatedAt = :updatedAt`,
+    ExpressionAttributeValues: {
+      ':channel': parseInt(channel),
+      ':channelSource': source,
+      ':channelChangeAt': now,
+      ':updatedAt': now,
 		}
 	};
 	console.log({ params });
