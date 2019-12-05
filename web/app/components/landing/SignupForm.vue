@@ -10,8 +10,15 @@
       id="signup-form"
       v-on:submit.prevent="onSubmit"
       v-else
+      novalidate
     >
       <div class="control control-expanded">
+        <input
+          class="input get-outta-here-bot"
+          type="email"
+          placeholder="Enter your email"
+          v-model.trim="emailBot1"
+        />
         <input
           class="input"
           type="email"
@@ -19,6 +26,12 @@
           v-model.trim="email"
           :disabled="submitting"
           required
+        />
+        <input
+          class="input get-outta-here-bot"
+          type="email"
+          placeholder="Enter your email"
+          v-model.trim="emailBot2"
         />
       </div>
       <div class="control">
@@ -38,6 +51,8 @@ export default {
   data: function() {
     return {
       email: '',
+      emailBot1: '',
+      emailBot2: '',
       submitting: false,
       submitted: false,
       error: false,
@@ -46,7 +61,10 @@ export default {
   methods: {
     onSubmit() {
       this.submitting = true;
-      const { email } = this;
+      const { email, emailBot1, emailBot2 } = this;
+      if (emailBot1.length || emailBot2.length) {
+        return console.info('get outta here bot!')
+      }
       console.log('$analytics');
       console.log(this.$analytics);
       console.log(email);
@@ -71,6 +89,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.get-outta-here-bot {
+  display: none;
+}
 .error {
   color: get-color(alert, error);
 }
