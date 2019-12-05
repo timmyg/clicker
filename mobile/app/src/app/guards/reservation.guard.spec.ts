@@ -5,7 +5,7 @@ import { ReservationGuard } from './reservation.guard';
 describe('ReservationGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ReservationGuard]
+      providers: [ReservationGuard],
     });
   });
 

@@ -87,23 +87,18 @@ export class WalletPage {
         // https://stripe.com/docs/charges
         this.store.dispatch(new fromUser.UpdateCard(result.token.id));
 
-        this.actions$
-          .pipe(
-            ofType(fromUser.UPDATE_CARD_SUCCESS),
-            take(1),
-          )
-          .subscribe(async () => {
-            const toast = await this.toastController.create({
-              message: `💳 Card successfully added. 👐`,
-              duration: 3000,
-              cssClass: 'ion-text-center',
-            });
-            toast.present();
-            this.waiting = false;
-            this.segment.track(this.globals.events.payment.sourceAdded, {
-              type: 'Credit Card',
-            });
+        this.actions$.pipe(ofType(fromUser.UPDATE_CARD_SUCCESS), take(1)).subscribe(async () => {
+          const toast = await this.toastController.create({
+            message: `💳 Card successfully added. 👐`,
+            duration: 3000,
+            cssClass: 'ion-text-center',
           });
+          toast.present();
+          this.waiting = false;
+          this.segment.track(this.globals.events.payment.sourceAdded, {
+            type: 'Credit Card',
+          });
+        });
         this.actions$
           .pipe(ofType(fromUser.UPDATE_CARD_FAIL))
           .pipe(first())
@@ -136,36 +131,31 @@ export class WalletPage {
     this.waiting = true;
     this.store.dispatch(new fromUser.AddFunds(this.selectedPlan));
 
-    this.actions$
-      .pipe(
-        ofType(fromUser.ADD_FUNDS_SUCCESS),
-        take(1),
-      )
-      .subscribe(async () => {
-        this.waiting = false;
-        const toast = await this.toastController.create({
-          message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens. 🎉`,
-          duration: 3000,
-          cssClass: 'ion-text-center',
-        });
-        toast.present();
-        this.onClose();
-        this.segment.track(this.globals.events.payment.fundsAdded, {
-          amount: this.selectedPlan.dollars,
-        });
-        this.store
-          .select(getUserId)
-          .pipe(first(val => !!val))
-          .subscribe(async userId => {
-            this.segment.identify(
-              userId,
-              { paid: true },
-              {
-                // Intercom: { hideDefaultLauncher: true },
-              },
-            );
-          });
+    this.actions$.pipe(ofType(fromUser.ADD_FUNDS_SUCCESS), take(1)).subscribe(async () => {
+      this.waiting = false;
+      const toast = await this.toastController.create({
+        message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens. 🎉`,
+        duration: 3000,
+        cssClass: 'ion-text-center',
       });
+      toast.present();
+      this.onClose();
+      this.segment.track(this.globals.events.payment.fundsAdded, {
+        amount: this.selectedPlan.dollars,
+      });
+      this.store
+        .select(getUserId)
+        .pipe(first(val => !!val))
+        .subscribe(async userId => {
+          this.segment.identify(
+            userId,
+            { paid: true },
+            {
+              // Intercom: { hideDefaultLauncher: true },
+            },
+          );
+        });
+    });
     this.actions$
       .pipe(ofType(fromUser.ADD_FUNDS_FAIL))
       .pipe(first())

@@ -8,13 +8,13 @@
             <div class="label-wrapper">
               <label>Amount</label>
             </div>
-            <span>${{amount}}</span>
+            <span>${{ amount }}</span>
           </div>
           <div v-if="isSubscription">
             <div class="label-wrapper">
               <label>Amount</label>
             </div>
-            <span>${{amount}}/month (starting {{ start || now | moment("M/D/YY") }})</span>
+            <span>${{ amount }}/month (starting {{ start || now | moment('M/D/YY') }})</span>
           </div>
           <div>
             <div class="label-wrapper">
@@ -38,24 +38,20 @@
             <div class="label-wrapper">
               <label>Credit Card</label>
             </div>
-            <card
-              v-if="loadedStripe"
-              class="stripe-card"
-              :stripe="stripePublishableKey"
-              :options="stripeOptions"
-            />
+            <card v-if="loadedStripe" class="stripe-card" :stripe="stripePublishableKey" :options="stripeOptions" />
           </div>
-          <p class="error" v-if="error">{{error}}</p>
+          <p class="error" v-if="error">{{ error }}</p>
           <button class="button button-primary button-block button-shadow" :disabled="submitting">
-            <span v-if="isSubscription">Setup ${{amount}}/month autopay</span>
-            <span v-if="isOneTime">Pay ${{amount}}</span>
+            <span v-if="isSubscription">Setup ${{ amount }}/month autopay</span>
+            <span v-if="isOneTime">Pay ${{ amount }}</span>
           </button>
         </form>
         <section class="completed" v-else>
-          <span
-            v-if="isSubscription"
-          >Successfully setup ${{amount}}/month autopay for the {{ start || now | moment("Do") }} of every month.</span>
-          <span v-if="isOneTime">${{amount}} payment completed. Email receipt is on the way.</span>
+          <span v-if="isSubscription"
+            >Successfully setup ${{ amount }}/month autopay for the {{ start || now | moment('Do') }} of every
+            month.</span
+          >
+          <span v-if="isOneTime">${{ amount }} payment completed. Email receipt is on the way.</span>
           <div class="emojis mt-24">
             <div>🎉</div>
             <div>🎊</div>
@@ -191,7 +187,7 @@ export default {
     },
   },
 };
-</script> 
+</script>
 
 <style lang="scss">
 .site-header-center {
@@ -312,4 +308,4 @@ $danger: #cf665b;
 main {
   padding-top: 100px;
 }
-</style> 
+</style>

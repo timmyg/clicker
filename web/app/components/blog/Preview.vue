@@ -1,16 +1,20 @@
 <template>
   <article>
-    <nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug }}" class="title">
+    <nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }" class="title">
       <div class="wrap">
         <img
           class="primary thumbnail"
           :src="post.fields.featuredImage.fields.file.url + '?fit=scale&w=350&h=196'"
-          :srcset="`${post.fields.featuredImage.fields.file.url}?w=350&h=196&fit=fill 350w, ${post.fields.featuredImage.fields.file.url}?w=1000&h=562&fit=fill 1000w, ${post.fields.featuredImage.fields.file.url}?w=2000&h=1125&fit=fill 2000w`"
+          :srcset="
+            `${post.fields.featuredImage.fields.file.url}?w=350&h=196&fit=fill 350w, ${
+              post.fields.featuredImage.fields.file.url
+            }?w=1000&h=562&fit=fill 1000w, ${post.fields.featuredImage.fields.file.url}?w=2000&h=1125&fit=fill 2000w`
+          "
           sizes="(min-width: 1024px) 400px, 100vw"
         />
         <div class="secondary">
           <h4 class="title">{{ post.fields.title }}</h4>
-          <time>{{ post.sys.createdAt | moment("MMMM Do YYYY") }}</time>
+          <time>{{ post.sys.createdAt | moment('MMMM Do YYYY') }}</time>
           <p>{{ post.fields.summary }}</p>
         </div>
       </div>
@@ -20,9 +24,10 @@
       <nuxt-link
         v-for="tag in post.fields.tags"
         :key="tag"
-        :to="{ name: 'tags-tag', params: { tag: tag }}"
+        :to="{ name: 'tags-tag', params: { tag: tag } }"
         class="tag"
-      >{{ tag }}</nuxt-link>
+        >{{ tag }}</nuxt-link
+      >
     </div>
   </article>
 </template>
@@ -33,7 +38,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped >
+<style lang="scss" scoped>
 // img {
 //   height: 300px;
 // }

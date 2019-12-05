@@ -7,16 +7,10 @@
           <div class="card">
             <header>Colors</header>
             <div class="colors">
-              <div
-                class="color"
-                id="primary"
-                v-bind:style="{ background: colors.primary}"
-              >{{colors.primary}}</div>
-              <div
-                class="color"
-                id="secondary"
-                v-bind:style="{ background: colors.secondary}"
-              >{{colors.secondary}}</div>
+              <div class="color" id="primary" v-bind:style="{ background: colors.primary }">{{ colors.primary }}</div>
+              <div class="color" id="secondary" v-bind:style="{ background: colors.secondary }">
+                {{ colors.secondary }}
+              </div>
             </div>
           </div>
         </div>
@@ -40,10 +34,7 @@
           <div class="card">
             <header>Logo TV Square</header>
             <div>
-              <img
-                src="https://clicker-brand.s3.amazonaws.com/logo-tv-square-180.png"
-                alt="Clicker tv logo"
-              />
+              <img src="https://clicker-brand.s3.amazonaws.com/logo-tv-square-180.png" alt="Clicker tv logo" />
             </div>
           </div>
         </div>
@@ -51,10 +42,7 @@
           <div class="card">
             <header>Logo Square w/ bg</header>
             <div>
-              <img
-                src="https://clicker-brand.s3.amazonaws.com/logo-square.png"
-                alt="Clicker logo square"
-              />
+              <img src="https://clicker-brand.s3.amazonaws.com/logo-square.png" alt="Clicker logo square" />
             </div>
           </div>
         </div>
@@ -70,10 +58,7 @@
           <div class="card">
             <header>Checkerboard</header>
             <div>
-              <img
-                src="https://clicker-brand.s3.amazonaws.com/checkerboard.png"
-                alt="Clicker checkerboard"
-              />
+              <img src="https://clicker-brand.s3.amazonaws.com/checkerboard.png" alt="Clicker checkerboard" />
             </div>
           </div>
         </div>

@@ -4,17 +4,8 @@ import { State as ProgramState } from './program.reducer';
 
 export const getProgramsState = createFeatureSelector<ProgramState>('program');
 
-export const getAllPrograms = createSelector(
-  getProgramsState,
-  fromPrograms.getAllPrograms,
-);
+export const getAllPrograms = createSelector(getProgramsState, fromPrograms.getAllPrograms);
 
-export const getLoading = createSelector(
-  getProgramsState,
-  fromPrograms.getLoading,
-);
+export const getLoading = createSelector(getProgramsState, fromPrograms.getLoading);
 
-export const getError = createSelector(
-  getProgramsState,
-  fromPrograms.getError,
-);
+export const getError = createSelector(getProgramsState, fromPrograms.getError);

@@ -9,10 +9,9 @@ describe('ReferralPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReferralPage ],
+      declarations: [ReferralPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

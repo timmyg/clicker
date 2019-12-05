@@ -10,10 +10,10 @@
                 You pay a lot for DirecTV.
                 <br />Let's Maximize it.
               </h1>
-              <p
-                class="m-0 mb-24"
-                v-scroll-reveal="{ delay: 200 , origin: 'left'}"
-              >We guarantee the most compelling local and national sports are always on your TVs, taking that responsibility off your staff.</p>
+              <p class="m-0 mb-24" v-scroll-reveal="{ delay: 200, origin: 'left' }">
+                We guarantee the most compelling local and national sports are always on your TVs, taking that
+                responsibility off your staff.
+              </p>
               <div v-scroll-reveal="{ delay: 400 }">
                 <!-- <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a> -->
                 <SignupForm />
@@ -21,7 +21,7 @@
             </div>
             <div
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
-              v-scroll-reveal="{ scale: .9}"
+              v-scroll-reveal="{ scale: 0.9 }"
             >
               <img src="/images/landing/wall-tvs.png" alt="Wall with three tvs" />
             </div>
@@ -59,4 +59,3 @@ export default {
   }
 }
 </style>
-

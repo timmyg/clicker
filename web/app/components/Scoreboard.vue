@@ -6,37 +6,33 @@
         <a href class="link right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
         <a class="link right" v-else disabled>refreshing...</a>
       </div>
-      <div
-        v-for="(games, leagueName) in gamesByLeague"
-        v-bind:key="leagueName"
-        class="league-wrapper"
-      >
-        <div class="league">{{leagueName}}</div>
+      <div v-for="(games, leagueName) in gamesByLeague" v-bind:key="leagueName" class="league-wrapper">
+        <div class="league">{{ leagueName }}</div>
         <div class="grid">
           <div v-for="game in games" v-bind:key="game.id" class="game-wrapper col-3">
             <div class=" game row">
               <div class="col-8">
-                <div class="team away"> 
+                <div class="team away">
                   <img :src="game.away.logo" />
-                  <span> 
-                    <small v-if="game.away.rank">{{game.away.rank}}&nbsp;</small>
-                    <span class="name">{{game.away.name.abbr}}</span>
-                    <span class="score">{{game.away.score}}</span>
+                  <span>
+                    <small v-if="game.away.rank">{{ game.away.rank }}&nbsp;</small>
+                    <span class="name">{{ game.away.name.abbr }}</span>
+                    <span class="score">{{ game.away.score }}</span>
                   </span>
                 </div>
                 <div class="team home">
                   <img :src="game.home.logo" />
                   <span>
-                    <span v-if="game.home.rank">{{game.home.rank}}&nbsp;</span>
-                    <span class="name">{{game.home.name.abbr}}  </span>
-                    <span class="score">{{game.home.score}}</span>
+                    <span v-if="game.home.rank">{{ game.home.rank }}&nbsp;</span>
+                    <span class="name">{{ game.home.name.abbr }} </span>
+                    <span class="score">{{ game.home.score }}</span>
                   </span>
                 </div>
-              </div> 
-                <div class="col-4 status">
-                  <div class="status">{{game.scoreboard.display}}</div>
-                  <small v-if="game.broadcast">{{game.broadcast.network}}</small>
-                </div>
+              </div>
+              <div class="col-4 status">
+                <div class="status">{{ game.scoreboard.display }}</div>
+                <small v-if="game.broadcast">{{ game.broadcast.network }}</small>
+              </div>
             </div>
           </div>
         </div>
@@ -121,7 +117,6 @@ section.main {
       text-align: right;
     }
   }
-
 }
 // .game {
 //   display: flex;

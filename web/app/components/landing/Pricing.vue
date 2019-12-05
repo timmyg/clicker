@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="tiles-wrap illustration-section-07">
-          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 0 , origin: 'bottom'}">
+          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 0, origin: 'bottom' }">
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
@@ -43,10 +43,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="tiles-item reveal-scale-up"
-            v-scroll-reveal="{ delay: 200 , origin: 'bottom'}"
-          >
+          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 200, origin: 'bottom' }">
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
@@ -63,9 +60,7 @@
                   </div>
                   <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">
-                      <span>
-                        <b class="brand-font">Control Center</b> automatically manages your TVs
-                      </span>
+                      <span> <b class="brand-font">Control Center</b> automatically manages your TVs </span>
                     </li>
                     <li class="is-checked">24 hr/day auto programming</li>
                     <li class="is-checked">Weekly email with upcoming TV sports schedule</li>
@@ -80,10 +75,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="tiles-item reveal-scale-up"
-            v-scroll-reveal="{ delay: 400 , origin: 'bottom'}"
-          >
+          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 400, origin: 'bottom' }">
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
