@@ -28,6 +28,7 @@ declare class process {
     twilioAccountSid: string,
     twilioAuthToken: string,
     twilioServiceSid: string,
+    NODE_ENV: string,
   };
 }
 

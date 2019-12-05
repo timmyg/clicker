@@ -1,5 +1,5 @@
 // @flow
-const Airtable = require('airtable');
+const Airtable: any = require('airtable');
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const request = require('request-promise');
 const awsXRay = require('aws-xray-sdk');

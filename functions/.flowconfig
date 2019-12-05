@@ -1,11 +1,12 @@
 [ignore]
-node_modules
 .*/node_modules/.*
+.*/coverage/.*
+.*/*.json
 
 [include]
-.*\.flow\.js
 
 [libs]
+./.flow-typed
 
 [lints]
 

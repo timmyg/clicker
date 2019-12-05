@@ -12,7 +12,9 @@
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
   },
   "devDependencies": {
-    "flow-bin": "^0.109.0",
+    "flow-bin": "^0.113.0",
+    "flow-mono-cli": "^1.5.2",
+    "flow-typed": "^2.5.1",
     "serverless-prune-plugin": "^1.4.0",
     "serverless-sentry": "^1.2.0"
   }

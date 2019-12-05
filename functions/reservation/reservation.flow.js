@@ -20,6 +20,7 @@ declare class process {
   static env: {
     stage: string,
     tableReservation: string,
+    NODE_ENV: string,
   };
 }
 

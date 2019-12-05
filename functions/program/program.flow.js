@@ -19,6 +19,7 @@ declare class process {
     tableProgramArea: string,
     stage: string,
     newProgramTopicArn: string,
+    NODE_ENV: string,
   };
 }
 

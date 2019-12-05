@@ -12,6 +12,7 @@ declare class process {
   static env: {
     stage: string,
     tableLocation: string,
+    NODE_ENV: string,
   };
 }
 if (process.env.NODE_ENV === 'test') {
@@ -369,7 +370,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       //  - send slack notif
       //  - send to airtable sheet
       if (!!location.boxes[i].zone || location.boxes[i].appActive) {
-        const text = `Manual Zap @ ${location.name} (${location.neighborhood}) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+        const text = `Manual Zap @ ${location.name} (${
+          location.neighborhood
+        }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
 
         await new Invoke()
           .service('notification')
@@ -408,12 +411,7 @@ module.exports.setLabels = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
   const { boxes } = location;
   console.log(boxes, boxesWithLabels);
-  const updatedBoxes = boxes.map(x =>
-    Object.assign(
-      x,
-      boxesWithLabels.find(y => y.setupChannel == x.setupChannel),
-    ),
-  );
+  const updatedBoxes = boxes.map(x => Object.assign(x, boxesWithLabels.find(y => y.setupChannel == x.setupChannel)));
   console.log(updatedBoxes);
   await Location.update({ id }, { boxes: updatedBoxes }, { returnValues: 'ALL_NEW' });
 

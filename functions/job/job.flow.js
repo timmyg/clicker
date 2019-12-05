@@ -58,6 +58,11 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
   return respond(200);
 });
 
+function getChannelForZone(ix: number): number {
+  const initChannels = [206, 209, 208, 212, 219];
+  return initChannels[ix % initChannels.length];
+}
+
 module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   // TODO pull actual regions
   const regions = ['cincinnati'];
@@ -269,10 +274,5 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
 
   return respond(200, { changedCount, waitingCount });
 });
-
-function getChannelForZone(index) {
-  const initChannels = [206, 209, 208, 212, 219];
-  return initChannels[index % initChannels.length];
-}
 
 module.exports.getChannelForZone = getChannelForZone;

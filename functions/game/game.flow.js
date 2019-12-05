@@ -317,7 +317,7 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
 
 type actionNetworkRequest = {
   sport: string,
-  params?: any[],
+  params?: any,
 };
 
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
@@ -344,7 +344,7 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
     );
   }
   console.log('sync');
-  const allEvents = await pullFromActionNetwork(datesToPull);
+  const allEvents: any = await pullFromActionNetwork(datesToPull);
   await updateGames(allEvents);
   return respond(200);
 });
@@ -356,7 +356,7 @@ function removeEmpty(obj) {
   });
 }
 
-function getUpdatedGames(response) {
+function getUpdatedGames(response: any) {
   return response.filter(e => !['time-tbd', 'scheduled'].includes(e.status));
 }
 
@@ -457,7 +457,7 @@ async function updateGames(events: any[]) {
   }
 }
 
-function transformGameV2(game) {
+function transformGameV2(game: any) {
   // set away, home teams
   game.away = game.teams.find(t => t.id === game.away_team_id);
   game.home = game.teams.find(t => t.id === game.home_team_id);
