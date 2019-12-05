@@ -14,17 +14,11 @@
                 </div>
               </div>
               <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                >Game Flow AI</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >
+                <h4 class="mt-0 mb-8 reveal-from-bottom" data-reveal-container=".tiles-item">Game Flow AI</h4>
+                <p class="m-0 text-sm reveal-from-bottom" data-reveal-container=".tiles-item" data-reveal-delay="150">
                   With
-                  <span class="brand-font">Game Flow AI</span>, we read live scoreboard data to make sure a close, intriguing game is never turned off just because another game is about to kick off.
+                  <span class="brand-font">Game Flow AI</span>, we read live scoreboard data to make sure a close,
+                  intriguing game is never turned off just because another game is about to kick off.
                 </p>
               </div>
             </div>
@@ -40,15 +34,11 @@
                 </div>
               </div>
               <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                >Manual Change Override</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >We can't predict what every guest wants to watch. If you put on a game with the traditional remote, we'll turn off our automation to prevent changing over their game.</p>
+                <h4 class="mt-0 mb-8 reveal-from-bottom" data-reveal-container=".tiles-item">Manual Change Override</h4>
+                <p class="m-0 text-sm reveal-from-bottom" data-reveal-container=".tiles-item" data-reveal-delay="150">
+                  We can't predict what every guest wants to watch. If you put on a game with the traditional remote,
+                  we'll turn off our automation to prevent changing over their game.
+                </p>
               </div>
             </div>
           </div>
@@ -63,15 +53,11 @@
                 </div>
               </div>
               <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                >Custom Scheduling</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >We'll work closely with you to ensure you stay on brand by understanding your location's sports preferences and the atmosphere you want to cultivate and preserve.</p>
+                <h4 class="mt-0 mb-8 reveal-from-bottom" data-reveal-container=".tiles-item">Custom Scheduling</h4>
+                <p class="m-0 text-sm reveal-from-bottom" data-reveal-container=".tiles-item" data-reveal-delay="150">
+                  We'll work closely with you to ensure you stay on brand by understanding your location's sports
+                  preferences and the atmosphere you want to cultivate and preserve.
+                </p>
               </div>
             </div>
           </div>
@@ -81,5 +67,4 @@
   </section>
 </template>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

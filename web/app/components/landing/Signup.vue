@@ -2,11 +2,11 @@
   <section
     class="cta section center-content-mobile"
     v-scroll-reveal="{
-  origin : 'right',
-  delay    : 20,
-  distance : '40px',
-  easing   : 'ease-in-out'
-  }"
+      origin: 'right',
+      delay: 20,
+      distance: '40px',
+      easing: 'ease-in-out',
+    }"
   >
     <div class="container">
       <div class="cta-inner section-inner cta-split has-top-divider has-bottom-divider">
@@ -29,4 +29,3 @@ export default {
   },
 };
 </script>
-

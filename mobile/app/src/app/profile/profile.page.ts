@@ -247,14 +247,9 @@ export class ProfilePage {
     this.store.dispatch(new fromReservation.GetAll());
     this.store.dispatch(new fromUser.Refresh());
     // zip(
-    this.actions$
-      .pipe(
-        ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
-        take(1),
-      )
-      .subscribe(() => {
-        event.target.complete();
-      });
+    this.actions$.pipe(ofType(fromReservation.GET_RESERVATIONS_SUCCESS), take(1)).subscribe(() => {
+      event.target.complete();
+    });
   }
 
   async showVersion() {
