@@ -12,18 +12,14 @@
             <div class="tiles-item-inner has-shadow">
               <div class="testimonial-item-header">
                 <div class="testimonial-item-image mt-8 mb-24">
-                  <img
-                    src="/images/landing/testimonials/will.jpg"
-                    alt="Testimonial image 02"
-                    width="56"
-                    height="56"
-                  />
+                  <img src="/images/landing/testimonials/will.jpg" alt="Testimonial image 02" width="56" height="56" />
                 </div>
               </div>
               <div class="testimonial-item-content">
-                <p
-                  class="text-sm mb-24"
-                >I am all in on Clicker. Control Center has proved to be invaluable to us, as it gives me peace of mind that experts are actively managing our TV sports entertainment.</p>
+                <p class="text-sm mb-24">
+                  I am all in on Clicker. Control Center has proved to be invaluable to us, as it gives me peace of mind
+                  that experts are actively managing our TV sports entertainment.
+                </p>
               </div>
               <div class="testimonial-item-footer has-top-divider">
                 <div class="testimonial-item-name h6 m-0">Will</div>
@@ -47,9 +43,10 @@
                 </div>
               </div>
               <div class="testimonial-item-content">
-                <p
-                  class="text-sm mb-24"
-                >Clicker TV has been such a huge help to my staff. It has allowed them to focus on bartending and waiting on our customers without having to worry about adjusting the TVs all day.</p>
+                <p class="text-sm mb-24">
+                  Clicker TV has been such a huge help to my staff. It has allowed them to focus on bartending and
+                  waiting on our customers without having to worry about adjusting the TVs all day.
+                </p>
               </div>
               <div class="testimonial-item-footer has-top-divider">
                 <div class="testimonial-item-name h6 m-0">Patrick</div>

@@ -4,36 +4,25 @@
       <div class="site-header-inner">
         <div
           class="brand"
-          v-scroll-reveal.reset="{ easing: 'cubic-bezier(0.5, 0, 0, 1)', distance: '10px', origin: 'top', rotate : { z: -20 }}"
+          v-scroll-reveal.reset="{
+            easing: 'cubic-bezier(0.5, 0, 0, 1)',
+            distance: '10px',
+            origin: 'top',
+            rotate: { z: -20 },
+          }"
         >
           <a href="/">
-            <img
-              src="https://clicker-brand.s3.amazonaws.com/logo.png"
-              width="150"
-              alt="Clicker logo"
-            />
-            <div
-              class="subtitle"
-              v-scroll-reveal.reset="{ origin: 'right', delay: 500}"
-            >{{subtitle}}</div>
+            <img src="https://clicker-brand.s3.amazonaws.com/logo.png" width="150" alt="Clicker logo" />
+            <div class="subtitle" v-scroll-reveal.reset="{ origin: 'right', delay: 500 }">{{ subtitle }}</div>
           </a>
         </div>
-        <button
-          id="header-nav-toggle"
-          class="header-nav-toggle"
-          aria-controls="primary-menu"
-          aria-expanded="false"
-        >
+        <button id="header-nav-toggle" class="header-nav-toggle" aria-controls="primary-menu" aria-expanded="false">
           <span class="screen-reader">Menu</span>
           <span class="hamburger">
             <span class="hamburger-inner"></span>
           </span>
         </button>
-        <nav
-          id="header-nav"
-          class="header-nav"
-          v-scroll-reveal.reset="{ delay: 200 , origin: 'right'}"
-        >
+        <nav id="header-nav" class="header-nav" v-scroll-reveal.reset="{ delay: 200, origin: 'right' }">
           <div class="header-nav-inner">
             <ul class="list-reset text-xxs header-nav-right">
               <li>

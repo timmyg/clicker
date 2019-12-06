@@ -5,24 +5,28 @@ const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 
 const { respond, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const plans = [
-	{ tokens: 2, dollars: 10, id: 'bb23310b-3fec-4873-8cdf-279ffcd31b32' },
-	{ tokens: 5, dollars: 20, id: '40167d6a-1626-456a-8a35-f60c91c05120' },
-	{ tokens: 10, dollars: 30, id: 'd25f930b-7c3a-4ea2-b41b-9ae959135c6a', best: true }
+  { tokens: 2, dollars: 10, id: 'bb23310b-3fec-4873-8cdf-279ffcd31b32' },
+  { tokens: 5, dollars: 20, id: '40167d6a-1626-456a-8a35-f60c91c05120' },
+  { tokens: 10, dollars: 30, id: 'd25f930b-7c3a-4ea2-b41b-9ae959135c6a', best: true },
 ];
-const timeframes = [ { tokens: 0, minutes: 0 }, { tokens: 1, minutes: 30 }, { tokens: 2, minutes: 60 } ];
+const timeframes = [
+  { tokens: 0, minutes: 0 },
+  { tokens: 1, minutes: 30 },
+  { tokens: 2, minutes: 60 },
+];
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async (event) => {
-	return respond(200, `hello`);
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200, `hello`);
 });
 
-module.exports.buy = RavenLambdaWrapper.handler(Raven, async (event) => {
-	return respond(200, plans);
+module.exports.buy = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200, plans);
 });
 
-module.exports.timeframes = RavenLambdaWrapper.handler(Raven, async (event) => {
-	console.log(event.queryStringParameters.locationId);
-	// locationId should be available in query params
-	return respond(200, timeframes);
+module.exports.timeframes = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log(event.queryStringParameters.locationId);
+  // locationId should be available in query params
+  return respond(200, timeframes);
 });
 
 // module.exports.blogPostUpdated = RavenLambdaWrapper.handler(Raven, async event => {
