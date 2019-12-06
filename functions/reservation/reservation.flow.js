@@ -171,7 +171,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
-  const originalReservation = await dbReservation.get({ id, userId });
+  const originalReservation: Reservation = await dbReservation.get({ id, userId });
   console.log(userId, originalReservation.userId);
   if (userId.replace('sms|', '') !== originalReservation.userId) {
     return respond(403, 'invalid userId');
@@ -180,7 +180,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
   const { program, end } = updatedReservation;
-  const reservation = await dbReservation.update(
+  const reservation: Reservation = await dbReservation.update(
     { id, userId },
     { cost: updatedCost, minutes: updatedMinutes, program, end },
     { returnValues: 'ALL_NEW', updateExpires: true },
@@ -231,7 +231,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
-  const userReservations = await dbReservation
+  const userReservations: Reservation[] = await dbReservation
     .query('userId')
     .eq(userId)
     .exec();
@@ -255,7 +255,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
   const { id } = params;
 
-  const reservation = await dbReservation.get({ id, userId });
+  const reservation: Reservation = await dbReservation.get({ id, userId });
   return respond(200, reservation);
 });
 
@@ -263,7 +263,7 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { id } = getPathParameters(event);
 
-  const reservation = await dbReservation.get({ id, userId });
+  const reservation: Reservation = await dbReservation.get({ id, userId });
   await dbReservation.update({ id, userId }, { cancelled: true }, { updateExpires: true });
 
   // mark box free

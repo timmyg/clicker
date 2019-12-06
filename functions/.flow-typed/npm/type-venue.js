@@ -16,6 +16,10 @@ class Box {
   channelChangeAt: Date;
   updatedAt: Date;
   channelSource: string;
+  // clear() {
+  //   delete this.end;
+  //   // delete this.reserved;
+  // }
 }
 
 class BoxV2 {
@@ -48,7 +52,7 @@ class BoxV2 {
 export class Venue {
   id: string;
   losantId: string;
-  boxes: Array<Box>;
+  boxes: Box[];
   boxesV2: BoxV2[];
   channels: {
     exclude: string[],
@@ -73,4 +77,5 @@ export class Venue {
   // calculated fields
   distance: number;
   openTvs: boolean;
+  save() {}
 }

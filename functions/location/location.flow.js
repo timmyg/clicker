@@ -159,10 +159,9 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   });
 
   allLocations.forEach((l, i, locations) => {
-    delete l.boxes;
-    delete l.losantId;
-    l.boxes = undefined;
-    l.losantId = undefined;
+    // delete l.boxes;
+    // delete l.losantId;
+    l = { ...l, boxes: null, losantId: null };
     if (latitude && longitude) {
       const { latitude: locationLatitude, longitude: locationLongitude } = l.geo;
       const meters = geolib.getDistanceSimple(
@@ -185,7 +184,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
@@ -196,8 +195,11 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       // check if box is reserved and end time is in past
       if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
         // if so, update to not reserved
-        delete boxes[i].reserved;
-        delete boxes[i].end;
+        // delete boxes[i].end;
+        // delete boxes[i].reserved;
+        // boxes[i].end
+        boxes[i].reserved = false;
+        // boxes[i] = { ...boxes[i] };
       }
     });
     await location.save();
@@ -239,7 +241,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const body = getBody(event);
     console.log(body);
-    const location = await dbLocation.create(body);
+    const location: Venue = await dbLocation.create(body);
     return respond(201, location);
   } catch (e) {
     console.error(e);
@@ -252,7 +254,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     const { id } = getPathParameters(event);
     const body = getBody(event);
 
-    const updatedLocation = await dbLocation.update({ id }, body, { returnValues: 'ALL_NEW' });
+    const updatedLocation: Venue = await dbLocation.update({ id }, body, { returnValues: 'ALL_NEW' });
     return respond(200, updatedLocation);
   } catch (e) {
     console.error(e);
@@ -265,7 +267,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ boxes, ip });
   const { id } = getPathParameters(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
@@ -311,7 +313,6 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
       console.log('existing box', box.ip);
     }
   }
-  // await dbLocation.update({ id }, { boxes: location.boxes }, { returnValues: 'ALL_NEW' });
 
   return respond(201, updatedLocation);
 });
@@ -320,14 +321,14 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  location.boxes[boxIndex]['reserved'] = true;
-  location.boxes[boxIndex]['end'] = end;
+  location.boxes[boxIndex].reserved = true;
+  location.boxes[boxIndex].end = end;
   await location.save();
 
   return respond(200);
@@ -336,14 +337,14 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
 module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  delete location.boxes[boxIndex]['reserved'];
-  delete location.boxes[boxIndex]['end'];
+  location.boxes[boxIndex].reserved = false;
+  // location.boxes[boxIndex].end;
   await location.save();
 
   return respond(200);
@@ -353,7 +354,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
   const { id: locationId } = getPathParameters(event);
   const { boxes } = getBody(event);
   console.log(boxes);
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();
@@ -364,9 +365,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
     const { major } = info;
 
-    const i = location.boxes.findIndex(b => b.id === boxId);
+    const i: number = location.boxes.findIndex(b => b.id === boxId);
     console.log('box', location.boxes[i], major);
-    const originalChannel = location.boxes[i]['channel'];
+    const originalChannel = location.boxes[i].channel;
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
@@ -438,7 +439,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 module.exports.setLabels = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   const boxesWithLabels = getBody(event);
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
@@ -454,7 +455,7 @@ module.exports.setLabels = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
@@ -486,7 +487,7 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
 
   const connected = true;
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('losantId')
     .eq(losantId)
     .exec();
@@ -510,7 +511,7 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
 
   const connected = false;
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('losantId')
     .eq(losantId)
     .exec();
@@ -533,7 +534,7 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
@@ -563,7 +564,7 @@ module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
@@ -593,7 +594,7 @@ module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   // const { id } = getPathParameters(event);
-  let allLocations = await dbLocation.scan().exec();
+  let allLocations: Venue[] = await dbLocation.scan().exec();
 
   for (const location of allLocations) {
     const { losantId } = location;
@@ -650,7 +651,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   const { id: locationId, boxId } = getPathParameters(event);
   const { channel, source } = getBody(event);
 
-  const location = await dbLocation
+  const location: Venue = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();

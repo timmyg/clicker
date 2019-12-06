@@ -123,7 +123,7 @@ class SiStatus {
 }
 
 class SiGame {
-  tv?: string;
+  tv: string;
   status: SiStatus;
   teams: SiTeam[];
   league: SiLeague;
@@ -262,13 +262,6 @@ function transformSIUrl(webUrl: string): string {
   return apiUrl.join('/');
 }
 
-// module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { start, network } = event.queryStringParameters;
-//   console.log({ start, network });
-//   const game = await getGame(start, network);
-//   respond(200, game);
-// });
-
 module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   const currentTime = moment()
     .subtract(5, 'hours')
@@ -291,26 +284,13 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     console.log('get games');
     console.time('all scores');
-    const allGames = await dbGame
+    const allGames: Game[] = await dbGame
       .query('status')
       // .eq('time-tbd')
       .eq('inprogress')
       .exec();
     console.timeEnd('all scores');
-
-    // const allGames = await dbGame.scan().exec();
     console.log(allGames.length);
-    // // const sortedGames = allGames;
-    // const sortedGames = [];
-    // sortedGames.push(...allGames.filter(g => g.status === 'inprogress'));
-    // console.log(1);
-    // sortedGames.push(...allGames.filter(g => g.status === 'complete'));
-    // console.log(2);
-    // sortedGames.push(...allGames.filter(g => g.status === 'scheduled'));
-    // console.log(3);
-    // sortedGames.push(...allGames.filter(g => !['inprogress', 'complete', 'scheduled'].includes(g.status)));
-
-    // console.log(sortedGames.length);
     return respond(200, allGames);
   } catch (e) {
     console.error(e);

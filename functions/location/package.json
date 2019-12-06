@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx flow-remove-types location.flow.js -o location.js",
     "test": "npm run build && jest --coverage",
-    "invoke:health": "serverless invoke local --function health",
+    "invoke:health": "serverless invoke local --function health --stage develop",
     "invoke:all": "serverless invoke local --function all --stage develop --path ../.resources/data/location-all.json",
     "invoke:add": "serverless invoke local --function create --path ../.resources/data/location-all.json --stage develop",
     "invoke:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",
