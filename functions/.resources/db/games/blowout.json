@@ -1,0 +1,50 @@
+{
+  "away": {
+    "book": {
+      "moneyline": -170,
+      "spread": -3
+    },
+    "id": 140,
+    "logo": "https://static.sprtactn.co/teamlogos/nfl/100/dal.png",
+    "name": {
+      "abbr": "DAL",
+      "display": "Cowboys",
+      "full": "Dallas Cowboys",
+      "short": "Cowboys"
+    },
+    "score": 24
+  },
+  "book": {
+    "total": 43
+  },
+  "broadcast": {
+    "network": "FOX/NFL"
+  },
+  "createdAt": 1575645837501,
+  "expires": 1575732237,
+  "home": {
+    "book": {
+      "moneyline": 150,
+      "spread": 3
+    },
+    "id": 143,
+    "logo": "https://static.sprtactn.co/teamlogos/nfl/100/chi.png",
+    "name": {
+      "abbr": "CHI",
+      "display": "Bears",
+      "full": "Chicago Bears",
+      "short": "Bears"
+    },
+    "score": 52
+  },
+  "id": 68137,
+  "leagueName": "nfl",
+  "scoreboard": {
+    "clock": "5:05",
+    "display": "In Progress",
+    "period": 4
+  },
+  "start": "2019-12-06T01:20:00.000Z",
+  "status": "in-progress",
+  "updatedAt": 1575645837501
+}

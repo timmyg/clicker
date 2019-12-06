@@ -1,0 +1,43 @@
+{
+  "away": {
+    "book": {
+      "moneyline": 145,
+      "spread": 3
+    },
+    "id": 150,
+    "logo": "https://static.sprtactn.co/teamlogos/nfl/100/car.png",
+    "name": {
+      "abbr": "CAR",
+      "display": "Panthers",
+      "full": "Carolina Panthers",
+      "short": "Panthers"
+    }
+  },
+  "book": {
+    "total": 47
+  },
+  "broadcast": {
+    "network": "FOX"
+  },
+  "createdAt": 1575622804393,
+  "expires": 1575860400,
+  "home": {
+    "book": {
+      "moneyline": -165,
+      "spread": -3
+    },
+    "id": 151,
+    "logo": "https://static.sprtactn.co/teamlogos/nfl/100/atl.png",
+    "name": {
+      "abbr": "ATL",
+      "display": "Falcons",
+      "full": "Atlanta Falcons",
+      "short": "Falcons"
+    }
+  },
+  "id": 68140,
+  "leagueName": "nfl",
+  "start": "2019-12-08T18:00:00.000Z",
+  "status": "scheduled",
+  "updatedAt": 1575622804411
+}
