@@ -14,7 +14,6 @@ const {
   RavenLambdaWrapper,
 } = require('serverless-helpers');
 const uuid = require('uuid/v1');
-let Reservation;
 
 declare class process {
   static env: {
@@ -31,7 +30,7 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
-Reservation = dynamoose.model(
+const dbReservation = dynamoose.model(
   process.env.tableReservation,
   {
     userId: {
@@ -97,7 +96,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
-  let reservation = getBody(event);
+  let reservation: Reservation = getBody(event);
   const { cost } = reservation;
   reservation.userId = getUserId(event);
 
@@ -123,7 +122,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   reservation.end = calculateReservationEndTime(reservation);
-  await Reservation.create(reservation);
+  await dbReservation.create(reservation);
 
   console.time('mark box reserved');
   // mark box reserved
@@ -172,7 +171,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
-  const originalReservation = await Reservation.get({ id, userId });
+  const originalReservation: Reservation = await dbReservation.get({ id, userId });
   console.log(userId, originalReservation.userId);
   if (userId.replace('sms|', '') !== originalReservation.userId) {
     return respond(403, 'invalid userId');
@@ -181,7 +180,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
   const { program, end } = updatedReservation;
-  const reservation = await Reservation.update(
+  const reservation: Reservation = await dbReservation.update(
     { id, userId },
     { cost: updatedCost, minutes: updatedMinutes, program, end },
     { returnValues: 'ALL_NEW', updateExpires: true },
@@ -232,7 +231,8 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
-  const userReservations = await Reservation.query('userId')
+  const userReservations: Reservation[] = await dbReservation
+    .query('userId')
     .eq(userId)
     .exec();
   if (userReservations && userReservations.length) {
@@ -255,7 +255,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
   const { id } = params;
 
-  const reservation = await Reservation.get({ id, userId });
+  const reservation: Reservation = await dbReservation.get({ id, userId });
   return respond(200, reservation);
 });
 
@@ -263,8 +263,8 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { id } = getPathParameters(event);
 
-  const reservation = await Reservation.get({ id, userId });
-  await Reservation.update({ id, userId }, { cancelled: true }, { updateExpires: true });
+  const reservation: Reservation = await dbReservation.get({ id, userId });
+  await dbReservation.update({ id, userId }, { cancelled: true }, { updateExpires: true });
 
   // mark box free
   await new Invoke()

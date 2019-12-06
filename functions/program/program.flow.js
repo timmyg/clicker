@@ -9,7 +9,6 @@ const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
-let Program, ProgramArea;
 
 declare class process {
   static env: {
@@ -92,7 +91,7 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
-Program = dynamoose.model(
+const Program = dynamoose.model(
   process.env.tableProgram,
   {
     region: {
@@ -149,7 +148,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = params;
 
   console.log({ locationId });
-  const { data: location } = await new Invoke()
+  const { data: location }: { data: Venue } = await new Invoke()
     .service('location')
     .name('get')
     .pathParams({ id: locationId })
@@ -193,12 +192,12 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming run query');
-  const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
+  const [programs: Program[], programsNext: Program[]] = await Promise.all([programsQuery, programsNextQuery]);
   console.log(programs.length, programsNext.length);
   console.time('current + next programming run query');
 
-  let currentPrograms = programs;
-  const nextPrograms = programsNext;
+  let currentPrograms: Program[] = programs;
+  const nextPrograms: Program[] = programsNext;
 
   console.time('current + next programming combine');
   currentPrograms.forEach((program, i) => {
@@ -226,20 +225,20 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('remove excluded');
 
   console.time('rank');
-  const rankedPrograms = rankPrograms(currentPrograms);
+  const rankedPrograms: Program[] = rankPrograms(currentPrograms);
   // const rankedPrograms = rankPrograms(currentNational.concat(currentPremium, currentLocal));
   console.timeEnd('rank');
   return respond(200, rankedPrograms);
 });
 
-function rankPrograms(programs) {
+function rankPrograms(programs: Program[]) {
   programs.forEach((program, i) => {
     programs[i] = rank(program);
   });
   return programs.sort((a, b) => b.points - a.points);
 }
 
-function rank(program) {
+function rank(program: Program) {
   if (!program || !program.title) {
     return program;
   }
@@ -305,13 +304,6 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
-  // const x = await Program.query('region')
-  // 	.using('startLocalIndex')
-  // 	.eq('cincinnati')
-  // 	.where('start')
-  // 	.descending()
-  // 	.exec();
-  // console.log(x[0]);
   const { name, defaultZip, localChannels } = getBody(event);
   await syncChannels(name, localChannels, defaultZip);
   respond(200);
