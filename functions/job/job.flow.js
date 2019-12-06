@@ -27,14 +27,14 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async event => {
   // TODO pull actual regions
   const regions = ['cincinnati'];
-  const { data: locations } = await new Invoke()
+  const { data: locations }: { data: Venue[] } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')
     .pathParams({ regions })
     .headers(event.headers)
     .go();
   for (location of locations) {
-    const boxes = location.boxes.filter(b => b.zone).sort((a, b) => a.zone - b.zone);
+    const boxes = location.boxes.filter(b => b.zone).sort((a, b) => a.zone.localeCompare(b.zone));
     let i = 0;
     for (const box of boxes) {
       const command = 'tune';
@@ -66,7 +66,7 @@ function getChannelForZone(ix: number): number {
 module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   // TODO pull actual regions
   const regions = ['cincinnati'];
-  const { data: locations } = await new Invoke()
+  const { data: locations }: { data: Venue[] } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')
     .pathParams({ regions })
@@ -215,7 +215,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
 
       console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
       // find locations that are in region and control center enabled
-      const { data: locations } = await new Invoke()
+      const { data: locations }: { data: Venue[] } = await new Invoke()
         .service('location')
         .name('controlCenterLocationsByRegion')
         .pathParams({ regions })

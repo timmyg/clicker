@@ -7,9 +7,11 @@ const AWS = require('aws-sdk');
 const objectMapper = require('object-mapper');
 const _ = require('lodash');
 const awsXRay = require('aws-xray-sdk');
+// const types = require('clicker-types');
+// const util = require('my-lib');
+// import type {Game} from types;
 const awsSdk = awsXRay.captureAWS(AWS);
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-let Game;
 
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
@@ -18,7 +20,7 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
-Game = dynamoose.model(
+const dbGame = dynamoose.model(
   process.env.tableGame,
   {
     start: { type: String, hashKey: true },
@@ -121,7 +123,7 @@ class SiStatus {
 }
 
 class SiGame {
-  tv: string;
+  tv?: string;
   status: SiStatus;
   teams: SiTeam[];
   league: SiLeague;
@@ -289,13 +291,14 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     console.log('get games');
     console.time('all scores');
-    const allGames = await Game.query('status')
+    const allGames = await dbGame
+      .query('status')
       // .eq('time-tbd')
       .eq('inprogress')
       .exec();
     console.timeEnd('all scores');
 
-    // const allGames = await Game.scan().exec();
+    // const allGames = await dbGame.scan().exec();
     console.log(allGames.length);
     // // const sortedGames = allGames;
     // const sortedGames = [];
@@ -320,9 +323,13 @@ type actionNetworkRequest = {
   params?: any,
 };
 
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200);
+});
+
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('get games...');
-  const allGames = await Game.scan().exec();
+  const allGames: Game[] = await dbGame.scan().exec();
   console.log('existingGames:', allGames.length);
   const datesToPull = [];
   if (allGames && allGames.length) {
@@ -449,7 +456,7 @@ async function updateGames(events: any[]) {
       console.log('creating:', dbEvents.length);
       console.log('remaining:', events.length);
       // console.log(JSON.stringify(dbEvents));
-      const result = await Game.batchPut(dbEvents);
+      const result = await dbGame.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
       console.error(e);
@@ -457,7 +464,7 @@ async function updateGames(events: any[]) {
   }
 }
 
-function transformGameV2(game: any) {
+function transformGameV2(game: any): Game {
   // set away, home teams
   game.away = game.teams.find(t => t.id === game.away_team_id);
   game.home = game.teams.find(t => t.id === game.home_team_id);
