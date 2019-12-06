@@ -179,12 +179,12 @@ function getStatusV2(game: Game): GameStatus {
   const gameStatus = new GameStatus();
   gameStatus.started = ['complete', 'in-progress'].includes(game.status) ? true : false;
   gameStatus.ended = ['complete'].includes(game.status) ? true : false;
-  gameStatus.description = getDecription(game);
+  gameStatus.description = getDescription(game);
   gameStatus.blowout = ['complete', 'in-progress'].includes(game.status) ? isBlowout(game) : false;
   return gameStatus;
 }
 
-function getDecription(game: Game): string {
+function getDescription(game: Game): string {
   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
   switch (game.status) {
     case 'scheduled': {
@@ -461,6 +461,7 @@ async function pullFromActionNetwork(dates: Date[]) {
   const actionSports: actionNetworkRequest[] = [];
   actionSports.push({ sport: 'ncaab', params: { division: 'D1' } });
   actionSports.push({ sport: 'ncaaf', params: { division: 'FBS' } });
+  actionSports.push({ sport: 'nba' });
   actionSports.push({ sport: 'nfl' });
   actionSports.push({ sport: 'mlb' });
   actionSports.push({ sport: 'nhl' });
