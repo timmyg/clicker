@@ -1,0 +1,47 @@
+{
+    "away": {
+      "book": {
+        "moneyline": 753,
+        "spread": 1.5
+      },
+      "id": 2000,
+      "logo": "https://assets.actionnetwork.com/126732_NBPoc.png",
+      "name": {
+        "abbr": "SB",
+        "display": "Brest",
+        "full": "Stade Brestois 29",
+        "short": "29"
+      },
+      "score": 0
+    },
+    "book": {
+      "total": 3
+    },
+    "createdAt": 1575661600259,
+    "expires": 1575687600,
+    "home": {
+      "book": {
+        "moneyline": -270,
+        "spread": -1.5
+      },
+      "id": 1143,
+      "logo": "https://static.sprtactn.co/teamlogos/soccer/100/1143.png",
+      "name": {
+        "abbr": "LIL",
+        "display": "Lille",
+        "full": "OSC Lille",
+        "short": "Dogues"
+      },
+      "score": 1
+    },
+    "id": 70798,
+    "leagueName": "ligue1",
+    "scoreboard": {
+      "clock": "81",
+      "display": "81'",
+      "period": 2
+    },
+    "start": "2019-12-06T18:00:00.000Z",
+    "status": "inprogress",
+    "updatedAt": 1575661600259
+  }

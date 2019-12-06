@@ -178,23 +178,31 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
 
 function getStatusV2(game: Game): GameStatus {
   const gameStatus = new GameStatus();
-  gameStatus.started = ['complete', 'in-progress'].includes(game.status) ? true : false;
+  gameStatus.started = ['complete', 'inprogress'].includes(game.status) ? true : false;
   gameStatus.ended = ['complete'].includes(game.status) ? true : false;
   gameStatus.description = getDescription(game);
-  gameStatus.blowout = ['complete', 'in-progress'].includes(game.status) ? isBlowout(game) : false;
+  gameStatus.blowout = ['complete', 'inprogress'].includes(game.status) ? isBlowout(game) : false;
   return gameStatus;
 }
 
 function getDescription(game: Game): string {
-  console.log(game.away);
-  console.log(game.away.name);
   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
   switch (game.status) {
     case 'scheduled': {
       return `${score} (${moment.tz(game.start, 'America/New_York').format('M/D h:mma')} EST)`;
     }
-    case 'in-progress': {
-      return `${score} (${game.scoreboard.clock} - ${game.scoreboard.period})`;
+    case 'inprogress': {
+      if (['ligue1'].includes(game.leagueName)) {
+
+      } else 
+      switch(game.leagueName) {
+        case 'ligue1': {
+          return `${score} (${game.scoreboard.display})`
+        }
+        default: {
+          return `${score} (${game.scoreboard.clock} - ${game.scoreboard.period})`;
+        }
+      }
     }
     case 'complete': {
       return `${score} (${game.scoreboard.display})`;
@@ -244,12 +252,13 @@ function isBlowout(game: Game): boolean {
       const isBlowout = Math.abs(game.home.score - game.away.score) >= 25;
       return isNearEnd && isBlowout;
     }
-    // case "soccer": {
-    //   // 80th minutes and 3+ goal difference
-    //   const isNearEnd = game.scoreboard.period === 2 && +game.status.time.minutes >= 80;
-    //   const isBlowout = Math.abs(game.home.score - game.away.score) >= 3;
-    //   return isNearEnd && isBlowout;
-    // }
+    // TODO support others
+    case "ligue1": {
+      // 80th minutes and 3+ goal difference
+      const isNearEnd = game.scoreboard.period === 2 && +game.scoreboard.clock >= 80;
+      const isBlowout = Math.abs(game.home.score - game.away.score) >= 3;
+      return isNearEnd && isBlowout;
+    }
     default:
       return true;
   }
