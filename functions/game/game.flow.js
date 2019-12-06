@@ -396,11 +396,18 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async (event) => {
 		console.log('get games');
 		console.time('all scores');
 		const allGames: Game[] = await dbGame
-			.query('status')
+			.scan()
+			// .query('status')
 			// .eq('time-tbd')
-			.eq('inprogress')
+			// .eq('inprogress')
 			.exec();
-		const sortedGames = [
+		let sortedGames = [
+			...allGames.filter((g) => g.status === 'inprogress'),
+			...allGames.filter((g) => g.status === 'complete'),
+			...allGames.filter((g) => g.status === 'scheduled'),
+			...allGames.filter((g) => g.status === 'time-tbd')
+		];
+		sortedGames = [
 			...allGames.filter((g) => g.leagueName === 'ncaaf'),
 			...allGames.filter((g) => g.leagueName === 'ncaab'),
 			...allGames.filter((g) => g.leagueName === 'nfl'),
