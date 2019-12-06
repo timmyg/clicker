@@ -2,12 +2,14 @@
   <layout-basic>
     <Header v-bind:subtitle="'Scoreboard'"></Header>
     <section class="main container">
-      <div class="refresh-wrapper">
-        <a href class="link right" v-if="!loading" v-on:click="refresh($event)">refresh</a>
-        <a class="link right" v-else disabled>refreshing...</a>
+      <div class="refresh-wrapper text-right">
+        <span>
+          <a href class="link" v-if="!loading" v-on:click="refresh($event)">refresh</a>
+          <a class="link" v-else disabled>refreshing...</a>
+        </span>
       </div>
       <div v-for="(games, leagueName) in gamesByLeague" v-bind:key="leagueName" class="league-wrapper">
-        <div class="league">{{ leagueName }}</div>
+        <div class="league uppercase text-sm font-bold">{{ leagueName }}</div>
         <div class="flex flex-wrap mb-4">
           <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 md:w-1/3 lg:w-1/4 mb-4 rounded-sm">
             <div class="game-wrapper p-2">
