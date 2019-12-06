@@ -400,9 +400,14 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async (event) => {
 			// .eq('time-tbd')
 			.eq('inprogress')
 			.exec();
-		console.timeEnd('all scores');
-		console.log(allGames.length);
-		return respond(200, allGames);
+		const sortedGames = [
+			...allGames.filter((g) => g.leagueName === 'ncaaf'),
+			...allGames.filter((g) => g.leagueName === 'ncaab'),
+			...allGames.filter((g) => g.leagueName === 'nfl'),
+			...allGames.filter((g) => g.leagueName === 'nba'),
+			...allGames.filter((g) => ![ 'ncaaf', 'ncaab', 'nfl', 'nba' ].includes(g.leagueName))
+		];
+		return respond(200, sortedGames);
 	} catch (e) {
 		console.error(e);
 		respond(400, e);

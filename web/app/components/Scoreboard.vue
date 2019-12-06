@@ -8,30 +8,30 @@
       </div>
       <div v-for="(games, leagueName) in gamesByLeague" v-bind:key="leagueName" class="league-wrapper">
         <div class="league">{{ leagueName }}</div>
-        <div class="grid">
-          <div v-for="game in games" v-bind:key="game.id" class="game-wrapper col-3">
-            <div class=" game row">
-              <div class="col-8">
-                <div class="team away">
-                  <img :src="game.away.logo" />
-                  <span>
-                    <small v-if="game.away.rank">{{ game.away.rank }}&nbsp;</small>
-                    <span class="name">{{ game.away.name.abbr }}</span>
-                    <span class="score">{{ game.away.score }}</span>
-                  </span>
+        <div class="flex flex-wrap mb-4">
+          <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 md:w-1/3 lg:w-1/4 mb-4 rounded-sm">
+            <div class="game-wrapper p-2">
+              <div class="flex flex-row status-wrapper justify-between text-sm">
+                <div>
+                  <span v-if="game.broadcast">{{ game.broadcast.network }}</span>
                 </div>
-                <div class="team home">
-                  <img :src="game.home.logo" />
-                  <span>
-                    <span v-if="game.home.rank">{{ game.home.rank }}&nbsp;</span>
-                    <span class="name">{{ game.home.name.abbr }} </span>
-                    <span class="score">{{ game.home.score }}</span>
-                  </span>
-                </div>
+                <div class="status ">{{ game.scoreboard.display }}</div>
               </div>
-              <div class="col-4 status">
-                <div class="status">{{ game.scoreboard.display }}</div>
-                <small v-if="game.broadcast">{{ game.broadcast.network }}</small>
+              <div class=" flex teams-wrapper">
+                <div class="w-full">
+                  <div class="team flex flex-row mb-2" v-for="team in [game.away, game.home]" v-bind:key="team.id">
+                    <div class="w-2/3 flex flex-wrap">
+                      <img :src="team.logo" class="w-8" /> <small v-if="team.rank">{{ team.rank }}&nbsp;</small>
+                      <span class="name text-md pl-2">
+                        <span class="hidden sm:inline-block">{{ team.name.short }}</span>
+                        <span class="block sm:hidden">{{ team.name.abbr }}</span>
+                      </span>
+                    </div>
+                    <div class="w-1/3 text-right">
+                      <span class="score">{{ team.score }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -88,11 +88,16 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/vendor/wirecss/scss/wire.scss';
+// @import '@/assets/vendor/wirecss/scss/wire.scss';
+@import 'tailwindcss/base';
 
-.right {
-  float: right;
-}
+@import 'tailwindcss/components';
+
+@import 'tailwindcss/utilities';
+
+// .right {
+//   float: right;
+// }
 // header.site-header {
 //   margin-bottom: 40px;
 // }
@@ -100,24 +105,28 @@ export default Vue.extend({
 section.main {
   padding-top: 100px;
 }
-.game-wrapper {
-  margin-bottom: 16px;
-  padding-right: 8px;
-  .game {
-    border: 2px solid lightgrey;
-    border-radius: 4px;
-    padding: 10px;
-    margin: 6px;
-    img {
-      width: 30px;
-      display: inline-block;
-    }
-    .status {
-      font-size: 15px;
-      text-align: right;
-    }
-  }
-}
+
+// img {
+//   width: 30px;
+// }
+// .game-wrapper {
+//   margin-bottom: 16px;
+//   padding-right: 8px;
+//   .game {
+//     border: 2px solid lightgrey;
+//     border-radius: 4px;
+//     padding: 10px;
+//     margin: 6px;
+//     img {
+//       width: 30px;
+//       display: inline-block;
+//     }
+//     .status {
+//       font-size: 15px;
+//       text-align: right;
+//     }
+//   }
+// }
 // .game {
 //   display: flex;
 //   margin-right: 15px;
@@ -172,12 +181,12 @@ section.main {
 //   font-size: 12px;
 //   text-transform: uppercase;
 // }
-.league {
-  margin-bottom: 16px;
-  color: lightgrey;
-  text-transform: uppercase;
-  font-style: normal;
-}
+// .league {
+//   margin-bottom: 16px;
+//   color: lightgrey;
+//   text-transform: uppercase;
+//   font-style: normal;
+// }
 .refresh-wrapper {
   display: block;
   height: 40px;
