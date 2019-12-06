@@ -185,6 +185,7 @@ function getStatusV2(game: Game): GameStatus {
 }
 
 function getDescription(game: Game): string {
+  console.log({ game });
   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
   switch (game.status) {
     case 'scheduled': {
