@@ -151,9 +151,10 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
     const parts = webUrl.split('/');
     const gameId = parts[parts.length - 1];
     const game: Game = await dbGame
-      .query('id')
+      .queryOne('id')
       .eq(gameId)
       .exec();
+    console.log('get game', gameId, game);
     const status: GameStatus = getStatusV2(game);
     return respond(200, status);
   } else {
@@ -185,7 +186,8 @@ function getStatusV2(game: Game): GameStatus {
 }
 
 function getDescription(game: Game): string {
-  console.log({ game });
+  console.log(game.away);
+  console.log(game.away.name);
   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
   switch (game.status) {
     case 'scheduled': {
