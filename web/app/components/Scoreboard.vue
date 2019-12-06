@@ -8,11 +8,7 @@
           <a class="link" v-else disabled>refreshing...</a>
         </span>
       </div>
-      <div
-        v-for="(games, leagueName) in gamesByLeague"
-        v-bind:key="leagueName"
-        class="league-wrapper"
-      >
+      <div v-for="(games, leagueName) in gamesByLeague" v-bind:key="leagueName" class="league-wrapper">
         <div class="league uppercase text-sm font-bold">{{ leagueName }}</div>
         <div class="flex flex-wrap mb-4">
           <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 md:w-1/3 lg:w-1/4 mb-4">
@@ -57,7 +53,6 @@ export default Vue.extend({
     loadScoreboard() {
       this.loading = true;
       axios.get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard`).then(response => {
-        console.log(response.data.map(d => d.id));
         this.games = response.data;
         this.loading = false;
         // const key = 'leagueName';
