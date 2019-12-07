@@ -172,6 +172,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   console.log(id, userId);
   const originalReservation: Reservation = await dbReservation.get({ id, userId });
+  console.log({ originalReservation });
   console.log(userId, originalReservation.userId);
   if (userId !== originalReservation.userId) {
     return respond(403, 'invalid userId');
