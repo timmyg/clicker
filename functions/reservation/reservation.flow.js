@@ -79,12 +79,20 @@ const dbReservation = dynamoose.model(
       attribute: 'expires',
       returnExpiredItems: false,
       defaultExpires: x => {
+        // TODO x is undefined during reservation update and
+        //  blows everything up
         console.log({ x });
         console.log(this);
         // expire 60 minutes after end
-        return moment(x.end)
-          .add(60, 'minutes')
-          .toDate();
+        if (x) {
+          return moment(x.end)
+            .add(60, 'minutes')
+            .toDate();
+        } else {
+          return moment()
+            .add(300, 'minutes')
+            .toDate();
+        }
       },
     },
   },
@@ -173,6 +181,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(id, userId);
   const originalReservation: Reservation = await dbReservation.get({ id, userId });
   console.log({ originalReservation });
+  console.log({ updatedReservation });
   console.log(userId, originalReservation.userId);
   if (userId !== originalReservation.userId) {
     return respond(403, 'invalid userId');
