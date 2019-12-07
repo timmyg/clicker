@@ -10,6 +10,7 @@
     "invoke:all": "serverless invoke local --function all --path ../.resources/data/reservation.json",
     "invoke:create": "serverless invoke local --function create --path ../.resources/data/reservation.json",
     "invoke:cancel": "serverless invoke local --function cancel --path ../.resources/data/reservation.json",
+    "invoke:update": "serverless invoke local --function update --path ../.resources/data/reservation.json --stage develop",
     "invoke:changeChannel": "serverless invoke local --function changeChannel --path ../.resources/data/reservation.json",
     "invoke:changeTime": "serverless invoke local --function changeTime --path ../.resources/data/reservation.json",
     "invoke:health": "serverless invoke local --function health"
