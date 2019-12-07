@@ -180,6 +180,8 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
   const { program, end } = updatedReservation;
+  console.log('update reservation:');
+  console.log({ cost: updatedCost, minutes: updatedMinutes, program, end });
   const reservation: Reservation = await dbReservation.update(
     { id, userId },
     { cost: updatedCost, minutes: updatedMinutes, program, end },
