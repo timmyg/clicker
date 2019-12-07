@@ -37,9 +37,6 @@ const dbReservation = dynamoose.model(
       type: String,
       hashKey: true,
       required: true,
-      set: val => {
-        return decodeURI(val).replace('sms|', '');
-      },
     },
     id: {
       type: String,
@@ -82,6 +79,8 @@ const dbReservation = dynamoose.model(
       attribute: 'expires',
       returnExpiredItems: false,
       defaultExpires: x => {
+        console.log({ x });
+        console.log(this);
         // expire 60 minutes after end
         return moment(x.end)
           .add(60, 'minutes')
@@ -174,7 +173,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(id, userId);
   const originalReservation: Reservation = await dbReservation.get({ id, userId });
   console.log(userId, originalReservation.userId);
-  if (userId.replace('sms|', '') !== originalReservation.userId) {
+  if (userId !== originalReservation.userId) {
     return respond(403, 'invalid userId');
   }
   const updatedCost = originalReservation.cost + updatedReservation.cost;
