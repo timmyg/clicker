@@ -1,26 +1,59 @@
 {
   "pathParameters": {
-    "id": "35aefac0-51d3-11e9-9331-17a52abe47f5",
+    "id": "c51cb430-18a3-11ea-a61e-0bdfc515eb0d",
     "locationId": "cfa3d190-507b-11e9-b03b-fd47a97c4034"
   },
   "headers": {
-    "userid": "1926fd60-4c49-11e9-a14d-793fbe38ca56"
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MDEwNDQ3MC04ZWJjLTExZTktOGY1NC0zNTUzYjNhMTEyOTAiLCJndWVzdCI6dHJ1ZSwiaWF0IjoxNTYwNTI3NTA2fQ.vHbd-sMoGEdsd2d_nnUJyjzBxa2ssJ1daLEHhjI6hzA"
   },
   "body": {
-    "cost": 2,
-    "start": 1553829770,
-    "end": 1553831584,
-    "program": {
-      "channel": 432
-    },
-    "box": {
-      "clientAddress": "435.453",
-      "locationName": "name",
-      "label": "633"
-    },
+    "cost": 0,
     "location": {
-      "id": "43aefac0-51d3-11e9-9331-17a52abe47g1",
-      "losantId": "92308409324"
+      "losantId": "xxx",
+      "name": "Queen City Exchange",
+      "img": "https://s3.amazonaws.com/clicker-partners/logos/qce.png",
+      "neighborhood": "Downtown",
+      "id": "0a379440-87d1-11e9-b520-190ed0c297be"
+    },
+    "expires": "2019-12-07T05:13:45.000Z",
+    "minutes": 0,
+    "userId": "50104470-8ebc-11e9-8f54-3553b3a11290",
+    "updatedAt": "2019-12-07T03:43:45.396Z",
+    "createdAt": "2019-12-07T03:43:45.396Z",
+    "box": {
+      "locationName": "2",
+      "label": "2",
+      "id": "5ed20ac0-8340-11e9-b38d-f97ff2671de1",
+      "clientAddress": "E237BFBB81C5",
+      "ip": "192.168.3.234"
+    },
+    "end": "2019-12-07T04:13:45.394Z",
+    "id": "c51cb430-18a3-11ea-a61e-0bdfc515eb0d",
+    "start": "2019-12-07T03:43:45.394Z",
+    "program": {
+      "programmingId": "SH032794290000",
+      "expires": "2019-12-07T04:30:00.000Z",
+      "subcategories": ["Drama", "Series"],
+      "createdAt": "2019-12-06T12:47:01.745Z",
+      "mainCategory": "TV",
+      "live": false,
+      "channel": 661,
+      "repeat": true,
+      "channelCategories": ["Sports Channels"],
+      "durationMins": 30,
+      "updatedAt": "2019-12-06T12:47:01.746Z",
+      "channelMinor": 1,
+      "end": 1575691200000,
+      "region": "cincinnati",
+      "channelTitle": "FSCIN",
+      "id": "90eba0f1-caee-5ae4-9894-e923455e364d",
+      "start": 1575689400000,
+      "title": "Bearcats Insider 19-20",
+      "nextProgramTitle": "World Poker Tour",
+      "nextProgramStart": 1575691200000,
+      "sports": false,
+      "points": 1,
+      "icon": "📺"
     }
   }
 }
