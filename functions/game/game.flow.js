@@ -402,17 +402,7 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     console.log('get games');
     console.time('all scores');
-    const allGames: Game[] = await dbGame
-      .scan()
-      //   .query('status')
-      //   .eq('scheduled')
-      //   .or()
-      //   .query('status')
-      //   .eq('inprogress')
-      // filter
-      //   .in(['inprogress', 'complete', 'scheduled', 'time-tbd'])
-      .all()
-      .exec();
+    const allGames: Game[] = await dbGame.scan().exec();
     console.log('allGames', allGames.length);
     let sortedGames = [
       ...allGames.filter(g => g.status === 'inprogress'),
@@ -422,11 +412,11 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
     ];
     console.log('sortedGames', sortedGames.length);
     sortedGames = [
-      ...allGames.filter(g => g.leagueName === 'ncaaf'),
-      ...allGames.filter(g => g.leagueName === 'ncaab'),
-      ...allGames.filter(g => g.leagueName === 'nfl'),
-      ...allGames.filter(g => g.leagueName === 'nba'),
-      ...allGames.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
+      ...sortedGames.filter(g => g.leagueName === 'ncaaf'),
+      ...sortedGames.filter(g => g.leagueName === 'ncaab'),
+      ...sortedGames.filter(g => g.leagueName === 'nfl'),
+      ...sortedGames.filter(g => g.leagueName === 'nba'),
+      ...sortedGames.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
     ];
     console.log('sortedGames', sortedGames.length);
     return respond(200, sortedGames);
