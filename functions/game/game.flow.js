@@ -411,6 +411,7 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
       //   .eq('inprogress')
       // filter
       //   .in(['inprogress', 'complete', 'scheduled', 'time-tbd'])
+      .all()
       .exec();
     console.log('allGames', allGames.length);
     let sortedGames = [
