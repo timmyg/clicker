@@ -157,6 +157,7 @@ functions:
     events:
       - http:
           path: scoreboard
+          memorySize: 1024
           method: get
           cors:
             origin: '*'
