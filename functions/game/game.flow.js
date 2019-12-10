@@ -412,7 +412,7 @@ module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, asyn
     .eq(start)
     // .filter(filter)
     .exec();
-  const game = games.filter(g => g.broadcast && g.broadcast.network === network);
+  const game = games.find(g => g.broadcast && g.broadcast.network === network);
   return respond(200, game);
   // const docClient = new AWS.DynamoDB.DocumentClient();
   // var params = {
