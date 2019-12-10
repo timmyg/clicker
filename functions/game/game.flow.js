@@ -407,27 +407,32 @@ module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, asyn
   //   },
   // };
   console.log({ start, network });
-  // const games: Game[] = await dbGame
-  //   .query('start')
-  //   .eq(start)
-  //   .filter(filter)
-  //   .exec();
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  var params = {
-    TableName: process.env.tableGame,
-    Key: { start },
-    FilterExpression: 'broadcast.network = :network',
-    ExpressionAttributeValues: {
-      ':network': network,
-    },
-  };
-  try {
-    const games = await docClient.get(params).promise();
-    console.log({ games });
-    return respond(200, games);
-  } catch (err) {
-    return err;
-  }
+  const games: Game[] = await dbGame
+    .query('start')
+    .eq(start)
+    // .filter(filter)
+    .exec();
+  const game = games.filter(g => g.broadcast && g.broadcast.network === network);
+  return respond(200, game);
+  // const docClient = new AWS.DynamoDB.DocumentClient();
+  // var params = {
+  //   TableName: process.env.tableGame,
+  //   Key: { start },
+  //   // FilterExpression: 'broadcast.network = :network',
+  //   // ExpressionAttributeValues: {
+  //   //   ':network': network,
+  //   // },
+  //   ExpressionAttributeNames: { '#broadcast.network': 'type' },
+  //   KeyConditionExpression: '#typename = :typename',
+  //   ExpressionAttributeValues: { ':typename': 'hat' }
+  // };
+  // try {
+  //   const games = await docClient.get(params).promise();
+  //   console.log({ games });
+  //   return respond(200, games);
+  // } catch (err) {
+  //   return err;
+  // }
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
