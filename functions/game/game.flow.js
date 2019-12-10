@@ -400,20 +400,35 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
   const { start, network } = event.queryStringParameters;
-  const filter = {
+  // const filter = {
+  //   FilterExpression: 'broadcast.network = :network',
+  //   ExpressionAttributeValues: {
+  //     ':network': network,
+  //   },
+  // };
+  console.log({ start, network });
+  // const games: Game[] = await dbGame
+  //   .query('start')
+  //   .eq(start)
+  //   .filter(filter)
+  //   .exec();
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName: process.env.tableGame,
+    Key: { start },
     FilterExpression: 'broadcast.network = :network',
     ExpressionAttributeValues: {
       ':network': network,
     },
   };
-  console.log({ start, filter });
-  const games: Game[] = await dbGame
-    .query('start')
-    .eq(start)
-    .filter(filter)
-    .exec();
+  try {
+    const data = await docClient.get(params).promise();
+    return data.Item;
+  } catch (err) {
+    return err;
+  }
 
-  return respond(200, games);
+  // return respond(200, games);
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
