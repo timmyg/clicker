@@ -401,7 +401,8 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     console.log('get games');
-    console.time('all scores');
+    console.time('all scores!');
+    // const allGames: Game[] = await dbGame.scan().exec();
     const allGames: Game[] = await dbGame.scan().exec();
     console.log('allGames', allGames.length);
     let sortedGames = [
@@ -419,7 +420,7 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
       ...sortedGames.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
     ];
     console.log('sortedGames', sortedGames.length);
-    return respond(200, sortedGames);
+    return respond(200, sortedGames.length);
   } catch (e) {
     console.error(e);
     respond(400, e);
