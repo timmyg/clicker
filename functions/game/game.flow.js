@@ -422,13 +422,12 @@ module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, asyn
     },
   };
   try {
-    const data = await docClient.get(params).promise();
-    return data.Item;
+    const games = await docClient.get(params).promise();
+    console.log({ games });
+    return respond(200, games);
   } catch (err) {
     return err;
   }
-
-  // return respond(200, games);
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
