@@ -171,7 +171,7 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
     } catch (e) {
       console.error(`failed to get score: ${apiUrl}`);
       Raven.captureException(e);
-      return respond(400);
+      return respond(400, e);
     }
   }
 });
@@ -396,6 +396,18 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   } else {
     return respond(200, { events: 0 });
   }
+});
+
+module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
+  const { start, network } = getBody(event);
+  const games: Game[] = await dbGame
+    .query('start')
+    .eq(start)
+    .filter('network')
+    .eq(network)
+    .exec();
+
+  return respond(200, games);
 });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
