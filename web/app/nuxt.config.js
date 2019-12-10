@@ -1,5 +1,5 @@
 import { createClient } from './plugins/contentful.js';
-const path = require('path')
+const path = require('path');
 
 let dynamicRoutes = () => {
   const client = createClient();
@@ -22,10 +22,10 @@ module.exports = {
     routes: dynamicRoutes,
   },
   modules: ['@nuxtjs/markdownit', '@nuxtjs/style-resources', '@nuxt/http', '@nuxtjs/dotenv'],
-  plugins: ['~/plugins/vue-moment.js'],
+  plugins: ['~/plugins/vue-moment.js', '~/plugins/filters.js'],
   css: [
     '~assets/scss/style.scss',
-    // '~assets/css/tailwind.css', 
+    // '~assets/css/tailwind.css',
     // '@/assets/vendor/wirecss/scss/wire.scss'
   ],
 
@@ -56,8 +56,8 @@ module.exports = {
   build: {
     postcss: {
       plugins: {
-        tailwindcss: path.resolve(__dirname, './tailwind.config.js')
-      }
+        tailwindcss: path.resolve(__dirname, './tailwind.config.js'),
+      },
     },
     /*
      ** Run ESLint on save

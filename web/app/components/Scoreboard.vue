@@ -8,10 +8,14 @@
           <a class="link" v-else disabled>refreshing...</a>
         </span>
       </div>
-      <div v-for="(games, leagueName) in gamesByLeague" v-bind:key="leagueName" class="league-wrapper">
+      <div
+        v-for="(games, leagueName) in gamesByLeague"
+        v-bind:key="leagueName"
+        class="league-wrapper"
+      >
         <div class="league uppercase text-sm font-bold">{{ leagueName }}</div>
         <div class="flex flex-wrap mb-4">
-          <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 md:w-1/3 lg:w-1/4 mb-4">
+          <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 lg:w-1/4 mb-4">
             <Game v-bind:game="game" />
           </div>
         </div>

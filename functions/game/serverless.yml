@@ -154,6 +154,7 @@ functions:
               - content-type
   scoreboard:
     handler: game.scoreboard
+    memorySize: 1024
     events:
       - http:
           path: scoreboard
