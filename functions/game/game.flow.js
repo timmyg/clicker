@@ -155,8 +155,6 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(gameId)
       .exec();
     console.log('get game', gameId, game);
-    if (!game) {
-    }
     const status: GameStatus = getStatusV2(game);
     return respond(200, status);
   } else {
@@ -171,8 +169,8 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
 
       return respond(200, gameStatus);
     } catch (e) {
-      console.error(`failed to get score: ${webUrl}`);
-      Raven.captureMessage(`failed to get score: ${webUrl}`);
+      console.error(`failed to get score: ${apiUrl}`);
+      Raven.captureException(e);
       return respond(400);
     }
   }

@@ -248,6 +248,8 @@ functions:
               - content-type
   updateBoxInfo:
     handler: location.updateBoxInfo
+    timeout: 12
+    memorySize: 512
   allOff:
     handler: location.allOff
     events:
