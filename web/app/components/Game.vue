@@ -13,7 +13,7 @@
       <div class="flex teams-wrapper">
         <div class="w-full">
           <div class="team flex flex-row mb-2" v-for="team in getTeams()" v-bind:key="team.id">
-            <div class="w-1/2 flex flex-wrap items-center">
+            <div class="w-3/5 flex flex-wrap items-center">
               <img :src="team.logo" class="logo" />
               <div class="name text-md pl-2 relative text-sm">
                 <span v-if="team.rank" class="text-gray-500 text-xs">{{ team.rank }}</span>
@@ -21,7 +21,7 @@
                 <span class="inline-block sm:hidden text-sm">{{ team.name.abbr | truncate(5) }}</span>
               </div>
             </div>
-            <div class="w-1/2">
+            <div class="w-2/5">
               <span v-if="isVegas" class="text-sm flex">
                 <span v-if="!team.book">-</span>
                 <span v-else>
