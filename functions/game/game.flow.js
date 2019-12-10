@@ -596,6 +596,34 @@ function transformGameV2(game: any): Game {
     'odds[0].spread_away': 'away.book.spread',
     'odds[0].spread_home': 'home.book.spread',
   };
+  switch (game.broadcast.network) {
+    case 'Fox Sports 1':
+      game.broadcast.network = 'FS1';
+      break;
+    case 'Fox Sports 2':
+      game.broadcast.network = 'FS2';
+      break;
+    case 'CBS Sports Network':
+      game.broadcast.network = 'CBSSN';
+      break;
+    case 'Pac-12 Network':
+      game.broadcast.network = 'P12';
+      break;
+    case 'SEC Network':
+      game.broadcast.network = 'SEC';
+      break;
+    case 'ACC Network':
+      game.broadcast.network = 'ACC';
+      break;
+    case 'ACC Network Extra':
+      game.broadcast.network = 'ACCX';
+      break;
+    case 'WAC Digital Network':
+      game.broadcast.network = 'WAC';
+      break;
+    default:
+      break;
+  }
   return objectMapper(game, map);
 }
 
