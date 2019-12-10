@@ -399,7 +399,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
-  const { start, network } = getBody(event);
+  const { start, network } = event.queryStringParameters;
   const games: Game[] = await dbGame
     .query('start')
     .eq(start)
