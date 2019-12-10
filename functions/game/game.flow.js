@@ -403,7 +403,7 @@ module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, asyn
   const games: Game[] = await dbGame
     .query('start')
     .eq(start)
-    .filter('network')
+    .filter('broadcast.network')
     .eq(network)
     .exec();
 
