@@ -212,6 +212,7 @@ functions:
               - content-type
   saveBoxesInfo:
     handler: location.saveBoxesInfo
+    timeout: 12
     events:
       - http:
           path: '{id}/boxes/info'

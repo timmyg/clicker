@@ -125,18 +125,18 @@ functions:
               - partner
               - authorization
               - content-type
-  # getByStartTimeAndNetwork:
-  #   handler: game.getByStartTimeAndNetwork
-  #   events:
-  #     - http:
-  #         path: search
-  #         method: get
-  #         cors:
-  #           origin: '*'
-  #           headers:
-  #             - partner
-  #             - authorization
-  #             - content-type
+  getByStartTimeAndNetwork:
+    handler: game.getByStartTimeAndNetwork
+    events:
+      - http:
+          path: search
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   syncScores:
     handler: game.syncScores
     memorySize: 1024

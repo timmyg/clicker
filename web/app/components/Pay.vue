@@ -38,7 +38,12 @@
             <div class="label-wrapper">
               <label>Credit Card</label>
             </div>
-            <card v-if="loadedStripe" class="stripe-card" :stripe="stripePublishableKey" :options="stripeOptions" />
+            <card
+              v-if="loadedStripe"
+              class="stripe-card"
+              :stripe="stripePublishableKey"
+              :options="stripeOptions"
+            />
           </div>
           <p class="error" v-if="error">{{ error }}</p>
           <button class="button button-primary button-block button-shadow" :disabled="submitting">
@@ -47,10 +52,10 @@
           </button>
         </form>
         <section class="completed" v-else>
-          <span v-if="isSubscription"
-            >Successfully setup ${{ amount }}/month autopay for the {{ start || now | moment('Do') }} of every
-            month.</span
-          >
+          <span v-if="isSubscription">
+            Successfully setup ${{ amount }}/month autopay for the {{ start || now | moment('Do') }} of every
+            month.
+          </span>
           <span v-if="isOneTime">${{ amount }} payment completed. Email receipt is on the way.</span>
           <div class="emojis mt-24">
             <div>🎉</div>
@@ -72,7 +77,6 @@ import * as moment from 'moment';
 
 export default {
   data() {
-    console.log(process.env.NUXT_ENV_STRIPE_PUBLISHABLE_KEY);
     return {
       completed: false,
       submitting: false,
@@ -108,11 +112,9 @@ export default {
     this.name = name;
     this.type = type;
     this.plan = plan;
-    // console.log(start);
     this.start = start ? moment(start, 'M-D-YYYY').toDate() : null;
     this.isSubscription = type === 'subscription';
     this.isOneTime = type === 'onetime';
-    // console.log(this);
   },
 
   created() {
@@ -152,13 +154,11 @@ export default {
             plan,
             start: start ? moment(start).unix() * 1000 : null,
           };
-          // console.log(body);
           // return;
           const endpoint = this.isOneTime ? 'users/charge' : 'users/subscribe';
           this.$http
             .post(`${process.env.NUXT_ENV_API_BASE}/${endpoint}`, body)
             .then(x => {
-              console.log(x);
               this.completed = true;
               this.submitting = false;
             })
@@ -168,8 +168,6 @@ export default {
               // console.error(e.message);
               // console.error(JSON.parse(e));
               // this.error = e.message;
-              // console.log(e);
-              // console.log(e.response.data.message);
               this.error = e.response.data.message;
             })
             .finally(() => {
