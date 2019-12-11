@@ -293,7 +293,8 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.consumeNewGame = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('consume');
   console.log(event);
-  console.log(event.Records[0].body);
+  const game: Game = event.Records[0].body;
+  console.log({ game });
   return respond(200);
 });
 

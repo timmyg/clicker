@@ -175,7 +175,7 @@ functions:
     memorySize: 1024
     timeout: 30
     environment:
-      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
+      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
     events:
       - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
       - http:
