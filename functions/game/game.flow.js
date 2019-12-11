@@ -335,10 +335,12 @@ async function publishNewGames(games) {
   let i = 0;
   const messages = [];
   for (const game of games) {
-    const message = sns.publish({
-      Message: JSON.stringify(game),
-      TopicArn: process.env.newGameTopicArn,
-    });
+    const message = sns
+      .publish({
+        Message: JSON.stringify(game),
+        TopicArn: process.env.newGameTopicArn,
+      })
+      .promise();
     messages.push(message);
     i++;
   }
