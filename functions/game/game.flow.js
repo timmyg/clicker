@@ -427,7 +427,9 @@ async function pullFromActionNetwork(dates: Date[]) {
   }
 }
 
-async function updateGames(events: any[]) {
+async function updateGames(allEvents: any[]) {
+  // copy so we can splice array
+  let events = JSON.parse(JSON.stringify(allEvents));
   events.forEach((part, index, eventsArray) => {
     eventsArray[index] = transformGame(eventsArray[index]);
   });
