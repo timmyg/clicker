@@ -369,6 +369,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   // get program ids, publish to sns topic to update description
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
+  console.time(`publish ${transformedPrograms.length} messages`);
   for (const program of transformedPrograms) {
     console.log(i);
     const messageData = {
@@ -383,6 +384,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
       console.error(e);
     }
   }
+  console.timeEnd(`publish ${transformedPrograms.length} messages`);
   console.log(i, 'topics published to:', process.env.newProgramTopicArn);
 }
 

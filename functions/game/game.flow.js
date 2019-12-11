@@ -332,26 +332,9 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
 async function publishNewGames(games) {
   // get game ids, publish to sns topic to update description
   const sns = new AWS.SNS({ region: 'us-east-1' });
-  // let i = 0;
-  // for (const game of games) {
-  //   console.log(i);
-  //   const messageData = {
-  //     Message: JSON.stringify(game),
-  //     TopicArn: process.env.newGameTopicArn,
-  //   };
-
-  //   try {
-  //     await sns.publish(messageData).promise();
-  //     i++;
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // const [programs: Program[], programsNext: Program[]] = await Promise.all([programsQuery, programsNextQuery]);
   let i = 0;
   const messages = [];
   for (const game of games) {
-    console.log(i);
     const message = sns.publish({
       Message: JSON.stringify(game),
       TopicArn: process.env.newGameTopicArn,
@@ -359,9 +342,9 @@ async function publishNewGames(games) {
     messages.push(message);
     i++;
   }
-  console.time('publish messages');
+  console.time(`publish ${messages.length} messages`);
   await Promise.all(messages);
-  console.timeEnd('publish messages');
+  console.timeEnd(`publish ${messages.length} messages`);
   return respond(200);
 }
 
