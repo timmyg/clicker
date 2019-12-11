@@ -596,7 +596,9 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
   // const { id } = getPathParameters(event);
   let allLocations: Venue[] = await dbLocation.scan().exec();
 
+  let i = 0;
   for (const location of allLocations) {
+    console.log(i);
     const { losantId } = location;
     const body = {
       losantId,
@@ -607,8 +609,10 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
         const { id: boxId, ip, clientAddress: client } = box;
         body.boxes.push({ boxId, ip, client });
       }
+      console.log('location.boxes', location.boxes.length);
       if (losantId.length > 3 && !!body.boxes.length) {
         console.log({ body });
+        console.log(i);
         await new Invoke()
           .service('remote')
           .name('checkBoxesInfo')
@@ -617,6 +621,7 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
           .go();
       }
     }
+    i++;
   }
   return respond(200, 'ok');
 });

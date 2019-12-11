@@ -370,14 +370,15 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
   for (const program of transformedPrograms) {
+    console.log(i);
     const messageData = {
       Message: JSON.stringify(program),
       TopicArn: process.env.newProgramTopicArn,
     };
 
     try {
-      i++;
       await sns.publish(messageData).promise();
+      i++;
     } catch (e) {
       console.error(e);
     }

@@ -37,9 +37,6 @@ const dbReservation = dynamoose.model(
       type: String,
       hashKey: true,
       required: true,
-      set: val => {
-        return decodeURI(val).replace('sms|', '');
-      },
     },
     id: {
       type: String,
@@ -181,17 +178,20 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
+  console.log(id, userId);
   const originalReservation: Reservation = await dbReservation.get({ id, userId });
   console.log({ originalReservation });
   console.log({ updatedReservation });
   console.log(userId, originalReservation.userId);
-  if (userId.replace('sms|', '') !== originalReservation.userId) {
+  if (userId !== originalReservation.userId) {
     return respond(403, 'invalid userId');
   }
   const updatedCost = originalReservation.cost + updatedReservation.cost;
   const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
   const { program, end } = updatedReservation;
+  console.log('update reservation:');
+  console.log({ cost: updatedCost, minutes: updatedMinutes, program, end });
   const reservation: Reservation = await dbReservation.update(
     { id, userId },
     { cost: updatedCost, minutes: updatedMinutes, program, end },

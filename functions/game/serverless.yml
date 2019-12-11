@@ -78,21 +78,14 @@ resources:
               - AttributeName: status
                 KeyType: HASH
             Projection:
-              # NonKeyAttributes:
-              #   - awayTeam
-              #   - homeTeam
-              #   - statusDisplay
-              # ProjectionType: INCLUDE
               ProjectionType: ALL
-        # - IndexName: networkGlobalIndex
-        #   KeySchema:
-        #     - AttributeName: network
-        #       KeyType: HASH
-        #   Projection:
-        #     ProjectionType: KEYS_ONLY
-        #   ProvisionedThroughput:
-        #     ReadCapacityUnits: ${self:custom.tableThroughput}
-        #     WriteCapacityUnits: ${self:custom.tableThroughput}
+          - IndexName: idGlobalIndex
+            KeySchema:
+              - AttributeName: id
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
 functions:
   health:
     handler: game.health
@@ -161,6 +154,7 @@ functions:
               - content-type
   scoreboard:
     handler: game.scoreboard
+    memorySize: 1024
     events:
       - http:
           path: scoreboard
