@@ -12,6 +12,8 @@ provider:
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
     serviceName: ${self:service}
+    airtableKey: ${env:AIRTABLE_KEY}
+    airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -50,6 +52,10 @@ custom:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
+  airtableBase:
+    prod: ${env:AIRTABLE_BASE}
+    release: ${env:AIRTABLE_BASE_RELEASE}
+    develop: ${env:AIRTABLE_BASE_DEV}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: programs
@@ -63,8 +69,6 @@ custom:
     basePath: ../
   newProgramTopic: '${self:service}-${self:custom.stage}-new-program-topic'
   newProgramTopicArn:
-    #   # local:
-    #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
     deployed:
       {
         'Fn::Join':
