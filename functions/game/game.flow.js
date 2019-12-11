@@ -8,9 +8,6 @@ const AWS = require('aws-sdk');
 const objectMapper = require('object-mapper');
 const _ = require('lodash');
 const awsXRay = require('aws-xray-sdk');
-// const types = require('clicker-types');
-// const util = require('my-lib');
-// import type {Game} from types;
 const awsSdk = awsXRay.captureAWS(AWS);
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
