@@ -33,7 +33,6 @@ export default {
       }),
     ])
       .then(([posts]) => {
-        console.log(posts.items[0].fields);
         return {
           post: posts.items[0],
         };

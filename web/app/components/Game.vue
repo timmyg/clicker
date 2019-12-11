@@ -67,7 +67,6 @@ export default Vue.extend({
       }
     },
     getSpread(team) {
-      console.log({ team });
       return team.book.spread > 0 ? `+${team.book.spread}` : team.book.spread;
     },
     getMoneyline(team) {
