@@ -425,21 +425,6 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
   }
 });
 
-// async function updateProgram(data) {
-//   const docClient = new AWS.DynamoDB.DocumentClient();
-//   var params = {
-//     TableName: process.env.tableProgram,
-//     Item: data,
-//   };
-//   try {
-//     console.log('. . .');
-//     const x = await docClient.put(params).promise();
-//     console.log({ x });
-//   } catch (err) {
-//     return err;
-//   }
-// }
-// async function abstraction
 async function updateProgram(id, region, description) {
   console.log({ description });
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -458,21 +443,6 @@ async function updateProgram(id, region, description) {
     return err;
   }
 }
-
-// async function getProgram(id, start) {
-//   const AWS = require('aws-sdk');
-//   const docClient = new AWS.DynamoDB.DocumentClient();
-//   var params = {
-//     TableName: process.env.tableProgram,
-//     Key: { id, start },
-//   };
-//   try {
-//     const data = await docClient.get(params).promise();
-//     return data.Item;
-//   } catch (err) {
-//     return err;
-//   }
-// }
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
