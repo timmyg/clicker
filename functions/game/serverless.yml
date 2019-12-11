@@ -142,7 +142,9 @@ functions:
     memorySize: 1024
     timeout: 12
     events:
-      - schedule: rate(5 minutes)
+      # - schedule: rate(5 minutes)
+      - schedule: cron(0/1 21-8 ? * * *) # Every 1 minute between 9pm UTC and 8am UTC
+      - schedule: cron(0/10 8-21 ? * * *) # Every 10 minutes between 8am UTC and 9pm UTC
       - http:
           path: sync/scores
           method: post
