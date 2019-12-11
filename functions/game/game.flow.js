@@ -324,6 +324,7 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('sync');
   const allEvents: any = await pullFromActionNetwork(datesToPull);
   await updateGames(allEvents);
+  console.log('publish events:', allEvents.length);
   await publishNewGames(allEvents);
   return respond(200);
 });
