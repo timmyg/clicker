@@ -290,7 +290,7 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
       const { defaultZip, name, localChannels } = region;
       console.log(`sync local channels: ${name}/${defaultZip} for channels ${localChannels.join(', ')}`);
       await new Invoke()
-        .service('programs')
+        .service('program')
         .name('syncByRegion')
         .body({ name, localChannels, defaultZip })
         .async()
