@@ -236,3 +236,13 @@ functions:
             - newProgramQueue
             - Arn
           batchSize: 1
+  consumeNewProgramAddToAirtable:
+    handler: program.consumeNewProgramAddToAirtable
+    description: Consume new program add to airtable
+    reservedConcurrency: 1
+    events:
+      - sqs:
+          arn: !GetAtt
+            - newProgramQueue
+            - Arn
+          batchSize: 1

@@ -289,11 +289,11 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.consumeNewGameAddToAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGames = 'Games';
   console.log('consume');
   console.log(event);
   const game: Game = JSON.parse(event.Records[0].body);
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const { id, leagueName, start } = game;
   const { full: homeTeam } = game.home.name;
   const { full: awayTeam } = game.away.name;

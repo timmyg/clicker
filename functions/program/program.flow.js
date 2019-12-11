@@ -1,6 +1,7 @@
 // @flow
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
+const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
 const awsXRay = require('aws-xray-sdk');
 const AWS = require('aws-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
@@ -320,7 +321,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   // const regionPrograms = await Program.query('region').eq(regionName).exec();
   const regionPrograms = await Program.query('region')
     .using('startLocalIndex')
-    .eq('cincinnati')
+    .eq(regionName)
     .where('start')
     .descending()
     .exec();
@@ -422,21 +423,20 @@ module.exports.consumeNewProgramAddToAirtable = RavenLambdaWrapper.handler(Raven
   const airtablePrograms = 'Programs';
   console.log('consume');
   console.log(event);
-  // const game: Game = JSON.parse(event.Records[0].body);
-  // const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  // const { id, leagueName, start } = game;
-  // const { full: homeTeam } = game.home.name;
-  // const { full: awayTeam } = game.away.name;
+  const program: Program = JSON.parse(event.Records[0].body);
+  const { programmingId, title, description, channel, channelTitle, live, start } = program;
 
-  // await base(airtablePrograms).create({
-  //   id,
-  //   leagueName,
-  //   homeTeam,
-  //   awayTeam,
-  //   start,
-  // });
+  await airtableBase(airtablePrograms).create({
+    programmingId,
+    title,
+    description,
+    channel,
+    channelTitle,
+    live,
+    start,
+  });
 
-  console.log({ game });
+  console.log({ program });
   return respond(200);
 });
 
