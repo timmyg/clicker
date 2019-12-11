@@ -22,7 +22,7 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
   // check if any scheduled events for control center today
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   // find games scheduled for the next 24 hours
-  let games = await base('Games')
+  let games = await base('Control Center v1')
     .select({
       view: 'Scheduled',
       filterByFormula: `AND( {Started Hours Ago} <= 0, {Started Hours Ago} > -14 )`,
