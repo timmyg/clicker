@@ -343,6 +343,7 @@ async function publishNewGames(games) {
     i++;
   }
   console.time(`publish ${messages.length} messages`);
+  console.log(messages[0]);
   await Promise.all(messages);
   console.timeEnd(`publish ${messages.length} messages`);
   return respond(200);
