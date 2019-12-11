@@ -212,6 +212,7 @@ functions:
               - content-type
   saveBoxesInfo:
     handler: location.saveBoxesInfo
+    timeout: 12
     events:
       - http:
           path: '{id}/boxes/info'
@@ -248,6 +249,8 @@ functions:
               - content-type
   updateBoxInfo:
     handler: location.updateBoxInfo
+    timeout: 12
+    memorySize: 512
   allOff:
     handler: location.allOff
     events:
