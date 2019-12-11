@@ -333,22 +333,22 @@ async function publishNewGames(games) {
   // get game ids, publish to sns topic to update description
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
-  const messages = [];
+  const messagePromises = [];
   for (const game of games) {
-    const message = sns
+    const messagePromise = sns
       .publish({
         Message: JSON.stringify(game),
         TopicArn: process.env.newGameTopicArn,
       })
       .promise();
-    messages.push(message);
+    messagePromises.push(messagePromise);
     i++;
   }
-  console.time(`publish ${messages.length} messages`);
-  console.log(messages[0]);
-  const [first] = await Promise.all(messages);
+  console.time(`publish ${messagePromises.length} messages`);
+  console.log(messagePromises[0]);
+  const [first] = await Promise.all(messagePromises);
   console.log({ first });
-  console.timeEnd(`publish ${messages.length} messages`);
+  console.timeEnd(`publish ${messagePromises.length} messages`);
   return respond(200);
 }
 

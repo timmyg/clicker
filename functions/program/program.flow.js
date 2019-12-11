@@ -369,7 +369,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   // get program ids, publish to sns topic to update description
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
-  const messages = [];
+  const messagePromises = [];
   console.time(`publish ${transformedPrograms.length} messages`);
   for (const program of transformedPrograms) {
     console.log(i);
@@ -379,13 +379,13 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     };
 
     try {
-      messages.push(sns.publish(messageData).promise());
+      messagePromises.push(sns.publish(messageData).promise());
       i++;
     } catch (e) {
       console.error(e);
     }
   }
-  await Promise.all(messages);
+  await Promise.all(messagePromises);
   console.timeEnd(`publish ${transformedPrograms.length} messages`);
   console.log(i, 'topics published to:', process.env.newProgramTopicArn);
 }
