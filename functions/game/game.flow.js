@@ -290,6 +290,13 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+module.exports.consumeNewGame = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('consume');
+  console.log(event);
+  console.log(event.Records[0].body);
+  return respond(200);
+});
+
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('get games...');
   const allGames: Game[] = await dbGame.scan().exec();
@@ -316,8 +323,29 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('sync');
   const allEvents: any = await pullFromActionNetwork(datesToPull);
   await updateGames(allEvents);
+  await publishNewGames(allEvents);
   return respond(200);
 });
+
+async function publishNewGames(games) {
+  // get game ids, publish to sns topic to update description
+  const sns = new AWS.SNS({ region: 'us-east-1' });
+  let i = 0;
+  for (const game of games) {
+    console.log(i);
+    const messageData = {
+      Message: JSON.stringify(game),
+      TopicArn: process.env.newGameTopicArn,
+    };
+
+    try {
+      await sns.publish(messageData).promise();
+      i++;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
 
 function removeEmpty(obj) {
   return Object.keys(obj).forEach(function(key) {

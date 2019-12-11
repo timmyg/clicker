@@ -21,6 +21,14 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - SNS:Publish
+      Resource:
+        {
+          'Fn::Join':
+            ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+        }
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
@@ -53,6 +61,15 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
+  newGameTopic: '${self:service}-${self:custom.stage}-new-game-topic'
+  newGameTopicArn:
+    #   # local:
+    #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newGameTopic}"
+    deployed:
+      {
+        'Fn::Join':
+          ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+      }
 resources:
   Resources:
     GamesTable:
@@ -85,7 +102,50 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-
+    newGameTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:service}-${self:custom.stage}-new-game-topic
+    newGameQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.stage}-new-game-queue
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt
+            - newGameDLQ
+            - Arn
+          maxReceiveCount: 3
+    newGameDLQ:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.stage}-new-game-queue-dlq
+    snsToNewGameQueueSqsPolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: 'allow-sns-messages'
+              Effect: Allow
+              Principal: '*'
+              Resource: !GetAtt
+                - newGameQueue
+                - Arn
+              Action: 'SQS:SendMessage'
+              Condition:
+                ArnEquals:
+                  'aws:SourceArn': !Ref newGameTopic
+        Queues:
+          - Ref: newGameQueue
+    newGameQueueSubscription:
+      Type: 'AWS::SNS::Subscription'
+      Properties:
+        TopicArn: !Ref newGameTopic
+        Endpoint: !GetAtt
+          - newGameQueue
+          - Arn
+        Protocol: sqs
+        RawMessageDelivery: 'true'
 functions:
   health:
     handler: game.health
@@ -114,6 +174,8 @@ functions:
     handler: game.syncSchedule
     memorySize: 1024
     timeout: 30
+    environment:
+      newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
     events:
       - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
       - http:
@@ -167,3 +229,14 @@ functions:
               - partner
               - authorization
               - content-type
+  consumeNewGame:
+    memorySize: 512
+    timeout: 12
+    handler: game.consumeNewGame
+    reservedConcurrency: 1
+    events:
+      - sqs:
+          arn: !GetAtt
+            - newGameQueue
+            - Arn
+          batchSize: 1
