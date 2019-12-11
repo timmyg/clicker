@@ -311,6 +311,16 @@ module.exports.consumeNewGameAddToAirtable = RavenLambdaWrapper.handler(Raven, a
 });
 
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
+  const gameIds = await dbGame
+    .query()
+    .using('idOnlyGlobalIndex')
+    // .eq(regionName)
+    // .where('start')
+    // .descending()
+    .exec();
+
+  console.log({ gameIds });
+
   console.log('get games...');
   const allGames: Game[] = await dbGame.scan().exec();
   console.log('existingGames:', allGames.length);

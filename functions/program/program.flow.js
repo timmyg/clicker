@@ -93,7 +93,7 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
-const Program = dynamoose.model(
+const dbProgram = dynamoose.model(
   process.env.tableProgram,
   {
     region: {
@@ -168,7 +168,8 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('current + next programming setup queries');
 
   console.log(location.region, now, in25Mins);
-  const programsQuery = Program.query('region')
+  const programsQuery = dbProgram
+    .query('region')
     .eq(location.region)
     .and()
     .filter('start')
@@ -180,7 +181,8 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
   console.log(2);
 
-  const programsNextQuery = Program.query('region')
+  const programsNextQuery = dbProgram
+    .query('region')
     .eq(location.region)
     .and()
     .filter('end')
@@ -318,8 +320,9 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
   // get latest program
   console.log('querying region:', regionName);
-  // const regionPrograms = await Program.query('region').eq(regionName).exec();
-  const regionPrograms = await Program.query('region')
+  // const regionPrograms = await dbProgram.query('region').eq(regionName).exec();
+  const regionPrograms = await dbProgram
+    .query('region')
     .using('startLocalIndex')
     .eq(regionName)
     .where('start')
@@ -365,7 +368,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   console.log('allPrograms:', allPrograms.length);
   let transformedPrograms = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
-  let dbResult = await Program.batchPut(transformedPrograms);
+  let dbResult = await dbProgram.batchPut(transformedPrograms);
   console.log(dbResult);
 
   // get program ids, publish to sns topic to update description
@@ -462,7 +465,7 @@ async function updateProgram(id, region, description) {
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
   programs.forEach(p => {
-    transformedPrograms.push(new Program(p));
+    transformedPrograms.push(new dbProgram(p));
   });
   return transformedPrograms;
 }

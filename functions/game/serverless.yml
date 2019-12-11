@@ -106,6 +106,12 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
+          - IndexName: idOnlyGlobalIndex
+            KeySchema:
+              - AttributeName: id
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
     newGameTopic:
       Type: AWS::SNS::Topic
       Properties:
