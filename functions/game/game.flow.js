@@ -288,7 +288,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.consumeNewGame = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.consumeNewGameAddToAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const airtableGames = 'Games';
   console.log('consume');
   console.log(event);
@@ -335,9 +335,9 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.log('sync');
   const allEvents: any = await pullFromActionNetwork(datesToPull);
-  await updateGames(allEvents);
-  console.log('publish events:', allEvents.length);
-  await publishNewGames(allEvents);
+  const allEventsTransformed: Game[] = await updateGames(allEvents);
+  console.log('publish events:', allEventsTransformed.length);
+  await publishNewGames(allEventsTransformed);
   return respond(200);
 });
 
@@ -426,12 +426,12 @@ async function pullFromActionNetwork(dates: Date[]) {
   }
 }
 
-async function updateGames(allEvents: any[]) {
-  // copy so we can splice array
-  let events = JSON.parse(JSON.stringify(allEvents));
+async function updateGames(events: any[]) {
   events.forEach((part, index, eventsArray) => {
     eventsArray[index] = transformGame(eventsArray[index]);
   });
+  // copy so we can splice array but return entire array
+  const eventsCopy = JSON.parse(JSON.stringify(events));
   console.log('updateGames:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -448,6 +448,7 @@ async function updateGames(allEvents: any[]) {
       console.error(e);
     }
   }
+  return eventsCopy;
 }
 
 function transformGame(game: any): Game {

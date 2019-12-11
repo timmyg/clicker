@@ -1,5 +1,6 @@
 // @flow
 const dynamoose = require('dynamoose');
+const Airtable = require('airtable');
 const awsXRay = require('aws-xray-sdk');
 const AWS = require('aws-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
@@ -390,7 +391,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   console.log(i, 'topics published to:', process.env.newProgramTopicArn);
 }
 
-module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('consume');
   console.log(event);
   const { id, programmingId, region } = JSON.parse(event.Records[0].body);
@@ -404,15 +405,9 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
     const { description } = result.data.programDetail;
     console.log('update', { id, region }, { description });
 
-    // let program = await getProgram(id, region);
-    // if (!!program.id) {
     if (description && description.length) {
       await updateProgram(id, region, description);
     }
-    //   console.log('program saved');
-    // } else {
-    //   console.log('no program by id:', id);
-    // }
     return respond(200);
   } catch (e) {
     if (e.response && e.response.status === 404) {
@@ -420,9 +415,29 @@ module.exports.consumeNewProgram = RavenLambdaWrapper.handler(Raven, async event
       console.error(e);
     }
     console.error(e);
-    // throw e;
     return respond(400);
   }
+});
+module.exports.consumeNewProgramAddToAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const airtablePrograms = 'Programs';
+  console.log('consume');
+  console.log(event);
+  // const game: Game = JSON.parse(event.Records[0].body);
+  // const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  // const { id, leagueName, start } = game;
+  // const { full: homeTeam } = game.home.name;
+  // const { full: awayTeam } = game.away.name;
+
+  // await base(airtablePrograms).create({
+  //   id,
+  //   leagueName,
+  //   homeTeam,
+  //   awayTeam,
+  //   start,
+  // });
+
+  console.log({ game });
+  return respond(200);
 });
 
 async function updateProgram(id, region, description) {

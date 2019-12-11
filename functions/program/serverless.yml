@@ -224,10 +224,10 @@ functions:
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
-  consumeNewProgram:
+  consumeNewProgramUpdateDescription:
     memorySize: 512
     timeout: 12
-    handler: program.consumeNewProgram
+    handler: program.consumeNewProgramUpdateDescription
     description: Consume new program queue and add description
     reservedConcurrency: 1
     events:

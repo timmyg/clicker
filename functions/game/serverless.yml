@@ -233,10 +233,8 @@ functions:
               - partner
               - authorization
               - content-type
-  consumeNewGame:
-    memorySize: 512
-    timeout: 12
-    handler: game.consumeNewGame
+  consumeNewGameAddToAirtable:
+    handler: game.consumeNewGameAddToAirtable
     reservedConcurrency: 1
     events:
       - sqs:
