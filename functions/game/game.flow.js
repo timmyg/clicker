@@ -344,7 +344,8 @@ async function publishNewGames(games) {
   }
   console.time(`publish ${messages.length} messages`);
   console.log(messages[0]);
-  await Promise.all(messages);
+  const [first] = await Promise.all(messages);
+  console.log({ first });
   console.timeEnd(`publish ${messages.length} messages`);
   return respond(200);
 }
