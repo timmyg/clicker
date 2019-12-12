@@ -27,6 +27,8 @@ const dbGame = dynamoose.model(
       rangeKey: true,
       index: {
         global: true,
+        // name: 'idOnlyGlobalIndex',
+        // project: false,
       },
     },
     status: {
@@ -312,8 +314,9 @@ module.exports.consumeNewGameAddToAirtable = RavenLambdaWrapper.handler(Raven, a
 
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   const gameIds = await dbGame
-    .query()
-    .using('idOnlyGlobalIndex')
+    .scan()
+    // .query()
+    // .using('idOnlyGlobalIndex')
     // .eq(regionName)
     // .where('start')
     // .descending()
