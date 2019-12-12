@@ -440,6 +440,7 @@ async function updateGames(events: any[], deduplicate: boolean = false) {
   if (deduplicate) {
     const existingGames = await dbGame.scan().exec();
     let existingGameIds = [];
+    console.log({ existingGameIds });
     if (existingGames && existingGames.length) {
       existingGameIds = existingGames.map(g => g.id);
     }
