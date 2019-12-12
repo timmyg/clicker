@@ -384,7 +384,8 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
   // get program ids, publish to sns topic to update description
   // remove duplicate programmingIds so there's not multiple per region
-  transformedPrograms = [...new Set(transformedPrograms.map(item => item.programmingId))];
+  // transformedPrograms = [...new Set(transformedPrograms.map(item => item.programmingId))];
+  transformedPrograms = uniqBy(transformedPrograms, 'programmingId');
   console.log('unique programs by programmingId:', transformedPrograms.length);
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
