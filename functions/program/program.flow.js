@@ -1,7 +1,6 @@
 // @flow
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
-const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
 const awsXRay = require('aws-xray-sdk');
 const AWS = require('aws-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
@@ -14,6 +13,8 @@ const directvEndpoint = 'https://www.directv.com/json';
 
 declare class process {
   static env: {
+    airtableBase: string,
+    airtableKey: string,
     tableProgram: string,
     serviceName: string,
     tableProgram: string,
@@ -423,6 +424,7 @@ module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(R
   }
 });
 module.exports.consumeNewProgramAddToAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Programs';
   console.log('consume');
   console.log(event);
