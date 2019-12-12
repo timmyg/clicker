@@ -421,7 +421,25 @@ module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(R
     console.log('update', { id, region }, { description });
 
     if (description && description.length) {
+      // update in our db
       await updateProgram(id, region, description);
+      // update in airtable
+      const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+      const airtablePrograms = 'Programs';
+      const airtableGames = await airtableBase(airtablePrograms)
+        .select({
+          filterByFormula: `{programmingId} = ${programmingId}`,
+        })
+        .all();
+      const airtablePromises = [];
+      airtableGames.forEach(g => {
+        airtablePromises.push(
+          airtableBase(airtablePrograms).update(g.id, {
+            description,
+          }),
+        );
+      });
+      await Promise.all(airtablePromises);
     }
     return respond(200);
   } catch (e) {
