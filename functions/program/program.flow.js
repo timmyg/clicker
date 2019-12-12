@@ -329,6 +329,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     .where('start')
     .descending()
     .exec();
+  const existingRegionProgramIds = regionPrograms.map(p => p.id);
 
   // console.log({ regionName, latestProgram });
 
@@ -365,7 +366,8 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   let result = await axios({ method, url, params, headers });
   console.log(result);
   let { schedule } = result.data;
-  let allPrograms = build(schedule, regionName);
+  let allPrograms: Program[] = build(schedule, regionName);
+  allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
   console.log('allPrograms:', allPrograms.length);
   let transformedPrograms = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);

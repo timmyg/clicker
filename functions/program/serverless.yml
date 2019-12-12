@@ -150,7 +150,9 @@ resources:
               - AttributeName: start
                 KeyType: RANGE
             Projection:
-              ProjectionType: KEYS_ONLY
+              NonKeyAttributes:
+                - id
+              ProjectionType: INCLUDE
         #   - IndexName: endLocalIndex
         #     KeySchema:
         #       - AttributeName: region
