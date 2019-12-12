@@ -1,4 +1,4 @@
-const { getInProgressAndCompletedGames, getStatus, transformGame, transformSIUrl } = require('./game');
+const { getInProgressAndCompletedGames, buildStatus, transformGame, transformSIUrl } = require('./game');
 
 describe('transformGame', () => {
   describe('getInProgressAndCompletedGames', () => {
@@ -46,7 +46,7 @@ describe('get status', () => {
   describe('nfl', () => {
     test('completed', () => {
       const data = require('../.resources/db/games/football/nfl/completed.json');
-      const { started, blowout, ended, description } = getStatus(data);
+      const { started, blowout, ended, description } = buildStatus(data);
       expect(description).toBe('DAL 24 @ CHI 31 (Final)');
       expect(started).toBeTruthy();
       expect(ended).toBeTruthy();
@@ -54,7 +54,7 @@ describe('get status', () => {
     });
     test('blowout', () => {
       const data = require('../.resources/db/games/football/nfl/blowout.json');
-      const { started, blowout, ended, description } = getStatus(data);
+      const { started, blowout, ended, description } = buildStatus(data);
       expect(description).toBe('DAL 24 @ CHI 52 (5:05 - 4)');
       expect(started).toBeTruthy();
       expect(ended).toBeFalsy();
@@ -62,7 +62,7 @@ describe('get status', () => {
     });
     test('close game', () => {
       const data = require('../.resources/db/games/football/nfl/close-game.json');
-      const { started, blowout, ended, description } = getStatus(data);
+      const { started, blowout, ended, description } = buildStatus(data);
       expect(description).toBe('DAL 24 @ CHI 31 (01:05 - 4)');
       expect(started).toBeTruthy();
       expect(ended).toBeFalsy();
@@ -70,7 +70,7 @@ describe('get status', () => {
     });
     test('early blowout', () => {
       const data = require('../.resources/db/games/football/nfl/early-blowout.json');
-      const { started, blowout, ended, description } = getStatus(data);
+      const { started, blowout, ended, description } = buildStatus(data);
       expect(description).toBe('DAL 24 @ CHI 52 (11:00 - 4)');
       expect(started).toBeTruthy();
       expect(ended).toBeFalsy();
@@ -78,7 +78,7 @@ describe('get status', () => {
     });
     test('future', () => {
       const data = require('../.resources/db/games/football/nfl/future.json');
-      const { started, blowout, ended, description } = getStatus(data);
+      const { started, blowout, ended, description } = buildStatus(data);
       expect(description).toBe('CAR 0 @ ATL 0 (12/8 1:00pm EST)');
       expect(started).toBeFalsy();
       expect(ended).toBeFalsy();
@@ -88,7 +88,7 @@ describe('get status', () => {
   describe('la ligue', () => {
     test('close game', () => {
       const data = require('../.resources/db/games/soccer/la-ligue/close-game.json');
-      const { started, blowout, ended, description } = getStatus(data);
+      const { started, blowout, ended, description } = buildStatus(data);
       expect(description).toBe("SB 0 @ LIL 1 (81')");
       expect(started).toBeTruthy();
       expect(ended).toBeFalsy();
@@ -96,7 +96,7 @@ describe('get status', () => {
     });
     test('blowout', () => {
       const data = require('../.resources/db/games/soccer/la-ligue/blowout.json');
-      const { started, blowout, ended, description } = getStatus(data);
+      const { started, blowout, ended, description } = buildStatus(data);
       expect(description).toBe("SB 4 @ LIL 1 (81')");
       expect(started).toBeTruthy();
       expect(ended).toBeFalsy();
