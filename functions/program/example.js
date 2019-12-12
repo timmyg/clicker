@@ -1,11 +1,16 @@
 console.log(4);
 (async () => {
-  const axios = require('axios');
-  try {
-    console.log('hi');
-    const result = await axios.get('https://httpstat.us/404?sleep=1000');
-  } catch (e) {
-    // console.error(e);
-    console.error(e.response.status === 405);
-  }
+  console.log('1');
+  require('dotenv').config({ path: '../.env' });
+  const Airtable = require('airtable');
+  const programmingId = 'SH033462440000';
+  const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtablePrograms = 'Programs';
+  console.log('call');
+  const airtableGames = await airtableBase(airtablePrograms)
+    .select({
+      filterByFormula: `{programmingId}='${programmingId}'`,
+    })
+    .all();
+  console.log({ airtableGames });
 })();

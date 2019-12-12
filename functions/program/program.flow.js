@@ -428,7 +428,7 @@ module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(R
       const airtablePrograms = 'Programs';
       const airtableGames = await airtableBase(airtablePrograms)
         .select({
-          filterByFormula: `{programmingId} = ${programmingId}`,
+          filterByFormula: `{programmingId} = '${programmingId}'`,
         })
         .all();
       const airtablePromises = [];
