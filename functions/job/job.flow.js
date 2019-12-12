@@ -227,6 +227,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
       // loop through locations
       for (const location of locations) {
         // ensure location has package for game
+        console.log(gamePackage, location.packages);
         if (gamePackage && (!location.packages || !location.packages.includes(gamePackage))) {
           console.log(`${location.name} doesn't have ${gamePackage} package`);
           continue;

@@ -123,11 +123,11 @@ module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(gameId)
     .exec();
   console.log('get game', gameId, game);
-  const status: GameStatus = getStatus(game);
+  const status: GameStatus = buildStatus(game);
   return respond(200, status);
 });
 
-function getStatus(game: Game): GameStatus {
+function buildStatus(game: Game): GameStatus {
   const gameStatus = new GameStatus();
   gameStatus.started = ['complete', 'inprogress'].includes(game.status) ? true : false;
   gameStatus.ended = ['complete'].includes(game.status) ? true : false;
@@ -137,6 +137,7 @@ function getStatus(game: Game): GameStatus {
 }
 
 function getDescription(game: Game): string {
+  // console.log({ game44: game });
   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
   console.log('game.leagueName', game.leagueName, game.status);
   switch (game.status) {
@@ -550,4 +551,4 @@ function transformGame(game: any): Game {
 
 module.exports.getInProgressAndCompletedGames = getInProgressAndCompletedGames;
 module.exports.transformGame = transformGame;
-module.exports.getStatus = getStatus;
+module.exports.buildStatus = buildStatus;
