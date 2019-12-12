@@ -373,7 +373,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   // console.log(result);
   let { schedule } = result.data;
   let allPrograms: Program[] = build(schedule, regionName);
-  // deduplicate
+  // remove existing programs
   console.log('allPrograms:', allPrograms.length);
   allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
   console.log('allPrograms deduped:', allPrograms.length);
@@ -383,6 +383,9 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   console.log(dbResult);
 
   // get program ids, publish to sns topic to update description
+  // remove duplicate programmingIds so there's not multiple per region
+  transformedPrograms = [...new Set(transformedPrograms.map(item => item.programmingId))];
+  console.log('unique programs by programmingId:', transformedPrograms.length);
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
   const messagePromises = [];
@@ -457,13 +460,14 @@ module.exports.consumeNewProgramAddToAirtable = RavenLambdaWrapper.handler(Raven
   console.log('consume');
   console.log(event);
   const program: Program = JSON.parse(event.Records[0].body);
-  const { programmingId, title, description, channel, channelTitle, live, start } = program;
+  const { programmingId, title, description, channel, channelTitle, live, start, region } = program;
 
   await airtableBase(airtablePrograms).create({
     programmingId,
     title,
     description,
     channel,
+    region,
     channelTitle,
     live,
     start,
