@@ -4,11 +4,18 @@ const axios = require('axios');
 const camelcase = require('camelcase-keys');
 const dynamoose = require('dynamoose');
 const moment = require('moment-timezone');
-const AWS = require('aws-sdk');
 const objectMapper = require('object-mapper');
 const _ = require('lodash');
-const awsXRay = require('aws-xray-sdk');
-const awsSdk = awsXRay.captureAWS(AWS);
+// const AWS = require('aws-sdk');
+let AWS;
+if (process.env._X_AMZN_TRACE_ID) {
+  AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
+} else {
+  console.info('Serverless Offline detected; skipping AWS X-Ray setup');
+  AWS = require('aws-sdk');
+}
+// const awsXRay = require('aws-xray-sdk');
+// const awsSdk = awsXRay.captureAWS(AWS);
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 if (process.env.NODE_ENV === 'test') {
@@ -231,7 +238,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
       console.log('gamesToUpdate', gamesToUpdate.length);
       if (!!gamesToUpdate.length) {
         const totalGames = gamesToUpdate.length;
-        await updateGames(gamesToUpdate);
+        await updateGames(gamesToUpdate, []);
         return respond(200, { updatedGames: totalGames });
       }
     }
@@ -313,16 +320,12 @@ module.exports.consumeNewGameAddToAirtable = RavenLambdaWrapper.handler(Raven, a
 });
 
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
-  const gameIds = await dbGame
-    .scan()
-    // .query()
-    // .using('idOnlyGlobalIndex')
-    // .eq(regionName)
-    // .where('start')
-    // .descending()
-    .exec();
-
-  console.log({ gameIds });
+  const existingGames = await dbGame.scan().exec();
+  let existingGameIds = [];
+  if (existingGames && existingGames.length) {
+    existingGameIds = existingGames.map(g => g.id);
+  }
+  console.log({ existingGameIds });
 
   console.log('get games...');
   const allGames: Game[] = await dbGame.scan().exec();
@@ -348,7 +351,7 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.log('sync');
   const allEvents: any = await pullFromActionNetwork(datesToPull);
-  const allEventsTransformed: Game[] = await updateGames(allEvents);
+  const allEventsTransformed: Game[] = await updateGames(allEvents, existingGameIds);
   console.log('publish events:', allEventsTransformed.length);
   await publishNewGames(allEventsTransformed);
   return respond(200);
@@ -439,7 +442,10 @@ async function pullFromActionNetwork(dates: Date[]) {
   }
 }
 
-async function updateGames(events: any[]) {
+async function updateGames(events: any[], existingGameIds: number[]) {
+  console.log('all events', events.length);
+  events = events.filter(e => !existingGameIds.includes(e.id));
+  console.log('new events', events.length);
   events.forEach((part, index, eventsArray) => {
     eventsArray[index] = transformGame(eventsArray[index]);
   });
