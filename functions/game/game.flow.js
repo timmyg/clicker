@@ -239,7 +239,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
       console.log('gamesToUpdate', gamesToUpdate.length);
       if (!!gamesToUpdate.length) {
         const totalGames = gamesToUpdate.length;
-        await updateGames(gamesToUpdate, []);
+        await updateGames(gamesToUpdate, true);
         return respond(200, { updatedGames: totalGames });
       }
     }
@@ -321,13 +321,6 @@ module.exports.consumeNewGameAddToAirtable = RavenLambdaWrapper.handler(Raven, a
 });
 
 module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
-  const existingGames = await dbGame.scan().exec();
-  let existingGameIds = [];
-  if (existingGames && existingGames.length) {
-    existingGameIds = existingGames.map(g => g.id);
-  }
-  console.log({ existingGameIds });
-
   console.log('get games...');
   const allGames: Game[] = await dbGame.scan().exec();
   console.log('existingGames:', allGames.length);
@@ -352,7 +345,7 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.log('sync');
   const allEvents: any = await pullFromActionNetwork(datesToPull);
-  const allEventsTransformed: Game[] = await updateGames(allEvents, existingGameIds);
+  const allEventsTransformed: Game[] = await updateGames(allEvents, true);
   console.log('publish events:', allEventsTransformed.length);
   await publishNewGames(allEventsTransformed);
   return respond(200);
@@ -443,10 +436,17 @@ async function pullFromActionNetwork(dates: Date[]) {
   }
 }
 
-async function updateGames(events: any[], existingGameIds: number[]) {
+async function updateGames(events: any[], deduplicate: boolean = false) {
   console.log('all events', events.length);
-  events = events.filter(e => !existingGameIds.includes(e.id));
-  console.log('new events', events.length);
+  if (deduplicate) {
+    const existingGames = await dbGame.scan().exec();
+    let existingGameIds = [];
+    if (existingGames && existingGames.length) {
+      existingGameIds = existingGames.map(g => g.id);
+    }
+    events = events.filter(e => !existingGameIds.includes(e.id));
+    console.log('new events', events.length);
+  }
   events.forEach((part, index, eventsArray) => {
     eventsArray[index] = transformGame(eventsArray[index]);
   });

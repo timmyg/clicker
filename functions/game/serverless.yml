@@ -213,6 +213,8 @@ functions:
     handler: game.syncScores
     memorySize: 1024
     timeout: 12
+    environment:
+      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
     events:
       # - schedule: rate(5 minutes)
       - schedule: cron(0/1 21-8 ? * * *) # Every 1 minute between 9pm UTC and 8am UTC
