@@ -1,9 +1,13 @@
 // @flow
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
-const awsXRay = require('aws-xray-sdk');
-const AWS = require('aws-sdk');
-const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+let AWS;
+if (!process.env.IS_LOCAL) {
+  AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
+} else {
+  console.info('Serverless Offline detected; skipping AWS X-Ray setup');
+  AWS = require('aws-sdk');
+}
 const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
@@ -18,10 +22,10 @@ declare class process {
     tableProgram: string,
     serviceName: string,
     tableProgram: string,
-    tableProgramArea: string,
     stage: string,
     newProgramTopicArn: string,
     NODE_ENV: string,
+    IS_LOCAL: string,
   };
 }
 
@@ -142,7 +146,7 @@ const dbProgram = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('hi', process.env.tableProgram);
+  console.log('hi', process.env.tableProgram, process.env);
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 });
 
@@ -309,6 +313,7 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log(JSON.stringify(event));
   const { name, defaultZip, localChannels } = getBody(event);
   await syncChannels(name, localChannels, defaultZip);
   respond(200);
@@ -329,6 +334,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     .where('start')
     .descending()
     .exec();
+  console.log('regionPrograms:', regionPrograms.length);
   const existingRegionProgramIds = regionPrograms.map(p => p.id);
 
   // console.log({ regionName, latestProgram });
@@ -364,11 +370,13 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   const method = 'get';
   console.log('getting channels....', params, headers);
   let result = await axios({ method, url, params, headers });
-  console.log(result);
+  // console.log(result);
   let { schedule } = result.data;
   let allPrograms: Program[] = build(schedule, regionName);
-  allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
+  // deduplicate
   console.log('allPrograms:', allPrograms.length);
+  allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
+  console.log('allPrograms deduped:', allPrograms.length);
   let transformedPrograms = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);

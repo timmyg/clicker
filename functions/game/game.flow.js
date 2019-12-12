@@ -6,16 +6,13 @@ const dynamoose = require('dynamoose');
 const moment = require('moment-timezone');
 const objectMapper = require('object-mapper');
 const _ = require('lodash');
-// const AWS = require('aws-sdk');
 let AWS;
-if (process.env._X_AMZN_TRACE_ID) {
+if (!process.env.IS_LOCAL) {
   AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
 } else {
   console.info('Serverless Offline detected; skipping AWS X-Ray setup');
   AWS = require('aws-sdk');
 }
-// const awsXRay = require('aws-xray-sdk');
-// const awsSdk = awsXRay.captureAWS(AWS);
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 if (process.env.NODE_ENV === 'test') {
@@ -438,13 +435,13 @@ async function pullFromActionNetwork(dates: Date[]) {
 async function updateGames(events: any[], deduplicate: boolean = false) {
   console.log('all events', events.length);
   if (deduplicate) {
-    const existingGames = await dbGame.scan().exec();
-    let existingGameIds = [];
-    if (existingGames && existingGames.length) {
-      existingGameIds = existingGames.map(g => g.id);
-    }
-    console.log({ existingGameIds });
-    events = events.filter(e => !existingGameIds.includes(e.id));
+    const existingGames = await dbGame
+      .scan()
+      .all()
+      .exec();
+    const existingUniqueGameIds = [...new Set(existingGames.map(g => g.id))];
+    console.log('existingUniqueGameIds', existingUniqueGameIds.length);
+    events = events.filter(e => !existingUniqueGameIds.includes(e.id));
     console.log('new events', events.length);
   }
   events.forEach((part, index, eventsArray) => {

@@ -6,10 +6,9 @@
   "scripts": {
     "build": "npx flow-remove-types program.flow.js -o program.js",
     "test": "npm run build && jest --coverage",
-    "invoke:pull": "serverless invoke local --function pull",
-    "invoke:programming:area:create": "serverless invoke local --function createAreaProgramming --path ../.resources/data/programming-area.json",
-    "invoke:programming:area:get": "serverless invoke local --function getAreaProgramming --path ../.resources/data/programming-area.json",
-    "invoke:syncNew": "serverless invoke local --function syncNew",
+    "invoke:health": "serverless invoke local --function health --stage develop",
+    "invoke:syncAll": "serverless invoke local --function syncNew --stage develop",
+    "invoke:syncRegion": "serverless invoke local --function syncByRegion --stage develop --path ../.resources/data/sync-programs-region.json",
     "invoke:consumeNewProgram": "serverless invoke local --function consumeNewProgram  --path ../.resources/data/new-program.json"
   },
   "author": "",
