@@ -347,7 +347,6 @@ module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
   const allEvents: any = await pullFromActionNetwork(datesToPull);
   const allEventsTransformed: Game[] = await updateGames(allEvents, true);
   console.log('publish events:', allEventsTransformed.length);
-  await publishNewGames(allEventsTransformed);
   return respond(200);
 });
 
@@ -468,6 +467,7 @@ async function updateGames(events: any[], deduplicate: boolean = false) {
       console.error(e);
     }
   }
+  await publishNewGames(eventsCopy);
   return eventsCopy;
 }
 
