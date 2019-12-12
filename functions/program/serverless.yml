@@ -201,9 +201,9 @@ functions:
               - partner
               - authorization
               - content-type
-  syncNew:
-    handler: program.syncNew
-    timeout: 60
+  syncRegions:
+    handler: program.syncRegions
+    # timeout: 60
     events:
       - schedule: rate(2 hours)
       # - schedule: rate(60 minutes)
@@ -219,13 +219,28 @@ functions:
               - partner
               - authorization
               - content-type
-  syncByRegion:
-    handler: program.syncByRegion
+  syncRegionNextFewHours:
+    handler: program.syncRegionNextFewHours
     memorySize: 1024
     timeout: 60
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
+  syncAirtable:
+    handler: program.syncAirtable
+    memorySize: 1024
+    timeout: 60
+    events:
+      - schedule: cron(10 10 * * ? *) # every day @ 6:10am eastern
+      - http:
+          path: sync/airtable
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-typeself:custom.newProgramTopicArn.deployed}
   consumeNewProgramUpdateDescription:
     memorySize: 512
     timeout: 12

@@ -181,8 +181,8 @@ functions:
               - partner
               - authorization
               - content-type
-  syncSchedule:
-    handler: game.syncSchedule
+  syncNextFewDays:
+    handler: game.syncNextFewDays
     memorySize: 1024
     timeout: 30
     environment:
@@ -198,20 +198,8 @@ functions:
               - partner
               - authorization
               - content-type
-  getByStartTimeAndNetwork:
-    handler: game.getByStartTimeAndNetwork
-    events:
-      - http:
-          path: search
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  syncScores:
-    handler: game.syncScores
+  syncActive:
+    handler: game.syncActive
     memorySize: 1024
     timeout: 12
     environment:
@@ -223,6 +211,34 @@ functions:
       - http:
           path: sync/scores
           method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  syncAirtable:
+    handler: game.syncAirtable
+    timeout: 20
+    environment:
+      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+    events:
+      - schedule: cron(00 10 * * ? *) # every day @ 6:00am eastern
+      - http:
+          path: sync/airtable
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  getByStartTimeAndNetwork:
+    handler: game.getByStartTimeAndNetwork
+    events:
+      - http:
+          path: search
+          method: get
           cors:
             origin: '*'
             headers:

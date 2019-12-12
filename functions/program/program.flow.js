@@ -293,14 +293,14 @@ function rank(program: Program) {
   return program;
 }
 
-module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     for (const region of allRegions) {
       const { defaultZip, name, localChannels } = region;
       console.log(`sync local channels: ${name}/${defaultZip} for channels ${localChannels.join(', ')}`);
       await new Invoke()
         .service('program')
-        .name('syncByRegion')
+        .name('syncRegionNextFewHours')
         .body({ name, localChannels, defaultZip })
         .async()
         .go();
@@ -312,102 +312,148 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(JSON.stringify(event));
-  const { name, defaultZip, localChannels } = getBody(event);
-  await syncChannels(name, localChannels, defaultZip);
+  const { name: regionName, defaultZip, localChannels } = getBody(event);
+  await syncChannels(regionName, localChannels, defaultZip);
   respond(200);
 });
 
+module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtablePrograms = 'Programs';
+  const datesToPull = [];
+  [...Array(12)].forEach((_, i) => {
+    const dateToSync = moment()
+      .subtract(5, 'hrs')
+      .add(i, 'days')
+      .toDate();
+    datesToPull.push(dateToSync);
+  });
+  for (const region of allRegions) {
+    const results = await pullFromDirecTV(region.name, region.localChannels, region.defaultZip, datesToPull, 24);
+    for (const result2 of results) {
+      const allExistingGames = await base(airtablePrograms)
+        .select({ fields: ['programmingId'] })
+        .all();
+      const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
+      let { schedule } = result2.data;
+      let allPrograms: Program[] = build(schedule, region.name);
+      allPrograms = allPrograms.filter(p => !!p.live);
+      allPrograms = uniqBy(allPrograms, 'programmingId');
+      allPrograms = allPrograms.filter(e => !allExistingProgrammingIds.includes(e.programmingId));
+      let allAirtablePrograms = buildAirtablePrograms(allPrograms);
+      const promises = [];
+      console.time('create');
+      while (!!allAirtablePrograms.length) {
+        try {
+          const programsSlice = allAirtablePrograms.splice(0, 10);
+          console.log('batch putting:', programsSlice.length);
+          console.log('remaining:', allAirtablePrograms.length);
+          promises.push(base(airtablePrograms).create(programsSlice));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      const result = await Promise.all(promises);
+      console.timeEnd('create');
+    }
+  }
+  return respond(200);
+});
+
+function buildAirtablePrograms(programs: Program[]) {
+  const transformed = [];
+  programs.forEach(program => {
+    program.bob;
+    const { programmingId, title, description, channel, region, channelTitle, live, start } = program;
+    transformed.push({
+      fields: {
+        programmingId,
+        title,
+        description,
+        channel,
+        region,
+        channelTitle,
+        live,
+        start,
+      },
+    });
+  });
+  return transformed;
+}
+
 async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
-  const channels = regionChannels.concat(nationalChannels);
-  const channelsString = getChannels(channels).join(',');
+  // const channels = [...regionChannels, ...nationalChannels];
 
   // get latest program
   console.log('querying region:', regionName);
   // const regionPrograms = await dbProgram.query('region').eq(regionName).exec();
-  const regionPrograms = await dbProgram
+  const existingRegionPrograms = await dbProgram
     .query('region')
     .using('startLocalIndex')
     .eq(regionName)
     .where('start')
     .descending()
     .exec();
-  console.log('regionPrograms:', regionPrograms.length);
-  const existingRegionProgramIds = regionPrograms.map(p => p.id);
-
-  // console.log({ regionName, latestProgram });
-
+  console.log('existingRegionPrograms:', existingRegionPrograms.length);
+  const existingRegionProgramIds = existingRegionPrograms.map(p => p.id);
   let totalHours, startTime;
   // if programs, take the largest start time, add 1 minute and start from there and get two hours of programming
   //   add one hour because that seems like min duration for dtv api
   //   (doesnt matter if you set to 5:00 or 5:59, same results until 6:00)
-  if (regionPrograms && regionPrograms.length) {
-    startTime = moment(regionPrograms[0].start)
+  if (existingRegionPrograms && existingRegionPrograms.length) {
+    startTime = moment(existingRegionPrograms[0].start)
       .utc()
-      .add(1, 'hour')
-      .toString();
+      .add(1, 'hour');
     totalHours = 2;
   } else {
-    // if no programs, get 4 hours ago and pull 6 hours
+    // if no programs, get 4 hours ago and pull 8 hours
     const startHoursFromNow = -4;
     totalHours = 8;
     startTime = moment()
       .utc()
       .add(startHoursFromNow, 'hours')
       .minutes(0)
-      .seconds(0)
-      .toString();
+      .seconds(0);
   }
-
-  const url = `${directvEndpoint}/channelschedule`;
-
-  const params = { startTime, hours: totalHours, channels: channelsString };
-  const headers = {
-    Cookie: `dtve-prospect-zip=${zip};`,
-  };
-  const method = 'get';
-  console.log('getting channels....', params, headers);
-  let result = await axios({ method, url, params, headers });
-  // console.log(result);
+  const [result] = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
   let { schedule } = result.data;
   let allPrograms: Program[] = build(schedule, regionName);
   // remove existing programs
   console.log('allPrograms:', allPrograms.length);
   allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
   console.log('allPrograms deduped:', allPrograms.length);
+  allPrograms = uniqBy(allPrograms, 'programmingId');
+  console.log('allPrograms new unique:', allPrograms.length);
   let transformedPrograms = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);
   console.log(dbResult);
+}
 
-  // get program ids, publish to sns topic to update description
-  // remove duplicate programmingIds so there's not multiple per region
-  // transformedPrograms = [...new Set(transformedPrograms.map(item => item.programmingId))];
-  transformedPrograms = uniqBy(transformedPrograms, 'programmingId');
-  console.log('unique programs by programmingId:', transformedPrograms.length);
-  const sns = new AWS.SNS({ region: 'us-east-1' });
-  let i = 0;
-  const messagePromises = [];
-  console.time(`publish ${transformedPrograms.length} messages`);
-  for (const program of transformedPrograms) {
-    console.log(i);
-    const messageData = {
-      Message: JSON.stringify(program),
-      TopicArn: process.env.newProgramTopicArn,
+async function pullFromDirecTV(
+  regionName: string,
+  regionChannels: number[],
+  zip: string,
+  startTimes: moment[],
+  totalHours,
+) {
+  const promises = [];
+  startTimes.forEach(startTime => {
+    const url = `${directvEndpoint}/channelschedule`;
+    const channelsString = getChannels([...regionChannels, ...nationalChannels]).join(',');
+    const params = { startTime: startTime.toString(), hours: totalHours, channels: channelsString };
+    const headers = {
+      Cookie: `dtve-prospect-zip=${zip};`,
     };
-
-    try {
-      messagePromises.push(sns.publish(messageData).promise());
-      i++;
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  await Promise.all(messagePromises);
-  console.timeEnd(`publish ${transformedPrograms.length} messages`);
-  console.log(i, 'topics published to:', process.env.newProgramTopicArn);
+    const method = 'get';
+    console.log('getting channels....', params, headers);
+    promises.push(axios({ method, url, params, headers }));
+  });
+  const results = await Promise.all(promises);
+  return results;
 }
 
 module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(Raven, async event => {
