@@ -282,6 +282,8 @@ functions:
     handler: program.syncAirtable
     memorySize: 1024
     timeout: 60
+    environment:
+      newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
     events:
       - schedule: cron(10 10 * * ? *) # every day @ 6:10am eastern
       - http:
