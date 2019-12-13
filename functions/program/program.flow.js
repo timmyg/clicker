@@ -471,7 +471,7 @@ async function pullFromDirecTV(
 	return results;
 }
 
-async function getProgramDetails(program: Program): Promise<Program> {
+async function getProgramDetails(program: Program): Promise<any> {
 	const { programmingId } = program;
 	const url = `${directvEndpoint}/program/flip/${programmingId}`;
 	const options = {
@@ -479,15 +479,15 @@ async function getProgramDetails(program: Program): Promise<Program> {
 	};
 	const result = await axios.get(url, options);
 	console.log('result.data', result.data);
-	const { description, type: progType } = result.data.programDetail;
-	return description;
+	return result.data.programDetail;
+	// return { description, type: progType };
 }
 
 module.exports.consumeNewProgramAirtableUpdateDescription = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('consume');
 	const program = JSON.parse(event.Records[0].body);
 	const { id, programmingId, region } = program;
-	const { description, type } = await getProgramDetails(program);
+	const { description, progType: type } = await getProgramDetails(program);
 
 	// update in airtable
 	const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -516,7 +516,7 @@ module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(R
 	console.log(event);
 	const program = JSON.parse(event.Records[0].body);
 	const { id, programmingId, region } = program;
-	const { description, type } = await getProgramDetails(program);
+	const { description, progType: type } = await getProgramDetails(program);
 	await updateProgram(id, region, description, type);
 });
 
