@@ -307,10 +307,25 @@ functions:
               - content-type
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
+    description: sync program game id from airtable to programs db
     events:
       - schedule: rate(1 hour)
       - http:
           path: sync/airtable/updates
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  syncRatings:
+    handler: program.syncRatings
+    description: rate programs by keywords that haven't been rated yet
+    events:
+      - schedule: rate(1 hour)
+      - http:
+          path: sync/airtable/ratings
           method: post
           cors:
             origin: '*'

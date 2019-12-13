@@ -59,7 +59,7 @@ functions:
     handler: job.controlCenter
     timeout: 30
     events:
-      - schedule: cron(0 * * * ? *) # run every hour, on the hour
+      - schedule: cron(*/5 * * * ? *)
       - http:
           path: 'control-center'
           method: post

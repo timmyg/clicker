@@ -375,10 +375,9 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
+async function getAirtableProgramsInWindow(hasGameAttached) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Programs';
-  const airtableGamesName = 'Games';
   const fourHoursAgo = moment()
     .subtract(4, 'h')
     .toISOString();
@@ -389,12 +388,20 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     .subtract(6, 'm')
     .toISOString();
 
+  let filterByFormula: string[] = [`{start} > '${fourHoursAgo}'`, `{start} < '${fourHoursFromNow}'`];
+  if (hasGameAttached) {
+    filterByFormula.push(`{gameId} != BLANK()`);
+  }
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
-      filterByFormula: `AND({start} > '${fourHoursAgo}', {start} < '${fourHoursFromNow}', {gameId} != BLANK())`,
+      filterByFormula: `AND(${filterByFormula.join(',')})`,
     })
     .all();
+  return updatedAirtablePrograms;
+}
 
+module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
+  const updatedAirtablePrograms = await getAirtableProgramsInWindow(true);
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
@@ -413,6 +420,78 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
 
   return respond(200, { updates: promises.length });
 });
+
+module.exports.syncRatings = RavenLambdaWrapper.handler(Raven, async event => {
+  console.time('ratings');
+  const airtablePrograms = await getAirtableProgramsInWindow();
+  const updatedPrograms = await ratePrograms(airtablePrograms);
+  console.timeEnd('ratings');
+
+  const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableProgramsName = 'Programs';
+  const airtablePromises = [];
+  updatedPrograms.forEach(p => {
+    airtablePromises.push(
+      airtableBase(airtableProgramsName).update(p.id, {
+        rating: p.get('rating'),
+      }),
+    );
+  });
+  await Promise.all(airtablePromises);
+  return respond(200, { updatedPrograms: updatedPrograms.length });
+});
+
+class RatingKeywordsAirtable {
+  terms: string;
+  rating: number;
+  fields: any;
+  get(x: string): any {}
+  //   split(x: string) {}
+}
+
+class ProgramAirtable {
+  id: string;
+  rating: number;
+  title: string;
+  get(x: string): any {}
+}
+
+async function ratePrograms(programs: ProgramAirtable[]) {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableRatingKeywordsName = 'Rating Keywords';
+
+  const keywordRecords: RatingKeywordsAirtable[] = await base(airtableRatingKeywordsName)
+    .select({
+      view: 'Live',
+    })
+    .all();
+
+  const rated = [];
+  keywordRecords.forEach(kw => {
+    const termsList: any = kw.get('Terms');
+    const rating: number = kw.get('Rating');
+    const terms = termsList.split(',').map(item => item.trim());
+    terms.map(term => {
+      console.log({ term });
+      programs.forEach(p => {
+        console.log(p.get('title').toLowerCase());
+        if (
+          p
+            .get('title')
+            .toLowerCase()
+            .includes(term)
+        ) {
+          console.log(p.get('title').toLowerCase());
+          if (!p.get('rating')) {
+            p.set('rating', rating);
+            rated.push(p);
+          }
+        }
+      });
+    });
+  });
+  return rated;
+}
 
 function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];

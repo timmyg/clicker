@@ -13,7 +13,8 @@
     "invoke:syncAirtable": "serverless invoke local --function syncAirtable --stage develop",
     "invoke:syncAirtableUpdates": "serverless invoke local --function syncAirtableUpdates --stage develop",
     "invoke:consumeNewProgramAirtableUpdateDetails": "serverless invoke local --function consumeNewProgramAirtableUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
-    "invoke:consumeNewProgramUpdateDetails": "serverless invoke local --function consumeNewProgramUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json"
+    "invoke:consumeNewProgramUpdateDetails": "serverless invoke local --function consumeNewProgramUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
+    "invoke:syncRatings": "serverless invoke local --function syncRatings  --stage develop"
   },
   "author": "",
   "license": "ISC",
