@@ -21,9 +21,11 @@ declare class process {
     airtableKey: string,
     tableProgram: string,
     serviceName: string,
+    newProgramTopicArn: string,
+    newProgramAirtableTopicArn: string,
     tableProgram: string,
     stage: string,
-    newProgramTopicArn: string,
+    syncProgramsAirtableDateTopicArn: string,
     NODE_ENV: string,
     IS_LOCAL: string,
   };
@@ -315,7 +317,7 @@ module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(JSON.stringify(event));
   const { name: regionName, defaultZip, localChannels } = getBody(event);
-  await syncChannels(regionName, localChannels, defaultZip);
+  await syncRegionChannels(regionName, localChannels, defaultZip);
   respond(200);
 });
 
@@ -339,7 +341,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
       let { schedule } = result2.data;
       let allPrograms: Program[] = build(schedule, region.name);
-      allPrograms = allPrograms.filter(p => !!p.live);
+      // allPrograms = allPrograms.filter(p => !!p.live);
       allPrograms = uniqBy(allPrograms, 'programmingId');
       allPrograms = allPrograms.filter(e => !allExistingProgrammingIds.includes(e.programmingId));
       let allAirtablePrograms = buildAirtablePrograms(allPrograms);
@@ -356,6 +358,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
         }
       }
       const result = await Promise.all(promises);
+      await publishNewPrograms(allPrograms, process.env.newProgramAirtableTopicArn);
       console.timeEnd('create');
     }
   }
@@ -365,7 +368,6 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
 function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
   programs.forEach(program => {
-    program.bob;
     const { programmingId, title, description, channel, region, channelTitle, live, start } = program;
     transformed.push({
       fields: {
@@ -383,7 +385,7 @@ function buildAirtablePrograms(programs: Program[]) {
   return transformed;
 }
 
-async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
+async function syncRegionChannels(regionName: string, regionChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
   // const channels = [...regionChannels, ...nationalChannels];
 
@@ -427,10 +429,35 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   console.log('allPrograms deduped:', allPrograms.length);
   allPrograms = uniqBy(allPrograms, 'programmingId');
   console.log('allPrograms new unique:', allPrograms.length);
-  let transformedPrograms = buildProgramObjects(allPrograms);
+  let transformedPrograms: Program[] = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);
+  await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
   console.log(dbResult);
+}
+
+async function publishNewPrograms(programs: Program[], topicArn: string) {
+  const sns = new AWS.SNS({ region: 'us-east-1' });
+  let i = 0;
+  const messagePromises = [];
+  console.time(`publish ${programs.length} messages`);
+  for (const program of programs) {
+    console.log(i);
+    const messageData = {
+      Message: JSON.stringify(program),
+      TopicArn: topicArn,
+    };
+
+    try {
+      messagePromises.push(sns.publish(messageData).promise());
+      i++;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  await Promise.all(messagePromises);
+  console.timeEnd(`publish ${messagePromises.length} messages`);
+  console.log(i, 'topics published to:', process.env.newProgramTopicArn);
 }
 
 async function pullFromDirecTV(
@@ -456,72 +483,54 @@ async function pullFromDirecTV(
   return results;
 }
 
-module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('consume');
-  console.log(event);
-  const { id, programmingId, region } = JSON.parse(event.Records[0].body);
+async function getProgramDescription(program: Program): Promise<string> {
+  const { programmingId } = program;
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = {
     timeout: 2000,
   };
-  try {
-    const result = await axios.get(url, options);
-    console.log('result.data.programDetail', result.data.programDetail);
-    const { description } = result.data.programDetail;
-    console.log('update', { id, region }, { description });
+  const result = await axios.get(url, options);
+  console.log('result.data', result.data);
+  const { description } = result.data.programDetail;
+  return description;
+}
 
-    if (description && description.length) {
-      // update in our db
-      await updateProgram(id, region, description);
-      // update in airtable
-      const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-      const airtablePrograms = 'Programs';
-      const airtableGames = await airtableBase(airtablePrograms)
-        .select({
-          filterByFormula: `{programmingId} = '${programmingId}'`,
-        })
-        .all();
-      const airtablePromises = [];
-      airtableGames.forEach(g => {
-        airtablePromises.push(
-          airtableBase(airtablePrograms).update(g.id, {
-            description,
-          }),
-        );
-      });
-      await Promise.all(airtablePromises);
-    }
-    return respond(200);
-  } catch (e) {
-    if (e.response && e.response.status === 404) {
-      console.log('404!!');
-      console.error(e);
-    }
-    console.error(e);
-    return respond(400);
+module.exports.consumeNewProgramAirtableUpdateDescription = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('consume');
+  const program = JSON.parse(event.Records[0].body);
+  const { id, programmingId, region } = program;
+  const description = await getProgramDescription(program);
+  console.log(description);
+
+  if (description && description.length) {
+    // update in airtable
+    const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+    const airtablePrograms = 'Programs';
+    const airtableGames = await airtableBase(airtablePrograms)
+      .select({
+        filterByFormula: `{programmingId} = '${programmingId}'`,
+      })
+      .all();
+    const airtablePromises = [];
+    airtableGames.forEach(g => {
+      airtablePromises.push(
+        airtableBase(airtablePrograms).update(g.id, {
+          description,
+        }),
+      );
+    });
+    await Promise.all(airtablePromises);
   }
+  return respond(200);
 });
-module.exports.consumeNewProgramAddToAirtable = RavenLambdaWrapper.handler(Raven, async event => {
-  const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtablePrograms = 'Programs';
+
+module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('consume');
   console.log(event);
-  const program: Program = JSON.parse(event.Records[0].body);
-  const { programmingId, title, description, channel, channelTitle, live, start, region } = program;
-
-  await airtableBase(airtablePrograms).create({
-    programmingId,
-    title,
-    description,
-    channel,
-    region,
-    channelTitle,
-    live,
-    start,
-  });
-
-  console.log({ program });
-  return respond(200);
+  const program = JSON.parse(event.Records[0].body);
+  const { id, programmingId, region } = program;
+  const description = await getProgramDescription(program);
+  await updateProgram(id, region, description);
 });
 
 async function updateProgram(id, region, description) {
