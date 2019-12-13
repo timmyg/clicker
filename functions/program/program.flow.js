@@ -375,14 +375,14 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-async function getAirtableProgramsInWindow(hasGameAttached) {
+async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursFromNow = 4) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Programs';
   const fourHoursAgo = moment()
-    .subtract(4, 'h')
+    .subtract(hoursAgo, 'h')
     .toISOString();
   const fourHoursFromNow = moment()
-    .add(4, 'h')
+    .add(hoursFromNow, 'h')
     .toISOString();
   const sixMinutesAgo = moment()
     .subtract(6, 'm')
@@ -423,7 +423,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
 
 module.exports.syncRatings = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('ratings');
-  const airtablePrograms = await getAirtableProgramsInWindow();
+  const airtablePrograms = await getAirtableProgramsInWindow(false, 4, 24);
   const updatedPrograms = await ratePrograms(airtablePrograms);
   console.timeEnd('ratings');
 
@@ -472,19 +472,29 @@ async function ratePrograms(programs: ProgramAirtable[]) {
     const rating: number = kw.get('Rating');
     const terms = termsList.split(',').map(item => item.trim());
     terms.map(term => {
-      console.log({ term });
+      let isProperty = false;
+      console.log(term);
+      if (term.startsWith('{')) {
+        isProperty = true;
+        term = term.replace(/{/g, '').replace(/}/g, '');
+      }
       programs.forEach(p => {
-        console.log(p.get('title').toLowerCase());
-        if (
-          p
-            .get('title')
-            .toLowerCase()
-            .includes(term)
-        ) {
-          console.log(p.get('title').toLowerCase());
-          if (!p.get('rating')) {
+        if (isProperty) {
+          console.log(term, p.get(term));
+          if (p.get(term) === true) {
             p.set('rating', rating);
             rated.push(p);
+          }
+        } else {
+          const titleHasTerm = p
+            .get('title')
+            .toLowerCase()
+            .includes(term);
+          if (titleHasTerm) {
+            if (!p.get('rating')) {
+              p.set('rating', rating);
+              rated.push(p);
+            }
           }
         }
       });
@@ -618,7 +628,7 @@ async function getProgramDetails(program: Program): Promise<any> {
     timeout: 2000,
   };
   const result = await axios.get(url, options);
-  console.log('result.data', result.data);
+  //   console.log('result.data', result.data);
   return result.data.programDetail;
   // return { description, type: progType };
 }
@@ -653,7 +663,7 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
 
 module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('consume');
-  console.log(event);
+  //   console.log(event);
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
   const { description, progType: type } = await getProgramDetails(program);
@@ -661,14 +671,18 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
 });
 
 async function updateProgram(id, region, description, type) {
-  console.log({ description });
+  console.log({ id, region, description, type });
   const docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
     TableName: process.env.tableProgram,
     Key: { id, region },
-    UpdateExpression: 'set description = :newdescription, set programType = :newtype',
-    ConditionExpression: 'id = :id',
-    ExpressionAttributeValues: { ':newdescription': description, ':newtype': type, ':id': id },
+    UpdateExpression: 'set description = :newdescription, programType = :newtype',
+    // ConditionExpression: 'id = :id',
+    ExpressionAttributeValues: {
+      ':newdescription': description,
+      ':newtype': type,
+      // ':id': id
+    },
   };
   try {
     const x = await docClient.update(params).promise();

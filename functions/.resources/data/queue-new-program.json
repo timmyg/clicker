@@ -1,7 +1,7 @@
 {
   "Records": [
     {
-      "body": "{ \"channel\": 206, \"channelCategories\": [\"Sports Channels\"], \"channelTitle\": \"TVG\", \"createdAt\": 1576239582910, \"durationMins\": 120, \"end\": 1576256400000, \"expires\": 1576258200, \"id\": \"298af57b-f6b1-5ca9-a68e-cc2b193550b2\", \"live\": true, \"mainCategory\": \"Sports\", \"programmingId\": \"SH030305900000\", \"region\": \"cincinnati\", \"repeat\": false, \"start\": 1576249200000, \"subcategories\": [\"Horse\"], \"title\": \"More Ways to Win\", \"updatedAt\": 1576239582911 }"
+      "body": "{ \"channel\": 206, \"channelCategories\": [\"Sports Channels\"], \"channelTitle\": \"TVG\", \"createdAt\": 1576239582910, \"durationMins\": 120, \"end\": 1576256400000, \"expires\": 1576258200, \"id\": \"1e366365-4c3d-5ccf-8c18-05e52fa8af29\", \"live\": true, \"mainCategory\": \"Sports\", \"programmingId\": \"EP000206851549\", \"region\": \"cincinnati\", \"repeat\": false, \"start\": 1576249200000, \"subcategories\": [\"Horse\"], \"title\": \"More Ways to Win\", \"updatedAt\": 1576239582911 }"
     }
   ]
 }
