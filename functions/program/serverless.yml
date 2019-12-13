@@ -308,7 +308,7 @@ functions:
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
     events:
-      - schedule: rate(5 minutes)
+      - schedule: rate(1 hour)
       - http:
           path: sync/airtable/updates
           method: post

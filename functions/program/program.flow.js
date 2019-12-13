@@ -109,7 +109,7 @@ const dbProgram = dynamoose.model(
       index: true,
     },
     id: { type: String, rangeKey: true },
-    start: { type: Number, rangeKey: true },
+    start: { type: Number },
     end: Number,
     channel: Number,
     channelMinor: Number,
@@ -122,7 +122,14 @@ const dbProgram = dynamoose.model(
     live: Boolean,
     repeat: Boolean,
     sports: Boolean,
-    programmingId: String, // "SH000296530000" - use this to get summary
+    programmingId: {
+      type: String,
+      index: {
+        global: true,
+        // name: 'idOnlyGlobalIndex',
+        project: false,
+      },
+    }, // "SH000296530000" - use this to get summary
     channelCategories: [String], // ["Sports Channels"]
     subcategories: [String], // ["Basketball"]
     mainCategory: String, // "Sports"
@@ -372,21 +379,38 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Programs';
   const airtableGamesName = 'Games';
+  const fourHoursAgo = moment()
+    .subtract(4, 'h')
+    .toISOString();
+  const fourHoursFromNow = moment()
+    .add(4, 'h')
+    .toISOString();
   const sixMinutesAgo = moment()
     .subtract(6, 'm')
     .toISOString();
+
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
-      filterByFormula: `{gameUpdatedAt} > '${sixMinutesAgo}'`,
+      filterByFormula: `AND({start} > '${fourHoursAgo}', {start} < '${fourHoursFromNow}', {gameId} != BLANK())`,
     })
     .all();
+
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
-    const gameAirtableId = updatedAirtablePrograms[0].get('game');
-    const gameAirtable = await base(airtableGamesName).find(gameAirtableId);
-    const gameDatabaseId = gameAirtable.get('id');
-    console.log({ programmingId, gameDatabaseId });
-    await dbProgram.update({ programmingId }, { gameId: gameDatabaseId });
+    const gameDatabaseId = airtableProgram.get('gameId');
+    const programs = await dbProgram
+      .query('programmingId')
+      .eq(programmingId)
+      .exec();
+    // console.log({ programs });
+    const promises = [];
+    for (const program of programs) {
+      //   console.log(program.id);
+      const { region, id } = program;
+      console.log(region, id);
+      promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId }));
+    }
+    await Promise.all(promises);
   }
 });
 

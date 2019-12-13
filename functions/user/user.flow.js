@@ -18,8 +18,6 @@ const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
 const initialTokens = 1;
 const key = 'clikr';
-let User;
-
 declare class process {
   static env: {
     stage: string,
@@ -39,7 +37,8 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
-User = dynamoose.model(
+
+const dbUser = dynamoose.model(
   process.env.tableUser,
   {
     id: {
@@ -84,7 +83,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const id = uuid();
-  await User.create({ id, tokens: initialTokens });
+  await dbUser.create({ id, tokens: initialTokens });
   const token = jwt.sign({ sub: id, guest: true }, key);
 
   return respond(201, { token });
@@ -94,11 +93,13 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
   // get user
   const userId = getUserId(event);
-  const user = await User.queryOne('id')
+  const user = await dbUser
+    .queryOne('id')
     .eq(userId)
     .exec();
 
-  const referrerUser = await User.queryOne('referralCode')
+  const referrerUser = await dbUser
+    .queryOne('referralCode')
     .eq(code)
     .all()
     .exec();
@@ -115,9 +116,9 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   // add token to each user, save
-  await User.update({ id: userId }, { $ADD: { tokens: 1, spent: 0 } });
-  await User.update({ id: userId }, { referredByCode: code });
-  await User.update({ id: referrerUser.id }, { $ADD: { tokens: 1, spent: 0 } });
+  await dbUser.update({ id: userId }, { $ADD: { tokens: 1, spent: 0 } });
+  await dbUser.update({ id: userId }, { referredByCode: code });
+  await dbUser.update({ id: referrerUser.id }, { $ADD: { tokens: 1, spent: 0 } });
 
   const text = '*New referral*';
   await new Invoke()
@@ -132,7 +133,8 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
-  let user = await User.queryOne('id')
+  let user = await dbUser
+    .queryOne('id')
     .eq(userId)
     .exec();
   console.log({ user });
@@ -141,7 +143,7 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
   if (!user) {
     // const userId = uuid();
     console.log('creating user', userId, initialTokens);
-    user = await User.create({ id: userId, tokens: initialTokens });
+    user = await dbUser.create({ id: userId, tokens: initialTokens });
   }
 
   // generate referral code if none
@@ -149,7 +151,7 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
     const referralCode = Math.random()
       .toString(36)
       .substr(2, 5);
-    user = await User.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
+    user = await dbUser.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
   }
 
   console.log({ user });
@@ -167,7 +169,8 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { token: stripeCardToken } = getBody(event);
 
-  const user = await User.queryOne('id')
+  const user = await dbUser
+    .queryOne('id')
     .eq(userId)
     .exec();
 
@@ -184,7 +187,7 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
         phone: user.phone,
       });
       // TODO audit
-      await User.update({ id: userId }, { stripeCustomer: customer.id });
+      await dbUser.update({ id: userId }, { stripeCustomer: customer.id });
       return respond(201, customer);
     }
   } catch (e) {
@@ -196,7 +199,8 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
 
-  const { stripeCustomer } = await User.queryOne('id')
+  const { stripeCustomer } = await dbUser
+    .queryOne('id')
     .eq(userId)
     .exec();
 
@@ -211,7 +215,8 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const userId = getUserId(event);
     const plan = getBody(event);
-    const user = await User.queryOne('id')
+    const user = await dbUser
+      .queryOne('id')
       .eq(userId)
       .exec();
     // TODO audit plan
@@ -228,7 +233,7 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
     // TODO audit
 
     // update user
-    const updatedUser = await User.update(
+    const updatedUser = await dbUser.update(
       { id: userId },
       { $ADD: { tokens, spent: dollars } },
       { returnValues: 'ALL_NEW' },
@@ -313,13 +318,14 @@ module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   const { tokens } = getBody(event);
-  let user = await User.queryOne('id')
+  let user = await dbUser
+    .queryOne('id')
     .eq(userId)
     .exec();
 
   if (user && user.tokens >= tokens) {
     // TODO audit
-    user = await User.update({ id: userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
+    user = await dbUser.update({ id: userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
     return respond(200, user);
   } else {
     console.error('Insufficient Funds');
@@ -331,10 +337,12 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
   const { fromId, toId } = getPathParameters(event);
 
   // get existing users
-  const fromUser = await User.queryOne('id')
+  const fromUser = await dbUser
+    .queryOne('id')
     .eq(fromId)
     .exec();
-  const toUser = await User.queryOne('id')
+  const toUser = await dbUser
+    .queryOne('id')
     .eq(toId)
     .exec();
 
@@ -347,15 +355,15 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
   // create or update user
   let user;
   if (toUser) {
-    user = await User.update({ id: toId }, { tokens });
+    user = await dbUser.update({ id: toId }, { tokens });
   } else {
-    user = await User.create({ id: toId, tokens });
+    user = await dbUser.create({ id: toId, tokens });
   }
   // remove tokens from old account
-  await User.update({ id: fromId }, { tokens: 0 });
+  await dbUser.update({ id: fromId }, { tokens: 0 });
 
   // update for tracking purposes
-  await User.update({ id: fromId }, { aliasedTo: toId });
+  await dbUser.update({ id: fromId }, { aliasedTo: toId });
 
   // TODO update reservations to new user!
 
@@ -397,7 +405,8 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function getToken(phone) {
-  const user = await User.queryOne('phone')
+  const user = await dbUser
+    .queryOne('phone')
     .eq(phone)
     .all()
     .exec();
@@ -405,7 +414,7 @@ async function getToken(phone) {
     const { id } = user;
     return jwt.sign({ sub: id }, key);
   } else {
-    const user = await User.create({ phone, tokens: 0 });
+    const user = await dbUser.create({ phone, tokens: 0 });
     return jwt.sign({ sub: user.id }, key);
   }
 }
