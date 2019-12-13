@@ -111,8 +111,8 @@ resources:
     newProgramTopic:
       Type: AWS::SNS::Topic
       Properties:
-        # TopicName: ${self:service}-${self:custom.stage}-new-program-topic
-        TopicName: ${self:custom.newProgramTopic}
+        TopicName: ${self:service}-${self:custom.stage}-new-program-topic
+        # TopicName: ${self:custom.newProgramTopic}
     newProgramQueue:
       Type: AWS::SQS::Queue
       Properties:
@@ -156,8 +156,8 @@ resources:
     newProgramAirtableTopic:
       Type: AWS::SNS::Topic
       Properties:
-        # TopicName: ${self:service}-${self:custom.stage}-new-program-airtable-topic
-        TopicName: ${self:custom.newProgramAirtableTopic}
+        TopicName: ${self:service}-${self:custom.stage}-new-program-airtable-topic
+        # TopicName: ${self:custom.newProgramAirtableTopic}
     newProgramAirtableQueue:
       Type: AWS::SQS::Queue
       Properties:
