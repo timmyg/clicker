@@ -210,11 +210,21 @@ resources:
             AttributeType: N
           - AttributeName: id
             AttributeType: S
+          - AttributeName: programmingId
+            AttributeType: S
         KeySchema:
           - AttributeName: region
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: programmingIdGlobalIndex
+            KeySchema:
+              - AttributeName: programmingId
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            # ProvisionedThroughput:
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
             KeySchema:
@@ -288,6 +298,19 @@ functions:
       - schedule: cron(10 10 * * ? *) # every day @ 6:10am eastern
       - http:
           path: sync/airtable
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  syncAirtableUpdates:
+    handler: program.syncAirtableUpdates
+    events:
+      - schedule: rate(5 minutes)
+      - http:
+          path: sync/airtable/updates
           method: post
           cors:
             origin: '*'
