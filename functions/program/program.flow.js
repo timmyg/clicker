@@ -125,7 +125,7 @@ const dbProgram = dynamoose.model(
 		channelCategories: [ String ], // ["Sports Channels"]
 		subcategories: [ String ], // ["Basketball"]
 		mainCategory: String, // "Sports"
-		type: String, // "Sports non-event"
+		programType: String, // "Sports non-event"
 		// dynamic fields
 		nextProgramTitle: String,
 		nextProgramStart: Number,
@@ -487,7 +487,7 @@ module.exports.consumeNewProgramAirtableUpdateDescription = RavenLambdaWrapper.h
 	console.log('consume');
 	const program = JSON.parse(event.Records[0].body);
 	const { id, programmingId, region } = program;
-	const { description, progType: type } = await getProgramDetails(program);
+	const { description, progType: programType } = await getProgramDetails(program);
 
 	// update in airtable
 	const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -502,7 +502,7 @@ module.exports.consumeNewProgramAirtableUpdateDescription = RavenLambdaWrapper.h
 		airtablePromises.push(
 			airtableBase(airtablePrograms).update(g.id, {
 				description,
-				type
+				programType
 			})
 		);
 	});
@@ -526,7 +526,7 @@ async function updateProgram(id, region, description, type) {
 	var params = {
 		TableName: process.env.tableProgram,
 		Key: { id, region },
-		UpdateExpression: 'set description = :newdescription, set type = :newtype',
+		UpdateExpression: 'set description = :newdescription, set programType = :newtype',
 		ConditionExpression: 'id = :id',
 		ExpressionAttributeValues: { ':newdescription': description, ':newtype': type, ':id': id }
 	};
