@@ -219,7 +219,8 @@ functions:
               - content-type
   syncAirtable:
     handler: game.syncAirtable
-    timeout: 20
+    timeout: 30
+    memorySize: 1024
     environment:
       newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
     events:
@@ -258,12 +259,3 @@ functions:
               - partner
               - authorization
               - content-type
-  consumeNewGameAddToAirtable:
-    handler: game.consumeNewGameAddToAirtable
-    reservedConcurrency: 1
-    events:
-      - sqs:
-          arn: !GetAtt
-            - newGameQueue
-            - Arn
-          batchSize: 1

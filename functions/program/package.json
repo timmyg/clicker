@@ -1,41 +1,41 @@
 {
-  "name": "program",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "npx flow-remove-types program.flow.js -o program.js",
-    "test": "npm run build && jest --coverage",
-    "invoke:health": "serverless invoke local --function health --stage develop",
-    "invoke:getAll": "serverless invoke local --function getAll --stage develop  --path ../.resources/data/reservation.json",
-    "invoke:syncRegions": "serverless invoke local --function syncRegions --stage develop",
-    "invoke:syncRegionNextFewHours": "serverless invoke local --function syncRegionNextFewHours --stage develop --path ../.resources/data/sync-programs-region.json",
-    "invoke:syncAirtable": "serverless invoke local --function syncAirtable --stage develop",
-    "invoke:consumeNewProgramAirtableUpdateDescription": "serverless invoke local --function consumeNewProgramAirtableUpdateDescription  --stage develop --path ../.resources/data/queue-new-program.json",
-    "invoke:consumeNewProgramUpdateDescription": "serverless invoke local --function consumeNewProgramUpdateDescription  --stage develop --path ../.resources/data/queue-new-program.json"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "airtable": "^0.8.1",
-    "aws-sdk": "^2.580.0",
-    "aws-xray-sdk": "^2.5.0",
-    "axios": "^0.18.0",
-    "dynamoose": "^1.5.2",
-    "lodash": "^4.17.11",
-    "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
-    "uuid": "^3.3.2"
-  },
-  "devDependencies": {
-    "flow-bin": "^0.107.0",
-    "flow-remove-types": "^2.107.0",
-    "jest": "^24.1.0",
-    "serverless": "^1.37.0",
-    "serverless-domain-manager": "^2.6.13",
-    "serverless-dotenv-plugin": "^2.1.1",
-    "serverless-plugin-tracing": "^2.0.0",
-    "serverless-prune-plugin": "^1.4.0",
-    "serverless-sentry": "^1.2.0"
-  }
+	"name": "program",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "npx flow-remove-types program.flow.js -o program.js",
+		"test": "npm run build && jest --coverage",
+		"invoke:health": "serverless invoke local --function health --stage develop",
+		"invoke:getAll": "serverless invoke local --function getAll --stage develop  --path ../.resources/data/reservation.json",
+		"invoke:syncRegions": "serverless invoke local --function syncRegions --stage develop",
+		"invoke:syncRegionNextFewHours": "serverless invoke local --function syncRegionNextFewHours --stage develop --path ../.resources/data/sync-programs-region.json",
+		"invoke:syncAirtable": "serverless invoke local --function syncAirtable --stage develop",
+		"invoke:consumeNewProgramAirtableUpdateDetails": "serverless invoke local --function consumeNewProgramAirtableUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
+		"invoke:consumeNewProgramUpdateDetails": "serverless invoke local --function consumeNewProgramUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"airtable": "^0.8.1",
+		"aws-sdk": "^2.580.0",
+		"aws-xray-sdk": "^2.5.0",
+		"axios": "^0.18.0",
+		"dynamoose": "^1.5.2",
+		"lodash": "^4.17.11",
+		"moment": "^2.24.0",
+		"serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
+		"uuid": "^3.3.2"
+	},
+	"devDependencies": {
+		"flow-bin": "^0.107.0",
+		"flow-remove-types": "^2.107.0",
+		"jest": "^24.1.0",
+		"serverless": "^1.37.0",
+		"serverless-domain-manager": "^2.6.13",
+		"serverless-dotenv-plugin": "^2.1.1",
+		"serverless-plugin-tracing": "^2.0.0",
+		"serverless-prune-plugin": "^1.4.0",
+		"serverless-sentry": "^1.2.0"
+	}
 }

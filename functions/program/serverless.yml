@@ -295,10 +295,10 @@ functions:
               - partner
               - authorization
               - content-type
-  consumeNewProgramUpdateDescription:
+  consumeNewProgramUpdateDetails:
     memorySize: 512
     timeout: 12
-    handler: program.consumeNewProgramUpdateDescription
+    handler: program.consumeNewProgramUpdateDetails
     description: Consume new db program and update description
     reservedConcurrency: 1
     events:
@@ -307,8 +307,8 @@ functions:
             - newProgramQueue
             - Arn
           batchSize: 1
-  consumeNewProgramAirtableUpdateDescription:
-    handler: program.consumeNewProgramAirtableUpdateDescription
+  consumeNewProgramAirtableUpdateDetails:
+    handler: program.consumeNewProgramAirtableUpdateDetails
     description: Consume new airtable program update description
     reservedConcurrency: 1
     events:

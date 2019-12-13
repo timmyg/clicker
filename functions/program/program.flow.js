@@ -483,7 +483,7 @@ async function getProgramDetails(program: Program): Promise<any> {
 	// return { description, type: progType };
 }
 
-module.exports.consumeNewProgramAirtableUpdateDescription = RavenLambdaWrapper.handler(Raven, async (event) => {
+module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('consume');
 	const program = JSON.parse(event.Records[0].body);
 	const { id, programmingId, region } = program;
@@ -511,7 +511,7 @@ module.exports.consumeNewProgramAirtableUpdateDescription = RavenLambdaWrapper.h
 	return respond(200);
 });
 
-module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(Raven, async (event) => {
+module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('consume');
 	console.log(event);
 	const program = JSON.parse(event.Records[0].body);
