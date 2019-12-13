@@ -125,6 +125,7 @@ const dbProgram = dynamoose.model(
 		channelCategories: [ String ], // ["Sports Channels"]
 		subcategories: [ String ], // ["Basketball"]
 		mainCategory: String, // "Sports"
+		type: String, // "Sports non-event"
 		// dynamic fields
 		nextProgramTitle: String,
 		nextProgramStart: Number,
@@ -470,7 +471,7 @@ async function pullFromDirecTV(
 	return results;
 }
 
-async function getProgramDescription(program: Program): Promise<string> {
+async function getProgramDetails(program: Program): Promise<Program> {
 	const { programmingId } = program;
 	const url = `${directvEndpoint}/program/flip/${programmingId}`;
 	const options = {
@@ -478,7 +479,7 @@ async function getProgramDescription(program: Program): Promise<string> {
 	};
 	const result = await axios.get(url, options);
 	console.log('result.data', result.data);
-	const { description } = result.data.programDetail;
+	const { description, type: progType } = result.data.programDetail;
 	return description;
 }
 
@@ -486,28 +487,27 @@ module.exports.consumeNewProgramAirtableUpdateDescription = RavenLambdaWrapper.h
 	console.log('consume');
 	const program = JSON.parse(event.Records[0].body);
 	const { id, programmingId, region } = program;
-	const description = await getProgramDescription(program);
-	console.log(description);
+	const { description, type } = await getProgramDetails(program);
 
-	if (description && description.length) {
-		// update in airtable
-		const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-		const airtablePrograms = 'Programs';
-		const airtableGames = await airtableBase(airtablePrograms)
-			.select({
-				filterByFormula: `{programmingId} = '${programmingId}'`
+	// update in airtable
+	const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+	const airtablePrograms = 'Programs';
+	const airtableGames = await airtableBase(airtablePrograms)
+		.select({
+			filterByFormula: `{programmingId} = '${programmingId}'`
+		})
+		.all();
+	const airtablePromises = [];
+	airtableGames.forEach((g) => {
+		airtablePromises.push(
+			airtableBase(airtablePrograms).update(g.id, {
+				description,
+				type
 			})
-			.all();
-		const airtablePromises = [];
-		airtableGames.forEach((g) => {
-			airtablePromises.push(
-				airtableBase(airtablePrograms).update(g.id, {
-					description
-				})
-			);
-		});
-		await Promise.all(airtablePromises);
-	}
+		);
+	});
+	await Promise.all(airtablePromises);
+	// }
 	return respond(200);
 });
 
@@ -516,19 +516,19 @@ module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(R
 	console.log(event);
 	const program = JSON.parse(event.Records[0].body);
 	const { id, programmingId, region } = program;
-	const description = await getProgramDescription(program);
-	await updateProgram(id, region, description);
+	const { description, type } = await getProgramDetails(program);
+	await updateProgram(id, region, description, type);
 });
 
-async function updateProgram(id, region, description) {
+async function updateProgram(id, region, description, type) {
 	console.log({ description });
 	const docClient = new AWS.DynamoDB.DocumentClient();
 	var params = {
 		TableName: process.env.tableProgram,
 		Key: { id, region },
-		UpdateExpression: 'set description = :newdescription',
+		UpdateExpression: 'set description = :newdescription, set type = :newtype',
 		ConditionExpression: 'id = :id',
-		ExpressionAttributeValues: { ':newdescription': description, ':id': id }
+		ExpressionAttributeValues: { ':newdescription': description, ':newtype': type, ':id': id }
 	};
 	try {
 		const x = await docClient.update(params).promise();
