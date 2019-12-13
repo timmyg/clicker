@@ -395,7 +395,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     })
     .all();
 
-  let i = 0;
+  const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
     const gameDatabaseId = airtableProgram.get('gameId');
@@ -403,15 +403,15 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
       .query('programmingId')
       .eq(programmingId)
       .exec();
-    const promises = [];
+
     for (const program of programs) {
       const { region, id } = program;
-      i++;
       promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId }));
     }
-    await Promise.all(promises);
   }
-  return respond(200, { updates: i });
+  await Promise.all(promises);
+
+  return respond(200, { updates: promises.length });
 });
 
 function buildAirtablePrograms(programs: Program[]) {
