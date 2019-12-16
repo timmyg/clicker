@@ -12,6 +12,8 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
+const axiosRetry = require('axios-retry');
+axiosRetry(axios, { retries: 3 });
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 
@@ -157,7 +159,6 @@ const dbProgram = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('hi', process.env.tableProgram, process.env);
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 });
 
@@ -344,12 +345,12 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   for (const region of allRegions) {
     const results = await pullFromDirecTV(region.name, region.localChannels, region.defaultZip, datesToPull, 24);
-    for (const result2 of results) {
+    for (const result of results) {
       const allExistingGames = await base(airtablePrograms)
         .select({ fields: ['programmingId'] })
         .all();
       const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
-      let { schedule } = result2.data;
+      let { schedule } = result.data;
       let allPrograms: Program[] = build(schedule, region.name);
       // allPrograms = allPrograms.filter(p => !!p.live);
       allPrograms = uniqBy(allPrograms, 'programmingId');
