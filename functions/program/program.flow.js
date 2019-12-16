@@ -473,7 +473,6 @@ async function ratePrograms(programs: ProgramAirtable[]) {
     const terms = termsList.split(',').map(item => item.trim());
     terms.map(term => {
       let isProperty = false;
-      console.log(term);
       if (term.startsWith('{')) {
         isProperty = true;
         term = term.replace(/{/g, '').replace(/}/g, '');
@@ -662,12 +661,15 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
 });
 
 module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('consume');
-  //   console.log(event);
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
-  const { description, progType: type } = await getProgramDetails(program);
-  await updateProgram(id, region, description, type);
+  if (!programmingId.includes('GDM')) {
+    const { description, progType: type } = await getProgramDetails(program);
+    await updateProgram(id, region, description, type);
+  } else {
+    console.info(`skipping ${programmingId}`);
+  }
+  return respond(200);
 });
 
 async function updateProgram(id, region, description, type) {
