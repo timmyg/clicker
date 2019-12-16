@@ -323,7 +323,7 @@ functions:
     handler: program.syncRatings
     description: rate programs by keywords that haven't been rated yet
     events:
-      - schedule: rate(1 hour)
+      # - schedule: rate(1 hour)
       - http:
           path: sync/airtable/ratings
           method: post
