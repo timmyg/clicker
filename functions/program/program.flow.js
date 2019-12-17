@@ -12,8 +12,9 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-const axiosRetry = require('axios-retry');
-axiosRetry(axios, { retries: 3 });
+const rax = require('retry-axios');
+const interceptorId = rax.attach();
+console.log({ interceptorId });
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 
