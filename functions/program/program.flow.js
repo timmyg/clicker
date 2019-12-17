@@ -368,7 +368,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
           console.error(e);
         }
       }
-      const result = await Promise.all(promises);
+      await Promise.all(promises);
       await publishNewPrograms(allPrograms, process.env.newProgramAirtableTopicArn);
       console.timeEnd('create');
     }
