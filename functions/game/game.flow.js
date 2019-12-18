@@ -263,7 +263,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     .all();
   const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
   console.log('allExistingGamesIds', allExistingGamesIds.length);
-  const daysToPull = 12;
+  const daysToPull = 2; // TODO change to 12
   const datesToPull = [];
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
@@ -414,12 +414,12 @@ async function pullFromActionNetwork(dates: Date[]) {
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
   const actionSports: actionNetworkRequest[] = [];
   actionSports.push({ sport: 'ncaab', params: { division: 'D1' } });
-  actionSports.push({ sport: 'ncaaf', params: { division: 'FBS' } });
-  actionSports.push({ sport: 'nba' });
-  actionSports.push({ sport: 'nfl' });
-  actionSports.push({ sport: 'mlb' });
-  actionSports.push({ sport: 'nhl' });
-  actionSports.push({ sport: 'soccer' });
+  // actionSports.push({ sport: 'ncaaf', params: { division: 'FBS' } });
+  // actionSports.push({ sport: 'nba' });
+  // actionSports.push({ sport: 'nfl' });
+  // actionSports.push({ sport: 'mlb' });
+  // actionSports.push({ sport: 'nhl' });
+  // actionSports.push({ sport: 'soccer' }); // TODO uncomment
   // actionSports.push({ sport: 'pga' });
   // actionSports.push({ sport: 'boxing' });
   const method = 'get';
@@ -431,7 +431,9 @@ async function pullFromActionNetwork(dates: Date[]) {
       const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
       actionSports.forEach((actionSport: actionNetworkRequest) => {
         const url = `${actionBaseUrl}/${actionSport.sport}`;
-        const queryDate = moment(date).format('YYYYMMDD');
+        const queryDate = moment(date)
+          .clone()
+          .format('YYYYMMDD');
         const params = actionSport.params || {};
         params.date = queryDate;
         console.log(url, { params });
@@ -441,13 +443,24 @@ async function pullFromActionNetwork(dates: Date[]) {
       console.error(e);
     }
   }
+  console.log('request', requests[0]);
   const responses = await Promise.all(requests);
-  console.log('responses', responses.length);
+  console.log('responses.length', responses.length);
+  console.log('responses[0]', responses[0]);
+  console.log('responses[1]', responses[1]);
+  // console.log('responses[0]', responses[0].data.games[9].id);
+  // console.log('responses[1]', responses[1].data.games[9].id);
+  // console.log('responses', responses);
   const all = [];
   responses.forEach(response => {
     const responseEvents = response.data.games ? response.data.games : response.data.competitions;
     all.push(...responseEvents);
+    console.log('all.length', all.length);
   });
+  // console.log('all.length', all.length);
+  // console.log('all', all);
+  console.log('muskies', all.find(a => a.id === 76487));
+  // console.log('muskies', all.find(a => a.id === 76782));
   return all;
 }
 
