@@ -17,9 +17,9 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async (event) => {
 	if (emailBot1 !== 'dave' || emailBot2 !== 'matthews') {
 		return respond(400, "i honestly think you're a bot");
 	}
-	console.time('hubspot:create');
+	console.time('notification');
 	await new Invoke().service('notification').name('sendLanding').body({ text }).async().go();
-	console.timeEnd('hubspot:create');
+	console.timeEnd('notification');
 	if (stage === 'prod') {
 		console.time('hubspot:create');
 		const hubspotContact = await createHubspotContact(email);
