@@ -51,8 +51,8 @@ export default {
   data: function() {
     return {
       email: "",
-      emailBot1: "",
-      emailBot2: "",
+      emailBot1: "dave",
+      emailBot2: "matthews",
       submitting: false,
       submitted: false,
       error: false
@@ -65,13 +65,13 @@ export default {
       if (emailBot1.length || emailBot2.length) {
         return console.info("get outta here bot!");
       }
-      console.log("$analytics");
-      console.log(this.$analytics);
-      console.log(email);
+      // console.log("$analytics");
+      // console.log(this.$analytics);
+      // console.log(email);
       if (this.$analytics) {
         this.$analytics.alias(email);
       }
-      console.log(this.$http);
+      // console.log(this.$http);
       this.$http
         .post(`${process.env.NUXT_ENV_API_BASE}/leads`, {
           email,
