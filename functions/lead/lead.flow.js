@@ -17,10 +17,16 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async (event) => {
 	if (emailBot1 !== 'dave' || emailBot2 !== 'matthews') {
 		return respond(400, "i honestly think you're a bot");
 	}
+	console.time('hubspot:create');
 	await new Invoke().service('notification').name('sendLanding').body({ text }).async().go();
+	console.timeEnd('hubspot:create');
 	if (stage === 'prod') {
+		console.time('hubspot:create');
 		const hubspotContact = await createHubspotContact(email);
+		console.timeEnd('hubspot:create');
+		console.time('trello:create');
 		const trelloContact = await createTrelloCard(email);
+		console.timeEnd('trello:create');
 		return respond(201, { hubspotContact, trelloContact });
 	}
 	return respond(201, "not prod so didn't actually create anything");
