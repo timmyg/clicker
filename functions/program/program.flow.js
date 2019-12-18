@@ -12,6 +12,9 @@ const axios = require('axios');
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
+const rax = require('retry-axios');
+const interceptorId = rax.attach();
+console.log({ interceptorId });
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 
@@ -157,7 +160,6 @@ const dbProgram = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('hi', process.env.tableProgram, process.env);
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 });
 
@@ -344,12 +346,12 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   for (const region of allRegions) {
     const results = await pullFromDirecTV(region.name, region.localChannels, region.defaultZip, datesToPull, 24);
-    for (const result2 of results) {
+    for (const result of results) {
       const allExistingGames = await base(airtablePrograms)
         .select({ fields: ['programmingId'] })
         .all();
       const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
-      let { schedule } = result2.data;
+      let { schedule } = result.data;
       let allPrograms: Program[] = build(schedule, region.name);
       // allPrograms = allPrograms.filter(p => !!p.live);
       allPrograms = uniqBy(allPrograms, 'programmingId');
@@ -367,7 +369,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
           console.error(e);
         }
       }
-      const result = await Promise.all(promises);
+      await Promise.all(promises);
       await publishNewPrograms(allPrograms, process.env.newProgramAirtableTopicArn);
       console.timeEnd('create');
     }
@@ -473,7 +475,6 @@ async function ratePrograms(programs: ProgramAirtable[]) {
     const terms = termsList.split(',').map(item => item.trim());
     terms.map(term => {
       let isProperty = false;
-      console.log(term);
       if (term.startsWith('{')) {
         isProperty = true;
         term = term.replace(/{/g, '').replace(/}/g, '');
@@ -614,10 +615,14 @@ async function pullFromDirecTV(
       Cookie: `dtve-prospect-zip=${zip};`,
     };
     const method = 'get';
+    const timeout = 2000;
     console.log('getting channels....', params, headers);
-    promises.push(axios({ method, url, params, headers }));
+    promises.push(axios({ method, url, params, headers, timeout }));
   });
+  console.log(`executing ${promises.length} promises`);
+  console.time('pullFromDirecTV');
   const results = await Promise.all(promises);
+  console.timeEnd('pullFromDirecTV');
   return results;
 }
 
@@ -627,7 +632,10 @@ async function getProgramDetails(program: Program): Promise<any> {
   const options = {
     timeout: 2000,
   };
+  console.log('get program details');
+  console.time('program details');
   const result = await axios.get(url, options);
+  console.timeEnd('program details');
   //   console.log('result.data', result.data);
   return result.data.programDetail;
   // return { description, type: progType };
@@ -662,12 +670,15 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
 });
 
 module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('consume');
-  //   console.log(event);
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
-  const { description, progType: type } = await getProgramDetails(program);
-  await updateProgram(id, region, description, type);
+  if (!programmingId.includes('GDM')) {
+    const { description, progType: type } = await getProgramDetails(program);
+    await updateProgram(id, region, description, type);
+  } else {
+    console.info(`skipping ${programmingId}`);
+  }
+  return respond(200);
 });
 
 async function updateProgram(id, region, description, type) {

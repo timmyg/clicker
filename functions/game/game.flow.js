@@ -262,8 +262,10 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     .select({ fields: ['id'] })
     .all();
   const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
+  console.log('allExistingGamesIds', allExistingGamesIds.length);
+  const daysToPull = 12;
   const datesToPull = [];
-  [...Array(3)].forEach((_, i) => {
+  [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
       .add(i, 'days')
@@ -271,8 +273,11 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     datesToPull.push(dateToSync);
   });
   let allEvents: any = await pullFromActionNetwork(datesToPull);
+  console.log('allEvents', allEvents.length);
   allEvents = uniqBy(allEvents, 'id');
+  console.log('unique events', allEvents.length);
   allEvents = allEvents.filter(e => !allExistingGamesIds.includes(e.id));
+  console.log('not existing in airtable events', allEvents.length);
   console.time('create');
   let transformedGames: Game[] = [];
   allEvents.forEach(g => transformedGames.push(transformGame(g)));
@@ -283,7 +288,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       const gamesSlice = airtableGames.splice(0, 10);
       console.log('batch putting:', gamesSlice.length);
       console.log('remaining:', airtableGames.length);
-      promises.push(base(airtableGames).create(gamesSlice));
+      promises.push(base(airtableGamesName).create(gamesSlice));
     } catch (e) {
       console.error(e);
     }
