@@ -62,7 +62,7 @@ export default {
     onSubmit() {
       this.submitting = true;
       const { email, emailBot1, emailBot2 } = this;
-      if (emailBot1.length || emailBot2.length) {
+      if (emailBot1 !== "dave" || emailBot2 !== "matthews") {
         return console.info("get outta here bot!");
       }
       // console.log("$analytics");
