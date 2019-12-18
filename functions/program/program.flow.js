@@ -615,10 +615,14 @@ async function pullFromDirecTV(
       Cookie: `dtve-prospect-zip=${zip};`,
     };
     const method = 'get';
+    const timeout = 2000;
     console.log('getting channels....', params, headers);
-    promises.push(axios({ method, url, params, headers }));
+    promises.push(axios({ method, url, params, headers, timeout }));
   });
+  console.log(`executing ${promises.length} promises`);
+  console.time('pullFromDirecTV');
   const results = await Promise.all(promises);
+  console.timeEnd('pullFromDirecTV');
   return results;
 }
 
@@ -628,7 +632,10 @@ async function getProgramDetails(program: Program): Promise<any> {
   const options = {
     timeout: 2000,
   };
+  console.log('get program details');
+  console.time('program details');
   const result = await axios.get(url, options);
+  console.timeEnd('program details');
   //   console.log('result.data', result.data);
   return result.data.programDetail;
   // return { description, type: progType };
