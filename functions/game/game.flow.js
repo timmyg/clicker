@@ -283,7 +283,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       const gamesSlice = airtableGames.splice(0, 10);
       console.log('batch putting:', gamesSlice.length);
       console.log('remaining:', airtableGames.length);
-      promises.push(base(airtableGames).create(gamesSlice));
+      promises.push(base(airtableGamesName).create(gamesSlice));
     } catch (e) {
       console.error(e);
     }
