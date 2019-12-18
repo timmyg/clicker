@@ -432,7 +432,7 @@ async function pullFromActionNetwork(dates: Date[]) {
       actionSports.forEach((actionSport: actionNetworkRequest) => {
         const url = `${actionBaseUrl}/${actionSport.sport}`;
         const queryDate = moment(date)
-          .clone()
+          // .clone()
           .format('YYYYMMDD');
         const params = actionSport.params || {};
         params.date = queryDate;
@@ -443,7 +443,8 @@ async function pullFromActionNetwork(dates: Date[]) {
       console.error(e);
     }
   }
-  console.log('request', requests[0]);
+  console.log('request0', requests[0]);
+  console.log('request1', requests[1]);
   const responses = await Promise.all(requests);
   console.log('responses.length', responses.length);
   console.log('responses[0]', responses[0]);
