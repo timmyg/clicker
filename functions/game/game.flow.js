@@ -274,8 +274,8 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   let allEvents: any = await pullFromActionNetwork(datesToPull);
   console.log('allEvents', allEvents.length);
-  allEvents = uniqBy(allEvents, 'id');
-  console.log('unique events', allEvents.length);
+  // allEvents = uniqBy(allEvents, 'id');
+  // console.log('unique events', allEvents.length);
   allEvents = allEvents.filter(e => !allExistingGamesIds.includes(e.id));
   console.log('not existing in airtable events', allEvents.length);
   console.time('create');
