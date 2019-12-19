@@ -429,7 +429,7 @@ async function pullFromActionNetwork(dates: Date[]) {
   for (const actionSport: actionNetworkRequest of actionSports) {
     const url = `${actionBaseUrl}/${actionSport.sport}`;
     for (const date of dates) {
-      const queryDate = dateFns.format(date, 'yyyyMMdd');
+      // const queryDate = dateFns.format(date, 'yyyyMMdd');
       // const params = actionSport.params || {};
       // const queryDate = moment(date).format('YYYYMMDD');
       // const queryDate = Math.random();
