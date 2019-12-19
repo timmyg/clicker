@@ -263,7 +263,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     .all();
   const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
   console.log('allExistingGamesIds', allExistingGamesIds.length);
-  const daysToPull = 2; // TODO change to 12
+  const daysToPull = 12; // TODO change to 12
   const datesToPull = [];
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
@@ -414,41 +414,42 @@ async function pullFromActionNetwork(dates: Date[]) {
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
   const actionSports: actionNetworkRequest[] = [];
   actionSports.push({ sport: 'ncaab', params: { division: 'D1' } });
-  // actionSports.push({ sport: 'ncaaf', params: { division: 'FBS' } });
-  // actionSports.push({ sport: 'nba' });
-  // actionSports.push({ sport: 'nfl' });
-  // actionSports.push({ sport: 'mlb' });
-  // actionSports.push({ sport: 'nhl' });
-  // actionSports.push({ sport: 'soccer' }); // TODO uncomment
+  actionSports.push({ sport: 'ncaaf', params: { division: 'FBS' } });
+  actionSports.push({ sport: 'nba' });
+  actionSports.push({ sport: 'nfl' });
+  actionSports.push({ sport: 'mlb' });
+  actionSports.push({ sport: 'nhl' });
+  actionSports.push({ sport: 'soccer' }); // TODO uncomment
   // actionSports.push({ sport: 'pga' });
   // actionSports.push({ sport: 'boxing' });
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
-  console.log({ dates });
   const requests = [];
-  for (const date of dates) {
-    try {
-      const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
-      actionSports.forEach((actionSport: actionNetworkRequest) => {
-        const url = `${actionBaseUrl}/${actionSport.sport}`;
-        const queryDate = moment(date)
-          // .clone()
-          .format('YYYYMMDD');
-        const params = actionSport.params || {};
-        params.date = queryDate;
-        console.log(url, { params });
-        requests.push(axios.get(url, { params }));
-      });
-    } catch (e) {
-      console.error(e);
+  const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+  for (const actionSport: actionNetworkRequest of actionSports) {
+    const url = `${actionBaseUrl}/${actionSport.sport}`;
+    for (const date of dates) {
+      const queryDate = dateFns.format(date, 'yyyyMMdd');
+      // const params = actionSport.params || {};
+      // const queryDate = moment(date).format('YYYYMMDD');
+      // const queryDate = Math.random();
+      // params.date = queryDate;
+      // console.log({ params });
+      const params = { ...actionSport.params, date: moment(date).format('YYYYMMDD') };
+      const request = axios.get(url, { params });
+      requests.push(request);
     }
   }
-  console.log('request0', requests[0]);
-  console.log('request1', requests[1]);
+  console.log('requests:');
+  console.log(require('util').inspect(requests));
   const responses = await Promise.all(requests);
-  console.log('responses.length', responses.length);
-  console.log('responses[0]', responses[0]);
-  console.log('responses[1]', responses[1]);
+  // console.log('responses.length', responses.length);
+  console.log('responses[0]', responses[0].config.params);
+  console.log('responses[1]', responses[1].config.params);
+  // console.log('responses[0]', responses[0].data.games[0].id);
+  // console.log('responses[1]', responses[1].data.games[0].id);
+  console.log('responses[2]', responses[2].config.params);
+  console.log('responses[3]', responses[3].config.params);
   // console.log('responses[0]', responses[0].data.games[9].id);
   // console.log('responses[1]', responses[1].data.games[9].id);
   // console.log('responses', responses);
