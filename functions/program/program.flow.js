@@ -355,7 +355,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     Cookie: `dtve-prospect-zip=${zip};`,
   };
   const method = 'get';
-  console.log('getting channels....', params, headers);
+  console.log('getting channels.... ->', params, headers);
   let result = await axios({ method, url, params, headers });
   console.log(result);
   let { schedule } = result.data;
