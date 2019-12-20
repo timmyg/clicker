@@ -361,8 +361,8 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   console.log('Dummy server started on port 7500');
   const x = await axios.get(`https://jsonplaceholder.typicode.com/users`);
   console.log({ x });
-  const z = await axios.get('https://www.directv.com/json/program/flip/EP000199170206');
-  console.log({ z });
+  // const z = await axios.get('https://www.directv.com/json/program/flip/EP000199170206');
+  // console.log({ z });
   console.log('getting channels 2.... ->', url, params, headers);
   // let result2 = await axios({ method, url, params, headers });
   let result2 = await axios.get(url, { params, headers });
