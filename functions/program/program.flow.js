@@ -309,6 +309,7 @@ module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
   respond(200);
 });
 
+
 async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
   const channels = regionChannels.concat(nationalChannels);
