@@ -368,7 +368,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   // console.log({ z });
   console.log('getting channels 2.... ->', url, params, headers);
   // let result2 = await axios({ method, url, params, headers });
-  let result2 = await axios.get(url, { params, headers, crossdomain: true });
+  let result2 = await axios.get(url, { params, headers });
   console.log(result2);
   let { schedule } = result2.data;
   let allPrograms = build(schedule, regionName);
