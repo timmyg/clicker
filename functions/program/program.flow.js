@@ -355,10 +355,11 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     Cookie: `dtve-prospect-zip=${zip};`,
   };
   const method = 'get';
-  console.log('getting channels.... ->', params, headers);
   const x = await axios.get(`https://jsonplaceholder.typicode.com/users`);
   console.log({ x });
-  let result2 = await axios({ method, url, params, headers });
+  console.log('getting channels.... ->', params, headers);
+  // let result2 = await axios({ method, url, params, headers });
+  let result2 = await axios.get(url, { params, headers });
   console.log(result2);
   let { schedule } = result2.data;
   let allPrograms = build(schedule, regionName);
