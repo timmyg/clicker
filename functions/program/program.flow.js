@@ -355,6 +355,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   const params = { startTime, hours: totalHours, channels: channelsString };
   const headers = {
     Cookie: `dtve-prospect-zip=${zip};`,
+    'User-Agent': 'PostmanRuntime/7.20.1',
   };
   const method = 'get';
   console.log('Dummy server started on port 7500');
