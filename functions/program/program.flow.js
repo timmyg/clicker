@@ -309,7 +309,6 @@ module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
   respond(200);
 });
 
-
 async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
   const channels = regionChannels.concat(nationalChannels);
@@ -357,9 +356,11 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   };
   const method = 'get';
   console.log('getting channels.... ->', params, headers);
-  let result = await axios({ method, url, params, headers });
-  console.log(result);
-  let { schedule } = result.data;
+  const x = await axios.get(`https://jsonplaceholder.typicode.com/users`);
+  console.log({ x });
+  let result2 = await axios({ method, url, params, headers });
+  console.log(result2);
+  let { schedule } = result2.data;
   let allPrograms = build(schedule, regionName);
   console.log('allPrograms:', allPrograms.length);
   let transformedPrograms = buildProgramObjects(allPrograms);
