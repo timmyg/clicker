@@ -358,6 +358,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   const headers = {
     Cookie: `dtve-prospect-zip=${zip};`,
     'User-Agent': 'PostmanRuntime/7.20.1',
+    Host: 'www.directv.com',
   };
   const method = 'get';
   console.log('Dummy server started on port 7500');
