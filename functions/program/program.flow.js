@@ -9,6 +9,7 @@ const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
+const rp = require('request-promise');
 
 declare class process {
   static env: {
@@ -355,11 +356,24 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     Cookie: `dtve-prospect-zip=${zip};`,
   };
   const method = 'get';
-  const x = await axios.get(`https://jsonplaceholder.typicode.com/users`);
-  console.log({ x });
-  console.log('getting channels 2.... ->', url, params, headers);
-  // let result2 = await axios({ method, url, params, headers });
-  let result2 = await axios.get(url, { params, headers });
+
+  var options = {
+    method: 'GET',
+    url,
+    qs: params,
+    headers,
+  };
+
+  console.log('y');
+  const y = await rp(options);
+
+  console.log({ y });
+
+  // const x = await axios.get(`https://jsonplaceholder.typicode.com/users`);
+  // console.log({ x });
+  // console.log('getting channels 2.... ->', url, params, headers);
+  // // let result2 = await axios({ method, url, params, headers });
+  // let result2 = await axios.get(url, { params, headers });
   console.log(result2);
   let { schedule } = result2.data;
   let allPrograms = build(schedule, regionName);
