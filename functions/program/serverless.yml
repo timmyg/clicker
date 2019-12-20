@@ -221,7 +221,7 @@ functions:
   syncByRegion:
     handler: program.syncByRegion
     memorySize: 1024
-    timeout: 30
+    timeout: 60
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}

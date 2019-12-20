@@ -9,8 +9,6 @@ const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
-const curlirize = require('axios-curlirize');
-curlirize(axios);
 
 declare class process {
   static env: {
@@ -357,7 +355,6 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
     Cookie: `dtve-prospect-zip=${zip};`,
   };
   const method = 'get';
-  console.log('Dummy server started on port 7500');
   const x = await axios.get(`https://jsonplaceholder.typicode.com/users`);
   console.log({ x });
   const z = await axios.get('https://www.directv.com/json/program/flip/EP000199170206');
