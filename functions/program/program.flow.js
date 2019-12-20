@@ -621,9 +621,13 @@ async function pullFromDirecTV(
   });
   console.log(`executing ${promises.length} promises`);
   console.time('pullFromDirecTV');
-  const results = await Promise.all(promises);
-  console.timeEnd('pullFromDirecTV');
-  return results;
+  try {
+    const results = await Promise.all(promises);
+    console.timeEnd('pullFromDirecTV');
+    return results;
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 async function getProgramDetails(program: Program): Promise<any> {
