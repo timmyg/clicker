@@ -23,7 +23,6 @@
     "dynamoose": "^1.5.2",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "node-fetch": "^2.6.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
     "uuid": "^3.3.2"
   },
