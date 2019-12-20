@@ -352,6 +352,8 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
 
   const url = `${directvEndpoint}/channelschedule`;
 
+  axios.defaults.headers.common = {};
+
   const params = { startTime, hours: totalHours, channels: channelsString };
   const headers = {
     Cookie: `dtve-prospect-zip=${zip};`,
