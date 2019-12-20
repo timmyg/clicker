@@ -9,6 +9,8 @@ if (!process.env.IS_LOCAL) {
   AWS = require('aws-sdk');
 }
 const axios = require('axios');
+const curlirize = require('axios-curlirize');
+curlirize(axios);
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
@@ -588,7 +590,9 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
     };
 
     try {
-      messagePromises.push(sns.publish(messageData).promise());
+      if (!process.env.IS_LOCAL) {
+        messagePromises.push(sns.publish(messageData).promise());
+      }
       i++;
     } catch (e) {
       console.error(e);
