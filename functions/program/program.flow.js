@@ -357,7 +357,7 @@ async function syncChannels(regionName: string, regionChannels: number[], zip: s
   const method = 'get';
   const x = await axios.get(`https://jsonplaceholder.typicode.com/users`);
   console.log({ x });
-  console.log('getting channels 2.... ->', url, params, headers);
+  console.log('getting channels.... ->', params, headers);
   // let result2 = await axios({ method, url, params, headers });
   let result2 = await axios.get(url, { params, headers });
   console.log(result2);
