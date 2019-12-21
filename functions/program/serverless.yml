@@ -356,11 +356,10 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  numpy:
+  getSchedulePy:
     handler: programPy.getSchedule
     runtime: python3.6
     events:
       - http:
           path: schedule
           method: get
-
