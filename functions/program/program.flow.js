@@ -162,36 +162,36 @@ const dbProgram = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
-  // var request = require('request');
-  // var options = {
-  //   method: 'GET',
-  //   json: true,
-  //   url:
-  //     'https://www.directv.com/json/channelschedule?channels=9,206&startTime=Fri Dec 20 2019 10:00:00 GMT+0000&hours=24',
-  //   // 'https://jsonplaceholder.typicode.com/todos/1',
-  //   headers: {
-  //     // 'Accept-Encoding': 'gzip, deflate, br',
-  //     // 'Accept-Language': 'en-US,en;q=0.9',
-  //     // 'User-Agent':
-  //     //   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
-  //     // Accept: '*/*',
-  //     // 'Content-Type': 'application/json',
-  //     // Referer: 'https://www.directv.com/assets/js/dtve/apps/guide/programDataServiceProcessor.js',
-  //     Cookie:
-  //       'dtve-prospect-zip=45212; TLTSID=07AB36D2984D10980006B9E2CD812DCD; TLTUID=07AB36D2984D10980006B9E2CD812DCD; dtv-lsid=cjxaz2wvrtrfzlhqxez7ebw3k; customer=yes; dtv-msg-key-cache=f2f4b6987855de75fb25f643800680fe9e3b7e71; AB_IDPROOT=new_idproot_20190410; IDPROOT-TEST=AB-IDPROOT-New; ak_bmsc=B0BB1518FBC4B0EF9F6798374873B8CB17373947D336000034E6FC5D792E2930~pl88Yb7OLXkX9uIHhezw3KMZGivkGjfpRkvucGwJvmPlE/qt9R89WjtVnDaq2YkurCSvDwzNDCCIeNOOzsKzkzGsJx8CMycVM+6izt6AaL1MxlNC9NYhjDhYdn4BIhSTGqy19AoQKbH45fe/6HVkV40ucLzzM+0MX4UCJpVtjnwZ4xdT9QjfRFmXumYMzhDnY6dQP6PMcI2jNojSgrbCq2UOox5yruY4hXdlnslgq4Asu/BRqTppxYmr/q3zhH5DNz; bm_sv=4F68B5D513F9494C29B960014CE03B95~nAtkC9YQMOZQlJZpjNbQE+5vMs+5QQCz7BqTdJTu+wyhK7uO0XpNcB4ajzn9N16BH4EdO0rzWAbiW3W+qQBo1EyXudlMEbb48WDmygNIjeJR/xmwFl/+SLFvOZgOydSI0KHxJ7PTGkz3qyU2YOTDdCXmeCMhwTWmCpa0tZ+bzwE=',
-  //     // Connection: 'keep-alive',
-  //     // 'Cache-Control': 'no-cache',
-  //     // 'Postman-Token': 'c315ff13-a9c2-49bb-8242-80282308f4b4',
-  //     // Host: 'www.directv.com',
-  //   },
-  // };
-  // console.log('calling');
-  // request(options, function(error, response, body) {
-  //   if (error) throw new Error(error);
-  //   console.log(body);
-  //   return respond(200, 'hi');
-  // });
+  // return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
+  var request = require('request');
+  var options = {
+    method: 'GET',
+    json: true,
+    url:
+      'https://www.directv.com/json/channelschedule?channels=9,206&startTime=Fri Dec 20 2019 10:00:00 GMT+0000&hours=24',
+    // 'https://jsonplaceholder.typicode.com/todos/1',
+    headers: {
+      // 'Accept-Encoding': 'gzip, deflate, br',
+      // 'Accept-Language': 'en-US,en;q=0.9',
+      // 'User-Agent':
+      //   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
+      // Accept: '*/*',
+      // 'Content-Type': 'application/json',
+      // Referer: 'https://www.directv.com/assets/js/dtve/apps/guide/programDataServiceProcessor.js',
+      Cookie:
+        'dtve-prospect-zip=45212; TLTSID=07AB36D2984D10980006B9E2CD812DCD; TLTUID=07AB36D2984D10980006B9E2CD812DCD; dtv-lsid=cjxaz2wvrtrfzlhqxez7ebw3k; customer=yes; dtv-msg-key-cache=f2f4b6987855de75fb25f643800680fe9e3b7e71; AB_IDPROOT=new_idproot_20190410; IDPROOT-TEST=AB-IDPROOT-New; ak_bmsc=B0BB1518FBC4B0EF9F6798374873B8CB17373947D336000034E6FC5D792E2930~pl88Yb7OLXkX9uIHhezw3KMZGivkGjfpRkvucGwJvmPlE/qt9R89WjtVnDaq2YkurCSvDwzNDCCIeNOOzsKzkzGsJx8CMycVM+6izt6AaL1MxlNC9NYhjDhYdn4BIhSTGqy19AoQKbH45fe/6HVkV40ucLzzM+0MX4UCJpVtjnwZ4xdT9QjfRFmXumYMzhDnY6dQP6PMcI2jNojSgrbCq2UOox5yruY4hXdlnslgq4Asu/BRqTppxYmr/q3zhH5DNz; bm_sv=4F68B5D513F9494C29B960014CE03B95~nAtkC9YQMOZQlJZpjNbQE+5vMs+5QQCz7BqTdJTu+wyhK7uO0XpNcB4ajzn9N16BH4EdO0rzWAbiW3W+qQBo1EyXudlMEbb48WDmygNIjeJR/xmwFl/+SLFvOZgOydSI0KHxJ7PTGkz3qyU2YOTDdCXmeCMhwTWmCpa0tZ+bzwE=',
+      // Connection: 'keep-alive',
+      // 'Cache-Control': 'no-cache',
+      // 'Postman-Token': 'c315ff13-a9c2-49bb-8242-80282308f4b4',
+      // Host: 'www.directv.com',
+    },
+  };
+  console.log('calling');
+  request(options, function(error, response, body) {
+    if (error) throw new Error(error);
+    console.log(body);
+    return respond(200, 'hi');
+  });
 });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
