@@ -359,7 +359,8 @@ functions:
   numpy:
     handler: programPy.getSchedule
     runtime: python3.6
-    - http:
-        path: schedule
-        method: get
+    events:
+      - http:
+          path: schedule
+          method: get
 
