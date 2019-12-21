@@ -1,26 +1,38 @@
 // @flow
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
-const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-const awsXRay = require('aws-xray-sdk');
-const AWS = require('aws-sdk');
-const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+let AWS;
+if (!process.env.IS_LOCAL) {
+  AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
+} else {
+  console.info('Serverless Offline detected; skipping AWS X-Ray setup');
+  AWS = require('aws-sdk');
+}
 const axios = require('axios');
+const curlirize = require('axios-curlirize');
+curlirize(axios);
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
+// const rax = require('retry-axios');
+// const interceptorId = rax.attach();
+// console.log({ interceptorId });
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 
 declare class process {
   static env: {
+    airtableBase: string,
+    airtableKey: string,
     tableProgram: string,
     serviceName: string,
-    tableProgram: string,
-    tableProgramArea: string,
-    stage: string,
     newProgramTopicArn: string,
+    newProgramAirtableTopicArn: string,
+    tableProgram: string,
+    stage: string,
+    syncProgramsAirtableDateTopicArn: string,
     NODE_ENV: string,
+    IS_LOCAL: string,
   };
 }
 
@@ -102,7 +114,7 @@ const dbProgram = dynamoose.model(
       index: true,
     },
     id: { type: String, rangeKey: true },
-    start: { type: Number, rangeKey: true },
+    start: { type: Number },
     end: Number,
     channel: Number,
     channelMinor: Number,
@@ -111,13 +123,22 @@ const dbProgram = dynamoose.model(
     episodeTitle: String, // "Oklahoma State at Kansas"
     description: String,
     durationMins: Number, // mins
+    gameId: Number,
     live: Boolean,
     repeat: Boolean,
     sports: Boolean,
-    programmingId: String, // "SH000296530000" - use this to get summary
+    programmingId: {
+      type: String,
+      index: {
+        global: true,
+        // name: 'idOnlyGlobalIndex',
+        project: false,
+      },
+    }, // "SH000296530000" - use this to get summary
     channelCategories: [String], // ["Sports Channels"]
     subcategories: [String], // ["Basketball"]
     mainCategory: String, // "Sports"
+    programType: String, // "Sports non-event"
     // dynamic fields
     nextProgramTitle: String,
     nextProgramStart: Number,
@@ -141,8 +162,36 @@ const dbProgram = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('hi', process.env.tableProgram);
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
+  // var request = require('request');
+  // var options = {
+  //   method: 'GET',
+  //   json: true,
+  //   url:
+  //     'https://www.directv.com/json/channelschedule?channels=9,206&startTime=Fri Dec 20 2019 10:00:00 GMT+0000&hours=24',
+  //   // 'https://jsonplaceholder.typicode.com/todos/1',
+  //   headers: {
+  //     // 'Accept-Encoding': 'gzip, deflate, br',
+  //     // 'Accept-Language': 'en-US,en;q=0.9',
+  //     // 'User-Agent':
+  //     //   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
+  //     // Accept: '*/*',
+  //     // 'Content-Type': 'application/json',
+  //     // Referer: 'https://www.directv.com/assets/js/dtve/apps/guide/programDataServiceProcessor.js',
+  //     Cookie:
+  //       'dtve-prospect-zip=45212; TLTSID=07AB36D2984D10980006B9E2CD812DCD; TLTUID=07AB36D2984D10980006B9E2CD812DCD; dtv-lsid=cjxaz2wvrtrfzlhqxez7ebw3k; customer=yes; dtv-msg-key-cache=f2f4b6987855de75fb25f643800680fe9e3b7e71; AB_IDPROOT=new_idproot_20190410; IDPROOT-TEST=AB-IDPROOT-New; ak_bmsc=B0BB1518FBC4B0EF9F6798374873B8CB17373947D336000034E6FC5D792E2930~pl88Yb7OLXkX9uIHhezw3KMZGivkGjfpRkvucGwJvmPlE/qt9R89WjtVnDaq2YkurCSvDwzNDCCIeNOOzsKzkzGsJx8CMycVM+6izt6AaL1MxlNC9NYhjDhYdn4BIhSTGqy19AoQKbH45fe/6HVkV40ucLzzM+0MX4UCJpVtjnwZ4xdT9QjfRFmXumYMzhDnY6dQP6PMcI2jNojSgrbCq2UOox5yruY4hXdlnslgq4Asu/BRqTppxYmr/q3zhH5DNz; bm_sv=4F68B5D513F9494C29B960014CE03B95~nAtkC9YQMOZQlJZpjNbQE+5vMs+5QQCz7BqTdJTu+wyhK7uO0XpNcB4ajzn9N16BH4EdO0rzWAbiW3W+qQBo1EyXudlMEbb48WDmygNIjeJR/xmwFl/+SLFvOZgOydSI0KHxJ7PTGkz3qyU2YOTDdCXmeCMhwTWmCpa0tZ+bzwE=',
+  //     // Connection: 'keep-alive',
+  //     // 'Cache-Control': 'no-cache',
+  //     // 'Postman-Token': 'c315ff13-a9c2-49bb-8242-80282308f4b4',
+  //     // Host: 'www.directv.com',
+  //   },
+  // };
+  // console.log('calling');
+  // request(options, function(error, response, body) {
+  //   if (error) throw new Error(error);
+  //   console.log(body);
+  //   return respond(200, 'hi');
+  // });
 });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
@@ -288,14 +337,14 @@ function rank(program: Program) {
   return program;
 }
 
-module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     for (const region of allRegions) {
       const { defaultZip, name, localChannels } = region;
       console.log(`sync local channels: ${name}/${defaultZip} for channels ${localChannels.join(', ')}`);
       await new Invoke()
         .service('program')
-        .name('syncByRegion')
+        .name('syncRegionNextFewHours')
         .body({ name, localChannels, defaultZip })
         .async()
         .go();
@@ -307,151 +356,381 @@ module.exports.syncNew = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.syncByRegion = RavenLambdaWrapper.handler(Raven, async event => {
-  const { name, defaultZip, localChannels } = getBody(event);
-  await syncChannels(name, localChannels, defaultZip);
+module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log(JSON.stringify(event));
+  const { name: regionName, defaultZip, localChannels } = getBody(event);
+  await syncRegionChannels(regionName, localChannels, defaultZip);
   respond(200);
 });
 
-async function syncChannels(regionName: string, regionChannels: number[], zip: string) {
+module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtablePrograms = 'Programs';
+  const datesToPull = [];
+  const daysToPull = 12;
+  [...Array(daysToPull)].forEach((_, i) => {
+    const dateToSync = moment()
+      .subtract(5, 'hrs')
+      .add(i, 'days')
+      .toDate();
+    datesToPull.push(dateToSync);
+  });
+  for (const region of allRegions) {
+    const results = await pullFromDirecTV(region.name, region.localChannels, region.defaultZip, datesToPull, 24);
+    for (const result of results) {
+      const allExistingGames = await base(airtablePrograms)
+        .select({ fields: ['programmingId'] })
+        .all();
+      const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
+      let { schedule } = result.data;
+      let allPrograms: Program[] = build(schedule, region.name);
+      // allPrograms = allPrograms.filter(p => !!p.live);
+      allPrograms = uniqBy(allPrograms, 'programmingId');
+      allPrograms = allPrograms.filter(e => !allExistingProgrammingIds.includes(e.programmingId));
+      let allAirtablePrograms = buildAirtablePrograms(allPrograms);
+      const promises = [];
+      console.time('create');
+      while (!!allAirtablePrograms.length) {
+        try {
+          const programsSlice = allAirtablePrograms.splice(0, 10);
+          console.log('batch putting:', programsSlice.length);
+          console.log('remaining:', allAirtablePrograms.length);
+          promises.push(base(airtablePrograms).create(programsSlice));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      await Promise.all(promises);
+      await publishNewPrograms(allPrograms, process.env.newProgramAirtableTopicArn);
+      console.timeEnd('create');
+    }
+  }
+  return respond(200);
+});
+
+async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursFromNow = 4) {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableProgramsName = 'Programs';
+  const fourHoursAgo = moment()
+    .subtract(hoursAgo, 'h')
+    .toISOString();
+  const fourHoursFromNow = moment()
+    .add(hoursFromNow, 'h')
+    .toISOString();
+  const sixMinutesAgo = moment()
+    .subtract(6, 'm')
+    .toISOString();
+
+  let filterByFormula: string[] = [`{start} > '${fourHoursAgo}'`, `{start} < '${fourHoursFromNow}'`];
+  if (hasGameAttached) {
+    filterByFormula.push(`{gameId} != BLANK()`);
+  }
+  const updatedAirtablePrograms = await base(airtableProgramsName)
+    .select({
+      filterByFormula: `AND(${filterByFormula.join(',')})`,
+    })
+    .all();
+  return updatedAirtablePrograms;
+}
+
+module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
+  const updatedAirtablePrograms = await getAirtableProgramsInWindow(true);
+  const promises = [];
+  for (const airtableProgram of updatedAirtablePrograms) {
+    const programmingId = airtableProgram.get('programmingId');
+    const gameDatabaseId = airtableProgram.get('gameId');
+    const programs = await dbProgram
+      .query('programmingId')
+      .eq(programmingId)
+      .exec();
+
+    for (const program of programs) {
+      const { region, id } = program;
+      promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId }));
+    }
+  }
+  await Promise.all(promises);
+
+  return respond(200, { updates: promises.length });
+});
+
+module.exports.syncRatings = RavenLambdaWrapper.handler(Raven, async event => {
+  console.time('ratings');
+  const airtablePrograms = await getAirtableProgramsInWindow(false, 4, 24);
+  const updatedPrograms = await ratePrograms(airtablePrograms);
+  console.timeEnd('ratings');
+
+  const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableProgramsName = 'Programs';
+  const airtablePromises = [];
+  updatedPrograms.forEach(p => {
+    airtablePromises.push(
+      airtableBase(airtableProgramsName).update(p.id, {
+        rating: p.get('rating'),
+      }),
+    );
+  });
+  await Promise.all(airtablePromises);
+  return respond(200, { updatedPrograms: updatedPrograms.length });
+});
+
+class RatingKeywordsAirtable {
+  terms: string;
+  rating: number;
+  fields: any;
+  get(x: string): any {}
+  //   split(x: string) {}
+}
+
+class ProgramAirtable {
+  id: string;
+  rating: number;
+  title: string;
+  get(x: string): any {}
+}
+
+async function ratePrograms(programs: ProgramAirtable[]) {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableRatingKeywordsName = 'Rating Keywords';
+
+  const keywordRecords: RatingKeywordsAirtable[] = await base(airtableRatingKeywordsName)
+    .select({
+      view: 'Live',
+    })
+    .all();
+
+  const rated = [];
+  keywordRecords.forEach(kw => {
+    const termsList: any = kw.get('Terms');
+    const rating: number = kw.get('Rating');
+    const terms = termsList.split(',').map(item => item.trim());
+    terms.map(term => {
+      let isProperty = false;
+      if (term.startsWith('{')) {
+        isProperty = true;
+        term = term.replace(/{/g, '').replace(/}/g, '');
+      }
+      programs.forEach(p => {
+        if (isProperty) {
+          console.log(term, p.get(term));
+          if (p.get(term) === true) {
+            p.set('rating', rating);
+            rated.push(p);
+          }
+        } else {
+          const titleHasTerm = p
+            .get('title')
+            .toLowerCase()
+            .includes(term);
+          if (titleHasTerm) {
+            if (!p.get('rating')) {
+              p.set('rating', rating);
+              rated.push(p);
+            }
+          }
+        }
+      });
+    });
+  });
+  return rated;
+}
+
+function buildAirtablePrograms(programs: Program[]) {
+  const transformed = [];
+  programs.forEach(program => {
+    const { programmingId, title, description, channel, region, channelTitle, live, start } = program;
+    transformed.push({
+      fields: {
+        programmingId,
+        title,
+        description,
+        channel,
+        region,
+        channelTitle,
+        live,
+        start,
+      },
+    });
+  });
+  return transformed;
+}
+
+async function syncRegionChannels(regionName: string, regionChannels: number[], zip: string) {
   // channels may have minor channel, so get main channel number
-  const channels = regionChannels.concat(nationalChannels);
-  const channelsString = getChannels(channels).join(',');
+  // const channels = [...regionChannels, ...nationalChannels];
 
   // get latest program
   console.log('querying region:', regionName);
   // const regionPrograms = await dbProgram.query('region').eq(regionName).exec();
-  const regionPrograms = await dbProgram
+  const existingRegionPrograms = await dbProgram
     .query('region')
     .using('startLocalIndex')
     .eq(regionName)
     .where('start')
     .descending()
     .exec();
-
-  // console.log({ regionName, latestProgram });
-
+  console.log('existingRegionPrograms:', existingRegionPrograms.length);
+  const existingRegionProgramIds = existingRegionPrograms.map(p => p.id);
   let totalHours, startTime;
   // if programs, take the largest start time, add 1 minute and start from there and get two hours of programming
   //   add one hour because that seems like min duration for dtv api
   //   (doesnt matter if you set to 5:00 or 5:59, same results until 6:00)
-  if (regionPrograms && regionPrograms.length) {
-    startTime = moment(regionPrograms[0].start)
+  if (existingRegionPrograms && existingRegionPrograms.length) {
+    startTime = moment(existingRegionPrograms[0].start)
       .utc()
-      .add(1, 'hour')
-      .toString();
+      .add(1, 'hour');
     totalHours = 2;
   } else {
-    // if no programs, get 4 hours ago and pull 6 hours
+    // if no programs, get 4 hours ago and pull 8 hours
     const startHoursFromNow = -4;
     totalHours = 8;
     startTime = moment()
       .utc()
       .add(startHoursFromNow, 'hours')
       .minutes(0)
-      .seconds(0)
-      .toString();
+      .seconds(0);
   }
-
-  const url = `${directvEndpoint}/channelschedule`;
-
-  const params = { startTime, hours: totalHours, channels: channelsString };
-  const headers = {
-    Cookie: `dtve-prospect-zip=${zip};`,
-  };
-  const method = 'get';
-  console.log('getting channels....', params, headers);
-  let result = await axios({ method, url, params, headers });
-  console.log(result);
+  const [result] = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
   let { schedule } = result.data;
-  let allPrograms = build(schedule, regionName);
+  let allPrograms: Program[] = build(schedule, regionName);
+  // remove existing programs
   console.log('allPrograms:', allPrograms.length);
-  let transformedPrograms = buildProgramObjects(allPrograms);
+  allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
+  console.log('allPrograms deduped:', allPrograms.length);
+  allPrograms = uniqBy(allPrograms, 'programmingId');
+  console.log('allPrograms new unique:', allPrograms.length);
+  let transformedPrograms: Program[] = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);
+  await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
   console.log(dbResult);
+}
 
-  // get program ids, publish to sns topic to update description
+async function publishNewPrograms(programs: Program[], topicArn: string) {
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
   const messagePromises = [];
-  console.time(`publish ${transformedPrograms.length} messages`);
-  for (const program of transformedPrograms) {
+  console.time(`publish ${programs.length} messages`);
+  for (const program of programs) {
     console.log(i);
     const messageData = {
       Message: JSON.stringify(program),
-      TopicArn: process.env.newProgramTopicArn,
+      TopicArn: topicArn,
     };
 
     try {
-      messagePromises.push(sns.publish(messageData).promise());
+      if (!process.env.IS_LOCAL) {
+        messagePromises.push(sns.publish(messageData).promise());
+      }
       i++;
     } catch (e) {
       console.error(e);
     }
   }
   await Promise.all(messagePromises);
-  console.timeEnd(`publish ${transformedPrograms.length} messages`);
+  console.timeEnd(`publish ${messagePromises.length} messages`);
   console.log(i, 'topics published to:', process.env.newProgramTopicArn);
 }
 
-module.exports.consumeNewProgramUpdateDescription = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('consume');
-  console.log(event);
-  const { id, programmingId, region } = JSON.parse(event.Records[0].body);
+async function pullFromDirecTV(
+  regionName: string,
+  regionChannels: number[],
+  zip: string,
+  startTimes: moment[],
+  totalHours,
+) {
+  const promises = [];
+  startTimes.forEach(startTime => {
+    const url = `${directvEndpoint}/channelschedule`;
+    const channelsString = getChannels([...regionChannels, ...nationalChannels]).join(',');
+    const params = { startTime: startTime.toString(), hours: totalHours, channels: channelsString };
+    const headers = {
+      Cookie: `dtve-prospect-zip=${zip};`,
+    };
+    const method = 'get';
+    const timeout = 2000;
+    console.log('getting channels....', params, headers);
+    promises.push(axios({ method, url, params, headers, timeout }));
+  });
+  console.log(`executing ${promises.length} promises`);
+  console.time('pullFromDirecTV');
+  try {
+    const results = await Promise.all(promises);
+    console.timeEnd('pullFromDirecTV');
+    return results;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function getProgramDetails(program: Program): Promise<any> {
+  const { programmingId } = program;
   const url = `${directvEndpoint}/program/flip/${programmingId}`;
   const options = {
     timeout: 2000,
   };
-  try {
-    const result = await axios.get(url, options);
-    console.log('result.data.programDetail', result.data.programDetail);
-    const { description } = result.data.programDetail;
-    console.log('update', { id, region }, { description });
+  console.log('get program details');
+  console.time('program details');
+  const result = await axios.get(url, options);
+  console.timeEnd('program details');
+  //   console.log('result.data', result.data);
+  return result.data.programDetail;
+  // return { description, type: progType };
+}
 
-    if (description && description.length) {
-      await updateProgram(id, region, description);
-    }
-    return respond(200);
-  } catch (e) {
-    if (e.response && e.response.status === 404) {
-      console.log('404!!');
-      console.error(e);
-    }
-    console.error(e);
-    return respond(400);
-  }
-});
-module.exports.consumeNewProgramAddToAirtable = RavenLambdaWrapper.handler(Raven, async event => {
-  const airtablePrograms = 'Programs';
+module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('consume');
-  console.log(event);
-  const program: Program = JSON.parse(event.Records[0].body);
-  const { programmingId, title, description, channel, channelTitle, live, start } = program;
+  const program = JSON.parse(event.Records[0].body);
+  const { id, programmingId, region } = program;
+  const { description, progType: programType } = await getProgramDetails(program);
 
-  await airtableBase(airtablePrograms).create({
-    programmingId,
-    title,
-    description,
-    channel,
-    channelTitle,
-    live,
-    start,
+  // update in airtable
+  const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtablePrograms = 'Programs';
+  const airtableGames = await airtableBase(airtablePrograms)
+    .select({
+      filterByFormula: `{programmingId} = '${programmingId}'`,
+    })
+    .all();
+  const airtablePromises = [];
+  airtableGames.forEach(g => {
+    airtablePromises.push(
+      airtableBase(airtablePrograms).update(g.id, {
+        description,
+        programType,
+      }),
+    );
   });
-
-  console.log({ program });
+  await Promise.all(airtablePromises);
+  // }
   return respond(200);
 });
 
-async function updateProgram(id, region, description) {
-  console.log({ description });
+module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
+  const program = JSON.parse(event.Records[0].body);
+  const { id, programmingId, region } = program;
+  if (!programmingId.includes('GDM')) {
+    const { description, progType: type } = await getProgramDetails(program);
+    await updateProgram(id, region, description, type);
+  } else {
+    console.info(`skipping ${programmingId}`);
+  }
+  return respond(200);
+});
+
+async function updateProgram(id, region, description, type) {
+  console.log({ id, region, description, type });
   const docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
     TableName: process.env.tableProgram,
     Key: { id, region },
-    UpdateExpression: 'set description = :newdescription',
-    ConditionExpression: 'id = :id',
-    ExpressionAttributeValues: { ':newdescription': description, ':id': id },
+    UpdateExpression: 'set description = :newdescription, programType = :newtype',
+    // ConditionExpression: 'id = :id',
+    ExpressionAttributeValues: {
+      ':newdescription': description,
+      ':newtype': type,
+      // ':id': id
+    },
   };
   try {
     const x = await docClient.update(params).promise();

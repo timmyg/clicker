@@ -5,17 +5,14 @@ const camelcase = require('camelcase-keys');
 const dynamoose = require('dynamoose');
 const moment = require('moment-timezone');
 const objectMapper = require('object-mapper');
-const _ = require('lodash');
-// const AWS = require('aws-sdk');
+const { uniqBy } = require('lodash');
 let AWS;
-if (process.env._X_AMZN_TRACE_ID) {
+if (!process.env.IS_LOCAL) {
   AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
 } else {
   console.info('Serverless Offline detected; skipping AWS X-Ray setup');
   AWS = require('aws-sdk');
 }
-// const awsXRay = require('aws-xray-sdk');
-// const awsSdk = awsXRay.captureAWS(AWS);
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 
 if (process.env.NODE_ENV === 'test') {
@@ -112,6 +109,15 @@ class GameStatus {
   ended: boolean;
   description: string;
 }
+
+type actionNetworkRequest = {
+  sport: string,
+  params?: any,
+};
+
+module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200);
+});
 
 module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('getstatus');
@@ -222,7 +228,7 @@ function isBlowout(game: Game): boolean {
   }
 }
 
-module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
   const currentTime = moment()
     .subtract(5, 'hours')
     .toDate();
@@ -239,7 +245,7 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
       console.log('gamesToUpdate', gamesToUpdate.length);
       if (!!gamesToUpdate.length) {
         const totalGames = gamesToUpdate.length;
-        await updateGames(gamesToUpdate, []);
+        await syncGamesDatabase(gamesToUpdate, true);
         return respond(200, { updatedGames: totalGames });
       }
     }
@@ -249,12 +255,54 @@ module.exports.syncScores = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableGamesName = 'Games';
+  const allExistingGames = await base(airtableGamesName)
+    .select({ fields: ['id'] })
+    .all();
+  const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
+  console.log('allExistingGamesIds', allExistingGamesIds.length);
+  const daysToPull = 12; // TODO change to 12
+  const datesToPull = [];
+  [...Array(daysToPull)].forEach((_, i) => {
+    const dateToSync = moment()
+      .subtract(5, 'hrs')
+      .add(i, 'days')
+      .toDate();
+    datesToPull.push(dateToSync);
+  });
+  let allEvents: any = await pullFromActionNetwork(datesToPull);
+  console.log('allEvents', allEvents.length);
+  allEvents = uniqBy(allEvents, 'id');
+  console.log('unique events', allEvents.length);
+  allEvents = allEvents.filter(e => !allExistingGamesIds.includes(e.id));
+  console.log('not existing in airtable events', allEvents.length);
+  console.time('create');
+  let transformedGames: Game[] = [];
+  allEvents.forEach(g => transformedGames.push(transformGame(g)));
+  const airtableGames = buildAirtableGames(transformedGames);
+  const promises = [];
+  while (!!airtableGames.length) {
+    try {
+      const gamesSlice = airtableGames.splice(0, 10);
+      console.log('batch putting:', gamesSlice.length);
+      console.log('remaining:', airtableGames.length);
+      promises.push(base(airtableGamesName).create(gamesSlice));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  const result = await Promise.all(promises);
+  console.timeEnd('create');
+  return respond(200);
+});
+
 module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
   const { start, network } = event.queryStringParameters;
   const games: Game[] = await dbGame
     .query('start')
-    .eq(start)
-    // .filter(filter)
+    .eq(start) // .filter(filter)
     .exec();
   const game = games.find(g => g.broadcast && g.broadcast.network === network);
   return respond(200, game);
@@ -289,104 +337,65 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-type actionNetworkRequest = {
-  sport: string,
-  params?: any,
-};
-
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond(200);
-});
-
-module.exports.consumeNewGameAddToAirtable = RavenLambdaWrapper.handler(Raven, async event => {
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableGames = 'Games';
-  console.log('consume');
-  console.log(event);
-  const game: Game = JSON.parse(event.Records[0].body);
-  const { id, leagueName, start } = game;
-  const { full: homeTeam } = game.home.name;
-  const { full: awayTeam } = game.away.name;
-
-  await base(airtableGames).create({
-    id,
-    leagueName,
-    homeTeam,
-    awayTeam,
-    start,
+function buildAirtableGames(games: Game[]) {
+  const transformed = [];
+  games.forEach(game => {
+    // console.log({ game });
+    const { id, leagueName, start } = game;
+    const { full: homeTeam } = game.home.name;
+    const { full: awayTeam } = game.away.name;
+    transformed.push({
+      fields: {
+        id,
+        leagueName,
+        homeTeam,
+        awayTeam,
+        start,
+      },
+    });
   });
+  return transformed;
+}
 
-  console.log({ game });
-  return respond(200);
-});
-
-module.exports.syncSchedule = RavenLambdaWrapper.handler(Raven, async event => {
-  const existingGames = await dbGame.scan().exec();
-  let existingGameIds = [];
-  if (existingGames && existingGames.length) {
-    existingGameIds = existingGames.map(g => g.id);
-  }
-  console.log({ existingGameIds });
-
-  console.log('get games...');
-  const allGames: Game[] = await dbGame.scan().exec();
-  console.log('existingGames:', allGames.length);
-  const datesToPull = [];
-  if (allGames && allGames.length) {
-    const allGamesDescending = allGames.sort((a, b) => b.start.localeCompare(a.start));
-    const latestGame = allGamesDescending[0];
-    console.log({ latestGame });
-    // get one day more than largest start time
-    const dayAfterFurthestGame = moment(latestGame.start)
+module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('sync games to database for next few days...');
+  const datesToPull = [
+    moment().toDate(),
+    moment()
       .add(1, 'd')
-      .toDate();
-    datesToPull.push(dayAfterFurthestGame);
-  } else {
-    // if no data, get today and tomorrow
-    datesToPull.push(moment().toDate());
-    datesToPull.push(
-      moment()
-        .add(1, 'd')
-        .toDate(),
-    );
-  }
+      .toDate(),
+    moment()
+      .add(2, 'd')
+      .toDate(),
+  ];
   console.log('sync');
   const allEvents: any = await pullFromActionNetwork(datesToPull);
-  const allEventsTransformed: Game[] = await updateGames(allEvents, existingGameIds);
-  console.log('publish events:', allEventsTransformed.length);
-  await publishNewGames(allEventsTransformed);
+  await syncGamesDatabase(allEvents, true);
   return respond(200);
 });
 
-async function publishNewGames(games) {
-  // get game ids, publish to sns topic to update description
-  const sns = new AWS.SNS({ region: 'us-east-1' });
-  let i = 0;
-  const messagePromises = [];
-  for (const game of games) {
-    const messagePromise = sns
-      .publish({
-        Message: JSON.stringify(game),
-        TopicArn: process.env.newGameTopicArn,
-      })
-      .promise();
-    messagePromises.push(messagePromise);
-    i++;
-  }
-  console.time(`publish ${messagePromises.length} messages`);
-  console.log(messagePromises[0]);
-  const [first] = await Promise.all(messagePromises);
-  console.log({ first });
-  console.timeEnd(`publish ${messagePromises.length} messages`);
-  return respond(200);
-}
-
-function removeEmpty(obj) {
-  return Object.keys(obj).forEach(function(key) {
-    if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key]);
-    else if (obj[key] == null) delete obj[key];
-  });
-}
+// async function publishNewGames(games) {
+//   // get game ids, publish to sns topic to update description
+//   const sns = new AWS.SNS({ region: 'us-east-1' });
+//   let i = 0;
+//   const messagePromises = [];
+//   for (const game of games) {
+//     const messagePromise = sns
+//       .publish({
+//         Message: JSON.stringify(game),
+//         TopicArn: process.env.newGameTopicArn,
+//       })
+//       .promise();
+//     messagePromises.push(messagePromise);
+//     i++;
+//   }
+//   console.time(`publish ${messagePromises.length} messages`);
+//   console.log(messagePromises[0]);
+//   const [first] = await Promise.all(messagePromises);
+//   console.log({ first });
+//   console.timeEnd(`publish ${messagePromises.length} messages`);
+//   return respond(200);
+// }
 
 function getInProgressAndCompletedGames(response: any): Game[] {
   return response.filter(e => !['time-tbd', 'scheduled'].includes(e.status));
@@ -410,49 +419,72 @@ async function pullFromActionNetwork(dates: Date[]) {
   actionSports.push({ sport: 'nfl' });
   actionSports.push({ sport: 'mlb' });
   actionSports.push({ sport: 'nhl' });
-  actionSports.push({ sport: 'soccer' });
+  actionSports.push({ sport: 'soccer' }); // TODO uncomment
   // actionSports.push({ sport: 'pga' });
   // actionSports.push({ sport: 'boxing' });
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
-  console.log({ dates });
-  for (const date of dates) {
-    try {
-      const requests = [];
-      const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
-      actionSports.forEach((actionSport: actionNetworkRequest) => {
-        const url = `${actionBaseUrl}/${actionSport.sport}`;
-        const queryDate = moment(date).format('YYYYMMDD');
-        const params = actionSport.params || {};
-        params.date = queryDate;
-        console.log(url, { params });
-        requests.push(axios.get(url, { params }));
-      });
-
-      const responses = await Promise.all(requests);
-      console.log('responses', responses.length);
-      const all = [];
-      responses.forEach(response => {
-        const responseEvents = response.data.games ? response.data.games : response.data.competitions;
-        all.push(...responseEvents);
-      });
-      return all;
-    } catch (e) {
-      console.error(e);
+  const requests = [];
+  const actionBaseUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
+  for (const actionSport: actionNetworkRequest of actionSports) {
+    const url = `${actionBaseUrl}/${actionSport.sport}`;
+    for (const date of dates) {
+      // const queryDate = dateFns.format(date, 'yyyyMMdd');
+      // const params = actionSport.params || {};
+      // const queryDate = moment(date).format('YYYYMMDD');
+      // const queryDate = Math.random();
+      // params.date = queryDate;
+      // console.log({ params });
+      const params = { ...actionSport.params, date: moment(date).format('YYYYMMDD') };
+      const request = axios.get(url, { params });
+      requests.push(request);
     }
   }
+  console.log('requests:');
+  console.log(require('util').inspect(requests));
+  const responses = await Promise.all(requests);
+  // console.log('responses.length', responses.length);
+  console.log('responses[0]', responses[0].config.params);
+  console.log('responses[1]', responses[1].config.params);
+  // console.log('responses[0]', responses[0].data.games[0].id);
+  // console.log('responses[1]', responses[1].data.games[0].id);
+  console.log('responses[2]', responses[2].config.params);
+  console.log('responses[3]', responses[3].config.params);
+  // console.log('responses[0]', responses[0].data.games[9].id);
+  // console.log('responses[1]', responses[1].data.games[9].id);
+  // console.log('responses', responses);
+  const all = [];
+  responses.forEach(response => {
+    const responseEvents = response.data.games ? response.data.games : response.data.competitions;
+    all.push(...responseEvents);
+    console.log('all.length', all.length);
+  });
+  // console.log('all.length', all.length);
+  // console.log('all', all);
+  console.log('muskies', all.find(a => a.id === 76487));
+  // console.log('muskies', all.find(a => a.id === 76782));
+  return all;
 }
 
-async function updateGames(events: any[], existingGameIds: number[]) {
+async function syncGamesDatabase(events: any[], deduplicate: boolean = false) {
   console.log('all events', events.length);
-  events = events.filter(e => !existingGameIds.includes(e.id));
-  console.log('new events', events.length);
+  events = uniqBy(events, 'id');
+  console.log('all events unique', events.length);
+  if (deduplicate) {
+    const existingGames = await dbGame
+      .scan()
+      .all()
+      .exec();
+    const existingUniqueGameIds = [...new Set(existingGames.map(g => g.id))];
+    console.log('existingUniqueGameIds', existingUniqueGameIds.length);
+    events = events.filter(e => !existingUniqueGameIds.includes(e.id));
+    console.log('new events', events.length);
+  }
   events.forEach((part, index, eventsArray) => {
     eventsArray[index] = transformGame(eventsArray[index]);
   });
   // copy so we can splice array but return entire array
   const eventsCopy = JSON.parse(JSON.stringify(events));
-  console.log('updateGames:', events.length);
   const { tableGame } = process.env;
   const docClient = new AWS.DynamoDB.DocumentClient();
   console.log('cleaned');
@@ -468,7 +500,9 @@ async function updateGames(events: any[], existingGameIds: number[]) {
       console.error(e);
     }
   }
-  return eventsCopy;
+  return;
+  // await publishNewGames(eventsCopy);
+  // return eventsCopy;
 }
 
 function transformGame(game: any): Game {

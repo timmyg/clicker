@@ -6,6 +6,7 @@ provider:
   versionFunctions: false
   runtime: nodejs10.x
   tracing: true
+  logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
@@ -70,6 +71,7 @@ custom:
   newGameTopic: '${self:service}-${self:custom.stage}-new-game-topic'
   newGameTopicArn:
     deployed:
+      # arn:aws:sns:us-east-1:980883882378:game-develop-new-game-topic
       {
         'Fn::Join':
           ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
@@ -180,8 +182,8 @@ functions:
               - partner
               - authorization
               - content-type
-  syncSchedule:
-    handler: game.syncSchedule
+  syncNextFewDays:
+    handler: game.syncNextFewDays
     memorySize: 1024
     timeout: 30
     environment:
@@ -190,6 +192,42 @@ functions:
       - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
       - http:
           path: 'sync'
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  syncActive:
+    handler: game.syncActive
+    memorySize: 1024
+    timeout: 12
+    environment:
+      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+    events:
+      # - schedule: rate(5 minutes)
+      - schedule: cron(0/1 21-4 ? * * *) # Every 1 minute between 11pm UTC and 4am UTC
+      - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
+      - http:
+          path: sync/scores
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  syncAirtable:
+    handler: game.syncAirtable
+    timeout: 30
+    memorySize: 1024
+    environment:
+      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+    events:
+      - schedule: cron(00 10 * * ? *) # every day @ 6:00am eastern
+      - http:
+          path: sync/airtable
           method: post
           cors:
             origin: '*'
@@ -209,23 +247,6 @@ functions:
               - partner
               - authorization
               - content-type
-  syncScores:
-    handler: game.syncScores
-    memorySize: 1024
-    timeout: 12
-    events:
-      # - schedule: rate(5 minutes)
-      - schedule: cron(0/1 21-8 ? * * *) # Every 1 minute between 9pm UTC and 8am UTC
-      - schedule: cron(0/10 8-21 ? * * *) # Every 10 minutes between 8am UTC and 9pm UTC
-      - http:
-          path: sync/scores
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   scoreboard:
     handler: game.scoreboard
     memorySize: 1024
@@ -239,12 +260,3 @@ functions:
               - partner
               - authorization
               - content-type
-  consumeNewGameAddToAirtable:
-    handler: game.consumeNewGameAddToAirtable
-    reservedConcurrency: 1
-    events:
-      - sqs:
-          arn: !GetAtt
-            - newGameQueue
-            - Arn
-          batchSize: 1
