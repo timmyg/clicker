@@ -57,7 +57,7 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-
+  - serverless-python-requirements
 custom:
   stage: ${opt:stage, self:provider.stage}
   prune:
