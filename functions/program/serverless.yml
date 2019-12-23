@@ -57,7 +57,7 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  - serverless-python-requirements
+  # - serverless-python-requirements
 custom:
   stage: ${opt:stage, self:provider.stage}
   prune:
@@ -359,6 +359,8 @@ functions:
   getSchedulePy:
     handler: programPy.getSchedule
     runtime: python3.6
+    plugins:
+      - serverless-python-requirements
     events:
       - http:
           path: schedule
