@@ -92,7 +92,7 @@ def getPrograms(event, context):
                             proxies=proxies
                             )
     print('response')
-    # print(response.json())
+    print(response.json())
     # response.json()
     OK_RESPONSE = {
         'statusCode': 200,
@@ -100,3 +100,7 @@ def getPrograms(event, context):
         'body': response.json()
     }
     OK_RESPONSE
+
+
+# if __name__ == "__main__":
+#     main('', '')
