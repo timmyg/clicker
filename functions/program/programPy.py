@@ -1,6 +1,7 @@
 
 import requests
 import json
+import random
 
 
 def getPrograms(event, context):
@@ -89,10 +90,12 @@ def getPrograms(event, context):
         # 'Mon Dec 23 2019 00:00:00 GMT-0500 (Eastern Standard Time)'),
         ('startTime', data['start']),
         ('hours', '8'),
-        ('chIds', '238,2071,2073,2076,6069,6092,2075,4317,4063,6111,3849,4062,1016,1904,1977,6209,1978,354,4328,553,219,5239,348,332'),
+        # ('chIds', '238,2071,2073,2076,6069,6092,2075,4317,4063,6111,3849,4062,1016,1904,1977,6209,1978,354,4328,553,219,5239,348,332'),
     )
 
-    proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.639950638449:1gjgp252qy4b@165.227.199.200:22225'
+    randomString = str(random.randint(100000000000, 999999999999))
+    proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.' + \
+        randomString + ':1gjgp252qy4b@165.227.199.200:22225'
     proxies = {'http': proxy_raw, 'https': proxy_raw}
 
     print('calling...')
