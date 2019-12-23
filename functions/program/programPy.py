@@ -102,5 +102,5 @@ def getPrograms(event, context):
     return {
         'statusCode': 200,
         'headers': {'Content-Type': 'application/json'},
-        'body': dict(response.json())
+        'body': json.dumps(response.json())
     }
