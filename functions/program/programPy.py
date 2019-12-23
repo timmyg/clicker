@@ -99,7 +99,7 @@ def getPrograms(event, context):
         'headers': {'Content-Type': 'application/json'},
         'body': response.json()
     }
-    OK_RESPONSE
+    return OK_RESPONSE
 
 
 # if __name__ == "__main__":
