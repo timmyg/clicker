@@ -80,7 +80,7 @@ def getPrograms(event, context):
     }
 
     params = (
-        ('channels', '1,6,15,17,22,47,53,65,70,70,70,70,71,71,72,73,74,75,76,77,78,79,80,81'),
+        ('channels',  data['channels']),
         # 'Mon Dec 23 2019 00:00:00 GMT-0500 (Eastern Standard Time)'),
         ('startTime', data['start']),
         ('hours', '8'),
