@@ -381,3 +381,4 @@ functions:
       - http:
           path: schedule
           method: get
+
