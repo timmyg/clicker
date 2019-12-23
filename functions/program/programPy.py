@@ -2,7 +2,8 @@
 import requests
 
 
-def main(event, context):
+def getPrograms(event, context):
+    print('getPrograms')
     cookies = {
         'dtve-prospect-zip': '45212'
         # '$Cookie: dtv-lsid': 'ck4f01qyh1zn7m3qu9sn628ec',
@@ -83,17 +84,19 @@ def main(event, context):
     proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.639950638483:1gjgp252qy4b@165.227.199.200:22225'
     proxies = {'http': proxy_raw, 'https': proxy_raw}
 
+    print('calling...')
     response = requests.get('https://www.directv.com/json/channelschedule',
                             headers=headers,
                             params=params,
                             cookies=cookies,
                             proxies=proxies
                             )
-
+    print('response')
     # print(response.json())
-    response.json()
-#
-
-
-if __name__ == "__main__":
-    main('', '')
+    # response.json()
+    OK_RESPONSE = {
+        'statusCode': 200,
+        'headers': {'Content-Type': 'application/json'},
+        'body': response.json()
+    }
+    OK_RESPONSE
