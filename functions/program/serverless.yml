@@ -372,7 +372,7 @@ functions:
     runtime: python3.6
     events:
       - http:
-          path: schedule
+          path: py/schedule
           method: get
   getScheduleTest:
     handler: program.getScheduleTest
@@ -384,4 +384,3 @@ functions:
 
  
 
- 
