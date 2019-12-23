@@ -5,10 +5,15 @@ import json
 
 def getPrograms(event, context):
     print('getPrograms')
-    data = json.loads(event['body'])
-    print(data)
+    data = event['queryStringParameters']
+    # print(data['start'])
+    # print(urlencode(event["queryStringParameters"] or {}))
+    # data = urlencode(event["queryStringParameters"] or {})
+    # data = json.dumps(event)["queryStringParameters"]
+    # print(data)
     print(data['start'])
     print(data['zip'])
+    print(data['channels'])
     cookies = {
         'dtve-prospect-zip': data['zip']
         # '$Cookie: dtv-lsid': 'ck4f01qyh1zn7m3qu9sn628ec',
