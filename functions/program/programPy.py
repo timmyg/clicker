@@ -1,9 +1,14 @@
 
 import requests
+import json
 
 
 def getPrograms(event, context):
     print('getPrograms')
+    # data = json.loads(event['body'])
+    # print(data)
+    # print(data['start'])
+    # print(data['zip'])
     cookies = {
         'dtve-prospect-zip': '45212'
         # '$Cookie: dtv-lsid': 'ck4f01qyh1zn7m3qu9sn628ec',
@@ -92,15 +97,10 @@ def getPrograms(event, context):
                             proxies=proxies
                             )
     print('response')
-    print(response.json())
+    # print(response.json())
     # response.json()
-    OK_RESPONSE = {
+    return {
         'statusCode': 200,
         'headers': {'Content-Type': 'application/json'},
         'body': response.json()
     }
-    return OK_RESPONSE
-
-
-# if __name__ == "__main__":
-#     main('', '')
