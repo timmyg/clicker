@@ -5,12 +5,12 @@ import json
 
 def getPrograms(event, context):
     print('getPrograms')
-    # data = json.loads(event['body'])
-    # print(data)
-    # print(data['start'])
-    # print(data['zip'])
+    data = json.loads(event['body'])
+    print(data)
+    print(data['start'])
+    print(data['zip'])
     cookies = {
-        'dtve-prospect-zip': '45212'
+        'dtve-prospect-zip': data['zip']
         # '$Cookie: dtv-lsid': 'ck4f01qyh1zn7m3qu9sn628ec',
         # 'AB_IDPROOT': 'new_idproot_20190410',
         # 'IDPROOT-TEST': 'AB-IDPROOT-New',
@@ -81,7 +81,8 @@ def getPrograms(event, context):
 
     params = (
         ('channels', '1,6,15,17,22,47,53,65,70,70,70,70,71,71,72,73,74,75,76,77,78,79,80,81'),
-        ('startTime', 'Mon Dec 23 2019 00:00:00 GMT-0500 (Eastern Standard Time)'),
+        # 'Mon Dec 23 2019 00:00:00 GMT-0500 (Eastern Standard Time)'),
+        ('startTime', data['start']),
         ('hours', '8'),
         ('chIds', '238,2071,2073,2076,6069,6092,2075,4317,4063,6111,3849,4062,1016,1904,1977,6209,1978,354,4328,553,219,5239,348,332'),
     )
