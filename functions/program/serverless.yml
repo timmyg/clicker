@@ -57,7 +57,7 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  # - serverless-python-requirements
+  - serverless-python-requirements
 custom:
   stage: ${opt:stage, self:provider.stage}
   prune:
@@ -68,6 +68,8 @@ custom:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
+  pythonRequirements:
+    dockerizePip: non-linux
   airtableBase:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
@@ -356,15 +358,13 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  # getSchedulePy:
-  #   handler: programPy.main
-  #   runtime: python3.6
-  #   plugins:
-  #     - serverless-python-requirements
-  #   events:
-  #     - http:
-  #         path: schedule
-  #         method: get
+  getSchedulePy:
+    handler: programPy.main
+    runtime: python3.6
+    events:
+      - http:
+          path: schedule
+          method: get
   getScheduleTest:
     handler: program.getScheduleTest
     events:
