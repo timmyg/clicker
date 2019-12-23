@@ -356,11 +356,17 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  getSchedulePy:
-    handler: programPy.getSchedule
-    runtime: python3.6
-    plugins:
-      - serverless-python-requirements
+  # getSchedulePy:
+  #   handler: programPy.main
+  #   runtime: python3.6
+  #   plugins:
+  #     - serverless-python-requirements
+  #   events:
+  #     - http:
+  #         path: schedule
+  #         method: get
+  getScheduleTest:
+    handler: program.getScheduleTest
     events:
       - http:
           path: schedule

@@ -14,7 +14,8 @@
     "invoke:syncAirtableUpdates": "serverless invoke local --function syncAirtableUpdates --stage develop",
     "invoke:consumeNewProgramAirtableUpdateDetails": "serverless invoke local --function consumeNewProgramAirtableUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
     "invoke:consumeNewProgramUpdateDetails": "serverless invoke local --function consumeNewProgramUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
-    "invoke:syncRatings": "serverless invoke local --function syncRatings  --stage develop"
+    "invoke:syncRatings": "serverless invoke local --function syncRatings  --stage develop",
+    "invoke:getSchedulePy": "serverless invoke local --function getSchedulePy"
   },
   "author": "",
   "license": "ISC",
