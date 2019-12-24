@@ -374,10 +374,10 @@ functions:
       - http:
           path: py/schedule
           method: get
-  getScheduleTest:
-    handler: program.getScheduleTest
-    runtime: nodejs10.x
-    events:
-      - http:
-          path: schedule
-          method: get
+  # getScheduleTest:
+  #   handler: program.getScheduleTest
+  #   runtime: nodejs10.x
+  #   events:
+  #     - http:
+  #         path: schedule
+  #         method: get

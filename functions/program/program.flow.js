@@ -369,7 +369,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
         .select({ fields: ['programmingId'] })
         .all();
       const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
-      let { schedule } = result.data;
+      const schedule = result.data;
       let allPrograms: Program[] = build(schedule, region.name);
       // allPrograms = allPrograms.filter(p => !!p.live);
       allPrograms = uniqBy(allPrograms, 'programmingId');
@@ -578,7 +578,7 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
       .seconds(0);
   }
   const [result] = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
-  let { schedule } = result.data;
+  let schedule = result.data;
   let allPrograms: Program[] = build(schedule, regionName);
   // remove existing programs
   console.log('allPrograms:', allPrograms.length);
@@ -653,7 +653,7 @@ async function pullFromDirecTV(
   console.time('pullFromDirecTV');
   try {
     const results = await Promise.all(promises);
-    console.log(results.length)
+    console.log(results.length);
     console.timeEnd('pullFromDirecTV');
     return results;
   } catch (e) {

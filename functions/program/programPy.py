@@ -14,6 +14,7 @@ def getPrograms(event, context):
     # print(data)
     print(data['start'])
     print(data['zip'])
+    print(data['hours'])
     print(data['channels'])
     cookies = {
         'dtve-prospect-zip': data['zip']
