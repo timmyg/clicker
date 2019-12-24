@@ -9,14 +9,9 @@ if (!process.env.IS_LOCAL) {
   AWS = require('aws-sdk');
 }
 const axios = require('axios');
-const curlirize = require('axios-curlirize');
-curlirize(axios);
 const moment = require('moment');
 const { uniqBy } = require('lodash');
 const uuid = require('uuid/v5');
-// const rax = require('retry-axios');
-// const interceptorId = rax.attach();
-// console.log({ interceptorId });
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 
@@ -165,26 +160,26 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 });
 
-module.exports.getScheduleTest = RavenLambdaWrapper.handler(Raven, async event => {
-  const url = `https://www.directv.com/json/channelschedule`;
-  const channelsString = [9, 206].join(',');
-  const params = { startTime: 'Fri Dec 20 2019 10:00:00 GMT+0000', hours: 8, channels: channelsString };
-  const headers = {
-    Cookie: `dtve-prospect-zip=45212; TLTSID=07AB36D2984D10980006B9E2CD812DCD; TLTUID=07AB36D2984D10980006B9E2CD812DCD; dtv-lsid=cjxaz2wvrtrfzlhqxez7ebw3k; customer=yes; dtv-msg-key-cache=f2f4b6987855de75fb25f643800680fe9e3b7e71; AB_IDPROOT=new_idproot_20190410; ak_bmsc=BF3F5616F70B1D3EBCBB8528B9CF0AC5B81B2D9AA23E0000DA20FD5DF346D533~plhd0d9XqziHqQPQJ6Ono9r+jJYoytwdXPspAQvp216SDIBxPPpDVoOZVge2RFIS6JGjilwgnRukLLcw64Wasa3T3osFoGU1wcSl17r1ApQ2vJvahtErciLCUS0kA3Y8fC7CgGHaFMfTr5kvWaHUea3s6xCQti+OQtD6mWyOroIaYJi/CRqhWHeCIvLhtnYFQstHDAW2XMgvW6Dlnq09TMcd1N1tMk+dZSe60dGkoA9fg=`,
-  };
-  const method = 'get';
-  // const timeout = 2000;
-  console.log('getting channels....', params, headers);
-  console.log('calling...');
-  const result = await axios({
-    method,
-    url,
-    params,
-    headers,
-  });
-  console.log('back!', result);
-  return respond(200, result);
-});
+// module.exports.getScheduleTest = RavenLambdaWrapper.handler(Raven, async event => {
+//   const url = `https://www.directv.com/json/channelschedule`;
+//   const channelsString = [9, 206].join(',');
+//   const params = { startTime: 'Fri Dec 20 2019 10:00:00 GMT+0000', hours: 8, channels: channelsString };
+//   const headers = {
+//     Cookie: `dtve-prospect-zip=45212; TLTSID=07AB36D2984D10980006B9E2CD812DCD; TLTUID=07AB36D2984D10980006B9E2CD812DCD; dtv-lsid=cjxaz2wvrtrfzlhqxez7ebw3k; customer=yes; dtv-msg-key-cache=f2f4b6987855de75fb25f643800680fe9e3b7e71; AB_IDPROOT=new_idproot_20190410; ak_bmsc=BF3F5616F70B1D3EBCBB8528B9CF0AC5B81B2D9AA23E0000DA20FD5DF346D533~plhd0d9XqziHqQPQJ6Ono9r+jJYoytwdXPspAQvp216SDIBxPPpDVoOZVge2RFIS6JGjilwgnRukLLcw64Wasa3T3osFoGU1wcSl17r1ApQ2vJvahtErciLCUS0kA3Y8fC7CgGHaFMfTr5kvWaHUea3s6xCQti+OQtD6mWyOroIaYJi/CRqhWHeCIvLhtnYFQstHDAW2XMgvW6Dlnq09TMcd1N1tMk+dZSe60dGkoA9fg=`,
+//   };
+//   const method = 'get';
+//   // const timeout = 2000;
+//   console.log('getting channels....', params, headers);
+//   console.log('calling...');
+//   const result = await axios({
+//     method,
+//     url,
+//     params,
+//     headers,
+//   });
+//   console.log('back!', result);
+//   return respond(200, result);
+// });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
@@ -633,21 +628,32 @@ async function pullFromDirecTV(
 ) {
   const promises = [];
   startTimes.forEach(startTime => {
-    const url = `${directvEndpoint}/channelschedule`;
+    // const url = `${directvEndpoint}/channelschedule`;
     const channelsString = getChannels([...regionChannels, ...nationalChannels]).join(',');
-    const params = { startTime: startTime.toString(), hours: totalHours, channels: channelsString };
-    const headers = {
-      Cookie: `dtve-prospect-zip=${zip};`,
-    };
-    const method = 'get';
-    const timeout = 2000;
-    console.log('getting channels....', params, headers);
-    promises.push(axios({ method, url, params, headers, timeout }));
+    // const params = { startTime: startTime.toString(), hours: totalHours, channels: channelsString };
+    // const headers = {
+    //   Cookie: `dtve-prospect-zip=${zip};`,
+    // };
+    // const method = 'get';
+    // const timeout = 2000;
+    // console.log('getting channels....', params, headers);
+
+    // getSchedulePy
+
+    promises.push(
+      new Invoke()
+        .service('program')
+        .name('getSchedulePy')
+        .queryParams({ start: startTime.toString(), zip, hours: totalHours, channels: channelsString })
+        // .headers(event.headers)
+        .go(),
+    );
   });
   console.log(`executing ${promises.length} promises`);
   console.time('pullFromDirecTV');
   try {
     const results = await Promise.all(promises);
+    console.log(results.length)
     console.timeEnd('pullFromDirecTV');
     return results;
   } catch (e) {
