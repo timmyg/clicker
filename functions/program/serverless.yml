@@ -374,6 +374,14 @@ functions:
       - http:
           path: py/schedule
           method: get
+  getProgramDetailPy:
+    handler: programPy.getProgramDetail
+    # runtime: nodejs10.x
+    runtime: python3.6
+    events:
+      - http:
+          path: py/program/detail
+          method: get
   # getScheduleTest:
   #   handler: program.getScheduleTest
   #   runtime: nodejs10.x
