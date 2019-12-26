@@ -663,17 +663,12 @@ async function pullFromDirecTV(
 
 async function getProgramDetails(program: Program): Promise<any> {
   const { programmingId } = program;
-  const url = `${directvEndpoint}/program/flip/${programmingId}`;
-  const options = {
-    timeout: 2000,
-  };
-  console.log('get program details');
-  console.time('program details');
-  const result = await axios.get(url, options);
-  console.timeEnd('program details');
-  //   console.log('result.data', result.data);
-  return result.data.programDetail;
-  // return { description, type: progType };
+  const programDetail = await new Invoke()
+    .service('program')
+    .name('getProgramDetailPy')
+    .queryParams({ programmingId })
+    .go();
+  return programDetail;
 }
 
 module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
