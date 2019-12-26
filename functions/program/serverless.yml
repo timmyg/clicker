@@ -241,7 +241,7 @@ resources:
 functions:
   health:
     handler: program.health
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     events:
       - http:
           path: health
@@ -254,7 +254,7 @@ functions:
               - content-type
   getAll:
     handler: program.getAll
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     memorySize: 1024
     timeout: 20
     events:
@@ -269,7 +269,7 @@ functions:
               - content-type
   syncRegions:
     handler: program.syncRegions
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     # timeout: 60
     events:
       - schedule: rate(2 hours)
@@ -288,7 +288,7 @@ functions:
               - content-type
   syncRegionNextFewHours:
     handler: program.syncRegionNextFewHours
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     memorySize: 1024
     timeout: 30
     environment:
@@ -296,7 +296,7 @@ functions:
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
   syncAirtable:
     handler: program.syncAirtable
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     memorySize: 1024
     timeout: 60
     environment:
@@ -314,7 +314,7 @@ functions:
               - content-type
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     description: sync program game id from airtable to programs db
     events:
       - schedule: rate(1 hour)
@@ -329,7 +329,7 @@ functions:
               - content-type
   syncRatings:
     handler: program.syncRatings
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     description: rate programs by keywords that haven't been rated yet
     events:
       # - schedule: rate(1 hour)
@@ -346,7 +346,7 @@ functions:
     memorySize: 512
     timeout: 12
     handler: program.consumeNewProgramUpdateDetails
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     description: Consume new db program and update description
     reservedConcurrency: 1
     events:
@@ -357,7 +357,7 @@ functions:
           batchSize: 1
   consumeNewProgramAirtableUpdateDetails:
     handler: program.consumeNewProgramAirtableUpdateDetails
-    runtime: nodejs10.x
+    runtime: nodejs12.x
     description: Consume new airtable program update description
     reservedConcurrency: 1
     events:
@@ -368,7 +368,7 @@ functions:
           batchSize: 1
   getSchedulePy:
     handler: programPy.getPrograms
-    # runtime: nodejs10.x
+    # runtime: nodejs12.x
     runtime: python3.6
     events:
       - http:
@@ -376,7 +376,7 @@ functions:
           method: get
   getProgramDetailPy:
     handler: programPy.getProgramDetail
-    # runtime: nodejs10.x
+    # runtime: nodejs12.x
     runtime: python3.6
     events:
       - http:
@@ -384,7 +384,7 @@ functions:
           method: get
   # getScheduleTest:
   #   handler: program.getScheduleTest
-  #   runtime: nodejs10.x
+  #   runtime: nodejs12.x
   #   events:
   #     - http:
   #         path: schedule

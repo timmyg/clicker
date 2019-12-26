@@ -159,7 +159,7 @@ const dbProgram = dynamoose.model(
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
   // const x = await getProgramDetails({ programmingId: 'SH003895120000' });
-  // console.log(x);
+  // console.log({ x });
 });
 
 // module.exports.getScheduleTest = RavenLambdaWrapper.handler(Raven, async event => {
@@ -664,7 +664,6 @@ async function pullFromDirecTV(
 }
 
 async function getProgramDetails(program: Program): Promise<any> {
-  console.log('getProgramDetails', { program });
   const { programmingId } = program;
   const { data: programDetail } = await new Invoke()
     .service('program')
