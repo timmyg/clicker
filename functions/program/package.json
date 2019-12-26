@@ -14,7 +14,8 @@
     "invoke:syncAirtableUpdates": "serverless invoke local --function syncAirtableUpdates --stage develop",
     "invoke:consumeNewProgramAirtableUpdateDetails": "serverless invoke local --function consumeNewProgramAirtableUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
     "invoke:consumeNewProgramUpdateDetails": "serverless invoke local --function consumeNewProgramUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
-    "invoke:syncRatings": "serverless invoke local --function syncRatings  --stage develop"
+    "invoke:syncRatings": "serverless invoke local --function syncRatings  --stage develop",
+    "invoke:getSchedulePy": "serverless invoke local --function getSchedulePy --path ../.resources/data/program-schedules.json"
   },
   "author": "",
   "license": "ISC",
@@ -42,6 +43,7 @@
     "serverless-dotenv-plugin": "^2.1.1",
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-prune-plugin": "^1.4.0",
+    "serverless-python-requirements": "^5.0.1",
     "serverless-sentry": "^1.2.0"
   }
 }

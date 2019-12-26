@@ -12,3 +12,5 @@ remote.js
 reservation.js
 user.js
 import.csv
+
+**/__pycache__
