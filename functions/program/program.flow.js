@@ -579,8 +579,9 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
       .minutes(0)
       .seconds(0);
   }
-  const [result] = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
-  let schedule = result.data;
+  const result = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
+  console.log({ result });
+  let schedule = result[0].data;
   let allPrograms: Program[] = build(schedule, regionName);
   // remove existing programs
   console.log('allPrograms:', allPrograms.length);
