@@ -111,7 +111,13 @@ const dbProgram = dynamoose.model(
     id: { type: String, rangeKey: true },
     start: { type: Number },
     end: Number,
-    channel: Number,
+    channel: {
+      type: Number,
+      index: {
+        global: true,
+        project: false,
+      },
+    },
     // channelMinor: Number,
     channelTitle: String,
     title: String, // "Oklahoma State @ Kansas"
@@ -186,21 +192,26 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { channel, time, region } = event.queryStringParameters;
-  console.log(channel, time, region);
-  const program: Program = await dbProgram
-    .queryOne('channel')
-    .eq(parseInt(channel))
-    .and()
-    .filter('region')
-    .eq(region)
-    .and()
-    .filter('start')
-    .lte(time)
-    .and()
-    .filter('end')
-    .gte(time)
+  console.log(parseInt(channel), time, region);
+  // const program: Program = await dbProgram
+  //   .query('channel')
+  //   // .using('channelGlobalIndex')
+  //   .eq(parseInt(channel))
+  // .and()
+  // .filter('region')
+  // .eq(region)
+  // .and()
+  // .filter('start')
+  // .lt(time)
+  // .and()
+  // .filter('end')
+  // .gt(time)
+  // .exec();
+  const programs = await dbProgram
+    .query('programmingId')
+    .eq('EP029941833464')
     .exec();
-  return respond(200, program);
+  return respond(200, programs);
 });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
