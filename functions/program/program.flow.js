@@ -193,7 +193,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { channel, time, region } = event.queryStringParameters;
   console.log(parseInt(channel), time, region);
-  const programs: Program = await dbProgram
+  const programs: Program[] = await dbProgram
     .query('channel')
     // .using('channelGlobalIndex')
     .eq(parseInt(channel))
@@ -207,11 +207,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .filter('end')
     .gt(parseInt(time))
     .exec();
-  // const programs = await dbProgram
-  //   .query('programmingId')
-  //   .eq('EP029941833464')
-  //   .exec();
-  return respond(200, programs);
+  return respond(200, programs[0]);
 });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
