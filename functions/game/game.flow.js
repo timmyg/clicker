@@ -241,11 +241,13 @@ module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
     if (ipAndCompletedGames && ipAndCompletedGames.length) {
       // dont update again in database if already updated...
       const alreadyCompletedGameIds = await getCompleteGameIds();
+      console.log({ alreadyCompletedGameIds });
       gamesToUpdate = ipAndCompletedGames.filter(g => !alreadyCompletedGameIds.includes(g.id));
+      console.log({ gamesToUpdate });
       console.log('gamesToUpdate', gamesToUpdate.length);
       if (!!gamesToUpdate.length) {
         const totalGames = gamesToUpdate.length;
-        await syncGamesDatabase(gamesToUpdate, true);
+        await syncGamesDatabase(gamesToUpdate, false);
         return respond(200, { updatedGames: totalGames });
       }
     }
@@ -478,6 +480,7 @@ async function syncGamesDatabase(events: any[], deduplicate: boolean = false) {
     const existingUniqueGameIds = [...new Set(existingGames.map(g => g.id))];
     console.log('existingUniqueGameIds', existingUniqueGameIds.length);
     events = events.filter(e => !existingUniqueGameIds.includes(e.id));
+    console.log({ events });
     console.log('new events', events.length);
   }
   events.forEach((part, index, eventsArray) => {
