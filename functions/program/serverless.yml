@@ -234,7 +234,11 @@ resources:
               - AttributeName: channel
                 KeyType: HASH
             Projection:
-              ProjectionType: KEYS_ONLY
+              NonKeyAttributes:
+                - start
+                - end
+                - region
+              ProjectionType: INCLUDE
             # ProvisionedThroughput:
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
