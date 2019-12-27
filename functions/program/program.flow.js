@@ -579,8 +579,9 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
       .minutes(0)
       .seconds(0);
   }
-  const [result] = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
-  let schedule = result.data;
+  const result = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
+  console.log({ result });
+  let schedule = result[0].data;
   let allPrograms: Program[] = build(schedule, regionName);
   // remove existing programs
   console.log('allPrograms:', allPrograms.length);
@@ -705,8 +706,15 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
   if (!programmingId.includes('GDM')) {
-    const { description, progType: type } = await getProgramDetails(program);
-    await updateProgram(id, region, description, type);
+    console.time('getProgramDetails');
+    const programDetails = await getProgramDetails(program);
+    console.timeEnd('getProgramDetails');
+    if (!!programDetails) {
+      const { description, progType: type } = programDetails;
+      console.time('updateProgram');
+      await updateProgram(id, region, description, type);
+      console.timeEnd('updateProgram');
+    }
   } else {
     console.info(`skipping ${programmingId}`);
   }
