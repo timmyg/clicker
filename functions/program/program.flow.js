@@ -184,6 +184,25 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 //   return respond(200, result);
 // });
 
+module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { channel, time, region } = event.queryStringParameters;
+  console.log(channel, time, region);
+  const program: Program = await dbProgram
+    .queryOne('channel')
+    .eq(parseInt(channel))
+    .and()
+    .filter('region')
+    .eq(region)
+    .and()
+    .filter('start')
+    .lt(time)
+    .and()
+    .filter('end')
+    .gt(time)
+    .exec();
+  return respond(200, program);
+});
+
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
   const { locationId } = params;

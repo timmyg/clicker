@@ -215,6 +215,8 @@ resources:
             AttributeType: S
           - AttributeName: programmingId
             AttributeType: S
+          - AttributeName: channel
+            AttributeType: N
         KeySchema:
           - AttributeName: region
             KeyType: HASH
@@ -224,6 +226,12 @@ resources:
           - IndexName: programmingIdGlobalIndex
             KeySchema:
               - AttributeName: programmingId
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+          - IndexName: channelGlobalIndex
+            KeySchema:
+              - AttributeName: channel
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
@@ -382,10 +390,10 @@ functions:
       - http:
           path: py/program/detail
           method: get
-  # getScheduleTest:
-  #   handler: program.getScheduleTest
-  #   runtime: nodejs12.x
-  #   events:
-  #     - http:
-  #         path: schedule
-  #         method: get
+  get:
+    handler: program.get
+    runtime: nodejs12.x
+    events:
+      - http:
+          # path:
+          method: get
