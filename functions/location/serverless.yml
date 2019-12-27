@@ -309,5 +309,5 @@ functions:
     runtime: nodejs12.x
     events:
       - http:
-          path: control-center/v2/{locationId}
+          path: {id}/control-center/v2
           method: post
