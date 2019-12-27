@@ -467,6 +467,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
 
     for (const program of programs) {
       const { region, id } = program;
+      console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
       promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating }));
     }
   }
