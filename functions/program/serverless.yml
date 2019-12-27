@@ -395,5 +395,5 @@ functions:
     runtime: nodejs12.x
     events:
       - http:
-          # path:
+          path: ''
           method: get

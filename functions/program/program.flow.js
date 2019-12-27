@@ -195,10 +195,10 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(region)
     .and()
     .filter('start')
-    .lt(time)
+    .lte(time)
     .and()
     .filter('end')
-    .gt(time)
+    .gte(time)
     .exec();
   return respond(200, program);
 });
