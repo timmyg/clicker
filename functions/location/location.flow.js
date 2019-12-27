@@ -363,10 +363,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     const { boxId, info } = box;
     console.log(boxId, info);
 
-    const { major } = info;
+    const { major, minor } = info;
 
     const i: number = location.boxes.findIndex(b => b.id === boxId);
-    console.log('box', location.boxes[i], major);
+    console.log('box', location.boxes[i], major, minor);
     const originalChannel = location.boxes[i].channel;
     console.log('original channel', originalChannel);
     console.log('current channel', major);
@@ -374,7 +374,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     await new Invoke()
       .service('location')
       .name('updateBoxInfo')
-      .body({ channel: major, source: 'manual' })
+      .body({ channel: major, channelMinor: minor, source: 'manual' })
       .pathParams({ id: location.id, boxId })
       .async()
       .go();
@@ -654,18 +654,18 @@ module.exports.health = async (event: any) => {
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
-  const { channel, source } = getBody(event);
+  const { channel, channelMinor, source } = getBody(event);
 
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  await updateLocationBoxChannel(locationId, boxIndex, channel, source);
+  await updateLocationBoxChannel(locationId, boxIndex, channel, channelMinor, source);
   return respond(200);
 });
 
-async function updateLocationBoxChannel(locationId, boxIndex, channel: number, source) {
+async function updateLocationBoxChannel(locationId, boxIndex, channel: number, channelMinor: number, source) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
   const now = moment().unix() * 1000;
@@ -675,11 +675,13 @@ async function updateLocationBoxChannel(locationId, boxIndex, channel: number, s
     ReturnValues: 'ALL_NEW',
     UpdateExpression: `set 
        boxes[${boxIndex}].channel = :channel,
+       boxes[${boxIndex}].channelMinor = :channelMinor,
        boxes[${boxIndex}].channelSource = :channelSource,
        boxes[${boxIndex}].channelChangeAt = :channelChangeAt,
        boxes[${boxIndex}].updatedAt = :updatedAt`,
     ExpressionAttributeValues: {
       ':channel': parseInt(channel),
+      ':channelMinor': parseInt(channelMinor),
       ':channelSource': source,
       ':channelChangeAt': now,
       ':updatedAt': now,

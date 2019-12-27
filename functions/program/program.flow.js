@@ -445,6 +445,15 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
   return respond(200, { updates: promises.length });
 });
 
+module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
+  // get location id
+  // get location boxes
+  // loop through boxes
+  // attach program based on channel number
+  // attach game w/ status
+  //
+});
+
 module.exports.syncRatings = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('ratings');
   const airtablePrograms = await getAirtableProgramsInWindow(false, 4, 24);

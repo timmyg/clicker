@@ -2,6 +2,7 @@ service: program
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
+  runtime: nodejs12.x
   memorySize: 128
   versionFunctions: false
   tracing: true
@@ -389,3 +390,9 @@ functions:
   #     - http:
   #         path: schedule
   #         method: get
+  controlCenterV2byLocation:
+    handler: program.controlCenterV2byLocation
+    events:
+      - http:
+          path: v2/control-center
+          method: post
