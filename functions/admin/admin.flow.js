@@ -80,6 +80,36 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   return respond(200);
 });
 
+module.exports.airtableRemoveExpired = RavenLambdaWrapper.handler(Raven, async event => {
+  const tableNames = ['Control Center v1', 'Channel Changes', 'Programs', 'Games'];
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  let count = 0;
+  for (const tableName of tableNames) {
+    const expired = await base(tableName)
+      .select({ view: 'Expired' })
+      // .select({ view: 'Expired', fields: ['id'] })
+      .all();
+    console.log({ expired });
+    // return;
+    const expiredIds = expired.map(g => g.id);
+    console.log({ expiredIds });
+    const promises = [];
+    while (!!expiredIds.length) {
+      try {
+        const expiredSlice = expiredIds.splice(0, 10);
+        console.log('batch putting:', expiredSlice.length);
+        console.log('remaining:', expiredIds.length);
+        promises.push(base(tableName).destroy(expiredSlice));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    count += promises.length;
+    await Promise.all(promises);
+  }
+  return respond(200, { count });
+});
+
 async function sendControlCenterSlack(text) {
   await new Invoke()
     .service('notification')
