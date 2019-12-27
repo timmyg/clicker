@@ -125,7 +125,7 @@ const dbProgram = dynamoose.model(
     description: String,
     durationMins: Number, // mins
     gameId: Number,
-    rating: Number,
+    clickerRating: Number,
     live: Boolean,
     repeat: Boolean,
     sports: Boolean,
@@ -202,10 +202,10 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(region)
     .and()
     .filter('start')
-    .lt(time)
+    .lt(parseInt(time))
     .and()
     .filter('end')
-    .gt(time)
+    .gt(parseInt(time))
     .exec();
   // const programs = await dbProgram
   //   .query('programmingId')
@@ -467,7 +467,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
 
     for (const program of programs) {
       const { region, id } = program;
-      promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId, rating: programRating }));
+      promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating }));
     }
   }
   await Promise.all(promises);
