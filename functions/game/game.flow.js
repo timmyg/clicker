@@ -480,6 +480,7 @@ async function syncGamesDatabase(events: any[], deduplicate: boolean = false) {
     const existingUniqueGameIds = [...new Set(existingGames.map(g => g.id))];
     console.log('existingUniqueGameIds', existingUniqueGameIds.length);
     events = events.filter(e => !existingUniqueGameIds.includes(e.id));
+    console.log({ events });
     console.log('new events', events.length);
   }
   events.forEach((part, index, eventsArray) => {
