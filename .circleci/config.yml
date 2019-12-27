@@ -1,7 +1,9 @@
 aliases:
   - &serverless_build_test_deploy
     docker:
-      - image: circleci/node:8.10
+      # - image: circleci/node:8.10
+      # - image: circleci/python:3.8.1
+      - image: nikolaik/python-nodejs
     steps:
       - checkout:
           path: ~/clicker

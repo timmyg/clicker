@@ -8,14 +8,16 @@
     "test": "npm run build && jest --coverage",
     "test:specific": "npm run build && jest -t='soccer'",
     "invoke:getStatus": "serverless invoke local --function getStatus --stage develop --path ../.resources/data/action-url.json",
-    "invoke:syncSchedule": "serverless invoke local --function syncSchedule --stage develop",
-    "invoke:syncScores": "serverless invoke local --function syncScores --stage develop",
+    "invoke:syncNextFewDays": "serverless invoke local --function syncNextFewDays --stage develop",
+    "invoke:syncActive": "serverless invoke local --function syncActive --stage develop",
+    "invoke:syncAirtable": "serverless invoke local --function syncAirtable --stage develop",
     "invoke:scoreboard": "serverless invoke local --function scoreboard --stage develop",
     "invoke:health": "serverless invoke local --function health --stage develop"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "airtable": "^0.8.1",
     "aws-sdk": "^2.580.0",
     "aws-xray-sdk": "^2.5.0",
     "axios": "^0.19.0",

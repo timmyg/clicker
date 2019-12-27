@@ -4,6 +4,7 @@ const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverl
 const request = require('request-promise');
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+const airtableControlCenterV1 = 'Control Center v1';
 
 declare class process {
   static env: {
@@ -22,7 +23,7 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
   // check if any scheduled events for control center today
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   // find games scheduled for the next 24 hours
-  let games = await base('Games')
+  let games = await base(airtableControlCenterV1)
     .select({
       view: 'Scheduled',
       filterByFormula: `AND( {Started Hours Ago} <= 0, {Started Hours Ago} > -14 )`,
@@ -77,6 +78,36 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   console.timeEnd('send to airtable');
 
   return respond(200);
+});
+
+module.exports.airtableRemoveExpired = RavenLambdaWrapper.handler(Raven, async event => {
+  const tableNames = ['Control Center v1', 'Channel Changes', 'Programs', 'Games'];
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  let count = 0;
+  for (const tableName of tableNames) {
+    const expired = await base(tableName)
+      .select({ view: 'Expired' })
+      // .select({ view: 'Expired', fields: ['id'] })
+      .all();
+    console.log({ expired });
+    // return;
+    const expiredIds = expired.map(g => g.id);
+    console.log({ expiredIds });
+    const promises = [];
+    while (!!expiredIds.length) {
+      try {
+        const expiredSlice = expiredIds.splice(0, 10);
+        console.log('batch putting:', expiredSlice.length);
+        console.log('remaining:', expiredIds.length);
+        promises.push(base(tableName).destroy(expiredSlice));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    count += promises.length;
+    await Promise.all(promises);
+  }
+  return respond(200, { count });
 });
 
 async function sendControlCenterSlack(text) {

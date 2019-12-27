@@ -4,6 +4,7 @@
 memorySize: 128
 #   runtime: nodejs10.x
   tracing: true
+  logRetentionInDays: 14
 #   deploymentBucket:
 #     name: serverless-deploys-clicker
 #   environment:

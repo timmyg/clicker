@@ -5,8 +5,9 @@ provider:
   memorySize: 128
   region: eu-central-1 # Germany
   versionFunctions: false
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   tracing: true
+  logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker-eu-central-1
   environment:

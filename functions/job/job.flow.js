@@ -4,6 +4,7 @@ const moment = require('moment');
 const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+const airtableControlCenterV1 = 'Control Center v1';
 
 declare class process {
   static env: {
@@ -97,7 +98,7 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
     const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
     console.log('searching for games to update score');
     // try {
-    let allGames = await base('Games')
+    let allGames = await base(airtableControlCenterV1)
       .select({
         view: 'Score Update',
       })
@@ -123,7 +124,7 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
           console.log({ data });
           const gameStatus: GameStatus = data;
           console.log({ gameStatus });
-          await base('Games').update(gameId, {
+          await base(airtableControlCenterV1).update(gameId, {
             'Game Status': gameStatus.description,
             'Game Over': gameStatus.ended,
             Started: gameStatus.started,
@@ -148,7 +149,7 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
-  let games = await base('Games')
+  let games = await base(airtableControlCenterV1)
     .select({
       view: 'Scheduled',
     })
@@ -174,7 +175,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
       if (waitOn && waitOn.length) {
         console.log('has depdendency game');
         const [dependencyGameId] = waitOn;
-        const dependencyGame = await base('Games').find(dependencyGameId);
+        const dependencyGame = await base(airtableControlCenterV1).find(dependencyGameId);
         const lockedUntil = dependencyGame.get('Locked Until');
         const gameOver = dependencyGame.get('Game Over');
         const blowout = dependencyGame.get('Blowout');
@@ -267,7 +268,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
       }
       // mark game as completed on airtable
       // TODO maybe delete in future?
-      await base('Games').update(gameId, {
+      await base(airtableControlCenterV1).update(gameId, {
         Zapped: true,
       });
     }

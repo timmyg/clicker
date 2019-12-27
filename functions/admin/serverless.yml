@@ -6,6 +6,7 @@ provider:
   versionFunctions: false
   runtime: nodejs10.x
   tracing: true
+  logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
@@ -104,3 +105,11 @@ functions:
               - partner
               - authorization
               - content-type
+  airtableRemoveExpired:
+    handler: admin.airtableRemoveExpired
+    timeout: 60
+    events:
+      - http:
+          path: airtable
+          method: delete
+      - schedule: cron(55 9 * * ? *) # every day @ 5:55am eastern

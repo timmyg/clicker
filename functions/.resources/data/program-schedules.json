@@ -1,0 +1,7 @@
+{
+  "queryStringParameters": {
+    "start": "Mon Dec 23 2019 00:00:00 GMT-0500 (Eastern Standard Time)",
+    "zip": "90210",
+    "channels": "5,9,12,19,206,209"
+  }
+}

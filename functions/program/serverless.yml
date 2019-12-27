@@ -1,10 +1,9 @@
-service: programs
+service: program
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
   memorySize: 128
   versionFunctions: false
-  runtime: nodejs10.x
   tracing: true
   logRetentionInDays: 14
   deploymentBucket:
@@ -13,6 +12,8 @@ provider:
     stage: ${self:custom.stage}
     tableProgram: ${self:custom.tableProgram}
     serviceName: ${self:service}
+    airtableKey: ${env:AIRTABLE_KEY}
+    airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -33,6 +34,21 @@ provider:
               ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
             ],
         }
+    - Effect: Allow
+      Action:
+        - SNS:Publish
+      Resource:
+        {
+          'Fn::Join':
+            [
+              '',
+              [
+                'arn:aws:sns:${self:provider.region}:',
+                { 'Ref': 'AWS::AccountId' },
+                ':${self:custom.newProgramAirtableTopic}',
+              ],
+            ],
+        }
 
 plugins:
   - serverless-domain-manager
@@ -40,21 +56,23 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-
+  - serverless-python-requirements
 custom:
   stage: ${opt:stage, self:provider.stage}
   prune:
     automatic: true
     number: 3
   tableProgram: programs-${self:custom.stage}
-  tableThroughputs:
-    prod: 5
-    default: 1
-  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
+  pythonRequirements:
+    dockerizePip: non-linux
+  airtableBase:
+    prod: ${env:AIRTABLE_BASE}
+    release: ${env:AIRTABLE_BASE_RELEASE}
+    develop: ${env:AIRTABLE_BASE_DEV}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: programs
@@ -66,10 +84,8 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  newProgramTopic: '${self:service}-${self:custom.stage}-new-program-topic'
+  newProgramTopic: ${self:service}-${self:custom.stage}-new-program-topic
   newProgramTopicArn:
-    #   # local:
-    #   #   "arn:aws:sns:us-east-1:123456789012:${self:custom.newProgramTopic}"
     deployed:
       {
         'Fn::Join':
@@ -78,12 +94,27 @@ custom:
             ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newProgramTopic}'],
           ],
       }
+  newProgramAirtableTopic: ${self:service}-${self:custom.stage}-new-program-airtable-topic
+  newProgramAirtableTopicArn:
+    deployed:
+      {
+        'Fn::Join':
+          [
+            '',
+            [
+              'arn:aws:sns:${self:provider.region}:',
+              { 'Ref': 'AWS::AccountId' },
+              ':${self:custom.newProgramAirtableTopic}',
+            ],
+          ],
+      }
 resources:
   Resources:
     newProgramTopic:
       Type: AWS::SNS::Topic
       Properties:
         TopicName: ${self:service}-${self:custom.stage}-new-program-topic
+        # TopicName: ${self:custom.newProgramTopic}
     newProgramQueue:
       Type: AWS::SQS::Queue
       Properties:
@@ -124,6 +155,51 @@ resources:
           - Arn
         Protocol: sqs
         RawMessageDelivery: 'true'
+    newProgramAirtableTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:service}-${self:custom.stage}-new-program-airtable-topic
+        # TopicName: ${self:custom.newProgramAirtableTopic}
+    newProgramAirtableQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.stage}-new-program-airtable-queue
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt
+            - newProgramAirtableDLQ
+            - Arn
+          maxReceiveCount: 3
+    newProgramAirtableDLQ:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.stage}-new-program-airtable-queue-dlq
+    snsToNewProgramAirtableQueueSqsPolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: 'allow-sns-messages'
+              Effect: Allow
+              Principal: '*'
+              Resource: !GetAtt
+                - newProgramAirtableQueue
+                - Arn
+              Action: 'SQS:SendMessage'
+              Condition:
+                ArnEquals:
+                  'aws:SourceArn': !Ref newProgramAirtableTopic
+        Queues:
+          - Ref: newProgramAirtableQueue
+    newProgramAirtableQueueSubscription:
+      Type: 'AWS::SNS::Subscription'
+      Properties:
+        TopicArn: !Ref newProgramAirtableTopic
+        Endpoint: !GetAtt
+          - newProgramAirtableQueue
+          - Arn
+        Protocol: sqs
+        RawMessageDelivery: 'true'
     ProgramTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -134,15 +210,23 @@ resources:
             AttributeType: S
           - AttributeName: start
             AttributeType: N
-          # - AttributeName: end
-          #   AttributeType: N
           - AttributeName: id
+            AttributeType: S
+          - AttributeName: programmingId
             AttributeType: S
         KeySchema:
           - AttributeName: region
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: programmingIdGlobalIndex
+            KeySchema:
+              - AttributeName: programmingId
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+            # ProvisionedThroughput:
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
             KeySchema:
@@ -151,31 +235,13 @@ resources:
               - AttributeName: start
                 KeyType: RANGE
             Projection:
-              ProjectionType: KEYS_ONLY
-        #   - IndexName: endLocalIndex
-        #     KeySchema:
-        #       - AttributeName: region
-        #         KeyType: HASH
-        #       - AttributeName: end
-        #         KeyType: RANGE
-        #     Projection:
-        #       ProjectionType: KEYS_ONLY
-        # GlobalSecondaryIndexes:
-        #   - IndexName: regionGlobalIndex
-        #     KeySchema:
-        #       - AttributeName: region
-        #         KeyType: HASH
-        #     Projection:
-        #       ProjectionType: ALL
-        #     ProvisionedThroughput:
-        #       ReadCapacityUnits: ${self:custom.tableThroughput}
-        #       WriteCapacityUnits: ${self:custom.tableThroughput}
-        # ProvisionedThroughput:
-        #   ReadCapacityUnits: ${self:custom.tableThroughput}
-        #   WriteCapacityUnits: ${self:custom.tableThroughput}
+              NonKeyAttributes:
+                - id
+              ProjectionType: INCLUDE
 functions:
   health:
     handler: program.health
+    runtime: nodejs12.x
     events:
       - http:
           path: health
@@ -188,6 +254,7 @@ functions:
               - content-type
   getAll:
     handler: program.getAll
+    runtime: nodejs12.x
     memorySize: 1024
     timeout: 20
     events:
@@ -200,9 +267,10 @@ functions:
               - partner
               - authorization
               - content-type
-  syncNew:
-    handler: program.syncNew
-    timeout: 60
+  syncRegions:
+    handler: program.syncRegions
+    runtime: nodejs12.x
+    # timeout: 60
     events:
       - schedule: rate(2 hours)
       # - schedule: rate(60 minutes)
@@ -218,18 +286,68 @@ functions:
               - partner
               - authorization
               - content-type
-  syncByRegion:
-    handler: program.syncByRegion
+  syncRegionNextFewHours:
+    handler: program.syncRegionNextFewHours
+    runtime: nodejs12.x
     memorySize: 1024
-    timeout: 60
+    timeout: 30
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
-  consumeNewProgram:
+  syncAirtable:
+    handler: program.syncAirtable
+    runtime: nodejs12.x
+    memorySize: 1024
+    timeout: 60
+    environment:
+      newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
+    events:
+      - schedule: cron(10 10 * * ? *) # every day @ 6:10am eastern
+      - http:
+          path: sync/airtable
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  syncAirtableUpdates:
+    handler: program.syncAirtableUpdates
+    runtime: nodejs12.x
+    description: sync program game id from airtable to programs db
+    events:
+      - schedule: rate(1 hour)
+      - http:
+          path: sync/airtable/updates
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  syncRatings:
+    handler: program.syncRatings
+    runtime: nodejs12.x
+    description: rate programs by keywords that haven't been rated yet
+    events:
+      # - schedule: rate(1 hour)
+      - http:
+          path: sync/airtable/ratings
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
+  consumeNewProgramUpdateDetails:
     memorySize: 512
     timeout: 12
-    handler: program.consumeNewProgram
-    description: Consume new program queue and add description
+    handler: program.consumeNewProgramUpdateDetails
+    runtime: nodejs12.x
+    description: Consume new db program and update description
     reservedConcurrency: 1
     events:
       - sqs:
@@ -237,3 +355,37 @@ functions:
             - newProgramQueue
             - Arn
           batchSize: 1
+  consumeNewProgramAirtableUpdateDetails:
+    handler: program.consumeNewProgramAirtableUpdateDetails
+    runtime: nodejs12.x
+    description: Consume new airtable program update description
+    reservedConcurrency: 1
+    events:
+      - sqs:
+          arn: !GetAtt
+            - newProgramAirtableQueue
+            - Arn
+          batchSize: 1
+  getSchedulePy:
+    handler: programPy.getPrograms
+    # runtime: nodejs12.x
+    runtime: python3.6
+    events:
+      - http:
+          path: py/schedule
+          method: get
+  getProgramDetailPy:
+    handler: programPy.getProgramDetail
+    # runtime: nodejs12.x
+    runtime: python3.6
+    events:
+      - http:
+          path: py/program/detail
+          method: get
+  # getScheduleTest:
+  #   handler: program.getScheduleTest
+  #   runtime: nodejs12.x
+  #   events:
+  #     - http:
+  #         path: schedule
+  #         method: get
