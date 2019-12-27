@@ -389,10 +389,3 @@ functions:
   #     - http:
   #         path: schedule
   #         method: get
-  controlCenterV2byLocation:
-    handler: program.controlCenterV2byLocation
-    runtime: nodejs12.x
-    events:
-      - http:
-          path: v2/control-center
-          method: post

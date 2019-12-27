@@ -60,37 +60,37 @@ const dbLocation = dynamoose.model(
         },
       },
     ],
-    boxesV2: [
-      {
-        id: String,
-        about: {
-          clientAddress: String, // dtv calls this clientAddr
-          locationName: String, // dtv name
-          label: String, // physical label id on tv (defaults to locationName)
-          setupChannel: Number,
-          ip: String,
-          notes: String,
-        },
-        controlCenter: {
-          zone: String,
-        },
-        userControl: {
-          // clicker tv app
-          active: Boolean, // formerly appActive
-          reserved: Boolean,
-          end: Date,
-        },
-        current: {
-          channel: Number,
-          channelChangeAt: Date,
-          updatedAt: Date,
-          channelSource: {
-            type: String,
-            enum: ['app', 'control center', 'manual', 'control center daily'],
-          },
-        },
-      },
-    ],
+    // boxesV2: [
+    //   {
+    //     id: String,
+    //     about: {
+    //       clientAddress: String, // dtv calls this clientAddr
+    //       locationName: String, // dtv name
+    //       label: String, // physical label id on tv (defaults to locationName)
+    //       setupChannel: Number,
+    //       ip: String,
+    //       notes: String,
+    //     },
+    //     controlCenter: {
+    //       zone: String,
+    //     },
+    //     userControl: {
+    //       // clicker tv app
+    //       active: Boolean, // formerly appActive
+    //       reserved: Boolean,
+    //       end: Date,
+    //     },
+    //     current: {
+    //       channel: Number,
+    //       channelChangeAt: Date,
+    //       updatedAt: Date,
+    //       channelSource: {
+    //         type: String,
+    //         enum: ['app', 'control center', 'manual', 'control center daily'],
+    //       },
+    //     },
+    //   },
+    // ],
 
     channels: {
       exclude: {
@@ -350,6 +350,7 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+// called from antenna
 module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
   const { boxes } = getBody(event);
@@ -663,6 +664,20 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   await updateLocationBoxChannel(locationId, boxIndex, channel, channelMinor, source);
   return respond(200);
+});
+
+module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(id)
+    .exec();
+  const { boxes } = location;
+  // loop through boxes
+  //  attach program based on channel number
+  //  attach game based on gameId
+  //
+  return respond(200, boxes);
 });
 
 async function updateLocationBoxChannel(locationId, boxIndex, channel: number, channelMinor: number, source) {

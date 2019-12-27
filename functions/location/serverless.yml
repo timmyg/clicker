@@ -212,6 +212,7 @@ functions:
               - authorization
               - content-type
   saveBoxesInfo:
+    description: called from antenna every 5 minutes to update whats on each box
     handler: location.saveBoxesInfo
     timeout: 12
     events:
@@ -249,6 +250,7 @@ functions:
               - authorization
               - content-type
   updateBoxInfo:
+    description: called by saveBoxesInfo for manual and remote for other changes
     handler: location.updateBoxInfo
     timeout: 12
     memorySize: 512
@@ -302,3 +304,10 @@ functions:
               - partner
               - authorization
               - content-type
+  controlCenterV2byLocation:
+    handler: program.controlCenterV2byLocation
+    runtime: nodejs12.x
+    events:
+      - http:
+          path: control-center/v2/{locationId}
+          method: post
