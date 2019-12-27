@@ -241,7 +241,9 @@ module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
     if (ipAndCompletedGames && ipAndCompletedGames.length) {
       // dont update again in database if already updated...
       const alreadyCompletedGameIds = await getCompleteGameIds();
+      console.log({ alreadyCompletedGameIds });
       gamesToUpdate = ipAndCompletedGames.filter(g => !alreadyCompletedGameIds.includes(g.id));
+      console.log({ gamesToUpdate });
       console.log('gamesToUpdate', gamesToUpdate.length);
       if (!!gamesToUpdate.length) {
         const totalGames = gamesToUpdate.length;
