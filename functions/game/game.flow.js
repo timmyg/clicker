@@ -300,15 +300,27 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
-  const { start, network } = event.queryStringParameters;
-  const games: Game[] = await dbGame
-    .query('start')
-    .eq(start) // .filter(filter)
+module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  // const { ids } = getPathParameters(event);
+  // const gameIds = ids.split(',');
+  const game: Game[] = await dbGame
+    .query('id')
+    .eq(id) // .filter(filter)
     .exec();
-  const game = games.find(g => g.broadcast && g.broadcast.network === network);
+  // const game = games.find(g => g.broadcast && g.broadcast.network === network);
   return respond(200, game);
 });
+
+// module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { start, network } = event.queryStringParameters;
+//   const games: Game[] = await dbGame
+//     .query('start')
+//     .eq(start) // .filter(filter)
+//     .exec();
+//   const game = games.find(g => g.broadcast && g.broadcast.network === network);
+//   return respond(200, game);
+// });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {

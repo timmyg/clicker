@@ -52,6 +52,7 @@ const dbLocation = dynamoose.model(
         notes: String,
         appActive: Boolean,
         channel: Number,
+        channelMinor: Number,
         channelChangeAt: Date,
         updatedAt: Date,
         channelSource: {
@@ -677,7 +678,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   //  attach program based on channel number
   //  attach game based on gameId
   //
-  return respond(200, boxes);
+  // return respond(200, boxes);
+  return respond(200);
 });
 
 async function updateLocationBoxChannel(locationId, boxIndex, channel: number, channelMinor: number, source) {

@@ -112,7 +112,7 @@ const dbProgram = dynamoose.model(
     start: { type: Number },
     end: Number,
     channel: Number,
-    channelMinor: Number,
+    // channelMinor: Number,
     channelTitle: String,
     title: String, // "Oklahoma State @ Kansas"
     episodeTitle: String, // "Oklahoma State at Kansas"

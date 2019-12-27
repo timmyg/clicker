@@ -13,7 +13,8 @@
     "invoke:boxes:add": "serverless invoke local --function addBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:all": "serverless invoke local --function getBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
-    "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json"
+    "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json",
+    "invoke:controlCenterV2byLocation": "serverless invoke local --function controlCenterV2byLocation --path ../.resources/data/location-update.json --stage develop"
   },
   "author": "",
   "license": "ISC",

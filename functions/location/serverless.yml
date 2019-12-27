@@ -4,7 +4,7 @@ provider:
   name: aws
   memorySize: 128
   versionFunctions: false
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   tracing: true
   logRetentionInDays: 14
   deploymentBucket:
@@ -305,9 +305,8 @@ functions:
               - authorization
               - content-type
   controlCenterV2byLocation:
-    handler: program.controlCenterV2byLocation
-    runtime: nodejs12.x
+    handler: location.controlCenterV2byLocation
     events:
       - http:
-          path: {id}/control-center/v2
+          path: '{id}/control-center/v2'
           method: post
