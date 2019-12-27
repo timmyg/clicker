@@ -705,10 +705,14 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
   if (!programmingId.includes('GDM')) {
+    console.time('getProgramDetails');
     const programDetails = await getProgramDetails(program);
+    console.timeEnd('getProgramDetails');
     if (!!programDetails) {
       const { description, progType: type } = programDetails;
+      console.time('updateProgram');
       await updateProgram(id, region, description, type);
+      console.timeEnd('updateProgram');
     }
   } else {
     console.info(`skipping ${programmingId}`);
