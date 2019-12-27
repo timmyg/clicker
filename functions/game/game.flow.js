@@ -247,7 +247,7 @@ module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
       console.log('gamesToUpdate', gamesToUpdate.length);
       if (!!gamesToUpdate.length) {
         const totalGames = gamesToUpdate.length;
-        await syncGamesDatabase(gamesToUpdate, true);
+        await syncGamesDatabase(gamesToUpdate, false);
         return respond(200, { updatedGames: totalGames });
       }
     }
