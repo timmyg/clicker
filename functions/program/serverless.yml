@@ -384,8 +384,8 @@ functions:
           batchSize: 1
   getSchedulePy:
     handler: programPy.getPrograms
-    # runtime: nodejs12.x
     runtime: python3.6
+    timeout: 40
     events:
       - http:
           path: py/schedule
@@ -393,6 +393,7 @@ functions:
   getProgramDetailPy:
     handler: programPy.getProgramDetail
     runtime: python3.6
+    timeout: 40
     events:
       - http:
           path: py/program/detail
