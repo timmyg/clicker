@@ -4,8 +4,15 @@ const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
 const uuid = require('uuid/v1');
-const awsXRay = require('aws-xray-sdk');
-const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+// const awsXRay = require('aws-xray-sdk');
+// const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+let AWS;
+if (!process.env.IS_LOCAL) {
+  AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
+} else {
+  console.info('Serverless Offline detected; skipping AWS X-Ray setup');
+  AWS = require('aws-sdk');
+}
 
 declare class process {
   static env: {
@@ -677,12 +684,15 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // loop through boxes
 
   //  attach program based on channel number
-  // await new Invoke()
-  //   .service('program')
-  //   .name('get')
-  //   .queryParams({ channel, time, region })
-  //   .async()
-  //   .go();
+  const [channel, time, region] = [206, moment().unix() * 1000, 'cincinnati'];
+  console.log({ channel, time, region });
+  const { data: program } = await new Invoke()
+    .service('program')
+    .name('get')
+    .queryParams({ channel, time, region })
+    // .async()
+    .go();
+  console.log({ program });
 
   //  attach game based on gameId
   // await new Invoke()
