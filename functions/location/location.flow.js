@@ -627,13 +627,13 @@ async function updateLocationBoxChannel(locationId, boxIndex, channel: number, c
 		ReturnValues: 'ALL_NEW',
 		UpdateExpression: `set 
        boxes[${boxIndex}].channel = :channel,
-       boxes[${boxIndex}].channelMinor = :channelMinor,
        boxes[${boxIndex}].channelSource = :channelSource,
        boxes[${boxIndex}].channelChangeAt = :channelChangeAt,
-       boxes[${boxIndex}].updatedAt = :updatedAt`,
+	   boxes[${boxIndex}].updatedAt = :updatedAt`,
+		//    boxes[${boxIndex}].channelMinor = :channelMinor,
 		ExpressionAttributeValues: {
 			':channel': parseInt(channel),
-			':channelMinor': parseInt(channelMinor),
+			// ':channelMinor': parseInt(channelMinor),
 			':channelSource': source,
 			':channelChangeAt': now,
 			':updatedAt': now
