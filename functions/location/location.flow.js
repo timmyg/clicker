@@ -689,18 +689,17 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   const { data: program } = await new Invoke()
     .service('program')
     .name('get')
-    .queryParams({ channel, time, region })
-    // .async()
+    .queryParams({ channel, region })
     .go();
-  console.log({ program });
 
   //  attach game based on gameId
-  // await new Invoke()
-  //   .service('game')
-  //   .name('get')
-  //   .pathParams({ id: gameId })
-  //   .async()
-  //   .go();
+  const { data: game } = await new Invoke()
+    .service('game')
+    .name('get')
+    .pathParams({ id: program.gameId || 80121 })
+    .go();
+
+  console.log({ program, game });
 
   // return respond(200, boxes);
   return respond(200);

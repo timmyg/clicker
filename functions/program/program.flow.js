@@ -115,7 +115,7 @@ const dbProgram = dynamoose.model(
       type: Number,
       index: {
         global: true,
-        project: ['start', 'end', 'region'],
+        project: ['start', 'end', 'region', 'gameId'],
       },
     },
     // channelMinor: Number,
