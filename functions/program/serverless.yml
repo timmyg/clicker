@@ -217,8 +217,8 @@ resources:
             AttributeType: S
           - AttributeName: channel
             AttributeType: N
-          - AttributeName: gameId
-            AttributeType: N
+          # - AttributeName: gameId
+          #   AttributeType: N
         KeySchema:
           - AttributeName: region
             KeyType: HASH
