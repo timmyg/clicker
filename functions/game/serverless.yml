@@ -235,18 +235,24 @@ functions:
               - partner
               - authorization
               - content-type
-  getByStartTimeAndNetwork:
-    handler: game.getByStartTimeAndNetwork
+  get:
+    handler: game.get
     events:
       - http:
-          path: search
+          path: '{id}'
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
+  # getByStartTimeAndNetwork:
+  #   handler: game.getByStartTimeAndNetwork
+  #   events:
+  #     - http:
+  #         path: search
+  #         method: get
+  #         cors:
+  #           origin: '*'
+  #           headers:
+  #             - partner
+  #             - authorization
+  #             - content-type
   scoreboard:
     handler: game.scoreboard
     memorySize: 1024
