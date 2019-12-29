@@ -2,6 +2,7 @@ service: program
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
+  # runtime: nodejs12.x
   memorySize: 128
   versionFunctions: false
   tracing: true
@@ -214,6 +215,10 @@ resources:
             AttributeType: S
           - AttributeName: programmingId
             AttributeType: S
+          - AttributeName: channel
+            AttributeType: N
+          # - AttributeName: gameId
+          #   AttributeType: N
         KeySchema:
           - AttributeName: region
             KeyType: HASH
@@ -226,6 +231,17 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
+          - IndexName: channelGlobalIndex
+            KeySchema:
+              - AttributeName: channel
+                KeyType: HASH
+            Projection:
+              NonKeyAttributes:
+                - start
+                - end
+                - region
+                - gameId
+              ProjectionType: INCLUDE
             # ProvisionedThroughput:
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
@@ -368,24 +384,24 @@ functions:
           batchSize: 1
   getSchedulePy:
     handler: programPy.getPrograms
-    # runtime: nodejs12.x
     runtime: python3.6
+    timeout: 40
     events:
       - http:
           path: py/schedule
           method: get
   getProgramDetailPy:
     handler: programPy.getProgramDetail
-    # runtime: nodejs12.x
     runtime: python3.6
+    timeout: 40
     events:
       - http:
           path: py/program/detail
           method: get
-  # getScheduleTest:
-  #   handler: program.getScheduleTest
-  #   runtime: nodejs12.x
-  #   events:
-  #     - http:
-  #         path: schedule
-  #         method: get
+  get:
+    handler: program.get
+    runtime: nodejs12.x
+    events:
+      - http:
+          path: ''
+          method: get

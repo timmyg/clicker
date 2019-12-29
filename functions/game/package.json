@@ -12,7 +12,8 @@
     "invoke:syncActive": "serverless invoke local --function syncActive --stage develop",
     "invoke:syncAirtable": "serverless invoke local --function syncAirtable --stage develop",
     "invoke:scoreboard": "serverless invoke local --function scoreboard --stage develop",
-    "invoke:health": "serverless invoke local --function health --stage develop"
+    "invoke:health": "serverless invoke local --function health --stage develop",
+    "invoke:getGame": "serverless invoke local --function get --path ../.resources/data/game.json --stage develop"
   },
   "author": "",
   "license": "ISC",

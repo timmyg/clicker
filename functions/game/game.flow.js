@@ -86,6 +86,8 @@ const dbGame = dynamoose.model(
     book: {
       total: Number,
     },
+    // dynamic
+    liveStatus: Object, // GameStatus
   },
   {
     timestamps: true,
@@ -300,15 +302,25 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
-  const { start, network } = event.queryStringParameters;
-  const games: Game[] = await dbGame
-    .query('start')
-    .eq(start) // .filter(filter)
+module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  const game: Game = await dbGame
+    .queryOne('id')
+    .eq(parseInt(id))
     .exec();
-  const game = games.find(g => g.broadcast && g.broadcast.network === network);
+  game.liveStatus = buildStatus(game);
   return respond(200, game);
 });
+
+// module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { start, network } = event.queryStringParameters;
+//   const games: Game[] = await dbGame
+//     .query('start')
+//     .eq(start) // .filter(filter)
+//     .exec();
+//   const game = games.find(g => g.broadcast && g.broadcast.network === network);
+//   return respond(200, game);
+// });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
   try {

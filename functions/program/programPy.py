@@ -2,6 +2,8 @@
 import requests
 import json
 import random
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 headers = {
     'Sec-Fetch-Site': 'same-origin',
@@ -43,12 +45,18 @@ def getPrograms(event, context):
     proxies = {'http': proxy_raw, 'https': proxy_raw}
 
     print('calling...')
-    response = requests.get(dtvApiBaseUrl + '/channelschedule',
-                            headers=headers,
-                            params=params,
-                            cookies=cookies,
-                            proxies=proxies
-                            )
+
+    s = requests.Session()
+    retries = Retry(total=5, backoff_factor=1,
+                    status_forcelist=[502, 503, 504])
+    s.mount('http://', HTTPAdapter(max_retries=retries))
+    response = s.get(dtvApiBaseUrl + '/channelschedule',
+                     headers=headers,
+                     params=params,
+                     cookies=cookies,
+                     proxies=proxies,
+                     timeout=3
+                     )
     print('response')
     return {
         'statusCode': 200,
@@ -88,11 +96,16 @@ def getProgramDetail(event, context):
     proxies = {'http': proxy_raw, 'https': proxy_raw}
 
     print('calling...')
-    response = requests.get(dtvApiBaseUrl + '/program/flip/' + programmingId,
-                            headers=headers,
-                            # cookies=cookies,
-                            proxies=proxies
-                            )
+    s = requests.Session()
+    retries = Retry(total=5, backoff_factor=1,
+                    status_forcelist=[502, 503, 504])
+    s.mount('http://', HTTPAdapter(max_retries=retries))
+    response = s.get(dtvApiBaseUrl + '/program/flip/' + programmingId,
+                     headers=headers,
+                     # cookies=cookies,
+                     proxies=proxies,
+                     timeout=3
+                     )
     print('response')
     return {
         'statusCode': 200,
