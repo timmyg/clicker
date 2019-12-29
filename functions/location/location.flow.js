@@ -586,9 +586,14 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 	const { id: locationId, boxId } = getPathParameters(event);
 	const { channel, channelMinor, source } = getBody(event);
 
+	console.time('get location');
 	const location: Venue = await dbLocation.queryOne('id').eq(locationId).exec();
+	console.timeEnd('get location');
 	const boxIndex = location.boxes.findIndex((b) => b.id === boxId);
+	console.log({ boxId, boxIndex });
+	console.time('update location box');
 	await updateLocationBoxChannel(locationId, boxIndex, channel, channelMinor, source);
+	console.timeEnd('update location box');
 	return respond(200);
 });
 
