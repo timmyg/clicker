@@ -47,7 +47,8 @@ def getPrograms(event, context):
                             headers=headers,
                             params=params,
                             cookies=cookies,
-                            proxies=proxies
+                            proxies=proxies,
+                            timeout=3
                             )
     print('response')
     return {
@@ -91,7 +92,8 @@ def getProgramDetail(event, context):
     response = requests.get(dtvApiBaseUrl + '/program/flip/' + programmingId,
                             headers=headers,
                             # cookies=cookies,
-                            proxies=proxies
+                            proxies=proxies,
+                            timeout=3
                             )
     print('response')
     return {
