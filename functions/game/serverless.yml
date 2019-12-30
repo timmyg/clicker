@@ -53,10 +53,6 @@ custom:
   prune:
     automatic: true
     number: 3
-  tableThroughputs:
-    prod: 2
-    default: 1
-  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
@@ -76,18 +72,9 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  # newGameTopic: '${self:service}-${self:custom.stage}-new-game-topic'
-  # newGameTopicArn:
-  #   deployed:
-  #     # arn:aws:sns:us-east-1:980883882378:game-develop-new-game-topic
-  #     {
-  #       'Fn::Join':
-  #         ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
-  #     }
   updatedGameTopic: '${self:service}-${self:custom.stage}-updated-game-topic'
   updatedGameTopicArn:
     deployed:
-      # arn:aws:sns:us-east-1:980883882378:game-develop-updated-game-topic
       {
         'Fn::Join':
           ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}']],
@@ -124,57 +111,6 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          # - IndexName: idOnlyGlobalIndex
-          #   KeySchema:
-          #     - AttributeName: id
-          #       KeyType: HASH
-          #   Projection:
-          #     ProjectionType: KEYS_ONLY
-    # new game stuff
-    # newGameTopic:
-    #   Type: AWS::SNS::Topic
-    #   Properties:
-    #     TopicName: ${self:service}-${self:custom.stage}-new-game-topic
-    # newGameQueue:
-    #   Type: AWS::SQS::Queue
-    #   Properties:
-    #     QueueName: ${self:service}-${self:custom.stage}-new-game-queue
-    #     RedrivePolicy:
-    #       deadLetterTargetArn: !GetAtt
-    #         - newGameDLQ
-    #         - Arn
-    #       maxReceiveCount: 3
-    # newGameDLQ:
-    #   Type: AWS::SQS::Queue
-    #   Properties:
-    #     QueueName: ${self:service}-${self:custom.stage}-new-game-queue-dlq
-    # snsToNewGameQueueSqsPolicy:
-    #   Type: AWS::SQS::QueuePolicy
-    #   Properties:
-    #     PolicyDocument:
-    #       Version: '2012-10-17'
-    #       Statement:
-    #         - Sid: 'allow-sns-messages'
-    #           Effect: Allow
-    #           Principal: '*'
-    #           Resource: !GetAtt
-    #             - newGameQueue
-    #             - Arn
-    #           Action: 'SQS:SendMessage'
-    #           Condition:
-    #             ArnEquals:
-    #               'aws:SourceArn': !Ref newGameTopic
-    #     Queues:
-    #       - Ref: newGameQueue
-    # newGameQueueSubscription:
-    #   Type: 'AWS::SNS::Subscription'
-    #   Properties:
-    #     TopicArn: !Ref newGameTopic
-    #     Endpoint: !GetAtt
-    #       - newGameQueue
-    #       - Arn
-    #     Protocol: sqs
-    #     RawMessageDelivery: 'true'
 
     # updated game stuff (score update)
     updatedGameTopic:
@@ -331,7 +267,7 @@ functions:
               - authorization
               - content-type
   consumeUpdatedGameUpdateProgram:
-    handler: program.consumeUpdatedGameUpdateProgram
+    handler: game.consumeUpdatedGameUpdateProgram
     description: Consume updated game update program
     reservedConcurrency: 1
     events:
