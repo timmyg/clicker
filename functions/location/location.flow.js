@@ -666,7 +666,7 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 		updateExpression += `boxes[${boxIndex}].program = :program,`;
 		expressionAttributeValues[':program'] = program;
 	}
-	updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt,`;
+	updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
 	expressionAttributeValues[':updatedAt'] = now;
 	var params = {
 		TableName: process.env.tableLocation,
