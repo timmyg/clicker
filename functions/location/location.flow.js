@@ -62,7 +62,7 @@ const dbLocation = dynamoose.model(
 				channelMinor: Number,
 				channelChangeAt: Date,
 				updatedAt: Date,
-				program: Object, // populated every few minutes
+				program: Map, // populated every few minutes
 				channelSource: {
 					type: String,
 					enum: [ 'app', 'control center', 'manual', 'control center daily' ]
