@@ -659,8 +659,8 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 		expressionAttributeValues[':channelChangeAt'] = now;
 	}
 	if (source) {
-		updateExpression += `boxes[${boxIndex}].source = :source,`;
-		expressionAttributeValues[':source'] = source;
+		updateExpression += `boxes[${boxIndex}].channelSource = :channelSource,`;
+		expressionAttributeValues[':channelSource'] = source;
 	}
 	if (program) {
 		updateExpression += `boxes[${boxIndex}].program = :program,`;
