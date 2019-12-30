@@ -672,6 +672,7 @@ module.exports.consumeUpdatedGame = RavenLambdaWrapper.handler(Raven, async (eve
 	const game: Game = JSON.parse(event.Records[0].body);
 	console.log(game);
 });
+
 module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('consume');
 	const program = JSON.parse(event.Records[0].body);

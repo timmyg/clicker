@@ -110,6 +110,7 @@ custom:
           ],
       }
   # duplicated
+  updatedGameTopic: '${self:service}-${self:custom.stage}-updated-game-topic'
   updatedGameTopicArn:
     deployed:
       {
