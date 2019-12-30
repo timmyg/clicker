@@ -759,7 +759,7 @@ async function updateProgram(id, region, description, type) {
 	}
 }
 
-async function updateProgramGame(programId, region, game) {
+function updateProgramGame(programId, region, game) {
 	console.log({ programId, region, game });
 	const docClient = new AWS.DynamoDB.DocumentClient();
 	var params = {

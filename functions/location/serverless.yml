@@ -292,6 +292,14 @@ functions:
               - partner
               - authorization
               - content-type
+  updateBoxesProgram:
+    handler: location.updateBoxesProgram
+    timeout: 30
+    events:
+      - schedule: rate(5 minutes)
+      - http:
+          path: boxes/programs
+          method: post
   controlCenterLocationsByRegion:
     handler: location.controlCenterLocationsByRegion
     events:

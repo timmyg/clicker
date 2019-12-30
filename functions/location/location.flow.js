@@ -62,6 +62,7 @@ const dbLocation = dynamoose.model(
 				channelMinor: Number,
 				channelChangeAt: Date,
 				updatedAt: Date,
+				program: Object, // populated every few minutes
 				channelSource: {
 					type: String,
 					enum: [ 'app', 'control center', 'manual', 'control center daily' ]
@@ -584,7 +585,7 @@ module.exports.health = async (event: any) => {
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async (event) => {
 	const { id: locationId, boxId } = getPathParameters(event);
-	const { channel, channelMinor, source } = getBody(event);
+	const { channel, channelMinor, source, program } = getBody(event);
 
 	console.time('get location');
 	const location: Venue = await dbLocation.queryOne('id').eq(locationId).exec();
@@ -592,9 +593,37 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async (event) =
 	const boxIndex = location.boxes.findIndex((b) => b.id === boxId);
 	console.log({ boxId, boxIndex });
 	console.time('update location box');
-	await updateLocationBoxChannel(locationId, boxIndex, channel, channelMinor, source);
+	await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program);
 	console.timeEnd('update location box');
 	return respond(200);
+});
+
+module.exports.updateBoxesProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
+	let allLocations: Venue[] = await dbLocation.scan().exec();
+	let i = 0;
+	for (const location of allLocations) {
+		const { region, id: locationId } = location;
+		const { boxes } = location;
+		for (const box of boxes) {
+			const { channel, id: boxId } = box;
+			const boxIndex: number = location.boxes.findIndex((b) => b.id === boxId);
+			const { data: program } = await new Invoke()
+				.service('program')
+				.name('get')
+				.queryParams({ channel, region })
+				.go();
+
+			await new Invoke()
+				.service('location')
+				.name('updateBoxInfo')
+				.body({ program })
+				.pathParams({ id: locationId, boxId })
+				.async()
+				.go();
+			i++;
+		}
+	}
+	return respond(200, { updated: i });
 });
 
 module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async (event) => {
@@ -617,27 +646,34 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 	return respond(200);
 });
 
-async function updateLocationBoxChannel(locationId, boxIndex, channel: number, channelMinor: number, source) {
+async function updateLocationBox(locationId, boxIndex, channel: number, channelMinor: number, source, program) {
 	const AWS = require('aws-sdk');
 	const docClient = new AWS.DynamoDB.DocumentClient();
 	const now = moment().unix() * 1000;
+	let updateExpression = `set `;
+	let expressionAttributeValues = {};
+	if (channel) {
+		updateExpression += 'boxes[${boxIndex}].channel = :channel,';
+		expressionAttributeValues[':channel'] = parseInt(channel);
+		updateExpression += 'boxes[${boxIndex}].channelChangeAt = :channelChangeAt,';
+		expressionAttributeValues[':channelChangeAt'] = now;
+	}
+	if (source) {
+		updateExpression += 'boxes[${boxIndex}].source = :source,';
+		expressionAttributeValues[':source'] = source;
+	}
+	if (program) {
+		updateExpression += 'boxes[${boxIndex}].program = :program,';
+		expressionAttributeValues[':program'] = program;
+	}
+	updateExpression += 'boxes[${boxIndex}].updatedAt = :updatedAt,';
+	expressionAttributeValues[':updatedAt'] = now;
 	var params = {
 		TableName: process.env.tableLocation,
 		Key: { id: locationId },
 		ReturnValues: 'ALL_NEW',
-		UpdateExpression: `set 
-       boxes[${boxIndex}].channel = :channel,
-       boxes[${boxIndex}].channelSource = :channelSource,
-       boxes[${boxIndex}].channelChangeAt = :channelChangeAt,
-	   boxes[${boxIndex}].updatedAt = :updatedAt`,
-		//    boxes[${boxIndex}].channelMinor = :channelMinor,
-		ExpressionAttributeValues: {
-			':channel': parseInt(channel),
-			// ':channelMinor': parseInt(channelMinor),
-			':channelSource': source,
-			':channelChangeAt': now,
-			':updatedAt': now
-		}
+		UpdateExpression: updateExpression,
+		ExpressionAttributeValues: expressionAttributeValues
 	};
 	console.log({ params });
 	try {
