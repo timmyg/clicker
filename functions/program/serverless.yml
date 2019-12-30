@@ -109,6 +109,13 @@ custom:
             ],
           ],
       }
+  # duplicated
+  updatedGameTopicArn:
+    deployed:
+      {
+        'Fn::Join':
+          ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}']],
+      }
 resources:
   Resources:
     newProgramTopic:
@@ -382,6 +389,18 @@ functions:
           arn: !GetAtt
             - newProgramAirtableQueue
             - Arn
+          batchSize: 1
+  consumeUpdatedGame:
+    handler: program.consumeUpdatedGame
+    runtime: nodejs12.x
+    description: Consume updated game to update game on program
+    reservedConcurrency: 1
+    events:
+      - sqs:
+          # arn: !GetAtt
+          #   - newProgramAirtableQueue
+          #   - Arn
+          arn: ${self:custom.updatedGameTopicArn.deployed}
           batchSize: 1
   getSchedulePy:
     handler: programPy.getPrograms

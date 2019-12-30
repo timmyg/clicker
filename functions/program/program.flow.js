@@ -668,6 +668,10 @@ async function getProgramDetails(program: Program): Promise<any> {
 	return result ? result.data : null;
 }
 
+module.exports.consumeUpdatedGame = RavenLambdaWrapper.handler(Raven, async (event) => {
+	const game: Game = JSON.parse(event.Records[0].body);
+	console.log(game);
+});
 module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('consume');
 	const program = JSON.parse(event.Records[0].body);

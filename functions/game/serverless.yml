@@ -24,13 +24,21 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
+    # - Effect: Allow
+    #   Action:
+    #     - SNS:Publish
+    #   Resource:
+    #     {
+    #       'Fn::Join':
+    #         ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+    #     }
     - Effect: Allow
       Action:
         - SNS:Publish
       Resource:
         {
           'Fn::Join':
-            ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+            ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}']],
         }
 plugins:
   - serverless-domain-manager
@@ -68,13 +76,21 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  newGameTopic: '${self:service}-${self:custom.stage}-new-game-topic'
-  newGameTopicArn:
+  # newGameTopic: '${self:service}-${self:custom.stage}-new-game-topic'
+  # newGameTopicArn:
+  #   deployed:
+  #     # arn:aws:sns:us-east-1:980883882378:game-develop-new-game-topic
+  #     {
+  #       'Fn::Join':
+  #         ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+  #     }
+  updatedGameTopic: '${self:service}-${self:custom.stage}-updated-game-topic'
+  updatedGameTopicArn:
     deployed:
-      # arn:aws:sns:us-east-1:980883882378:game-develop-new-game-topic
+      # arn:aws:sns:us-east-1:980883882378:game-develop-updated-game-topic
       {
         'Fn::Join':
-          ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+          ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}']],
       }
 resources:
   Resources:
@@ -114,24 +130,71 @@ resources:
           #       KeyType: HASH
           #   Projection:
           #     ProjectionType: KEYS_ONLY
-    newGameTopic:
+    # new game stuff
+    # newGameTopic:
+    #   Type: AWS::SNS::Topic
+    #   Properties:
+    #     TopicName: ${self:service}-${self:custom.stage}-new-game-topic
+    # newGameQueue:
+    #   Type: AWS::SQS::Queue
+    #   Properties:
+    #     QueueName: ${self:service}-${self:custom.stage}-new-game-queue
+    #     RedrivePolicy:
+    #       deadLetterTargetArn: !GetAtt
+    #         - newGameDLQ
+    #         - Arn
+    #       maxReceiveCount: 3
+    # newGameDLQ:
+    #   Type: AWS::SQS::Queue
+    #   Properties:
+    #     QueueName: ${self:service}-${self:custom.stage}-new-game-queue-dlq
+    # snsToNewGameQueueSqsPolicy:
+    #   Type: AWS::SQS::QueuePolicy
+    #   Properties:
+    #     PolicyDocument:
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Sid: 'allow-sns-messages'
+    #           Effect: Allow
+    #           Principal: '*'
+    #           Resource: !GetAtt
+    #             - newGameQueue
+    #             - Arn
+    #           Action: 'SQS:SendMessage'
+    #           Condition:
+    #             ArnEquals:
+    #               'aws:SourceArn': !Ref newGameTopic
+    #     Queues:
+    #       - Ref: newGameQueue
+    # newGameQueueSubscription:
+    #   Type: 'AWS::SNS::Subscription'
+    #   Properties:
+    #     TopicArn: !Ref newGameTopic
+    #     Endpoint: !GetAtt
+    #       - newGameQueue
+    #       - Arn
+    #     Protocol: sqs
+    #     RawMessageDelivery: 'true'
+
+    # updated game stuff (score update)
+    updatedGameTopic:
       Type: AWS::SNS::Topic
       Properties:
-        TopicName: ${self:service}-${self:custom.stage}-new-game-topic
-    newGameQueue:
+        TopicName: ${self:service}-${self:custom.stage}-updated-game-topic
+    updatedGameQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:service}-${self:custom.stage}-new-game-queue
+        QueueName: ${self:service}-${self:custom.stage}-updated-game-queue
         RedrivePolicy:
           deadLetterTargetArn: !GetAtt
-            - newGameDLQ
+            - updatedGameDLQ
             - Arn
           maxReceiveCount: 3
-    newGameDLQ:
+    updatedGameDLQ:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:service}-${self:custom.stage}-new-game-queue-dlq
-    snsToNewGameQueueSqsPolicy:
+        QueueName: ${self:service}-${self:custom.stage}-updated-game-queue-dlq
+    snsToUpdatedGameQueueSqsPolicy:
       Type: AWS::SQS::QueuePolicy
       Properties:
         PolicyDocument:
@@ -141,20 +204,20 @@ resources:
               Effect: Allow
               Principal: '*'
               Resource: !GetAtt
-                - newGameQueue
+                - updatedGameQueue
                 - Arn
               Action: 'SQS:SendMessage'
               Condition:
                 ArnEquals:
-                  'aws:SourceArn': !Ref newGameTopic
+                  'aws:SourceArn': !Ref updatedGameTopic
         Queues:
-          - Ref: newGameQueue
-    newGameQueueSubscription:
+          - Ref: updatedGameQueue
+    updatedGameQueueSubscription:
       Type: 'AWS::SNS::Subscription'
       Properties:
-        TopicArn: !Ref newGameTopic
+        TopicArn: !Ref updatedGameTopic
         Endpoint: !GetAtt
-          - newGameQueue
+          - updatedGameQueue
           - Arn
         Protocol: sqs
         RawMessageDelivery: 'true'
@@ -186,8 +249,8 @@ functions:
     handler: game.syncNextFewDays
     memorySize: 1024
     timeout: 30
-    environment:
-      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+    # environment:
+    #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
     events:
       - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
       - http:
@@ -204,7 +267,8 @@ functions:
     memorySize: 1024
     timeout: 12
     environment:
-      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+      # newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+      updatedGameTopicArn: ${self:custom.updatedGameTopicArn.deployed}
     events:
       # - schedule: rate(5 minutes)
       - schedule: cron(0/1 21-4 ? * * *) # Every 1 minute between 11pm UTC and 4am UTC
@@ -222,8 +286,8 @@ functions:
     handler: game.syncAirtable
     timeout: 30
     memorySize: 1024
-    environment:
-      newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+    # environment:
+    #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
     events:
       - schedule: cron(00 10 * * ? *) # every day @ 6:00am eastern
       - http:
