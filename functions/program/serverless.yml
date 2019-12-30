@@ -332,6 +332,7 @@ functions:
     handler: program.syncAirtableUpdates
     runtime: nodejs12.x
     description: sync program game id from airtable to programs db
+    timeout: 15
     events:
       - schedule: rate(1 hour)
       - http:
@@ -360,7 +361,7 @@ functions:
               - content-type
   consumeNewProgramUpdateDetails:
     memorySize: 512
-    timeout: 12
+    timeout: 15
     handler: program.consumeNewProgramUpdateDetails
     runtime: nodejs12.x
     description: Consume new db program and update description

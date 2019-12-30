@@ -39,31 +39,38 @@ def getPrograms(event, context):
         # ('chIds', '238,2071,2073,2076,6069,6092,2075,4317,4063,6111,3849,4062,1016,1904,1977,6209,1978,354,4328,553,219,5239,348,332'),
     )
 
-    randomString = str(random.randint(100000000000, 999999999999))
-    print(randomString)
-    proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.' + \
-        randomString + ':1gjgp252qy4b@165.227.199.200:22225'
-    proxies = {'http': proxy_raw, 'https': proxy_raw}
+    exception = True
+    while (exception):
+        randomString = str(random.randint(100000000000, 999999999999))
+        print(randomString)
+        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.' + \
+            randomString + ':1gjgp252qy4b@165.227.199.200:22225'
+        proxies = {'http': proxy_raw, 'https': proxy_raw}
 
-    print('calling...')
+        print('calling...')
 
-    s = requests.Session()
-    retries = Retry(total=5, backoff_factor=1,
-                    status_forcelist=[502, 503, 504])
-    s.mount('http://', HTTPAdapter(max_retries=retries))
-    response = s.get(dtvApiBaseUrl + '/channelschedule',
-                     headers=headers,
-                     params=params,
-                     cookies=cookies,
-                     proxies=proxies,
-                     timeout=3
-                     )
-    print('response')
-    return {
-        'statusCode': 200,
-        'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps(response.json().get('schedule'))
-    }
+        s = requests.Session()
+        retries = Retry(total=5, backoff_factor=1,
+                        status_forcelist=[502, 503, 504])
+        s.mount('http://', HTTPAdapter(max_retries=retries))
+
+        try:
+            response = s.get(dtvApiBaseUrl + '/channelschedule',
+                             headers=headers,
+                             params=params,
+                             cookies=cookies,
+                             proxies=proxies,
+                             timeout=3
+                             )
+            print('response')
+            # print(json.dumps(response.json().get('schedule'))
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json'},
+                'body': json.dumps(response.json().get('schedule'))
+            }
+        except:
+            exception = True
 
 
 def getProgramDetail(event, context):
@@ -90,26 +97,31 @@ def getProgramDetail(event, context):
         'Referer': 'https://www.directv.com/assets/js/dtve/apps/guide/programDataServiceProcessor.js',
         'Connection': 'keep-alive',
     }
+    exception = True
+    while (exception):
 
-    randomString = str(random.randint(100000000000, 999999999999))
-    proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.' + \
-        randomString + ':1gjgp252qy4b@165.227.199.200:22225'
-    proxies = {'http': proxy_raw, 'https': proxy_raw}
+        randomString = str(random.randint(100000000000, 999999999999))
+        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.' + \
+            randomString + ':1gjgp252qy4b@165.227.199.200:22225'
+        proxies = {'http': proxy_raw, 'https': proxy_raw}
 
-    print('calling...')
-    s = requests.Session()
-    retries = Retry(total=5, backoff_factor=1,
-                    status_forcelist=[502, 503, 504])
-    s.mount('http://', HTTPAdapter(max_retries=retries))
-    response = s.get(dtvApiBaseUrl + '/program/flip/' + programmingId,
-                     headers=headers,
-                     # cookies=cookies,
-                     proxies=proxies,
-                     timeout=3
-                     )
-    print('response')
-    return {
-        'statusCode': 200,
-        'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps(response.json().get('programDetail'))
-    }
+        print('calling...')
+        s = requests.Session()
+        retries = Retry(total=5, backoff_factor=1,
+                        status_forcelist=[502, 503, 504])
+        s.mount('http://', HTTPAdapter(max_retries=retries))
+        try:
+            response = s.get(dtvApiBaseUrl + '/program/flip/' + programmingId,
+                             headers=headers,
+                             # cookies=cookies,
+                             proxies=proxies,
+                             timeout=3
+                             )
+            print('response')
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json'},
+                'body': json.dumps(response.json().get('programDetail'))
+            }
+        except:
+            exception = True
