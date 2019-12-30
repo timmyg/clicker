@@ -24,14 +24,14 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
-    - Effect: Allow
-      Action:
-        - SNS:Publish
-      Resource:
-        {
-          'Fn::Join':
-            ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
-        }
+    # - Effect: Allow
+    #   Action:
+    #     - SNS:Publish
+    #   Resource:
+    #     {
+    #       'Fn::Join':
+    #         ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+    #     }
     - Effect: Allow
       Action:
         - SNS:Publish
