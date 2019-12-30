@@ -653,20 +653,20 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 	let updateExpression = `set `;
 	let expressionAttributeValues = {};
 	if (channel) {
-		updateExpression += 'boxes[${boxIndex}].channel = :channel,';
+		updateExpression += `boxes[${boxIndex}].channel = :channel,`;
 		expressionAttributeValues[':channel'] = parseInt(channel);
-		updateExpression += 'boxes[${boxIndex}].channelChangeAt = :channelChangeAt,';
+		updateExpression += `boxes[${boxIndex}].channelChangeAt = :channelChangeAt,`;
 		expressionAttributeValues[':channelChangeAt'] = now;
 	}
 	if (source) {
-		updateExpression += 'boxes[${boxIndex}].source = :source,';
+		updateExpression += `boxes[${boxIndex}].source = :source,`;
 		expressionAttributeValues[':source'] = source;
 	}
 	if (program) {
-		updateExpression += 'boxes[${boxIndex}].program = :program,';
+		updateExpression += `boxes[${boxIndex}].program = :program,`;
 		expressionAttributeValues[':program'] = program;
 	}
-	updateExpression += 'boxes[${boxIndex}].updatedAt = :updatedAt,';
+	updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt,`;
 	expressionAttributeValues[':updatedAt'] = now;
 	var params = {
 		TableName: process.env.tableLocation,
