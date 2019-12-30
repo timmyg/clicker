@@ -124,7 +124,14 @@ const dbProgram = dynamoose.model(
 		episodeTitle: String, // "Oklahoma State at Kansas"
 		description: String,
 		durationMins: Number, // mins
-		gameId: Number,
+		gameId: {
+			type: Number,
+			index: {
+				global: true,
+				// name: 'idOnlyGlobalIndex',
+				project: false
+			}
+		},
 		game: Object,
 		clickerRating: Number,
 		live: Boolean,
