@@ -50,7 +50,7 @@ const dbLocation = dynamoose.model(
 				clientAddress: String, // dtv calls this clientAddr
 				locationName: String, // dtv name
 				label: String, // physical label id on tv (defaults to locationName)
-				tunerBond: Boolean, // not sure what this is
+				// tunerBond: Boolean, // not sure what this is
 				setupChannel: Number,
 				ip: String,
 				reserved: Boolean,

@@ -132,7 +132,7 @@ const dbProgram = dynamoose.model(
 				project: false
 			}
 		},
-		game: Object,
+		game: Map,
 		clickerRating: Number,
 		live: Boolean,
 		repeat: Boolean,
