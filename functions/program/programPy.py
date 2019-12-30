@@ -1,6 +1,7 @@
 
 import requests
 import json
+import time
 import random
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -70,6 +71,7 @@ def getPrograms(event, context):
                 'body': json.dumps(response.json().get('schedule'))
             }
         except:
+            time.sleep(1)
             exception = True
 
 
@@ -124,4 +126,5 @@ def getProgramDetail(event, context):
                 'body': json.dumps(response.json().get('programDetail'))
             }
         except:
+            time.sleep(1)
             exception = True
