@@ -729,10 +729,9 @@ module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async (event) => {
 	const programs = await dbProgram.query('gameId').eq(game.id).exec();
 	const promises = [];
 	for (const program of programs) {
-		program.game = game;
-		promises.push(program.save());
+		promises.push(updateProgramGame(program.id, program.region, game));
 	}
-	await Promise.all(promises);
+	Promise.all(promises);
 	return respond(200);
 });
 
@@ -759,23 +758,24 @@ async function updateProgram(id, region, description, type) {
 	}
 }
 
-// async function updateGame(programId, region, game) {
-// 	const docClient = new AWS.DynamoDB.DocumentClient();
-// 	var params = {
-// 		TableName: process.env.tableProgram,
-// 		Key: { id: programId, region },
-// 		UpdateExpression: 'set game = :game',
-// 		ExpressionAttributeValues: {
-// 			':game': game
-// 		}
-// 	};
-// 	try {
-// 		const x = await docClient.update(params).promise();
-// 	} catch (err) {
-// 		console.log({ err });
-// 		return err;
-// 	}
-// }
+async function updateProgramGame(programId, region, game) {
+	console.log({ programId, region, game });
+	const docClient = new AWS.DynamoDB.DocumentClient();
+	var params = {
+		TableName: process.env.tableProgram,
+		Key: { id: programId, region },
+		UpdateExpression: 'set game = :game',
+		ExpressionAttributeValues: {
+			':game': game
+		}
+	};
+	try {
+		const x = await docClient.update(params).promise();
+	} catch (err) {
+		console.log({ err });
+		return err;
+	}
+}
 
 function buildProgramObjects(programs) {
 	const transformedPrograms = [];
