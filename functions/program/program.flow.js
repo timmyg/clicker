@@ -726,6 +726,7 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
 
 module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async (event) => {
 	const game: Game = getBody(event);
+	console.log({ game });
 	const programs = await dbProgram.query('gameId').eq(game.id).exec();
 	const promises = [];
 	for (const program of programs) {
@@ -770,7 +771,7 @@ async function updateProgramGame(programId, region, game) {
 		}
 	};
 	try {
-		const x = await docClient.update(params).promise();
+		return docClient.update(params).promise();
 	} catch (err) {
 		console.log({ err });
 		return err;
