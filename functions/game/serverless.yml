@@ -24,14 +24,14 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
-    # - Effect: Allow
-    #   Action:
-    #     - SNS:Publish
-    #   Resource:
-    #     {
-    #       'Fn::Join':
-    #         ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
-    #     }
+    - Effect: Allow
+      Action:
+        - SNS:Publish
+      Resource:
+        {
+          'Fn::Join':
+            ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
+        }
     - Effect: Allow
       Action:
         - SNS:Publish
@@ -330,3 +330,13 @@ functions:
               - partner
               - authorization
               - content-type
+  consumeUpdatedGameUpdateProgram:
+    handler: program.consumeUpdatedGameUpdateProgram
+    description: Consume updated game update program
+    reservedConcurrency: 1
+    events:
+      - sqs:
+          arn: !GetAtt
+            - updatedGameQueue
+            - Arn
+          batchSize: 1

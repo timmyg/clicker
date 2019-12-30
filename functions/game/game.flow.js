@@ -13,7 +13,7 @@ if (!process.env.IS_LOCAL) {
 	console.info('Serverless Offline detected; skipping AWS X-Ray setup');
 	AWS = require('aws-sdk');
 }
-const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper, Invoke } = require('serverless-helpers');
 
 if (process.env.NODE_ENV === 'test') {
 	dynamoose.AWS.config.update({
@@ -377,6 +377,12 @@ module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async (event)
 	const allEvents: any = await pullFromActionNetwork(datesToPull);
 	await syncGamesDatabase(allEvents, true);
 	return respond(200);
+});
+
+module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
+	const game: Game = JSON.parse(event.Records[0].body);
+	await new Invoke().service('program').name('updateGame').body(game).async().go();
+	console.log(game);
 });
 
 // async function publishNewGames(games) {

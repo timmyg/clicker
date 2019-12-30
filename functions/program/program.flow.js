@@ -125,6 +125,7 @@ const dbProgram = dynamoose.model(
 		description: String,
 		durationMins: Number, // mins
 		gameId: Number,
+		game: Object,
 		clickerRating: Number,
 		live: Boolean,
 		repeat: Boolean,
@@ -668,11 +669,6 @@ async function getProgramDetails(program: Program): Promise<any> {
 	return result ? result.data : null;
 }
 
-module.exports.consumeUpdatedGame = RavenLambdaWrapper.handler(Raven, async (event) => {
-	const game: Game = JSON.parse(event.Records[0].body);
-	console.log(game);
-});
-
 module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async (event) => {
 	console.log('consume');
 	const program = JSON.parse(event.Records[0].body);
@@ -721,6 +717,18 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
 	return respond(200);
 });
 
+module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async (event) => {
+	const game: Game = getBody(event);
+	const programs = await dbProgram.query('gameId').eq(game.id).exec();
+	const promises = [];
+	for (const program of programs) {
+		program.game = game;
+		promises.push(program.save());
+	}
+	await Promise.all(promises);
+	return respond(200);
+});
+
 async function updateProgram(id, region, description, type) {
 	console.log({ id, region, description, type });
 	const docClient = new AWS.DynamoDB.DocumentClient();
@@ -743,6 +751,24 @@ async function updateProgram(id, region, description, type) {
 		return err;
 	}
 }
+
+// async function updateGame(programId, region, game) {
+// 	const docClient = new AWS.DynamoDB.DocumentClient();
+// 	var params = {
+// 		TableName: process.env.tableProgram,
+// 		Key: { id: programId, region },
+// 		UpdateExpression: 'set game = :game',
+// 		ExpressionAttributeValues: {
+// 			':game': game
+// 		}
+// 	};
+// 	try {
+// 		const x = await docClient.update(params).promise();
+// 	} catch (err) {
+// 		console.log({ err });
+// 		return err;
+// 	}
+// }
 
 function buildProgramObjects(programs) {
 	const transformedPrograms = [];
