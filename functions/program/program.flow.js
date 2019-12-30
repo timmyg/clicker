@@ -402,7 +402,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async (event) =>
 			allPrograms = allPrograms.filter((e) => !allExistingProgrammingIds.includes(e.programmingId));
 			let allAirtablePrograms = buildAirtablePrograms(allPrograms);
 			console.time('create');
-			while (allAirtablePrograms.length >= 0) {
+			while (!!allAirtablePrograms.length) {
 				try {
 					const promises = [];
 					const programsSlice = allAirtablePrograms.splice(0, 10);
