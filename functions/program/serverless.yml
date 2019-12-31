@@ -242,14 +242,7 @@ resources:
               - AttributeName: channel
                 KeyType: HASH
             Projection:
-              NonKeyAttributes:
-                - start
-                - end
-                - region
-                - gameId
-                - game
-                # - programmingId
-              ProjectionType: INCLUDE
+              ProjectionType: ALL
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
             KeySchema:

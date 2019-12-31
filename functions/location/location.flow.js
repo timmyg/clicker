@@ -736,7 +736,17 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   for (const location of locations) {
     const { boxes } = location;
     const currentProgramming = boxes.map(b => b.program && b.program.programmingId);
-    // console.log({ currentProgramming });
+    // remove programs that are currently on
+    // If there is a 9 or 10 starting in the next 10 minutes, turn it on (E, force)*
+    // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
+    // If there is a 5 - 7 starting in the next 5 minutes, turn on if A, B, C*
+    // If there is a 1-4 starting in the next 5 minutes, if A*
+
+    // A. game over (any game)
+    // B. major blowout (any game)
+    // C. blowout (any game)
+    // D. meh game (1-6 rating)
+    // E. force (pick least-relevant box)
   }
 
   return respond(200);
