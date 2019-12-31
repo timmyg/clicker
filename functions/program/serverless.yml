@@ -248,7 +248,7 @@ resources:
                 - region
                 - gameId
                 - game
-                - programmingId
+                # - programmingId
               ProjectionType: INCLUDE
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
