@@ -16,6 +16,7 @@ class Box {
   channelChangeAt: Date;
   updatedAt: Date;
   channelSource: string;
+  program: Program;
   // clear() {
   //   delete this.end;
   //   // delete this.reserved;

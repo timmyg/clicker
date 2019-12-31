@@ -3,7 +3,7 @@
 #   name: aws
 memorySize: 128
 #   runtime: nodejs10.x
-  tracing: true
+  # tracing: true
   logRetentionInDays: 14
 #   deploymentBucket:
 #     name: serverless-deploys-clicker
