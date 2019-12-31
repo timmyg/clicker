@@ -5,7 +5,7 @@ provider:
   # runtime: nodejs12.x
   memorySize: 128
   versionFunctions: false
-  tracing: true
+  # tracing: true
   logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker
@@ -217,8 +217,8 @@ resources:
             AttributeType: S
           - AttributeName: channel
             AttributeType: N
-          # - AttributeName: gameId
-          #   AttributeType: N
+          - AttributeName: gameId
+            AttributeType: N
         KeySchema:
           - AttributeName: region
             KeyType: HASH
@@ -231,18 +231,18 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
+          - IndexName: gameIdGlobalIndex
+            KeySchema:
+              - AttributeName: gameId
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
           - IndexName: channelGlobalIndex
             KeySchema:
               - AttributeName: channel
                 KeyType: HASH
             Projection:
-              NonKeyAttributes:
-                - start
-                - end
-                - region
-                - gameId
-              ProjectionType: INCLUDE
-            # ProvisionedThroughput:
+              ProjectionType: ALL
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
             KeySchema:
@@ -406,3 +406,10 @@ functions:
       - http:
           path: ''
           method: get
+  updateGame:
+    handler: program.updateGame
+    runtime: nodejs12.x
+    events:
+      - http:
+          path: '/game'
+          method: post

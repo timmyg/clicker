@@ -5,7 +5,7 @@ provider:
   memorySize: 128
   versionFunctions: false
   runtime: nodejs10.x
-  tracing: true
+  # tracing: true
   logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker
