@@ -724,9 +724,12 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     .all();
 
   const controlCenter = {
-    get: function(rating: number) {
+    get: (rating: number) => {
       return ccPrograms.filter(p => p.get('rating') === rating).map(r => r.get('programmingId'));
     },
+    // getAll: () => {
+    //   return ccPrograms.map(r => r.get('programmingId'));
+    // },
   };
 
   //   console.log(controlCenter.get(9));
@@ -737,6 +740,14 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     const { boxes } = location;
     const currentProgramming = boxes.map(b => b.program && b.program.programmingId);
     // remove programs that are currently on
+    const newProgramming = ccPrograms
+      .map(r => r.get('programmingId'))
+      .filter(el => {
+        return !currentProgramming.includes(el);
+      });
+
+    console.log({ newProgramming });
+
     // If there is a 9 or 10 starting in the next 10 minutes, turn it on (E, force)*
     // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
     // If there is a 5 - 7 starting in the next 5 minutes, turn on if A, B, C*
