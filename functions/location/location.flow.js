@@ -691,12 +691,14 @@ module.exports.updateBoxesProgram = RavenLambdaWrapper.handler(Raven, async even
     const { boxes } = location;
     for (const box of boxes) {
       const { channel, id: boxId } = box;
-      const boxIndex: number = location.boxes.findIndex(b => b.id === boxId);
+      // const boxIndex: number = location.boxes.findIndex(b => b.id === boxId);
+      console.log('get program', { channel, region });
       const { data: program } = await new Invoke()
         .service('program')
         .name('get')
         .queryParams({ channel, region })
         .go();
+      console.log({ program });
 
       await new Invoke()
         .service('location')
