@@ -207,12 +207,14 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 // });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log(event.queryStringParameters);
   const { channel, time, region } = event.queryStringParameters;
   // clg
   const timeToSearch = time || moment().unix() * 1000;
   console.log(typeof timeToSearch);
   console.log(typeof channel);
   console.log(typeof region);
+  console.log(object);
   const programs: Program[] = await dbProgram
     .query('channel')
     // .using('channelGlobalIndex')
