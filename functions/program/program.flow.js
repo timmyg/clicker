@@ -214,7 +214,6 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(typeof timeToSearch);
   console.log(typeof channel);
   console.log(typeof region);
-  console.log(object);
   const programs: Program[] = await dbProgram
     .query('channel')
     // .using('channelGlobalIndex')
