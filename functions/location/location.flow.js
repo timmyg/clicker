@@ -693,23 +693,25 @@ module.exports.updateBoxesProgram = RavenLambdaWrapper.handler(Raven, async even
       const { channel, id: boxId } = box;
       // const boxIndex: number = location.boxes.findIndex(b => b.id === boxId);
       console.log('get program', { channel, region });
-      const result = await new Invoke()
-        .service('program')
-        .name('get')
-        .queryParams({ channel, region })
-        .go();
-      if (result.data) {
-        await new Invoke()
-          .service('location')
-          .name('updateBoxInfo')
-          .body({ program: result.data })
-          .pathParams({ id: locationId, boxId })
-          .async()
+      if (channel) {
+        const result = await new Invoke()
+          .service('program')
+          .name('get')
+          .queryParams({ channel, region })
           .go();
-      } else {
-        console.log('no program found:', { channel, region });
+        if (result.data) {
+          await new Invoke()
+            .service('location')
+            .name('updateBoxInfo')
+            .body({ program: result.data })
+            .pathParams({ id: locationId, boxId })
+            .async()
+            .go();
+        } else {
+          console.log('no program found:', { channel, region });
+        }
+        i++;
       }
-      i++;
     }
   }
   return respond(200, { updated: i });
