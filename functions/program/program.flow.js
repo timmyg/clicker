@@ -720,17 +720,21 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
   console.log('consume');
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
+  console.time('programDetails');
   const programDetails = await getProgramDetails(program);
+  console.timeEnd('programDetails');
   if (!!programDetails) {
     const { description, progType: programType } = programDetails;
     // update in airtable
     const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
     const airtablePrograms = 'Programs';
+    console.time('airtable');
     const airtableGames = await airtableBase(airtablePrograms)
       .select({
         filterByFormula: `{programmingId} = '${programmingId}'`,
       })
       .all();
+    console.timeEnd('airtable');
     console.log({ airtableGames });
     const airtablePromises = [];
     airtableGames.forEach(g => {
