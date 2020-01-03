@@ -774,7 +774,8 @@ module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async event => {
   for (const program of programs) {
     promises.push(updateProgramGame(program.id, program.region, game));
   }
-  Promise.all(promises);
+  console.log('promises:', promises.length);
+  await Promise.all(promises);
   return respond(200);
 });
 
