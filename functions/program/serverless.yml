@@ -373,6 +373,8 @@ functions:
             - Arn
           batchSize: 1
   consumeNewProgramAirtableUpdateDetails:
+    memorySize: 256
+    timeout: 15
     handler: program.consumeNewProgramAirtableUpdateDetails
     runtime: nodejs12.x
     description: Consume new airtable program update description

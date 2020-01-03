@@ -731,6 +731,7 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
         filterByFormula: `{programmingId} = '${programmingId}'`,
       })
       .all();
+    console.log({ airtableGames });
     const airtablePromises = [];
     airtableGames.forEach(g => {
       airtablePromises.push(
@@ -740,7 +741,10 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
         }),
       );
     });
+    console.log('airtablePromises:', airtablePromises.length);
+    console.time('airtablePromises');
     await Promise.all(airtablePromises);
+    console.timeEnd('airtablePromises');
   }
   return respond(200);
 });
