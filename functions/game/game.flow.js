@@ -438,12 +438,6 @@ async function pullFromActionNetwork(dates: Date[]) {
 	for (const actionSport: actionNetworkRequest of actionSports) {
 		const url = `${actionBaseUrl}/${actionSport.sport}`;
 		for (const date of dates) {
-			// const queryDate = dateFns.format(date, 'yyyyMMdd');
-			// const params = actionSport.params || {};
-			// const queryDate = moment(date).format('YYYYMMDD');
-			// const queryDate = Math.random();
-			// params.date = queryDate;
-			// console.log({ params });
 			const params = { ...actionSport.params, date: moment(date).format('YYYYMMDD') };
 			const request = axios.get(url, { params });
 			requests.push(request);
@@ -452,26 +446,16 @@ async function pullFromActionNetwork(dates: Date[]) {
 	console.log('requests:');
 	console.log(require('util').inspect(requests));
 	const responses = await Promise.all(requests);
-	// console.log('responses.length', responses.length);
 	console.log('responses[0]', responses[0].config.params);
 	console.log('responses[1]', responses[1].config.params);
-	// console.log('responses[0]', responses[0].data.games[0].id);
-	// console.log('responses[1]', responses[1].data.games[0].id);
 	console.log('responses[2]', responses[2].config.params);
 	console.log('responses[3]', responses[3].config.params);
-	// console.log('responses[0]', responses[0].data.games[9].id);
-	// console.log('responses[1]', responses[1].data.games[9].id);
-	// console.log('responses', responses);
 	const all = [];
 	responses.forEach((response) => {
 		const responseEvents = response.data.games ? response.data.games : response.data.competitions;
 		all.push(...responseEvents);
 		console.log('all.length', all.length);
 	});
-	// console.log('all.length', all.length);
-	// console.log('all', all);
-	console.log('muskies', all.find((a) => a.id === 76487));
-	// console.log('muskies', all.find(a => a.id === 76782));
 	return all;
 }
 

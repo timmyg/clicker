@@ -314,7 +314,7 @@ functions:
     handler: program.syncAirtable
     runtime: nodejs12.x
     memorySize: 1024
-    timeout: 60
+    timeout: 120
     environment:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
     events:
