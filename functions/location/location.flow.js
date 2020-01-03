@@ -685,6 +685,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
 module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
+  console.log({ locationId, boxId });
   const location = await dbLocation
     .queryOne('id')
     .eq(locationId)
@@ -695,6 +696,7 @@ module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event 
     .name('get')
     .queryParams({ channel: box.channel, region: location.region })
     .go();
+  console.log({ result });
   if (result.data) {
     await new Invoke()
       .service('location')
@@ -706,6 +708,7 @@ module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event 
   } else {
     console.log('no program found:', { channel: box.channel, region: location.region });
   }
+  return respond(200);
 });
 
 module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
