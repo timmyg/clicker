@@ -720,7 +720,7 @@ module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven
     for (const box of boxes) {
       if (box.channel) {
         await new Invoke()
-          .service('program')
+          .service('location')
           .name('updateBoxProgram')
           .pathParams({ id: locationId, boxId: box.id })
           .async()
