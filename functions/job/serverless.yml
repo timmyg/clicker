@@ -6,7 +6,7 @@ provider:
   region: eu-central-1 # Germany
   versionFunctions: false
   runtime: nodejs12.x
-  tracing: true
+  # tracing: true
   logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker-eu-central-1
