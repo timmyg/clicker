@@ -38,7 +38,10 @@ provider:
       Resource:
         {
           'Fn::Join':
-            ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}']],
+            [
+              '',
+              ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
+            ],
         }
 plugins:
   - serverless-domain-manager
@@ -77,7 +80,10 @@ custom:
     deployed:
       {
         'Fn::Join':
-          ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}']],
+          [
+            '',
+            ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
+          ],
       }
 resources:
   Resources:
@@ -269,6 +275,7 @@ functions:
   consumeUpdatedGameUpdateProgram:
     handler: game.consumeUpdatedGameUpdateProgram
     description: Consume updated game update program
+    memorySize: 256
     reservedConcurrency: 1
     events:
       - sqs:

@@ -706,6 +706,7 @@ async function pullFromDirecTV(
 }
 
 async function getProgramDetails(program: Program): Promise<any> {
+  console.log({ program });
   const { programmingId } = program;
   const result = await new Invoke()
     .service('program')
