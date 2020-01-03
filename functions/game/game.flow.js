@@ -357,6 +357,7 @@ function buildAirtableGames(games: Game[]) {
 		const { id, leagueName, start } = game;
 		const { full: homeTeam } = game.home.name;
 		const { full: awayTeam } = game.away.name;
+		console.log({ id });
 		transformed.push({
 			fields: {
 				id,
