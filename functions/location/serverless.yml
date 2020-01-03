@@ -218,7 +218,7 @@ functions:
               - authorization
               - content-type
   saveBoxesInfo:
-    description: called from antenna every 5 minutes to update whats on each box
+    description: called from antenna to update whats on each box
     handler: location.saveBoxesInfo
     timeout: 12
     events:
@@ -286,6 +286,7 @@ functions:
               - content-type
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
+    description: check what is on each location boxes
     timeout: 30
     events:
       - schedule: rate(5 minutes)
@@ -298,13 +299,21 @@ functions:
               - partner
               - authorization
               - content-type
-  updateBoxesProgram:
-    handler: location.updateBoxesProgram
+  updateAllLocationsBoxesProgram:
+    handler: location.updateAllLocationsBoxesProgram
+    description: called from antenna to update whats on each box
     timeout: 30
     events:
       - schedule: rate(5 minutes)
       - http:
           path: boxes/programs
+          method: post
+  updateBoxProgram:
+    handler: location.updateBoxProgram
+    description: update box program
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}/program'
           method: post
   controlCenterLocationsByRegion:
     handler: location.controlCenterLocationsByRegion

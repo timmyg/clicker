@@ -683,33 +683,45 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200);
 });
 
-module.exports.updateBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id: locationId, boxId } = getPathParameters(event);
+  const location = await dbLocation
+    .queryOne('id')
+    .eq(locationId)
+    .exec();
+  const box: Box = location.boxes && location.boxes.find(box => box.id === boxId);
+  const result = await new Invoke()
+    .service('program')
+    .name('get')
+    .queryParams({ channel: box.channel, region: location.region })
+    .go();
+  if (result.data) {
+    await new Invoke()
+      .service('location')
+      .name('updateBoxInfo')
+      .body({ program: result.data })
+      .pathParams({ id: locationId, boxId })
+      .async()
+      .go();
+  } else {
+    console.log('no program found:', { channel: box.channel, region: location.region });
+  }
+});
+
+module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
   let allLocations: Venue[] = await dbLocation.scan().exec();
   let i = 0;
   for (const location of allLocations) {
     const { region, id: locationId } = location;
     const { boxes } = location;
     for (const box of boxes) {
-      const { channel, id: boxId } = box;
-      // const boxIndex: number = location.boxes.findIndex(b => b.id === boxId);
-      console.log('get program', { channel, region });
-      if (channel) {
-        const result = await new Invoke()
+      if (box.channel) {
+        await new Invoke()
           .service('program')
-          .name('get')
-          .queryParams({ channel, region })
+          .name('updateBoxProgram')
+          .pathParams({ id: locationId, boxId: box.id })
+          .async()
           .go();
-        if (result.data) {
-          await new Invoke()
-            .service('location')
-            .name('updateBoxInfo')
-            .body({ program: result.data })
-            .pathParams({ id: locationId, boxId })
-            .async()
-            .go();
-        } else {
-          console.log('no program found:', { channel, region });
-        }
         i++;
       }
     }
