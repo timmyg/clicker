@@ -715,12 +715,16 @@ module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven
   let allLocations: Venue[] = await dbLocation.scan().exec();
   let i = 0;
   for (const location of allLocations) {
+    console.log(location.name);
     const { region, id: locationId } = location;
     const { boxes } = location;
     for (const box of boxes) {
       // update if box has a channel
       //  and there isnt a program or the program has ended
-      if (box.channel &&  moment(box.program.end).diff(moment().toDate()) < 0) {
+      console.log(box.channel, box.program.end);
+      // if (box.channel && moment(box.program.end).diff(moment().toDate()) < 0) {
+      if (box.channel) {
+        console.log('update box program', locationId, box.id);
         await new Invoke()
           .service('location')
           .name('updateBoxProgram')
