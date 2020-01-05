@@ -25,4 +25,6 @@ export class Program {
 	synced: boolean;
 	gameId: number;
 	game: Game;
+	createdAt: number;
+	updatedAt: number;
 }
