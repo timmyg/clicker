@@ -314,7 +314,7 @@ functions:
     handler: program.syncAirtable
     runtime: nodejs12.x
     memorySize: 1024
-    timeout: 60
+    timeout: 120
     environment:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
     events:
@@ -337,21 +337,6 @@ functions:
       - schedule: rate(1 hour)
       - http:
           path: sync/airtable/updates
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  syncRatings:
-    handler: program.syncRatings
-    runtime: nodejs12.x
-    description: rate programs by keywords that haven't been rated yet
-    events:
-      # - schedule: rate(1 hour)
-      - http:
-          path: sync/airtable/ratings
           method: post
           cors:
             origin: '*'

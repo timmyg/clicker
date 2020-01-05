@@ -170,9 +170,9 @@ const dbProgram = dynamoose.model(
       attribute: 'expires',
       returnExpiredItems: false,
       defaultExpires: x => {
-        // expire 30 minutes after end
+        // expire 2 hours after end
         return moment(x.end)
-          .add(30, 'minutes')
+          .add(2, 'hours')
           .toDate();
       },
     },
@@ -208,16 +208,17 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters);
+  const previousProgramMinutesAgo = 30;
   const { channel, time, region } = event.queryStringParameters;
-  // clg
   const timeToSearch = time || moment().unix() * 1000;
-  console.log(typeof timeToSearch);
-  console.log(typeof channel);
-  console.log(typeof region);
+  const timeToSearchPreviousProgram =
+    moment(timeToSearch)
+      .subtract(previousProgramMinutesAgo, 'm')
+      .unix() * 1000;
+  // get programs that are on now or ended within last 30 mins
   const programs: Program[] = await dbProgram
     .query('channel')
-    // .using('channelGlobalIndex')
-    .eq(parseInt(channel))
+    .eq(channel)
     .and()
     .filter('region')
     .eq(region)
@@ -226,9 +227,19 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .lt(timeToSearch)
     .and()
     .filter('end')
-    .gt(timeToSearch)
+    .gt(timeToSearchPreviousProgram)
+    .where('createdAt')
+    .ascending()
     .exec();
-  return respond(200, programs[0]);
+  const existingProgram = programs[programs.length - 1];
+  if (programs.length > 1) {
+    // check if first program is game, and if it is over
+    const previousProgram = programs[0];
+    if (previousProgram.game && previousProgram.game.status === 'inprogress') {
+      return respond(200, previousProgram);
+    }
+  }
+  return respond(200, existingProgram);
 });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
@@ -492,26 +503,6 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
   await Promise.all(promises);
 
   return respond(200, { updates: promises.length });
-});
-
-module.exports.syncRatings = RavenLambdaWrapper.handler(Raven, async event => {
-  console.time('ratings');
-  const airtablePrograms = await getAirtableProgramsInWindow(false, 4, 24);
-  const updatedPrograms = await ratePrograms(airtablePrograms);
-  console.timeEnd('ratings');
-
-  const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableProgramsName = 'Programs';
-  const airtablePromises = [];
-  updatedPrograms.forEach(p => {
-    airtablePromises.push(
-      airtableBase(airtableProgramsName).update(p.id, {
-        rating: p.get('rating'),
-      }),
-    );
-  });
-  await Promise.all(airtablePromises);
-  return respond(200, { updatedPrograms: updatedPrograms.length });
 });
 
 class RatingKeywordsAirtable {
@@ -783,7 +774,8 @@ module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async event => {
   for (const program of programs) {
     promises.push(updateProgramGame(program.id, program.region, game));
   }
-  Promise.all(promises);
+  console.log('promises:', promises.length);
+  await Promise.all(promises);
   return respond(200);
 });
 
