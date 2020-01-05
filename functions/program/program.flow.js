@@ -140,7 +140,9 @@ const dbProgram = dynamoose.model(
 				project: false
 			}
 		},
-		game: Map,
+		// game: {
+		// 	save unknown
+		// },
 		clickerRating: Number,
 		live: Boolean,
 		repeat: Boolean,
@@ -164,6 +166,7 @@ const dbProgram = dynamoose.model(
 		synced: Boolean // synced with description from separate endpoint
 	},
 	{
+		saveUnknown: [ 'game' ],
 		timestamps: true,
 		expires: {
 			ttl: 86400,
