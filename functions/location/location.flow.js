@@ -738,57 +738,207 @@ module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven
   return respond(200, { updated: i });
 });
 
+class ControlCenterProgram {
+  fields: {
+    start: Date,
+    rating: number,
+    programmingId: string,
+    channel: number,
+  };
+  constructor(obj: any) {
+    Object.assign(this, obj);
+  }
+  isMinutesFromNow(minutes: number) {
+    return moment.duration(moment(this.fields.start).diff(moment(), 'minutes')) <= minutes;
+  }
+}
+
+module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event => {
+  const locations: Venue[] = await dbLocation.scan().exec();
+  for (const location of locations) {
+    await new Invoke()
+      .service('location')
+      .name('controlCenterV2byLocation')
+      .pathParams({ id: location.id })
+      .async()
+      .go();
+  }
+  return respond(200, { locations: locations.length });
+});
+
 module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('controlCenterV2byLocation');
   const { id: locationId } = getPathParameters(event);
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(locationId)
+    .exec();
 
   // get control center programs
-  const airtableProgramsName = 'Programs';
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const ccPrograms = await base(airtableProgramsName)
-    .select({
-      view: 'Control Center', // start time -3 to 1 hours from now
-    })
-    .all();
+  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
+  // console.info({ ccPrograms });
 
-  const controlCenter = {
-    get: (rating: number) => {
-      return ccPrograms.filter(p => p.get('rating') === rating).map(r => r.get('programmingId'));
+  // filter out currently showing programs
+  const liveProgrammingIds = location.boxes.map(b => b.program && b.program.programmingId);
+  ccPrograms = ccPrograms.filter(ccp => !liveProgrammingIds.includes(ccp.fields.programmingId));
+  // sort by rating descending
+  ccPrograms = ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
+
+  const boxes = evaluateBoxes(location.boxes);
+  for (const program of ccPrograms) {
+    // await evaluateProgram(program, location.boxes);
+    switch (program.fields.rating) {
+      // If there is a 9 or 10 starting in the next 10 minutes, turn it on (E)*
+      case 10:
+      case 9:
+        if (program.isMinutesFromNow(10)) {
+          const boxStatus = selectBox('E', boxes);
+          await tune(location, boxStatus.box, program.fields.channel);
+        }
+      // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
+      case 8:
+      case 7:
+      case 6:
+      // If there is a 5-7 starting in the next 5 minutes, turn on if A, B, C*
+      case 5:
+      // If there is a 1-4 starting in the next 5 minutes, if A*
+      case 4:
+      case 3:
+      case 2:
+      case 1:
+      default:
+        break;
+    }
+  }
+
+  // *
+
+  // }
+
+  return respond(200);
+});
+
+class BoxStatus {
+  boxId: string;
+  hasProgram: boolean;
+  ended: boolean;
+  gameOver: boolean;
+  blowout: boolean;
+  rating: number;
+  box: Box;
+  constructor(props) {
+    Object.assign(this, props);
+  }
+}
+
+async function tune(location: Venue, box: Box, channel: number) {
+  const command = 'tune';
+  const reservation = {
+    location,
+    box,
+    program: {
+      channel,
     },
-    // getAll: () => {
-    //   return ccPrograms.map(r => r.get('programmingId'));
-    // },
   };
+  const source = 'control center';
+  await new Invoke()
+    .service('remote')
+    .name('command')
+    .body({ reservation, command, source })
+    .async()
+    .go();
+}
 
-  //   console.log(controlCenter.get(9));
-  //   console.log(controlCenter.get(2));
-  const locations: Venue[] = await dbLocation.scan().exec();
+function evaluateBoxes(boxes: Box[]): BoxStatus[] {
+  return boxes.map(b => {
+    return new BoxStatus({
+      boxId: b.id,
+      hasProgram: b.program && Object.keys(b.program).length > 0,
+      ended: b.program && b.program.game && b.program.game.liveStatus.ended,
+      blowout: b.program && b.program.game && b.program.game.liveStatus.blowout,
+      rating: b.program && b.program.clickerRating,
+      box: b,
+    });
+  });
+}
 
-  for (const location of locations) {
-    const { boxes } = location;
-    const currentProgramming = boxes.map(b => b.program && b.program.programmingId);
-    // remove programs that are currently on
-    const newProgramming = ccPrograms
-      .map(r => r.get('programmingId'))
-      .filter(el => {
-        return !currentProgramming.includes(el);
-      });
-
-    console.log({ newProgramming });
-
-    // If there is a 9 or 10 starting in the next 10 minutes, turn it on (E, force)*
-    // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
-    // If there is a 5 - 7 starting in the next 5 minutes, turn on if A, B, C*
-    // If there is a 1-4 starting in the next 5 minutes, if A*
-
+function selectBox(type: string, boxes: BoxStatus[]): BoxStatus {
+  // sort by zone ascending
+  // boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
+  switch (type) {
     // A. game over (any game)
     // B. major blowout (any game)
     // C. blowout (any game)
     // D. meh game (1-6 rating)
-    // E. force (pick least-relevant box)
-  }
+    // E. force (pick box with lowest rated game)
+    case 'E':
+      // boxes without programs (shouldn't happen)
+      const programlessBox = boxes.find(b => !b.hasProgram);
+      if (programlessBox) return programlessBox;
 
-  return respond(200);
-});
+      // boxes without rating
+      const ratinglessBox = boxes.find(b => !b.rating);
+      if (ratinglessBox) return ratinglessBox;
+
+      // boxes that program is over
+      const endedBox = boxes.find(b => b.ended);
+      if (endedBox) return endedBox;
+
+      // boxes with blowout
+      const blowoutBox = boxes.find(b => b.blowout);
+      if (blowoutBox) return blowoutBox;
+
+      // boxes with poor rating
+      const badGameBox = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.rating));
+      if (badGameBox) return badGameBox;
+
+      // pick the worst box (don't think this should happen)
+      const seven = boxes.find(b => b.rating === 7);
+      if (seven) return seven;
+      const eight = boxes.find(b => b.rating === 8);
+      if (eight) return eight;
+      const nine = boxes.find(b => b.rating === 9);
+      if (nine) return nine;
+      const ten = boxes.find(b => b.rating === 10);
+      if (ten) return ten;
+    default:
+      return new BoxStatus();
+  }
+}
+
+// async function evaluateProgram(program: ControlCenterProgram, boxes: Box[]) {
+//   switch (program.fields.rating) {
+//     case 10:
+//       if (program.isMinutesFromNow(10)) {
+//         await changeChannel(program, 'E');
+//       }
+//     case 9:
+//     case 8:
+//     case 7:
+//     case 6:
+//     case 5:
+//     case 4:
+//     case 3:
+//     case 2:
+//     case 1:
+//     default:
+//       break;
+//   }
+// }
+
+// async function changeChannel(program: ControlCenterProgram, boxes: Box[], changeType: string) {}
+
+async function getAirtablePrograms() {
+  const airtableProgramsName = 'Programs';
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
+    .select({
+      view: 'All',
+      filterByFormula: `AND( {gameId} != BLANK(), {rating} != BLANK(), {startedHoursAgo} >= -4, {startedHoursAgo} <= 4 )`,
+    })
+    .all();
+  return ccPrograms.map(p => new ControlCenterProgram(p));
+}
 
 async function updateLocationBox(locationId, boxIndex, channel: number, channelMinor: number, source, program) {
   const AWS = require('aws-sdk');
@@ -828,3 +978,5 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
     return err;
   }
 }
+
+module.exports.ControlCenterProgram = ControlCenterProgram;

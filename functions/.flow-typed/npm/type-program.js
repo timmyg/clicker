@@ -23,6 +23,7 @@ export class Program {
 	nextProgramStart: number;
 	points: number;
 	synced: boolean;
+	clickerRating: number;
 	gameId: number;
 	game: Game;
 	createdAt: number;
