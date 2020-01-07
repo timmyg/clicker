@@ -724,31 +724,31 @@ module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event 
   return respond(200);
 });
 
-module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
-  let allLocations: Venue[] = await dbLocation.scan().exec();
-  let i = 0;
-  for (const location of allLocations) {
-    console.log(location.name);
-    const { region, id: locationId } = location;
-    const { boxes } = location;
-    for (const box of boxes) {
-      // update if box has a channel
-      //  and there isnt a program or the program has ended
-      // if (box.channel && moment(box.program.end).diff(moment().toDate()) < 0) {
-      if (box.channel) {
-        console.log('update box program', locationId, box.id);
-        await new Invoke()
-          .service('location')
-          .name('updateBoxProgram')
-          .pathParams({ id: locationId, boxId: box.id })
-          .async()
-          .go();
-        i++;
-      }
-    }
-  }
-  return respond(200, { updated: i });
-});
+// module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
+//   let allLocations: Venue[] = await dbLocation.scan().exec();
+//   let i = 0;
+//   for (const location of allLocations) {
+//     console.log(location.name);
+//     const { region, id: locationId } = location;
+//     const { boxes } = location;
+//     for (const box of boxes) {
+//       // update if box has a channel
+//       //  and there isnt a program or the program has ended
+//       // if (box.channel && moment(box.program.end).diff(moment().toDate()) < 0) {
+//       if (box.channel) {
+//         console.log('update box program', locationId, box.id);
+//         await new Invoke()
+//           .service('location')
+//           .name('updateBoxProgram')
+//           .pathParams({ id: locationId, boxId: box.id })
+//           .async()
+//           .go();
+//         i++;
+//       }
+//     }
+//   }
+//   return respond(200, { updated: i });
+// });
 
 class ControlCenterProgram {
   fields: {
