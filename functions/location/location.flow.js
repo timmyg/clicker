@@ -847,11 +847,14 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
         break;
     }
     if (boxStatus) {
-      // remove box so it doesnt get reassigned
-      boxes = boxes.filter(b => b.box.id !== boxStatus.box.id);
       await tune(location, boxStatus.box, program.fields.channel);
+      // remove box so it doesnt get reassigned
+      console.log(`boxes: ${boxes.length}`);
+      boxes = boxes.filter(b => b.box.id !== boxStatus.box.id);
+      console.log(`boxes remaining: ${boxes.length}`);
     }
     if (!boxes.length) {
+      console.info('no more boxes');
       break;
     }
   }
