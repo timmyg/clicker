@@ -304,7 +304,7 @@ functions:
     description: called from antenna to update whats on each box
     timeout: 30
     events:
-      - schedule: rate(5 minutes)
+      - schedule: rate(15 minutes)
       - http:
           path: boxes/programs
           method: post

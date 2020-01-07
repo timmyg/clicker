@@ -675,11 +675,23 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .eq(locationId)
     .exec();
   console.timeEnd('get location');
+
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   console.log({ boxId, boxIndex });
+
   console.time('update location box');
   await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program);
   console.timeEnd('update location box');
+
+  console.time('update box program');
+  await new Invoke()
+    .service('location')
+    .name('updateBoxProgram')
+    .pathParams({ id: locationId, boxId })
+    .async()
+    .go();
+  console.timeEnd('update box program');
+
   return respond(200);
 });
 
