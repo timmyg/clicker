@@ -789,7 +789,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
 
   // remove channels that location doesnt have
-  const excludedChannels = location.channels && location.channels.exclude.map(channel => parseInt(channel, 10));
+  const excludedChannels =
+    location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
 
   if (excludedChannels && excludedChannels.length) {
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.fields.channel));
