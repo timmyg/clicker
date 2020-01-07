@@ -137,6 +137,7 @@ const dbLocation = dynamoose.model(
     connected: Boolean,
     setup: Boolean,
     controlCenter: Boolean,
+    controlCenterV2: Boolean,
     announcement: String,
     notes: String,
     // calculated fields
@@ -733,7 +734,6 @@ module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven
     for (const box of boxes) {
       // update if box has a channel
       //  and there isnt a program or the program has ended
-      console.log(box.channel, box.program.end);
       // if (box.channel && moment(box.program.end).diff(moment().toDate()) < 0) {
       if (box.channel) {
         console.log('update box program', locationId, box.id);
@@ -756,6 +756,7 @@ class ControlCenterProgram {
     rating: number,
     programmingId: string,
     channel: number,
+    title: string,
   };
   constructor(obj: any) {
     Object.assign(this, obj);
@@ -766,7 +767,9 @@ class ControlCenterProgram {
 }
 
 module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event => {
-  const locations: Venue[] = await dbLocation.scan().exec();
+  let locations: Venue[] = await dbLocation.scan().exec();
+  locations = locations.filter(l => l.controlCenterV2 === true);
+  console.log(locations.map(l => l.name));
   for (const location of locations) {
     await new Invoke()
       .service('location')
@@ -778,6 +781,7 @@ module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event =
   return respond(200, { locations: locations.length });
 });
 
+// npm run invoke:controlCenterV2byLocation
 module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('controlCenterV2byLocation');
   const { id: locationId } = getPathParameters(event);
@@ -791,42 +795,81 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // console.info({ ccPrograms });
 
   // filter out currently showing programs
-  const liveProgrammingIds = location.boxes.map(b => b.program && b.program.programmingId);
-  ccPrograms = ccPrograms.filter(ccp => !liveProgrammingIds.includes(ccp.fields.programmingId));
+  // const liveProgrammingIds = location.boxes.map(b => b.program && b.program.programmingId);
+  // ccPrograms = ccPrograms.filter(ccp => !liveProgrammingIds.includes(ccp.fields.programmingId));
+  const liveChannelIds = location.boxes.map(b => b.channel);
+  ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
+
+  // remove channels that location doesnt have
+  const excludedChannels =
+    location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
+
+  if (excludedChannels && excludedChannels.length) {
+    ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.fields.channel));
+  }
+
   // sort by rating descending
   ccPrograms = ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
 
-  const boxes = evaluateBoxes(location.boxes);
+  // only boxes with zones
+  let boxes = location.boxes.filter(b => b.zone && b.zone.length);
+  boxes = createBoxes(boxes);
+
+  let boxStatus;
   for (const program of ccPrograms) {
+    console.info(`trying to turn on: ${program.fields.title} (${program.fields.channel})`);
     // await evaluateProgram(program, location.boxes);
     switch (program.fields.rating) {
       // If there is a 9 or 10 starting in the next 10 minutes, turn it on (E)*
       case 10:
       case 9:
         if (program.isMinutesFromNow(10)) {
-          const boxStatus = selectBox('E', boxes);
-          await tune(location, boxStatus.box, program.fields.channel);
+          boxStatus = selectBox('E', boxes);
         }
+        break;
       // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
       case 8:
       case 7:
+        if (program.isMinutesFromNow(5)) {
+          boxStatus = selectBox('A', boxes);
+          if (!boxStatus) boxStatus = selectBox('B', boxes);
+          if (!boxStatus) boxStatus = selectBox('C', boxes);
+          if (!boxStatus) boxStatus = selectBox('D', boxes);
+        }
+        break;
+      // If there is a 5-6 starting in the next 5 minutes, turn on if A, B, C*
       case 6:
-      // If there is a 5-7 starting in the next 5 minutes, turn on if A, B, C*
       case 5:
+        if (program.isMinutesFromNow(5)) {
+          boxStatus = selectBox('A', boxes);
+          if (!boxStatus) boxStatus = selectBox('B', boxes);
+          if (!boxStatus) boxStatus = selectBox('C', boxes);
+        }
+        break;
       // If there is a 1-4 starting in the next 5 minutes, if A*
       case 4:
       case 3:
       case 2:
       case 1:
+        if (program.isMinutesFromNow(5)) {
+          boxStatus = selectBox('A', boxes);
+        }
+        break;
       default:
         break;
     }
+    if (boxStatus) {
+      await tune(location, boxStatus.box, program.fields.channel);
+      // remove box so it doesnt get reassigned
+      console.log(`boxes: ${boxes.length}`);
+      boxes = boxes.filter(b => b.box.id !== boxStatus.box.id);
+      console.log(`boxes remaining: ${boxes.length}`);
+    }
+    if (!boxes.length) {
+      console.info('no more boxes');
+      break;
+    }
   }
-
-  // *
-
-  // }
-
   return respond(200);
 });
 
@@ -853,6 +896,7 @@ async function tune(location: Venue, box: Box, channel: number) {
     },
   };
   const source = 'control center';
+  // console.log(`tune to ${channel}`, box.label);
   await new Invoke()
     .service('remote')
     .name('command')
@@ -861,7 +905,7 @@ async function tune(location: Venue, box: Box, channel: number) {
     .go();
 }
 
-function evaluateBoxes(boxes: Box[]): BoxStatus[] {
+function createBoxes(boxes: Box[]): BoxStatus[] {
   return boxes.map(b => {
     return new BoxStatus({
       boxId: b.id,
@@ -879,32 +923,48 @@ function selectBox(type: string, boxes: BoxStatus[]): BoxStatus {
   // boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
   switch (type) {
     // A. game over (any game)
-    // B. major blowout (any game)
-    // C. blowout (any game)
-    // D. meh game (1-6 rating)
-    // E. force (pick box with lowest rated game)
-    case 'E':
-      // boxes without programs (shouldn't happen)
-      const programlessBox = boxes.find(b => !b.hasProgram);
-      if (programlessBox) return programlessBox;
-
-      // boxes without rating
-      const ratinglessBox = boxes.find(b => !b.rating);
-      if (ratinglessBox) return ratinglessBox;
-
-      // boxes that program is over
+    case 'A':
+      console.info('boxes that program is over');
       const endedBox = boxes.find(b => b.ended);
       if (endedBox) return endedBox;
 
-      // boxes with blowout
+    // B. major blowout (any game)
+    // C. blowout (any game)
+    case 'B':
+    case 'C':
+      console.info('boxes with blowout');
       const blowoutBox = boxes.find(b => b.blowout);
       if (blowoutBox) return blowoutBox;
 
-      // boxes with poor rating
+    // D. meh game (1-6 rating)
+    case 'D':
+      console.info('boxes with poor rating');
       const badGameBox = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.rating));
       if (badGameBox) return badGameBox;
 
-      // pick the worst box (don't think this should happen)
+    // E. force (pick box with lowest rated game)
+    case 'E':
+      console.info('boxes without programs');
+      const programlessBox = boxes.find(b => !b.hasProgram);
+      if (programlessBox) return programlessBox;
+
+      console.info('boxes without rating');
+      const ratinglessBox = boxes.find(b => !b.rating);
+      if (ratinglessBox) return ratinglessBox;
+
+      console.info('boxes that program is over');
+      const endedBox2 = boxes.find(b => b.ended);
+      if (endedBox2) return endedBox2;
+
+      console.info('boxes with blowout');
+      const blowoutBox2 = boxes.find(b => b.blowout);
+      if (blowoutBox2) return blowoutBox2;
+
+      console.info('boxes with poor rating');
+      const badGameBox2 = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.rating));
+      if (badGameBox2) return badGameBox2;
+
+      console.info('pick the worst box (shouldnt happen)');
       const seven = boxes.find(b => b.rating === 7);
       if (seven) return seven;
       const eight = boxes.find(b => b.rating === 8);
@@ -946,7 +1006,7 @@ async function getAirtablePrograms() {
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
       view: 'All',
-      filterByFormula: `AND( {gameId} != BLANK(), {rating} != BLANK(), {startedHoursAgo} >= -4, {startedHoursAgo} <= 4 )`,
+      filterByFormula: `AND( {gameId} != BLANK(), {rating} != BLANK(), {startHoursFromNow} >= -4, {startHoursFromNow} <= 4 )`,
     })
     .all();
   return ccPrograms.map(p => new ControlCenterProgram(p));

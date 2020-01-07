@@ -1,42 +1,42 @@
 {
-  "name": "locations",
-  "version": "1.0.0",
-  "description": "",
-  "main": "locations.js",
-  "scripts": {
-    "build": "npx flow-remove-types location.flow.js -o location.js",
-    "test": "npm run build && jest --coverage",
-    "invoke:health": "serverless invoke local --function health --stage develop",
-    "invoke:all": "serverless invoke local --function all --stage develop --path ../.resources/data/location-all.json",
-    "invoke:add": "serverless invoke local --function create --path ../.resources/data/location-all.json --stage develop",
-    "invoke:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",
-    "invoke:boxes:add": "serverless invoke local --function addBoxes --path ../.resources/data/boxes.json",
-    "invoke:boxes:all": "serverless invoke local --function getBoxes --path ../.resources/data/boxes.json",
-    "invoke:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
-    "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json",
-    "invoke:controlCenterV2byLocation": "serverless invoke local --function controlCenterV2byLocation --path ../.resources/data/location-update.json --stage develop"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "airtable": "^0.8.1",
-    "aws-sdk": "^2.580.0",
-    "aws-xray-sdk": "^2.5.0",
-    "dotenv": "^7.0.0",
-    "dynamoose": "^1.11.1",
-    "geolib": "^2.0.24",
-    "moment": "^2.24.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
-  },
-  "devDependencies": {
-    "flow-bin": "^0.107.0",
-    "flow-remove-types": "^2.107.0",
-    "jest": "^24.0.0",
-    "serverless": "^1.42.2",
-    "serverless-domain-manager": "^2.6.13",
-    "serverless-dotenv-plugin": "^2.1.1",
-    "serverless-plugin-tracing": "^2.0.0",
-    "serverless-prune-plugin": "^1.4.0",
-    "serverless-sentry": "^1.2.0"
-  }
+	"name": "locations",
+	"version": "1.0.0",
+	"description": "",
+	"main": "locations.js",
+	"scripts": {
+		"build": "npx flow-remove-types location.flow.js -o location.js",
+		"test": "npm run build && jest --coverage",
+		"invoke:health": "serverless invoke local --function health --stage develop",
+		"invoke:all": "serverless invoke local --function all --stage develop --path ../.resources/data/location-all.json",
+		"invoke:add": "serverless invoke local --function create --path ../.resources/data/location-all.json --stage develop",
+		"invoke:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",
+		"invoke:boxes:add": "serverless invoke local --function addBoxes --path ../.resources/data/boxes.json",
+		"invoke:boxes:all": "serverless invoke local --function getBoxes --path ../.resources/data/boxes.json",
+		"invoke:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
+		"invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json",
+		"invoke:controlCenterV2byLocation": "npm run build && serverless invoke local --function controlCenterV2byLocation --path ../.resources/data/location-update.json --stage develop"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"airtable": "^0.8.1",
+		"aws-sdk": "^2.580.0",
+		"aws-xray-sdk": "^2.5.0",
+		"dotenv": "^7.0.0",
+		"dynamoose": "^1.11.1",
+		"geolib": "^2.0.24",
+		"moment": "^2.24.0",
+		"serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
+	},
+	"devDependencies": {
+		"flow-bin": "^0.107.0",
+		"flow-remove-types": "^2.107.0",
+		"jest": "^24.0.0",
+		"serverless": "^1.42.2",
+		"serverless-domain-manager": "^2.6.13",
+		"serverless-dotenv-plugin": "^2.1.1",
+		"serverless-plugin-tracing": "^2.0.0",
+		"serverless-prune-plugin": "^1.4.0",
+		"serverless-sentry": "^1.2.0"
+	}
 }
