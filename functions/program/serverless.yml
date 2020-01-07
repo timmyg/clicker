@@ -389,6 +389,7 @@ functions:
   get:
     handler: program.get
     runtime: nodejs12.x
+    memorySize: 256
     events:
       - http:
           path: ''

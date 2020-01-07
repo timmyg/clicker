@@ -699,16 +699,20 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
 module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   console.log({ locationId, boxId });
+  console.time('location');
   const location = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();
+  console.timeEnd('location');
   const box: Box = location.boxes && location.boxes.find(box => box.id === boxId);
+  console.time('get program');
   const result = await new Invoke()
     .service('program')
     .name('get')
     .queryParams({ channel: box.channel, region: location.region })
     .go();
+  console.timeEnd('get program');
   console.log({ result });
   if (result.data) {
     await new Invoke()
@@ -724,31 +728,31 @@ module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event 
   return respond(200);
 });
 
-module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
-  let allLocations: Venue[] = await dbLocation.scan().exec();
-  let i = 0;
-  for (const location of allLocations) {
-    console.log(location.name);
-    const { region, id: locationId } = location;
-    const { boxes } = location;
-    for (const box of boxes) {
-      // update if box has a channel
-      //  and there isnt a program or the program has ended
-      // if (box.channel && moment(box.program.end).diff(moment().toDate()) < 0) {
-      if (box.channel) {
-        console.log('update box program', locationId, box.id);
-        await new Invoke()
-          .service('location')
-          .name('updateBoxProgram')
-          .pathParams({ id: locationId, boxId: box.id })
-          .async()
-          .go();
-        i++;
-      }
-    }
-  }
-  return respond(200, { updated: i });
-});
+// module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
+//   let allLocations: Venue[] = await dbLocation.scan().exec();
+//   let i = 0;
+//   for (const location of allLocations) {
+//     console.log(location.name);
+//     const { region, id: locationId } = location;
+//     const { boxes } = location;
+//     for (const box of boxes) {
+//       // update if box has a channel
+//       //  and there isnt a program or the program has ended
+//       // if (box.channel && moment(box.program.end).diff(moment().toDate()) < 0) {
+//       if (box.channel) {
+//         console.log('update box program', locationId, box.id);
+//         await new Invoke()
+//           .service('location')
+//           .name('updateBoxProgram')
+//           .pathParams({ id: locationId, boxId: box.id })
+//           .async()
+//           .go();
+//         i++;
+//       }
+//     }
+//   }
+//   return respond(200, { updated: i });
+// });
 
 class ControlCenterProgram {
   fields: {
@@ -1049,6 +1053,7 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
     console.log({ err });
     return err;
   }
+  return;
 }
 
 module.exports.ControlCenterProgram = ControlCenterProgram;
