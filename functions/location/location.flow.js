@@ -815,9 +815,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // sort by rating descending
   ccPrograms = ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
 
-  // only boxes with zones
-  let boxes = location.boxes.filter(b => b.zone && b.zone.length);
-  boxes = createBoxes(boxes);
+  const boxes: BoxStatus[] = getAvailableBoxes(location.boxes);
 
   let boxStatus;
   for (const program of ccPrograms) {
@@ -876,6 +874,24 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   }
   return respond(200);
 });
+
+function getAvailableBoxes(boxes: Box[]): BoxStatus[] {
+  // only boxes with zones
+  boxes = boxes.filter(b => b.zone && b.zone.length);
+
+  // remove manually changed boxes
+  const manualChangeMinutesAgo = 45;
+  boxes = boxes.filter(
+    b =>
+      b.channelSource !== 'manual' ||
+      (b.channelSource === 'manual' && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
+    // ||
+    // (b.channelSource === 'manual' && b.program && b.program.game && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
+  );
+
+  // turn boxes into BoxStatus's
+  return createBoxes(boxes);
+}
 
 class BoxStatus {
   boxId: string;
@@ -1057,3 +1073,4 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 }
 
 module.exports.ControlCenterProgram = ControlCenterProgram;
+module.exports.getAvailableBoxes = getAvailableBoxes;
