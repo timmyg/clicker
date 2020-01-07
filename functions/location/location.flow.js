@@ -799,7 +799,10 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // sort by rating descending
   ccPrograms = ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
 
-  let boxes = createBoxes(location.boxes);
+  // only boxes with zones
+  let boxes = location.boxes.filter(b => b.zone && b.zone.length);
+  boxes = createBoxes(boxes);
+
   let boxStatus;
   for (const program of ccPrograms) {
     console.info(`trying to turn on: ${program.fields.title} (${program.fields.channel})`);
