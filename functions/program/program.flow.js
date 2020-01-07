@@ -140,9 +140,7 @@ const dbProgram = dynamoose.model(
 				project: false
 			}
 		},
-		// game: {
-		// 	save unknown
-		// },
+		// game: saveUnknown below
 		clickerRating: Number,
 		live: Boolean,
 		repeat: Boolean,

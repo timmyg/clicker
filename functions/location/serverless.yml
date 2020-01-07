@@ -327,14 +327,15 @@ functions:
               - partner
               - authorization
               - content-type
-  controlCenterV:
+  controlCenterV2:
     handler: location.controlCenterV2
     events:
+      - schedule: cron(*/10 * * * ? *)
       - http:
           path: 'control-center/v2'
           method: post
-  controlCenterV2ByLocation:
-    handler: location.controlCenterV2ByLocation
+  controlCenterV2byLocation:
+    handler: location.controlCenterV2byLocation
     events:
       - http:
           path: '{id}/control-center/v2'

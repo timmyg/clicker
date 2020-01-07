@@ -73,6 +73,7 @@ export class Venue {
   connected: boolean;
   setup: boolean;
   controlCenter: boolean;
+  controlCenterV2: boolean;
   announcement: string;
   notes: string;
   // calculated fields
