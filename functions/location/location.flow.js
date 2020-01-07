@@ -699,16 +699,20 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
 module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   console.log({ locationId, boxId });
+  console.time('location');
   const location = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();
+  console.timeEnd('location');
   const box: Box = location.boxes && location.boxes.find(box => box.id === boxId);
+  console.time('get program');
   const result = await new Invoke()
     .service('program')
     .name('get')
     .queryParams({ channel: box.channel, region: location.region })
     .go();
+  console.timeEnd('get program');
   console.log({ result });
   if (result.data) {
     await new Invoke()
@@ -1049,6 +1053,7 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
     console.log({ err });
     return err;
   }
+  return;
 }
 
 module.exports.ControlCenterProgram = ControlCenterProgram;

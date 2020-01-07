@@ -312,6 +312,7 @@ functions:
     handler: location.updateBoxProgram
     description: update box program
     memorySize: 256
+    timeout: 12
     events:
       - http:
           path: '{id}/boxes/{boxId}/program'
