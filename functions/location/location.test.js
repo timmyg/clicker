@@ -30,7 +30,7 @@ test('ControlCenterProgram model', () => {
 });
 
 describe('getAvailableBoxes', () => {
-  test("removes boxes that shouldn't be changed", () => {
+  test.skip("removes boxes that shouldn't be changed", () => {
     const openGoodBox = { id: 1, zone: '4' };
     const openGoodBox2 = { id: 2, zone: '3' };
     const reservedManuallyChangedRecently = {
