@@ -640,7 +640,6 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
   return respond(200, 'ok');
 });
 
-
 module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven, async event => {
   const { regions } = getPathParameters(event);
   console.log(regions);
@@ -1026,4 +1025,3 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
 module.exports.filterProgramsAlreadyShowing = filterProgramsAlreadyShowing;
-
