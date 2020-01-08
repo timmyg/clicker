@@ -743,28 +743,30 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
-  // console.info({ ccPrograms });
+  console.info(`all programs: ${ccPrograms.length}`);
+  console.info(`all boxes: ${location.boxes.length}`);
 
   // filter out currently showing programs
-  // const liveProgrammingIds = location.boxes.map(b => b.program && b.program.programmingId);
-  // ccPrograms = ccPrograms.filter(ccp => !liveProgrammingIds.includes(ccp.fields.programmingId));
   ccPrograms = filterProgramsAlreadyShowing(ccPrograms, location.boxes);
+  console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
   // remove channels that location doesnt have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
+  console.info({ excludedChannels });
 
   if (excludedChannels && excludedChannels.length) {
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.fields.channel));
   }
+  console.info(`filtered programs after looking at excluded: ${ccPrograms.length}`);
 
   // sort by rating descending
   ccPrograms = ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
 
   let boxes: BoxStatus[] = getAvailableBoxes(location.boxes);
 
-  let boxStatus;
   for (const program of ccPrograms) {
+    let boxStatus;
     console.info(`trying to turn on: ${program.fields.title} (${program.fields.channel})`);
     // await evaluateProgram(program, location.boxes);
     switch (program.fields.rating) {
