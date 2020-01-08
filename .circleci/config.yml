@@ -37,7 +37,7 @@ aliases:
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               npx serverless deploy --stage develop --verbose
             fi
-version: 2.0
+version: 2.1
 jobs:
   build:
     docker:
