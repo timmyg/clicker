@@ -684,14 +684,14 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program);
   console.timeEnd('update location box');
 
-  console.time('update box program');
-  await new Invoke()
-    .service('location')
-    .name('updateBoxProgram')
-    .pathParams({ id: locationId, boxId })
-    .async()
-    .go();
-  console.timeEnd('update box program');
+  // console.time('update box program');
+  // await new Invoke()
+  //   .service('location')
+  //   .name('updateBoxProgram')
+  //   .pathParams({ id: locationId, boxId })
+  //   .async()
+  //   .go();
+  // console.timeEnd('update box program');
 
   return respond(200);
 });
