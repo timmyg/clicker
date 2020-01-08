@@ -37,21 +37,37 @@ aliases:
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               npx serverless deploy --stage develop --verbose
             fi
-version: 2.0
+version: 2.1
+parameters:
+  # By default we enable the main workflow
+  trigger:
+    type: boolean
+    default: true
+
 jobs:
-  build:
-    docker:
-      - image: circleci/node:8.10
-    branches:
-      only:
-        - master
-        - release
-        - develop
+  trigger-workflows:
+    executor: node
     steps:
-      - checkout
       - run:
-          name: Determine which projects have changed and trigger the builds
-          command: sh cool.sh
+          name: Trigger workflows
+          command: node ./circleci.js
+
+workflows:
+  version: 2
+  # The main workflow will trigger other workflow based on your changes
+  trigger:
+    when: << pipeline.parameters.trigger >>
+    jobs:
+      - trigger-workflows
+      - new_version:
+          requires:
+            - trigger-workflows
+          filters:
+            branches:
+              only:
+                - master
+                - release
+                - develop
   functions/admin:
     working_directory: ~/clicker/functions/admin
     <<: *serverless_build_test_deploy
