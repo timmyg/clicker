@@ -1,9 +1,10 @@
 const fetch = require("node-fetch");
 const { exec } = require("child_process");
 
-const modules = ["core", "components"];
+// const modules = ["components"];
 
 exec("npx lerna changed --all", (error, stdout) => {
+  console.log({ stdout, error });
   modules.forEach(name => {
     console.log({ name });
     if (!stdout.includes(name)) return;
