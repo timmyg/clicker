@@ -727,6 +727,11 @@ module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event =
   return respond(200, { locations: locations.length });
 });
 
+function filterProgramsAlreadyShowing(ccPrograms: ControlCenterProgram[], boxes: Box[]): ControlCenterProgram[] {
+  const liveChannelIds = boxes.map(b => b.channel);
+  return ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
+}
+
 // npm run invoke:controlCenterV2byLocation
 module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('controlCenterV2byLocation');
@@ -743,8 +748,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // filter out currently showing programs
   // const liveProgrammingIds = location.boxes.map(b => b.program && b.program.programmingId);
   // ccPrograms = ccPrograms.filter(ccp => !liveProgrammingIds.includes(ccp.fields.programmingId));
-  const liveChannelIds = location.boxes.map(b => b.channel);
-  ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
+  ccPrograms = filterProgramsAlreadyShowing(ccPrograms, location.boxes);
 
   // remove channels that location doesnt have
   const excludedChannels =
@@ -1018,3 +1022,4 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
+module.exports.filterProgramsAlreadyShowing = filterProgramsAlreadyShowing;

@@ -1,5 +1,5 @@
 const file = require('./location');
-const { ControlCenterProgram, getAvailableBoxes } = require('./location');
+const { ControlCenterProgram, getAvailableBoxes, filterProgramsAlreadyShowing } = require('./location');
 const moment = require('moment');
 
 test('smoke test', () => {
@@ -29,6 +29,17 @@ test('ControlCenterProgram model', () => {
   expect(ccPrograms[0].isMinutesFromNow(20)).toBeTruthy();
 });
 
+describe('filterProgramsAlreadyShowing', () => {
+  const ccPrograms = [
+    { fields: { channel: 206 } }, // showing
+    { fields: { channel: 209 } },
+    { fields: { channel: 219 } }, // showing
+    { fields: { channel: 5 } },
+  ];
+  const boxes = [{ channel: 206 }, { channel: 219 }, { channel: 206 }, { channel: 9 }];
+  const result = filterProgramsAlreadyShowing(ccPrograms, boxes);
+  expect(result.length).toBe(2);
+});
 describe('getAvailableBoxes', () => {
   test.skip("removes boxes that shouldn't be changed", () => {
     const openGoodBox = { id: 1, zone: '4' };
