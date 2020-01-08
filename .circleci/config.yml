@@ -51,7 +51,7 @@ jobs:
       - checkout
       - run:
           name: Determine which projects have changed and trigger the builds
-          command: sudo sh ./cool.sh
+          command: sudo ./cool.sh
   functions/admin:
     working_directory: ~/clicker/functions/admin
     <<: *serverless_build_test_deploy
