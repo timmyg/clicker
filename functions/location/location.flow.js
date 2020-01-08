@@ -815,7 +815,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // sort by rating descending
   ccPrograms = ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
 
-  const boxes: BoxStatus[] = getAvailableBoxes(location.boxes);
+  let boxes: BoxStatus[] = getAvailableBoxes(location.boxes);
 
   let boxStatus;
   for (const program of ccPrograms) {
