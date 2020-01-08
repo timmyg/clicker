@@ -1061,7 +1061,9 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
     UpdateExpression: updateExpression,
     ExpressionAttributeValues: expressionAttributeValues,
   };
+  console.log('calling...');
   console.log({ params });
+  console.log('returned');
   try {
     const x = await docClient.update(params).promise();
     console.log({ x });
