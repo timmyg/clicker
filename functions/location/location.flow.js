@@ -1025,3 +1025,4 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
 module.exports.filterProgramsAlreadyShowing = filterProgramsAlreadyShowing;
+
