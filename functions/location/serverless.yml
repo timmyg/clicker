@@ -299,24 +299,6 @@ functions:
               - partner
               - authorization
               - content-type
-  # updateAllLocationsBoxesProgram:
-  #   handler: location.updateAllLocationsBoxesProgram
-  #   description: called from antenna to update whats on each box
-  #   timeout: 30
-  #   events:
-  #     - schedule: rate(5 minutes)
-  #     - http:
-  #         path: boxes/programs
-  #         method: post
-  updateBoxProgram:
-    handler: location.updateBoxProgram
-    description: update box program
-    memorySize: 256
-    timeout: 12
-    events:
-      - http:
-          path: '{id}/boxes/{boxId}/program'
-          method: post
   controlCenterLocationsByRegion:
     handler: location.controlCenterLocationsByRegion
     events:

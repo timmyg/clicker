@@ -668,7 +668,7 @@ module.exports.health = async (event: any) => {
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
-  const { channel, channelMinor, source, program } = getBody(event);
+  const { channel, channelMinor, source } = getBody(event);
 
   console.time('get location');
   const location: Venue = await dbLocation
@@ -680,79 +680,21 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   console.log({ boxId, boxIndex });
 
+  console.time('get program');
+  const programResult = await new Invoke()
+    .service('program')
+    .name('get')
+    .queryParams({ channel: channel, region: location.region })
+    .go();
+  const program = programResult && programResult.data;
+  console.timeEnd('get program');
+
   console.time('update location box');
   await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program);
   console.timeEnd('update location box');
 
-  // console.time('update box program');
-  // await new Invoke()
-  //   .service('location')
-  //   .name('updateBoxProgram')
-  //   .pathParams({ id: locationId, boxId })
-  //   .async()
-  //   .go();
-  // console.timeEnd('update box program');
-
   return respond(200);
 });
-
-module.exports.updateBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id: locationId, boxId } = getPathParameters(event);
-  console.log({ locationId, boxId });
-  console.time('location');
-  const location = await dbLocation
-    .queryOne('id')
-    .eq(locationId)
-    .exec();
-  console.timeEnd('location');
-  const box: Box = location.boxes && location.boxes.find(box => box.id === boxId);
-  console.time('get program');
-  const result = await new Invoke()
-    .service('program')
-    .name('get')
-    .queryParams({ channel: box.channel, region: location.region })
-    .go();
-  console.timeEnd('get program');
-  console.log({ result });
-  if (result.data) {
-    await new Invoke()
-      .service('location')
-      .name('updateBoxInfo')
-      .body({ program: result.data })
-      .pathParams({ id: locationId, boxId })
-      .async()
-      .go();
-  } else {
-    console.log('no program found:', { channel: box.channel, region: location.region });
-  }
-  return respond(200);
-});
-
-// module.exports.updateAllLocationsBoxesProgram = RavenLambdaWrapper.handler(Raven, async event => {
-//   let allLocations: Venue[] = await dbLocation.scan().exec();
-//   let i = 0;
-//   for (const location of allLocations) {
-//     console.log(location.name);
-//     const { region, id: locationId } = location;
-//     const { boxes } = location;
-//     for (const box of boxes) {
-//       // update if box has a channel
-//       //  and there isnt a program or the program has ended
-//       // if (box.channel && moment(box.program.end).diff(moment().toDate()) < 0) {
-//       if (box.channel) {
-//         console.log('update box program', locationId, box.id);
-//         await new Invoke()
-//           .service('location')
-//           .name('updateBoxProgram')
-//           .pathParams({ id: locationId, boxId: box.id })
-//           .async()
-//           .go();
-//         i++;
-//       }
-//     }
-//   }
-//   return respond(200, { updated: i });
-// });
 
 class ControlCenterProgram {
   fields: {
