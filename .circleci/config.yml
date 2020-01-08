@@ -18,26 +18,15 @@ executors:
   node:
     docker:
       - image: circleci/node
-
-jobs:
-  trigger-workflows:
-    executor: node
-    steps:
-      - checkout
-      - run: yarn --frozen-lockfile
-      - run:
-          name: Trigger workflows
-          command: node ./circleci.js
-
-  new_version:
-    executor: node
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "7d:4f:a9:ac:9d:54:47:bc:4d:aa:bd:b0:98:20:df:91"
-      - run: git config user.email "ci@julienkarst.com" && git config user.name "[CI] 🤖"
-      - run: yarn bump:version
+  # new_version:
+  #   executor: node
+  #   steps:
+  #     - checkout
+  #     - add_ssh_keys:
+  #         fingerprints:
+  #           - "7d:4f:a9:ac:9d:54:47:bc:4d:aa:bd:b0:98:20:df:91"
+  #     - run: git config user.email "ci@julienkarst.com" && git config user.name "[CI] 🤖"
+  #     - run: yarn bump:version
 
   lint:
     parameters:
