@@ -6,7 +6,7 @@ parameters:
     default: true
 
   # A parameter per package
-  functions/lead:
+  functionslead:
     type: boolean
     default: false
 workflows:
