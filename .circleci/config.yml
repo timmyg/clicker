@@ -9,20 +9,22 @@ parameters:
     type: boolean
     default: false
 
-# executors:
-#   node:
-#     docker:
-#       - image: circleci/node
+executors:
+  node:
+    docker:
+      - image: circleci/node
 
 jobs:
   trigger-workflows:
-    docker:
-      - image: circleci/node:8.10
+    # docker:
+    #   - image: circleci/node:8.10
+    executor: node
     steps:
       - checkout
       - run:
           name: Determine which projects have changed and trigger the builds
-          command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
+          # command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
+          command: chmod +x .circleci/circle_trigger.js && node .circleci/circle_trigger.js
   serverless-build-test-deploy:
     parameters:
       package_name:
