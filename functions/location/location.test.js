@@ -1,5 +1,5 @@
 const file = require('./location');
-const { ControlCenterProgram, getAvailableBoxes, filterProgramsAlreadyShowing } = require('./location');
+const { ControlCenterProgram, getAvailableBoxes, filterProgramsAlreadyShowing, createBoxes } = require('./location');
 const moment = require('moment');
 
 test('smoke test', () => {
@@ -40,73 +40,101 @@ describe('filterProgramsAlreadyShowing', () => {
   const result = filterProgramsAlreadyShowing(ccPrograms, boxes);
   expect(result.length).toBe(2);
 });
-describe('getAvailableBoxes', () => {
-  test.skip("removes boxes that shouldn't be changed", () => {
-    const openGoodBox = { id: 1, zone: '4' };
-    const openGoodBox2 = { id: 2, zone: '3' };
-    const reservedManuallyChangedRecently = {
-      id: 3,
-      zone: 'A',
-      channelSource: 'manual',
-      channelChangeAt: moment()
-        .subtract(33, 'm')
-        .unix(),
-    };
-    const reservedManuallyChangedGameOn = {
-      id: 4,
-      zone: '15',
-      channelSource: 'manual',
-      channelChangeAt: moment()
-        .subtract(50, 'm')
-        .unix(),
-      program: {
-        game: {
-          start: moment()
-            .subtract(55, 'm')
-            .unix(),
-          liveStatus: {
-            status: 'inprogress',
-          },
+describe('get boxes', () => {
+  const openGoodBox = { id: 1, zone: '4' };
+  const openGoodBox2 = { id: 2, zone: '3' };
+  const reservedManuallyChangedRecently = {
+    id: 3,
+    zone: 'A',
+    program: {
+      clickerRating: 7,
+    },
+    channelSource: 'manual',
+    channelChangeAt: moment()
+      .subtract(33, 'm')
+      .unix(),
+  };
+  const reservedManuallyChangedGameOn = {
+    id: 4,
+    zone: '15',
+    channelSource: 'manual',
+    channelChangeAt: moment()
+      .subtract(50, 'm')
+      .unix(),
+    program: {
+      game: {
+        start: moment()
+          .subtract(55, 'm')
+          .unix(),
+        liveStatus: {
+          status: 'inprogress',
         },
       },
-    };
-    // TODO
-    const openManuallyChangedGameOver = {
-      id: 5,
-      zone: '15',
-      channelSource: 'manual',
-      channelChangeAt: moment()
-        .subtract(50, 'm')
-        .unix(),
-    };
-    const openManuallyChangedProgramOver = {
-      id: 6,
-      zone: '15',
-      channelSource: 'manual',
-      channelChangeAt: moment()
-        .subtract(40, 'm')
-        .unix(),
-      program: {
+    },
+  };
+  const openManuallyChangedGameOver = {
+    id: 5,
+    zone: '15',
+    channelSource: 'manual',
+    channelChangeAt: moment()
+      .subtract(50, 'm')
+      .unix(),
+    program: {
+      game: {
         start: moment()
-          .subtract(30, 'm')
+          .subtract(2, 'h')
           .unix(),
+        liveStatus: {
+          status: 'complete',
+        },
       },
-    };
-    const reservedZonelessBox = { id: 57, zone: '' };
-    const boxes = [
-      openGoodBox,
-      openGoodBox2,
+    },
+  };
+  const openManuallyChangedProgramOver = {
+    id: 6,
+    zone: '15',
+    channelSource: 'manual',
+    channelChangeAt: moment()
+      .subtract(40, 'm')
+      .unix(),
+    program: {
+      start: moment()
+        .subtract(30, 'm')
+        .unix(),
+    },
+  };
+  const reservedZonelessBox = { id: 57, zone: '' };
+  const boxes = [
+    openGoodBox,
+    openGoodBox2,
+    reservedManuallyChangedRecently,
+    reservedManuallyChangedGameOn,
+    openManuallyChangedGameOver,
+    openManuallyChangedProgramOver,
+    reservedZonelessBox,
+  ];
+  test('createBoxes: map to new object', () => {
+    const result = createBoxes([
       reservedManuallyChangedRecently,
-      reservedManuallyChangedGameOn,
       openManuallyChangedGameOver,
-      openManuallyChangedProgramOver,
-      reservedZonelessBox,
-    ];
+      reservedManuallyChangedGameOn,
+    ]);
+
+    expect(result.length).toBe(3);
+
+    const [one, two, three] = result;
+    expect(one.hasProgram).toBeTruthy();
+    expect(one.ended).toBeFalsy();
+    expect(one.blowout).toBeFalsy();
+    expect(one.rating).toBe(7);
+    expect(one.box.id).toBe(3);
+  });
+  test("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
     const result = getAvailableBoxes(boxes);
     expect(result.length).toBe(4);
-    expect(result[0].id).toBe(1);
-    expect(result[1].id).toBe(2);
-    expect(result[2].id).toBe(5);
-    expect(result[3].id).toBe(6);
+    expect(result[0].box.id).toBe(1);
+    expect(result[1].box.id).toBe(2);
+    expect(result[2].box.id).toBe(5);
+    expect(result[3].box.id).toBe(6);
   });
 });

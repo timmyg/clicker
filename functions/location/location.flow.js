@@ -662,7 +662,6 @@ module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven
   return respond(200, locations);
 });
 
-
 module.exports.health = async (event: any) => {
   return respond(200, 'ok');
 };
@@ -767,7 +766,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   let boxes: BoxStatus[] = getAvailableBoxes(location.boxes);
 
   for (const program of ccPrograms) {
-    let boxStatus;
+    let boxStatus = {};
     console.info(`trying to turn on: ${program.fields.title} (${program.fields.channel})`);
     // await evaluateProgram(program, location.boxes);
     switch (program.fields.rating) {
@@ -839,18 +838,19 @@ function getAvailableBoxes(boxes: Box[]): BoxStatus[] {
   );
 
   // turn boxes into BoxStatus's
+  // console.log(boxes, createBoxes(boxes));
   return createBoxes(boxes);
 }
 
 class BoxStatus {
-  boxId: string;
+  // boxId: string;
   hasProgram: boolean;
   ended: boolean;
   gameOver: boolean;
   blowout: boolean;
   rating: number;
   box: Box;
-  constructor(props) {
+  constructor(props: any) {
     Object.assign(this, props);
   }
 }
@@ -875,16 +875,21 @@ async function tune(location: Venue, box: Box, channel: number) {
 }
 
 function createBoxes(boxes: Box[]): BoxStatus[] {
-  return boxes.map(b => {
-    return new BoxStatus({
-      boxId: b.id,
-      hasProgram: b.program && Object.keys(b.program).length > 0,
-      ended: b.program && b.program.game && b.program.game.liveStatus.ended,
-      blowout: b.program && b.program.game && b.program.game.liveStatus.blowout,
-      rating: b.program && b.program.clickerRating,
-      box: b,
-    });
+  const boxStatuses: BoxStatus[] = [];
+  boxes.forEach(b => {
+    console.log({ b });
+    boxStatuses.push(
+      new BoxStatus({
+        // boxId: b.id,
+        hasProgram: !!b.program && Object.keys(b.program).length > 0,
+        ended: !!b.program && !!b.program.game && b.program.game.liveStatus.ended,
+        blowout: !!b.program && !!b.program.game && b.program.game.liveStatus.blowout,
+        rating: b.program.clickerRating,
+        box: b,
+      }),
+    );
   });
+  return boxStatuses;
 }
 
 function selectBox(type: string, boxes: BoxStatus[]): BoxStatus {
@@ -1026,3 +1031,4 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
 module.exports.filterProgramsAlreadyShowing = filterProgramsAlreadyShowing;
+module.exports.createBoxes = createBoxes;
