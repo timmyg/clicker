@@ -170,7 +170,7 @@ jobs:
               - master
               - release
               - develop
-          command: pwd && chmod +x .circleci/build-scripts/serverless-deploy.sh &&  .circleci/build-scripts/serverless-deploy.sh
+          command: pwd && chmod +x ~/clicker/.circleci/build-scripts/serverless-deploy.sh &&  ~/clicker/.circleci/build-scripts/serverless-deploy.sh
 workflows:
   version: 2
   ci:
