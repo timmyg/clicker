@@ -149,7 +149,8 @@ jobs:
       package_dir:
         type: string
     steps:
-      - checkout
+      - checkout:
+          path: ~/clicker
       - restore_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
       - run:
@@ -169,7 +170,7 @@ jobs:
               - master
               - release
               - develop
-          command: chmod +x .circleci/build-scripts/serverless-deploy.sh &&  .circleci/build-scripts/serverless-deploy.sh
+          command: pwd && chmod +x .circleci/build-scripts/serverless-deploy.sh &&  .circleci/build-scripts/serverless-deploy.sh
 workflows:
   version: 2
   ci:
