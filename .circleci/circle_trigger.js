@@ -19,10 +19,10 @@ const exec = require("await-exec");
     method: "GET"
   });
   const data = await response.json();
-  //   console.log({ data });
+  console.log({ data });
   const { vcs_revision: vcsRevision } = data;
 
-  const commitsRange = `${process.env.SHA1}...${vcsRevision}`;
+  const commitsRange = `${process.env.CIRCLE_SHA1}...${vcsRevision}`;
   const changedProjects = await exec(
     `git diff --name-only ${commitsRange} | cut -d/ -f-2 | sort -u`
   );
