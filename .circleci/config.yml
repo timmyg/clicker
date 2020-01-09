@@ -89,12 +89,9 @@ workflows:
               - develop
   functions-lead:
     when: << pipeline.parameters.functions-lead >>
-    # working_directory: ~/clicker/functions/lead
     jobs:
       - serverless-build-test-deploy:
-          # name: serverless-build-test-deploy
           package_dir: ~/clicker/functions/lead
-        # <<: *serverless_build_test_deploy
   # functions/admin:
   #   working_directory: ~/clicker/functions/admin
   #   <<: *serverless_build_test_deploy
