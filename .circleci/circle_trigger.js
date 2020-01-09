@@ -34,6 +34,9 @@ const fs = require("fs");
   );
   console.log(changedProjects.split("\n"));
 
+  const changedActiveProjects = changedProjects.filter(p =>
+    activeProjects.includes(p)
+  );
   // exec('yarn check:changes', (error, stdout) => {
   //     modules.forEach(name => {
   //         if (!stdout.includes(name)) return;
