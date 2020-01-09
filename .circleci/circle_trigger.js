@@ -1,8 +1,13 @@
 const fetch = require("node-fetch");
+const yaml = require("js-yaml");
 const exec = require("await-exec");
-// const { exec } = require("child_process");
+const fs = require("fs");
 
 (async function main() {
+  const activeProjects = yaml.safeLoad(
+    fs.readFileSync("./projects.yml", "utf8")
+  );
+  console.log({ activeProjects });
   const circleUrl = `https://circleci.com/api/v1.1/project/github/${
     process.env.CIRCLE_PROJECT_USERNAME
   }/${process.env.CIRCLE_PROJECT_REPONAME}/tree/${
@@ -24,10 +29,10 @@ const exec = require("await-exec");
 
   const commitsRange = `${vcsRevision}...${process.env.CIRCLE_SHA1}`;
   console.log({ commitsRange });
-  const changedProjects = await exec(
+  const { stdout: changedProjects } = await exec(
     `git diff --name-only ${commitsRange} | cut -d/ -f-2 | sort -u`
   );
-  console.log({ changedProjects });
+  console.log(changedProjects.split("\n"));
 
   // exec('yarn check:changes', (error, stdout) => {
   //     modules.forEach(name => {

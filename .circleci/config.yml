@@ -25,7 +25,7 @@ jobs:
           key: dependency-cache-ci
       - run:
           name: Install dependencies
-          command: npm i node-fetch await-exec
+          command: npm i node-fetch await-exec js-yaml
       - save_cache:
           key: dependency-cache-ci
           paths:

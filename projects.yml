@@ -1,0 +1,17 @@
+active:
+  - functions/admin
+  - functions/analytics
+  - functions/app
+  - functions/game
+  - functions/job
+  - functions/lead
+  - functions/location
+  - functions/notification
+  - functions/program
+  - functions/remote
+  - functions/reservation
+  - functions/user
+  - mobile/app
+  - web/app
+  - packages/antenna
+  - e2e/app
