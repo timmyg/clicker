@@ -32,7 +32,7 @@ jobs:
     parameters:
       package_name:
         type: string
-    working-directory: ~/<< parameters.package_name >>
+    working_directory: ~/<< parameters.package_name >>
     docker:
       - image: nikolaik/python-nodejs
     steps:
