@@ -100,7 +100,7 @@ jobs:
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && chmod +x ../../.circleci/scripts/netlify-deploy-web.sh && ../../.circleci/scripts/netlify-deploy-web.sh
+          command: pwd && chmod +x ~/clicker/.circleci/scripts/netlify-deploy-web.sh && ~/clicker/.circleci/scripts/netlify-deploy-web.sh
   netlify-build-deploy-mobile:
     executor: node
     working_directory: << parameters.package_dir >>
