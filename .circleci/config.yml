@@ -22,12 +22,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache
+          key: dependency-cache-ci
       - run:
           name: Install dependencies
           command: npm i node-fetch await-exec
       - save_cache:
-          key: dependency-cache
+          key: dependency-cache-ci
           paths:
             - ./node_modules
       - run:
