@@ -6,58 +6,40 @@ parameters:
     default: true
   functions-admin:
     type: boolean
-    default: false
   functions-analytics:
     type: boolean
-    default: false
   functions-app:
     type: boolean
-    default: false
   functions-game:
     type: boolean
-    default: false
   functions-job:
     type: boolean
-    default: false
   functions-lead:
     type: boolean
-    default: false
   functions-location:
     type: boolean
-    default: false
   functions-notification:
     type: boolean
-    default: false
   functions-program:
     type: boolean
-    default: false
   functions-receiver:
     type: boolean
-    default: false
   functions-remote:
     type: boolean
-    default: false
   functions-reservation:
     type: boolean
-    default: false
   functions-user:
     type: boolean
-    default: false
   functions-widget:
     type: boolean
-    default: false
   web-app:
     type: boolean
-    default: false
   mobile-app:
     type: boolean
-    default: false
   packages-antenna:
     type: boolean
-    default: false
   e2e-app:
     type: boolean
-    default: false
 
 executors:
   node:
