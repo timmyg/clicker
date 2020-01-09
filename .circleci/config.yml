@@ -97,7 +97,7 @@ jobs:
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && chmod +x ./build-scripts/netlify-deploy-web.sh && ./build-scripts/netlify-deploy-web.sh
+          command: pwd && cd build-scripts && pwd && chmod +x ./build-scripts/netlify-deploy-web.sh && ./build-scripts/netlify-deploy-web.sh
   netlify-build-deploy-mobile:
     executor: node
     working_directory: ~/clicker
