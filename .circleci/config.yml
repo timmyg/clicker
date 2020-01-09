@@ -76,7 +76,7 @@ workflows:
               - master
               - release
               - develop
-  functions/lead:
+  "functions/lead":
     when: << pipeline.parameters.'functions/lead' >>
     # working_directory: ~/clicker/functions/lead
     jobs:
