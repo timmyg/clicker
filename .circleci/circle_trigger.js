@@ -4,7 +4,7 @@ const exec = require("await-exec");
 const fs = require("fs");
 
 (async function main() {
-  const activeProjects = yaml.safeLoad(
+  const { active: activeProjects } = yaml.safeLoad(
     fs.readFileSync("./projects.yml", "utf8")
   );
   console.log({ activeProjects });
