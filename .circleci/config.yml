@@ -21,7 +21,13 @@ jobs:
     executor: node
     steps:
       - checkout
-      - run: npm i node-fetch await-exec
+      - restore_cache:
+          key: dependency-cache
+      - run:
+          name: Install dependencies
+          command: npm i node-fetch await-exec
+      - save_cache:
+          key: dependency-cache
       - run:
           name: Determine which projects have changed and trigger the builds
           # command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh

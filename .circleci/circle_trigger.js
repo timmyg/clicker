@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const exec = require("await-exec");
-const { exec } = require("child_process");
+// const { exec } = require("child_process");
 
 (async function main() {
   const circleUrl = `https://circleci.com/api/v1.1/project/github/${
