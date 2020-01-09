@@ -93,11 +93,12 @@ jobs:
           command: node ./build-scripts/project-diff-trigger.js
   netlify-build-deploy-web:
     executor: node
-    working_directory: ~/clicker
+    # working_directory: ~/clicker
     steps:
+      - checkout
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && cd build-scripts && pwd && chmod +x ./build-scripts/netlify-deploy-web.sh && ./build-scripts/netlify-deploy-web.sh
+          command: pwd && chmod +x .circleci/build-scripts/netlify-deploy-web.sh && .circleci/build-scripts/netlify-deploy-web.sh
   netlify-build-deploy-mobile:
     executor: node
     working_directory: ~/clicker
