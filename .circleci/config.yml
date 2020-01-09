@@ -97,14 +97,14 @@ jobs:
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && chmod +x .circleci/netlify-deploy-web.sh && .circleci/netlify-deploy-web.sh
+          command: pwd && chmod +x .circleci/scripts/netlify-deploy-web.sh && .circleci/scripts/netlify-deploy-web.sh
   netlify-build-deploy-mobile:
     executor: node
     working_directory: ~/clicker
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && chmod +x .circleci/netlify-deploy-mobile.sh && .circleci/netlify-deploy-mobile.sh
+          command: pwd && chmod +x .circleci/scripts/netlify-deploy-mobile.sh && .circleci/scripts/netlify-deploy-mobile.sh
   deploy-s3:
     executor: aws
     working_directory: << parameters.package_dir >>
