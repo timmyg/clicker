@@ -64,6 +64,7 @@ jobs:
             git diff --name-only $COMMITS | cut -d/ -f-2 | sort -u > projects
             echo -e "Modified directories:\n`cat projects`\n"
 
+            projects_inc_dep=(`cat projects`)
             echo -e "Building: ${projects_inc_dep[@]}\n"
             for project in ${projects_inc_dep[@]}; do
               if grep -Fxq $project .projects; then
