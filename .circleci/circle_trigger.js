@@ -16,7 +16,7 @@ fetch(circleUrl, {
     "Content-Type": "application/json"
   },
   method: "GET"
-}).then(console.log);
+}).then(res => console.log(res.json()));
 // });
 
 // exec('yarn check:changes', (error, stdout) => {
