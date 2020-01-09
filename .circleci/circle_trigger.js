@@ -35,37 +35,40 @@ const fs = require("fs");
 
   const changedProjects = stdOutChangedProjects.split("\n");
   console.log({ changedProjects });
+
   const changedActiveProjects = changedProjects.filter(p =>
     activeProjects.includes(p)
   );
   console.log({ changedActiveProjects });
 
-  const body = {
-    parameters: {
-      trigger: false
-    },
-    branch: process.env.CIRCLE_BRANCH
-  };
-  for (const changedActiveProject of changedActiveProjects) {
-    // replace slashes with dashes
-    const project = changedActiveProject.replace(/\//g, "-");
-    body.parameters[project] = true;
-  }
-  console.log({ body });
-
-  await fetch(
-    `https://circleci.com/api/v2/project/github/${
-      process.env.CIRCLE_PROJECT_USERNAME
-    }/${process.env.CIRCLE_PROJECT_REPONAME}/pipeline`,
-    {
-      body: JSON.stringify(body),
-      headers: {
-        Authorization: `Basic ${Buffer.from(process.env.CIRCLE_TOKEN).toString(
-          "base64"
-        )}`,
-        "Content-Type": "application/json"
+  if (changedActiveProjects && changedActiveProjects.length) {
+    const body = {
+      parameters: {
+        trigger: false
       },
-      method: "POST"
+      branch: process.env.CIRCLE_BRANCH
+    };
+    for (const changedActiveProject of changedActiveProjects) {
+      // replace slashes with dashes
+      const project = changedActiveProject.replace(/\//g, "-");
+      body.parameters[project] = true;
     }
-  );
+    console.log({ body });
+
+    await fetch(
+      `https://circleci.com/api/v2/project/github/${
+        process.env.CIRCLE_PROJECT_USERNAME
+      }/${process.env.CIRCLE_PROJECT_REPONAME}/pipeline`,
+      {
+        body: JSON.stringify(body),
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            process.env.CIRCLE_TOKEN
+          ).toString("base64")}`,
+          "Content-Type": "application/json"
+        },
+        method: "POST"
+      }
+    );
+  }
 })();
