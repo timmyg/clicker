@@ -4,8 +4,46 @@ parameters:
   trigger:
     type: boolean
     default: true
-
+  functions-admin:
+    type: boolean
+    default: false
+  functions-analytics:
+    type: boolean
+    default: false
+  functions-app:
+    type: boolean
+    default: false
+  functions-game:
+    type: boolean
+    default: false
+  functions-job:
+    type: boolean
+    default: false
   functions-lead:
+    type: boolean
+    default: false
+  functions-location:
+    type: boolean
+    default: false
+  functions-notification:
+    type: boolean
+    default: false
+  functions-program:
+    type: boolean
+    default: false
+  functions-receiver:
+    type: boolean
+    default: false
+  functions-remote:
+    type: boolean
+    default: false
+  functions-reservation:
+    type: boolean
+    default: false
+  functions-user:
+    type: boolean
+    default: false
+  functions-widget:
     type: boolean
     default: false
 
@@ -87,11 +125,6 @@ workflows:
               - master
               - release
               - develop
-  functions-lead:
-    when: << pipeline.parameters.functions-lead >>
-    jobs:
-      - serverless-build-test-deploy:
-          package_dir: ~/clicker/functions/lead
   functions-admin:
     when: << pipeline.parameters.functions-admin >>
     jobs:
@@ -117,6 +150,11 @@ workflows:
     jobs:
       - serverless-build-test-deploy:
           package_dir: ~/clicker/functions/job
+  functions-lead:
+    when: << pipeline.parameters.functions-lead >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/lead
   functions-location:
     when: << pipeline.parameters.functions-location >>
     jobs:
