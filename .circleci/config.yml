@@ -21,7 +21,7 @@ jobs:
     executor: node
     steps:
       - checkout
-      - run: npm i node-fetch
+      - run: npm i -g node-fetch
       - run:
           name: Determine which projects have changed and trigger the builds
           # command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
