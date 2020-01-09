@@ -54,6 +54,7 @@ jobs:
           command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
 
 workflows:
+  version: 2
   functions/admin:
     working_directory: ~/clicker/functions/admin
     <<: *serverless_build_test_deploy
