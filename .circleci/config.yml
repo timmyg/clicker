@@ -89,8 +89,8 @@ jobs:
             - ./node_modules
       - run:
           name: Determine which projects have changed and trigger the builds
-          # command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
-          command: node .circleci/project-diff-trigger.js
+          # command: chmod +x .circleci/scripts/circle_trigger.sh && .circleci/scripts/circle_trigger.sh
+          command: node .circleci/scripts/project-diff-trigger.js
   netlify-build-deploy-web:
     executor: node
     working_directory: << parameters.package_dir >>
@@ -100,7 +100,7 @@ jobs:
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: chmod +x .circleci/netlify-deploy-web.sh && .circleci/netlify-deploy-web.sh
+          command: chmod +x .circleci/scripts/netlify-deploy-web.sh && .circleci/scripts/netlify-deploy-web.sh
   netlify-build-deploy-mobile:
     executor: node
     working_directory: << parameters.package_dir >>
@@ -110,7 +110,7 @@ jobs:
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: chmod +x .circleci/netlify-deploy-mobile.sh && .circleci/netlify-deploy-mobile.sh
+          command: chmod +x .circleci/scripts/netlify-deploy-mobile.sh && .circleci/scripts/netlify-deploy-mobile.sh
   deploy-s3:
     executor: aws
     working_directory: << parameters.package_dir >>
@@ -125,7 +125,7 @@ jobs:
           command: npm i
       - run:
           name: Upload app zip to s3
-          command: chmod +x .circleci/s3-deploy-antenna.sh && .circleci/s3-deploy-antenna.sh
+          command: chmod +x .circleci/scripts/s3-deploy-antenna.sh && .circleci/scripts/s3-deploy-antenna.sh
   run-e2e:
     executor: cypress
     working_directory: << parameters.package_dir >>
