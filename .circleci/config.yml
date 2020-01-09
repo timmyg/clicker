@@ -1,4 +1,5 @@
 version: 2.1
+
 parameters:
   trigger:
     type: boolean
@@ -7,6 +8,12 @@ parameters:
   functionslead:
     type: boolean
     default: false
+
+# executors:
+#   node:
+#     docker:
+#       - image: circleci/node
+
 jobs:
   trigger-workflows:
     docker:
@@ -22,7 +29,10 @@ jobs:
           name: Determine which projects have changed and trigger the builds
           command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
   serverless-build-test-deploy:
-    working-directory: << parameters.package_name >>
+    parameters:
+      package_name:
+        type: string
+    working-directory: ~/<< parameters.package_name >>
     docker:
       - image: nikolaik/python-nodejs
     steps:
