@@ -26,13 +26,13 @@ workflows:
   # functions/job:
   #   working_directory: ~/clicker/functions/job
   #   <<: *serverless_build_test_deploy
-  functions/lead:
+  functionslead:
     when: << pipeline.parameters.functionslead >>
     # working_directory: ~/clicker/functions/lead
     jobs:
       - build:
           name: serverless-build-test-deploy
-          package_name: functions/lead
+          package_name: functionslead
         # <<: *serverless_build_test_deploy
   # functions/location:
   #   working_directory: ~/clicker/functions/location
