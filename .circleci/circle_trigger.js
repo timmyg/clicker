@@ -29,11 +29,12 @@ const fs = require("fs");
 
   const commitsRange = `${vcsRevision}...${process.env.CIRCLE_SHA1}`;
   console.log({ commitsRange });
-  const { stdout: changedProjects } = await exec(
+  const { stdout: stdOutChangedProjects } = await exec(
     `git diff --name-only ${commitsRange} | cut -d/ -f-2 | sort -u`
   );
-  console.log(changedProjects.split("\n"));
 
+  const changedProjects = stdOutChangedProjects.split("\n");
+  console.log({ changedProjects });
   const changedActiveProjects = changedProjects.filter(p =>
     activeProjects.includes(p)
   );
