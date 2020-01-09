@@ -94,23 +94,17 @@ jobs:
   netlify-build-deploy-web:
     executor: node
     working_directory: ~/clicker
-    parameters:
-      package_dir:
-        type: string
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && chmod +x netlify-deploy-web.sh && netlify-deploy-web.sh
+          command: pwd && chmod +x .circleci/netlify-deploy-web.sh && .circleci/netlify-deploy-web.sh
   netlify-build-deploy-mobile:
     executor: node
-    working_directory: << parameters.package_dir >>
-    parameters:
-      package_dir:
-        type: string
+    working_directory: ~/clicker
     steps:
       - run:
           name: Trigger Netlify build + deploy
-          command: chmod +x .circleci/scripts/netlify-deploy-mobile.sh && .circleci/scripts/netlify-deploy-mobile.sh
+          command: pwd && chmod +x .circleci/netlify-deploy-mobile.sh && .circleci/netlify-deploy-mobile.sh
   deploy-s3:
     executor: aws
     working_directory: << parameters.package_dir >>
@@ -275,13 +269,11 @@ workflows:
   web-app:
     when: << pipeline.parameters.web-app >>
     jobs:
-      - netlify-build-deploy-web:
-          package_dir: ~/clicker/web/app
+      - netlify-build-deploy-web
   mobile-app:
     when: << pipeline.parameters.mobile-app >>
     jobs:
-      - netlify-build-deploy-mobile:
-          package_dir: ~/clicker/mobile/app
+      - netlify-build-deploy-mobile
   packages-antenna:
     when: << pipeline.parameters.packages-antenna >>
     jobs:
