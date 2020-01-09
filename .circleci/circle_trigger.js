@@ -8,7 +8,7 @@ const { exec } = require("child_process");
     process.env.CIRCLE_BRANCH
   }?filter=completed&limit=1`;
   console.log({ circleUrl });
-  fetch(circleUrl, {
+  const response = await fetch(circleUrl, {
     // body: JSON.stringify(params),
     headers: {
       Authorization: `Basic ${Buffer.from(process.env.CIRCLE_TOKEN).toString(
@@ -17,11 +17,9 @@ const { exec } = require("child_process");
       "Content-Type": "application/json"
     },
     method: "GET"
-  })
-    .then(response => response.json())
-    .then(data => {
-      data;
-    });
+  });
+  const data = await response.json();
+  console.log({ data });
 
   // exec('yarn check:changes', (error, stdout) => {
   //     modules.forEach(name => {
