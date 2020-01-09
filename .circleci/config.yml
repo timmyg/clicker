@@ -80,8 +80,8 @@ workflows:
     when: << pipeline.parameters.functionslead >>
     # working_directory: ~/clicker/functions/lead
     jobs:
-      - build:
-          name: serverless-build-test-deploy
+      - serverless-build-test-deploy:
+          # name: serverless-build-test-deploy
           package_name: functions/lead
         # <<: *serverless_build_test_deploy
   # functions/admin:
