@@ -92,45 +92,71 @@ workflows:
     jobs:
       - serverless-build-test-deploy:
           package_dir: ~/clicker/functions/lead
-  # functions/admin:
-  #   working_directory: ~/clicker/functions/admin
-  #   <<: *serverless_build_test_deploy
-  # functions/analytics:
-  #   working_directory: ~/clicker/functions/analytics
-  #   <<: *serverless_build_test_deploy
-  # functions/app:
-  #   working_directory: ~/clicker/functions/app
-  #   <<: *serverless_build_test_deploy
-  # functions/game:
-  #   working_directory: ~/clicker/functions/game
-  #   <<: *serverless_build_test_deploy
-  # functions/job:
-  #   working_directory: ~/clicker/functions/job
-  #   <<: *serverless_build_test_deploy
-  # functions/location:
-  #   working_directory: ~/clicker/functions/location
-  #   <<: *serverless_build_test_deploy
-  # functions/notification:
-  #   working_directory: ~/clicker/functions/notification
-  #   <<: *serverless_build_test_deploy
-  # functions/program:
-  #   working_directory: ~/clicker/functions/program
-  #   <<: *serverless_build_test_deploy
-  # functions/receiver:
-  #   working_directory: ~/clicker/functions/receiver
-  #   <<: *serverless_build_test_deploy
-  # functions/remote:
-  #   working_directory: ~/clicker/functions/remote
-  #   <<: *serverless_build_test_deploy
-  # functions/reservation:
-  #   working_directory: ~/clicker/functions/reservation
-  #   <<: *serverless_build_test_deploy
-  # functions/user:
-  #   working_directory: ~/clicker/functions/user
-  #   <<: *serverless_build_test_deploy
-  # functions/widget:
-  #   working_directory: ~/clicker/functions/widget
-  #   <<: *serverless_build_test_deploy
+  functions-admin:
+    when: << pipeline.parameters.functions-admin >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/admin
+  functions-analytics:
+    when: << pipeline.parameters.functions-analytics >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/analytics
+  functions-app:
+    when: << pipeline.parameters.functions-app >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/app
+  functions-game:
+    when: << pipeline.parameters.functions-game >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/game
+  functions-job:
+    when: << pipeline.parameters.functions-job >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/job
+  functions-location:
+    when: << pipeline.parameters.functions-location >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/location
+  functions-notification:
+    when: << pipeline.parameters.functions-notification >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/notification
+  functions-program:
+    when: << pipeline.parameters.functions-program >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/program
+  functions-receiver:
+    when: << pipeline.parameters.functions-receiver >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/receiver
+  functions-remote:
+    when: << pipeline.parameters.functions-remote >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/remote
+  functions-reservation:
+    when: << pipeline.parameters.functions-reservation >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/reservation
+  functions-user:
+    when: << pipeline.parameters.functions-user >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/user
+  functions-widget:
+    when: << pipeline.parameters.functions-widget >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/widget
   # web/app:
   #   working_directory: ~/clicker/web/app
   #   docker:
