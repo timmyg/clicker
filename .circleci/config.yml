@@ -70,6 +70,7 @@ workflows:
     when: << pipeline.parameters.trigger >>
     jobs:
       - trigger-workflows:
+        name: trigger-workflows
         filters:
           branches:
             only:
