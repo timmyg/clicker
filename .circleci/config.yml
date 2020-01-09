@@ -111,6 +111,9 @@ jobs:
   netlify-build-deploy-mobile:
     executor: node
     working_directory: << parameters.package_dir >>
+    parameters:
+      package_dir:
+        type: string
     steps:
       - run:
           name: Trigger Netlify build + deploy
@@ -127,6 +130,10 @@ jobs:
             fi
   deploy-s3:
     executor: aws
+    working_directory: << parameters.package_dir >>
+    parameters:
+      package_dir:
+        type: string
     steps:
       - checkout:
           path: ~/clicker
@@ -152,6 +159,9 @@ jobs:
   run-e2e:
     executor: cypress
     working_directory: << parameters.package_dir >>
+    parameters:
+      package_dir:
+        type: string
     steps:
       - checkout:
           path: ~/clicker
@@ -172,10 +182,10 @@ jobs:
           command: npm run test:ci
   serverless-build-test-deploy:
     executor: pynode
+    working_directory: << parameters.package_dir >>
     parameters:
       package_dir:
         type: string
-    working_directory: << parameters.package_dir >>
     steps:
       - checkout:
           path: ~/clicker
