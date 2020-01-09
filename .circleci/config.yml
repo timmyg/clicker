@@ -30,7 +30,7 @@ workflows:
     when: << pipeline.parameters.'functions/lead' >>
     # working_directory: ~/clicker/functions/lead
     jobs:
-      - build-deploy
+      - build-deploy:
         name: serverless-build-test-deploy
         # <<: *serverless_build_test_deploy
   # functions/location:
@@ -228,4 +228,4 @@ jobs:
             fi
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               npx serverless deploy --stage develop --verbose
-            fi        
+            fi
