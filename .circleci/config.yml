@@ -149,8 +149,7 @@ jobs:
       package_dir:
         type: string
     steps:
-      - checkout:
-          path: ~/clicker
+      - checkout
       - restore_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
       - run:

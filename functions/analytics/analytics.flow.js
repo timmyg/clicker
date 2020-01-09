@@ -26,4 +26,3 @@ module.exports.track = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
-
