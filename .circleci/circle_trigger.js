@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const exec = require("await-exec");
 const { exec } = require("child_process");
 
 (async function main() {
@@ -9,7 +10,6 @@ const { exec } = require("child_process");
   }?filter=completed&limit=1`;
   console.log({ circleUrl });
   const response = await fetch(circleUrl, {
-    // body: JSON.stringify(params),
     headers: {
       Authorization: `Basic ${Buffer.from(process.env.CIRCLE_TOKEN).toString(
         "base64"
@@ -19,7 +19,14 @@ const { exec } = require("child_process");
     method: "GET"
   });
   const data = await response.json();
-  console.log({ data });
+  //   console.log({ data });
+  const { vcs_revision: vcsRevision } = data;
+
+  const commitsRange = `${process.env.SHA1}...${vcsRevision}`;
+  const changedProjects = await exec(
+    `git diff --name-only ${commitsRange} | cut -d/ -f-2 | sort -u`
+  );
+  console.log({ changedProjects });
 
   // exec('yarn check:changes', (error, stdout) => {
   //     modules.forEach(name => {
