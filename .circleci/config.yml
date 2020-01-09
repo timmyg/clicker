@@ -89,23 +89,21 @@ jobs:
             - ./node_modules
       - run:
           name: Determine which projects have changed and trigger the builds
-          # command: chmod +x ./build-scripts/circle_trigger.sh && ./build-scripts/circle_trigger.sh
           command: node .circleci/build-scripts/project-diff-trigger.js
   netlify-build-deploy-web:
     executor: node
-    # working_directory: ~/clicker
     steps:
       - checkout
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && chmod +x .circleci/build-scripts/netlify-deploy-web.sh && .circleci/build-scripts/netlify-deploy-web.sh
+          command: chmod +x .circleci/build-scripts/netlify-deploy-web.sh && .circleci/build-scripts/netlify-deploy-web.sh
   netlify-build-deploy-mobile:
     executor: node
-    working_directory: ~/clicker
     steps:
+      - checkout
       - run:
           name: Trigger Netlify build + deploy
-          command: pwd && chmod +x ./build-scripts/netlify-deploy-mobile.sh && ./build-scripts/netlify-deploy-mobile.sh
+          command: chmod +x .circleci/build-scripts/netlify-deploy-mobile.sh && .circleci/build-scripts/netlify-deploy-mobile.sh
   deploy-s3:
     executor: aws
     working_directory: << parameters.package_dir >>
@@ -113,14 +111,13 @@ jobs:
       package_dir:
         type: string
     steps:
-      - checkout:
-          path: ~/clicker
+      - checkout
       - run:
           name: Install dependencies
           command: npm i
       - run:
           name: Upload app zip to s3
-          command: chmod +x ./build-scripts/s3-deploy-antenna.sh && ./build-scripts/s3-deploy-antenna.sh
+          command: chmod +x .circleci/build-scripts/s3-deploy-antenna.sh &&  .circleci/build-scripts/s3-deploy-antenna.sh
   run-e2e:
     executor: cypress
     working_directory: << parameters.package_dir >>
@@ -173,18 +170,7 @@ jobs:
               - master
               - release
               - develop
-          command: |
-            npm run build --if-present
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              npx serverless deploy --stage prod --verbose
-            fi
-            if [ "${CIRCLE_BRANCH}" == "release" ]; then
-              npx serverless deploy --stage release --verbose
-            fi
-            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              npx serverless deploy --stage develop --verbose
-            fi
-
+          command: chmod +x .circleci/build-scripts/serverless-deploy.sh &&  .circleci/build-scripts/serverless-deploy.sh
 workflows:
   version: 2
   ci:
@@ -280,7 +266,6 @@ workflows:
     jobs:
       - deploy-s3:
           package_dir: ~/clicker/packages/antenna
-
   e2e-app:
     when: << pipeline.parameters.e2e-app >>
     jobs:
