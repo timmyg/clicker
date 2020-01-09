@@ -36,9 +36,9 @@ jobs:
           command: node .circleci/circle_trigger.js
   serverless-build-test-deploy:
     parameters:
-      package_name:
+      package_dir:
         type: string
-    working_directory: << parameters.package_name >>
+    working_directory: << parameters.package_dir >>
     docker:
       - image: nikolaik/python-nodejs
     steps:
@@ -93,7 +93,7 @@ workflows:
     jobs:
       - serverless-build-test-deploy:
           # name: serverless-build-test-deploy
-          package_name: functions-lead
+          package_dir: functions/lead
         # <<: *serverless_build_test_deploy
   # functions/admin:
   #   working_directory: ~/clicker/functions/admin
