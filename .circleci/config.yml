@@ -94,6 +94,9 @@ jobs:
   netlify-build-deploy-web:
     executor: node
     working_directory: << parameters.package_dir >>
+    parameters:
+      package_dir:
+        type: string
     steps:
       - run:
           name: Trigger Netlify build + deploy
