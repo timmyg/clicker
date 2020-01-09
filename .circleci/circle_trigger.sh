@@ -23,7 +23,7 @@ for project in ${projects_inc_dep[@]}; do
     #   https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
 
     PARAMETERS='"trigger":false'
-    PARAMETERS+=", \"$PACKAGE\":true"
+    PARAMETERS+=", \"$project\":true"
     DATA="{ \"branch\": \"$CIRCLE_BRANCH\", \"parameters\": { $PARAMETERS } }"
     URL="${CIRCLE_API}/v2/project/${REPOSITORY_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline"
     echo -e "calling: $DATA $URL"
