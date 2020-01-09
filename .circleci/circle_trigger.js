@@ -16,8 +16,11 @@ fetch(circleUrl, {
     "Content-Type": "application/json"
   },
   method: "GET"
-}).then(res => console.log(res.json()));
-// });
+})
+  .then(response => response.json())
+  .then(data => {
+    data;
+  });
 
 // exec('yarn check:changes', (error, stdout) => {
 //     modules.forEach(name => {
