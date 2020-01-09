@@ -34,6 +34,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async (event) => {
 	return respond(201, "not prod so didn't actually create anything");
 });
 
+
 module.exports.health = RavenLambdaWrapper.handler(Raven, async (event) => {
 	return respond(200, `hello`);
 });
