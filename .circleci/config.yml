@@ -28,6 +28,8 @@ jobs:
           command: npm i node-fetch await-exec
       - save_cache:
           key: dependency-cache
+          paths:
+            - ./node_modules
       - run:
           name: Determine which projects have changed and trigger the builds
           # command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
