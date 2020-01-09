@@ -20,7 +20,7 @@ const exec = require("await-exec");
   });
   const data = await response.json();
   console.log({ data });
-  const { vcs_revision: vcsRevision } = data;
+  const [{ vcs_revision: vcsRevision }] = data;
 
   const commitsRange = `${process.env.CIRCLE_SHA1}...${vcsRevision}`;
   const changedProjects = await exec(
