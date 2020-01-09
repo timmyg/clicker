@@ -77,7 +77,7 @@ workflows:
               - release
               - develop
   functionslead:
-    when: << pipeline.parameters.functionslead" >>
+    when: << pipeline.parameters.functionslead >>
     # working_directory: ~/clicker/functions/lead
     jobs:
       - build:
