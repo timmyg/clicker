@@ -52,6 +52,8 @@ jobs:
       - run:
           name: Determine which projects have changed and trigger the builds
           command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
+
+workflows:
   functions/admin:
     working_directory: ~/clicker/functions/admin
     <<: *serverless_build_test_deploy
@@ -68,6 +70,7 @@ jobs:
     working_directory: ~/clicker/functions/job
     <<: *serverless_build_test_deploy
   functions/lead:
+    when: << pipeline.parameters.'functions/lead' >>
     working_directory: ~/clicker/functions/lead
     <<: *serverless_build_test_deploy
   functions/location:
