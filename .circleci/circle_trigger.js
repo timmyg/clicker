@@ -22,7 +22,7 @@ const exec = require("await-exec");
   //   console.log({ data });
   const [{ vcs_revision: vcsRevision }] = data;
 
-  const commitsRange = `${process.env.CIRCLE_SHA1}...${vcsRevision}`;
+  const commitsRange = `${vcsRevision}...${process.env.CIRCLE_SHA1}`;
   console.log({ commitsRange });
   const changedProjects = await exec(
     `git diff --name-only ${commitsRange} | cut -d/ -f-2 | sort -u`
