@@ -39,6 +39,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async (event) => {
 });
 
 
+
 async function createHubspotContact(email) {
 	const contact = {
 		properties: [ { property: 'email', value: email }, { property: 'source', value: 'landing page' } ]

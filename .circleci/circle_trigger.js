@@ -19,7 +19,7 @@ const exec = require("await-exec");
     method: "GET"
   });
   const data = await response.json();
-  console.log({ data });
+  //   console.log({ data });
   const [{ vcs_revision: vcsRevision }] = data;
 
   const commitsRange = `${process.env.CIRCLE_SHA1}...${vcsRevision}`;
