@@ -18,12 +18,6 @@ jobs:
   trigger-workflows:
     docker:
       - image: circleci/node:8.10
-    filters:
-      branches:
-        only:
-          - master
-          - release
-          - develop
     steps:
       - checkout
       - run:
@@ -75,7 +69,13 @@ workflows:
   ci:
     when: << pipeline.parameters.trigger >>
     jobs:
-      - trigger-workflows
+      - trigger-workflows:
+        filters:
+          branches:
+            only:
+              - master
+              - release
+              - develop
   functionslead:
     when: << pipeline.parameters.functionslead >>
     # working_directory: ~/clicker/functions/lead
