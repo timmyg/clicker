@@ -90,7 +90,7 @@ jobs:
       - run:
           name: Determine which projects have changed and trigger the builds
           # command: chmod +x ./build-scripts/circle_trigger.sh && ./build-scripts/circle_trigger.sh
-          command: node ./build-scripts/project-diff-trigger.js
+          command: node .circleci/build-scripts/project-diff-trigger.js
   netlify-build-deploy-web:
     executor: node
     # working_directory: ~/clicker
