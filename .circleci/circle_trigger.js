@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const { exec } = require("child_process");
 
-async function go() {
+(async function main() {
   const circleUrl = `https://circleci.com/api/v1.1/project/github/${
     process.env.CIRCLE_PROJECT_USERNAME
   }/${process.env.CIRCLE_PROJECT_REPONAME}/tree/${
@@ -50,6 +50,4 @@ async function go() {
   //         ).then(console.log);
   //     });
   // });
-}
-
-go();
+})();
