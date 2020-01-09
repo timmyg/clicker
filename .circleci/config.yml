@@ -31,7 +31,8 @@ workflows:
     # working_directory: ~/clicker/functions/lead
     jobs:
       - build-deploy:
-        name: serverless-build-test-deploy
+          name: serverless-build-test-deploy
+          package_name: functions/lead
         # <<: *serverless_build_test_deploy
   # functions/location:
   #   working_directory: ~/clicker/functions/location
