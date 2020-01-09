@@ -5,7 +5,7 @@ parameters:
     type: boolean
     default: true
 
-  functionslead:
+  functions-lead:
     type: boolean
     default: false
 
@@ -87,13 +87,13 @@ workflows:
               - master
               - release
               - develop
-  functionslead:
-    when: << pipeline.parameters.functionslead >>
+  functions-lead:
+    when: << pipeline.parameters.functions-lead >>
     # working_directory: ~/clicker/functions/lead
     jobs:
       - serverless-build-test-deploy:
           # name: serverless-build-test-deploy
-          package_name: functions/lead
+          package_name: functions-lead
         # <<: *serverless_build_test_deploy
   # functions/admin:
   #   working_directory: ~/clicker/functions/admin

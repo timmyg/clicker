@@ -41,15 +41,18 @@ const fs = require("fs");
   console.log({ changedActiveProjects });
 
   for (const changedActiveProject of changedActiveProjects) {
+    // replace slashes with dashes
+    const project = changedActiveProject.replace(/\//g, "-");
     const params = {
       parameters: {
-        [changedActiveProject]: true,
+        [project]: true,
         trigger: false
       },
       branch: process.env.CIRCLE_BRANCH
     };
 
     console.log({ params });
+
     await fetch(
       `https://circleci.com/api/v2/project/github/${
         process.env.CIRCLE_PROJECT_USERNAME
