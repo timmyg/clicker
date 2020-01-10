@@ -109,7 +109,7 @@ const minorChannels = [
     subChannels: [
       {
         minor: 1,
-        channelIds: [34545],
+        channelIds: [34545, 2661],
       },
       { minor: 2, channelIds: [4661, 4626] },
     ],
