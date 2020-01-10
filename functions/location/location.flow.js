@@ -145,7 +145,7 @@ const dbLocation = dynamoose.model(
     openTvs: Boolean,
   },
   {
-    // saveUnknown: ['program'],
+    saveUnknown: ['program'],
     timestamps: true,
     allowEmptyArray: true,
     // update: true,
