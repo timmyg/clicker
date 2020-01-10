@@ -166,6 +166,7 @@ const dbProgram = dynamoose.model(
   {
     saveUnknown: ['game', 'subcategories'],
     timestamps: true,
+    allowEmptyArray: true,
     expires: {
       ttl: 86400,
       attribute: 'expires',
