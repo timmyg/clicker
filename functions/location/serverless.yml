@@ -98,6 +98,18 @@ functions:
               - partner
               - authorization
               - content-type
+  get:
+    handler: location.get
+    events:
+      - http:
+          path: '/{id}'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   all:
     handler: location.all
     events:
@@ -115,18 +127,6 @@ functions:
     events:
       - http:
           path: '/geo/{latitude}/{longitude}'
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  get:
-    handler: location.get
-    events:
-      - http:
-          path: '{id}'
           method: get
           cors:
             origin: '*'
