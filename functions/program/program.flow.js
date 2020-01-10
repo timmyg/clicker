@@ -154,7 +154,7 @@ const dbProgram = dynamoose.model(
       },
     }, // "SH000296530000" - use this to get summary
     channelCategories: [String], // ["Sports Channels"]
-    // subcategories: [String], // ["Basketball"]
+    subcategories: [String], // ["Basketball"]
     mainCategory: String, // "Sports"
     programType: String, // "Sports non-event"
     // dynamic fields
@@ -164,9 +164,8 @@ const dbProgram = dynamoose.model(
     synced: Boolean, // synced with description from separate endpoint
   },
   {
-    saveUnknown: ['game', 'subcategories'],
+    saveUnknown: ['game'],
     timestamps: true,
-    allowEmptyArray: true,
     expires: {
       ttl: 86400,
       attribute: 'expires',
