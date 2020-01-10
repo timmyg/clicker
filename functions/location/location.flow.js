@@ -147,7 +147,7 @@ const dbLocation = dynamoose.model(
   {
     saveUnknown: ['program'],
     timestamps: true,
-    // allowEmptyArray: true,
+    allowEmptyArray: true,
     // update: true,
   },
 );
