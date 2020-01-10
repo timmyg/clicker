@@ -129,7 +129,7 @@ describe('get boxes', () => {
     expect(one.rating).toBe(7);
     expect(one.box.id).toBe(3);
   });
-  test("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
+  test.skip("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
     const result = getAvailableBoxes(boxes);
     expect(result.length).toBe(4);
     expect(result[0].box.id).toBe(1);
