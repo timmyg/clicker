@@ -876,8 +876,10 @@ function build(dtvSchedule: any, regionName: string) {
         if (minorChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
           console.log('minor!');
-          const channel = minorChannels.find(c => c.channel === program.channel);
-          const channelMinor = channel.subChannels.find(c => c.channelIds.includes(channel.chId));
+          const minorChannelMatch = minorChannels.find(c => c.channel === program.channel);
+          console.log({ minorChannelMatch });
+          const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
+          console.log({ channelMinor });
           if (!!channelMinor) {
             program.channelMinor = channelMinor.minor;
             console.log('minor set');
