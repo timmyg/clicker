@@ -165,6 +165,7 @@ const dbProgram = dynamoose.model(
   },
   {
     saveUnknown: ['game'],
+    allowEmptyArray: true,
     timestamps: true,
     expires: {
       ttl: 86400,
