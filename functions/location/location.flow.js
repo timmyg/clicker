@@ -374,6 +374,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .queryOne('id')
     .eq(locationId)
     .exec();
+  console.log({ location });
 
   for (const box of boxes) {
     const { boxId, info } = box;
