@@ -42,7 +42,7 @@ const allRegions: region[] = [
   { name: 'chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   { name: 'nyc', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
 ];
-const minorChannels: number[] = [661];
+// const minorChannels: number[] = [661];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO'];
 const nationalChannels: number[] = [
   206, //ESPN
@@ -93,6 +93,29 @@ const nationalChannels: number[] = [
   106, //LIVE4K2
 ];
 
+const minorChannels = [
+  {
+    channel: 660,
+    subChannels: [
+      {
+        minor: 1,
+        channelIds: [2661, 2626, 624],
+      },
+      { minor: 2, channelIds: [4661, 4626, 625] },
+    ],
+  },
+  {
+    channel: 661,
+    subChannels: [
+      {
+        minor: 1,
+        channelIds: [2661, 2626],
+      },
+      { minor: 2, channelIds: [4661, 4626] },
+    ],
+  },
+];
+
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
     accessKeyId: 'test',
@@ -100,6 +123,7 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
+
 const dbProgram = dynamoose.model(
   process.env.tableProgram,
   {
@@ -126,7 +150,7 @@ const dbProgram = dynamoose.model(
         // ],
       },
     },
-    // channelMinor: Number,
+    channelMinor: Number,
     channelTitle: String,
     title: String, // "Oklahoma State @ Kansas"
     episodeTitle: String, // "Oklahoma State at Kansas"
@@ -231,10 +255,10 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .gt(timeToSearchPreviousProgram)
     .exec();
 
-  // this was causing issues getting location (location.boxes.program.subcategories) when it was null
+  // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
   programs.forEach(p => {
-    delete p['subcategories'];
-    delete p['channelCategories'];
+    delete p.subcategories;
+    delete p.channelCategories;
   });
   console.log(`programs: ${programs.length}`);
   const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
@@ -847,9 +871,14 @@ function build(dtvSchedule: any, regionName: string) {
         program.channel = channel.chNum;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
-        // if channel is in minors list, add a -1 to it
-        if (minorChannels.includes(program.channel)) {
-          program.channelMinor = 1;
+        // if channel is in minors list, try to add a minor channel to it
+        if (minorChannels.map(c => c.channel).includes(program.channel)) {
+          // program.channelMinor = 1;
+          const channel = minorChannels.find(c => c.channel === program.channel);
+          const channelMinor = channel.subChannels.find(c => c.channelIds.includes(channel.chId));
+          if (!!channelMinor) {
+            program.channelMinor = channelMinor.minor;
+          }
         }
 
         program.title = program.title !== 'Programming information not available' ? program.title : null;
