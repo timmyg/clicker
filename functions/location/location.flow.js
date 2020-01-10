@@ -65,7 +65,7 @@ const dbLocation = dynamoose.model(
         channelMinor: Number,
         channelChangeAt: Date,
         updatedAt: Date,
-        program: Map, // populated every few minutes
+        // program: Map, // populated every few minutes
         channelSource: {
           type: String,
           enum: ['app', 'control center', 'manual', 'control center daily'],
@@ -145,6 +145,7 @@ const dbLocation = dynamoose.model(
     openTvs: Boolean,
   },
   {
+    saveUnknown: ['program', 'program.game'],
     timestamps: true,
     // update: true,
   },
@@ -823,18 +824,67 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   return respond(200);
 });
 
+// npm run invoke:updateAirtableNowShowing
+module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
+  let locations: Venue[] = await dbLocation.scan().exec();
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableName = 'Now Showing';
+  const nowShowing = [];
+  locations.forEach(location => {
+    nowShowing.push(...buildAirtableNowShowing(location));
+  });
+  console.log(nowShowing[0]);
+  const promises = [];
+  while (!!nowShowing.length) {
+    try {
+      const slice = nowShowing.splice(0, 10);
+      promises.push(base(airtableName).create(slice));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  await Promise.all(promises);
+});
+
+function buildAirtableNowShowing(location: Venue) {
+  const transformed = [];
+  location.boxes.forEach(box => {
+    const { channel, channelSource: source, zone, program, label, appActive } = box;
+    let game, programTitle;
+    if (program) {
+      game = program.game;
+      console.log(game);
+      programTitle = program.title;
+      if (program.description) {
+        programTitle += `: ${program.description.substring(0, 20)}`;
+      }
+    }
+    transformed.push({
+      fields: {
+        location: `${location.name}: ${location.neighborhood}`,
+        program: programTitle ? programTitle : '',
+        game: game ? JSON.stringify(game) : '',
+        channel,
+        channelName: program ? program.channelTitle : null,
+        source,
+        zone: zone ? zone : appActive ? `${label} (app)` : '',
+        time: moment().toDate(),
+      },
+    });
+  });
+  return transformed;
+}
+
 function getAvailableBoxes(boxes: Box[]): BoxStatus[] {
   // only boxes with zones
   boxes = boxes.filter(b => b.zone && b.zone.length);
 
   // remove manually changed boxes
-  const manualChangeMinutesAgo = 45;
+  const manualChangeMinutesAgo = 30;
   boxes = boxes.filter(
     b =>
       b.channelSource !== 'manual' ||
       (b.channelSource === 'manual' && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
-    // ||
-    // (b.channelSource === 'manual' && b.program && b.program.game && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
   );
 
   // turn boxes into BoxStatus's
@@ -877,14 +927,13 @@ async function tune(location: Venue, box: Box, channel: number) {
 function createBoxes(boxes: Box[]): BoxStatus[] {
   const boxStatuses: BoxStatus[] = [];
   boxes.forEach(b => {
-    console.log({ b });
     boxStatuses.push(
       new BoxStatus({
         // boxId: b.id,
         hasProgram: !!b.program && Object.keys(b.program).length > 0,
         ended: !!b.program && !!b.program.game && b.program.game.liveStatus.ended,
         blowout: !!b.program && !!b.program.game && b.program.game.liveStatus.blowout,
-        rating: b.program.clickerRating,
+        rating: !!b.program && b.program.clickerRating,
         box: b,
       }),
     );

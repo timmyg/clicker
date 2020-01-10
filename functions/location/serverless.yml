@@ -324,3 +324,10 @@ functions:
       - http:
           path: '{id}/control-center/v2'
           method: post
+  updateAirtableNowShowing:
+    handler: location.updateAirtableNowShowing
+    events:
+      - schedule: cron(*/15 * * * ? *)
+      - http:
+          path: 'airtable/now-showing'
+          method: post
