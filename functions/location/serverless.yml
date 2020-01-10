@@ -102,7 +102,7 @@ functions:
     handler: location.get
     events:
       - http:
-          path: '/{id}'
+          path: '{id}'
           method: get
           cors:
             origin: '*'

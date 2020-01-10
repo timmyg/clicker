@@ -65,7 +65,7 @@ const dbLocation = dynamoose.model(
         channelMinor: Number,
         channelChangeAt: Date,
         updatedAt: Date,
-        program: Map, // populated every few minutes
+        // program: Map, // populated every few minutes
         channelSource: {
           type: String,
           enum: ['app', 'control center', 'manual', 'control center daily'],
@@ -145,7 +145,7 @@ const dbLocation = dynamoose.model(
     openTvs: Boolean,
   },
   {
-    // saveUnknown: ['program'],
+    saveUnknown: ['program'],
     timestamps: true,
     allowEmptyArray: true,
     // update: true,
