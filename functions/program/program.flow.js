@@ -109,7 +109,7 @@ const minorChannels = [
     subChannels: [
       {
         minor: 1,
-        channelIds: [2661, 2626],
+        channelIds: [34545],
       },
       { minor: 2, channelIds: [4661, 4626] },
     ],
@@ -872,6 +872,7 @@ function build(dtvSchedule: any, regionName: string) {
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
         // if channel is in minors list, try to add a minor channel to it
+        console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
         if (minorChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
           const channel = minorChannels.find(c => c.channel === program.channel);
