@@ -230,6 +230,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .filter('end')
     .gt(timeToSearchPreviousProgram)
     .exec();
+
+  // this was causing issues getting location (location.boxes.program.subcategories) when it was null
+  programs.forEach(p => delete p['subcategories']);
   console.log(`programs: ${programs.length}`);
   const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
   const existingProgram = sortedPrograms[sortedPrograms.length - 1];
