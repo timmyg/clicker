@@ -93,15 +93,16 @@ const nationalChannels: number[] = [
   106, //LIVE4K2
 ];
 
+// 2661
 const minorChannels = [
   {
     channel: 660,
     subChannels: [
       {
         minor: 1,
-        channelIds: [2661, 2626, 624],
+        channelIds: [5660, 2660],
       },
-      { minor: 2, channelIds: [4661, 4626, 625] },
+      { minor: 2, channelIds: [623, 624] },
     ],
   },
   {
@@ -109,9 +110,9 @@ const minorChannels = [
     subChannels: [
       {
         minor: 1,
-        channelIds: [34545, 2661],
+        channelIds: [5661],
       },
-      { minor: 2, channelIds: [4661, 4626] },
+      { minor: 2, channelIds: [625, 376] },
     ],
   },
 ];
