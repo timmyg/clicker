@@ -933,8 +933,8 @@ function createBoxes(boxes: Box[]): BoxStatus[] {
       new BoxStatus({
         // boxId: b.id,
         hasProgram: !!b.program && Object.keys(b.program).length > 0,
-        ended: !!b.program && !!b.program.game && b.program.game.liveStatus.ended,
-        blowout: !!b.program && !!b.program.game && b.program.game.liveStatus.blowout,
+        ended: !!b.program && !!b.program.game && !!b.program.game.liveStatus && b.program.game.liveStatus.ended,
+        blowout: !!b.program && !!b.program.game && !!b.program.game.liveStatus && b.program.game.liveStatus.blowout,
         rating: !!b.program && b.program.clickerRating,
         box: b,
       }),
