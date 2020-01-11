@@ -815,7 +815,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       await tune(location, boxStatus.box, program.fields.channel);
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${boxes.length}`);
-      console.log({ b, boxStatus });
+      console.log({ boxes, boxStatus });
       boxes = boxes.filter(b => b.box.id !== boxStatus.box.id);
       console.log(`boxes remaining: ${boxes.length}`);
     }
