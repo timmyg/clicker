@@ -81,31 +81,30 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
 });
 
 module.exports.airtableRemoveExpired = RavenLambdaWrapper.handler(Raven, async event => {
-  const tableNames = ['Control Center v1', 'Channel Changes', 'Programs', 'Games'];
+  const tableNames = ['Control Center v1', 'Channel Changes', 'Control Center', 'Games', 'Now Showing'];
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let count = 0;
   for (const tableName of tableNames) {
+    console.log({ tableName });
     const expired = await base(tableName)
       .select({ view: 'Expired' })
-      // .select({ view: 'Expired', fields: ['id'] })
       .all();
     console.log({ expired });
-    // return;
     const expiredIds = expired.map(g => g.id);
     console.log({ expiredIds });
     const promises = [];
     while (!!expiredIds.length) {
       try {
         const expiredSlice = expiredIds.splice(0, 10);
-        console.log('batch putting:', expiredSlice.length);
-        console.log('remaining:', expiredIds.length);
+        count += expiredSlice.length;
+        // console.log('batch putting:', expiredSlice.length);
+        // console.log('remaining:', expiredIds.length);
         promises.push(base(tableName).destroy(expiredSlice));
+        await Promise.all(promises);
       } catch (e) {
         console.error(e);
       }
     }
-    count += promises.length;
-    await Promise.all(promises);
   }
   return respond(200, { count });
 });
