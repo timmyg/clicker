@@ -1026,7 +1026,7 @@ function selectBox(type: string, boxes: BoxStatus[]): BoxStatus {
 // async function changeChannel(program: ControlCenterProgram, boxes: Box[], changeType: string) {}
 
 async function getAirtablePrograms() {
-  const airtableProgramsName = 'Programs';
+  const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({

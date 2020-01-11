@@ -12,3 +12,6 @@
 12. airtable change Cincinnati
 13. drop users, migrate data
 14. drop programs stack
+15. Programs > Control Center
+16. All views
+17. Control Center isSportsOrEmpty

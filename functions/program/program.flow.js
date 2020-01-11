@@ -446,7 +446,7 @@ module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtablePrograms = 'Programs';
+  const airtablePrograms = 'Control Center';
   const datesToPull = [];
   const daysToPull = 12;
   [...Array(daysToPull)].forEach((_, i) => {
@@ -492,7 +492,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
 
 async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursFromNow = 4) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableProgramsName = 'Programs';
+  const airtableProgramsName = 'Control Center';
   const fourHoursAgo = moment()
     .subtract(hoursAgo, 'h')
     .toISOString();
@@ -751,7 +751,7 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
     const { description, progType: programType } = programDetails;
     // update in airtable
     const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-    const airtablePrograms = 'Programs';
+    const airtablePrograms = 'Control Center';
     console.time('airtable');
     const airtableGames = await airtableBase(airtablePrograms)
       .select({
