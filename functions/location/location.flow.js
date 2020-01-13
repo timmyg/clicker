@@ -730,27 +730,10 @@ module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event =
   return respond(200, { locations: locations.length });
 });
 
-function filterProgramsAlreadyShowing(ccPrograms: ControlCenterProgram[], boxes: Box[]): ControlCenterProgram[] {
+function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
+  const { boxes } = location;
   const liveChannelIds = boxes.map(b => b.channel);
-  return ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
-}
-
-// npm run invoke:controlCenterV2byLocation
-module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('controlCenterV2byLocation');
-  const { id: locationId } = getPathParameters(event);
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(locationId)
-    .exec();
-
-  // get control center programs
-  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
-  console.info(`all programs: ${ccPrograms.length}`);
-  console.info(`all boxes: ${location.boxes.length}`);
-
-  // filter out currently showing programs
-  ccPrograms = filterProgramsAlreadyShowing(ccPrograms, location.boxes);
+  ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
   // remove channels that location doesnt have
@@ -762,10 +745,27 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.fields.channel));
   }
   console.info(`filtered programs after looking at excluded: ${ccPrograms.length}`);
-
   // sort by rating descending
-  ccPrograms = ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
+  return ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
+}
 
+// npm run invoke:controlCenterV2byLocation
+module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id: locationId } = getPathParameters(event);
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(locationId)
+    .exec();
+
+  // get control center programs
+  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
+  console.info(`all programs: ${ccPrograms.length}`);
+  console.info(`all boxes: ${location.boxes.length}`);
+
+  // filter out currently showing programs, excluded programs, and sort by rating
+  ccPrograms = filterPrograms(ccPrograms, location);
+
+  // get boxes with zones, and not manually locked
   let boxes: BoxStatus[] = getAvailableBoxes(location.boxes);
 
   for (const program of ccPrograms) {
@@ -879,32 +879,27 @@ function buildAirtableNowShowing(location: Venue) {
 }
 
 function getAvailableBoxes(boxes: Box[]): BoxStatus[] {
-  // only boxes with zones
-  boxes = boxes.filter(b => b.zone && b.zone.length);
-
   // remove manually changed boxes
   const manualChangeMinutesAgo = 30;
   const manualChangeBuffer = 15;
-  // boxes = boxes.filter(b => b.channelSource !== 'manual');
-  // remove manually changed within past 30 minutes
-  // console.log(moment(boxes[0].channelChangeAt).diff(moment(), 'minutes'));
-  boxes = boxes.filter(
-    b =>
-      b.channelSource !== 'manual' ||
-      (b.channelSource === 'manual' && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
-    // -33 < -30 true
-    // -27 < -30 false
-  );
-  // remove manually changed not in current game window
-  boxes = boxes.filter(
-    b =>
-      b.channelSource !== 'manual' ||
-      (b.channelSource === 'manual' &&
-        moment(b.channelChangeAt).diff(moment(b.program.start), 'minutes') < -manualChangeBuffer),
-  );
 
-  // turn boxes into BoxStatus's
-  // console.log(boxes, createBoxes(boxes));
+  boxes = boxes
+    // only boxes with zones
+    .filter(b => b.zone && b.zone.length)
+    // remove manually changed within past 30 minutes
+    .filter(
+      b =>
+        b.channelSource !== 'manual' ||
+        (b.channelSource === 'manual' && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
+    )
+    // remove manually changed not in current game window
+    .filter(
+      b =>
+        b.channelSource !== 'manual' ||
+        (b.channelSource === 'manual' &&
+          moment(b.channelChangeAt).diff(moment(b.program.start), 'minutes') < -manualChangeBuffer),
+    );
+
   return createBoxes(boxes);
 }
 
@@ -959,7 +954,7 @@ function createBoxes(boxes: Box[]): BoxStatus[] {
 
 function selectBox(type: string, boxes: BoxStatus[]): BoxStatus {
   // sort by zone ascending
-  // boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
+  boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
   switch (type) {
     // A. game over (any game)
     case 'A':
@@ -1095,5 +1090,5 @@ async function updateLocationBox(locationId, boxIndex, channel: number, channelM
 
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
-module.exports.filterProgramsAlreadyShowing = filterProgramsAlreadyShowing;
+module.exports.filterPrograms = filterPrograms;
 module.exports.createBoxes = createBoxes;

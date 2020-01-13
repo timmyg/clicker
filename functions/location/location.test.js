@@ -1,5 +1,5 @@
 const file = require('./location');
-const { ControlCenterProgram, getAvailableBoxes, filterProgramsAlreadyShowing, createBoxes } = require('./location');
+const { ControlCenterProgram, getAvailableBoxes, filterPrograms, createBoxes } = require('./location');
 const moment = require('moment');
 
 test('smoke test', () => {
@@ -29,16 +29,44 @@ test('ControlCenterProgram model', () => {
   expect(ccPrograms[0].isMinutesFromNow(20)).toBeTruthy();
 });
 
-describe('filterProgramsAlreadyShowing', () => {
-  const ccPrograms = [
-    { fields: { channel: 206 } }, // showing
-    { fields: { channel: 209 } },
-    { fields: { channel: 219 } }, // showing
-    { fields: { channel: 5 } },
-  ];
-  const boxes = [{ channel: 206 }, { channel: 219 }, { channel: 206 }, { channel: 9 }];
-  const result = filterProgramsAlreadyShowing(ccPrograms, boxes);
-  expect(result.length).toBe(2);
+describe('filterPrograms', () => {
+  test('already showing', () => {
+    const ccPrograms = [
+      { fields: { channel: 206, rating: 9 } }, // showing
+      { fields: { channel: 209, rating: 6 } },
+      { fields: { channel: 219, rating: 6 } }, // showing
+      { fields: { channel: 5, rating: 10 } },
+      { fields: { channel: 221, rating: 9 } },
+    ];
+    const location = {
+      channels: { excluded: [209] },
+      boxes: [{ channel: 206 }, { channel: 219 }, { channel: 206 }, { channel: 9 }],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(3);
+    // ensure sorted
+    expect(result[0].fields.channel).toBe(5);
+    expect(result[1].fields.channel).toBe(221);
+    expect(result[2].fields.channel).toBe(209);
+  });
+  test('already showing and excluded', () => {
+    const ccPrograms = [
+      { fields: { channel: 9 } }, // showing
+      { fields: { channel: 703 } }, // excluded
+      { fields: { channel: 219 } },
+      { fields: { channel: 5 } }, //showing
+      { fields: { channel: 709 } }, //excluded
+      { fields: { channel: 12 } },
+    ];
+    const location = {
+      channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
+      boxes: [{ channel: 5 }, { channel: 9 }, { channel: 19 }],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(2);
+    expect(result[0].fields.channel).toBe(219);
+    expect(result[1].fields.channel).toBe(12);
+  });
 });
 describe('get boxes', () => {
   const openGoodBox = { id: 1, zone: '4' };
