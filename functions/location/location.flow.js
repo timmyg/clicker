@@ -884,10 +884,23 @@ function getAvailableBoxes(boxes: Box[]): BoxStatus[] {
 
   // remove manually changed boxes
   const manualChangeMinutesAgo = 30;
+  const manualChangeBuffer = 15;
+  // boxes = boxes.filter(b => b.channelSource !== 'manual');
+  // remove manually changed within past 30 minutes
+  // console.log(moment(boxes[0].channelChangeAt).diff(moment(), 'minutes'));
   boxes = boxes.filter(
     b =>
       b.channelSource !== 'manual' ||
       (b.channelSource === 'manual' && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
+    // -33 < -30 true
+    // -27 < -30 false
+  );
+  // remove manually changed not in current game window
+  boxes = boxes.filter(
+    b =>
+      b.channelSource !== 'manual' ||
+      (b.channelSource === 'manual' &&
+        moment(b.channelChangeAt).diff(moment(b.program.start), 'minutes') < -manualChangeBuffer),
   );
 
   // turn boxes into BoxStatus's

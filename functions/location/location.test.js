@@ -50,73 +50,74 @@ describe('get boxes', () => {
       clickerRating: 7,
     },
     channelSource: 'manual',
-    channelChangeAt: moment()
-      .subtract(33, 'm')
-      .unix(),
+    channelChangeAt:
+      moment()
+        .subtract(27, 'm')
+        .unix() * 1000,
   };
   const reservedManuallyChangedGameOn = {
     id: 4,
     zone: '15',
     channelSource: 'manual',
-    channelChangeAt: moment()
-      .subtract(50, 'm')
-      .unix(),
+    channelChangeAt:
+      moment()
+        .subtract(50, 'm')
+        .unix() * 1000,
     program: {
+      start:
+        moment()
+          .subtract(40, 'm')
+          .unix() * 1000,
       game: {
-        start: moment()
-          .subtract(55, 'm')
-          .unix(),
         liveStatus: {
           status: 'inprogress',
         },
       },
     },
   };
-  const openManuallyChangedGameOver = {
+  const openManuallyChangedDifferentProgram = {
     id: 5,
     zone: '15',
     channelSource: 'manual',
-    channelChangeAt: moment()
-      .subtract(50, 'm')
-      .unix(),
+    channelChangeAt:
+      moment()
+        .subtract(2, 'h')
+        .unix() * 1000,
     program: {
+      start:
+        moment()
+          .subtract(1, 'h')
+          .unix() * 1000,
       game: {
-        start: moment()
-          .subtract(2, 'h')
-          .unix(),
         liveStatus: {
           status: 'complete',
         },
       },
     },
   };
-  const openManuallyChangedProgramOver = {
+  const reservedManuallyChangedProgramOver = {
     id: 6,
     zone: '15',
     channelSource: 'manual',
-    channelChangeAt: moment()
-      .subtract(40, 'm')
-      .unix(),
+    channelChangeAt:
+      moment()
+        .subtract(40, 'm')
+        .unix() * 1000,
     program: {
-      start: moment()
-        .subtract(30, 'm')
-        .unix(),
+      start:
+        moment()
+          .subtract(2, 'h')
+          .unix() * 1000,
+      game: {
+        status: 'complete',
+      },
     },
   };
-  const reservedZonelessBox = { id: 57, zone: '' };
-  const boxes = [
-    openGoodBox,
-    openGoodBox2,
-    reservedManuallyChangedRecently,
-    reservedManuallyChangedGameOn,
-    openManuallyChangedGameOver,
-    openManuallyChangedProgramOver,
-    reservedZonelessBox,
-  ];
+  const reservedZonelessBox = { id: 7, zone: '' };
   test('createBoxes: map to new object', () => {
     const result = createBoxes([
       reservedManuallyChangedRecently,
-      openManuallyChangedGameOver,
+      openManuallyChangedDifferentProgram,
       reservedManuallyChangedGameOn,
     ]);
 
@@ -129,12 +130,49 @@ describe('get boxes', () => {
     expect(one.rating).toBe(7);
     expect(one.box.id).toBe(3);
   });
-  test.skip("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
-    const result = getAvailableBoxes(boxes);
-    expect(result.length).toBe(4);
-    expect(result[0].box.id).toBe(1);
-    expect(result[1].box.id).toBe(2);
-    expect(result[2].box.id).toBe(5);
-    expect(result[3].box.id).toBe(6);
+  describe("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
+    test('openGoodBox', () => {
+      const result = getAvailableBoxes([openGoodBox]);
+      expect(result.length).toBe(1);
+    });
+    test('openGoodBox2', () => {
+      const result = getAvailableBoxes([openGoodBox2]);
+      expect(result.length).toBe(1);
+    });
+    test('openManuallyChangedDifferentProgram', () => {
+      const result = getAvailableBoxes([openManuallyChangedDifferentProgram]);
+      expect(result.length).toBe(1);
+    });
+    test('reservedManuallyChangedProgramOver', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedProgramOver]);
+      expect(result.length).toBe(0);
+    });
+    test('reservedManuallyChangedRecently', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedRecently]);
+      expect(result.length).toBe(0);
+    });
+    test('reservedManuallyChangedGameOn', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedGameOn]);
+      expect(result.length).toBe(0);
+    });
+    test('reservedZonelessBox', () => {
+      const result = getAvailableBoxes([reservedZonelessBox]);
+      expect(result.length).toBe(0);
+    });
+    test('all of em', () => {
+      const result = getAvailableBoxes([
+        openGoodBox,
+        openGoodBox2,
+        openManuallyChangedDifferentProgram,
+        reservedManuallyChangedProgramOver,
+        reservedManuallyChangedRecently,
+        reservedManuallyChangedGameOn,
+        reservedZonelessBox,
+      ]);
+      expect(result.length).toBe(3);
+      expect(result[0].box.id).toBe(1);
+      expect(result[1].box.id).toBe(2);
+      expect(result[2].box.id).toBe(5);
+    });
   });
 });
