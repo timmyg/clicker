@@ -233,6 +233,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
   const { channel, time, region } = event.queryStringParameters;
+  if (!channel || !region) {
+    return respond(400, `need channel or region: ${JSON.stringify({ channel, region })}`);
+  }
   const timeToSearch = time || moment().unix() * 1000;
   const timeToSearchPreviousProgram =
     moment(timeToSearch)
