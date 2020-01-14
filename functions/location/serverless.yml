@@ -326,6 +326,7 @@ functions:
           method: post
   updateAirtableNowShowing:
     handler: location.updateAirtableNowShowing
+    timeout: 30
     events:
       - schedule: cron(*/15 * * * ? *)
       - http:
@@ -341,4 +342,3 @@ functions:
       - http:
           path: boxes/programs
           method: post
-
