@@ -445,6 +445,8 @@ async function pullFromActionNetwork(dates: Date[]) {
 	const all = [];
 	responses.forEach((response) => {
 		const responseEvents = response.data.games ? response.data.games : response.data.competitions;
+		// remove games in past, not sure why action return them (NCAAF)
+		responseEvents.filter((e) => e.start_time > moment().subtract(6, 'h').toISOString());
 		all.push(...responseEvents);
 		console.log('all.length', all.length);
 	});
