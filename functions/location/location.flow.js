@@ -606,7 +606,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 
 				console.time('update location box');
 				const boxIndex = location.boxes.findIndex((b) => b.id === box.id);
-				await updateLocationBox(location.id, boxIndex, box.channel, 0, null, program);
+				await updateLocationBox(location.id, boxIndex, box.channel, undefined, undefined, program);
 				console.timeEnd('update location box');
 			}
 		}
@@ -988,8 +988,8 @@ async function updateLocationBox(
 	locationId,
 	boxIndex,
 	channel: number,
-	channelMinor: number,
-	source: string,
+	channelMinor?: number,
+	source?: string,
 	program: Program
 ) {
 	const AWS = require('aws-sdk');
