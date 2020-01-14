@@ -913,9 +913,9 @@ function build(dtvSchedule: any, regionName: string) {
   return filteredPrograms;
 }
 
-function generateId(program: any) {
-  const { programmingId, region } = program;
-  const id = programmingId + region;
+function generateId(program: Program) {
+  const { programmingId, channel, start, region } = program;
+  const id = programmingId + channel + start + region;
   return uuid(id, uuid.DNS);
 }
 
