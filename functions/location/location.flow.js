@@ -954,7 +954,7 @@ function createBoxes(boxes: Box[]): BoxStatus[] {
 
 function selectBox(type: string, boxes: BoxStatus[]): BoxStatus {
   // sort by zone ascending
-  boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
+  boxes = boxes.sort((a, b) => a.box.label.localeCompare(b.box.label));
   switch (type) {
     // A. game over (any game)
     case 'A':
