@@ -449,7 +449,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  const daysToPull = 12;
+  const daysToPull = 8;
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
@@ -680,7 +680,6 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
   const messagePromises = [];
   console.time(`publish ${programs.length} messages`);
   for (const program of programs) {
-    console.log(i);
     const messageData = {
       Message: JSON.stringify(program),
       TopicArn: topicArn,
@@ -689,15 +688,15 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
     try {
       if (!process.env.IS_LOCAL) {
         messagePromises.push(sns.publish(messageData).promise());
+        i++;
       }
-      i++;
     } catch (e) {
       console.error(e);
     }
   }
   await Promise.all(messagePromises);
   console.timeEnd(`publish ${messagePromises.length} messages`);
-  console.log(i, 'topics published to:', process.env.newProgramTopicArn);
+  console.log(i, 'topics published to:', topicArn);
 }
 
 async function pullFromDirecTV(
@@ -875,7 +874,7 @@ function build(dtvSchedule: any, regionName: string) {
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
         // if channel is in minors list, try to add a minor channel to it
-        console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
+        // console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
         if (minorChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
           console.log('minor!');
