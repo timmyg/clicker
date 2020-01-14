@@ -244,17 +244,9 @@ module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async (event) => {
 			if (!!gamesToUpdate.length) {
 				const totalGames = gamesToUpdate.length;
 				const updatedGames = await syncGamesDatabase(gamesToUpdate, false);
-				// publish games
-				const sns = new AWS.SNS({ region: 'us-east-1' });
 				const messagePromises = [];
 				for (const game of updatedGames) {
-					const messagePromise = sns
-						.publish({
-							Message: JSON.stringify(game),
-							TopicArn: process.env.updatedGameTopicArn
-						})
-						.promise();
-					messagePromises.push(messagePromise);
+					messagePromises.push(new Invoke().service('program').name('updateGame').body(game).async().go());
 				}
 				await Promise.all(messagePromises);
 				return respond(200, { updatedGames: totalGames });
@@ -380,11 +372,11 @@ module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async (event)
 	return respond(200);
 });
 
-module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
-	const game: Game = JSON.parse(event.Records[0].body);
-	await new Invoke().service('program').name('updateGame').body(game).async().go();
-	console.log(game);
-});
+// module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
+// 	const game: Game = JSON.parse(event.Records[0].body);
+// 	await new Invoke().service('program').name('updateGame').body(game).async().go();
+// 	console.log(game);
+// });
 
 // async function publishNewGames(games) {
 //   // get game ids, publish to sns topic to update description
