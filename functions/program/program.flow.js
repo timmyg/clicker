@@ -38,7 +38,7 @@ type region = {
 };
 
 const allRegions: region[] = [
-  { name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 660, 661] },
+  { name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 661, 660] },
   { name: 'chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   { name: 'nyc', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
 ];
@@ -441,6 +441,7 @@ module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async 
   respond(200);
 });
 
+// npm run invoke:syncAirtable
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
@@ -599,13 +600,14 @@ class ProgramAirtable {
 function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
   programs.forEach(program => {
-    const { programmingId, title, description, channel, region, channelTitle, live, start } = program;
+    const { programmingId, title, description, channel, channelMinor, region, channelTitle, live, start } = program;
     transformed.push({
       fields: {
         programmingId,
         title,
         description,
         channel,
+        channelMinor,
         region,
         channelTitle,
         live,
