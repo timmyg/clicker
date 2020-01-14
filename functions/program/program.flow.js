@@ -271,6 +271,12 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     if (previousProgram.game && previousProgram.game.status === 'inprogress') {
       return respond(200, previousProgram);
     }
+  } else if (
+    existingProgram &&
+    (moment(existingProgram.start).diff(moment()) > 0 || moment(existingProgram.end).diff(moment()) < 0)
+  ) {
+    console.info('no current program');
+    return respond(200, {});
   }
   return respond(200, existingProgram);
 });
