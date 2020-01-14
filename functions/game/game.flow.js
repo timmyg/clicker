@@ -244,17 +244,9 @@ module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async (event) => {
 			if (!!gamesToUpdate.length) {
 				const totalGames = gamesToUpdate.length;
 				const updatedGames = await syncGamesDatabase(gamesToUpdate, false);
-				// publish games
-				const sns = new AWS.SNS({ region: 'us-east-1' });
 				const messagePromises = [];
 				for (const game of updatedGames) {
-					const messagePromise = sns
-						.publish({
-							Message: JSON.stringify(game),
-							TopicArn: process.env.updatedGameTopicArn
-						})
-						.promise();
-					messagePromises.push(messagePromise);
+					messagePromises.push(new Invoke().service('program').name('updateGame').body(game).async().go());
 				}
 				await Promise.all(messagePromises);
 				return respond(200, { updatedGames: totalGames });
@@ -380,11 +372,11 @@ module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async (event)
 	return respond(200);
 });
 
-module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
-	const game: Game = JSON.parse(event.Records[0].body);
-	await new Invoke().service('program').name('updateGame').body(game).async().go();
-	console.log(game);
-});
+// module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
+// 	const game: Game = JSON.parse(event.Records[0].body);
+// 	await new Invoke().service('program').name('updateGame').body(game).async().go();
+// 	console.log(game);
+// });
 
 // async function publishNewGames(games) {
 //   // get game ids, publish to sns topic to update description
@@ -438,12 +430,6 @@ async function pullFromActionNetwork(dates: Date[]) {
 	for (const actionSport: actionNetworkRequest of actionSports) {
 		const url = `${actionBaseUrl}/${actionSport.sport}`;
 		for (const date of dates) {
-			// const queryDate = dateFns.format(date, 'yyyyMMdd');
-			// const params = actionSport.params || {};
-			// const queryDate = moment(date).format('YYYYMMDD');
-			// const queryDate = Math.random();
-			// params.date = queryDate;
-			// console.log({ params });
 			const params = { ...actionSport.params, date: moment(date).format('YYYYMMDD') };
 			const request = axios.get(url, { params });
 			requests.push(request);
@@ -452,26 +438,18 @@ async function pullFromActionNetwork(dates: Date[]) {
 	console.log('requests:');
 	console.log(require('util').inspect(requests));
 	const responses = await Promise.all(requests);
-	// console.log('responses.length', responses.length);
 	console.log('responses[0]', responses[0].config.params);
 	console.log('responses[1]', responses[1].config.params);
-	// console.log('responses[0]', responses[0].data.games[0].id);
-	// console.log('responses[1]', responses[1].data.games[0].id);
 	console.log('responses[2]', responses[2].config.params);
 	console.log('responses[3]', responses[3].config.params);
-	// console.log('responses[0]', responses[0].data.games[9].id);
-	// console.log('responses[1]', responses[1].data.games[9].id);
-	// console.log('responses', responses);
 	const all = [];
 	responses.forEach((response) => {
 		const responseEvents = response.data.games ? response.data.games : response.data.competitions;
+		// remove games in past, not sure why action return them (NCAAF)
+		responseEvents.filter((e) => e.start_time > moment().subtract(6, 'h').toISOString());
 		all.push(...responseEvents);
 		console.log('all.length', all.length);
 	});
-	// console.log('all.length', all.length);
-	// console.log('all', all);
-	console.log('muskies', all.find((a) => a.id === 76487));
-	// console.log('muskies', all.find(a => a.id === 76782));
 	return all;
 }
 

@@ -1,7 +1,7 @@
 // @flow
 const Airtable: any = require('airtable');
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-const request = require('request-promise');
+const fetch = require('node-fetch');
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const airtableControlCenterV1 = 'Control Center v1';
@@ -42,20 +42,24 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
 module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event => {
   const { circleToken, stage } = process.env;
 
-  const branch = stage === 'prod' ? 'master' : stage;
-  // use request package, axios sucks with form data
-  const url = `https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/${branch}`;
-  const options = {
-    method: 'POST',
-    form: { 'build_parameters[CIRCLE_JOB]': 'e2e/app' },
-    auth: {
-      user: circleToken,
+  const body = {
+    parameters: {
+      trigger: false,
+      'e2e-app': true,
     },
+    branch: stage === 'prod' ? 'master' : stage,
   };
 
-  const response = await request(url, options);
+  await fetch(`https://circleci.com/api/v2/project/github/teamclicker/clicker/pipeline`, {
+    body: JSON.stringify(body),
+    headers: {
+      Authorization: `Basic ${Buffer.from(circleToken).toString('base64')}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
 
-  return respond(200, response);
+  return respond(200);
 });
 
 module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event => {
@@ -81,31 +85,30 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
 });
 
 module.exports.airtableRemoveExpired = RavenLambdaWrapper.handler(Raven, async event => {
-  const tableNames = ['Control Center v1', 'Channel Changes', 'Programs', 'Games'];
+  const tableNames = ['Control Center v1', 'Channel Changes', 'Control Center', 'Games', 'Now Showing'];
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let count = 0;
   for (const tableName of tableNames) {
+    console.log({ tableName });
     const expired = await base(tableName)
       .select({ view: 'Expired' })
-      // .select({ view: 'Expired', fields: ['id'] })
       .all();
     console.log({ expired });
-    // return;
     const expiredIds = expired.map(g => g.id);
     console.log({ expiredIds });
     const promises = [];
     while (!!expiredIds.length) {
       try {
         const expiredSlice = expiredIds.splice(0, 10);
-        console.log('batch putting:', expiredSlice.length);
-        console.log('remaining:', expiredIds.length);
+        count += expiredSlice.length;
+        // console.log('batch putting:', expiredSlice.length);
+        // console.log('remaining:', expiredIds.length);
         promises.push(base(tableName).destroy(expiredSlice));
+        await Promise.all(promises);
       } catch (e) {
         console.error(e);
       }
     }
-    count += promises.length;
-    await Promise.all(promises);
   }
   return respond(200, { count });
 });

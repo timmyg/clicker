@@ -98,6 +98,18 @@ functions:
               - partner
               - authorization
               - content-type
+  get:
+    handler: location.get
+    events:
+      - http:
+          path: '{id}'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - authorization
+              - content-type
   all:
     handler: location.all
     events:
@@ -115,18 +127,6 @@ functions:
     events:
       - http:
           path: '/geo/{latitude}/{longitude}'
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  get:
-    handler: location.get
-    events:
-      - http:
-          path: '{id}'
           method: get
           cors:
             origin: '*'
@@ -218,7 +218,7 @@ functions:
               - authorization
               - content-type
   saveBoxesInfo:
-    description: called from antenna every 5 minutes to update whats on each box
+    description: called from antenna to update whats on each box
     handler: location.saveBoxesInfo
     timeout: 12
     events:
@@ -286,6 +286,7 @@ functions:
               - content-type
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
+    description: check what is on each location boxes
     timeout: 30
     events:
       - schedule: rate(5 minutes)
@@ -298,14 +299,6 @@ functions:
               - partner
               - authorization
               - content-type
-  updateBoxesProgram:
-    handler: location.updateBoxesProgram
-    timeout: 30
-    events:
-      - schedule: rate(5 minutes)
-      - http:
-          path: boxes/programs
-          method: post
   controlCenterLocationsByRegion:
     handler: location.controlCenterLocationsByRegion
     events:
@@ -318,9 +311,34 @@ functions:
               - partner
               - authorization
               - content-type
+  controlCenterV2:
+    handler: location.controlCenterV2
+    events:
+      - schedule: cron(*/10 * * * ? *)
+      - http:
+          path: 'control-center/v2'
+          method: post
   controlCenterV2byLocation:
     handler: location.controlCenterV2byLocation
     events:
       - http:
           path: '{id}/control-center/v2'
           method: post
+  updateAirtableNowShowing:
+    handler: location.updateAirtableNowShowing
+    events:
+      - schedule: cron(*/15 * * * ? *)
+      - http:
+          path: 'airtable/now-showing'
+          method: post
+  updateAllBoxesPrograms:
+    handler: location.updateAllBoxesPrograms
+    description: update all location boxes current program (for when antenna doesnt actually call)
+    timeout: 30
+    events:
+      - schedule: cron(0/5 21-4 ? * * *) # Every 5 minutes between 11pm UTC and 4am UTC
+      - schedule: cron(0/15 4-21 ? * * *) # Every 15 minutes between 4am UTC and 9pm UTC
+      - http:
+          path: boxes/programs
+          method: post
+

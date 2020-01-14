@@ -13,7 +13,7 @@ module.exports.track = RavenLambdaWrapper.handler(Raven, async event => {
     auth: {
       username: process.env.segmentWriteKey,
     },
-  };
+  }; 
 
   console.log('https://api.segment.io/v1/track', body, options);
   console.time('track event');
@@ -26,3 +26,4 @@ module.exports.track = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
+
