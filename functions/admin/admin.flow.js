@@ -1,7 +1,7 @@
 // @flow
 const Airtable: any = require('airtable');
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
-const request = require('request-promise');
+const fetch = require('node-fetch');
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const airtableControlCenterV1 = 'Control Center v1';
@@ -42,20 +42,24 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
 module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event => {
   const { circleToken, stage } = process.env;
 
-  const branch = stage === 'prod' ? 'master' : stage;
-  // use request package, axios sucks with form data
-  const url = `https://circleci.com/api/v1.1/project/github/teamclicker/clicker/tree/${branch}`;
-  const options = {
-    method: 'POST',
-    form: { 'build_parameters[CIRCLE_JOB]': 'e2e/app' },
-    auth: {
-      user: circleToken,
+  const body = {
+    parameters: {
+      trigger: false,
+      'e2e-app': true,
     },
+    branch: stage === 'prod' ? 'master' : stage,
   };
 
-  const response = await request(url, options);
+  await fetch(`https://circleci.com/api/v2/project/github/teamclicker/clicker/pipeline`, {
+    body: JSON.stringify(body),
+    headers: {
+      Authorization: `Basic ${Buffer.from(circleToken).toString('base64')}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
 
-  return respond(200, response);
+  return respond(200);
 });
 
 module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event => {

@@ -32,17 +32,17 @@ provider:
     #       'Fn::Join':
     #         ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
     #     }
-    - Effect: Allow
-      Action:
-        - SNS:Publish
-      Resource:
-        {
-          'Fn::Join':
-            [
-              '',
-              ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
-            ],
-        }
+    # - Effect: Allow
+    #   Action:
+    #     - SNS:Publish
+    #   Resource:
+    #     {
+    #       'Fn::Join':
+    #         [
+    #           '',
+    #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
+    #         ],
+    #     }
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
@@ -75,16 +75,16 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  updatedGameTopic: '${self:service}-${self:custom.stage}-updated-game-topic'
-  updatedGameTopicArn:
-    deployed:
-      {
-        'Fn::Join':
-          [
-            '',
-            ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
-          ],
-      }
+  # updatedGameTopic: '${self:service}-${self:custom.stage}-updated-game-topic'
+  # updatedGameTopicArn:
+  #   deployed:
+  #     {
+  #       'Fn::Join':
+  #         [
+  #           '',
+  #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
+  #         ],
+  #     }
 resources:
   Resources:
     GamesTable:
@@ -119,50 +119,50 @@ resources:
               ProjectionType: ALL
 
     # updated game stuff (score update)
-    updatedGameTopic:
-      Type: AWS::SNS::Topic
-      Properties:
-        TopicName: ${self:service}-${self:custom.stage}-updated-game-topic
-    updatedGameQueue:
-      Type: AWS::SQS::Queue
-      Properties:
-        QueueName: ${self:service}-${self:custom.stage}-updated-game-queue
-        RedrivePolicy:
-          deadLetterTargetArn: !GetAtt
-            - updatedGameDLQ
-            - Arn
-          maxReceiveCount: 3
-    updatedGameDLQ:
-      Type: AWS::SQS::Queue
-      Properties:
-        QueueName: ${self:service}-${self:custom.stage}-updated-game-queue-dlq
-    snsToUpdatedGameQueueSqsPolicy:
-      Type: AWS::SQS::QueuePolicy
-      Properties:
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Sid: 'allow-sns-messages'
-              Effect: Allow
-              Principal: '*'
-              Resource: !GetAtt
-                - updatedGameQueue
-                - Arn
-              Action: 'SQS:SendMessage'
-              Condition:
-                ArnEquals:
-                  'aws:SourceArn': !Ref updatedGameTopic
-        Queues:
-          - Ref: updatedGameQueue
-    updatedGameQueueSubscription:
-      Type: 'AWS::SNS::Subscription'
-      Properties:
-        TopicArn: !Ref updatedGameTopic
-        Endpoint: !GetAtt
-          - updatedGameQueue
-          - Arn
-        Protocol: sqs
-        RawMessageDelivery: 'true'
+    # updatedGameTopic:
+    #   Type: AWS::SNS::Topic
+    #   Properties:
+    #     TopicName: ${self:service}-${self:custom.stage}-updated-game-topic
+    # updatedGameQueue:
+    #   Type: AWS::SQS::Queue
+    #   Properties:
+    #     QueueName: ${self:service}-${self:custom.stage}-updated-game-queue
+    #     RedrivePolicy:
+    #       deadLetterTargetArn: !GetAtt
+    #         - updatedGameDLQ
+    #         - Arn
+    #       maxReceiveCount: 3
+    # updatedGameDLQ:
+    #   Type: AWS::SQS::Queue
+    #   Properties:
+    #     QueueName: ${self:service}-${self:custom.stage}-updated-game-queue-dlq
+    # snsToUpdatedGameQueueSqsPolicy:
+    #   Type: AWS::SQS::QueuePolicy
+    #   Properties:
+    #     PolicyDocument:
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Sid: 'allow-sns-messages'
+    #           Effect: Allow
+    #           Principal: '*'
+    #           Resource: !GetAtt
+    #             - updatedGameQueue
+    #             - Arn
+    #           Action: 'SQS:SendMessage'
+    #           Condition:
+    #             ArnEquals:
+    #               'aws:SourceArn': !Ref updatedGameTopic
+    #     Queues:
+    #       - Ref: updatedGameQueue
+    # updatedGameQueueSubscription:
+    #   Type: 'AWS::SNS::Subscription'
+    #   Properties:
+    #     TopicArn: !Ref updatedGameTopic
+    #     Endpoint: !GetAtt
+    #       - updatedGameQueue
+    #       - Arn
+    #     Protocol: sqs
+    #     RawMessageDelivery: 'true'
 functions:
   health:
     handler: game.health
@@ -208,12 +208,11 @@ functions:
     handler: game.syncActive
     memorySize: 1024
     timeout: 12
-    environment:
+    # environment:
       # newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
-      updatedGameTopicArn: ${self:custom.updatedGameTopicArn.deployed}
+      # updatedGameTopicArn: ${self:custom.updatedGameTopicArn.deployed}
     events:
-      # - schedule: rate(5 minutes)
-      - schedule: cron(0/1 21-4 ? * * *) # Every 1 minute between 11pm UTC and 4am UTC
+      - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
       - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
       - http:
           path: sync/scores
@@ -272,14 +271,3 @@ functions:
               - partner
               - authorization
               - content-type
-  consumeUpdatedGameUpdateProgram:
-    handler: game.consumeUpdatedGameUpdateProgram
-    description: Consume updated game update program
-    memorySize: 256
-    reservedConcurrency: 1
-    events:
-      - sqs:
-          arn: !GetAtt
-            - updatedGameQueue
-            - Arn
-          batchSize: 1
