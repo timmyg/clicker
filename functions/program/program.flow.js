@@ -38,7 +38,7 @@ type region = {
 };
 
 const allRegions: region[] = [
-  { name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 661] },
+  { name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 660, 661] },
   { name: 'chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   { name: 'nyc', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
 ];
@@ -69,28 +69,25 @@ const nationalChannels: number[] = [
   221, //CBSSN // premium
   245, //TNT
   247, //TBS
-  701, //NFLMX // 4 game mix
-  702, //NFLMX // 8 game mix
-  703, //NFLRZ // Redzone (premium)
-  704, //NFLFAN // Fantasy Zone (premium)
-  705, //NFL
-  706, //NFL
-  707, //NFL
-  708, //NFL
-  709, //NFL
-  710, //NFL
-  711, //NFL
-  712, //NFL
-  713, //NFL
-  714, //NFL
-  715, //NFL
-  716, //NFL
-  717, //NFL
-  718, //NFL
-  719, //NFL
-  104, //DTV4K
-  105, //LIVE4K
-  106, //LIVE4K2
+  // 701, //NFLMX // 4 game mix
+  // 702, //NFLMX // 8 game mix
+  // 703, //NFLRZ // Redzone (premium)
+  // 704, //NFLFAN // Fantasy Zone (premium)
+  // 705, //NFL
+  // 706, //NFL
+  // 707, //NFL
+  // 708, //NFL
+  // 709, //NFL
+  // 710, //NFL
+  // 711, //NFL
+  // 712, //NFL
+  // 713, //NFL
+  // 714, //NFL
+  // 715, //NFL
+  // 716, //NFL
+  // 717, //NFL
+  // 718, //NFL
+  // 719, //NFL
 ];
 
 // 2661

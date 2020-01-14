@@ -590,6 +590,7 @@ module.exports.health = async (event: any) => {
 	return respond(200, 'ok');
 };
 
+// npm run invoke:updateAllBoxesPrograms
 module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async (event) => {
 	const locations: Venue[] = await dbLocation.scan().exec();
 	for (const location of locations) {
@@ -606,6 +607,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 
 				console.time('update location box');
 				const boxIndex = location.boxes.findIndex((b) => b.id === box.id);
+				console.log(location.id, boxIndex, box.channel, program.title);
 				await updateLocationBox(location.id, boxIndex, box.channel, undefined, undefined, program);
 				console.timeEnd('update location box');
 			}
@@ -1020,12 +1022,12 @@ async function updateLocationBox(
 		UpdateExpression: updateExpression,
 		ExpressionAttributeValues: expressionAttributeValues
 	};
-	console.log('calling...');
-	console.log({ params });
-	console.log('returned');
+	// console.log('calling...');
+	// console.log({ params });
+	// console.log('returned');
 	try {
-		const x = await docClient.update(params).promise();
-		console.log({ x });
+		await docClient.update(params).promise();
+		// console.log({ x });
 	} catch (err) {
 		console.log({ err });
 		return err;
