@@ -153,7 +153,7 @@ function buildStatus(game: Game): GameStatus {
 function getDescription(game: Game): string {
   // console.log({ game44: game });
   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
-  console.log('game.leagueName', game.leagueName, game.status);
+  // console.log('game.leagueName', game.leagueName, game.status);
   switch (game.status) {
     case 'scheduled': {
       return `${score} (${moment.tz(game.start, 'America/New_York').format('M/D h:mma')} EST)`;
@@ -327,7 +327,6 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .queryOne('id')
     .eq(parseInt(id))
     .exec();
-  // game.liveStatus = buildStatus(game);
   return respond(200, game);
 });
 
@@ -552,8 +551,6 @@ function transformGame(game: any): Game {
     game.home.rank = homeRank ? homeRank.rank : null;
   }
 
-  game.summary = buildStatus(game);
-
   const map = {
     id: 'id',
     start_time: 'start',
@@ -615,7 +612,9 @@ function transformGame(game: any): Game {
         break;
     }
   }
-  return objectMapper(game, map);
+  const transformedGame = objectMapper(game, map);
+  transformedGame.summary = buildStatus(transformedGame);
+  return transformedGame;
 }
 
 module.exports.getInProgressAndCompletedGames = getInProgressAndCompletedGames;
