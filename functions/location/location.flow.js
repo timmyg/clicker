@@ -945,10 +945,16 @@ async function tune(location: Venue, box: Box, channel: number) {
 }
 
 function findBoxGameOver(boxes: Box[]): ?Box {
-  return boxes.find(b => b.program.game.summary.ended);
+  return boxes
+    .filter(b => b.program)
+    .filter(b => b.program.game)
+    .find(b => b.program.game.summary.ended);
 }
 function findBoxBlowout(boxes: Box[]): ?Box {
-  return boxes.find(b => b.program.game.summary.blowout);
+  return boxes
+    .filter(b => b.program)
+    .filter(b => b.program.game)
+    .find(b => b.program.game.summary.blowout);
 }
 function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   const sorted = boxes
@@ -959,7 +965,8 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
 }
 function findWorstRatedBox(boxes: Box[]): ?Box {
   const sorted = boxes
-    .filter(b => !!b.program && b.program.clickerRating)
+    .filter(b => b.program)
+    .filter(b => b.program.clickerRating)
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
   return sorted && sorted.length ? sorted[0] : null;
 }
@@ -967,16 +974,16 @@ function justFindBox(boxes: Box[]): Box {
   return boxes.sort((a, b) => a.channelChangeAt - b.channelChangeAt)[0];
 }
 function findUnratedBox(boxes: Box[]): ?Box {
-  return boxes.find(b => !b.program.clickerRating);
+  return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
 }
-function findEmptyBox(boxes: Box[]): ?Box {
+function findProgramlessBox(boxes: Box[]): ?Box {
   return boxes.find(b => !b.program);
 }
 function findBoxForce(boxes: Box[], program: ControlCenterProgram): ?Box {
   return (
     findBoxGameOver(boxes) ||
     findBoxBlowout(boxes) ||
-    findEmptyBox(boxes) ||
+    findProgramlessBox(boxes) ||
     findUnratedBox(boxes) ||
     findBoxWorseRating(boxes, program) ||
     findWorstRatedBox(boxes) ||
