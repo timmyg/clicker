@@ -485,7 +485,7 @@ async function pullFromActionNetwork(dates: Date[]) {
       e =>
         e.start_time >
         moment()
-          .subtract(6, 'h')
+          .subtract(12, 'h')
           .toISOString(),
     );
     all.push(...responseEvents);
