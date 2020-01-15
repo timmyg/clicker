@@ -93,16 +93,13 @@ module.exports.airtableRemoveExpired = RavenLambdaWrapper.handler(Raven, async e
     const expired = await base(tableName)
       .select({ view: 'Expired' })
       .all();
-    console.log({ expired });
     const expiredIds = expired.map(g => g.id);
-    console.log({ expiredIds });
+    console.log('expiredIds.length', expiredIds.length);
     const promises = [];
     while (!!expiredIds.length) {
       try {
         const expiredSlice = expiredIds.splice(0, 10);
         count += expiredSlice.length;
-        // console.log('batch putting:', expiredSlice.length);
-        // console.log('remaining:', expiredIds.length);
         promises.push(base(tableName).destroy(expiredSlice));
         await Promise.all(promises);
       } catch (e) {
