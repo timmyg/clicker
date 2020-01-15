@@ -271,6 +271,12 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     if (previousProgram.game && previousProgram.game.status === 'inprogress') {
       return respond(200, previousProgram);
     }
+  } else if (
+    existingProgram &&
+    (moment(existingProgram.start).diff(moment()) > 0 || moment(existingProgram.end).diff(moment()) < 0)
+  ) {
+    console.info('no current program');
+    return respond(200, {});
   }
   return respond(200, existingProgram);
 });
@@ -783,6 +789,7 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
   const { id, programmingId, region } = program;
   if (!programmingId.includes('GDM')) {
     console.time('getProgramDetails');
+    console.log('calling getProgramDetails');
     const programDetails = await getProgramDetails(program);
     console.timeEnd('getProgramDetails');
     if (!!programDetails) {
@@ -913,9 +920,9 @@ function build(dtvSchedule: any, regionName: string) {
   return filteredPrograms;
 }
 
-function generateId(program: any) {
-  const { programmingId, region } = program;
-  const id = programmingId + region;
+function generateId(program: Program) {
+  const { programmingId, channel, start, region } = program;
+  const id = programmingId + channel + start + region;
   return uuid(id, uuid.DNS);
 }
 

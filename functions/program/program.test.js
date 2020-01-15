@@ -53,7 +53,7 @@ test('build programs', () => {
   expect(response[0]).toHaveProperty('region');
   expect(response[0]).toHaveProperty('start');
   expect(response[0]).toHaveProperty('end');
-  expect(response.length).toBe(129);
+  expect(response.length).toBe(148);
 });
 
 test('convert local channel names', () => {
