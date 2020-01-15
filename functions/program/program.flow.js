@@ -609,7 +609,18 @@ class ProgramAirtable {
 function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
   programs.forEach(program => {
-    const { programmingId, title, description, channel, channelMinor, region, channelTitle, live, start } = program;
+    const {
+      programmingId,
+      title,
+      description,
+      channel,
+      channelMinor,
+      region,
+      channelTitle,
+      live,
+      start,
+      end,
+    } = program;
     transformed.push({
       fields: {
         programmingId,
@@ -621,6 +632,7 @@ function buildAirtablePrograms(programs: Program[]) {
         channelTitle,
         live,
         start,
+        end,
       },
     });
   });
