@@ -811,7 +811,13 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       case 10:
       case 9:
         if (program.isMinutesFromNow(10)) {
-          selectedBox = selectBox(program, priority.force, availableBoxes);
+          selectedBox = findBoxGameOver(availableBoxes);
+          if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
+          if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
+          if (!selectedBox) selectedBox = findUnratedBox(availableBoxes);
+          if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
+          if (!selectedBox) selectedBox = findWorstRatedBox(availableBoxes);
+          if (!selectedBox) selectedBox = justFindBox(availableBoxes);
         }
         break;
       case 8:
@@ -823,9 +829,10 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       case 2:
       case 1:
         if (program.isMinutesFromNow(5)) {
-          selectedBox = selectBox(program, priority.gameOver, availableBoxes);
-          if (!selectedBox) selectedBox = selectBox(program, priority.blowout, availableBoxes);
-          if (!selectedBox) selectedBox = selectBox(program, priority.worseRated, availableBoxes);
+          selectedBox = findBoxGameOver(availableBoxes);
+          if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
+          if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
+          if (!selectedBox) selectedBox = findEmptyBox(availableBoxes);
         }
         break;
       default:
@@ -973,39 +980,42 @@ function findWorstRatedBox(boxes: Box[]): ?Box {
 function justFindBox(boxes: Box[]): Box {
   return boxes.sort((a, b) => a.channelChangeAt - b.channelChangeAt)[0];
 }
-function findUnratedBox(boxes: Box[]): ?Box {
+function findEmptyBox(boxes: Box[]): ?Box {
   return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
+}
+function findUnratedBox(boxes: Box[]): ?Box {
+  return findProgramlessBox(boxes) || findUnratedBox(boxes);
 }
 function findProgramlessBox(boxes: Box[]): ?Box {
   return boxes.find(b => !b.program);
 }
-function findBoxForce(boxes: Box[], program: ControlCenterProgram): ?Box {
-  return (
-    findBoxGameOver(boxes) ||
-    findBoxBlowout(boxes) ||
-    findProgramlessBox(boxes) ||
-    findUnratedBox(boxes) ||
-    findBoxWorseRating(boxes, program) ||
-    findWorstRatedBox(boxes) ||
-    justFindBox(boxes)
-  );
-}
+// function findBoxForce(boxes: Box[], program: ControlCenterProgram): ?Box {
+//   return (
+//     findBoxGameOver(boxes) ||
+//     findBoxBlowout(boxes) ||
+//     findProgramlessBox(boxes) ||
+//     findUnratedBox(boxes) ||
+//     findBoxWorseRating(boxes, program) ||
+//     findWorstRatedBox(boxes) ||
+//     justFindBox(boxes)
+//   );
+// }
 
-function selectBox(program: ControlCenterProgram, type: string, boxes: Box[]): ?Box {
-  boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
-  switch (type) {
-    case priority.force:
-      return findBoxForce(boxes, program);
-    case priority.gameOver:
-      return findBoxGameOver(boxes);
-    case priority.blowout:
-      return findBoxBlowout(boxes);
-    case priority.worseRated:
-      return findBoxWorseRating(boxes, program);
-    default:
-      return null;
-  }
-}
+// function selectBox(program: ControlCenterProgram, type: string, boxes: Box[]): ?Box {
+//   boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
+//   switch (type) {
+//     case priority.force:
+//       return findBoxForce(boxes, program);
+//     case priority.gameOver:
+//       return findBoxGameOver(boxes);
+//     case priority.blowout:
+//       return findBoxBlowout(boxes);
+//     case priority.worseRated:
+//       return findBoxWorseRating(boxes, program);
+//     default:
+//       return null;
+//   }
+// }
 
 // async function evaluateProgram(program: ControlCenterProgram, boxes: Box[]) {
 //   switch (program.fields.rating) {
@@ -1035,7 +1045,7 @@ async function getAirtablePrograms() {
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
       view: 'All',
-      filterByFormula: `AND( {gameId} != BLANK(), {rating} != BLANK(), {startHoursFromNow} >= -4, {startHoursFromNow} <= 4 )`,
+      filterByFormula: `AND( {rating} != BLANK(), {startHoursFromNow} >= -4, {startHoursFromNow} <= 4 )`,
     })
     .all();
   return ccPrograms.map(p => new ControlCenterProgram(p));
