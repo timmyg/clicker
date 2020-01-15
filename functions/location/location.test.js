@@ -1,5 +1,5 @@
 const file = require('./location');
-const { ControlCenterProgram, getAvailableBoxes, filterPrograms, createBoxes } = require('./location');
+const { ControlCenterProgram, getAvailableBoxes, filterPrograms } = require('./location');
 const moment = require('moment');
 
 test('smoke test', () => {
@@ -97,7 +97,7 @@ describe('get boxes', () => {
           .subtract(40, 'm')
           .unix() * 1000,
       game: {
-        liveStatus: {
+        summary: {
           status: 'inprogress',
         },
       },
@@ -117,7 +117,7 @@ describe('get boxes', () => {
           .subtract(1, 'h')
           .unix() * 1000,
       game: {
-        liveStatus: {
+        summary: {
           status: 'complete',
         },
       },
@@ -142,22 +142,6 @@ describe('get boxes', () => {
     },
   };
   const reservedZonelessBox = { id: 7, zone: '' };
-  test('createBoxes: map to new object', () => {
-    const result = createBoxes([
-      reservedManuallyChangedRecently,
-      openManuallyChangedDifferentProgram,
-      reservedManuallyChangedGameOn,
-    ]);
-
-    expect(result.length).toBe(3);
-
-    const [one, two, three] = result;
-    expect(one.hasProgram).toBeTruthy();
-    expect(one.ended).toBeFalsy();
-    expect(one.blowout).toBeFalsy();
-    expect(one.rating).toBe(7);
-    expect(one.box.id).toBe(3);
-  });
   describe("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
     test('openGoodBox', () => {
       const result = getAvailableBoxes([openGoodBox]);
@@ -198,9 +182,10 @@ describe('get boxes', () => {
         reservedZonelessBox,
       ]);
       expect(result.length).toBe(3);
-      expect(result[0].box.id).toBe(1);
-      expect(result[1].box.id).toBe(2);
-      expect(result[2].box.id).toBe(5);
+      console.log({ result });
+      expect(result[0].id).toBe(1);
+      expect(result[1].id).toBe(2);
+      expect(result[2].id).toBe(5);
     });
   });
 });

@@ -89,6 +89,7 @@ const dbGame = dynamoose.model(
       total: Number,
     },
     summary: {
+      // GameStatus
       started: Boolean,
       blowout: Boolean,
       ended: Boolean,
