@@ -479,9 +479,9 @@ async function pullFromActionNetwork(dates: Date[]) {
   console.log('responses[3]', responses[3].config.params);
   const all = [];
   responses.forEach(response => {
-    const responseEvents = response.data.games ? response.data.games : response.data.competitions;
+    let responseEvents = response.data.games ? response.data.games : response.data.competitions;
     // remove games in past, not sure why action return them (NCAAF)
-    responseEvents.filter(
+    responseEvents = responseEvents.filter(
       e =>
         e.start_time >
         moment()
