@@ -64,7 +64,7 @@ def getPrograms(event, context):
                              timeout=3
                              )
             print('response code:')
-            print(r.status_code)
+            print(response.status_code)
             print('response item length:')
             print(len(response.json().get('schedule')))
             
