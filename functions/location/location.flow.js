@@ -778,11 +778,11 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 }
 
 const priority = {
-  force: 1, // force
-  poorlyRated: 2, // meh game (1-6 rating)
-  blowout: 3, // blowout
-  blowoutMajor: 4, // major blowout
-  gameOver: 5, // game over
+  force: 'force', // force
+  worseRated: 'worse rating', // turn off game with worse rating
+  blowout: 'blowout', // blowout
+  // blowoutMajor: 4, // major blowout
+  gameOver: 'game over', // game over
 };
 
 // npm run invoke:controlCenterV2byLocation
@@ -802,46 +802,30 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   ccPrograms = filterPrograms(ccPrograms, location);
 
   // get boxes that are CC active, and not manually locked
-  let boxes: Box[] = getAvailableBoxes(location.boxes);
+  let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
 
   for (const program of ccPrograms) {
-    let selectedBox: Box = null;
+    let selectedBox: ?Box = null;
     console.info(`trying to turn on: ${program.fields.title} (${program.fields.channel})`);
-    // await evaluateProgram(program, location.boxes);
     switch (program.fields.rating) {
-      // If there is a 9 or 10 starting in the next 10 minutes, turn it on (E)*
       case 10:
       case 9:
         if (program.isMinutesFromNow(10)) {
-          selectedBox = selectBox(priority.force, boxes);
+          selectedBox = selectBox(program, priority.force, availableBoxes);
         }
         break;
-      // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
       case 8:
       case 7:
-        if (program.isMinutesFromNow(5)) {
-          selectedBox = selectBox(priority.gameOver, boxes);
-          if (!selectedBox) selectedBox = selectBox(priority.blowoutMajor, boxes);
-          if (!selectedBox) selectedBox = selectBox(priority.blowout, boxes);
-          if (!selectedBox) selectedBox = selectBox(priority.poorlyRated, boxes);
-        }
-        break;
-      // If there is a 5-6 starting in the next 5 minutes, turn on if A, B, C*
       case 6:
       case 5:
-        if (program.isMinutesFromNow(5)) {
-          selectedBox = selectBox(priority.gameOver, boxes);
-          if (!selectedBox) selectedBox = selectBox(priority.blowoutMajor, boxes);
-          if (!selectedBox) selectedBox = selectBox(priority.blowout, boxes);
-        }
-        break;
-      // If there is a 1-4 starting in the next 5 minutes, if A*
       case 4:
       case 3:
       case 2:
       case 1:
         if (program.isMinutesFromNow(5)) {
-          selectedBox = selectBox(priority.gameOver, boxes);
+          selectedBox = selectBox(program, priority.gameOver, availableBoxes);
+          if (!selectedBox) selectedBox = selectBox(program, priority.blowout, availableBoxes);
+          if (!selectedBox) selectedBox = selectBox(program, priority.worseRated, availableBoxes);
         }
         break;
       default:
@@ -850,12 +834,12 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     if (selectedBox) {
       await tune(location, selectedBox, program.fields.channel);
       // remove box so it doesnt get reassigned
-      console.log(`boxes: ${boxes.length}`);
-      console.log({ boxes, selectedBox });
-      boxes = boxes.filter(b => b.id !== selectedBox.id);
-      console.log(`boxes remaining: ${boxes.length}`);
+      console.log(`boxes: ${availableBoxes.length}`);
+      console.log({ availableBoxes, selectedBox });
+      availableBoxes = availableBoxes.filter(b => selectedBox && b.id !== selectedBox.id);
+      console.log(`boxes remaining: ${availableBoxes.length}`);
     }
-    if (!boxes.length) {
+    if (!availableBoxes.length) {
       console.info('no more boxes');
       break;
     }
@@ -960,63 +944,59 @@ async function tune(location: Venue, box: Box, channel: number) {
     .go();
 }
 
-function selectBox(type: number, boxes: Box[]): Box {
-  // sort by zone ascending
+function findBoxGameOver(boxes: Box[]): ?Box {
+  return boxes.find(b => b.program.game.summary.ended);
+}
+function findBoxBlowout(boxes: Box[]): ?Box {
+  return boxes.find(b => b.program.game.summary.blowout);
+}
+function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
+  const sorted = boxes
+    .filter(b => b.program)
+    .filter(b => b.program.clickerRating < program.fields.rating)
+    .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+  return sorted && sorted.length ? sorted[0] : null;
+}
+function findWorstRatedBox(boxes: Box[]): ?Box {
+  const sorted = boxes
+    .filter(b => !!b.program && b.program.clickerRating)
+    .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+  return sorted && sorted.length ? sorted[0] : null;
+}
+function justFindBox(boxes: Box[]): Box {
+  return boxes.sort((a, b) => a.channelChangeAt - b.channelChangeAt)[0];
+}
+function findUnratedBox(boxes: Box[]): ?Box {
+  return boxes.find(b => !b.program.clickerRating);
+}
+function findEmptyBox(boxes: Box[]): ?Box {
+  return boxes.find(b => !b.program);
+}
+function findBoxForce(boxes: Box[], program: ControlCenterProgram): ?Box {
+  return (
+    findBoxGameOver(boxes) ||
+    findBoxBlowout(boxes) ||
+    findEmptyBox(boxes) ||
+    findUnratedBox(boxes) ||
+    findBoxWorseRating(boxes, program) ||
+    findWorstRatedBox(boxes) ||
+    justFindBox(boxes)
+  );
+}
+
+function selectBox(program: ControlCenterProgram, type: string, boxes: Box[]): ?Box {
   boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
   switch (type) {
-    // A. game over (any game)
-    case priority.gameOver:
-      console.info('boxes that program is over');
-      const endedBox = boxes.find(b => b.program.game.summary.ended);
-      if (endedBox) return endedBox;
-
-    // B. major blowout (any game)
-    // C. blowout (any game)
-    case priority.blowoutMajor:
-    case priority.blowout:
-      console.info('boxes with blowout');
-      const blowoutBox = boxes.find(b => b.program.game.summary.blowout);
-      if (blowoutBox) return blowoutBox;
-
-    // D. meh game (1-6 rating)
-    case priority.poorlyRated:
-      console.info('boxes with poor rating');
-      const badGameBox = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.program.clickerRating));
-      if (badGameBox) return badGameBox;
-
-    // E. force (pick box with lowest rated game)
     case priority.force:
-      console.info('boxes without programs');
-      const programlessBox = boxes.find(b => !b.program);
-      if (programlessBox) return programlessBox;
-
-      console.info('boxes without rating');
-      const ratinglessBox = boxes.find(b => !b.program.clickerRating);
-      if (ratinglessBox) return ratinglessBox;
-
-      console.info('boxes that program is over');
-      const endedBox2 = boxes.find(b => b.program.game.summary.ended);
-      if (endedBox2) return endedBox2;
-
-      console.info('boxes with blowout');
-      const blowoutBox2 = boxes.find(b => b.program.game.summary.blowout);
-      if (blowoutBox2) return blowoutBox2;
-
-      console.info('boxes with poor rating');
-      const badGameBox2 = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.program.clickerRating));
-      if (badGameBox2) return badGameBox2;
-
-      console.info('pick the worst box (shouldnt happen)');
-      const seven = boxes.find(b => b.program.clickerRating === 7);
-      if (seven) return seven;
-      const eight = boxes.find(b => b.program.clickerRating === 8);
-      if (eight) return eight;
-      const nine = boxes.find(b => b.program.clickerRating === 9);
-      if (nine) return nine;
-      const ten = boxes.find(b => b.program.clickerRating === 10);
-      if (ten) return ten;
+      return findBoxForce(boxes, program);
+    case priority.gameOver:
+      return findBoxGameOver(boxes);
+    case priority.blowout:
+      return findBoxBlowout(boxes);
+    case priority.worseRated:
+      return findBoxWorseRating(boxes, program);
     default:
-      return new Box();
+      return null;
   }
 }
 
