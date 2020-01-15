@@ -34,5 +34,5 @@ export class Game {
   book: {
     total: number,
   };
-  liveStatus: GameStatus;
+  summary: GameStatus;
 }

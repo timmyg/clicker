@@ -22,6 +22,7 @@ declare class process {
     airtableKey: string,
     airtableBase: string,
     NODE_ENV: string,
+    IS_LOCAL: string,
   };
 }
 if (process.env.NODE_ENV === 'test') {

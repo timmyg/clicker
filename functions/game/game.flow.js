@@ -88,8 +88,12 @@ const dbGame = dynamoose.model(
     book: {
       total: Number,
     },
-    // dynamic
-    liveStatus: Object, // GameStatus
+    summary: {
+      started: Boolean,
+      blowout: Boolean,
+      ended: Boolean,
+      description: String,
+    },
   },
   {
     timestamps: true,
@@ -323,7 +327,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .queryOne('id')
     .eq(parseInt(id))
     .exec();
-  game.liveStatus = buildStatus(game);
+  // game.liveStatus = buildStatus(game);
   return respond(200, game);
 });
 
@@ -547,6 +551,8 @@ function transformGame(game: any): Game {
     const homeRank = game.ranks.find(gr => gr.team_id === game.home.id);
     game.home.rank = homeRank ? homeRank.rank : null;
   }
+
+  game.summary = buildStatus(game);
 
   const map = {
     id: 'id',
