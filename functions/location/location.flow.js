@@ -846,7 +846,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
       console.log(JSON.stringify(availableBoxes), selectedBox);
-      availableBoxes = availableBoxes.filter(b => selectedBox && b.id !== selectedBox.id);
+      availableBoxes = availableBoxes.filter(b => b.id !== selectedBox.id);
       console.log(`boxes remaining: ${availableBoxes.length}`);
     }
     if (!availableBoxes.length) {
