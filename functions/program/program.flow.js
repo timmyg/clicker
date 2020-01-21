@@ -524,7 +524,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
-    const gameDatabaseId = airtableProgram.get('gameId')[0];
+    const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
     const programs = await dbProgram
       .query('programmingId')
