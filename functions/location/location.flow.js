@@ -777,11 +777,11 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 }
 
 const priority = {
-  one: 1, // force
-  two: 2, // meh game (1-6 rating)
-  three: 3, // blowout
-  four: 4, // major blowout
-  five: 5, // game over
+  force: 1, // force
+  poorlyRated: 2, // meh game (1-6 rating)
+  blowout: 3, // blowout
+  blowoutMajor: 4, // major blowout
+  gameOver: 5, // game over
 };
 
 // npm run invoke:controlCenterV2byLocation
@@ -812,26 +812,26 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       case 10:
       case 9:
         if (program.isMinutesFromNow(10)) {
-          boxStatus = selectBox(priority.one, boxes);
+          boxStatus = selectBox(priority.force, boxes);
         }
         break;
       // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
       case 8:
       case 7:
         if (program.isMinutesFromNow(5)) {
-          boxStatus = selectBox(priority.five, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.four, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.three, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.two, boxes);
+          boxStatus = selectBox(priority.gameOver, boxes);
+          if (!boxStatus) boxStatus = selectBox(priority.blowoutMajor, boxes);
+          if (!boxStatus) boxStatus = selectBox(priority.blowout, boxes);
+          if (!boxStatus) boxStatus = selectBox(priority.poorlyRated, boxes);
         }
         break;
       // If there is a 5-6 starting in the next 5 minutes, turn on if A, B, C*
       case 6:
       case 5:
         if (program.isMinutesFromNow(5)) {
-          boxStatus = selectBox(priority.five, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.four, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.three, boxes);
+          boxStatus = selectBox(priority.gameOver, boxes);
+          if (!boxStatus) boxStatus = selectBox(priority.blowoutMajor, boxes);
+          if (!boxStatus) boxStatus = selectBox(priority.blowout, boxes);
         }
         break;
       // If there is a 1-4 starting in the next 5 minutes, if A*
@@ -840,7 +840,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       case 2:
       case 1:
         if (program.isMinutesFromNow(5)) {
-          boxStatus = selectBox(priority.five, boxes);
+          boxStatus = selectBox(priority.gameOver, boxes);
         }
         break;
       default:
@@ -993,27 +993,27 @@ function selectBox(type: number, boxes: BoxStatus[]): BoxStatus {
   boxes = boxes.sort((a, b) => a.box.label.localeCompare(b.box.label));
   switch (type) {
     // A. game over (any game)
-    case priority.five:
+    case priority.gameOver:
       console.info('boxes that program is over');
       const endedBox = boxes.find(b => b.ended);
       if (endedBox) return endedBox;
 
     // B. major blowout (any game)
     // C. blowout (any game)
-    case priority.four:
-    case priority.three:
+    case priority.blowoutMajor:
+    case priority.blowout:
       console.info('boxes with blowout');
       const blowoutBox = boxes.find(b => b.blowout);
       if (blowoutBox) return blowoutBox;
 
     // D. meh game (1-6 rating)
-    case priority.two:
+    case priority.poorlyRated:
       console.info('boxes with poor rating');
       const badGameBox = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.rating));
       if (badGameBox) return badGameBox;
 
     // E. force (pick box with lowest rated game)
-    case priority.one:
+    case priority.force:
       console.info('boxes without programs');
       const programlessBox = boxes.find(b => !b.hasProgram);
       if (programlessBox) return programlessBox;
@@ -1052,7 +1052,7 @@ function selectBox(type: number, boxes: BoxStatus[]): BoxStatus {
 //   switch (program.fields.rating) {
 //     case 10:
 //       if (program.isMinutesFromNow(10)) {
-//         await changeChannel(program, priority.one);
+//         await changeChannel(program, priority.force);
 //       }
 //     case 9:
 //     case 8:

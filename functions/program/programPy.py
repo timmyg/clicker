@@ -63,8 +63,10 @@ def getPrograms(event, context):
                              proxies=proxies,
                              timeout=3
                              )
-            print('response')
-            # print(json.dumps(response.json().get('schedule'))
+            print('response code:', response.status_code)
+            print('response item length:', len(response.json().get('schedule')))
+            print('response:', json.dumps(response.json()))
+            
             return {
                 'statusCode': 200,
                 'headers': {'Content-Type': 'application/json'},
