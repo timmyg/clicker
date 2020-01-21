@@ -839,10 +839,13 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
         break;
     }
     if (selectedBox) {
+      console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning to ${program.fields.channel}...`);
+      console.log({ selectedBox });
+      console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning...`);
       await tune(location, selectedBox, program.fields.channel);
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
-      console.log({ availableBoxes, selectedBox });
+      console.log(JSON.stringify(availableBoxes), selectedBox);
       availableBoxes = availableBoxes.filter(b => selectedBox && b.id !== selectedBox.id);
       console.log(`boxes remaining: ${availableBoxes.length}`);
     }
@@ -952,25 +955,32 @@ async function tune(location: Venue, box: Box, channel: number) {
 }
 
 function findBoxGameOver(boxes: Box[]): ?Box {
+  console.info('findBoxGameOver');
   return boxes
     .filter(b => b.program)
     .filter(b => b.program.game)
     .find(b => b.program.game.summary.ended);
 }
+
 function findBoxBlowout(boxes: Box[]): ?Box {
+  console.info('findBoxBlowout');
   return boxes
     .filter(b => b.program)
     .filter(b => b.program.game)
     .find(b => b.program.game.summary.blowout);
 }
+
 function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
+  console.info('findBoxWorseRating');
   const sorted = boxes
     .filter(b => b.program)
     .filter(b => b.program.clickerRating < program.fields.rating)
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
   return sorted && sorted.length ? sorted[0] : null;
 }
+
 function findWorstRatedBox(boxes: Box[]): ?Box {
+  console.info('findWorstRatedBox');
   const sorted = boxes
     .filter(b => b.program)
     .filter(b => b.program.clickerRating)
@@ -978,66 +988,24 @@ function findWorstRatedBox(boxes: Box[]): ?Box {
   return sorted && sorted.length ? sorted[0] : null;
 }
 function justFindBox(boxes: Box[]): Box {
+  console.info('justFindBox');
   return boxes.sort((a, b) => a.channelChangeAt - b.channelChangeAt)[0];
 }
+
 function findEmptyBox(boxes: Box[]): ?Box {
+  console.info('findEmptyBox');
   return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
 }
+
 function findUnratedBox(boxes: Box[]): ?Box {
+  console.info('findUnratedBox');
   return findProgramlessBox(boxes) || findUnratedBox(boxes);
 }
+
 function findProgramlessBox(boxes: Box[]): ?Box {
+  console.info('findProgramlessBox');
   return boxes.find(b => !b.program);
 }
-// function findBoxForce(boxes: Box[], program: ControlCenterProgram): ?Box {
-//   return (
-//     findBoxGameOver(boxes) ||
-//     findBoxBlowout(boxes) ||
-//     findProgramlessBox(boxes) ||
-//     findUnratedBox(boxes) ||
-//     findBoxWorseRating(boxes, program) ||
-//     findWorstRatedBox(boxes) ||
-//     justFindBox(boxes)
-//   );
-// }
-
-// function selectBox(program: ControlCenterProgram, type: string, boxes: Box[]): ?Box {
-//   boxes = boxes.sort((a, b) => a.label.localeCompare(b.label));
-//   switch (type) {
-//     case priority.force:
-//       return findBoxForce(boxes, program);
-//     case priority.gameOver:
-//       return findBoxGameOver(boxes);
-//     case priority.blowout:
-//       return findBoxBlowout(boxes);
-//     case priority.worseRated:
-//       return findBoxWorseRating(boxes, program);
-//     default:
-//       return null;
-//   }
-// }
-
-// async function evaluateProgram(program: ControlCenterProgram, boxes: Box[]) {
-//   switch (program.fields.rating) {
-//     case 10:
-//       if (program.isMinutesFromNow(10)) {
-//         await changeChannel(program, priority.force);
-//       }
-//     case 9:
-//     case 8:
-//     case 7:
-//     case 6:
-//     case 5:
-//     case 4:
-//     case 3:
-//     case 2:
-//     case 1:
-//     default:
-//       break;
-//   }
-// }
-
-// async function changeChannel(program: ControlCenterProgram, boxes: Box[], changeType: string) {}
 
 async function getAirtablePrograms() {
   const airtableProgramsName = 'Control Center';
@@ -1045,7 +1013,7 @@ async function getAirtablePrograms() {
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
       view: 'All',
-      filterByFormula: `AND( {rating} != BLANK(), {startHoursFromNow} >= -2, {startHoursFromNow} <= 1 )`,
+      filterByFormula: `AND( {rating} != BLANK(), {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
   // get games, to see if they
