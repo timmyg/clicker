@@ -506,13 +506,10 @@ async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursF
   const fourHoursFromNow = moment()
     .add(hoursFromNow, 'h')
     .toISOString();
-  const sixMinutesAgo = moment()
-    .subtract(6, 'm')
-    .toISOString();
 
   let filterByFormula: string[] = [`{start} > '${fourHoursAgo}'`, `{start} < '${fourHoursFromNow}'`];
   if (hasGameAttached) {
-    filterByFormula.push(`{gameId} != BLANK()`);
+    filterByFormula.push(`{rating} != BLANK()`);
   }
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
