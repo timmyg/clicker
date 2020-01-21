@@ -841,7 +841,6 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     if (selectedBox) {
       console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning to ${program.fields.channel}...`);
       console.log({ selectedBox });
-      console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning...`);
       await tune(location, selectedBox, program.fields.channel);
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
