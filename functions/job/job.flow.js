@@ -93,6 +93,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
   return respond(200);
 });
 
+// ccv1
 module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);

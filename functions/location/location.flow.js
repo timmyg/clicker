@@ -1045,9 +1045,11 @@ async function getAirtablePrograms() {
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
       view: 'All',
-      filterByFormula: `AND( {rating} != BLANK(), {startHoursFromNow} >= -4, {startHoursFromNow} <= 4 )`,
+      filterByFormula: `AND( {rating} != BLANK(), {startHoursFromNow} >= -2, {startHoursFromNow} <= 1 )`,
     })
     .all();
+  // get games, to see if they
+
   return ccPrograms.map(p => new ControlCenterProgram(p));
 }
 
