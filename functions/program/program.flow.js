@@ -61,7 +61,7 @@ const nationalChannels: number[] = [
   602, //TVG
   612, //ACCN
   618, //FS2
-  620, //beIn Sports
+  // 620, //beIn Sports
   610, //BTN
   611, //SECHD
   605, //SPMN
@@ -917,12 +917,12 @@ function build(dtvSchedule: any, regionName: string) {
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.region = regionName;
-        program.id = generateId(program);
         program.start = moment(program.airTime).unix() * 1000;
         program.end =
           moment(program.airTime)
             .add(program.durationMins, 'minutes')
             .unix() * 1000;
+        program.id = generateId(program);
         programs.push(program);
       }
     });

@@ -986,10 +986,6 @@ function findWorstRatedBox(boxes: Box[]): ?Box {
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
   return sorted && sorted.length ? sorted[0] : null;
 }
-function justFindBox(boxes: Box[]): Box {
-  console.info('justFindBox');
-  return boxes.sort((a, b) => a.channelChangeAt - b.channelChangeAt)[0];
-}
 
 function findEmptyBox(boxes: Box[]): ?Box {
   console.info('findEmptyBox');
@@ -998,12 +994,17 @@ function findEmptyBox(boxes: Box[]): ?Box {
 
 function findUnratedBox(boxes: Box[]): ?Box {
   console.info('findUnratedBox');
-  return findProgramlessBox(boxes) || findUnratedBox(boxes);
+  return findProgramlessBox(boxes) || findEmptyBox(boxes);
 }
 
 function findProgramlessBox(boxes: Box[]): ?Box {
   console.info('findProgramlessBox');
   return boxes.find(b => !b.program);
+}
+
+function justFindBox(boxes: Box[]): Box {
+  console.info('justFindBox');
+  return boxes.sort((a, b) => a.channelChangeAt - b.channelChangeAt)[0];
 }
 
 async function getAirtablePrograms() {
