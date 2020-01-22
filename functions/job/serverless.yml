@@ -70,6 +70,7 @@ functions:
               - partner
               - authorization
               - content-type
+  # ccv1
   updateAllGamesStatus:
     handler: job.updateAllGamesStatus
     timeout: 30
@@ -84,6 +85,16 @@ functions:
               - partner
               - authorization
               - content-type
+
+  updateAirtableGamesStatus:
+    handler: job.updateAirtableGamesStatus
+    timeout: 30
+    events:
+      - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
+      - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
+      - http:
+          path: airtable/games/status
+          method: post
   controlCenterDailyInit:
     handler: job.controlCenterDailyInit
     timeout: 30

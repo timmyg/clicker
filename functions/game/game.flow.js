@@ -112,13 +112,6 @@ const dbGame = dynamoose.model(
 );
 // }
 
-class GameStatus {
-  started: boolean;
-  blowout: boolean;
-  ended: boolean;
-  description: string;
-}
-
 type actionNetworkRequest = {
   sport: string,
   params?: any,
@@ -128,6 +121,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+// ccv1
 module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('getstatus');
   const { url: webUrl } = getBody(event);
@@ -326,7 +320,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   const game: Game = await dbGame
     .queryOne('id')
-    .eq(parseInt(id))
+    .eq(id)
     .exec();
   return respond(200, game);
 });
