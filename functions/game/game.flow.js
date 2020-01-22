@@ -335,14 +335,15 @@ module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, asy
   console.log(`found ${programs.length} programs`);
   if (programs.length) {
     for (const program of programs) {
+      const recordId: string = program.id;
       const gameId: number = program.get('gameId');
       const game: Game = await dbGame
         .queryOne('id')
         .eq(gameId)
         .exec();
-      console.log({ gameId, game });
+      console.log({ recordId, gameId, game });
       if (game) {
-        await base(airtableControlCenter).update(gameId, {
+        await base(airtableControlCenter).update(recordId, {
           gameOver: game.summary.ended,
           gameStatus: game.summary.description,
         });
