@@ -732,8 +732,8 @@ class ControlCenterProgram {
     start: Date,
     rating: number,
     programmingId: string,
-    channel: number,
     title: string,
+    // channel: number, // do not use (region specific)
   };
   constructor(obj: any) {
     Object.assign(this, obj);
@@ -839,13 +839,22 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
         break;
     }
     if (selectedBox) {
-      console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning to ${program.fields.channel}...`);
+      console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning to ${program.fields.title}...`);
       console.log({ selectedBox });
-      await tune(location, selectedBox, program.fields.channel);
+      const { region } = location;
+      const { programmingId } = program.fields;
+      const programResult = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams({ region, programmingId: programmingId })
+        // .async()
+        .go();
+      const programDb = programResult && programResult.data;
+      await tune(location, selectedBox, programDb.channel);
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
       console.log(JSON.stringify(availableBoxes), selectedBox);
-      availableBoxes = availableBoxes.filter(b => b.id !== selectedBox.id);
+      availableBoxes = availableBoxes.filter(b => b.id !== (selectedBox && selectedBox.id));
       console.log(`boxes remaining: ${availableBoxes.length}`);
     }
     if (!availableBoxes.length) {

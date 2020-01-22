@@ -230,55 +230,87 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 // });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log(event.queryStringParameters);
+  console.log('GET');
+  // console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
-  const { channel, time, region } = event.queryStringParameters;
-  if (!channel || !region) {
-    return respond(400, `need channel or region: ${JSON.stringify({ channel, region })}`);
+  const { channel, time, region, programmingId, programmingIds } = event.queryStringParameters;
+  if (!region) {
+    return respond(400, `need region: ${region}`);
   }
-  const timeToSearch = time || moment().unix() * 1000;
-  const timeToSearchPreviousProgram =
-    moment(timeToSearch)
-      .subtract(previousProgramMinutesAgo, 'm')
-      .unix() * 1000;
-  // get programs that are on now or ended within last 30 mins
-  const programs: Program[] = await dbProgram
-    .query('channel')
-    .eq(channel)
-    .and()
-    .filter('region')
-    .eq(region)
-    .and()
-    .filter('start')
-    .lt(timeToSearch)
-    .and()
-    .filter('end')
-    .gt(timeToSearchPreviousProgram)
-    .exec();
+  if (!channel && !programmingId && !programmingIds) {
+    return respond(
+      400,
+      `need channel/programmingId/programmingIds: ${JSON.stringify({ channel, programmingId, programmingIds })}`,
+    );
+  }
+  if (channel) {
+    const timeToSearch = time || moment().unix() * 1000;
+    const timeToSearchPreviousProgram =
+      moment(timeToSearch)
+        .subtract(previousProgramMinutesAgo, 'm')
+        .unix() * 1000;
+    // get programs that are on now or ended within last 30 mins
+    const programs: Program[] = await dbProgram
+      .query('channel')
+      .eq(channel)
+      .and()
+      .filter('region')
+      .eq(region)
+      .and()
+      .filter('start')
+      .lt(timeToSearch)
+      .and()
+      .filter('end')
+      .gt(timeToSearchPreviousProgram)
+      .exec();
 
-  // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
-  programs.forEach(p => {
-    delete p.subcategories;
-    delete p.channelCategories;
-  });
-  console.log(`programs: ${programs.length}`);
-  const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
-  const existingProgram = sortedPrograms[sortedPrograms.length - 1];
-  if (sortedPrograms.length > 1) {
-    // check if first program is game, and if it is over
-    const previousProgram = sortedPrograms[0];
-    console.log({ previousProgram });
-    if (previousProgram.game && previousProgram.game.status === 'inprogress') {
-      return respond(200, previousProgram);
+    // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
+    programs.forEach(p => {
+      delete p.subcategories;
+      delete p.channelCategories;
+    });
+    console.log(`programs: ${programs.length}`);
+    const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
+    const existingProgram = sortedPrograms[sortedPrograms.length - 1];
+    if (sortedPrograms.length > 1) {
+      // check if first program is game, and if it is over
+      const previousProgram = sortedPrograms[0];
+      console.log({ previousProgram });
+      if (previousProgram.game && previousProgram.game.status === 'inprogress') {
+        return respond(200, previousProgram);
+      }
+    } else if (
+      existingProgram &&
+      (moment(existingProgram.start).diff(moment()) > 0 || moment(existingProgram.end).diff(moment()) < 0)
+    ) {
+      console.info('no current program');
+      return respond(200, {});
     }
-  } else if (
-    existingProgram &&
-    (moment(existingProgram.start).diff(moment()) > 0 || moment(existingProgram.end).diff(moment()) < 0)
-  ) {
-    console.info('no current program');
-    return respond(200, {});
+    return respond(200, existingProgram);
+  } else if (programmingId) {
+    console.log({ programmingId });
+    const programs: Program[] = await dbProgram
+      .query('region')
+      .eq(region)
+      .and()
+      .filter('programmingId')
+      .eq(programmingId)
+      .exec();
+    // TODO what if program on multiple channels? choose local?
+    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    return respond(200, sortedPrograms[0]);
+  } else if (programmingIds) {
+    const programs: Program[] = await dbProgram
+      .query('region')
+      .eq(region)
+      .and()
+      .filter('programmingId')
+      .in(programmingIds)
+      // .in(['EP023034511512'])
+      .exec();
+    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    return respond(200, sortedPrograms);
   }
-  return respond(200, existingProgram);
 });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
