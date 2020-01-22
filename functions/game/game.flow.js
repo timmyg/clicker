@@ -17,6 +17,13 @@ if (!process.env.IS_LOCAL) {
 }
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper, Invoke } = require('serverless-helpers');
 
+export class GameStatus {
+  started: boolean;
+  blowout: boolean;
+  ended: boolean;
+  description: string;
+}
+
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
     accessKeyId: 'test',
