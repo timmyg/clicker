@@ -327,7 +327,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
-  let programs = await base(airtableControlCenter)
+  const programs = await base(airtableControlCenter)
     .select({
       filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= -1 )`,
     })
@@ -340,6 +340,7 @@ module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, asy
         .queryOne('id')
         .eq(gameId)
         .exec();
+      console.log({ gameId, game });
       if (game) {
         await base(airtableControlCenter).update(gameId, {
           gameOver: game.summary.ended,
