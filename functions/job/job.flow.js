@@ -148,43 +148,6 @@ module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async ev
   }
 });
 
-module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  console.log('searching for games to change');
-  let programs = await base(airtableControlCenter)
-    .select({
-      filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= -1 )`,
-    })
-    .all();
-  console.log(`found ${programs.length} programs`);
-  if (programs.length) {
-    for (const program of programs) {
-      const gameId: number = program.get('gameId');
-      const gameResult = await new Invoke()
-        .service('game')
-        .name('get')
-        .pathParams({ id: gameId })
-        .async()
-        .go();
-      if (gameResult) {
-        const game: Game = gameResult.data;
-        await base(airtableControlCenter).update(gameId, {
-          gameOver: game.summary.ended,
-          gameStatus: game.summary.description,
-        });
-      } else {
-        await new Invoke()
-          .service('notification')
-          .name('sendControlCenter')
-          .body({ text: `game not found: ${gameId}` })
-          .async()
-          .go();
-      }
-    }
-  }
-  return respond(200);
-});
-
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   console.log('searching for games to change');
