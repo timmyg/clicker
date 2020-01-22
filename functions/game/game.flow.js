@@ -17,7 +17,7 @@ if (!process.env.IS_LOCAL) {
 }
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper, Invoke } = require('serverless-helpers');
 
-export class GameStatus {
+class GameStatus {
   started: boolean;
   blowout: boolean;
   ended: boolean;
