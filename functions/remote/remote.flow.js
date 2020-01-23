@@ -56,9 +56,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
-      const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} on ${
+      const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title}  [${
         reservation.program.channelTitle
-      } [${channel}] (${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(
+      } ${channel}] (${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(
         userId.length - 5,
       )}, previously: ${
         reservation.box.program
@@ -66,7 +66,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${channel}])`;
+      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${reservation.box.channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendApp')
@@ -76,15 +76,15 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} on ${
+      const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} [${
         reservation.program.channelTitle
-      } *Zone ${reservation.box.zone}* (previously: ${
+      } ${channel} *Zone ${reservation.box.zone}*] (previously: ${
         reservation.box.program
           ? `${reservation.box.program.title} _${
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${channel}])`;
+      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${reservation.box.channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -94,9 +94,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} on ${
+      const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} [${
         reservation.program.channelTitle
-      } [${channel}] *Zone ${reservation.box.zone}* (previously: ${reservation.box.channel}, ${
+      } ${channel} *Zone ${reservation.box.zone}*] (previously: ${reservation.box.channel}, ${
         reservation.box.program
           ? `${reservation.box.program.title} _${
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
