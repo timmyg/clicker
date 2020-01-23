@@ -772,7 +772,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove channels that location doesnt have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
-  console.info({ excludedChannels });
+  console.info({ excludedChannels: !!excludedChannels ? excludedChannels : [] });
 
   if (excludedChannels && excludedChannels.length) {
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
@@ -833,7 +833,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
-    console.info(`trying to turn on: ${program.fields.title} (${program.db.channel})`);
+    console.info(`trying to turn on: ${program.fields.title} (${program.db.channel}) *${program.fields.rating}*`);
 
     switch (program.fields.rating) {
       case 10:
@@ -869,10 +869,10 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     if (selectedBox) {
       console.log(
         `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title} (${
-        program.db.channel
-        }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${selectedBox.program &&
-          selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'}* (${selectedBox.channel})...`,
-      );
+        program.db.channel 
+        }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${!!selectedBox.program &&
+          !!selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'}* (${selectedBox.channel})...`,
+      ); 
       await tune(location, selectedBox, program.db.channel);
       // console.log({ selectedBox });
       // remove box so it doesnt get reassigned
