@@ -868,10 +868,10 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     }
     if (selectedBox) {
       console.log(
-        `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title}(${
+        `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title} (${
         program.db.channel
         }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${selectedBox.program &&
-        selectedBox.program.clickerRating}* (${selectedBox.channel})...`,
+          selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'}* (${selectedBox.channel})...`,
       );
       await tune(location, selectedBox, program.db.channel);
       // console.log({ selectedBox });
