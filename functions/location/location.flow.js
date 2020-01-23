@@ -807,6 +807,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   const { region } = location;
   // const { programmingId } = program.fields;
   const programmingIds = ccPrograms.map(p => p.fields.programmingId);
+  console.log({ region, programmingIds });
   const programsResult = await new Invoke()
     .service('program')
     .name('get')
