@@ -10,28 +10,33 @@
       id="signup-form"
       v-on:submit.prevent="onSubmit"
       v-else
-      novalidate
     >
       <div class="control control-expanded">
         <input
           class="input get-outta-here-bot"
+          name="1"
           type="email"
           placeholder="Enter your email"
           v-model.trim="emailBot1"
+          :required="!email.length"
         />
         <input
           class="input"
+          name="2"
           type="email"
           placeholder="Enter your email"
           v-model.trim="email"
           :disabled="submitting"
           required
         />
+
         <input
           class="input get-outta-here-bot"
+          name="3"
           type="email"
           placeholder="Enter your email"
           v-model.trim="emailBot2"
+          :required="!email.length"
         />
       </div>
       <div class="control">
@@ -40,6 +45,11 @@
           :disabled="submitting"
           class="button button-primary button-block button-shadow"
         >I'm Interested</button>
+        <!-- <button
+          type="submit"
+          :disabled="submitting"
+          class="button button-primary button-block button-shadow"
+        >{{getButtonText()}}</button>-->
       </div>
     </form>
   </div>
@@ -51,20 +61,28 @@ export default {
   data: function() {
     return {
       email: "",
-      emailBot1: "dave",
-      emailBot2: "matthews",
+      emailBot1: "dave@dmb.com",
+      emailBot2: "matthews@dmb.com",
       submitting: false,
       submitted: false,
       error: false
     };
   },
   methods: {
+    // getButtonText() {
+    //   return this.submitting ? "Submitting..." : "I'm Interested";
+    // },
     onSubmit() {
+      console.log("onsubmit");
+      if (!this.email || !this.email.length) {
+        return false;
+      }
       this.submitting = true;
       const { email, emailBot1, emailBot2 } = this;
-      if (emailBot1 !== "dave" || emailBot2 !== "matthews") {
+      console.log({ email, emailBot1, emailBot2 });
+      if (emailBot1 !== "dave@dmb.com" || emailBot2 !== "matthews@dmb.com") {
         console.info("get outta here bot!");
-        // return?
+        // return;
       }
       // console.log("$analytics");
       // console.log(this.$analytics);
@@ -95,7 +113,10 @@ export default {
 
 <style lang="scss" scoped>
 .get-outta-here-bot {
-  display: none;
+  // opacity: 0;
+  // position: absolute;
+  // top: -9999px;
+  // left: -9999px;
 }
 .error {
   color: get-color(alert, error);
