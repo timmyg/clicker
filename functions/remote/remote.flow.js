@@ -61,7 +61,11 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       } (${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(
         userId.length - 5,
       )}, previously: ${reservation.box.channel}, ${
-        reservation.box.program ? `${reservation.box.program.title} _${reservation.box.program.clickerRating}_` : '?'
+        reservation.box.program
+          ? `${reservation.box.program.title} _${
+              reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
+            }_`
+          : '?'
       })`;
       await new Invoke()
         .service('notification')
@@ -75,7 +79,11 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${
         reservation.box.zone
       }* (previously: ${reservation.box.channel}, ${
-        reservation.box.program ? `${reservation.box.program.title} _${reservation.box.program.clickerRating}_` : '?'
+        reservation.box.program
+          ? `${reservation.box.program.title} _${
+              reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
+            }_`
+          : '?'
       })`;
       await new Invoke()
         .service('notification')
@@ -89,7 +97,11 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${
         reservation.box.zone
       }* (previously: ${reservation.box.channel}, ${
-        reservation.box.program ? `${reservation.box.program.title} _${reservation.box.program.clickerRating}_` : '?'
+        reservation.box.program
+          ? `${reservation.box.program.title} _${
+              reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
+            }_`
+          : '?'
       })`;
       await new Invoke()
         .service('notification')
