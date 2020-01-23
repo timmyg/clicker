@@ -735,6 +735,7 @@ class ControlCenterProgram {
     title: string,
     // channel: number, // do not use (region specific)
   };
+  db: Program;
   constructor(obj: any) {
     Object.assign(this, obj);
   }
@@ -761,7 +762,7 @@ module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event =
 function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
   const { boxes } = location;
   const liveChannelIds = boxes.map(b => b.channel);
-  ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
+  ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.db.channel));
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
   // remove channels that location doesnt have
@@ -770,7 +771,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   console.info({ excludedChannels });
 
   if (excludedChannels && excludedChannels.length) {
-    ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.fields.channel));
+    ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
   }
   console.info(`filtered programs after looking at excluded: ${ccPrograms.length}`);
   // sort by rating descending
@@ -798,6 +799,24 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
 
+  // get programs from db from cc programs
+  const { region } = location;
+  // const { programmingId } = program.fields;
+  const programmingIds = ccPrograms.map(p => p.fields.programmingId);
+  const programsResult = await new Invoke()
+    .service('program')
+    .name('get')
+    .queryParams({ region, programmingIds })
+    // .async()
+    .go();
+  console.log({ programsResult });
+  const programs = programsResult && programsResult.data;
+
+  // attach db program
+  ccPrograms.map(ccp => {
+    ccp.db = programs.find(p => p.programmingId === ccp.fields.programmingId);
+  });
+
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
@@ -806,7 +825,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
-    console.info(`trying to turn on: ${program.fields.title} (${program.fields.channel})`);
+    console.info(`trying to turn on: ${program.fields.title} (${program.db.channel})`);
+
     switch (program.fields.rating) {
       case 10:
       case 9:
@@ -841,16 +861,6 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     if (selectedBox) {
       console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning to ${program.fields.title}...`);
       console.log({ selectedBox });
-      const { region } = location;
-      const { programmingId } = program.fields;
-      const programResult = await new Invoke()
-        .service('program')
-        .name('get')
-        .queryParams({ region, programmingId: programmingId })
-        // .async()
-        .go();
-      const programDb = programResult && programResult.data;
-      await tune(location, selectedBox, programDb.channel);
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
       console.log(JSON.stringify(availableBoxes), selectedBox);
