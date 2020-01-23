@@ -60,13 +60,13 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
         reservation.program.channelTitle
       } [${channel}] (${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(
         userId.length - 5,
-      )}, previously: ${reservation.box.channel}, ${
+      )}, previously: ${
         reservation.box.program
           ? `${reservation.box.program.title} _${
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      })`;
+      } [${channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendApp')
@@ -78,13 +78,13 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       userId = 'system';
       const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} on ${
         reservation.program.channelTitle
-      } [${channel}] *Zone ${reservation.box.zone}* (previously: ${reservation.box.channel}, ${
+      } *Zone ${reservation.box.zone}* (previously: ${
         reservation.box.program
           ? `${reservation.box.program.title} _${
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      })`;
+      } [${channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -96,13 +96,13 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       userId = 'system';
       const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} on ${
         reservation.program.channelTitle
-      } [${channel}] *Zone ${reservation.box.zone}* (previously: ${reservation.box.channel}, ${
+      } *Zone ${reservation.box.zone}* (previously: ${reservation.box.channel}, ${
         reservation.box.program
           ? `${reservation.box.program.title} _${
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      })`;
+      } [${channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
