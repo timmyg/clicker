@@ -56,10 +56,13 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     if (source === 'app') {
       eventName = 'App Zap';
       userId = reservation.userId;
-      let text = `*${eventName}* @ ${reservation.location.name}`;
-      text = `${text} to ${reservation.program.title} on ${reservation.program.channelTitle} (${
-        reservation.minutes
-      } mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)})`;
+      const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} on ${
+        reservation.program.channelTitle
+      } (${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(
+        userId.length - 5,
+      )}, previously: ${reservation.box.channel}, ${
+        reservation.box.program ? `${reservation.box.program.title} _${reservation.box.program.clickerRating}_` : '?'
+      })`;
       await new Invoke()
         .service('notification')
         .name('sendApp')
@@ -69,7 +72,11 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     } else if (source === 'control center') {
       eventName = 'Control Center Zap';
       userId = 'system';
-      const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
+      const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${
+        reservation.box.zone
+      }* (previously: ${reservation.box.channel}, ${
+        reservation.box.program ? `${reservation.box.program.title} _${reservation.box.program.clickerRating}_` : '?'
+      })`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -79,7 +86,11 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     } else if (source === 'control center daily') {
       eventName = 'Control Center Daily Zap';
       userId = 'system';
-      const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
+      const text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${
+        reservation.box.zone
+      }* (previously: ${reservation.box.channel}, ${
+        reservation.box.program ? `${reservation.box.program.title} _${reservation.box.program.clickerRating}_` : '?'
+      })`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
