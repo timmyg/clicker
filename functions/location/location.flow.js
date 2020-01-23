@@ -761,8 +761,11 @@ module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event =
 
 function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
   const { boxes } = location;
+  // remove if we couldnt find a match in the database
+  ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
+
   const currentlyShowingChannels: number[] = boxes.map(b => b.channel);
-  console.log({ currentlyShowingChannels }, { ccPrograms: ccPrograms.map(x => x.db.channel) });
+  // console.log({ currentlyShowingChannels }, { ccPrograms: ccPrograms.filter(x).map(x => x.db.channel) });
   ccPrograms = ccPrograms.filter(ccp => !currentlyShowingChannels.includes(ccp.db.channel));
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
