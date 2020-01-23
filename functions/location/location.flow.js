@@ -761,8 +761,9 @@ module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event =
 
 function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
   const { boxes } = location;
-  const liveChannelIds = boxes.map(b => b.channel);
-  ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.db.channel));
+  const currentlyShowingChannels: number[] = boxes.map(b => b.channel);
+  console.log({ currentlyShowingChannels }, ccPrograms.map(x => x.db.channel));
+  ccPrograms = ccPrograms.filter(ccp => !currentlyShowingChannels.includes(ccp.db.channel));
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
   // remove channels that location doesnt have
@@ -859,11 +860,16 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
         break;
     }
     if (selectedBox) {
-      console.log(`*$#&(#&%#$)@@#$(#*$59%* tuning to ${program.fields.title}...`);
-      console.log({ selectedBox });
+      console.log(
+        `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title}(${
+          program.db.channel
+        }) on box currently showing ${selectedBox.program && selectedBox.program.title}(${selectedBox.channel})...`,
+      );
+      await tune(location, selectedBox, program.db.channel);
+      // console.log({ selectedBox });
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
-      console.log(JSON.stringify(availableBoxes), selectedBox);
+      // console.log(JSON.stringify(availableBoxes), selectedBox);
       availableBoxes = availableBoxes.filter(b => b.id !== (selectedBox && selectedBox.id));
       console.log(`boxes remaining: ${availableBoxes.length}`);
     }
