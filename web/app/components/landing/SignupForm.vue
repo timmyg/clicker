@@ -113,10 +113,10 @@ export default {
 
 <style lang="scss" scoped>
 .get-outta-here-bot {
-  // opacity: 0;
-  // position: absolute;
-  // top: -9999px;
-  // left: -9999px;
+  opacity: 0;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
 }
 .error {
   color: get-color(alert, error);
