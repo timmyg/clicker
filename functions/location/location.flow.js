@@ -423,7 +423,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (!!location.boxes[i].zone || location.boxes[i].appActive) {
         const text = `Manual Zap @ ${location.name} (${
           location.neighborhood
-        }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+          }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
 
         await new Invoke()
           .service('notification')
@@ -802,6 +802,9 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
+  if (!ccPrograms.length) {
+    return respond(200, 'no programs')
+  }
 
   // get programs from db from cc programs
   const { region } = location;
@@ -866,9 +869,9 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     if (selectedBox) {
       console.log(
         `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title}(${
-          program.db.channel
+        program.db.channel
         }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${selectedBox.program &&
-          selectedBox.program.clickerRating}* (${selectedBox.channel})...`,
+        selectedBox.program.clickerRating}* (${selectedBox.channel})...`,
       );
       await tune(location, selectedBox, program.db.channel);
       // console.log({ selectedBox });
@@ -1042,8 +1045,8 @@ async function getAirtablePrograms() {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
-      view: 'All',
-      filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
+      view: 'Visible',
+      // filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
   // get games, to see if they
