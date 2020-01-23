@@ -306,7 +306,6 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .and()
       .filter('programmingId')
       .in(programmingIds)
-      // .in(['EP023034511512'])
       .exec();
     const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     console.log('querying for', region, { programmingIds });
