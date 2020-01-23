@@ -66,7 +66,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      })`;
+      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendApp')
@@ -84,7 +84,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      } [${channel}])`;
+      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
@@ -102,7 +102,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
               reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
             }_`
           : '?'
-      })`;
+      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${channel}])`;
       await new Invoke()
         .service('notification')
         .name('sendControlCenter')
