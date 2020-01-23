@@ -314,10 +314,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     if (programmingIds.length > programs.length) {
       const errorText = 'Program not found';
       console.error(errorText);
-      Raven.captureException({
-        name: errorText,
-        message: JSON.stringify({ channel, time, region, programmingId, programmingIds }),
-      });
+      console.error({ channel, time, region, programmingId, programmingIds });
+      Raven.captureException(new Error(errorText));
     }
     return respond(200, sortedPrograms);
   }
