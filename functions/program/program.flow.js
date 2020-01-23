@@ -312,7 +312,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     console.log('querying for', region, { programmingIds });
     console.log('returned', programs.map(p => p.programmingId));
     if (programmingIds.length > programs.length) {
-      const errorText = 'Program not found';
+      const errorText = 'Program not found in database';
       console.error(errorText);
       console.error({ channel, time, region, programmingId, programmingIds });
       Raven.captureException(new Error(errorText));
