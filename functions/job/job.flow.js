@@ -5,6 +5,7 @@ const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpe
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const airtableControlCenterV1 = 'Control Center v1';
+const airtableControlCenter = 'Control Center';
 
 declare class process {
   static env: {

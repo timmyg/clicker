@@ -16,6 +16,14 @@ if (!process.env.IS_LOCAL) {
   AWS = require('aws-sdk');
 }
 const { respond, getPathParameters, getBody, Raven, RavenLambdaWrapper, Invoke } = require('serverless-helpers');
+const airtableControlCenter = 'Control Center';
+
+class GameStatus {
+  started: boolean;
+  blowout: boolean;
+  ended: boolean;
+  description: string;
+}
 
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
@@ -112,13 +120,6 @@ const dbGame = dynamoose.model(
 );
 // }
 
-class GameStatus {
-  started: boolean;
-  blowout: boolean;
-  ended: boolean;
-  description: string;
-}
-
 type actionNetworkRequest = {
   sport: string,
   params?: any,
@@ -128,6 +129,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+// ccv1
 module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('getstatus');
   const { url: webUrl } = getBody(event);
@@ -322,11 +324,47 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  console.log('searching for games to change');
+  const programs = await base(airtableControlCenter)
+    .select({
+      filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= -1 )`,
+    })
+    .all();
+  console.log(`found ${programs.length} programs`);
+  if (programs.length) {
+    for (const program of programs) {
+      const recordId: string = program.id;
+      const gameId: number = program.get('gameId');
+      const game: Game = await dbGame
+        .queryOne('id')
+        .eq(gameId)
+        .exec();
+      console.log({ recordId, gameId, game });
+      if (game) {
+        await base(airtableControlCenter).update(recordId, {
+          gameOver: game.summary.ended,
+          gameStatus: game.summary.description,
+        });
+      } else {
+        await new Invoke()
+          .service('notification')
+          .name('sendControlCenter')
+          .body({ text: `game not found: ${gameId}` })
+          .async()
+          .go();
+      }
+    }
+  }
+  return respond(200);
+});
+
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   const game: Game = await dbGame
     .queryOne('id')
-    .eq(parseInt(id))
+    .eq(id)
     .exec();
   return respond(200, game);
 });

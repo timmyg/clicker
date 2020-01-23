@@ -15,3 +15,5 @@
 15. Programs > Control Center
 16. All views
 17. Control Center isSportsOrEmpty
+18. airtable gameStatus, gameOver, isOver columns
+19. remove programs so we can get end time
