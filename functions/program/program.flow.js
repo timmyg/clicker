@@ -311,6 +311,12 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     console.log('querying for', region, { programmingIds });
     console.log('returned', programs.map(p => p.programmingId));
+    if (programmingIds.length > programs.length) {
+      Raven.captureException({
+        name: 'Program not found',
+        message: JSON.stringify({ channel, time, region, programmingId, programmingIds }),
+      });
+    }
     return respond(200, sortedPrograms);
   }
 });

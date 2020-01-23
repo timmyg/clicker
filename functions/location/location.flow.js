@@ -423,7 +423,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (!!location.boxes[i].zone || location.boxes[i].appActive) {
         const text = `Manual Zap @ ${location.name} (${
           location.neighborhood
-          }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+        }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
 
         await new Invoke()
           .service('notification')
@@ -797,13 +797,14 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     .queryOne('id')
     .eq(locationId)
     .exec();
+  console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
-    return respond(200, 'no programs')
+    return respond(200, 'no programs');
   }
 
   // get programs from db from cc programs
@@ -869,10 +870,11 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     if (selectedBox) {
       console.log(
         `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title} (${
-        program.db.channel 
-        }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${!!selectedBox.program &&
-          !!selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'}* (${selectedBox.channel})...`,
-      ); 
+          program.db.channel
+        }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${
+          !!selectedBox.program && !!selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'
+        }* (${selectedBox.channel})...`,
+      );
       await tune(location, selectedBox, program.db.channel);
       // console.log({ selectedBox });
       // remove box so it doesnt get reassigned
