@@ -854,6 +854,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
       if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
+      console.info('could not find box to put program on');
     } else {
       console.info('game is too far in future');
       continue;
@@ -988,7 +989,7 @@ function findBoxBlowout(boxes: Box[]): ?Box {
 }
 
 function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box {
-  console.info('findBoxWorseRating');
+  console.info('findBoxWithoutRating');
   return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
 }
 

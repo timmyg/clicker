@@ -21,8 +21,6 @@ export class Program {
   type: string;
   nextProgramTitle: string;
   nextProgramStart: number;
-  startFromNow: number;
-  endFromNow: number;
   points: number;
   synced: boolean;
   clickerRating: number;
@@ -30,4 +28,8 @@ export class Program {
   game: Game;
   createdAt: number;
   updatedAt: number;
+
+  // dynamic
+  startFromNow: number;
+  endFromNow: number;
 }
