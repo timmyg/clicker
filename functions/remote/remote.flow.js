@@ -85,17 +85,17 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
         reservation.minutes
       } mins, TV: ${reservation.box.label}, user: ${userId.substr(
         userId.length - 5
-      )}, previously: ${
+      )}\n\t_previously ${
         reservation.box.program
-          ? `${reservation.box.program.title} _${
+          ? `${reservation.box.program.title} {${
               reservation.box.program.clickerRating
                 ? reservation.box.program.clickerRating
                 : "NR"
-            }_`
+            }}`
           : "?"
       } [${
         reservation.box.program ? reservation.box.program.channelTitle : ""
-      } ${reservation.box.channel}])`;
+      } ${reservation.box.channel}]_`;
       await new Invoke()
         .service("notification")
         .name("sendApp")
@@ -109,17 +109,17 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
         reservation.program.title
       } _${reservation.program.clickerRating}_ [${
         reservation.program.channelTitle
-      } ${channel} *Zone ${reservation.box.zone}*]\npreviously: ${
+      } ${channel} *Zone ${reservation.box.zone}*]\n\t_previously ${
         reservation.box.program
-          ? `${reservation.box.program.title} _${
+          ? `${reservation.box.program.title} {${
               reservation.box.program.clickerRating
                 ? reservation.box.program.clickerRating
                 : "NR"
-            }_`
+            }}`
           : "?"
       } [${
         reservation.box.program ? reservation.box.program.channelTitle : ""
-      } ${reservation.box.channel}])`;
+      } ${reservation.box.channel}]_`;
       await new Invoke()
         .service("notification")
         .name("sendControlCenter")
