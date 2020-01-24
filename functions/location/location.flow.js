@@ -854,7 +854,6 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
       if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
-      console.info('could not find box to put program on');
     } else {
       console.info('game is too far in future');
       continue;
@@ -865,6 +864,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       console.log(`boxes: ${availableBoxes.length}`);
       availableBoxes = availableBoxes.filter(b => b.id !== (selectedBox && selectedBox.id));
       console.log(`boxes remaining: ${availableBoxes.length}`);
+    } else {
+      console.info('could not find box to put program on');
     }
     if (!availableBoxes.length) {
       console.info('no more boxes');
@@ -963,7 +964,7 @@ async function tune(location: Venue, box: Box, channel: number, program: Program
     },
   };
   const source = 'control center';
-  // console.log(`tune to ${channel}`, box.label);
+  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel}`, box.label);
   await new Invoke()
     .service('remote')
     .name('command')
