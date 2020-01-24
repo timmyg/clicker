@@ -94,7 +94,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
           : '?'
       } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${reservation.box.channel}]_`;
       // ccv1
-      if (!reservation.box.program || !reservation.box.program.clickerRating) {
+      if (!reservation.program.clickerRating) {
         text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
         text += `\n\t_previously ${
           reservation.box.program
