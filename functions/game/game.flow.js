@@ -268,8 +268,9 @@ function isBlowout(game: Game): boolean {
 }
 
 module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
+  // 5 hours messed up at midnight
   const timeToPull = moment()
-    .subtract(5, "hours")
+    .subtract(12, "hours")
     .toDate();
   console.log({ timeToPull });
   const allEvents = await pullFromActionNetwork([timeToPull]);
