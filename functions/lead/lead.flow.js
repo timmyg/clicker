@@ -14,7 +14,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const { email, emailBot1, emailBot2 } = body;
   const text = `*New Landing Signup*: ${email}`;
   console.log({ email, emailBot1, emailBot2 });
-  if (emailBot1 !== 'dave' || emailBot2 !== 'matthews') {
+  if (emailBot1 !== 'dave@dmb.com' || emailBot2 !== 'matthews@dmb.com') {
     return respond(400, "i honestly think you're a bot");
   }
   console.time('notification');
