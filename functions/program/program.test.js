@@ -1,71 +1,71 @@
-const moment = require('moment');
+const moment = require("moment");
 const {
   build,
   generateId,
   getLocalChannelName,
   getChannels,
   getChannelsWithMinor,
-  transformSIUrl,
-} = require('./program');
-const data = require('../.resources/old/channelschedule-2.json');
-const file = require('./program');
+  transformSIUrl
+} = require("./program");
+const data = require("../.resources/old/channelschedule-2.json");
+const file = require("./program");
 
-test('smoke test', () => {
+test("smoke test", () => {
   const response = file.health();
   expect(response).toBeTruthy;
 });
 
-test('generateId generates the same id when same program', () => {
-  const region1 = 'cincinnati';
+test("generateId generates the same id when same program", () => {
+  const region1 = "cincinnati";
   const program = {
     chNum: 206,
     airTime: moment().toDate(),
-    region: region1,
+    region: region1
   };
   const program1Id = generateId(program);
   const program2Id = generateId(program);
   expect(program1Id).toEqual(program2Id);
 });
 
-test('generateId generates different ids when different programs', () => {
-  const region1 = 'cincinnati';
-  const region2 = 'chicago';
+test("generateId generates different ids when different programs", () => {
+  const region1 = "cincinnati";
+  const region2 = "chicago";
   const program1 = {
     chNum: 206,
-    region: region1,
+    region: region1
   };
   const program2 = {
     chNum: 206,
-    region: region2,
+    region: region2
   };
   const program1Id = generateId(program1);
   const program2Id = generateId(program2);
   expect(program1Id).not.toEqual(program2Id);
 });
 
-test('build programs', () => {
+test("build programs", () => {
   // fix dates
   data.schedule.forEach((s, i) => {
     s.schedules.forEach((c, i, channels) => {});
   });
-  const response = build(data.schedule, null, ['324', '661-1']);
+  const response = build(data.schedule, null, ["324", "661-1"]);
   // console.log({ response });
-  expect(response[0]).toHaveProperty('region');
-  expect(response[0]).toHaveProperty('start');
-  expect(response[0]).toHaveProperty('end');
+  expect(response[0]).toHaveProperty("region");
+  expect(response[0]).toHaveProperty("start");
+  expect(response[0]).toHaveProperty("end");
   expect(response.length).toBe(190);
 });
 
-test('convert local channel names', () => {
-  expect(getLocalChannelName('Cincinnati, OH WCPO ABC 9 SD')).toBe('ABC');
-  expect(getLocalChannelName('Cincinnati, OH WLWT NBC 5 SD')).toBe('NBC');
-  expect(getLocalChannelName('Cincinnati, OH WKRC CBS 12 SD')).toBe('CBS');
-  expect(getLocalChannelName('Cincinnati, OH WXIX FOX 19 SD')).toBe('FOX');
-  expect(getLocalChannelName('Cincinnati Blah blah')).toBe(undefined);
+test("convert local channel names", () => {
+  expect(getLocalChannelName("Cincinnati, OH WCPO ABC 9 SD")).toBe("ABC");
+  expect(getLocalChannelName("Cincinnati, OH WLWT NBC 5 SD")).toBe("NBC");
+  expect(getLocalChannelName("Cincinnati, OH WKRC CBS 12 SD")).toBe("CBS");
+  expect(getLocalChannelName("Cincinnati, OH WXIX FOX 19 SD")).toBe("FOX");
+  expect(getLocalChannelName("Cincinnati Blah blah")).toBe(undefined);
 });
 
 const channels = [5, 9, 12, 19, 661.1];
 
-test('getMajorChannels', () => {
+test("getMajorChannels", () => {
   expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
 });

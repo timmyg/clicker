@@ -1,11 +1,11 @@
-const { getChannelForZone, health } = require('./job');
+const { getChannelForZone, health } = require("./job");
 
-test('smoke test', () => {
+test("smoke test", () => {
   const response = health();
   expect(response).toBeTruthy;
 });
 
-test('get initial channels', () => {
+test("get initial channels", () => {
   expect(getChannelForZone(0)).toBe(206);
   expect(getChannelForZone(1)).toBe(209);
   expect(getChannelForZone(2)).toBe(212);

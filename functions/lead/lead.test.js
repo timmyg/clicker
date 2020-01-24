@@ -1,6 +1,6 @@
-const file = require('./lead');
+const file = require("./lead");
 
-test('smoke test', () => {
+test("smoke test", () => {
   const response = file.health();
   expect(response).toBeTruthy;
 });
