@@ -851,7 +851,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     if (isCloseHighlyRated || isCloseNotHighlyRated) {
       selectedBox = findBoxGameOver(availableBoxes);
       if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
-      if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
+      if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
       if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
     }
     if (selectedBox) {
@@ -991,6 +991,11 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
   console.log({ sorted });
   return sorted && sorted.length ? sorted[0] : null;
+}
+
+function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box {
+  console.info('findBoxWorseRating');
+  return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
 }
 
 function findProgramlessBox(boxes: Box[]): ?Box {
