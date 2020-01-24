@@ -1,4 +1,4 @@
-const file = require("./location");
+const file = require('./location');
 const {
   ControlCenterProgram,
   getAvailableBoxes,
@@ -6,31 +6,31 @@ const {
   findBoxWorseRating,
   findBoxGameOver,
   findBoxBlowout,
-  findProgramlessBox
-} = require("./location");
-const moment = require("moment");
+  findProgramlessBox,
+} = require('./location');
+const moment = require('moment');
 
-test("smoke test", () => {
+test('smoke test', () => {
   const response = file.health();
   expect(response).toBeTruthy;
 });
 
-test("ControlCenterProgram model", () => {
+test('ControlCenterProgram model', () => {
   const objects = [
     {
       fields: {
         start: moment()
-          .add(15, "m")
-          .toDate()
-      }
+          .add(15, 'm')
+          .toDate(),
+      },
     },
     {
       fields: {
         start: moment()
-          .add(15, "m")
-          .toDate()
-      }
-    }
+          .add(15, 'm')
+          .toDate(),
+      },
+    },
   ];
   const ccPrograms = objects.map(p => new ControlCenterProgram(p));
   expect(ccPrograms[0].isMinutesFromNow(10)).toBeFalsy();
@@ -41,8 +41,8 @@ function createBoxesByRatings(ratings) {
   return ratings.map(r => {
     return {
       program: {
-        clickerRating: r
-      }
+        clickerRating: r,
+      },
     };
   });
 }
@@ -51,8 +51,8 @@ function createBoxes() {
   return [
     {
       program: {
-        clickerRating: 7
-      }
+        clickerRating: 7,
+      },
     },
     {
       id: 5,
@@ -60,73 +60,68 @@ function createBoxes() {
         game: {
           summary: {
             blowout: true,
-            ended: false
-          }
-        }
-      }
+            ended: false,
+          },
+        },
+      },
     },
     {
       program: {
-        clickerRating: 3
-      }
+        clickerRating: 3,
+      },
     },
     {
-      id: 3
+      id: 3,
     },
     {
       program: {
-        clickerRating: 9
-      }
+        clickerRating: 9,
+      },
     },
     {
       id: 4,
       program: {
         game: {
           summary: {
-            ended: true
-          }
-        }
-      }
-    }
+            ended: true,
+          },
+        },
+      },
+    },
   ];
 }
 
-describe("findBox", () => {
-  test("findBoxWorseRating", () => {
+describe('findBox', () => {
+  test('findBoxWorseRating', () => {
     const program = { fields: { rating: 6 } };
     const result = findBoxWorseRating(createBoxes(), program);
     expect(result.program.clickerRating).toBe(3);
   });
-  test("findBoxGameOver", () => {
+  test('findBoxGameOver', () => {
     const result = findBoxGameOver(createBoxes());
     expect(result.id).toBe(4);
   });
-  test("findBoxBlowout", () => {
+  test('findBoxBlowout', () => {
     const result = findBoxBlowout(createBoxes());
     expect(result.id).toBe(5);
   });
-  test("findProgramlessBox", () => {
+  test('findProgramlessBox', () => {
     const result = findProgramlessBox(createBoxes());
     expect(result.id).toBe(3);
   });
 });
 
-describe("filterPrograms", () => {
-  test("already showing", () => {
+describe('filterPrograms', () => {
+  test('already showing', () => {
     const ccPrograms = [
       { fields: { rating: 9 }, db: { channel: 206 } }, // showing
       { fields: { rating: 6 }, db: { channel: 209 } },
       { fields: { rating: 6 }, db: { channel: 219 } }, // showing
       { fields: { rating: 10 }, db: { channel: 5 } },
-      { fields: { rating: 9 }, db: { channel: 221 } }
+      { fields: { rating: 9 }, db: { channel: 221 } },
     ];
     const location = {
-      boxes: [
-        { channel: 206 },
-        { channel: 219 },
-        { channel: 206 },
-        { channel: 9 }
-      ]
+      boxes: [{ channel: 206 }, { channel: 219 }, { channel: 206 }, { channel: 9 }],
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(3);
@@ -135,18 +130,18 @@ describe("filterPrograms", () => {
     expect(result[1].db.channel).toBe(221);
     expect(result[2].db.channel).toBe(209);
   });
-  test("already showing and excluded", () => {
+  test('already showing and excluded', () => {
     const ccPrograms = [
       { fields: { rating: 4 }, db: { channel: 9 } }, // showing
       { fields: { rating: 4 }, db: { channel: 703 } }, // excluded
       { fields: { rating: 4 }, db: { channel: 219 } },
       { fields: { rating: 4 }, db: { channel: 5 } }, //showing
       { fields: { rating: 4 }, db: { channel: 709 } }, //excluded
-      { fields: { rating: 4 }, db: { channel: 12 } }
+      { fields: { rating: 4 }, db: { channel: 12 } },
     ];
     const location = {
       channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
-      boxes: [{ channel: 5 }, { channel: 9 }, { channel: 19 }]
+      boxes: [{ channel: 5 }, { channel: 9 }, { channel: 19 }],
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(2);
@@ -154,110 +149,110 @@ describe("filterPrograms", () => {
     expect(result[1].db.channel).toBe(12);
   });
 });
-describe("get boxes", () => {
-  const openGoodBox = { id: 1, zone: "4" };
-  const openGoodBox2 = { id: 2, zone: "3" };
+describe('get boxes', () => {
+  const openGoodBox = { id: 1, zone: '4' };
+  const openGoodBox2 = { id: 2, zone: '3' };
   const reservedManuallyChangedRecently = {
     id: 3,
-    zone: "A",
+    zone: 'A',
     program: {
-      clickerRating: 7
+      clickerRating: 7,
     },
-    channelSource: "manual",
+    channelSource: 'manual',
     channelChangeAt:
       moment()
-        .subtract(27, "m")
-        .unix() * 1000
+        .subtract(27, 'm')
+        .unix() * 1000,
   };
   const reservedManuallyChangedGameOn = {
     id: 4,
-    zone: "15",
-    channelSource: "manual",
+    zone: '15',
+    channelSource: 'manual',
     channelChangeAt:
       moment()
-        .subtract(50, "m")
+        .subtract(50, 'm')
         .unix() * 1000,
     program: {
       start:
         moment()
-          .subtract(40, "m")
+          .subtract(40, 'm')
           .unix() * 1000,
       game: {
         summary: {
-          status: "inprogress"
-        }
-      }
-    }
+          status: 'inprogress',
+        },
+      },
+    },
   };
   const openManuallyChangedDifferentProgram = {
     id: 5,
-    zone: "15",
-    channelSource: "manual",
+    zone: '15',
+    channelSource: 'manual',
     channelChangeAt:
       moment()
-        .subtract(2, "h")
+        .subtract(2, 'h')
         .unix() * 1000,
     program: {
       start:
         moment()
-          .subtract(1, "h")
+          .subtract(1, 'h')
           .unix() * 1000,
       game: {
         summary: {
-          status: "complete"
-        }
-      }
-    }
+          status: 'complete',
+        },
+      },
+    },
   };
   const reservedManuallyChangedProgramOver = {
     id: 6,
-    zone: "15",
-    channelSource: "manual",
+    zone: '15',
+    channelSource: 'manual',
     channelChangeAt:
       moment()
-        .subtract(40, "m")
+        .subtract(40, 'm')
         .unix() * 1000,
     program: {
       start:
         moment()
-          .subtract(2, "h")
+          .subtract(2, 'h')
           .unix() * 1000,
       game: {
-        status: "complete"
-      }
-    }
+        status: 'complete',
+      },
+    },
   };
-  const reservedZonelessBox = { id: 7, zone: "" };
+  const reservedZonelessBox = { id: 7, zone: '' };
   describe("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
-    test("openGoodBox", () => {
+    test('openGoodBox', () => {
       const result = getAvailableBoxes([openGoodBox]);
       expect(result.length).toBe(1);
     });
-    test("openGoodBox2", () => {
+    test('openGoodBox2', () => {
       const result = getAvailableBoxes([openGoodBox2]);
       expect(result.length).toBe(1);
     });
-    test("openManuallyChangedDifferentProgram", () => {
+    test('openManuallyChangedDifferentProgram', () => {
       const result = getAvailableBoxes([openManuallyChangedDifferentProgram]);
       expect(result.length).toBe(1);
     });
-    test("reservedManuallyChangedProgramOver", () => {
+    test('reservedManuallyChangedProgramOver', () => {
       const result = getAvailableBoxes([reservedManuallyChangedProgramOver]);
       expect(result.length).toBe(0);
     });
-    test("reservedManuallyChangedRecently", () => {
+    test('reservedManuallyChangedRecently', () => {
       const result = getAvailableBoxes([reservedManuallyChangedRecently]);
       expect(result.length).toBe(0);
     });
-    test("reservedManuallyChangedGameOn", () => {
+    test('reservedManuallyChangedGameOn', () => {
       const result = getAvailableBoxes([reservedManuallyChangedGameOn]);
       expect(result.length).toBe(0);
     });
-    test("reservedZonelessBox", () => {
+    test('reservedZonelessBox', () => {
       const result = getAvailableBoxes([reservedZonelessBox]);
       expect(result.length).toBe(0);
     });
-    test("all of em", () => {
+    test('all of em', () => {
       const result = getAvailableBoxes([
         openGoodBox,
         openGoodBox2,
@@ -265,7 +260,7 @@ describe("get boxes", () => {
         reservedManuallyChangedProgramOver,
         reservedManuallyChangedRecently,
         reservedManuallyChangedGameOn,
-        reservedZonelessBox
+        reservedZonelessBox,
       ]);
       expect(result.length).toBe(3);
       expect(result[0].id).toBe(1);

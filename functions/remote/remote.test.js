@@ -1,6 +1,6 @@
-const file = require("./remote");
+const file = require('./remote');
 
-test("smoke test", () => {
+test('smoke test', () => {
   const response = file.health();
   expect(response).toBeTruthy;
 });

@@ -1,6 +1,6 @@
-const file = require("./analytics");
+const file = require('./analytics');
 
-test("smoke test", () => {
+test('smoke test', () => {
   const response = file.health();
   expect(response).toBeTruthy;
 });

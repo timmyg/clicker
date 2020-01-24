@@ -2,17 +2,17 @@ const x = {
   games: [
     {
       id: 69609,
-      status: "complete",
-      status_display: "Final",
-      start_time: "2019-11-06T00:00:00.000Z",
+      status: 'complete',
+      status_display: 'Final',
+      start_time: '2019-11-06T00:00:00.000Z',
       away_team_id: 326,
       home_team_id: 330,
       winning_team_id: 330,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: true,
       trending: false,
       away_rotation_number: 101,
@@ -20,90 +20,90 @@ const x = {
       teams: [
         {
           id: 326,
-          full_name: "Kent State Golden Flashes",
-          display_name: "Kent State",
-          short_name: "Golden Flashes",
-          location: "Kent State",
-          abbr: "KNT",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/knt.png",
-          primary_color: "003876",
-          secondary_color: "f0b310",
-          conference_type: "MIDAMERICAN",
-          division_type: "FBS",
+          full_name: 'Kent State Golden Flashes',
+          display_name: 'Kent State',
+          short_name: 'Golden Flashes',
+          location: 'Kent State',
+          abbr: 'KNT',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/knt.png',
+          primary_color: '003876',
+          secondary_color: 'f0b310',
+          conference_type: 'MIDAMERICAN',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 330,
-          full_name: "Toledo Rockets",
-          display_name: "Toledo",
-          short_name: "Rockets",
-          location: "Toledo",
-          abbr: "TOL",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/told.png",
-          primary_color: "002569",
-          secondary_color: "ffce00",
-          conference_type: "MIDAMERICAN",
-          division_type: "FBS",
+          full_name: 'Toledo Rockets',
+          display_name: 'Toledo',
+          short_name: 'Rockets',
+          location: 'Toledo',
+          abbr: 'TOL',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/told.png',
+          primary_color: '002569',
+          secondary_color: 'ffce00',
+          conference_type: 'MIDAMERICAN',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       last_play: {
-        text: "End of Game",
-        type: "game_over",
-        clock: "0:00",
+        text: 'End of Game',
+        type: 'game_over',
+        clock: '0:00',
         possession: 330,
         home_win_pct: null,
         over_win_pct: 1,
-        home_spread_win_pct: null
+        home_spread_win_pct: null,
       },
       boxscore: {
-        clock: "00:00",
+        clock: '00:00',
         period: 4,
         linescore: [
           {
             id: 1,
-            abbr: "1",
-            display_name: "1st",
-            full_name: "1st Quarter",
+            abbr: '1',
+            display_name: '1st',
+            full_name: '1st Quarter',
             away_points: 10,
-            home_points: 14
+            home_points: 14,
           },
           {
             id: 2,
-            abbr: "2",
-            display_name: "2nd",
-            full_name: "2nd Quarter",
+            abbr: '2',
+            display_name: '2nd',
+            full_name: '2nd Quarter',
             away_points: 7,
-            home_points: 14
+            home_points: 14,
           },
           {
             id: 3,
-            abbr: "3",
-            display_name: "3rd",
-            full_name: "3rd Quarter",
+            abbr: '3',
+            display_name: '3rd',
+            full_name: '3rd Quarter',
             away_points: 10,
-            home_points: 0
+            home_points: 0,
           },
           {
             id: 4,
-            abbr: "4",
-            display_name: "4th",
-            full_name: "4th Quarter",
+            abbr: '4',
+            display_name: '4th',
+            full_name: '4th Quarter',
             away_points: 6,
-            home_points: 7
-          }
+            home_points: 7,
+          },
         ],
         situation: {
           down: 4,
@@ -111,11 +111,11 @@ const x = {
           yardline: 63,
           is_redzone: false,
           possession: 330,
-          yardline_text: "KNT 37",
+          yardline_text: 'KNT 37',
           start_yardline: 65,
           yards_to_endzone: 37,
-          display: "4th & 17 @ KNT 37",
-          display_short: "4th & 17"
+          display: '4th & 17 @ KNT 37',
+          display_short: '4th & 17',
         },
         away_timeouts: 2,
         home_timeouts: 2,
@@ -124,7 +124,7 @@ const x = {
         total_away_firsthalf_points: 17,
         total_home_firsthalf_points: 28,
         total_away_secondhalf_points: 16,
-        total_home_secondhalf_points: 7
+        total_home_secondhalf_points: 7,
       },
       odds: [
         {
@@ -158,8 +158,8 @@ const x = {
           total_under_money: 26,
           num_bets: 10238,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T00:02:03.988018+00:00"
+          type: 'game',
+          inserted: '2019-11-06T00:02:03.988018+00:00',
         },
         {
           ml_away: 120,
@@ -192,8 +192,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T00:02:22.990774+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T00:02:22.990774+00:00',
         },
         {
           ml_away: 110,
@@ -226,8 +226,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 15,
-          type: "secondhalf",
-          inserted: "2019-11-06T02:01:52.30954+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-06T02:01:52.30954+00:00',
         },
         {
           ml_away: 107,
@@ -260,8 +260,8 @@ const x = {
           total_under_money: null,
           num_bets: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T00:03:37.534637+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T00:03:37.534637+00:00',
         },
         {
           ml_away: null,
@@ -294,8 +294,8 @@ const x = {
           total_under_money: null,
           num_bets: null,
           book_id: 15,
-          type: "live",
-          inserted: "2019-11-06T03:12:59.719145+00:00"
+          type: 'live',
+          inserted: '2019-11-06T03:12:59.719145+00:00',
         },
         {
           ml_away: 240,
@@ -328,8 +328,8 @@ const x = {
           total_under_money: 5,
           num_bets: 0,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T20:06:33.73666+00:00"
+          type: 'game',
+          inserted: '2019-11-04T20:06:33.73666+00:00',
         },
         {
           ml_away: 193,
@@ -362,8 +362,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-05T22:34:06.67121+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-05T22:34:06.67121+00:00',
         },
         {
           ml_away: -110,
@@ -396,8 +396,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-06T01:58:12.627495+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-06T01:58:12.627495+00:00',
         },
         {
           ml_away: 170,
@@ -430,8 +430,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:01:56.023348+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:01:56.023348+00:00',
         },
         {
           ml_away: null,
@@ -464,28 +464,28 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-06T00:03:58.816456+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-06T00:03:58.816456+00:00',
+        },
       ],
       broadcast: {
-        network: "CBS Sports Network",
-        satellite: "221"
-      }
+        network: 'CBS Sports Network',
+        satellite: '221',
+      },
     },
     {
       id: 69610,
-      status: "complete",
-      status_display: "Final",
-      start_time: "2019-11-06T01:00:00.000Z",
+      status: 'complete',
+      status_display: 'Final',
+      start_time: '2019-11-06T01:00:00.000Z',
       away_team_id: 332,
       home_team_id: 334,
       winning_team_id: 334,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 103,
@@ -493,90 +493,90 @@ const x = {
       teams: [
         {
           id: 332,
-          full_name: "Ball State Cardinals",
-          display_name: "Ball State",
-          short_name: "Cardinals",
-          location: "Ball State",
-          abbr: "BALL",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ball.png",
-          primary_color: "c22035",
-          secondary_color: "000000",
-          conference_type: "MIDAMERICAN",
-          division_type: "FBS",
+          full_name: 'Ball State Cardinals',
+          display_name: 'Ball State',
+          short_name: 'Cardinals',
+          location: 'Ball State',
+          abbr: 'BALL',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ball.png',
+          primary_color: 'c22035',
+          secondary_color: '000000',
+          conference_type: 'MIDAMERICAN',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 334,
-          full_name: "Western Michigan Broncos",
-          display_name: "W. Michigan",
-          short_name: "Broncos",
-          location: "W. Michigan",
-          abbr: "WMU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/wmc.png",
-          primary_color: "95774d",
-          secondary_color: "4a1a00",
-          conference_type: "MIDAMERICAN",
-          division_type: "FBS",
+          full_name: 'Western Michigan Broncos',
+          display_name: 'W. Michigan',
+          short_name: 'Broncos',
+          location: 'W. Michigan',
+          abbr: 'WMU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/wmc.png',
+          primary_color: '95774d',
+          secondary_color: '4a1a00',
+          conference_type: 'MIDAMERICAN',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       last_play: {
-        text: "End of Game",
-        type: "game_over",
-        clock: "0:00",
+        text: 'End of Game',
+        type: 'game_over',
+        clock: '0:00',
         possession: 334,
         home_win_pct: null,
         over_win_pct: 1,
-        home_spread_win_pct: null
+        home_spread_win_pct: null,
       },
       boxscore: {
-        clock: "00:00",
+        clock: '00:00',
         period: 4,
         linescore: [
           {
             id: 1,
-            abbr: "1",
-            display_name: "1st",
-            full_name: "1st Quarter",
+            abbr: '1',
+            display_name: '1st',
+            full_name: '1st Quarter',
             away_points: 7,
-            home_points: 7
+            home_points: 7,
           },
           {
             id: 2,
-            abbr: "2",
-            display_name: "2nd",
-            full_name: "2nd Quarter",
+            abbr: '2',
+            display_name: '2nd',
+            full_name: '2nd Quarter',
             away_points: 3,
-            home_points: 14
+            home_points: 14,
           },
           {
             id: 3,
-            abbr: "3",
-            display_name: "3rd",
-            full_name: "3rd Quarter",
+            abbr: '3',
+            display_name: '3rd',
+            full_name: '3rd Quarter',
             away_points: 7,
-            home_points: 0
+            home_points: 0,
           },
           {
             id: 4,
-            abbr: "4",
-            display_name: "4th",
-            full_name: "4th Quarter",
+            abbr: '4',
+            display_name: '4th',
+            full_name: '4th Quarter',
             away_points: 14,
-            home_points: 14
-          }
+            home_points: 14,
+          },
         ],
         situation: {
           down: 1,
@@ -584,11 +584,11 @@ const x = {
           yardline: 77,
           is_redzone: false,
           possession: 334,
-          yardline_text: "BALL 23",
+          yardline_text: 'BALL 23',
           start_yardline: 66,
           yards_to_endzone: 23,
-          display: "1st & 10 @ BALL 23",
-          display_short: "1st & 10"
+          display: '1st & 10 @ BALL 23',
+          display_short: '1st & 10',
         },
         away_timeouts: 2,
         home_timeouts: 2,
@@ -597,7 +597,7 @@ const x = {
         total_away_firsthalf_points: 10,
         total_home_firsthalf_points: 21,
         total_away_secondhalf_points: 21,
-        total_home_secondhalf_points: 14
+        total_home_secondhalf_points: 14,
       },
       odds: [
         {
@@ -624,8 +624,8 @@ const x = {
           total_under_public: 38,
           total_over_public: 62,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T01:05:30.785994+00:00"
+          type: 'game',
+          inserted: '2019-11-06T01:05:30.785994+00:00',
         },
         {
           ml_away: 170,
@@ -651,8 +651,8 @@ const x = {
           total_under_public: 42,
           total_over_public: 58,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T01:05:30.86155+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T01:05:30.86155+00:00',
         },
         {
           ml_away: 110,
@@ -678,8 +678,8 @@ const x = {
           total_under_public: 52,
           total_over_public: 48,
           book_id: 15,
-          type: "secondhalf",
-          inserted: "2019-11-06T02:57:33.920846+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-06T02:57:33.920846+00:00',
         },
         {
           ml_away: 136,
@@ -705,8 +705,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T01:04:34.679415+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T01:04:34.679415+00:00',
         },
         {
           ml_away: -117,
@@ -732,8 +732,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "live",
-          inserted: "2019-11-06T04:15:01.317544+00:00"
+          type: 'live',
+          inserted: '2019-11-06T04:15:01.317544+00:00',
         },
         {
           ml_away: 240,
@@ -759,8 +759,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T19:41:33.670513+00:00"
+          type: 'game',
+          inserted: '2019-11-04T19:41:33.670513+00:00',
         },
         {
           ml_away: 170,
@@ -786,8 +786,8 @@ const x = {
           total_under_public: 90,
           total_over_public: 10,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-05T19:00:49.59267+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-05T19:00:49.59267+00:00',
         },
         {
           ml_away: 110,
@@ -813,8 +813,8 @@ const x = {
           total_under_public: 52,
           total_over_public: 48,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-06T02:57:33.920846+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-06T02:57:33.920846+00:00',
         },
         {
           ml_away: 152,
@@ -840,8 +840,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:02:39.934606+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:02:39.934606+00:00',
         },
         {
           ml_away: 188,
@@ -867,28 +867,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-06T01:07:03.739288+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-06T01:07:03.739288+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN2",
-        satellite: "209"
-      }
+        network: 'ESPN2',
+        satellite: '209',
+      },
     },
     {
       id: 69611,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-07T01:00:00.000Z",
+      start_time: '2019-11-07T01:00:00.000Z',
       away_team_id: 327,
       home_team_id: 324,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: true,
       trending: false,
       away_rotation_number: 105,
@@ -896,44 +896,44 @@ const x = {
       teams: [
         {
           id: 324,
-          full_name: "Ohio Bobcats",
-          display_name: "Ohio",
-          short_name: "Bobcats",
-          location: "Ohio",
-          abbr: "OHIO",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ohi.png",
-          primary_color: "00694e",
-          secondary_color: "000000",
-          conference_type: "MIDAMERICAN",
-          division_type: "FBS",
+          full_name: 'Ohio Bobcats',
+          display_name: 'Ohio',
+          short_name: 'Bobcats',
+          location: 'Ohio',
+          abbr: 'OHIO',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ohi.png',
+          primary_color: '00694e',
+          secondary_color: '000000',
+          conference_type: 'MIDAMERICAN',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 327,
-          full_name: "Miami (OH) RedHawks",
-          display_name: "Miami (OH)",
-          short_name: "RedHawks",
-          location: "Miami (OH)",
-          abbr: "M-OH",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/moh.png",
-          primary_color: "f5002f",
-          secondary_color: "050403",
-          conference_type: "MIDAMERICAN",
-          division_type: "FBS",
+          full_name: 'Miami (OH) RedHawks',
+          display_name: 'Miami (OH)',
+          short_name: 'RedHawks',
+          location: 'Miami (OH)',
+          abbr: 'M-OH',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/moh.png',
+          primary_color: 'f5002f',
+          secondary_color: '050403',
+          conference_type: 'MIDAMERICAN',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -967,8 +967,8 @@ const x = {
           total_under_money: 18,
           num_bets: 2622,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:56:21.447509+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:56:21.447509+00:00',
         },
         {
           ml_away: 190,
@@ -1001,8 +1001,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:47:55.384801+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:47:55.384801+00:00',
         },
         {
           ml_away: 190,
@@ -1035,8 +1035,8 @@ const x = {
           total_under_money: null,
           num_bets: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:41:48.660899+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:41:48.660899+00:00',
         },
         {
           ml_away: 210,
@@ -1069,8 +1069,8 @@ const x = {
           total_under_money: 33,
           num_bets: 0,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T00:26:33.804192+00:00"
+          type: 'game',
+          inserted: '2019-11-06T00:26:33.804192+00:00',
         },
         {
           ml_away: 190,
@@ -1103,8 +1103,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-06T14:30:47.042873+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T14:30:47.042873+00:00',
         },
         {
           ml_away: null,
@@ -1137,8 +1137,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-24T00:00:18.511088+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-24T00:00:18.511088+00:00',
         },
         {
           ml_away: 168,
@@ -1171,8 +1171,8 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:03:42.936106+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:03:42.936106+00:00',
         },
         {
           ml_away: null,
@@ -1205,28 +1205,28 @@ const x = {
           total_under_money: null,
           num_bets: 0,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-24T00:00:18.548758+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-24T00:00:18.548758+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN2",
-        satellite: "209"
-      }
+        network: 'ESPN2',
+        satellite: '209',
+      },
     },
     {
       id: 69613,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-08T00:30:00.000Z",
+      start_time: '2019-11-08T00:30:00.000Z',
       away_team_id: 378,
       home_team_id: 415,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 109,
@@ -1235,43 +1235,43 @@ const x = {
         {
           id: 378,
           full_name: "Louisiana-Lafayette Ragin' Cajuns",
-          display_name: "LA-Lafayette",
+          display_name: 'LA-Lafayette',
           short_name: "Ragin' Cajuns",
-          location: "LA-Lafayette",
-          abbr: "ULL",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ull.png",
-          primary_color: "cf202f",
-          secondary_color: "c1c5c9",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          location: 'LA-Lafayette',
+          abbr: 'ULL',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ull.png',
+          primary_color: 'cf202f',
+          secondary_color: 'c1c5c9',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 415,
-          full_name: "Coastal Carolina Chanticleers",
-          display_name: "Coastal Car",
-          short_name: "Chanticleers",
-          location: "Coastal Car",
-          abbr: "CC",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/cc.png",
-          primary_color: "009297",
-          secondary_color: "000000",
-          conference_type: "IAAINDEPENDENTS",
-          division_type: "FBS",
+          full_name: 'Coastal Carolina Chanticleers',
+          display_name: 'Coastal Car',
+          short_name: 'Chanticleers',
+          location: 'Coastal Car',
+          abbr: 'CC',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/cc.png',
+          primary_color: '009297',
+          secondary_color: '000000',
+          conference_type: 'IAAINDEPENDENTS',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -1298,8 +1298,8 @@ const x = {
           total_under_public: 10,
           total_over_public: 90,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:54:48.689302+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:54:48.689302+00:00',
         },
         {
           ml_away: -450,
@@ -1325,8 +1325,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:15:32.31914+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:15:32.31914+00:00',
         },
         {
           ml_away: -255,
@@ -1352,8 +1352,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-05T01:15:17.803748+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-05T01:15:17.803748+00:00',
         },
         {
           ml_away: -440,
@@ -1379,8 +1379,8 @@ const x = {
           total_under_public: 41,
           total_over_public: 59,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T22:38:49.176951+00:00"
+          type: 'game',
+          inserted: '2019-11-05T22:38:49.176951+00:00',
         },
         {
           ml_away: -411,
@@ -1406,8 +1406,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:04:40.561838+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:04:40.561838+00:00',
         },
         {
           ml_away: null,
@@ -1433,8 +1433,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-25T00:00:18.648188+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-25T00:00:18.648188+00:00',
         },
         {
           ml_away: -262,
@@ -1460,8 +1460,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:04:40.527394+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:04:40.527394+00:00',
         },
         {
           ml_away: null,
@@ -1487,28 +1487,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-25T00:00:18.685379+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-25T00:00:18.685379+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPNU",
-        satellite: "208"
-      }
+        network: 'ESPNU',
+        satellite: '208',
+      },
     },
     {
       id: 69612,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-08T01:00:00.000Z",
+      start_time: '2019-11-08T01:00:00.000Z',
       away_team_id: 276,
       home_team_id: 273,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 111,
@@ -1516,44 +1516,44 @@ const x = {
       teams: [
         {
           id: 273,
-          full_name: "South Florida Bulls",
-          display_name: "S. Florida",
-          short_name: "Bulls",
-          location: "S. Florida",
-          abbr: "USF",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/usf.png",
-          primary_color: "00573c",
-          secondary_color: "dfd0a5",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'South Florida Bulls',
+          display_name: 'S. Florida',
+          short_name: 'Bulls',
+          location: 'S. Florida',
+          abbr: 'USF',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/usf.png',
+          primary_color: '00573c',
+          secondary_color: 'dfd0a5',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 276,
-          full_name: "Temple Owls",
-          display_name: "Temple",
-          short_name: "Owls",
-          location: "Temple",
-          abbr: "TEM",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/tem.png",
-          primary_color: "990033",
-          secondary_color: "000000",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'Temple Owls',
+          display_name: 'Temple',
+          short_name: 'Owls',
+          location: 'Temple',
+          abbr: 'TEM',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/tem.png',
+          primary_color: '990033',
+          secondary_color: '000000',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -1580,8 +1580,8 @@ const x = {
           total_under_public: 62,
           total_over_public: 38,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:47:48.786997+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:47:48.786997+00:00',
         },
         {
           ml_away: -114,
@@ -1607,8 +1607,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:12:14.284827+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:12:14.284827+00:00',
         },
         {
           ml_away: -115,
@@ -1634,8 +1634,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:18:25.26924+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:18:25.26924+00:00',
         },
         {
           ml_away: -125,
@@ -1661,8 +1661,8 @@ const x = {
           total_under_public: 93,
           total_over_public: 7,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T23:38:30.730013+00:00"
+          type: 'game',
+          inserted: '2019-11-04T23:38:30.730013+00:00',
         },
         {
           ml_away: -116,
@@ -1688,8 +1688,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:04:48.473008+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:04:48.473008+00:00',
         },
         {
           ml_away: null,
@@ -1715,8 +1715,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-25T00:00:18.74413+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-25T00:00:18.74413+00:00',
         },
         {
           ml_away: -115,
@@ -1742,8 +1742,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:04:48.498299+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:04:48.498299+00:00',
         },
         {
           ml_away: null,
@@ -1769,28 +1769,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-25T00:00:18.789807+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-25T00:00:18.789807+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN",
-        satellite: "206"
-      }
+        network: 'ESPN',
+        satellite: '206',
+      },
     },
     {
       id: 69614,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T00:00:00.000Z",
+      start_time: '2019-11-09T00:00:00.000Z',
       away_team_id: 269,
       home_team_id: 272,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 113,
@@ -1798,44 +1798,44 @@ const x = {
       teams: [
         {
           id: 269,
-          full_name: "UCF Knights",
-          display_name: "UCF",
-          short_name: "Knights",
-          location: "UCF",
-          abbr: "UCF",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ucf.png",
-          primary_color: "8d744a",
-          secondary_color: "000000",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'UCF Knights',
+          display_name: 'UCF',
+          short_name: 'Knights',
+          location: 'UCF',
+          abbr: 'UCF',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ucf.png',
+          primary_color: '8d744a',
+          secondary_color: '000000',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 272,
-          full_name: "Tulsa Golden Hurricane",
-          display_name: "Tulsa",
-          short_name: "Golden Hurricane",
-          location: "Tulsa",
-          abbr: "TLSA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/tsa.png",
-          primary_color: "002D72",
-          secondary_color: "C8102E",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'Tulsa Golden Hurricane',
+          display_name: 'Tulsa',
+          short_name: 'Golden Hurricane',
+          location: 'Tulsa',
+          abbr: 'TLSA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/tsa.png',
+          primary_color: '002D72',
+          secondary_color: 'C8102E',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 2,
             loss: 7,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -1862,8 +1862,8 @@ const x = {
           total_under_public: 54,
           total_over_public: 46,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:31.869305+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:31.869305+00:00',
         },
         {
           ml_away: -550,
@@ -1889,8 +1889,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:50:05.917579+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:50:05.917579+00:00',
         },
         {
           ml_away: -275,
@@ -1916,8 +1916,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:48:15.783079+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:48:15.783079+00:00',
         },
         {
           ml_away: -800,
@@ -1943,8 +1943,8 @@ const x = {
           total_under_public: 61,
           total_over_public: 39,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T22:00:33.570316+00:00"
+          type: 'game',
+          inserted: '2019-11-04T22:00:33.570316+00:00',
         },
         {
           ml_away: -512,
@@ -1970,8 +1970,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:04:52.534847+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:04:52.534847+00:00',
         },
         {
           ml_away: null,
@@ -1997,8 +1997,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-26T00:00:18.574432+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-26T00:00:18.574432+00:00',
         },
         {
           ml_away: -296,
@@ -2024,8 +2024,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:04:52.430957+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:04:52.430957+00:00',
         },
         {
           ml_away: null,
@@ -2051,28 +2051,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-26T00:00:18.621499+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-26T00:00:18.621499+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN2",
-        satellite: "209"
-      }
+        network: 'ESPN2',
+        satellite: '209',
+      },
     },
     {
       id: 69615,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T03:30:00.000Z",
+      start_time: '2019-11-09T03:30:00.000Z',
       away_team_id: 360,
       home_team_id: 354,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 115,
@@ -2080,44 +2080,44 @@ const x = {
       teams: [
         {
           id: 354,
-          full_name: "Oregon State Beavers",
-          display_name: "Oregon St",
-          short_name: "Beavers",
-          location: "Oregon St",
-          abbr: "ORST",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ors.png",
-          primary_color: "c34500",
-          secondary_color: "000000",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'Oregon State Beavers',
+          display_name: 'Oregon St',
+          short_name: 'Beavers',
+          location: 'Oregon St',
+          abbr: 'ORST',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ors.png',
+          primary_color: 'c34500',
+          secondary_color: '000000',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 360,
-          full_name: "Washington Huskies",
-          display_name: "Washington",
-          short_name: "Huskies",
-          location: "Washington",
-          abbr: "WASH",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/was.png",
-          primary_color: "363c74",
-          secondary_color: "e8d3a2",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'Washington Huskies',
+          display_name: 'Washington',
+          short_name: 'Huskies',
+          location: 'Washington',
+          abbr: 'WASH',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/was.png',
+          primary_color: '363c74',
+          secondary_color: 'e8d3a2',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -2144,8 +2144,8 @@ const x = {
           total_under_public: 28,
           total_over_public: 72,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:32:13.702593+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:32:13.702593+00:00',
         },
         {
           ml_away: -260,
@@ -2171,8 +2171,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-05T01:14:06.721184+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-05T01:14:06.721184+00:00',
         },
         {
           ml_away: -200,
@@ -2198,8 +2198,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-05T01:15:39.077226+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-05T01:15:39.077226+00:00',
         },
         {
           ml_away: -370,
@@ -2225,8 +2225,8 @@ const x = {
           total_under_public: 80,
           total_over_public: 20,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T00:01:52.275693+00:00"
+          type: 'game',
+          inserted: '2019-11-06T00:01:52.275693+00:00',
         },
         {
           ml_away: -286,
@@ -2252,8 +2252,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:04:57.678255+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:04:57.678255+00:00',
         },
         {
           ml_away: null,
@@ -2279,8 +2279,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-26T00:00:21.765038+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-26T00:00:21.765038+00:00',
         },
         {
           ml_away: -215,
@@ -2306,8 +2306,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:05:04.983723+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:05:04.983723+00:00',
         },
         {
           ml_away: null,
@@ -2333,28 +2333,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-26T00:00:21.809224+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-26T00:00:21.809224+00:00',
+        },
       ],
       broadcast: {
-        network: "Fox Sports 1",
-        satellite: "219"
-      }
+        network: 'Fox Sports 1',
+        satellite: '219',
+      },
     },
     {
       id: 69619,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 290,
       home_team_id: 288,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 123,
@@ -2362,44 +2362,44 @@ const x = {
       teams: [
         {
           id: 288,
-          full_name: "West Virginia Mountaineers",
-          display_name: "West Virginia",
-          short_name: "Mountaineers",
-          location: "West Virginia",
-          abbr: "WVU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/wvu.png",
-          primary_color: "00447c",
-          secondary_color: "eeb111",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'West Virginia Mountaineers',
+          display_name: 'West Virginia',
+          short_name: 'Mountaineers',
+          location: 'West Virginia',
+          abbr: 'WVU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/wvu.png',
+          primary_color: '00447c',
+          secondary_color: 'eeb111',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 290,
-          full_name: "Texas Tech Red Raiders",
-          display_name: "Texas Tech",
-          short_name: "Red Raiders",
-          location: "Texas Tech",
-          abbr: "TTU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/tt.png",
-          primary_color: "cc0000",
-          secondary_color: "000000",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'Texas Tech Red Raiders',
+          display_name: 'Texas Tech',
+          short_name: 'Red Raiders',
+          location: 'Texas Tech',
+          abbr: 'TTU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/tt.png',
+          primary_color: 'cc0000',
+          secondary_color: '000000',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -2426,8 +2426,8 @@ const x = {
           total_under_public: 86,
           total_over_public: 14,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T16:41:31.305939+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:41:31.305939+00:00',
         },
         {
           ml_away: -130,
@@ -2453,8 +2453,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:45:47.870798+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:45:47.870798+00:00',
         },
         {
           ml_away: -121,
@@ -2480,8 +2480,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T01:10:38.921692+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T01:10:38.921692+00:00',
         },
         {
           ml_away: -120,
@@ -2507,8 +2507,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T03:11:33.55842+00:00"
+          type: 'game',
+          inserted: '2019-11-05T03:11:33.55842+00:00',
         },
         {
           ml_away: -115,
@@ -2534,8 +2534,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:07:22.835643+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:07:22.835643+00:00',
         },
         {
           ml_away: null,
@@ -2561,8 +2561,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T20:00:09.688156+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T20:00:09.688156+00:00',
         },
         {
           ml_away: -114,
@@ -2588,8 +2588,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:07:23.474293+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:07:23.474293+00:00',
         },
         {
           ml_away: null,
@@ -2615,28 +2615,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T20:00:09.737333+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T20:00:09.737333+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN2",
-        satellite: "209"
-      }
+        network: 'ESPN2',
+        satellite: '209',
+      },
     },
     {
       id: 69623,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 274,
       home_team_id: 279,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 163,
@@ -2644,44 +2644,44 @@ const x = {
       teams: [
         {
           id: 274,
-          full_name: "East Carolina Pirates",
-          display_name: "E. Carolina",
-          short_name: "Pirates",
-          location: "E. Carolina",
-          abbr: "ECU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ecu.png",
-          primary_color: "592a86",
-          secondary_color: "ffc800",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'East Carolina Pirates',
+          display_name: 'E. Carolina',
+          short_name: 'Pirates',
+          location: 'E. Carolina',
+          abbr: 'ECU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ecu.png',
+          primary_color: '592a86',
+          secondary_color: 'ffc800',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 279,
-          full_name: "Southern Methodist Mustangs",
-          display_name: "SMU",
-          short_name: "Mustangs",
-          location: "SMU",
-          abbr: "SMU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/smu.png",
-          primary_color: "e51932",
-          secondary_color: "005da9",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'Southern Methodist Mustangs',
+          display_name: 'SMU',
+          short_name: 'Mustangs',
+          location: 'SMU',
+          abbr: 'SMU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/smu.png',
+          primary_color: 'e51932',
+          secondary_color: '005da9',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 8,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -2708,8 +2708,8 @@ const x = {
           total_under_public: 30,
           total_over_public: 70,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:20:48.982176+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:20:48.982176+00:00',
         },
         {
           ml_away: 400,
@@ -2735,8 +2735,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:50:40.708488+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:50:40.708488+00:00',
         },
         {
           ml_away: 335,
@@ -2762,8 +2762,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T14:22:27.731764+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T14:22:27.731764+00:00',
         },
         {
           ml_away: 1375,
@@ -2789,8 +2789,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T20:12:07.423604+00:00"
+          type: 'game',
+          inserted: '2019-11-04T20:12:07.423604+00:00',
         },
         {
           ml_away: 649,
@@ -2816,8 +2816,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:10:28.218844+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:10:28.218844+00:00',
         },
         {
           ml_away: null,
@@ -2843,8 +2843,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:06.725015+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:06.725015+00:00',
         },
         {
           ml_away: 372,
@@ -2870,8 +2870,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:10:28.380288+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:10:28.380288+00:00',
         },
         {
           ml_away: null,
@@ -2897,35 +2897,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:06.752431+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:06.752431+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPNU",
-        satellite: "208"
+        network: 'ESPNU',
+        satellite: '208',
       },
       ranks: [
         {
           team_id: 279,
           rank: 25,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69639,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 292,
       home_team_id: 302,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 141,
@@ -2933,44 +2933,44 @@ const x = {
       teams: [
         {
           id: 292,
-          full_name: "Penn State Nittany Lions",
-          display_name: "Penn State",
-          short_name: "Nittany Lions",
-          location: "Penn State",
-          abbr: "PSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/psu.png",
-          primary_color: "093162",
-          secondary_color: "000000",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Penn State Nittany Lions',
+          display_name: 'Penn State',
+          short_name: 'Nittany Lions',
+          location: 'Penn State',
+          abbr: 'PSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/psu.png',
+          primary_color: '093162',
+          secondary_color: '000000',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 8,
             loss: 0,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 302,
-          full_name: "Minnesota Golden Gophers",
-          display_name: "Minnesota",
-          short_name: "Golden Gophers",
-          location: "Minnesota",
-          abbr: "MINN",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/min.png",
-          primary_color: "7a0019",
-          secondary_color: "ffcc33",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Minnesota Golden Gophers',
+          display_name: 'Minnesota',
+          short_name: 'Golden Gophers',
+          location: 'Minnesota',
+          abbr: 'MINN',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/min.png',
+          primary_color: '7a0019',
+          secondary_color: 'ffcc33',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 8,
             loss: 0,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -2997,8 +2997,8 @@ const x = {
           total_under_public: 69,
           total_over_public: 31,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:45:48.618083+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:45:48.618083+00:00',
         },
         {
           ml_away: -204,
@@ -3024,8 +3024,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:47:12.728739+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:47:12.728739+00:00',
         },
         {
           ml_away: -172,
@@ -3051,8 +3051,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:40:17.258447+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:40:17.258447+00:00',
         },
         {
           ml_away: -280,
@@ -3078,8 +3078,8 @@ const x = {
           total_under_public: 55,
           total_over_public: 45,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T19:10:29.211983+00:00"
+          type: 'game',
+          inserted: '2019-11-04T19:10:29.211983+00:00',
         },
         {
           ml_away: -212,
@@ -3105,8 +3105,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-05T22:00:48.21569+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-05T22:00:48.21569+00:00',
         },
         {
           ml_away: null,
@@ -3132,8 +3132,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T18:00:12.500019+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T18:00:12.500019+00:00',
         },
         {
           ml_away: -180,
@@ -3159,8 +3159,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:49.725246+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:49.725246+00:00',
         },
         {
           ml_away: null,
@@ -3186,39 +3186,39 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T18:00:12.537243+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T18:00:12.537243+00:00',
+        },
       ],
       broadcast: {
-        network: "ABC"
+        network: 'ABC',
       },
       ranks: [
         {
           team_id: 292,
           rank: 4,
-          poll: "CFP25"
+          poll: 'CFP25',
         },
         {
           team_id: 302,
           rank: 17,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69642,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 367,
       home_team_id: 370,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 143,
@@ -3226,44 +3226,44 @@ const x = {
       teams: [
         {
           id: 367,
-          full_name: "Vanderbilt Commodores",
-          display_name: "Vanderbilt",
-          short_name: "Commodores",
-          location: "Vanderbilt",
-          abbr: "VAN",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/van.png",
-          primary_color: "997f3d",
-          secondary_color: "000000",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Vanderbilt Commodores',
+          display_name: 'Vanderbilt',
+          short_name: 'Commodores',
+          location: 'Vanderbilt',
+          abbr: 'VAN',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/van.png',
+          primary_color: '997f3d',
+          secondary_color: '000000',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 2,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 370,
-          full_name: "Florida Gators",
-          display_name: "Florida",
-          short_name: "Gators",
-          location: "Florida",
-          abbr: "FLA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/fla.png",
-          primary_color: "003087",
-          secondary_color: "ff5113",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Florida Gators',
+          display_name: 'Florida',
+          short_name: 'Gators',
+          location: 'Florida',
+          abbr: 'FLA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/fla.png',
+          primary_color: '003087',
+          secondary_color: 'ff5113',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -3290,8 +3290,8 @@ const x = {
           total_under_public: 39,
           total_over_public: 61,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:26:03.919423+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:26:03.919423+00:00',
         },
         {
           ml_away: 1125,
@@ -3317,8 +3317,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:47:42.83176+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:47:42.83176+00:00',
         },
         {
           ml_away: 494,
@@ -3344,8 +3344,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-05T09:22:48.60048+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-05T09:22:48.60048+00:00',
         },
         {
           ml_away: 1400,
@@ -3371,8 +3371,8 @@ const x = {
           total_under_public: 42,
           total_over_public: 58,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T18:55:15.659916+00:00"
+          type: 'game',
+          inserted: '2019-11-05T18:55:15.659916+00:00',
         },
         {
           ml_away: 858,
@@ -3398,8 +3398,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:08:56.97371+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:08:56.97371+00:00',
         },
         {
           ml_away: null,
@@ -3425,8 +3425,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T20:00:09.785192+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T20:00:09.785192+00:00',
         },
         {
           ml_away: 462,
@@ -3452,8 +3452,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:57.053609+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:57.053609+00:00',
         },
         {
           ml_away: null,
@@ -3479,35 +3479,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T20:00:09.810648+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T20:00:09.810648+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN",
-        satellite: "206"
+        network: 'ESPN',
+        satellite: '206',
       },
       ranks: [
         {
           team_id: 370,
           rank: 10,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69657,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 312,
       home_team_id: 361,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 171,
@@ -3515,44 +3515,44 @@ const x = {
       teams: [
         {
           id: 312,
-          full_name: "Western Kentucky Hilltoppers",
-          display_name: "W. Kentucky",
-          short_name: "Hilltoppers",
-          location: "W. Kentucky",
-          abbr: "WKU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/wky.png",
-          primary_color: "b01e24",
-          secondary_color: "000000",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'Western Kentucky Hilltoppers',
+          display_name: 'W. Kentucky',
+          short_name: 'Hilltoppers',
+          location: 'W. Kentucky',
+          abbr: 'WKU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/wky.png',
+          primary_color: 'b01e24',
+          secondary_color: '000000',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 361,
-          full_name: "Arkansas Razorbacks",
-          display_name: "Arkansas",
-          short_name: "Razorbacks",
-          location: "Arkansas",
-          abbr: "ARK",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ark.png",
-          primary_color: "7d110c",
-          secondary_color: "000000",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Arkansas Razorbacks',
+          display_name: 'Arkansas',
+          short_name: 'Razorbacks',
+          location: 'Arkansas',
+          abbr: 'ARK',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ark.png',
+          primary_color: '7d110c',
+          secondary_color: '000000',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 2,
             loss: 7,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -3579,8 +3579,8 @@ const x = {
           total_under_public: 18,
           total_over_public: 82,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:51:00.945321+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:51:00.945321+00:00',
         },
         {
           ml_away: -103,
@@ -3606,8 +3606,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:50:40.141793+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:50:40.141793+00:00',
         },
         {
           ml_away: -104,
@@ -3633,8 +3633,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:48:46.30644+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:48:46.30644+00:00',
         },
         {
           ml_away: 115,
@@ -3660,8 +3660,8 @@ const x = {
           total_under_public: 40,
           total_over_public: 60,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T16:30:36.391599+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:30:36.391599+00:00',
         },
         {
           ml_away: 108,
@@ -3687,8 +3687,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:14:21.123534+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:14:21.123534+00:00',
         },
         {
           ml_away: null,
@@ -3714,8 +3714,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:06.659867+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:06.659867+00:00',
         },
         {
           ml_away: 105,
@@ -3741,8 +3741,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:14:21.445279+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:14:21.445279+00:00',
         },
         {
           ml_away: null,
@@ -3768,28 +3768,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:06.682413+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:06.682413+00:00',
+        },
       ],
       broadcast: {
-        network: "SEC Network",
-        satellite: "611"
-      }
+        network: 'SEC Network',
+        satellite: '611',
+      },
     },
     {
       id: 69674,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 262,
       home_team_id: 259,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 119,
@@ -3797,44 +3797,44 @@ const x = {
       teams: [
         {
           id: 259,
-          full_name: "Boston College Eagles",
-          display_name: "Boston Col",
-          short_name: "Eagles",
-          location: "Boston Col",
-          abbr: "BC",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/bc.png",
-          primary_color: "98002e",
-          secondary_color: "bfa464",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Boston College Eagles',
+          display_name: 'Boston Col',
+          short_name: 'Eagles',
+          location: 'Boston Col',
+          abbr: 'BC',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/bc.png',
+          primary_color: '98002e',
+          secondary_color: 'bfa464',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 262,
-          full_name: "Florida State Seminoles",
-          display_name: "Florida St",
-          short_name: "Seminoles",
-          location: "Florida St",
-          abbr: "FSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/fsu.png",
-          primary_color: "540115",
-          secondary_color: "CDC092",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Florida State Seminoles',
+          display_name: 'Florida St',
+          short_name: 'Seminoles',
+          location: 'Florida St',
+          abbr: 'FSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/fsu.png',
+          primary_color: '540115',
+          secondary_color: 'CDC092',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -3861,8 +3861,8 @@ const x = {
           total_under_public: 31,
           total_over_public: 69,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:54:48.751362+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:54:48.751362+00:00',
         },
         {
           ml_away: 102,
@@ -3888,8 +3888,8 @@ const x = {
           total_under_public: 33,
           total_over_public: 67,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:44:48.362394+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:44:48.362394+00:00',
         },
         {
           ml_away: -100,
@@ -3915,8 +3915,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:23:35.662227+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:23:35.662227+00:00',
         },
         {
           ml_away: 100,
@@ -3942,8 +3942,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T14:55:12.219626+00:00"
+          type: 'game',
+          inserted: '2019-11-06T14:55:12.219626+00:00',
         },
         {
           ml_away: 103,
@@ -3969,8 +3969,8 @@ const x = {
           total_under_public: 33,
           total_over_public: 67,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:44:48.362394+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:44:48.362394+00:00',
         },
         {
           ml_away: null,
@@ -3996,8 +3996,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T18:00:12.417766+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T18:00:12.417766+00:00',
         },
         {
           ml_away: -100,
@@ -4023,8 +4023,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:06:53.022222+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:06:53.022222+00:00',
         },
         {
           ml_away: null,
@@ -4050,28 +4050,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T18:00:12.45223+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T18:00:12.45223+00:00',
+        },
       ],
       broadcast: {
-        network: "ACC Network",
-        satellite: "612"
-      }
+        network: 'ACC Network',
+        satellite: '612',
+      },
     },
     {
       id: 69689,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 297,
       home_team_id: 295,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 129,
@@ -4079,44 +4079,44 @@ const x = {
       teams: [
         {
           id: 295,
-          full_name: "Ohio State Buckeyes",
-          display_name: "Ohio State",
-          short_name: "Buckeyes",
-          location: "Ohio State",
-          abbr: "OSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/osu.png",
-          primary_color: "bb0000",
-          secondary_color: "666666",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Ohio State Buckeyes',
+          display_name: 'Ohio State',
+          short_name: 'Buckeyes',
+          location: 'Ohio State',
+          abbr: 'OSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/osu.png',
+          primary_color: 'bb0000',
+          secondary_color: '666666',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 8,
             loss: 0,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 297,
-          full_name: "Maryland Terrapins",
-          display_name: "Maryland",
-          short_name: "Terrapins",
-          location: "Maryland",
-          abbr: "MD",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/mar.png",
-          primary_color: "f5002f",
-          secondary_color: "f6d565",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Maryland Terrapins',
+          display_name: 'Maryland',
+          short_name: 'Terrapins',
+          location: 'Maryland',
+          abbr: 'MD',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/mar.png',
+          primary_color: 'f5002f',
+          secondary_color: 'f6d565',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -4143,8 +4143,8 @@ const x = {
           total_under_public: 33,
           total_over_public: 67,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:26:03.778872+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:26:03.778872+00:00',
         },
         {
           ml_away: null,
@@ -4170,8 +4170,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:46:18.546666+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:46:18.546666+00:00',
         },
         {
           ml_away: null,
@@ -4197,8 +4197,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T00:58:24.521349+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T00:58:24.521349+00:00',
         },
         {
           ml_away: null,
@@ -4224,8 +4224,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T04:45:12.347594+00:00"
+          type: 'game',
+          inserted: '2019-11-05T04:45:12.347594+00:00',
         },
         {
           ml_away: null,
@@ -4251,8 +4251,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:08:00.917737+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:08:00.917737+00:00',
         },
         {
           ml_away: null,
@@ -4278,8 +4278,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T20:00:09.54788+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T20:00:09.54788+00:00',
         },
         {
           ml_away: null,
@@ -4305,8 +4305,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:00.979905+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:00.979905+00:00',
         },
         {
           ml_away: null,
@@ -4332,34 +4332,34 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T20:00:09.57437+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T20:00:09.57437+00:00',
+        },
       ],
       broadcast: {
-        network: "FOX"
+        network: 'FOX',
       },
       ranks: [
         {
           team_id: 295,
           rank: 1,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69692,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 282,
       home_team_id: 284,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 161,
@@ -4367,44 +4367,44 @@ const x = {
       teams: [
         {
           id: 282,
-          full_name: "Baylor Bears",
-          display_name: "Baylor",
-          short_name: "Bears",
-          location: "Baylor",
-          abbr: "BAY",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/bay.png",
-          primary_color: "0d4018",
-          secondary_color: "ffb517",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'Baylor Bears',
+          display_name: 'Baylor',
+          short_name: 'Bears',
+          location: 'Baylor',
+          abbr: 'BAY',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/bay.png',
+          primary_color: '0d4018',
+          secondary_color: 'ffb517',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 8,
             loss: 0,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 284,
-          full_name: "TCU Horned Frogs",
-          display_name: "TCU",
-          short_name: "Horned Frogs",
-          location: "TCU",
-          abbr: "TCU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/tcud.png",
-          primary_color: "4d1979",
-          secondary_color: "000000",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'TCU Horned Frogs',
+          display_name: 'TCU',
+          short_name: 'Horned Frogs',
+          location: 'TCU',
+          abbr: 'TCU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/tcud.png',
+          primary_color: '4d1979',
+          secondary_color: '000000',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -4431,8 +4431,8 @@ const x = {
           total_under_public: 69,
           total_over_public: 31,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:56:31.458706+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:56:31.458706+00:00',
         },
         {
           ml_away: -122,
@@ -4458,8 +4458,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:51:49.841536+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:51:49.841536+00:00',
         },
         {
           ml_away: -119,
@@ -4485,8 +4485,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:54:45.014658+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:54:45.014658+00:00',
         },
         {
           ml_away: -125,
@@ -4512,8 +4512,8 @@ const x = {
           total_under_public: 92,
           total_over_public: 8,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T21:22:36.530445+00:00"
+          type: 'game',
+          inserted: '2019-11-04T21:22:36.530445+00:00',
         },
         {
           ml_away: -115,
@@ -4539,8 +4539,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:10:11.433002+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:10:11.433002+00:00',
         },
         {
           ml_away: null,
@@ -4566,8 +4566,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:06.582558+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:06.582558+00:00',
         },
         {
           ml_away: -114,
@@ -4593,8 +4593,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:10:11.194152+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:10:11.194152+00:00',
         },
         {
           ml_away: null,
@@ -4620,35 +4620,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:06.612187+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:06.612187+00:00',
+        },
       ],
       broadcast: {
-        network: "Fox Sports 1",
-        satellite: "219"
+        network: 'Fox Sports 1',
+        satellite: '219',
       },
       ranks: [
         {
           team_id: 282,
           rank: 12,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69693,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 304,
       home_team_id: 301,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 145,
@@ -4656,44 +4656,44 @@ const x = {
       teams: [
         {
           id: 301,
-          full_name: "Northwestern Wildcats",
-          display_name: "Northwestern",
-          short_name: "Wildcats",
-          location: "Northwestern",
-          abbr: "NW",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/nw.png",
-          primary_color: "520063",
-          secondary_color: "000000",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Northwestern Wildcats',
+          display_name: 'Northwestern',
+          short_name: 'Wildcats',
+          location: 'Northwestern',
+          abbr: 'NW',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/nw.png',
+          primary_color: '520063',
+          secondary_color: '000000',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 1,
             loss: 7,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 304,
-          full_name: "Purdue Boilermakers",
-          display_name: "Purdue",
-          short_name: "Boilermakers",
-          location: "Purdue",
-          abbr: "PUR",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/pur.png",
-          primary_color: "8d744a",
-          secondary_color: "050403",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Purdue Boilermakers',
+          display_name: 'Purdue',
+          short_name: 'Boilermakers',
+          location: 'Purdue',
+          abbr: 'PUR',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/pur.png',
+          primary_color: '8d744a',
+          secondary_color: '050403',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -4720,8 +4720,8 @@ const x = {
           total_under_public: 93,
           total_over_public: 7,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:48:58.066859+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:48:58.066859+00:00',
         },
         {
           ml_away: 100,
@@ -4747,8 +4747,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:48:14.840635+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:48:14.840635+00:00',
         },
         {
           ml_away: 101,
@@ -4774,8 +4774,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:28:52.550621+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:28:52.550621+00:00',
         },
         {
           ml_away: -130,
@@ -4801,8 +4801,8 @@ const x = {
           total_under_public: 83,
           total_over_public: 17,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T12:55:12.610233+00:00"
+          type: 'game',
+          inserted: '2019-11-06T12:55:12.610233+00:00',
         },
         {
           ml_away: -116,
@@ -4828,8 +4828,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:09:01.826229+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:09:01.826229+00:00',
         },
         {
           ml_away: null,
@@ -4855,8 +4855,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T20:00:09.61641+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T20:00:09.61641+00:00',
         },
         {
           ml_away: -114,
@@ -4882,8 +4882,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:01.631535+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:01.631535+00:00',
         },
         {
           ml_away: null,
@@ -4909,28 +4909,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T20:00:09.642883+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T20:00:09.642883+00:00',
+        },
       ],
       broadcast: {
-        network: "BTN",
-        satellite: "610"
-      }
+        network: 'BTN',
+        satellite: '610',
+      },
     },
     {
       id: 69709,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:00:00.000Z",
+      start_time: '2019-11-09T17:00:00.000Z',
       away_team_id: 323,
       home_team_id: 319,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 131,
@@ -4938,44 +4938,44 @@ const x = {
       teams: [
         {
           id: 319,
-          full_name: "Army Black Knights",
-          display_name: "Army ",
-          short_name: "Black Knights",
-          location: "Army ",
-          abbr: "ARMY",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/arm.png",
-          primary_color: "ffd530",
-          secondary_color: "000000",
-          conference_type: "IAINDEPENDENTS",
-          division_type: "FBS",
+          full_name: 'Army Black Knights',
+          display_name: 'Army ',
+          short_name: 'Black Knights',
+          location: 'Army ',
+          abbr: 'ARMY',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/arm.png',
+          primary_color: 'ffd530',
+          secondary_color: '000000',
+          conference_type: 'IAINDEPENDENTS',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 323,
-          full_name: "Massachusetts Minutemen",
-          display_name: "UMASS",
-          short_name: "Minutemen",
-          location: "UMASS",
-          abbr: "MASS",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/umass.png",
-          primary_color: "872434",
-          secondary_color: "000000",
-          conference_type: "IAINDEPENDENTS",
-          division_type: "FBS",
+          full_name: 'Massachusetts Minutemen',
+          display_name: 'UMASS',
+          short_name: 'Minutemen',
+          location: 'UMASS',
+          abbr: 'MASS',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/umass.png',
+          primary_color: '872434',
+          secondary_color: '000000',
+          conference_type: 'IAINDEPENDENTS',
+          division_type: 'FBS',
           standings: {
             win: 1,
             loss: 8,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -5002,8 +5002,8 @@ const x = {
           total_under_public: 66,
           total_over_public: 34,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:12:33.992041+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:12:33.992041+00:00',
         },
         {
           ml_away: null,
@@ -5029,8 +5029,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:46:23.757424+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:46:23.757424+00:00',
         },
         {
           ml_away: null,
@@ -5056,8 +5056,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T06:49:38.986397+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T06:49:38.986397+00:00',
         },
         {
           ml_away: 9000,
@@ -5083,8 +5083,8 @@ const x = {
           total_under_public: 61,
           total_over_public: 39,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T01:38:42.3548+00:00"
+          type: 'game',
+          inserted: '2019-11-05T01:38:42.3548+00:00',
         },
         {
           ml_away: null,
@@ -5110,8 +5110,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:08:11.805438+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:08:11.805438+00:00',
         },
         {
           ml_away: null,
@@ -5137,8 +5137,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-26T00:00:21.865781+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-26T00:00:21.865781+00:00',
         },
         {
           ml_away: null,
@@ -5164,8 +5164,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:11.767533+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:11.767533+00:00',
         },
         {
           ml_away: null,
@@ -5191,28 +5191,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-26T00:00:21.907141+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-26T00:00:21.907141+00:00',
+        },
       ],
       broadcast: {
-        network: "CBS Sports Network",
-        satellite: "221"
-      }
+        network: 'CBS Sports Network',
+        satellite: '221',
+      },
     },
     {
       id: 69695,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T17:30:00.000Z",
+      start_time: '2019-11-09T17:30:00.000Z',
       away_team_id: 271,
       home_team_id: 264,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 121,
@@ -5220,44 +5220,44 @@ const x = {
       teams: [
         {
           id: 264,
-          full_name: "Virginia Cavaliers",
-          display_name: "Virginia",
-          short_name: "Cavaliers",
-          location: "Virginia",
-          abbr: "UVA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/uva.png",
-          primary_color: "0d3268",
-          secondary_color: "ff7003",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Virginia Cavaliers',
+          display_name: 'Virginia',
+          short_name: 'Cavaliers',
+          location: 'Virginia',
+          abbr: 'UVA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/uva.png',
+          primary_color: '0d3268',
+          secondary_color: 'ff7003',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 271,
-          full_name: "Georgia Tech Yellow Jackets",
-          display_name: "GA Tech",
-          short_name: "Yellow Jackets",
-          location: "GA Tech",
-          abbr: "GT",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/gt.png",
-          primary_color: "c59353",
-          secondary_color: "00254c",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Georgia Tech Yellow Jackets',
+          display_name: 'GA Tech',
+          short_name: 'Yellow Jackets',
+          location: 'GA Tech',
+          abbr: 'GT',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/gt.png',
+          primary_color: 'c59353',
+          secondary_color: '00254c',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 2,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -5284,8 +5284,8 @@ const x = {
           total_under_public: 16,
           total_over_public: 84,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:47:33.371205+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:47:33.371205+00:00',
         },
         {
           ml_away: 463,
@@ -5311,8 +5311,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:45:29.606671+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:45:29.606671+00:00',
         },
         {
           ml_away: 280,
@@ -5338,8 +5338,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:44:16.493618+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:44:16.493618+00:00',
         },
         {
           ml_away: 600,
@@ -5365,8 +5365,8 @@ const x = {
           total_under_public: 8,
           total_over_public: 92,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T01:17:24.721161+00:00"
+          type: 'game',
+          inserted: '2019-11-06T01:17:24.721161+00:00',
         },
         {
           ml_away: 448,
@@ -5392,8 +5392,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:07:18.087451+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:07:18.087451+00:00',
         },
         {
           ml_away: null,
@@ -5419,8 +5419,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T18:00:12.58455+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T18:00:12.58455+00:00',
         },
         {
           ml_away: 289,
@@ -5446,8 +5446,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:07:18.146922+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:07:18.146922+00:00',
         },
         {
           ml_away: null,
@@ -5473,27 +5473,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T18:00:12.619491+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T18:00:12.619491+00:00',
+        },
       ],
       broadcast: {
-        network: "FSN"
-      }
+        network: 'FSN',
+      },
     },
     {
       id: 69638,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T19:00:00.000Z",
+      start_time: '2019-11-09T19:00:00.000Z',
       away_team_id: 317,
       home_team_id: 308,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 151,
@@ -5501,44 +5501,44 @@ const x = {
       teams: [
         {
           id: 308,
-          full_name: "Old Dominion Monarchs",
-          display_name: "Old Dominion",
-          short_name: "Monarchs",
-          location: "Old Dominion",
-          abbr: "ODU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/odu.png",
-          primary_color: "004677",
-          secondary_color: "8a8d8e",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'Old Dominion Monarchs',
+          display_name: 'Old Dominion',
+          short_name: 'Monarchs',
+          location: 'Old Dominion',
+          abbr: 'ODU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/odu.png',
+          primary_color: '004677',
+          secondary_color: '8a8d8e',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 1,
             loss: 8,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 317,
-          full_name: "UTSA Roadrunners",
-          display_name: "UTSA",
-          short_name: "Roadrunners",
-          location: "UTSA",
-          abbr: "UTSA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/utsa.png",
-          primary_color: "002244",
-          secondary_color: "f47321",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'UTSA Roadrunners',
+          display_name: 'UTSA',
+          short_name: 'Roadrunners',
+          location: 'UTSA',
+          abbr: 'UTSA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/utsa.png',
+          primary_color: '002244',
+          secondary_color: 'f47321',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -5565,8 +5565,8 @@ const x = {
           total_under_public: 85,
           total_over_public: 15,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:32:20.09539+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:32:20.09539+00:00',
         },
         {
           ml_away: 135,
@@ -5592,8 +5592,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:50:40.18722+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:50:40.18722+00:00',
         },
         {
           ml_away: 126,
@@ -5619,8 +5619,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:27:15.814364+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:27:15.814364+00:00',
         },
         {
           ml_away: 155,
@@ -5646,8 +5646,8 @@ const x = {
           total_under_public: 91,
           total_over_public: 9,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T04:01:15.9183+00:00"
+          type: 'game',
+          inserted: '2019-11-06T04:01:15.9183+00:00',
         },
         {
           ml_away: 149,
@@ -5673,8 +5673,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:09:22.536672+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:09:22.536672+00:00',
         },
         {
           ml_away: null,
@@ -5700,8 +5700,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-26T00:00:22.102765+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-26T00:00:22.102765+00:00',
         },
         {
           ml_away: 137,
@@ -5727,8 +5727,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:22.57959+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:22.57959+00:00',
         },
         {
           ml_away: null,
@@ -5754,27 +5754,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-26T00:00:22.147791+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-26T00:00:22.147791+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN3"
-      }
+        network: 'ESPN3',
+      },
     },
     {
       id: 69670,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T19:00:00.000Z",
+      start_time: '2019-11-09T19:00:00.000Z',
       away_team_id: 336,
       home_team_id: 339,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 147,
@@ -5782,44 +5782,44 @@ const x = {
       teams: [
         {
           id: 336,
-          full_name: "Air Force Falcons",
-          display_name: "Air Force",
-          short_name: "Falcons",
-          location: "Air Force",
-          abbr: "AFA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/af.png",
-          primary_color: "0055fa",
-          secondary_color: "8a8d8e",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'Air Force Falcons',
+          display_name: 'Air Force',
+          short_name: 'Falcons',
+          location: 'Air Force',
+          abbr: 'AFA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/af.png',
+          primary_color: '0055fa',
+          secondary_color: '8a8d8e',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 339,
-          full_name: "New Mexico Lobos",
-          display_name: "New Mexico",
-          short_name: "Lobos",
-          location: "New Mexico",
-          abbr: "UNM",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/nm.png",
-          primary_color: "c10037",
-          secondary_color: "5e5d60",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'New Mexico Lobos',
+          display_name: 'New Mexico',
+          short_name: 'Lobos',
+          location: 'New Mexico',
+          abbr: 'UNM',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/nm.png',
+          primary_color: 'c10037',
+          secondary_color: '5e5d60',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 2,
             loss: 7,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -5846,8 +5846,8 @@ const x = {
           total_under_public: 89,
           total_over_public: 11,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T16:43:19.678672+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:43:19.678672+00:00',
         },
         {
           ml_away: -923,
@@ -5873,8 +5873,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:27:15.554931+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:27:15.554931+00:00',
         },
         {
           ml_away: -392,
@@ -5900,8 +5900,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:27:16.198573+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:27:16.198573+00:00',
         },
         {
           ml_away: -1650,
@@ -5927,8 +5927,8 @@ const x = {
           total_under_public: 86,
           total_over_public: 14,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T14:19:42.393433+00:00"
+          type: 'game',
+          inserted: '2019-11-05T14:19:42.393433+00:00',
         },
         {
           ml_away: -856,
@@ -5954,8 +5954,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:09:06.299421+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:09:06.299421+00:00',
         },
         {
           ml_away: null,
@@ -5981,8 +5981,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-26T00:00:21.974672+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-26T00:00:21.974672+00:00',
         },
         {
           ml_away: -396,
@@ -6008,8 +6008,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:06.217132+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:06.217132+00:00',
         },
         {
           ml_away: null,
@@ -6035,28 +6035,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-26T00:00:22.018122+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-26T00:00:22.018122+00:00',
+        },
       ],
       broadcast: {
-        network: "SportsNet RM",
-        satellite: "683"
-      }
+        network: 'SportsNet RM',
+        satellite: '683',
+      },
     },
     {
       id: 69634,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:00:00.000Z",
+      start_time: '2019-11-09T20:00:00.000Z',
       away_team_id: 376,
       home_team_id: 374,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 165,
@@ -6064,44 +6064,44 @@ const x = {
       teams: [
         {
           id: 374,
-          full_name: "Texas State Bobcats",
-          display_name: "Texas St",
-          short_name: "Bobcats",
-          location: "Texas St",
-          abbr: "TXST",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/txst.png",
-          primary_color: "571c1f",
-          secondary_color: "ac9055",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'Texas State Bobcats',
+          display_name: 'Texas St',
+          short_name: 'Bobcats',
+          location: 'Texas St',
+          abbr: 'TXST',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/txst.png',
+          primary_color: '571c1f',
+          secondary_color: 'ac9055',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 2,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 376,
-          full_name: "South Alabama Jaguars",
-          display_name: "S. Alabama",
-          short_name: "Jaguars",
-          location: "S. Alabama",
-          abbr: "USA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/sab.png",
-          primary_color: "c0143c",
-          secondary_color: "266300",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'South Alabama Jaguars',
+          display_name: 'S. Alabama',
+          short_name: 'Jaguars',
+          location: 'S. Alabama',
+          abbr: 'USA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/sab.png',
+          primary_color: 'c0143c',
+          secondary_color: '266300',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 1,
             loss: 7,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -6128,8 +6128,8 @@ const x = {
           total_under_public: 60,
           total_over_public: 40,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:15.725223+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:15.725223+00:00',
         },
         {
           ml_away: 210,
@@ -6155,8 +6155,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:52:18.049164+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:52:18.049164+00:00',
         },
         {
           ml_away: 178,
@@ -6182,8 +6182,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T01:48:41.353284+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T01:48:41.353284+00:00',
         },
         {
           ml_away: 225,
@@ -6209,8 +6209,8 @@ const x = {
           total_under_public: 60,
           total_over_public: 40,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T16:55:43.492915+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:55:43.492915+00:00',
         },
         {
           ml_away: 209,
@@ -6236,8 +6236,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:10:28.340255+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:10:28.340255+00:00',
         },
         {
           ml_away: null,
@@ -6263,8 +6263,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T20:00:12.378619+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T20:00:12.378619+00:00',
         },
         {
           ml_away: 179,
@@ -6290,8 +6290,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:10:33.477302+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:10:33.477302+00:00',
         },
         {
           ml_away: null,
@@ -6317,27 +6317,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T20:00:12.42827+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T20:00:12.42827+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN3"
-      }
+        network: 'ESPN3',
+      },
     },
     {
       id: 69644,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:00:00.000Z",
+      start_time: '2019-11-09T20:00:00.000Z',
       away_team_id: 306,
       home_team_id: 316,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 159,
@@ -6345,44 +6345,44 @@ const x = {
       teams: [
         {
           id: 306,
-          full_name: "Charlotte 49ers",
-          display_name: "Charlotte",
-          short_name: "49ers",
-          location: "Charlotte",
-          abbr: "CHAR",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/cha.png",
-          primary_color: "00703c",
-          secondary_color: "9a8348",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'Charlotte 49ers',
+          display_name: 'Charlotte',
+          short_name: '49ers',
+          location: 'Charlotte',
+          abbr: 'CHAR',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/cha.png',
+          primary_color: '00703c',
+          secondary_color: '9a8348',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 316,
-          full_name: "UTEP Miners",
-          display_name: "UTEP",
-          short_name: "Miners",
-          location: "UTEP",
-          abbr: "UTEP",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/tep.png",
-          primary_color: "ff5600",
-          secondary_color: "002147",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'UTEP Miners',
+          display_name: 'UTEP',
+          short_name: 'Miners',
+          location: 'UTEP',
+          abbr: 'UTEP',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/tep.png',
+          primary_color: 'ff5600',
+          secondary_color: '002147',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 1,
             loss: 7,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -6409,8 +6409,8 @@ const x = {
           total_under_public: 60,
           total_over_public: 40,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:15.660228+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:15.660228+00:00',
         },
         {
           ml_away: -390,
@@ -6436,8 +6436,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:51:38.299551+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:51:38.299551+00:00',
         },
         {
           ml_away: -244,
@@ -6463,8 +6463,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:39:29.678333+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:39:29.678333+00:00',
         },
         {
           ml_away: -440,
@@ -6490,8 +6490,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T00:54:30.737118+00:00"
+          type: 'game',
+          inserted: '2019-11-06T00:54:30.737118+00:00',
         },
         {
           ml_away: -334,
@@ -6517,8 +6517,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:09:59.417471+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:09:59.417471+00:00',
         },
         {
           ml_away: null,
@@ -6544,8 +6544,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-26T00:00:22.433447+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-26T00:00:22.433447+00:00',
         },
         {
           ml_away: -234,
@@ -6571,8 +6571,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:59.500549+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:59.500549+00:00',
         },
         {
           ml_away: null,
@@ -6598,27 +6598,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-26T00:00:22.491278+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-26T00:00:22.491278+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN+"
-      }
+        network: 'ESPN+',
+      },
     },
     {
       id: 69658,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:00:00.000Z",
+      start_time: '2019-11-09T20:00:00.000Z',
       away_team_id: 355,
       home_team_id: 352,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 149,
@@ -6626,44 +6626,44 @@ const x = {
       teams: [
         {
           id: 352,
-          full_name: "Colorado Buffaloes",
-          display_name: "Colorado",
-          short_name: "Buffaloes",
-          location: "Colorado",
-          abbr: "COLO",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/col.png",
-          primary_color: "d2c694",
-          secondary_color: "000000",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'Colorado Buffaloes',
+          display_name: 'Colorado',
+          short_name: 'Buffaloes',
+          location: 'Colorado',
+          abbr: 'COLO',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/col.png',
+          primary_color: 'd2c694',
+          secondary_color: '000000',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 355,
-          full_name: "Stanford Cardinal",
-          display_name: "Stanford",
-          short_name: "Cardinal",
-          location: "Stanford",
-          abbr: "STAN",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/sta.png",
-          primary_color: "8c1515",
-          secondary_color: "4d4f53",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'Stanford Cardinal',
+          display_name: 'Stanford',
+          short_name: 'Cardinal',
+          location: 'Stanford',
+          abbr: 'STAN',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/sta.png',
+          primary_color: '8c1515',
+          secondary_color: '4d4f53',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -6690,8 +6690,8 @@ const x = {
           total_under_public: 41,
           total_over_public: 59,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T16:36:27.549437+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:36:27.549437+00:00',
         },
         {
           ml_away: -150,
@@ -6717,8 +6717,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:49:38.797076+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:49:38.797076+00:00',
         },
         {
           ml_away: -131,
@@ -6744,8 +6744,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:33:02.441046+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:33:02.441046+00:00',
         },
         {
           ml_away: -175,
@@ -6771,8 +6771,8 @@ const x = {
           total_under_public: 83,
           total_over_public: 17,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T04:13:09.234956+00:00"
+          type: 'game',
+          inserted: '2019-11-06T04:13:09.234956+00:00',
         },
         {
           ml_away: -149,
@@ -6798,8 +6798,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:09:11.929341+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:09:11.929341+00:00',
         },
         {
           ml_away: null,
@@ -6825,8 +6825,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T20:00:12.272636+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T20:00:12.272636+00:00',
         },
         {
           ml_away: -138,
@@ -6852,8 +6852,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:11.987639+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:11.987639+00:00',
         },
         {
           ml_away: null,
@@ -6879,27 +6879,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T20:00:12.320047+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T20:00:12.320047+00:00',
+        },
       ],
       broadcast: {
-        network: "Pac-12 Network"
-      }
+        network: 'Pac-12 Network',
+      },
     },
     {
       id: 69624,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 347,
       home_team_id: 349,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 153,
@@ -6907,44 +6907,44 @@ const x = {
       teams: [
         {
           id: 347,
-          full_name: "USC Trojans",
-          display_name: "USC",
-          short_name: "Trojans",
-          location: "USC",
-          abbr: "USC",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/usc.png",
-          primary_color: "990000",
-          secondary_color: "ffcc00",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'USC Trojans',
+          display_name: 'USC',
+          short_name: 'Trojans',
+          location: 'USC',
+          abbr: 'USC',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/usc.png',
+          primary_color: '990000',
+          secondary_color: 'ffcc00',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 349,
-          full_name: "Arizona State Sun Devils",
-          display_name: "Arizona St",
-          short_name: "Sun Devils",
-          location: "Arizona St",
-          abbr: "ASU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/asu.png",
-          primary_color: "802249",
-          secondary_color: "ffb310",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'Arizona State Sun Devils',
+          display_name: 'Arizona St',
+          short_name: 'Sun Devils',
+          location: 'Arizona St',
+          abbr: 'ASU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/asu.png',
+          primary_color: '802249',
+          secondary_color: 'ffb310',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -6971,8 +6971,8 @@ const x = {
           total_under_public: 25,
           total_over_public: 75,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:56:21.522223+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:56:21.522223+00:00',
         },
         {
           ml_away: -103,
@@ -6998,8 +6998,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:16:54.213356+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:16:54.213356+00:00',
         },
         {
           ml_away: -105,
@@ -7025,8 +7025,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T15:48:03.842003+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T15:48:03.842003+00:00',
         },
         {
           ml_away: -125,
@@ -7052,8 +7052,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T21:41:04.094946+00:00"
+          type: 'game',
+          inserted: '2019-11-05T21:41:04.094946+00:00',
         },
         {
           ml_away: 103,
@@ -7079,8 +7079,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:09:27.450024+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:09:27.450024+00:00',
         },
         {
           ml_away: null,
@@ -7106,8 +7106,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:09.706789+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:09.706789+00:00',
         },
         {
           ml_away: 100,
@@ -7133,8 +7133,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:27.406585+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:27.406585+00:00',
         },
         {
           ml_away: null,
@@ -7160,27 +7160,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:09.7393+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:09.7393+00:00',
+        },
       ],
       broadcast: {
-        network: "ABC"
-      }
+        network: 'ABC',
+      },
     },
     {
       id: 69625,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 258,
       home_team_id: 256,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 137,
@@ -7188,44 +7188,44 @@ const x = {
       teams: [
         {
           id: 256,
-          full_name: "Virginia Tech Hokies",
-          display_name: "VA Tech",
-          short_name: "Hokies",
-          location: "VA Tech",
-          abbr: "VT",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/vt.png",
-          primary_color: "660000",
-          secondary_color: "ff6600",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Virginia Tech Hokies',
+          display_name: 'VA Tech',
+          short_name: 'Hokies',
+          location: 'VA Tech',
+          abbr: 'VT',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/vt.png',
+          primary_color: '660000',
+          secondary_color: 'ff6600',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 258,
-          full_name: "Wake Forest Demon Deacons",
-          display_name: "Wake Forest",
-          short_name: "Demon Deacons",
-          location: "Wake Forest",
-          abbr: "WF",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/wf.png",
-          primary_color: "9e7e38",
-          secondary_color: "000000",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Wake Forest Demon Deacons',
+          display_name: 'Wake Forest',
+          short_name: 'Demon Deacons',
+          location: 'Wake Forest',
+          abbr: 'WF',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/wf.png',
+          primary_color: '9e7e38',
+          secondary_color: '000000',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -7252,8 +7252,8 @@ const x = {
           total_under_public: 44,
           total_over_public: 56,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:32:18.56328+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:32:18.56328+00:00',
         },
         {
           ml_away: -130,
@@ -7279,8 +7279,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:46:55.896731+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:46:55.896731+00:00',
         },
         {
           ml_away: -122,
@@ -7306,8 +7306,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:33:19.191825+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:33:19.191825+00:00',
         },
         {
           ml_away: -155,
@@ -7333,8 +7333,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T17:09:33.650825+00:00"
+          type: 'game',
+          inserted: '2019-11-05T17:09:33.650825+00:00',
         },
         {
           ml_away: -132,
@@ -7360,8 +7360,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:08:27.504424+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:08:27.504424+00:00',
         },
         {
           ml_away: null,
@@ -7387,8 +7387,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:09.793798+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:09.793798+00:00',
         },
         {
           ml_away: -126,
@@ -7414,8 +7414,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:27.446285+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:27.446285+00:00',
         },
         {
           ml_away: null,
@@ -7441,35 +7441,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:09.821525+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:09.821525+00:00',
+        },
       ],
       broadcast: {
-        network: "ACC Network",
-        satellite: "612"
+        network: 'ACC Network',
+        satellite: '612',
       },
       ranks: [
         {
           team_id: 258,
           rank: 19,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69636,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 291,
       home_team_id: 287,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 183,
@@ -7477,44 +7477,44 @@ const x = {
       teams: [
         {
           id: 287,
-          full_name: "Texas Longhorns",
-          display_name: "Texas",
-          short_name: "Longhorns",
-          location: "Texas",
-          abbr: "TEX",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/tex.png",
-          primary_color: "cc5500",
-          secondary_color: "000000",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'Texas Longhorns',
+          display_name: 'Texas',
+          short_name: 'Longhorns',
+          location: 'Texas',
+          abbr: 'TEX',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/tex.png',
+          primary_color: 'cc5500',
+          secondary_color: '000000',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 291,
-          full_name: "Kansas State Wildcats",
-          display_name: "K State",
-          short_name: "Wildcats",
-          location: "K State",
-          abbr: "KSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/kstd.png",
-          primary_color: "512888",
-          secondary_color: "a8adad",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'Kansas State Wildcats',
+          display_name: 'K State',
+          short_name: 'Wildcats',
+          location: 'K State',
+          abbr: 'KSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/kstd.png',
+          primary_color: '512888',
+          secondary_color: 'a8adad',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -7541,8 +7541,8 @@ const x = {
           total_under_public: 47,
           total_over_public: 53,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:54:48.792291+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:54:48.792291+00:00',
         },
         {
           ml_away: 183,
@@ -7568,8 +7568,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:34:09.659633+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:34:09.659633+00:00',
         },
         {
           ml_away: 163,
@@ -7595,8 +7595,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:34:09.511247+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:34:09.511247+00:00',
         },
         {
           ml_away: 195,
@@ -7622,8 +7622,8 @@ const x = {
           total_under_public: 17,
           total_over_public: 83,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T06:00:35.988151+00:00"
+          type: 'game',
+          inserted: '2019-11-05T06:00:35.988151+00:00',
         },
         {
           ml_away: 155,
@@ -7649,8 +7649,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:12:45.629228+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:12:45.629228+00:00',
         },
         {
           ml_away: 142,
@@ -7676,35 +7676,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:12:45.507328+00:00"
-        }
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:12:45.507328+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN",
-        satellite: "206"
+        network: 'ESPN',
+        satellite: '206',
       },
       ranks: [
         {
           team_id: 291,
           rank: 16,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69651,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 257,
       home_team_id: 263,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 125,
@@ -7712,44 +7712,44 @@ const x = {
       teams: [
         {
           id: 257,
-          full_name: "Louisville Cardinals",
-          display_name: "Louisville",
-          short_name: "Cardinals",
-          location: "Louisville",
-          abbr: "LOU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/lou.png",
-          primary_color: "ad0000",
-          secondary_color: "000000",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Louisville Cardinals',
+          display_name: 'Louisville',
+          short_name: 'Cardinals',
+          location: 'Louisville',
+          abbr: 'LOU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/lou.png',
+          primary_color: 'ad0000',
+          secondary_color: '000000',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 263,
-          full_name: "Miami (FL) Hurricanes",
-          display_name: "Miami (FL)",
-          short_name: "Hurricanes",
-          location: "Miami (FL)",
-          abbr: "MIA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/mfl.png",
-          primary_color: "005030",
-          secondary_color: "f47321",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Miami (FL) Hurricanes',
+          display_name: 'Miami (FL)',
+          short_name: 'Hurricanes',
+          location: 'Miami (FL)',
+          abbr: 'MIA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/mfl.png',
+          primary_color: '005030',
+          secondary_color: 'f47321',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -7776,8 +7776,8 @@ const x = {
           total_under_public: 88,
           total_over_public: 12,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:50:06.109184+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:50:06.109184+00:00',
         },
         {
           ml_away: 175,
@@ -7803,8 +7803,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:50:06.012396+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:50:06.012396+00:00',
         },
         {
           ml_away: 158,
@@ -7830,8 +7830,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:50:06.183242+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:50:06.183242+00:00',
         },
         {
           ml_away: 180,
@@ -7857,8 +7857,8 @@ const x = {
           total_under_public: 80,
           total_over_public: 20,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T16:26:51.594657+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:26:51.594657+00:00',
         },
         {
           ml_away: 157,
@@ -7884,8 +7884,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:07:40.639928+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:07:40.639928+00:00',
         },
         {
           ml_away: null,
@@ -7911,8 +7911,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:09.969083+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:09.969083+00:00',
         },
         {
           ml_away: 144,
@@ -7938,8 +7938,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:07:40.51316+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:07:40.51316+00:00',
         },
         {
           ml_away: null,
@@ -7965,28 +7965,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:10.006461+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:10.006461+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN2",
-        satellite: "209"
-      }
+        network: 'ESPN2',
+        satellite: '209',
+      },
     },
     {
       id: 69662,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 1326,
       home_team_id: 315,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 175,
@@ -7994,44 +7994,44 @@ const x = {
       teams: [
         {
           id: 315,
-          full_name: "Southern Miss Golden Eagles",
-          display_name: "Southern Miss",
-          short_name: "Golden Eagles",
-          location: "Southern Miss",
-          abbr: "USM",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/usm.png",
-          primary_color: "ffab00",
-          secondary_color: "000000",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'Southern Miss Golden Eagles',
+          display_name: 'Southern Miss',
+          short_name: 'Golden Eagles',
+          location: 'Southern Miss',
+          abbr: 'USM',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/usm.png',
+          primary_color: 'ffab00',
+          secondary_color: '000000',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 1326,
-          full_name: "UAB Blazers",
-          display_name: "UAB",
-          short_name: "Blazers",
-          location: "UAB",
-          abbr: "UAB",
-          logo: "https://static.sprtactn.co/teamlogos/ncaab/100/uab.png",
-          primary_color: "1E6B52",
-          secondary_color: "D2C780",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'UAB Blazers',
+          display_name: 'UAB',
+          short_name: 'Blazers',
+          location: 'UAB',
+          abbr: 'UAB',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaab/100/uab.png',
+          primary_color: '1E6B52',
+          secondary_color: 'D2C780',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -8058,8 +8058,8 @@ const x = {
           total_under_public: 39,
           total_over_public: 61,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:11:37.05938+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:11:37.05938+00:00',
         },
         {
           ml_away: 155,
@@ -8085,8 +8085,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:54:12.788377+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:54:12.788377+00:00',
         },
         {
           ml_away: 137,
@@ -8112,8 +8112,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:06:12.017682+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:06:12.017682+00:00',
         },
         {
           ml_away: 225,
@@ -8139,8 +8139,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T01:07:03.62386+00:00"
+          type: 'game',
+          inserted: '2019-11-06T01:07:03.62386+00:00',
         },
         {
           ml_away: 164,
@@ -8166,8 +8166,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:14:20.95322+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:14:20.95322+00:00',
         },
         {
           ml_away: null,
@@ -8193,8 +8193,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-27T00:00:19.737588+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-27T00:00:19.737588+00:00',
         },
         {
           ml_away: 149,
@@ -8220,8 +8220,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:14:21.61418+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:14:21.61418+00:00',
         },
         {
           ml_away: null,
@@ -8247,28 +8247,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-27T00:00:19.954945+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-27T00:00:19.954945+00:00',
+        },
       ],
       broadcast: {
-        network: "NFL Network",
-        satellite: "212"
-      }
+        network: 'NFL Network',
+        satellite: '212',
+      },
     },
     {
       id: 69664,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 298,
       home_team_id: 296,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 135,
@@ -8276,44 +8276,44 @@ const x = {
       teams: [
         {
           id: 296,
-          full_name: "Michigan State Spartans",
-          display_name: "Michigan St",
-          short_name: "Spartans",
-          location: "Michigan St",
-          abbr: "MSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/msud.png",
-          primary_color: "18453b",
-          secondary_color: "000000",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Michigan State Spartans',
+          display_name: 'Michigan St',
+          short_name: 'Spartans',
+          location: 'Michigan St',
+          abbr: 'MSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/msud.png',
+          primary_color: '18453b',
+          secondary_color: '000000',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 298,
-          full_name: "Illinois Fighting Illini",
-          display_name: "Illinois",
-          short_name: "Fighting Illini",
-          location: "Illinois",
-          abbr: "ILL",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ill.png",
-          primary_color: "002675",
-          secondary_color: "e34e35",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Illinois Fighting Illini',
+          display_name: 'Illinois',
+          short_name: 'Fighting Illini',
+          location: 'Illinois',
+          abbr: 'ILL',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ill.png',
+          primary_color: '002675',
+          secondary_color: 'e34e35',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -8340,8 +8340,8 @@ const x = {
           total_under_public: 40,
           total_over_public: 60,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:47:33.47828+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:47:33.47828+00:00',
         },
         {
           ml_away: 450,
@@ -8367,8 +8367,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:43:25.730771+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:43:25.730771+00:00',
         },
         {
           ml_away: 267,
@@ -8394,8 +8394,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:42:29.534304+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:42:29.534304+00:00',
         },
         {
           ml_away: 340,
@@ -8421,8 +8421,8 @@ const x = {
           total_under_public: 67,
           total_over_public: 33,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T10:55:09.139956+00:00"
+          type: 'game',
+          inserted: '2019-11-05T10:55:09.139956+00:00',
         },
         {
           ml_away: 323,
@@ -8448,8 +8448,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:08:18.297745+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:08:18.297745+00:00',
         },
         {
           ml_away: null,
@@ -8475,8 +8475,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:09.633753+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:09.633753+00:00',
         },
         {
           ml_away: 236,
@@ -8502,8 +8502,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:18.261934+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:18.261934+00:00',
         },
         {
           ml_away: null,
@@ -8529,28 +8529,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:09.661646+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:09.661646+00:00',
+        },
       ],
       broadcast: {
-        network: "Fox Sports 1",
-        satellite: "219"
-      }
+        network: 'Fox Sports 1',
+        satellite: '219',
+      },
     },
     {
       id: 69668,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 267,
       home_team_id: 270,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 133,
@@ -8558,44 +8558,44 @@ const x = {
       teams: [
         {
           id: 267,
-          full_name: "Connecticut Huskies",
-          display_name: "UConn",
-          short_name: "Huskies",
-          location: "UConn",
-          abbr: "CONN",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/uconn.png",
-          primary_color: "192b5f",
-          secondary_color: "000000",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'Connecticut Huskies',
+          display_name: 'UConn',
+          short_name: 'Huskies',
+          location: 'UConn',
+          abbr: 'CONN',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/uconn.png',
+          primary_color: '192b5f',
+          secondary_color: '000000',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 2,
             loss: 7,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 270,
-          full_name: "Cincinnati Bearcats",
-          display_name: "Cincinnati",
-          short_name: "Bearcats",
-          location: "Cincinnati",
-          abbr: "CIN",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/cind.png",
-          primary_color: "E00122",
-          secondary_color: "000000",
-          conference_type: "AAC",
-          division_type: "FBS",
+          full_name: 'Cincinnati Bearcats',
+          display_name: 'Cincinnati',
+          short_name: 'Bearcats',
+          location: 'Cincinnati',
+          abbr: 'CIN',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/cind.png',
+          primary_color: 'E00122',
+          secondary_color: '000000',
+          conference_type: 'AAC',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -8622,8 +8622,8 @@ const x = {
           total_under_public: 71,
           total_over_public: 29,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:11:15.866991+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:11:15.866991+00:00',
         },
         {
           ml_away: null,
@@ -8649,8 +8649,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T14:51:12.97796+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T14:51:12.97796+00:00',
         },
         {
           ml_away: null,
@@ -8676,8 +8676,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T14:51:12.88971+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T14:51:12.88971+00:00',
         },
         {
           ml_away: 8500,
@@ -8703,8 +8703,8 @@ const x = {
           total_under_public: 94,
           total_over_public: 6,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T17:43:33.783178+00:00"
+          type: 'game',
+          inserted: '2019-11-05T17:43:33.783178+00:00',
         },
         {
           ml_away: null,
@@ -8730,8 +8730,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:08:18.196899+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:08:18.196899+00:00',
         },
         {
           ml_away: null,
@@ -8757,8 +8757,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:09.895492+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:09.895492+00:00',
         },
         {
           ml_away: null,
@@ -8784,8 +8784,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:18.098202+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:18.098202+00:00',
         },
         {
           ml_away: null,
@@ -8811,35 +8811,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:09.923924+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:09.923924+00:00',
+        },
       ],
       broadcast: {
-        network: "CBS Sports Network",
-        satellite: "221"
+        network: 'CBS Sports Network',
+        satellite: '221',
       },
       ranks: [
         {
           team_id: 270,
           rank: 20,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69669,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 375,
       home_team_id: 383,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 177,
@@ -8847,44 +8847,44 @@ const x = {
       teams: [
         {
           id: 375,
-          full_name: "Georgia Southern Eagles",
-          display_name: "GA Southern",
-          short_name: "Eagles",
-          location: "GA Southern",
-          abbr: "GASO",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/gso.png",
-          primary_color: "000066",
-          secondary_color: "8d744a",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'Georgia Southern Eagles',
+          display_name: 'GA Southern',
+          short_name: 'Eagles',
+          location: 'GA Southern',
+          abbr: 'GASO',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/gso.png',
+          primary_color: '000066',
+          secondary_color: '8d744a',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 383,
-          full_name: "Troy Trojans",
-          display_name: "Troy",
-          short_name: "Trojans",
-          location: "Troy",
-          abbr: "TROY",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/try.png",
-          primary_color: "892034",
-          secondary_color: "84888b",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'Troy Trojans',
+          display_name: 'Troy',
+          short_name: 'Trojans',
+          location: 'Troy',
+          abbr: 'TROY',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/try.png',
+          primary_color: '892034',
+          secondary_color: '84888b',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -8911,8 +8911,8 @@ const x = {
           total_under_public: 62,
           total_over_public: 38,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:00:43.026205+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:00:43.026205+00:00',
         },
         {
           ml_away: -137,
@@ -8938,8 +8938,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:17.611054+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:17.611054+00:00',
         },
         {
           ml_away: -130,
@@ -8965,8 +8965,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:32:11.177649+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:32:11.177649+00:00',
         },
         {
           ml_away: -120,
@@ -8992,8 +8992,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T15:23:33.560988+00:00"
+          type: 'game',
+          inserted: '2019-11-05T15:23:33.560988+00:00',
         },
         {
           ml_away: -128,
@@ -9019,8 +9019,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-06T05:00:55.184247+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T05:00:55.184247+00:00',
         },
         {
           ml_away: null,
@@ -9046,8 +9046,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-27T00:00:19.474523+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-27T00:00:19.474523+00:00',
         },
         {
           ml_away: -123,
@@ -9073,8 +9073,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:12:19.548188+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:12:19.548188+00:00',
         },
         {
           ml_away: null,
@@ -9100,27 +9100,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-27T00:00:19.512503+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-27T00:00:19.512503+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN+"
-      }
+        network: 'ESPN+',
+      },
     },
     {
       id: 69694,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T20:30:00.000Z",
+      start_time: '2019-11-09T20:30:00.000Z',
       away_team_id: 365,
       home_team_id: 362,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 167,
@@ -9128,44 +9128,44 @@ const x = {
       teams: [
         {
           id: 362,
-          full_name: "Alabama Crimson Tide",
-          display_name: "Alabama",
-          short_name: "Crimson Tide",
-          location: "Alabama",
-          abbr: "BAMA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/bama.png",
-          primary_color: "7d110c",
-          secondary_color: "000000",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Alabama Crimson Tide',
+          display_name: 'Alabama',
+          short_name: 'Crimson Tide',
+          location: 'Alabama',
+          abbr: 'BAMA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/bama.png',
+          primary_color: '7d110c',
+          secondary_color: '000000',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 8,
             loss: 0,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 365,
-          full_name: "LSU Tigers",
-          display_name: "LSU",
-          short_name: "Tigers",
-          location: "LSU",
-          abbr: "LSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/lsu.png",
-          primary_color: "472f92",
-          secondary_color: "fdd023",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'LSU Tigers',
+          display_name: 'LSU',
+          short_name: 'Tigers',
+          location: 'LSU',
+          abbr: 'LSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/lsu.png',
+          primary_color: '472f92',
+          secondary_color: 'fdd023',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 8,
             loss: 0,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -9192,8 +9192,8 @@ const x = {
           total_under_public: 60,
           total_over_public: 40,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:51:33.642158+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:51:33.642158+00:00',
         },
         {
           ml_away: 166,
@@ -9219,8 +9219,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:52:22.358144+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:52:22.358144+00:00',
         },
         {
           ml_away: 149,
@@ -9246,8 +9246,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:45:53.612086+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:45:53.612086+00:00',
         },
         {
           ml_away: 210,
@@ -9273,8 +9273,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T22:17:58.966843+00:00"
+          type: 'game',
+          inserted: '2019-11-04T22:17:58.966843+00:00',
         },
         {
           ml_away: 160,
@@ -9300,8 +9300,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-05T06:00:37.059704+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-05T06:00:37.059704+00:00',
         },
         {
           ml_away: null,
@@ -9327,8 +9327,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-27T00:00:19.217012+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-27T00:00:19.217012+00:00',
         },
         {
           ml_away: 145,
@@ -9354,8 +9354,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T13:14:57.714011+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T13:14:57.714011+00:00',
         },
         {
           ml_away: null,
@@ -9381,39 +9381,39 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-27T00:00:19.255719+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-27T00:00:19.255719+00:00',
+        },
       ],
       broadcast: {
-        network: "CBS"
+        network: 'CBS',
       },
       ranks: [
         {
           team_id: 362,
           rank: 3,
-          poll: "CFP25"
+          poll: 'CFP25',
         },
         {
           team_id: 365,
           rank: 2,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69622,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T21:00:00.000Z",
+      start_time: '2019-11-09T21:00:00.000Z',
       away_team_id: 299,
       home_team_id: 300,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 193,
@@ -9421,44 +9421,44 @@ const x = {
       teams: [
         {
           id: 299,
-          full_name: "Iowa Hawkeyes",
-          display_name: "Iowa",
-          short_name: "Hawkeyes",
-          location: "Iowa",
-          abbr: "IOWA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/iowd.png",
-          primary_color: "ffe100",
-          secondary_color: "000000",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Iowa Hawkeyes',
+          display_name: 'Iowa',
+          short_name: 'Hawkeyes',
+          location: 'Iowa',
+          abbr: 'IOWA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/iowd.png',
+          primary_color: 'ffe100',
+          secondary_color: '000000',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 300,
-          full_name: "Wisconsin Badgers",
-          display_name: "Wisconsin",
-          short_name: "Badgers",
-          location: "Wisconsin",
-          abbr: "WISC",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/wis.png",
-          primary_color: "9B0000",
-          secondary_color: "000000",
-          conference_type: "BIGTEN",
-          division_type: "FBS",
+          full_name: 'Wisconsin Badgers',
+          display_name: 'Wisconsin',
+          short_name: 'Badgers',
+          location: 'Wisconsin',
+          abbr: 'WISC',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/wis.png',
+          primary_color: '9B0000',
+          secondary_color: '000000',
+          conference_type: 'BIGTEN',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -9485,8 +9485,8 @@ const x = {
           total_under_public: 61,
           total_over_public: 39,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:20:34.034833+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:20:34.034833+00:00',
         },
         {
           ml_away: -390,
@@ -9512,8 +9512,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:37.204641+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:37.204641+00:00',
         },
         {
           ml_away: 201,
@@ -9539,8 +9539,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-05T08:59:19.924565+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-05T08:59:19.924565+00:00',
         },
         {
           ml_away: 290,
@@ -9566,8 +9566,8 @@ const x = {
           total_under_public: 37,
           total_over_public: 63,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T03:00:47.481188+00:00"
+          type: 'game',
+          inserted: '2019-11-05T03:00:47.481188+00:00',
         },
         {
           ml_away: 226,
@@ -9593,8 +9593,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:13:40.868909+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:13:40.868909+00:00',
         },
         {
           ml_away: null,
@@ -9620,8 +9620,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:09.687308+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:09.687308+00:00',
         },
         {
           ml_away: 188,
@@ -9647,8 +9647,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:13:40.814825+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:13:40.814825+00:00',
         },
         {
           ml_away: null,
@@ -9674,39 +9674,39 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:09.714295+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:09.714295+00:00',
+        },
       ],
       broadcast: {
-        network: "FOX"
+        network: 'FOX',
       },
       ranks: [
         {
           team_id: 299,
           rank: 18,
-          poll: "CFP25"
+          poll: 'CFP25',
         },
         {
           team_id: 300,
           rank: 13,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69671,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T21:00:00.000Z",
+      start_time: '2019-11-09T21:00:00.000Z',
       away_team_id: 314,
       home_team_id: 309,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 185,
@@ -9714,44 +9714,44 @@ const x = {
       teams: [
         {
           id: 309,
-          full_name: "Louisiana Tech Bulldogs",
-          display_name: "LA Tech",
-          short_name: "Bulldogs",
-          location: "LA Tech",
-          abbr: "LT",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/lt.png",
-          primary_color: "e31b23",
-          secondary_color: "002f8b",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'Louisiana Tech Bulldogs',
+          display_name: 'LA Tech',
+          short_name: 'Bulldogs',
+          location: 'LA Tech',
+          abbr: 'LT',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/lt.png',
+          primary_color: 'e31b23',
+          secondary_color: '002f8b',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 314,
-          full_name: "North Texas Mean Green",
-          display_name: "North Texas",
-          short_name: "Mean Green",
-          location: "North Texas",
-          abbr: "UNT",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ntx.png",
-          primary_color: "00a651",
-          secondary_color: "000000",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'North Texas Mean Green',
+          display_name: 'North Texas',
+          short_name: 'Mean Green',
+          location: 'North Texas',
+          abbr: 'UNT',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ntx.png',
+          primary_color: '00a651',
+          secondary_color: '000000',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -9778,8 +9778,8 @@ const x = {
           total_under_public: 25,
           total_over_public: 75,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:15.933118+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:15.933118+00:00',
         },
         {
           ml_away: -2750,
@@ -9805,8 +9805,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:52.334313+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:52.334313+00:00',
         },
         {
           ml_away: 141,
@@ -9832,8 +9832,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:01:52.539106+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:01:52.539106+00:00',
         },
         {
           ml_away: 195,
@@ -9859,8 +9859,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T15:44:33.813453+00:00"
+          type: 'game',
+          inserted: '2019-11-06T15:44:33.813453+00:00',
         },
         {
           ml_away: 154,
@@ -9886,8 +9886,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-06T06:00:37.512937+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T06:00:37.512937+00:00',
         },
         {
           ml_away: null,
@@ -9913,8 +9913,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-27T00:00:20.117492+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-27T00:00:20.117492+00:00',
         },
         {
           ml_away: 142,
@@ -9940,8 +9940,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:13:14.137771+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:13:14.137771+00:00',
         },
         {
           ml_away: null,
@@ -9967,27 +9967,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-27T00:00:20.17808+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-27T00:00:20.17808+00:00',
+        },
       ],
       broadcast: {
-        network: "FACEBOOK"
-      }
+        network: 'FACEBOOK',
+      },
     },
     {
       id: 69681,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T21:00:00.000Z",
+      start_time: '2019-11-09T21:00:00.000Z',
       away_team_id: 369,
       home_team_id: 363,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 169,
@@ -9995,44 +9995,44 @@ const x = {
       teams: [
         {
           id: 363,
-          full_name: "Ole Miss Rebels",
-          display_name: "Ole Miss",
-          short_name: "Rebels",
-          location: "Ole Miss",
-          abbr: "MISS",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/mis.png",
-          primary_color: "cc092f",
-          secondary_color: "002663",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Ole Miss Rebels',
+          display_name: 'Ole Miss',
+          short_name: 'Rebels',
+          location: 'Ole Miss',
+          abbr: 'MISS',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/mis.png',
+          primary_color: 'cc092f',
+          secondary_color: '002663',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 6,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 369,
-          full_name: "New Mexico State Aggies",
-          display_name: "N. Mexico St",
-          short_name: "Aggies",
-          location: "N. Mexico St",
-          abbr: "NMSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/nms.png",
-          primary_color: "8b2346",
-          secondary_color: "000000",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'New Mexico State Aggies',
+          display_name: 'N. Mexico St',
+          short_name: 'Aggies',
+          location: 'N. Mexico St',
+          abbr: 'NMSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/nms.png',
+          primary_color: '8b2346',
+          secondary_color: '000000',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 0,
             loss: 8,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -10059,8 +10059,8 @@ const x = {
           total_under_public: 35,
           total_over_public: 65,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T16:55:43.583924+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:55:43.583924+00:00',
         },
         {
           ml_away: 1250,
@@ -10086,8 +10086,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:53:18.946962+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:53:18.946962+00:00',
         },
         {
           ml_away: 595,
@@ -10113,8 +10113,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:33:53.620268+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:33:53.620268+00:00',
         },
         {
           ml_away: 3250,
@@ -10140,8 +10140,8 @@ const x = {
           total_under_public: 20,
           total_over_public: 80,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T23:17:10.198211+00:00"
+          type: 'game',
+          inserted: '2019-11-05T23:17:10.198211+00:00',
         },
         {
           ml_away: 920,
@@ -10167,8 +10167,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:11:43.592946+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:11:43.592946+00:00',
         },
         {
           ml_away: null,
@@ -10194,8 +10194,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T20:00:15.710472+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T20:00:15.710472+00:00',
         },
         {
           ml_away: 488,
@@ -10221,8 +10221,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:11:43.640736+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:11:43.640736+00:00',
         },
         {
           ml_away: null,
@@ -10248,28 +10248,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T20:00:15.756952+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T20:00:15.756952+00:00',
+        },
       ],
       broadcast: {
-        network: "SEC Network",
-        satellite: "611"
-      }
+        network: 'SEC Network',
+        satellite: '611',
+      },
     },
     {
       id: 69630,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T22:00:00.000Z",
+      start_time: '2019-11-09T22:00:00.000Z',
       away_team_id: 377,
       home_team_id: 379,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 187,
@@ -10277,44 +10277,44 @@ const x = {
       teams: [
         {
           id: 377,
-          full_name: "Georgia State Panthers",
-          display_name: "Georgia State",
-          short_name: "Panthers",
-          location: "Georgia State",
-          abbr: "GST",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/gst.png",
-          primary_color: "0039a6",
-          secondary_color: "000000",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'Georgia State Panthers',
+          display_name: 'Georgia State',
+          short_name: 'Panthers',
+          location: 'Georgia State',
+          abbr: 'GST',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/gst.png',
+          primary_color: '0039a6',
+          secondary_color: '000000',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 379,
-          full_name: "Louisiana-Monroe Warhawks",
-          display_name: "LA-Monroe",
-          short_name: "Warhawks",
-          location: "LA-Monroe",
-          abbr: "ULM",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ulm.png",
-          primary_color: "872434",
-          secondary_color: "8d744a",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'Louisiana-Monroe Warhawks',
+          display_name: 'LA-Monroe',
+          short_name: 'Warhawks',
+          location: 'LA-Monroe',
+          abbr: 'ULM',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ulm.png',
+          primary_color: '872434',
+          secondary_color: '8d744a',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 3,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -10341,8 +10341,8 @@ const x = {
           total_under_public: 37,
           total_over_public: 63,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:16.035673+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:16.035673+00:00',
         },
         {
           ml_away: -119,
@@ -10368,8 +10368,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:52.588266+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:52.588266+00:00',
         },
         {
           ml_away: -117,
@@ -10395,8 +10395,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T07:16:35.559952+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T07:16:35.559952+00:00',
         },
         {
           ml_away: -135,
@@ -10422,8 +10422,8 @@ const x = {
           total_under_public: 55,
           total_over_public: 45,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T17:48:58.199605+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:48:58.199605+00:00',
         },
         {
           ml_away: -118,
@@ -10449,8 +10449,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:13:18.011292+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:13:18.011292+00:00',
         },
         {
           ml_away: null,
@@ -10476,8 +10476,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-27T00:00:20.262839+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-27T00:00:20.262839+00:00',
         },
         {
           ml_away: -116,
@@ -10503,8 +10503,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:13:17.967081+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:13:17.967081+00:00',
         },
         {
           ml_away: null,
@@ -10530,27 +10530,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-27T00:00:20.325412+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-27T00:00:20.325412+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN+"
-      }
+        network: 'ESPN+',
+      },
     },
     {
       id: 69633,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-09T23:00:00.000Z",
+      start_time: '2019-11-09T23:00:00.000Z',
       away_team_id: 313,
       home_team_id: 311,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 189,
@@ -10558,44 +10558,44 @@ const x = {
       teams: [
         {
           id: 311,
-          full_name: "Florida Atlantic Owls",
-          display_name: "FL Atlantic",
-          short_name: "Owls",
-          location: "FL Atlantic",
-          abbr: "FAU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/fau.png",
-          primary_color: "003366",
-          secondary_color: "cc0000",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'Florida Atlantic Owls',
+          display_name: 'FL Atlantic',
+          short_name: 'Owls',
+          location: 'FL Atlantic',
+          abbr: 'FAU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/fau.png',
+          primary_color: '003366',
+          secondary_color: 'cc0000',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 313,
-          full_name: "Florida International Golden Panthers",
-          display_name: "FIU",
-          short_name: "Golden Panthers",
-          location: "FIU",
-          abbr: "FIU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/fiu.png",
-          primary_color: "002d62",
-          secondary_color: "c5960c",
-          conference_type: "CONFERENCEUSA",
-          division_type: "FBS",
+          full_name: 'Florida International Golden Panthers',
+          display_name: 'FIU',
+          short_name: 'Golden Panthers',
+          location: 'FIU',
+          abbr: 'FIU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/fiu.png',
+          primary_color: '002d62',
+          secondary_color: 'c5960c',
+          conference_type: 'CONFERENCEUSA',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -10622,8 +10622,8 @@ const x = {
           total_under_public: 83,
           total_over_public: 17,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T16:56:12.650753+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:56:12.650753+00:00',
         },
         {
           ml_away: -270,
@@ -10649,8 +10649,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:53.614255+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:53.614255+00:00',
         },
         {
           ml_away: 197,
@@ -10676,8 +10676,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:41:55.432615+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:41:55.432615+00:00',
         },
         {
           ml_away: 310,
@@ -10703,8 +10703,8 @@ const x = {
           total_under_public: 67,
           total_over_public: 33,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T18:10:24.674049+00:00"
+          type: 'game',
+          inserted: '2019-11-05T18:10:24.674049+00:00',
         },
         {
           ml_away: 242,
@@ -10730,8 +10730,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:13:29.659237+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:13:29.659237+00:00',
         },
         {
           ml_away: null,
@@ -10757,8 +10757,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-27T00:00:20.428402+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-27T00:00:20.428402+00:00',
         },
         {
           ml_away: 197,
@@ -10784,8 +10784,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:13:29.588824+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:13:29.588824+00:00',
         },
         {
           ml_away: null,
@@ -10811,27 +10811,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-27T00:00:20.525835+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-27T00:00:20.525835+00:00',
+        },
       ],
       broadcast: {
-        network: "STADIUM"
-      }
+        network: 'STADIUM',
+      },
     },
     {
       id: 69672,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:00:00.000Z",
+      start_time: '2019-11-10T00:00:00.000Z',
       away_team_id: 356,
       home_team_id: 348,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 195,
@@ -10839,44 +10839,44 @@ const x = {
       teams: [
         {
           id: 348,
-          full_name: "California Bears",
-          display_name: "California",
-          short_name: "Bears",
-          location: "California",
-          abbr: "CAL",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/cald.png",
-          primary_color: "002675",
-          secondary_color: "ffc72c",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'California Bears',
+          display_name: 'California',
+          short_name: 'Bears',
+          location: 'California',
+          abbr: 'CAL',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/cald.png',
+          primary_color: '002675',
+          secondary_color: 'ffc72c',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 356,
-          full_name: "Washington State Cougars",
-          display_name: "Washington St",
-          short_name: "Cougars",
-          location: "Washington St",
-          abbr: "WSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/wst.png",
-          primary_color: "981e32",
-          secondary_color: "5e6a71",
-          conference_type: "PAC12",
-          division_type: "FBS",
+          full_name: 'Washington State Cougars',
+          display_name: 'Washington St',
+          short_name: 'Cougars',
+          location: 'Washington St',
+          abbr: 'WSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/wst.png',
+          primary_color: '981e32',
+          secondary_color: '5e6a71',
+          conference_type: 'PAC12',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -10903,8 +10903,8 @@ const x = {
           total_under_public: 71,
           total_over_public: 29,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:01:37.375532+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:01:37.375532+00:00',
         },
         {
           ml_away: -1380,
@@ -10930,8 +10930,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:52.700917+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:52.700917+00:00',
         },
         {
           ml_away: -191,
@@ -10957,8 +10957,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:14:13.599546+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:14:13.599546+00:00',
         },
         {
           ml_away: -275,
@@ -10984,8 +10984,8 @@ const x = {
           total_under_public: 57,
           total_over_public: 43,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T16:57:33.779927+00:00"
+          type: 'game',
+          inserted: '2019-11-06T16:57:33.779927+00:00',
         },
         {
           ml_away: -234,
@@ -11011,8 +11011,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:13:47.043573+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:13:47.043573+00:00',
         },
         {
           ml_away: null,
@@ -11038,8 +11038,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:09.816762+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:09.816762+00:00',
         },
         {
           ml_away: -191,
@@ -11065,8 +11065,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:13:47.076104+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:13:47.076104+00:00',
         },
         {
           ml_away: null,
@@ -11092,27 +11092,27 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:09.840468+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:09.840468+00:00',
+        },
       ],
       broadcast: {
-        network: "Pac-12 Network"
-      }
+        network: 'Pac-12 Network',
+      },
     },
     {
       id: 69680,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:00:00.000Z",
+      start_time: '2019-11-10T00:00:00.000Z',
       away_team_id: 382,
       home_team_id: 368,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 139,
@@ -11120,44 +11120,44 @@ const x = {
       teams: [
         {
           id: 368,
-          full_name: "South Carolina Gamecocks",
-          display_name: "S. Carolina",
-          short_name: "Gamecocks",
-          location: "S. Carolina",
-          abbr: "SC",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/sc.png",
-          primary_color: "73000a",
-          secondary_color: "000000",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'South Carolina Gamecocks',
+          display_name: 'S. Carolina',
+          short_name: 'Gamecocks',
+          location: 'S. Carolina',
+          abbr: 'SC',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/sc.png',
+          primary_color: '73000a',
+          secondary_color: '000000',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 382,
-          full_name: "Appalachian State Mountaineers",
-          display_name: "App State",
-          short_name: "Mountaineers",
-          location: "App State",
-          abbr: "APP",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/app.png",
-          primary_color: "ffce00",
-          secondary_color: "000000",
-          conference_type: "SUNBELT",
-          division_type: "FBS",
+          full_name: 'Appalachian State Mountaineers',
+          display_name: 'App State',
+          short_name: 'Mountaineers',
+          location: 'App State',
+          abbr: 'APP',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/app.png',
+          primary_color: 'ffce00',
+          secondary_color: '000000',
+          conference_type: 'SUNBELT',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -11184,8 +11184,8 @@ const x = {
           total_under_public: 60,
           total_over_public: 40,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:41:27.990388+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:41:27.990388+00:00',
         },
         {
           ml_away: 165,
@@ -11211,8 +11211,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:47:06.981682+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:47:06.981682+00:00',
         },
         {
           ml_away: 146,
@@ -11238,8 +11238,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:41:03.959181+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:41:03.959181+00:00',
         },
         {
           ml_away: 155,
@@ -11265,8 +11265,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T16:00:45.717266+00:00"
+          type: 'game',
+          inserted: '2019-11-05T16:00:45.717266+00:00',
         },
         {
           ml_away: 146,
@@ -11292,8 +11292,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:08:38.812199+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:08:38.812199+00:00',
         },
         {
           ml_away: null,
@@ -11319,8 +11319,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:10.052773+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:10.052773+00:00',
         },
         {
           ml_away: 135,
@@ -11346,8 +11346,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:08:37.933106+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:08:37.933106+00:00',
         },
         {
           ml_away: null,
@@ -11373,28 +11373,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:10.085984+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:10.085984+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN2",
-        satellite: "209"
-      }
+        network: 'ESPN2',
+        satellite: '209',
+      },
     },
     {
       id: 69687,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:00:00.000Z",
+      start_time: '2019-11-10T00:00:00.000Z',
       away_team_id: 373,
       home_team_id: 366,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 181,
@@ -11402,44 +11402,44 @@ const x = {
       teams: [
         {
           id: 366,
-          full_name: "Georgia Bulldogs",
-          display_name: "Georgia",
-          short_name: "Bulldogs",
-          location: "Georgia",
-          abbr: "UGA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/uga.png",
-          primary_color: "da291c",
-          secondary_color: "2c2a29",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Georgia Bulldogs',
+          display_name: 'Georgia',
+          short_name: 'Bulldogs',
+          location: 'Georgia',
+          abbr: 'UGA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/uga.png',
+          primary_color: 'da291c',
+          secondary_color: '2c2a29',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 373,
-          full_name: "Missouri Tigers",
-          display_name: "Missouri",
-          short_name: "Tigers",
-          location: "Missouri",
-          abbr: "MIZZ",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/miz.png",
-          primary_color: "f1b82d",
-          secondary_color: "000000",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Missouri Tigers',
+          display_name: 'Missouri',
+          short_name: 'Tigers',
+          location: 'Missouri',
+          abbr: 'MIZZ',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/miz.png',
+          primary_color: 'f1b82d',
+          secondary_color: '000000',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -11466,8 +11466,8 @@ const x = {
           total_under_public: 46,
           total_over_public: 54,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:52:27.454498+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:52:27.454498+00:00',
         },
         {
           ml_away: -105,
@@ -11493,8 +11493,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:52.671116+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:52.671116+00:00',
         },
         {
           ml_away: 299,
@@ -11520,8 +11520,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:27:16.017038+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:27:16.017038+00:00',
         },
         {
           ml_away: 1300,
@@ -11547,8 +11547,8 @@ const x = {
           total_under_public: 67,
           total_over_public: 33,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T02:09:34.28227+00:00"
+          type: 'game',
+          inserted: '2019-11-05T02:09:34.28227+00:00',
         },
         {
           ml_away: 465,
@@ -11574,8 +11574,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:12:40.99608+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:12:40.99608+00:00',
         },
         {
           ml_away: null,
@@ -11601,8 +11601,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:09.758364+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:09.758364+00:00',
         },
         {
           ml_away: 296,
@@ -11628,8 +11628,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:12:40.939903+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:12:40.939903+00:00',
         },
         {
           ml_away: null,
@@ -11655,35 +11655,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:09.779646+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:09.779646+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN",
-        satellite: "206"
+        network: 'ESPN',
+        satellite: '206',
       },
       ranks: [
         {
           team_id: 366,
           rank: 6,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69712,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:00:00.000Z",
+      start_time: '2019-11-10T00:00:00.000Z',
       away_team_id: 335,
       home_team_id: 337,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 191,
@@ -11691,44 +11691,44 @@ const x = {
       teams: [
         {
           id: 335,
-          full_name: "Utah State Aggies",
-          display_name: "Utah State",
-          short_name: "Aggies",
-          location: "Utah State",
-          abbr: "USU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/uts.png",
-          primary_color: "336600",
-          secondary_color: "a4aeb5",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'Utah State Aggies',
+          display_name: 'Utah State',
+          short_name: 'Aggies',
+          location: 'Utah State',
+          abbr: 'USU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/uts.png',
+          primary_color: '336600',
+          secondary_color: 'a4aeb5',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 337,
-          full_name: "Fresno State Bulldogs",
-          display_name: "Fresno State",
-          short_name: "Bulldogs",
-          location: "Fresno State",
-          abbr: "FRES",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/fre.png",
-          primary_color: "da062e",
-          secondary_color: "002e6f",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'Fresno State Bulldogs',
+          display_name: 'Fresno State',
+          short_name: 'Bulldogs',
+          location: 'Fresno State',
+          abbr: 'FRES',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/fre.png',
+          primary_color: 'da062e',
+          secondary_color: '002e6f',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -11755,8 +11755,8 @@ const x = {
           total_under_public: 58,
           total_over_public: 42,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:35:13.031467+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:35:13.031467+00:00',
         },
         {
           ml_away: 161,
@@ -11782,8 +11782,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:38:42.546266+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:38:42.546266+00:00',
         },
         {
           ml_away: 139,
@@ -11809,8 +11809,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:38:42.614429+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:38:42.614429+00:00',
         },
         {
           ml_away: 115,
@@ -11836,8 +11836,8 @@ const x = {
           total_under_public: 40,
           total_over_public: 60,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T23:04:22.180849+00:00"
+          type: 'game',
+          inserted: '2019-11-04T23:04:22.180849+00:00',
         },
         {
           ml_away: 137,
@@ -11863,8 +11863,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:13:36.297384+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:13:36.297384+00:00',
         },
         {
           ml_away: null,
@@ -11890,8 +11890,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-27T00:00:20.636188+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-27T00:00:20.636188+00:00',
         },
         {
           ml_away: 128,
@@ -11917,8 +11917,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:13:36.734421+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:13:36.734421+00:00',
         },
         {
           ml_away: null,
@@ -11944,28 +11944,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-27T00:00:20.720644+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-27T00:00:20.720644+00:00',
+        },
       ],
       broadcast: {
-        network: "CBS Sports Network",
-        satellite: "221"
-      }
+        network: 'CBS Sports Network',
+        satellite: '221',
+      },
     },
     {
       id: 69646,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:30:00.000Z",
+      start_time: '2019-11-10T00:30:00.000Z',
       away_team_id: 371,
       home_team_id: 372,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 179,
@@ -11973,44 +11973,44 @@ const x = {
       teams: [
         {
           id: 371,
-          full_name: "Tennessee Volunteers",
-          display_name: "Tennessee",
-          short_name: "Volunteers",
-          location: "Tennessee",
-          abbr: "TENN",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ten.png",
-          primary_color: "f77f00",
-          secondary_color: "000000",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Tennessee Volunteers',
+          display_name: 'Tennessee',
+          short_name: 'Volunteers',
+          location: 'Tennessee',
+          abbr: 'TENN',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ten.png',
+          primary_color: 'f77f00',
+          secondary_color: '000000',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 372,
-          full_name: "Kentucky Wildcats",
-          display_name: "Kentucky",
-          short_name: "Wildcats",
-          location: "Kentucky",
-          abbr: "UK",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/kend.png",
-          primary_color: "0039a6",
-          secondary_color: "000000",
-          conference_type: "SEC",
-          division_type: "FBS",
+          full_name: 'Kentucky Wildcats',
+          display_name: 'Kentucky',
+          short_name: 'Wildcats',
+          location: 'Kentucky',
+          abbr: 'UK',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/kend.png',
+          primary_color: '0039a6',
+          secondary_color: '000000',
+          conference_type: 'SEC',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -12037,8 +12037,8 @@ const x = {
           total_under_public: 32,
           total_over_public: 68,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:15.814392+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:15.814392+00:00',
         },
         {
           ml_away: -635,
@@ -12064,8 +12064,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:48.035562+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:48.035562+00:00',
         },
         {
           ml_away: -111,
@@ -12091,8 +12091,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-04T21:36:56.591554+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T21:36:56.591554+00:00',
         },
         {
           ml_away: 115,
@@ -12118,8 +12118,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T15:58:03.806421+00:00"
+          type: 'game',
+          inserted: '2019-11-05T15:58:03.806421+00:00',
         },
         {
           ml_away: 100,
@@ -12145,8 +12145,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:12:34.069652+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:12:34.069652+00:00',
         },
         {
           ml_away: null,
@@ -12172,8 +12172,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:09.92736+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:09.92736+00:00',
         },
         {
           ml_away: -102,
@@ -12199,8 +12199,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:12:34.286085+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:12:34.286085+00:00',
         },
         {
           ml_away: null,
@@ -12226,28 +12226,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:09.950239+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:09.950239+00:00',
+        },
       ],
       broadcast: {
-        network: "SEC Network",
-        satellite: "611"
-      }
+        network: 'SEC Network',
+        satellite: '611',
+      },
     },
     {
       id: 69649,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:30:00.000Z",
+      start_time: '2019-11-10T00:30:00.000Z',
       away_team_id: 261,
       home_team_id: 266,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 117,
@@ -12255,44 +12255,44 @@ const x = {
       teams: [
         {
           id: 261,
-          full_name: "Clemson Tigers",
-          display_name: "Clemson",
-          short_name: "Tigers",
-          location: "Clemson",
-          abbr: "CLEM",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/cle.png",
-          primary_color: "ff6824",
-          secondary_color: "522d80",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Clemson Tigers',
+          display_name: 'Clemson',
+          short_name: 'Tigers',
+          location: 'Clemson',
+          abbr: 'CLEM',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/cle.png',
+          primary_color: 'ff6824',
+          secondary_color: '522d80',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 9,
             loss: 0,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 266,
-          full_name: "North Carolina State Wolfpack",
-          display_name: "NC State",
-          short_name: "Wolfpack",
-          location: "NC State",
-          abbr: "NCST",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/ncst.png",
-          primary_color: "cb092e",
-          secondary_color: "000000",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'North Carolina State Wolfpack',
+          display_name: 'NC State',
+          short_name: 'Wolfpack',
+          location: 'NC State',
+          abbr: 'NCST',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/ncst.png',
+          primary_color: 'cb092e',
+          secondary_color: '000000',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -12319,8 +12319,8 @@ const x = {
           total_under_public: 34,
           total_over_public: 66,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:20:48.66612+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:20:48.66612+00:00',
         },
         {
           ml_away: -2434,
@@ -12346,8 +12346,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:44:43.659712+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:44:43.659712+00:00',
         },
         {
           ml_away: -879,
@@ -12373,8 +12373,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T15:36:37.276521+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T15:36:37.276521+00:00',
         },
         {
           ml_away: null,
@@ -12400,8 +12400,8 @@ const x = {
           total_under_public: 67,
           total_over_public: 33,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T08:45:15.439295+00:00"
+          type: 'game',
+          inserted: '2019-11-05T08:45:15.439295+00:00',
         },
         {
           ml_away: -2275,
@@ -12427,8 +12427,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:05:04.912155+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:05:04.912155+00:00',
         },
         {
           ml_away: null,
@@ -12454,8 +12454,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:10.232446+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:10.232446+00:00',
         },
         {
           ml_away: -764,
@@ -12481,8 +12481,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:05:04.634425+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:05:04.634425+00:00',
         },
         {
           ml_away: null,
@@ -12508,34 +12508,34 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:10.309997+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:10.309997+00:00',
+        },
       ],
       broadcast: {
-        network: "ABC"
+        network: 'ABC',
       },
       ranks: [
         {
           team_id: 261,
           rank: 5,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69660,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:30:00.000Z",
+      start_time: '2019-11-10T00:30:00.000Z',
       away_team_id: 401,
       home_team_id: 322,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 157,
@@ -12543,44 +12543,44 @@ const x = {
       teams: [
         {
           id: 322,
-          full_name: "BYU Cougars",
-          display_name: "BYU",
-          short_name: "Cougars",
-          location: "BYU",
-          abbr: "BYU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/byu.png",
-          primary_color: "002E5D",
-          secondary_color: "0062B8",
-          conference_type: "IAINDEPENDENTS",
-          division_type: "FBS",
+          full_name: 'BYU Cougars',
+          display_name: 'BYU',
+          short_name: 'Cougars',
+          location: 'BYU',
+          abbr: 'BYU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/byu.png',
+          primary_color: '002E5D',
+          secondary_color: '0062B8',
+          conference_type: 'IAINDEPENDENTS',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 401,
-          full_name: "Liberty Flames",
-          display_name: "Liberty",
-          short_name: "Flames",
-          location: "Liberty",
-          abbr: "LIB",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/lib.png",
-          primary_color: "02298A",
-          secondary_color: "A70F00",
-          conference_type: "IAINDEPENDENTS",
-          division_type: "FBS",
+          full_name: 'Liberty Flames',
+          display_name: 'Liberty',
+          short_name: 'Flames',
+          location: 'Liberty',
+          abbr: 'LIB',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/lib.png',
+          primary_color: '02298A',
+          secondary_color: 'A70F00',
+          conference_type: 'IAINDEPENDENTS',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -12607,8 +12607,8 @@ const x = {
           total_under_public: 46,
           total_over_public: 54,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:33:21.639751+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:33:21.639751+00:00',
         },
         {
           ml_away: 465,
@@ -12634,8 +12634,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:51:26.272467+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:51:26.272467+00:00',
         },
         {
           ml_away: 288,
@@ -12661,8 +12661,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:28:22.64908+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:28:22.64908+00:00',
         },
         {
           ml_away: 625,
@@ -12688,8 +12688,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T00:26:34.014914+00:00"
+          type: 'game',
+          inserted: '2019-11-06T00:26:34.014914+00:00',
         },
         {
           ml_away: 443,
@@ -12715,8 +12715,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-06T06:00:37.415898+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T06:00:37.415898+00:00',
         },
         {
           ml_away: null,
@@ -12742,8 +12742,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:10.135069+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:10.135069+00:00',
         },
         {
           ml_away: 287,
@@ -12769,8 +12769,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:49.826409+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:49.826409+00:00',
         },
         {
           ml_away: null,
@@ -12796,28 +12796,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:10.173693+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:10.173693+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPNU",
-        satellite: "208"
-      }
+        network: 'ESPNU',
+        satellite: '208',
+      },
     },
     {
       id: 69688,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T00:30:00.000Z",
+      start_time: '2019-11-10T00:30:00.000Z',
       away_team_id: 325,
       home_team_id: 265,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 127,
@@ -12825,44 +12825,44 @@ const x = {
       teams: [
         {
           id: 265,
-          full_name: "Duke Blue Devils",
-          display_name: "Duke",
-          short_name: "Blue Devils",
-          location: "Duke",
-          abbr: "DUKE",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/dukd.png",
-          primary_color: "0736a4",
-          secondary_color: "000000",
-          conference_type: "ACC",
-          division_type: "FBS",
+          full_name: 'Duke Blue Devils',
+          display_name: 'Duke',
+          short_name: 'Blue Devils',
+          location: 'Duke',
+          abbr: 'DUKE',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/dukd.png',
+          primary_color: '0736a4',
+          secondary_color: '000000',
+          conference_type: 'ACC',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 325,
-          full_name: "Notre Dame Fighting Irish",
-          display_name: "Notre Dame",
-          short_name: "Fighting Irish",
-          location: "Notre Dame",
-          abbr: "ND",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/nd.png",
-          primary_color: "00246b",
-          secondary_color: "b18d03",
-          conference_type: "IAINDEPENDENTS",
-          division_type: "FBS",
+          full_name: 'Notre Dame Fighting Irish',
+          display_name: 'Notre Dame',
+          short_name: 'Fighting Irish',
+          location: 'Notre Dame',
+          abbr: 'ND',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/nd.png',
+          primary_color: '00246b',
+          secondary_color: 'b18d03',
+          conference_type: 'IAINDEPENDENTS',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -12889,8 +12889,8 @@ const x = {
           total_under_public: 70,
           total_over_public: 30,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:26:03.701408+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:26:03.701408+00:00',
         },
         {
           ml_away: -241,
@@ -12916,8 +12916,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T12:51:59.511403+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T12:51:59.511403+00:00',
         },
         {
           ml_away: -194,
@@ -12943,8 +12943,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T12:51:59.488102+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T12:51:59.488102+00:00',
         },
         {
           ml_away: -235,
@@ -12970,8 +12970,8 @@ const x = {
           total_under_public: 88,
           total_over_public: 12,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T17:26:03.701408+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:26:03.701408+00:00',
         },
         {
           ml_away: -213,
@@ -12997,8 +12997,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:07:49.789563+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:07:49.789563+00:00',
         },
         {
           ml_away: null,
@@ -13024,8 +13024,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:10.426855+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:10.426855+00:00',
         },
         {
           ml_away: -180,
@@ -13051,8 +13051,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:07:49.763932+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:07:49.763932+00:00',
         },
         {
           ml_away: null,
@@ -13078,35 +13078,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:10.504956+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:10.504956+00:00',
+        },
       ],
       broadcast: {
-        network: "ACC Network",
-        satellite: "612"
+        network: 'ACC Network',
+        satellite: '612',
       },
       ranks: [
         {
           team_id: 325,
           rank: 15,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69673,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T01:00:00.000Z",
+      start_time: '2019-11-10T01:00:00.000Z',
       away_team_id: 285,
       home_team_id: 289,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 173,
@@ -13114,44 +13114,44 @@ const x = {
       teams: [
         {
           id: 285,
-          full_name: "Iowa State Cyclones",
-          display_name: "Iowa State",
-          short_name: "Cyclones",
-          location: "Iowa State",
-          abbr: "ISU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/isu.png",
-          primary_color: "a71930",
-          secondary_color: "fdc82f",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'Iowa State Cyclones',
+          display_name: 'Iowa State',
+          short_name: 'Cyclones',
+          location: 'Iowa State',
+          abbr: 'ISU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/isu.png',
+          primary_color: 'a71930',
+          secondary_color: 'fdc82f',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 3,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 289,
-          full_name: "Oklahoma Sooners",
-          display_name: "Oklahoma",
-          short_name: "Sooners",
-          location: "Oklahoma",
-          abbr: "OKLA",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/okl.png",
-          primary_color: "841617",
-          secondary_color: "000000",
-          conference_type: "BIG12",
-          division_type: "FBS",
+          full_name: 'Oklahoma Sooners',
+          display_name: 'Oklahoma',
+          short_name: 'Sooners',
+          location: 'Oklahoma',
+          abbr: 'OKLA',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/okl.png',
+          primary_color: '841617',
+          secondary_color: '000000',
+          conference_type: 'BIG12',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -13178,8 +13178,8 @@ const x = {
           total_under_public: 27,
           total_over_public: 73,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:40:57.534051+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:40:57.534051+00:00',
         },
         {
           ml_away: 380,
@@ -13205,8 +13205,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:53:27.815346+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:53:27.815346+00:00',
         },
         {
           ml_away: 242,
@@ -13232,8 +13232,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:39:34.631216+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:39:34.631216+00:00',
         },
         {
           ml_away: 400,
@@ -13259,8 +13259,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T19:12:59.183978+00:00"
+          type: 'game',
+          inserted: '2019-11-04T19:12:59.183978+00:00',
         },
         {
           ml_away: 306,
@@ -13286,8 +13286,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:14:21.511956+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:14:21.511956+00:00',
         },
         {
           ml_away: null,
@@ -13313,8 +13313,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:10.122961+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:10.122961+00:00',
         },
         {
           ml_away: 228,
@@ -13340,8 +13340,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:14:21.650461+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:14:21.650461+00:00',
         },
         {
           ml_away: null,
@@ -13367,34 +13367,34 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:10.162112+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:10.162112+00:00',
+        },
       ],
       broadcast: {
-        network: "FOX"
+        network: 'FOX',
       },
       ranks: [
         {
           team_id: 289,
           rank: 9,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69678,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T03:15:00.000Z",
+      start_time: '2019-11-10T03:15:00.000Z',
       away_team_id: 344,
       home_team_id: 338,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 155,
@@ -13402,44 +13402,44 @@ const x = {
       teams: [
         {
           id: 338,
-          full_name: "Boise State Broncos",
-          display_name: "Boise State",
-          short_name: "Broncos",
-          location: "Boise State",
-          abbr: "BSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/boise.png",
-          primary_color: "0055fa",
-          secondary_color: "ff571f",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'Boise State Broncos',
+          display_name: 'Boise State',
+          short_name: 'Broncos',
+          location: 'Boise State',
+          abbr: 'BSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/boise.png',
+          primary_color: '0055fa',
+          secondary_color: 'ff571f',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 344,
-          full_name: "Wyoming Cowboys",
-          display_name: "Wyoming",
-          short_name: "Cowboys",
-          location: "Wyoming",
-          abbr: "WYO",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/wyo.png",
-          primary_color: "492f24",
-          secondary_color: "ffc425",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'Wyoming Cowboys',
+          display_name: 'Wyoming',
+          short_name: 'Cowboys',
+          location: 'Wyoming',
+          abbr: 'WYO',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/wyo.png',
+          primary_color: '492f24',
+          secondary_color: 'ffc425',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 6,
             loss: 2,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -13466,8 +13466,8 @@ const x = {
           total_under_public: 46,
           total_over_public: 54,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:54:48.830145+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:54:48.830145+00:00',
         },
         {
           ml_away: 325,
@@ -13493,8 +13493,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:41:49.50879+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:41:49.50879+00:00',
         },
         {
           ml_away: 229,
@@ -13520,8 +13520,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T16:27:16.121467+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T16:27:16.121467+00:00',
         },
         {
           ml_away: 340,
@@ -13547,8 +13547,8 @@ const x = {
           total_under_public: 40,
           total_over_public: 60,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-05T09:56:33.340278+00:00"
+          type: 'game',
+          inserted: '2019-11-05T09:56:33.340278+00:00',
         },
         {
           ml_away: 321,
@@ -13574,8 +13574,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-06T05:00:55.12978+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T05:00:55.12978+00:00',
         },
         {
           ml_away: null,
@@ -13601,8 +13601,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T00:00:10.607944+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T00:00:10.607944+00:00',
         },
         {
           ml_away: 235,
@@ -13628,8 +13628,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:09:38.727426+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:09:38.727426+00:00',
         },
         {
           ml_away: null,
@@ -13655,35 +13655,35 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T00:00:10.687246+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T00:00:10.687246+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN",
-        satellite: "206"
+        network: 'ESPN',
+        satellite: '206',
       },
       ranks: [
         {
           team_id: 338,
           rank: 22,
-          poll: "CFP25"
-        }
-      ]
+          poll: 'CFP25',
+        },
+      ],
     },
     {
       id: 69647,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T03:30:00.000Z",
+      start_time: '2019-11-10T03:30:00.000Z',
       away_team_id: 346,
       home_team_id: 343,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 197,
@@ -13691,45 +13691,44 @@ const x = {
       teams: [
         {
           id: 343,
-          full_name: "San Diego State Aztecs",
-          display_name: "San Diego St",
-          short_name: "Aztecs",
-          location: "San Diego St",
-          abbr: "SDSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/sdsu.png",
-          primary_color: "a81933",
-          secondary_color: "d2c694",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'San Diego State Aztecs',
+          display_name: 'San Diego St',
+          short_name: 'Aztecs',
+          location: 'San Diego St',
+          abbr: 'SDSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/sdsu.png',
+          primary_color: 'a81933',
+          secondary_color: 'd2c694',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 7,
             loss: 1,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 346,
-          full_name: "Nevada Wolf Pack",
-          display_name: "Nevada",
-          short_name: "Wolf Pack",
-          location: "Nevada",
-          abbr: "NEV",
-          logo:
-            "https://static.sprtactn.co/assets/upload/181249_Nevada_Wolf_Pack_alternate_logo.png",
-          primary_color: "003366",
-          secondary_color: "807f84",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'Nevada Wolf Pack',
+          display_name: 'Nevada',
+          short_name: 'Wolf Pack',
+          location: 'Nevada',
+          abbr: 'NEV',
+          logo: 'https://static.sprtactn.co/assets/upload/181249_Nevada_Wolf_Pack_alternate_logo.png',
+          primary_color: '003366',
+          secondary_color: '807f84',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -13756,8 +13755,8 @@ const x = {
           total_under_public: 48,
           total_over_public: 52,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:16.101887+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:16.101887+00:00',
         },
         {
           ml_away: -635,
@@ -13783,8 +13782,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T16:50:52.464235+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T16:50:52.464235+00:00',
         },
         {
           ml_away: 317,
@@ -13810,8 +13809,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T03:38:22.774401+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T03:38:22.774401+00:00',
         },
         {
           ml_away: 575,
@@ -13837,8 +13836,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-04T20:02:33.979667+00:00"
+          type: 'game',
+          inserted: '2019-11-04T20:02:33.979667+00:00',
         },
         {
           ml_away: 500,
@@ -13864,8 +13863,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:13:53.822915+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:13:53.822915+00:00',
         },
         {
           ml_away: null,
@@ -13891,8 +13890,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-10-28T19:00:15.677348+00:00"
+          type: 'secondhalf',
+          inserted: '2019-10-28T19:00:15.677348+00:00',
         },
         {
           ml_away: 310,
@@ -13918,8 +13917,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:13:53.721273+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:13:53.721273+00:00',
         },
         {
           ml_away: null,
@@ -13945,28 +13944,28 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-10-28T19:00:15.73022+00:00"
-        }
+          type: 'live',
+          inserted: '2019-10-28T19:00:15.73022+00:00',
+        },
       ],
       broadcast: {
-        network: "ESPN2",
-        satellite: "209"
-      }
+        network: 'ESPN2',
+        satellite: '209',
+      },
     },
     {
       id: 69626,
-      status: "scheduled",
+      status: 'scheduled',
       status_display: null,
-      start_time: "2019-11-10T04:00:00.000Z",
+      start_time: '2019-11-10T04:00:00.000Z',
       away_team_id: 342,
       home_team_id: 345,
       winning_team_id: null,
-      league_name: "ncaaf",
-      type: "reg",
+      league_name: 'ncaaf',
+      type: 'reg',
       season: 2019,
       attendance: 0,
-      coverage: "full",
+      coverage: 'full',
       is_free: false,
       trending: false,
       away_rotation_number: 199,
@@ -13974,44 +13973,44 @@ const x = {
       teams: [
         {
           id: 342,
-          full_name: "San Jose State Spartans",
-          display_name: "San Jose St",
-          short_name: "Spartans",
-          location: "San Jose St",
-          abbr: "SJSU",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/sjs.png",
-          primary_color: "005a8b",
-          secondary_color: "c79900",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'San Jose State Spartans',
+          display_name: 'San Jose St',
+          short_name: 'Spartans',
+          location: 'San Jose St',
+          abbr: 'SJSU',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/sjs.png',
+          primary_color: '005a8b',
+          secondary_color: 'c79900',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 4,
             loss: 5,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
+            draw: 0,
+          },
         },
         {
           id: 345,
-          full_name: "Hawaii Warriors",
-          display_name: "Hawaii",
-          short_name: "Warriors",
-          location: "Hawaii",
-          abbr: "HAW",
-          logo: "https://static.sprtactn.co/teamlogos/ncaaf/100/haw.png",
-          primary_color: "024731",
-          secondary_color: "c4c1ba",
-          conference_type: "MOUNTAINWEST",
-          division_type: "FBS",
+          full_name: 'Hawaii Warriors',
+          display_name: 'Hawaii',
+          short_name: 'Warriors',
+          location: 'Hawaii',
+          abbr: 'HAW',
+          logo: 'https://static.sprtactn.co/teamlogos/ncaaf/100/haw.png',
+          primary_color: '024731',
+          secondary_color: 'c4c1ba',
+          conference_type: 'MOUNTAINWEST',
+          division_type: 'FBS',
           standings: {
             win: 5,
             loss: 4,
             ties: null,
             overtime_losses: null,
-            draw: 0
-          }
-        }
+            draw: 0,
+          },
+        },
       ],
       odds: [
         {
@@ -14038,8 +14037,8 @@ const x = {
           total_under_public: 68,
           total_over_public: 32,
           book_id: 15,
-          type: "game",
-          inserted: "2019-11-06T17:53:16.183317+00:00"
+          type: 'game',
+          inserted: '2019-11-06T17:53:16.183317+00:00',
         },
         {
           ml_away: 202,
@@ -14065,8 +14064,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firsthalf",
-          inserted: "2019-11-06T17:06:06.416907+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-06T17:06:06.416907+00:00',
         },
         {
           ml_away: 168,
@@ -14092,8 +14091,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 15,
-          type: "firstquarter",
-          inserted: "2019-11-06T17:15:27.159595+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-06T17:15:27.159595+00:00',
         },
         {
           ml_away: 235,
@@ -14119,8 +14118,8 @@ const x = {
           total_under_public: 50,
           total_over_public: 50,
           book_id: 30,
-          type: "game",
-          inserted: "2019-11-06T15:41:28.067077+00:00"
+          type: 'game',
+          inserted: '2019-11-06T15:41:28.067077+00:00',
         },
         {
           ml_away: 179,
@@ -14146,8 +14145,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firsthalf",
-          inserted: "2019-11-04T19:14:03.996359+00:00"
+          type: 'firsthalf',
+          inserted: '2019-11-04T19:14:03.996359+00:00',
         },
         {
           ml_away: null,
@@ -14173,8 +14172,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "secondhalf",
-          inserted: "2019-11-04T01:00:10.248244+00:00"
+          type: 'secondhalf',
+          inserted: '2019-11-04T01:00:10.248244+00:00',
         },
         {
           ml_away: 160,
@@ -14200,8 +14199,8 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "firstquarter",
-          inserted: "2019-11-04T19:14:03.923433+00:00"
+          type: 'firstquarter',
+          inserted: '2019-11-04T19:14:03.923433+00:00',
         },
         {
           ml_away: null,
@@ -14227,342 +14226,342 @@ const x = {
           total_under_public: null,
           total_over_public: null,
           book_id: 30,
-          type: "live",
-          inserted: "2019-11-04T01:00:10.282374+00:00"
-        }
+          type: 'live',
+          inserted: '2019-11-04T01:00:10.282374+00:00',
+        },
       ],
       broadcast: {
-        network: "FACEBOOK"
-      }
-    }
+        network: 'FACEBOOK',
+      },
+    },
   ],
   league: {
     id: 2,
-    sport: "football",
-    name: "ncaaf",
+    sport: 'football',
+    name: 'ncaaf',
     description: "Men's College Football",
-    logo: "https://static.sprtactn.co/leagues/500/ncaa.png",
-    current_season: "2019",
-    current_season_type: "reg",
+    logo: 'https://static.sprtactn.co/leagues/500/ncaa.png',
+    current_season: '2019',
+    current_season_type: 'reg',
     pre_season_start: null,
     pre_season_end: null,
-    reg_season_start: "2019-08-15T05:00:00.000Z",
-    reg_season_end: "2019-12-11T05:59:59.000Z",
-    post_season_start: "2019-12-08T06:00:00.000Z",
-    post_season_end: "2020-01-16T05:59:59.000Z",
+    reg_season_start: '2019-08-15T05:00:00.000Z',
+    reg_season_end: '2019-12-11T05:59:59.000Z',
+    post_season_start: '2019-12-08T06:00:00.000Z',
+    post_season_end: '2020-01-16T05:59:59.000Z',
     blacklist_dates: [
-      "2019-08-14T07:00:00.000Z",
-      "2019-08-15T07:00:00.000Z",
-      "2019-08-16T07:00:00.000Z",
-      "2019-08-17T07:00:00.000Z",
-      "2019-08-18T07:00:00.000Z",
-      "2019-08-19T07:00:00.000Z",
-      "2019-08-20T07:00:00.000Z",
-      "2019-08-21T07:00:00.000Z",
-      "2019-08-22T07:00:00.000Z",
-      "2019-08-23T07:00:00.000Z",
-      "2019-08-25T07:00:00.000Z",
-      "2019-08-26T07:00:00.000Z",
-      "2019-08-27T07:00:00.000Z",
-      "2019-08-28T07:00:00.000Z",
-      "2019-09-03T07:00:00.000Z",
-      "2019-09-04T07:00:00.000Z",
-      "2019-09-08T07:00:00.000Z",
-      "2019-09-09T07:00:00.000Z",
-      "2019-09-10T07:00:00.000Z",
-      "2019-09-11T07:00:00.000Z",
-      "2019-09-12T07:00:00.000Z",
-      "2019-09-15T07:00:00.000Z",
-      "2019-09-16T07:00:00.000Z",
-      "2019-09-17T07:00:00.000Z",
-      "2019-09-18T07:00:00.000Z",
-      "2019-09-22T07:00:00.000Z",
-      "2019-09-23T07:00:00.000Z",
-      "2019-09-24T07:00:00.000Z",
-      "2019-09-25T07:00:00.000Z",
-      "2019-09-29T07:00:00.000Z",
-      "2019-09-30T07:00:00.000Z",
-      "2019-10-01T07:00:00.000Z",
-      "2019-10-02T07:00:00.000Z",
-      "2019-10-06T07:00:00.000Z",
-      "2019-10-07T07:00:00.000Z",
-      "2019-10-08T07:00:00.000Z",
-      "2019-10-13T07:00:00.000Z",
-      "2019-10-14T07:00:00.000Z",
-      "2019-10-15T07:00:00.000Z",
-      "2019-10-20T07:00:00.000Z",
-      "2019-10-21T07:00:00.000Z",
-      "2019-10-22T07:00:00.000Z",
-      "2019-10-23T07:00:00.000Z",
-      "2019-10-27T07:00:00.000Z",
-      "2019-10-28T07:00:00.000Z",
-      "2019-10-29T07:00:00.000Z",
-      "2019-10-30T07:00:00.000Z",
-      "2019-11-03T07:00:00.000Z",
-      "2019-11-04T08:00:00.000Z",
-      "2019-11-10T08:00:00.000Z",
-      "2019-11-11T08:00:00.000Z",
-      "2019-11-17T08:00:00.000Z",
-      "2019-11-18T08:00:00.000Z",
-      "2019-11-24T08:00:00.000Z",
-      "2019-11-25T08:00:00.000Z",
-      "2019-11-27T08:00:00.000Z",
-      "2019-12-01T08:00:00.000Z",
-      "2019-12-02T08:00:00.000Z",
-      "2019-12-03T08:00:00.000Z",
-      "2019-12-04T08:00:00.000Z",
-      "2019-12-05T08:00:00.000Z",
-      "2019-12-06T08:00:00.000Z",
-      "2019-12-07T08:00:00.000Z",
-      "2019-12-08T08:00:00.000Z",
-      "2019-12-09T08:00:00.000Z",
-      "2019-12-10T08:00:00.000Z"
+      '2019-08-14T07:00:00.000Z',
+      '2019-08-15T07:00:00.000Z',
+      '2019-08-16T07:00:00.000Z',
+      '2019-08-17T07:00:00.000Z',
+      '2019-08-18T07:00:00.000Z',
+      '2019-08-19T07:00:00.000Z',
+      '2019-08-20T07:00:00.000Z',
+      '2019-08-21T07:00:00.000Z',
+      '2019-08-22T07:00:00.000Z',
+      '2019-08-23T07:00:00.000Z',
+      '2019-08-25T07:00:00.000Z',
+      '2019-08-26T07:00:00.000Z',
+      '2019-08-27T07:00:00.000Z',
+      '2019-08-28T07:00:00.000Z',
+      '2019-09-03T07:00:00.000Z',
+      '2019-09-04T07:00:00.000Z',
+      '2019-09-08T07:00:00.000Z',
+      '2019-09-09T07:00:00.000Z',
+      '2019-09-10T07:00:00.000Z',
+      '2019-09-11T07:00:00.000Z',
+      '2019-09-12T07:00:00.000Z',
+      '2019-09-15T07:00:00.000Z',
+      '2019-09-16T07:00:00.000Z',
+      '2019-09-17T07:00:00.000Z',
+      '2019-09-18T07:00:00.000Z',
+      '2019-09-22T07:00:00.000Z',
+      '2019-09-23T07:00:00.000Z',
+      '2019-09-24T07:00:00.000Z',
+      '2019-09-25T07:00:00.000Z',
+      '2019-09-29T07:00:00.000Z',
+      '2019-09-30T07:00:00.000Z',
+      '2019-10-01T07:00:00.000Z',
+      '2019-10-02T07:00:00.000Z',
+      '2019-10-06T07:00:00.000Z',
+      '2019-10-07T07:00:00.000Z',
+      '2019-10-08T07:00:00.000Z',
+      '2019-10-13T07:00:00.000Z',
+      '2019-10-14T07:00:00.000Z',
+      '2019-10-15T07:00:00.000Z',
+      '2019-10-20T07:00:00.000Z',
+      '2019-10-21T07:00:00.000Z',
+      '2019-10-22T07:00:00.000Z',
+      '2019-10-23T07:00:00.000Z',
+      '2019-10-27T07:00:00.000Z',
+      '2019-10-28T07:00:00.000Z',
+      '2019-10-29T07:00:00.000Z',
+      '2019-10-30T07:00:00.000Z',
+      '2019-11-03T07:00:00.000Z',
+      '2019-11-04T08:00:00.000Z',
+      '2019-11-10T08:00:00.000Z',
+      '2019-11-11T08:00:00.000Z',
+      '2019-11-17T08:00:00.000Z',
+      '2019-11-18T08:00:00.000Z',
+      '2019-11-24T08:00:00.000Z',
+      '2019-11-25T08:00:00.000Z',
+      '2019-11-27T08:00:00.000Z',
+      '2019-12-01T08:00:00.000Z',
+      '2019-12-02T08:00:00.000Z',
+      '2019-12-03T08:00:00.000Z',
+      '2019-12-04T08:00:00.000Z',
+      '2019-12-05T08:00:00.000Z',
+      '2019-12-06T08:00:00.000Z',
+      '2019-12-07T08:00:00.000Z',
+      '2019-12-08T08:00:00.000Z',
+      '2019-12-09T08:00:00.000Z',
+      '2019-12-10T08:00:00.000Z',
     ],
     calendar_info: {
       reg: [
         {
-          abbr: "Week 1",
+          abbr: 'Week 1',
           week: 1,
-          label: "Week 1",
-          endDate: "2019-09-02T06:59Z",
-          startDate: "2019-08-22T07:00Z"
+          label: 'Week 1',
+          endDate: '2019-09-02T06:59Z',
+          startDate: '2019-08-22T07:00Z',
         },
         {
-          abbr: "Week 2",
+          abbr: 'Week 2',
           week: 2,
-          label: "Week 2",
-          endDate: "2019-09-10T06:59Z",
-          startDate: "2019-09-03T07:00Z"
+          label: 'Week 2',
+          endDate: '2019-09-10T06:59Z',
+          startDate: '2019-09-03T07:00Z',
         },
         {
-          abbr: "Week 3",
+          abbr: 'Week 3',
           week: 3,
-          label: "Week 3",
-          endDate: "2019-09-17T06:59Z",
-          startDate: "2019-09-10T07:00Z"
+          label: 'Week 3',
+          endDate: '2019-09-17T06:59Z',
+          startDate: '2019-09-10T07:00Z',
         },
         {
-          abbr: "Week 4",
+          abbr: 'Week 4',
           week: 4,
-          label: "Week 4",
-          endDate: "2019-09-23T06:59Z",
-          startDate: "2019-09-17T07:00Z"
+          label: 'Week 4',
+          endDate: '2019-09-23T06:59Z',
+          startDate: '2019-09-17T07:00Z',
         },
         {
-          abbr: "Week 5",
+          abbr: 'Week 5',
           week: 5,
-          label: "Week 5",
-          endDate: "2019-10-01T06:59Z",
-          startDate: "2019-09-23T07:00Z"
+          label: 'Week 5',
+          endDate: '2019-10-01T06:59Z',
+          startDate: '2019-09-23T07:00Z',
         },
         {
-          abbr: "Week 6",
+          abbr: 'Week 6',
           week: 6,
-          label: "Week 6",
-          endDate: "2019-10-08T06:59Z",
-          startDate: "2019-10-01T07:00Z"
+          label: 'Week 6',
+          endDate: '2019-10-08T06:59Z',
+          startDate: '2019-10-01T07:00Z',
         },
         {
-          abbr: "Week 7",
+          abbr: 'Week 7',
           week: 7,
-          label: "Week 7",
-          endDate: "2019-10-15T06:59Z",
-          startDate: "2019-10-08T07:00Z"
+          label: 'Week 7',
+          endDate: '2019-10-15T06:59Z',
+          startDate: '2019-10-08T07:00Z',
         },
         {
-          abbr: "Week 8",
+          abbr: 'Week 8',
           week: 8,
-          label: "Week 8",
-          endDate: "2019-10-22T06:59Z",
-          startDate: "2019-10-15T07:00Z"
+          label: 'Week 8',
+          endDate: '2019-10-22T06:59Z',
+          startDate: '2019-10-15T07:00Z',
         },
         {
-          abbr: "Week 9",
+          abbr: 'Week 9',
           week: 9,
-          label: "Week 9",
-          endDate: "2019-10-29T06:59Z",
-          startDate: "2019-10-22T07:00Z"
+          label: 'Week 9',
+          endDate: '2019-10-29T06:59Z',
+          startDate: '2019-10-22T07:00Z',
         },
         {
-          abbr: "Week 10",
+          abbr: 'Week 10',
           week: 10,
-          label: "Week 10",
-          endDate: "2019-11-05T07:59Z",
-          startDate: "2019-10-29T07:00Z"
+          label: 'Week 10',
+          endDate: '2019-11-05T07:59Z',
+          startDate: '2019-10-29T07:00Z',
         },
         {
-          abbr: "Week 11",
+          abbr: 'Week 11',
           week: 11,
-          label: "Week 11",
-          endDate: "2019-11-12T07:59Z",
-          startDate: "2019-11-05T08:00Z"
+          label: 'Week 11',
+          endDate: '2019-11-12T07:59Z',
+          startDate: '2019-11-05T08:00Z',
         },
         {
-          abbr: "Week 12",
+          abbr: 'Week 12',
           week: 12,
-          label: "Week 12",
-          endDate: "2019-11-19T07:59Z",
-          startDate: "2019-11-12T08:00Z"
+          label: 'Week 12',
+          endDate: '2019-11-19T07:59Z',
+          startDate: '2019-11-12T08:00Z',
         },
         {
-          abbr: "Week 13",
+          abbr: 'Week 13',
           week: 13,
-          label: "Week 13",
-          endDate: "2019-11-26T07:59Z",
-          startDate: "2019-11-19T08:00Z"
+          label: 'Week 13',
+          endDate: '2019-11-26T07:59Z',
+          startDate: '2019-11-19T08:00Z',
         },
         {
-          abbr: "Week 14",
+          abbr: 'Week 14',
           week: 14,
-          label: "Week 14",
-          endDate: "2019-12-03T07:59Z",
-          startDate: "2019-11-26T08:00Z"
+          label: 'Week 14',
+          endDate: '2019-12-03T07:59Z',
+          startDate: '2019-11-26T08:00Z',
         },
         {
-          abbr: "Week 15",
+          abbr: 'Week 15',
           week: 15,
-          label: "Week 15",
-          endDate: "2019-12-09T07:59Z",
-          startDate: "2019-12-03T08:00Z"
-        }
+          label: 'Week 15',
+          endDate: '2019-12-09T07:59Z',
+          startDate: '2019-12-03T08:00Z',
+        },
       ],
       post: [
         {
-          abbr: "Bowls",
+          abbr: 'Bowls',
           week: 1,
-          label: "Bowls",
-          endDate: "2020-01-14T07:59Z",
-          startDate: "2019-12-09T08:00Z"
-        }
-      ]
+          label: 'Bowls',
+          endDate: '2020-01-14T07:59Z',
+          startDate: '2019-12-09T08:00Z',
+        },
+      ],
     },
     current_week: 11,
-    updated_at: "2019-11-06T08:00:13.335Z",
+    updated_at: '2019-11-06T08:00:13.335Z',
     is_active: true,
     conferences: [
       {
-        id: "AAC",
-        display: "AAC"
+        id: 'AAC',
+        display: 'AAC',
       },
       {
-        id: "ACC",
-        display: "ACC"
+        id: 'ACC',
+        display: 'ACC',
       },
       {
-        id: "BIG12",
-        display: "Big 12"
+        id: 'BIG12',
+        display: 'Big 12',
       },
       {
-        id: "BIGSKY",
-        display: "Big Sky"
+        id: 'BIGSKY',
+        display: 'Big Sky',
       },
       {
-        id: "BIGSOUTH",
-        display: "Big South"
+        id: 'BIGSOUTH',
+        display: 'Big South',
       },
       {
-        id: "BIGTEN",
-        display: "Big Ten"
+        id: 'BIGTEN',
+        display: 'Big Ten',
       },
       {
-        id: "CONFERENCEUSA",
-        display: "C-USA"
+        id: 'CONFERENCEUSA',
+        display: 'C-USA',
       },
       {
-        id: "CAA",
-        display: "Colonial"
+        id: 'CAA',
+        display: 'Colonial',
       },
       {
-        id: "IAINDEPENDENTS",
-        display: "FBS (Ind)"
+        id: 'IAINDEPENDENTS',
+        display: 'FBS (Ind)',
       },
       {
-        id: "IAAINDEPENDENTS",
-        display: "FCS (Ind)"
+        id: 'IAAINDEPENDENTS',
+        display: 'FCS (Ind)',
       },
       {
-        id: "IVY",
-        display: "Ivy"
+        id: 'IVY',
+        display: 'Ivy',
       },
       {
-        id: "MEAC",
-        display: "MEAC"
+        id: 'MEAC',
+        display: 'MEAC',
       },
       {
-        id: "MIDAMERICAN",
-        display: "MAC"
+        id: 'MIDAMERICAN',
+        display: 'MAC',
       },
       {
-        id: "MISSOURIVALLEY",
-        display: "MVC"
+        id: 'MISSOURIVALLEY',
+        display: 'MVC',
       },
       {
-        id: "MOUNTAINWEST",
-        display: "Mtn West"
+        id: 'MOUNTAINWEST',
+        display: 'Mtn West',
       },
       {
-        id: "NORTHEAST",
-        display: "NEC"
+        id: 'NORTHEAST',
+        display: 'NEC',
       },
       {
-        id: "OHIOVALLEY",
-        display: "Ohio"
+        id: 'OHIOVALLEY',
+        display: 'Ohio',
       },
       {
-        id: "PAC12",
-        display: "PAC-12"
+        id: 'PAC12',
+        display: 'PAC-12',
       },
       {
-        id: "PATRIOTLEAGUE",
-        display: "Patriot"
+        id: 'PATRIOTLEAGUE',
+        display: 'Patriot',
       },
       {
-        id: "PIONEER",
-        display: "Pioneer"
+        id: 'PIONEER',
+        display: 'Pioneer',
       },
       {
-        id: "SEC",
-        display: "SEC"
+        id: 'SEC',
+        display: 'SEC',
       },
       {
-        id: "SOUTHERN",
-        display: "Southern"
+        id: 'SOUTHERN',
+        display: 'Southern',
       },
       {
-        id: "SOUTHLAND",
-        display: "Southland"
+        id: 'SOUTHLAND',
+        display: 'Southland',
       },
       {
-        id: "SUNBELT",
-        display: "Sun Belt"
+        id: 'SUNBELT',
+        display: 'Sun Belt',
       },
       {
-        id: "SWAC",
-        display: "SWAC"
-      }
+        id: 'SWAC',
+        display: 'SWAC',
+      },
     ],
     divisions: [
       {
-        id: "FBS",
-        display: "ALL FBS"
+        id: 'FBS',
+        display: 'ALL FBS',
       },
       {
-        id: "TOP25",
-        display: "Top 25"
+        id: 'TOP25',
+        display: 'Top 25',
       },
       {
-        id: "FCS",
-        display: "ALL FCS"
-      }
-    ]
-  }
+        id: 'FCS',
+        display: 'ALL FCS',
+      },
+    ],
+  },
 };
 
-const camelcase = require("camelcase-keys");
-console.time("cc");
+const camelcase = require('camelcase-keys');
+console.time('cc');
 x.games.forEach((game, i, games) => {
-  games[i]["odds"] = games[i]["odds"][0];
+  games[i]['odds'] = games[i]['odds'][0];
 });
 const fixed = cc(x.games, { deep: true });
-console.timeEnd("cc");
+console.timeEnd('cc');
 console.log(fixed[4], fixed[4].odds.length);

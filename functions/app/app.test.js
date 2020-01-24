@@ -1,6 +1,6 @@
-const file = require("./app");
+const file = require('./app');
 
-test("smoke test", () => {
+test('smoke test', () => {
   const response = file.health();
   expect(response).toBeTruthy;
 });

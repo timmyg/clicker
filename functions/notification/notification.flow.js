@@ -1,13 +1,8 @@
 // @flow
-const {
-  respond,
-  getBody,
-  Raven,
-  RavenLambdaWrapper
-} = require("serverless-helpers");
-const { IncomingWebhook } = require("@slack/webhook");
-const awsXRay = require("aws-xray-sdk");
-const awsSdk = awsXRay.captureAWS(require("aws-sdk"));
+const { respond, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const { IncomingWebhook } = require('@slack/webhook');
+const awsXRay = require('aws-xray-sdk');
+const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const { stage } = process.env;
 
 declare class process {
@@ -18,7 +13,7 @@ declare class process {
     slackAppWebhookUrl: string,
     slackTasksWebhookUrl: string,
     slackLandingWebhookUrl: string,
-    slackSandboxWebhookUrl: string
+    slackSandboxWebhookUrl: string,
   };
 }
 
@@ -29,17 +24,12 @@ module.exports.sendApp = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.sendControlCenter = RavenLambdaWrapper.handler(
-  Raven,
-  async event => {
-    const webhook = new IncomingWebhook(
-      process.env.slackControlCenterWebhookUrl
-    );
-    const { text } = getBody(event);
-    await sendSlack(webhook, text);
-    return respond(200);
-  }
-);
+module.exports.sendControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
+  const webhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
+  const { text } = getBody(event);
+  await sendSlack(webhook, text);
+  return respond(200);
+});
 
 module.exports.sendAntenna = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackAntennaWebhookUrl);
@@ -51,11 +41,7 @@ module.exports.sendAntenna = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.sendLanding = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackLandingWebhookUrl);
   const { text } = getBody(event);
-  console.log(
-    text,
-    process.env.slackAntennaWebhookUrl,
-    process.env.slackLandingWebhookUrl
-  );
+  console.log(text, process.env.slackAntennaWebhookUrl, process.env.slackLandingWebhookUrl);
   await sendSlack(webhook, text);
   return respond(200);
 });
@@ -76,29 +62,27 @@ async function sendSlack(webhook: any, text: string, importance?: number) {
   let emoji;
   switch (importance) {
     case 1:
-      emoji = ":bangbang:";
+      emoji = ':bangbang:';
       break;
     case 2:
-      emoji = ":exclamation:";
+      emoji = ':exclamation:';
       break;
     default:
       break;
   }
   console.log({ emoji });
-  const stageText = stage !== "prod" ? `_${stage}_` : "";
-  text = `${emoji ? `${emoji} ` : ""}${text} ${stageText}`;
+  const stageText = stage !== 'prod' ? `_${stage}_` : '';
+  text = `${emoji ? `${emoji} ` : ''}${text} ${stageText}`;
   console.log({ text });
 
-  if (stage === "prod") {
+  if (stage === 'prod') {
     await webhook.send({
-      text
+      text,
     });
   } else {
-    const sandboxWebhook = new IncomingWebhook(
-      process.env.slackSandboxWebhookUrl
-    );
+    const sandboxWebhook = new IncomingWebhook(process.env.slackSandboxWebhookUrl);
     await sandboxWebhook.send({
-      text
+      text,
     });
   }
 }
