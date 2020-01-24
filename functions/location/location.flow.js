@@ -845,14 +845,18 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
-    console.info(`trying to turn on: ${program.fields.title} (${program.db.channel}) *${program.fields.rating}*`);
-    const isCloseHighlyRated = [10, 9].includes(program.fields.rating) && program.isMinutesFromNow(5);
-    const isCloseNotHighlyRated = [7, 6, 5, 4, 3, 2, 1].includes(program.fields.rating) && program.isMinutesFromNow(10);
-    if (isCloseHighlyRated || isCloseNotHighlyRated) {
+    console.info(`trying to turn on: ${program.fields.title} (${program.db.channel}) {${program.fields.rating}}`);
+    // const isCloseHighlyRated = [10, 9].includes(program.fields.rating) && program.isMinutesFromNow(10);
+    // const isCloseNotHighlyRated = [7, 6, 5, 4, 3, 2, 1].includes(program.fields.rating) && program.isMinutesFromNow(5);
+    // if (isCloseHighlyRated || isCloseNotHighlyRated) {
+    if(program.isMinutesFromNow(0))
       selectedBox = findBoxGameOver(availableBoxes);
       if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
       if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
+    } else {
+      console.info('game is too far in future');
+      continue;
     }
     if (selectedBox) {
       await tune(location, selectedBox, program.db.channel, program.db);
