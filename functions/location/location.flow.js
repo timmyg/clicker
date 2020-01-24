@@ -849,7 +849,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     // const isCloseHighlyRated = [10, 9].includes(program.fields.rating) && program.isMinutesFromNow(10);
     // const isCloseNotHighlyRated = [7, 6, 5, 4, 3, 2, 1].includes(program.fields.rating) && program.isMinutesFromNow(5);
     // if (isCloseHighlyRated || isCloseNotHighlyRated) {
-    if(program.isMinutesFromNow(0))
+    if (program.isMinutesFromNow(0)) {
       selectedBox = findBoxGameOver(availableBoxes);
       if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
