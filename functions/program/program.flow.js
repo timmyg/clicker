@@ -281,7 +281,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       delete p.channelCategories;
     });
     console.log(`programs: ${programs.length}`);
-    const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
+    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     const existingProgram = sortedPrograms[sortedPrograms.length - 1];
     console.log({ existingProgram });
     if (sortedPrograms.length > 1) {
