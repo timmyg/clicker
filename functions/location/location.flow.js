@@ -427,7 +427,8 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(
       await new Invoke()
         .service("location")
         .name("updateBoxInfo")
-        .body({ channel: major, channelMinor: minor, source: "manual" })
+        // .body({ channel: major, channelMinor: minor, source: "manual" })
+        .body({ channel: major, channelMinor: minor })
         .pathParams({ id: location.id, boxId })
         .async()
         .go();
