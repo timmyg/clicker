@@ -5,6 +5,7 @@ const { respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpe
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const airtableControlCenterV1 = 'Control Center v1';
+const airtableControlCenter = 'Control Center';
 
 declare class process {
   static env: {
@@ -93,6 +94,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
   return respond(200);
 });
 
+// ccv1
 module.exports.updateAllGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -214,7 +216,12 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
         }
       }
 
-      console.log(`searching for locations for:`, { regions, channel, zones, waitOn });
+      console.log(`searching for locations for:`, {
+        regions,
+        channel,
+        zones,
+        waitOn,
+      });
       // find locations that are in region and control center enabled
       const { data: locations }: { data: Venue[] } = await new Invoke()
         .service('location')

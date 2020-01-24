@@ -70,6 +70,7 @@ functions:
               - partner
               - authorization
               - content-type
+  # ccv1
   updateAllGamesStatus:
     handler: job.updateAllGamesStatus
     timeout: 30

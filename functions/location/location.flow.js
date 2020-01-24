@@ -22,6 +22,7 @@ declare class process {
     airtableKey: string,
     airtableBase: string,
     NODE_ENV: string,
+    IS_LOCAL: string,
   };
 }
 if (process.env.NODE_ENV === 'test') {
@@ -269,7 +270,9 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     const { id } = getPathParameters(event);
     const body = getBody(event);
 
-    const updatedLocation: Venue = await dbLocation.update({ id }, body, { returnValues: 'ALL_NEW' });
+    const updatedLocation: Venue = await dbLocation.update({ id }, body, {
+      returnValues: 'ALL_NEW',
+    });
     return respond(200, updatedLocation);
   } catch (e) {
     console.error(e);
@@ -391,7 +394,8 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     await new Invoke()
       .service('location')
       .name('updateBoxInfo')
-      .body({ channel: major, channelMinor: minor, source: 'manual' })
+      // .body({ channel: major, channelMinor: minor, source: "manual" })
+      .body({ channel: major, channelMinor: minor })
       .pathParams({ id: location.id, boxId })
       .async()
       .go();
@@ -719,7 +723,14 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   console.timeEnd('get program 2');
 
   console.time('update location box');
-  console.log({ locationId, boxIndex, channel, channelMinor, source, program });
+  console.log({
+    locationId,
+    boxIndex,
+    channel,
+    channelMinor,
+    source,
+    program,
+  });
   await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program);
   console.timeEnd('update location box');
 
@@ -731,14 +742,15 @@ class ControlCenterProgram {
     start: Date,
     rating: number,
     programmingId: string,
-    channel: number,
     title: string,
+    // channel: number, // do not use (region specific)
   };
+  db: Program;
   constructor(obj: any) {
     Object.assign(this, obj);
   }
   isMinutesFromNow(minutes: number) {
-    return moment.duration(moment(this.fields.start).diff(moment(), 'minutes')) <= minutes;
+    return moment.duration(moment(this.fields.start).diff(moment(), 'minutes')) < minutes;
   }
 }
 
@@ -759,17 +771,22 @@ module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event =
 
 function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
   const { boxes } = location;
-  const liveChannelIds = boxes.map(b => b.channel);
-  ccPrograms = ccPrograms.filter(ccp => !liveChannelIds.includes(ccp.fields.channel));
+  // remove if we couldnt find a match in the database
+  ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
+
+  const currentlyShowingChannels: number[] = boxes.map(b => b.channel);
+  ccPrograms = ccPrograms.filter(ccp => !currentlyShowingChannels.includes(ccp.db.channel));
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
   // remove channels that location doesnt have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
-  console.info({ excludedChannels });
+  console.info({
+    excludedChannels: !!excludedChannels ? excludedChannels : [],
+  });
 
   if (excludedChannels && excludedChannels.length) {
-    ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.fields.channel));
+    ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
   }
   console.info(`filtered programs after looking at excluded: ${ccPrograms.length}`);
   // sort by rating descending
@@ -777,11 +794,11 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 }
 
 const priority = {
-  force: 1, // force
-  poorlyRated: 2, // meh game (1-6 rating)
-  blowout: 3, // blowout
-  blowoutMajor: 4, // major blowout
-  gameOver: 5, // game over
+  force: 'force', // force
+  worseRated: 'worse rating', // turn off game with worse rating
+  blowout: 'blowout', // blowout
+  // blowoutMajor: 4, // major blowout
+  gameOver: 'game over', // game over
 };
 
 // npm run invoke:controlCenterV2byLocation
@@ -791,70 +808,68 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     .queryOne('id')
     .eq(locationId)
     .exec();
+  console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
+  if (!ccPrograms.length) {
+    return respond(200, 'no programs');
+  }
+
+  // get programs from db from cc programs
+  const { region } = location;
+  // const { programmingId } = program.fields;
+  const programmingIds = ccPrograms.map(p => p.fields.programmingId);
+  console.log({ region, programmingIds });
+  const programsResult = await new Invoke()
+    .service('program')
+    .name('get')
+    .queryParams({ region, programmingIds })
+    // .async()
+    .go();
+  console.log({ programsResult });
+  const programs = programsResult && programsResult.data;
+
+  // attach db program
+  ccPrograms.map(ccp => {
+    ccp.db = programs.find(p => p.programmingId === ccp.fields.programmingId);
+  });
 
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
-  // get boxes with zones, and not manually locked
-  let boxes: BoxStatus[] = getAvailableBoxes(location.boxes);
+  // get boxes that are CC active, and not manually locked
+  let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
 
   for (const program of ccPrograms) {
-    let boxStatus = null;
-    console.info(`trying to turn on: ${program.fields.title} (${program.fields.channel})`);
-    // await evaluateProgram(program, location.boxes);
-    switch (program.fields.rating) {
-      // If there is a 9 or 10 starting in the next 10 minutes, turn it on (E)*
-      case 10:
-      case 9:
-        if (program.isMinutesFromNow(10)) {
-          boxStatus = selectBox(priority.force, boxes);
-        }
-        break;
-      // If there is a 7 or 8 starting in the next 5 minutes, turn it on if A, B, C, D*
-      case 8:
-      case 7:
-        if (program.isMinutesFromNow(5)) {
-          boxStatus = selectBox(priority.gameOver, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.blowoutMajor, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.blowout, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.poorlyRated, boxes);
-        }
-        break;
-      // If there is a 5-6 starting in the next 5 minutes, turn on if A, B, C*
-      case 6:
-      case 5:
-        if (program.isMinutesFromNow(5)) {
-          boxStatus = selectBox(priority.gameOver, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.blowoutMajor, boxes);
-          if (!boxStatus) boxStatus = selectBox(priority.blowout, boxes);
-        }
-        break;
-      // If there is a 1-4 starting in the next 5 minutes, if A*
-      case 4:
-      case 3:
-      case 2:
-      case 1:
-        if (program.isMinutesFromNow(5)) {
-          boxStatus = selectBox(priority.gameOver, boxes);
-        }
-        break;
-      default:
-        break;
+    let selectedBox: ?Box = null;
+    console.info(`trying to turn on: ${program.fields.title} (${program.db.channel}) *${program.fields.rating}*`);
+    if (program.isMinutesFromNow(5)) {
+      selectedBox = findBoxGameOver(availableBoxes);
+      if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
+      if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
+      if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
     }
-    if (boxStatus && boxStatus.box) {
-      await tune(location, boxStatus.box, program.fields.channel);
+    // }
+    if (selectedBox) {
+      // console.log(
+      //   `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title} (${
+      //     program.db.channel
+      //   }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${
+      //     !!selectedBox.program && !!selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'
+      //   }* (${selectedBox.channel})...`,
+      // );
+      await tune(location, selectedBox, program.db.channel, program.db);
+      // console.log({ selectedBox });
       // remove box so it doesnt get reassigned
-      console.log(`boxes: ${boxes.length}`);
-      console.log({ boxes, boxStatus });
-      boxes = boxes.filter(b => b.box.id !== boxStatus.box.id);
-      console.log(`boxes remaining: ${boxes.length}`);
+      console.log(`boxes: ${availableBoxes.length}`);
+      // console.log(JSON.stringify(availableBoxes), selectedBox);
+      availableBoxes = availableBoxes.filter(b => b.id !== (selectedBox && selectedBox.id));
+      console.log(`boxes remaining: ${availableBoxes.length}`);
     }
-    if (!boxes.length) {
+    if (!availableBoxes.length) {
       console.info('no more boxes');
       break;
     }
@@ -914,50 +929,39 @@ function buildAirtableNowShowing(location: Venue) {
   return transformed;
 }
 
-function getAvailableBoxes(boxes: Box[]): BoxStatus[] {
+function getAvailableBoxes(boxes: Box[]): Box[] {
   // remove manually changed boxes
   const manualChangeMinutesAgo = 30;
   const manualChangeBuffer = 15;
 
-  boxes = boxes
-    // only boxes with zones
-    .filter(b => b.zone && b.zone.length)
-    // remove manually changed within past 30 minutes
-    .filter(
-      b =>
-        b.channelSource !== 'manual' ||
-        (b.channelSource === 'manual' && moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
-    )
-    // remove manually changed not in current game window
-    .filter(
-      b =>
-        b.channelSource !== 'manual' ||
-        (b.channelSource === 'manual' &&
-          moment(b.channelChangeAt).diff(moment(b.program.start), 'minutes') < -manualChangeBuffer),
-    );
-
-  return createBoxes(boxes);
+  return (
+    boxes
+      // only boxes with zones
+      .filter(b => b.zone && b.zone.length)
+      // remove manually changed within past 30 minutes
+      .filter(
+        b =>
+          b.channelSource !== 'manual' ||
+          (b.channelSource === 'manual' &&
+            moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
+      )
+      // remove manually changed not in current game window
+      .filter(
+        b =>
+          b.channelSource !== 'manual' ||
+          (b.channelSource === 'manual' &&
+            moment(b.channelChangeAt).diff(moment(b.program.start), 'minutes') < -manualChangeBuffer),
+      )
+  );
 }
 
-class BoxStatus {
-  // boxId: string;
-  hasProgram: boolean;
-  ended: boolean;
-  gameOver: boolean;
-  blowout: boolean;
-  rating: number;
-  box: Box;
-  constructor(props: any) {
-    Object.assign(this, props);
-  }
-}
-
-async function tune(location: Venue, box: Box, channel: number) {
+async function tune(location: Venue, box: Box, channel: number, program: Program) {
   const command = 'tune';
   const reservation = {
     location,
     box,
     program: {
+      ...program,
       channel,
     },
   };
@@ -971,114 +975,48 @@ async function tune(location: Venue, box: Box, channel: number) {
     .go();
 }
 
-function createBoxes(boxes: Box[]): BoxStatus[] {
-  const boxStatuses: BoxStatus[] = [];
-  boxes.forEach(b => {
-    boxStatuses.push(
-      new BoxStatus({
-        // boxId: b.id,
-        hasProgram: !!b.program && Object.keys(b.program).length > 0,
-        ended: !!b.program && !!b.program.game && !!b.program.game.liveStatus && b.program.game.liveStatus.ended,
-        blowout: !!b.program && !!b.program.game && !!b.program.game.liveStatus && b.program.game.liveStatus.blowout,
-        rating: !!b.program && b.program.clickerRating,
-        box: b,
-      }),
-    );
-  });
-  return boxStatuses;
+function findBoxGameOver(boxes: Box[]): ?Box {
+  console.info('findBoxGameOver');
+  return boxes
+    .filter(b => b.program)
+    .filter(b => b.program.game)
+    .find(b => b.program.game.summary.ended);
 }
 
-function selectBox(type: number, boxes: BoxStatus[]): BoxStatus {
-  // sort by zone ascending
-  boxes = boxes.sort((a, b) => a.box.label.localeCompare(b.box.label));
-  switch (type) {
-    // A. game over (any game)
-    case priority.gameOver:
-      console.info('boxes that program is over');
-      const endedBox = boxes.find(b => b.ended);
-      if (endedBox) return endedBox;
-
-    // B. major blowout (any game)
-    // C. blowout (any game)
-    case priority.blowoutMajor:
-    case priority.blowout:
-      console.info('boxes with blowout');
-      const blowoutBox = boxes.find(b => b.blowout);
-      if (blowoutBox) return blowoutBox;
-
-    // D. meh game (1-6 rating)
-    case priority.poorlyRated:
-      console.info('boxes with poor rating');
-      const badGameBox = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.rating));
-      if (badGameBox) return badGameBox;
-
-    // E. force (pick box with lowest rated game)
-    case priority.force:
-      console.info('boxes without programs');
-      const programlessBox = boxes.find(b => !b.hasProgram);
-      if (programlessBox) return programlessBox;
-
-      console.info('boxes without rating');
-      const ratinglessBox = boxes.find(b => !b.rating);
-      if (ratinglessBox) return ratinglessBox;
-
-      console.info('boxes that program is over');
-      const endedBox2 = boxes.find(b => b.ended);
-      if (endedBox2) return endedBox2;
-
-      console.info('boxes with blowout');
-      const blowoutBox2 = boxes.find(b => b.blowout);
-      if (blowoutBox2) return blowoutBox2;
-
-      console.info('boxes with poor rating');
-      const badGameBox2 = boxes.find(b => [0, 1, 2, 3, 4, 5, 6].includes(b.rating));
-      if (badGameBox2) return badGameBox2;
-
-      console.info('pick the worst box (shouldnt happen)');
-      const seven = boxes.find(b => b.rating === 7);
-      if (seven) return seven;
-      const eight = boxes.find(b => b.rating === 8);
-      if (eight) return eight;
-      const nine = boxes.find(b => b.rating === 9);
-      if (nine) return nine;
-      const ten = boxes.find(b => b.rating === 10);
-      if (ten) return ten;
-    default:
-      return new BoxStatus();
-  }
+function findBoxBlowout(boxes: Box[]): ?Box {
+  console.info('findBoxBlowout');
+  return boxes
+    .filter(b => b.program)
+    .filter(b => b.program.game)
+    .find(b => b.program.game.summary.blowout);
 }
 
-// async function evaluateProgram(program: ControlCenterProgram, boxes: Box[]) {
-//   switch (program.fields.rating) {
-//     case 10:
-//       if (program.isMinutesFromNow(10)) {
-//         await changeChannel(program, priority.force);
-//       }
-//     case 9:
-//     case 8:
-//     case 7:
-//     case 6:
-//     case 5:
-//     case 4:
-//     case 3:
-//     case 2:
-//     case 1:
-//     default:
-//       break;
-//   }
-// }
+function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
+  console.info('findBoxWorseRating');
+  const sorted = boxes
+    .filter(b => b.program)
+    .filter(b => b.program.clickerRating < program.fields.rating)
+    .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+  console.log({ sorted });
+  return sorted && sorted.length ? sorted[0] : null;
+}
 
-// async function changeChannel(program: ControlCenterProgram, boxes: Box[], changeType: string) {}
+function findProgramlessBox(boxes: Box[]): ?Box {
+  console.info('findProgramlessBox');
+  return boxes.find(b => !b.program);
+}
 
 async function getAirtablePrograms() {
   const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
-      view: 'All',
-      filterByFormula: `AND( {gameId} != BLANK(), {rating} != BLANK(), {startHoursFromNow} >= -4, {startHoursFromNow} <= 4 )`,
+      view: 'Visible',
+      // filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
+  // get games, to see if they
+
   return ccPrograms.map(p => new ControlCenterProgram(p));
 }
 
@@ -1134,4 +1072,7 @@ async function updateLocationBox(
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
 module.exports.filterPrograms = filterPrograms;
-module.exports.createBoxes = createBoxes;
+module.exports.findBoxWorseRating = findBoxWorseRating;
+module.exports.findBoxGameOver = findBoxGameOver;
+module.exports.findBoxBlowout = findBoxBlowout;
+module.exports.findProgramlessBox = findProgramlessBox;

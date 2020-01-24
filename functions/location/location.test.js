@@ -1,5 +1,13 @@
 const file = require('./location');
-const { ControlCenterProgram, getAvailableBoxes, filterPrograms, createBoxes } = require('./location');
+const {
+  ControlCenterProgram,
+  getAvailableBoxes,
+  filterPrograms,
+  findBoxWorseRating,
+  findBoxGameOver,
+  findBoxBlowout,
+  findProgramlessBox,
+} = require('./location');
 const moment = require('moment');
 
 test('smoke test', () => {
@@ -29,34 +37,107 @@ test('ControlCenterProgram model', () => {
   expect(ccPrograms[0].isMinutesFromNow(20)).toBeTruthy();
 });
 
+function createBoxesByRatings(ratings) {
+  return ratings.map(r => {
+    return {
+      program: {
+        clickerRating: r,
+      },
+    };
+  });
+}
+
+function createBoxes() {
+  return [
+    {
+      program: {
+        clickerRating: 7,
+      },
+    },
+    {
+      id: 5,
+      program: {
+        game: {
+          summary: {
+            blowout: true,
+            ended: false,
+          },
+        },
+      },
+    },
+    {
+      program: {
+        clickerRating: 3,
+      },
+    },
+    {
+      id: 3,
+    },
+    {
+      program: {
+        clickerRating: 9,
+      },
+    },
+    {
+      id: 4,
+      program: {
+        game: {
+          summary: {
+            ended: true,
+          },
+        },
+      },
+    },
+  ];
+}
+
+describe('findBox', () => {
+  test('findBoxWorseRating', () => {
+    const program = { fields: { rating: 6 } };
+    const result = findBoxWorseRating(createBoxes(), program);
+    expect(result.program.clickerRating).toBe(3);
+  });
+  test('findBoxGameOver', () => {
+    const result = findBoxGameOver(createBoxes());
+    expect(result.id).toBe(4);
+  });
+  test('findBoxBlowout', () => {
+    const result = findBoxBlowout(createBoxes());
+    expect(result.id).toBe(5);
+  });
+  test('findProgramlessBox', () => {
+    const result = findProgramlessBox(createBoxes());
+    expect(result.id).toBe(3);
+  });
+});
+
 describe('filterPrograms', () => {
   test('already showing', () => {
     const ccPrograms = [
-      { fields: { channel: 206, rating: 9 } }, // showing
-      { fields: { channel: 209, rating: 6 } },
-      { fields: { channel: 219, rating: 6 } }, // showing
-      { fields: { channel: 5, rating: 10 } },
-      { fields: { channel: 221, rating: 9 } },
+      { fields: { rating: 9 }, db: { channel: 206 } }, // showing
+      { fields: { rating: 6 }, db: { channel: 209 } },
+      { fields: { rating: 6 }, db: { channel: 219 } }, // showing
+      { fields: { rating: 10 }, db: { channel: 5 } },
+      { fields: { rating: 9 }, db: { channel: 221 } },
     ];
     const location = {
-      channels: { excluded: [209] },
       boxes: [{ channel: 206 }, { channel: 219 }, { channel: 206 }, { channel: 9 }],
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(3);
     // ensure sorted
-    expect(result[0].fields.channel).toBe(5);
-    expect(result[1].fields.channel).toBe(221);
-    expect(result[2].fields.channel).toBe(209);
+    expect(result[0].db.channel).toBe(5);
+    expect(result[1].db.channel).toBe(221);
+    expect(result[2].db.channel).toBe(209);
   });
   test('already showing and excluded', () => {
     const ccPrograms = [
-      { fields: { channel: 9 } }, // showing
-      { fields: { channel: 703 } }, // excluded
-      { fields: { channel: 219 } },
-      { fields: { channel: 5 } }, //showing
-      { fields: { channel: 709 } }, //excluded
-      { fields: { channel: 12 } },
+      { fields: { rating: 4 }, db: { channel: 9 } }, // showing
+      { fields: { rating: 4 }, db: { channel: 703 } }, // excluded
+      { fields: { rating: 4 }, db: { channel: 219 } },
+      { fields: { rating: 4 }, db: { channel: 5 } }, //showing
+      { fields: { rating: 4 }, db: { channel: 709 } }, //excluded
+      { fields: { rating: 4 }, db: { channel: 12 } },
     ];
     const location = {
       channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
@@ -64,8 +145,8 @@ describe('filterPrograms', () => {
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(2);
-    expect(result[0].fields.channel).toBe(219);
-    expect(result[1].fields.channel).toBe(12);
+    expect(result[0].db.channel).toBe(219);
+    expect(result[1].db.channel).toBe(12);
   });
 });
 describe('get boxes', () => {
@@ -97,7 +178,7 @@ describe('get boxes', () => {
           .subtract(40, 'm')
           .unix() * 1000,
       game: {
-        liveStatus: {
+        summary: {
           status: 'inprogress',
         },
       },
@@ -117,7 +198,7 @@ describe('get boxes', () => {
           .subtract(1, 'h')
           .unix() * 1000,
       game: {
-        liveStatus: {
+        summary: {
           status: 'complete',
         },
       },
@@ -142,22 +223,6 @@ describe('get boxes', () => {
     },
   };
   const reservedZonelessBox = { id: 7, zone: '' };
-  test('createBoxes: map to new object', () => {
-    const result = createBoxes([
-      reservedManuallyChangedRecently,
-      openManuallyChangedDifferentProgram,
-      reservedManuallyChangedGameOn,
-    ]);
-
-    expect(result.length).toBe(3);
-
-    const [one, two, three] = result;
-    expect(one.hasProgram).toBeTruthy();
-    expect(one.ended).toBeFalsy();
-    expect(one.blowout).toBeFalsy();
-    expect(one.rating).toBe(7);
-    expect(one.box.id).toBe(3);
-  });
   describe("getAvailableBoxes: removes boxes that shouldn't be changed", () => {
     test('openGoodBox', () => {
       const result = getAvailableBoxes([openGoodBox]);
@@ -198,9 +263,9 @@ describe('get boxes', () => {
         reservedZonelessBox,
       ]);
       expect(result.length).toBe(3);
-      expect(result[0].box.id).toBe(1);
-      expect(result[1].box.id).toBe(2);
-      expect(result[2].box.id).toBe(5);
+      expect(result[0].id).toBe(1);
+      expect(result[1].id).toBe(2);
+      expect(result[2].id).toBe(5);
     });
   });
 });

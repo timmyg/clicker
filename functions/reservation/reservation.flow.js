@@ -179,7 +179,10 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
   console.log(id, userId);
-  const originalReservation: Reservation = await dbReservation.get({ id, userId });
+  const originalReservation: Reservation = await dbReservation.get({
+    id,
+    userId,
+  });
   console.log({ originalReservation });
   console.log({ updatedReservation });
   console.log(userId, originalReservation.userId);
@@ -204,7 +207,10 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     .service('location')
     .name('setBoxReserved')
     .body({ end: updatedReservation.end })
-    .pathParams({ id: originalReservation.location.id, boxId: originalReservation.box.id })
+    .pathParams({
+      id: originalReservation.location.id,
+      boxId: originalReservation.box.id,
+    })
     .headers(event.headers)
     .async()
     .go();

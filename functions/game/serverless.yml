@@ -117,7 +117,6 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-
     # updated game stuff (score update)
     # updatedGameTopic:
     #   Type: AWS::SNS::Topic
@@ -209,8 +208,8 @@ functions:
     memorySize: 1024
     timeout: 12
     # environment:
-      # newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
-      # updatedGameTopicArn: ${self:custom.updatedGameTopicArn.deployed}
+    # newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+    # updatedGameTopicArn: ${self:custom.updatedGameTopicArn.deployed}
     events:
       - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
       - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
@@ -271,3 +270,12 @@ functions:
               - partner
               - authorization
               - content-type
+  updateAirtableGamesStatus:
+    handler: game.updateAirtableGamesStatus
+    timeout: 30
+    events:
+      - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
+      - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
+      - http:
+          path: airtable/live/status
+          method: put
