@@ -608,52 +608,6 @@ class ProgramAirtable {
   get(x: string): any {}
 }
 
-// async function ratePrograms(programs: ProgramAirtable[]) {
-//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-//   const airtableRatingKeywordsName = 'Rating Keywords';
-
-//   const keywordRecords: RatingKeywordsAirtable[] = await base(airtableRatingKeywordsName)
-//     .select({
-//       view: 'Live',
-//     })
-//     .all();
-
-//   const rated = [];
-//   keywordRecords.forEach(kw => {
-//     const termsList: any = kw.get('Terms');
-//     const rating: number = kw.get('Rating');
-//     const terms = termsList.split(',').map(item => item.trim());
-//     terms.map(term => {
-//       let isProperty = false;
-//       if (term.startsWith('{')) {
-//         isProperty = true;
-//         term = term.replace(/{/g, '').replace(/}/g, '');
-//       }
-//       programs.forEach((p: any) => {
-//         if (isProperty) {
-//           console.log(term, p.get(term));
-//           if (p.get(term) === true) {
-//             p.set('rating', rating);
-//             rated.push(p);
-//           }
-//         } else {
-//           const titleHasTerm = p
-//             .get('title')
-//             .toLowerCase()
-//             .includes(term);
-//           if (titleHasTerm) {
-//             if (!p.get('rating')) {
-//               p.set('rating', rating);
-//               rated.push(p);
-//             }
-//           }
-//         }
-//       });
-//     });
-//   });
-//   return rated;
-// }
-
 function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
   programs.forEach(program => {

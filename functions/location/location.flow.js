@@ -846,26 +846,18 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
     console.info(`trying to turn on: ${program.fields.title} (${program.db.channel}) *${program.fields.rating}*`);
-    if (program.isMinutesFromNow(5)) {
+    const isCloseHighlyRated = [10, 9].includes(program.fields.rating) && program.isMinutesFromNow(5);
+    const isCloseNotHighlyRated = [7, 6, 5, 4, 3, 2, 1].includes(program.fields.rating) && program.isMinutesFromNow(10);
+    if (isCloseHighlyRated || isCloseNotHighlyRated) {
       selectedBox = findBoxGameOver(availableBoxes);
       if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
     }
-    // }
     if (selectedBox) {
-      // console.log(
-      //   `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title} (${
-      //     program.db.channel
-      //   }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${
-      //     !!selectedBox.program && !!selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'
-      //   }* (${selectedBox.channel})...`,
-      // );
       await tune(location, selectedBox, program.db.channel, program.db);
-      // console.log({ selectedBox });
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
-      // console.log(JSON.stringify(availableBoxes), selectedBox);
       availableBoxes = availableBoxes.filter(b => b.id !== (selectedBox && selectedBox.id));
       console.log(`boxes remaining: ${availableBoxes.length}`);
     }
@@ -1015,8 +1007,6 @@ async function getAirtablePrograms() {
       filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
-  // get games, to see if they
-
   return ccPrograms.map(p => new ControlCenterProgram(p));
 }
 
