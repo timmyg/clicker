@@ -283,11 +283,14 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     console.log(`programs: ${programs.length}`);
     const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
     const existingProgram = sortedPrograms[sortedPrograms.length - 1];
+    console.log({ existingProgram });
     if (sortedPrograms.length > 1) {
+      console.log(' is multiple');
       // check if first program is game, and if it is over
       const previousProgram = sortedPrograms[0];
       console.log({ previousProgram });
       if (previousProgram.game && previousProgram.game.status === 'inprogress') {
+        console.log('previous game in progress');
         return respond(200, previousProgram);
       }
     } else if (
@@ -297,6 +300,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       console.info('no current program');
       return respond(200, {});
     }
+    console.log('returning existing program');
     return respond(200, existingProgram);
   } else if (programmingId) {
     console.log({ programmingId });
