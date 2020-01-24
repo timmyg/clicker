@@ -279,6 +279,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       delete p.subcategories;
       // $FlowFixMe
       delete p.channelCategories;
+      p.startFromNow = moment(p.start).fromNow();
+      p.endFromNow = moment(p.end).fromNow();
     });
     console.log(`programs: ${programs.length}`);
     const sortedPrograms = programs.sort((a, b) => a.start - b.start);

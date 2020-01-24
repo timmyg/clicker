@@ -21,6 +21,8 @@ export class Program {
   type: string;
   nextProgramTitle: string;
   nextProgramStart: number;
+  startFromNow: number;
+  endFromNow: number;
   points: number;
   synced: boolean;
   clickerRating: number;
