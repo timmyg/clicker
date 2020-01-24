@@ -82,7 +82,10 @@ jobs:
           key: dependency-cache-ci
       - run:
           name: Install dependencies
-          command: npm i node-fetch await-exec js-yaml
+          command: |
+            if [ ! -d node_modules ]; then
+              npm i node-fetch await-exec js-yaml
+            fi
       - save_cache:
           key: dependency-cache-ci
           paths:

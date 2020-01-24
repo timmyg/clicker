@@ -38,7 +38,11 @@ type region = {
 };
 
 const allRegions: region[] = [
-  { name: 'cincinnati', defaultZip: '45202', localChannels: [5, 9, 12, 19, 661, 660] },
+  {
+    name: 'cincinnati',
+    defaultZip: '45202',
+    localChannels: [5, 9, 12, 19, 661, 660],
+  },
   { name: 'chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   { name: 'nyc', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
 ];
@@ -61,7 +65,7 @@ const nationalChannels: number[] = [
   602, //TVG
   612, //ACCN
   618, //FS2
-  620, //beIn Sports
+  // 620, //beIn Sports
   610, //BTN
   611, //SECHD
   605, //SPMN
@@ -230,55 +234,102 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 // });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log(event.queryStringParameters);
+  console.log('GET');
+  // console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
-  const { channel, time, region } = event.queryStringParameters;
-  if (!channel || !region) {
-    return respond(400, `need channel or region: ${JSON.stringify({ channel, region })}`);
+  const { channel, time, region, programmingId, programmingIds } = event.queryStringParameters;
+  if (!region) {
+    return respond(400, `need region: ${region}`);
   }
-  const timeToSearch = time || moment().unix() * 1000;
-  const timeToSearchPreviousProgram =
-    moment(timeToSearch)
-      .subtract(previousProgramMinutesAgo, 'm')
-      .unix() * 1000;
-  // get programs that are on now or ended within last 30 mins
-  const programs: Program[] = await dbProgram
-    .query('channel')
-    .eq(channel)
-    .and()
-    .filter('region')
-    .eq(region)
-    .and()
-    .filter('start')
-    .lt(timeToSearch)
-    .and()
-    .filter('end')
-    .gt(timeToSearchPreviousProgram)
-    .exec();
+  if (!channel && !programmingId && !programmingIds) {
+    return respond(
+      400,
+      `need channel/programmingId/programmingIds: ${JSON.stringify({
+        channel,
+        programmingId,
+        programmingIds,
+      })}`,
+    );
+  }
+  if (channel) {
+    const timeToSearch = time || moment().unix() * 1000;
+    const timeToSearchPreviousProgram =
+      moment(timeToSearch)
+        .subtract(previousProgramMinutesAgo, 'm')
+        .unix() * 1000;
+    // get programs that are on now or ended within last 30 mins
+    const programs: Program[] = await dbProgram
+      .query('channel')
+      .eq(channel)
+      .and()
+      .filter('region')
+      .eq(region)
+      .and()
+      .filter('start')
+      .lt(timeToSearch)
+      .and()
+      .filter('end')
+      .gt(timeToSearchPreviousProgram)
+      .exec();
 
-  // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
-  programs.forEach(p => {
-    delete p.subcategories;
-    delete p.channelCategories;
-  });
-  console.log(`programs: ${programs.length}`);
-  const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
-  const existingProgram = sortedPrograms[sortedPrograms.length - 1];
-  if (sortedPrograms.length > 1) {
-    // check if first program is game, and if it is over
-    const previousProgram = sortedPrograms[0];
-    console.log({ previousProgram });
-    if (previousProgram.game && previousProgram.game.status === 'inprogress') {
-      return respond(200, previousProgram);
+    // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
+    // delete programs[0].subcategories;
+    programs.forEach(p => {
+      // $FlowFixMe
+      delete p.subcategories;
+      // $FlowFixMe
+      delete p.channelCategories;
+    });
+    console.log(`programs: ${programs.length}`);
+    const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
+    const existingProgram = sortedPrograms[sortedPrograms.length - 1];
+    if (sortedPrograms.length > 1) {
+      // check if first program is game, and if it is over
+      const previousProgram = sortedPrograms[0];
+      console.log({ previousProgram });
+      if (previousProgram.game && previousProgram.game.status === 'inprogress') {
+        return respond(200, previousProgram);
+      }
+    } else if (
+      existingProgram &&
+      (moment(existingProgram.start).diff(moment()) > 0 || moment(existingProgram.end).diff(moment()) < 0)
+    ) {
+      console.info('no current program');
+      return respond(200, {});
     }
-  } else if (
-    existingProgram &&
-    (moment(existingProgram.start).diff(moment()) > 0 || moment(existingProgram.end).diff(moment()) < 0)
-  ) {
-    console.info('no current program');
-    return respond(200, {});
+    return respond(200, existingProgram);
+  } else if (programmingId) {
+    console.log({ programmingId });
+    const programs: Program[] = await dbProgram
+      .query('region')
+      .eq(region)
+      .and()
+      .filter('programmingId')
+      .eq(programmingId)
+      .exec();
+    // TODO what if program on multiple channels? choose local?
+    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    return respond(200, sortedPrograms[0]);
+  } else if (programmingIds) {
+    const programs: Program[] = await dbProgram
+      .query('region')
+      .eq(region)
+      .and()
+      .filter('programmingId')
+      .in(programmingIds)
+      .exec();
+    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    console.log('querying for', region, { programmingIds });
+    console.log('returned', programs.map(p => p.programmingId));
+    if (programmingIds.length > programs.length) {
+      console.error(`missing: ${programmingIds.map(pid => !programs.map(p => p.programmingId).includes(pid))}`);
+      const errorText = 'Program not found in database';
+      console.error(errorText);
+      console.error({ channel, time, region, programmingId, programmingIds });
+      Raven.captureException(new Error(errorText));
+    }
+    return respond(200, sortedPrograms);
   }
-  return respond(200, existingProgram);
 });
 
 module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
@@ -506,13 +557,10 @@ async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursF
   const fourHoursFromNow = moment()
     .add(hoursFromNow, 'h')
     .toISOString();
-  const sixMinutesAgo = moment()
-    .subtract(6, 'm')
-    .toISOString();
 
   let filterByFormula: string[] = [`{start} > '${fourHoursAgo}'`, `{start} < '${fourHoursFromNow}'`];
   if (hasGameAttached) {
-    filterByFormula.push(`{gameId} != BLANK()`);
+    filterByFormula.push(`{rating} != BLANK()`);
   }
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
@@ -527,7 +575,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
-    const gameDatabaseId = airtableProgram.get('gameId')[0];
+    const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
     const programs = await dbProgram
       .query('programmingId')
@@ -609,7 +657,18 @@ class ProgramAirtable {
 function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
   programs.forEach(program => {
-    const { programmingId, title, description, channel, channelMinor, region, channelTitle, live, start } = program;
+    const {
+      programmingId,
+      title,
+      description,
+      channel,
+      channelMinor,
+      region,
+      channelTitle,
+      live,
+      start,
+      end,
+    } = program;
     transformed.push({
       fields: {
         programmingId,
@@ -621,6 +680,7 @@ function buildAirtablePrograms(programs: Program[]) {
         channelTitle,
         live,
         start,
+        end,
       },
     });
   });
@@ -719,7 +779,12 @@ async function pullFromDirecTV(
       new Invoke()
         .service('program')
         .name('getSchedulePy')
-        .queryParams({ start: startTime.toString(), zip, hours: totalHours, channels: channelsString })
+        .queryParams({
+          start: startTime.toString(),
+          zip,
+          hours: totalHours,
+          channels: channelsString,
+        })
         // .headers(event.headers)
         .go(),
     );
@@ -757,7 +822,9 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
   if (!!programDetails) {
     const { description, progType: programType } = programDetails;
     // update in airtable
-    const airtableBase = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+    const airtableBase = new Airtable({
+      apiKey: process.env.airtableKey,
+    }).base(process.env.airtableBase);
     const airtablePrograms = 'Control Center';
     console.time('airtable');
     const airtableGames = await airtableBase(airtablePrograms)
@@ -885,7 +952,7 @@ function build(dtvSchedule: any, regionName: string) {
         if (minorChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
           console.log('minor!');
-          const minorChannelMatch = minorChannels.find(c => c.channel === program.channel);
+          const minorChannelMatch: any = minorChannels.find(c => c.channel === program.channel);
           console.log({ minorChannelMatch });
           const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
           console.log({ channelMinor });
@@ -905,12 +972,12 @@ function build(dtvSchedule: any, regionName: string) {
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.region = regionName;
-        program.id = generateId(program);
         program.start = moment(program.airTime).unix() * 1000;
         program.end =
           moment(program.airTime)
             .add(program.durationMins, 'minutes')
             .unix() * 1000;
+        program.id = generateId(program);
         programs.push(program);
       }
     });

@@ -16,6 +16,12 @@ class Team {
   };
 }
 
+export class GameStatus {
+  started: boolean;
+  blowout: boolean;
+  ended: boolean;
+  description: string;
+}
 export class Game {
   start: string;
   id: number;
@@ -34,5 +40,5 @@ export class Game {
   book: {
     total: number,
   };
-  liveStatus: GameStatus;
+  summary: GameStatus;
 }
