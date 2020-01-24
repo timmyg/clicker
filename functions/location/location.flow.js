@@ -835,47 +835,22 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
     console.info(`trying to turn on: ${program.fields.title} (${program.db.channel}) *${program.fields.rating}*`);
-
-    switch (program.fields.rating) {
-      case 10:
-      case 9:
-        if (program.isMinutesFromNow(10)) {
-          selectedBox = findBoxGameOver(availableBoxes);
-          if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
-          if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
-          if (!selectedBox) selectedBox = findUnratedBox(availableBoxes);
-          if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
-          // if (!selectedBox) selectedBox = findWorstRatedBox(availableBoxes);
-          if (!selectedBox) selectedBox = justFindBox(availableBoxes);
-        }
-        break;
-      case 8:
-      case 7:
-      case 6:
-      case 5:
-      case 4:
-      case 3:
-      case 2:
-      case 1:
-        if (program.isMinutesFromNow(5)) {
-          selectedBox = findBoxGameOver(availableBoxes);
-          if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
-          // if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
-          if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
-          if (!selectedBox) selectedBox = findEmptyBox(availableBoxes);
-        }
-        break;
-      default:
-        break;
+    if (program.isMinutesFromNow(5)) {
+      selectedBox = findBoxGameOver(availableBoxes);
+      if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
+      if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
+      if (!selectedBox) selectedBox = findUnratedBox(availableBoxes);
+      if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
     }
+    // }
     if (selectedBox) {
-      console.log(
-        `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title} (${
-          program.db.channel
-        }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${
-          !!selectedBox.program && !!selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'
-        }* (${selectedBox.channel})...`,
-      );
+      // console.log(
+      //   `-_-_-_-_-_-_-_-_-_-_-_-_ tuning to ${program.fields.title} (${
+      //     program.db.channel
+      //   }) on box currently showing ${selectedBox.program && selectedBox.program.title} *${
+      //     !!selectedBox.program && !!selectedBox.program.clickerRating ? selectedBox.program.clickerRating : 'unrated'
+      //   }* (${selectedBox.channel})...`,
+      // );
       await tune(location, selectedBox, program.db.channel, program.db);
       // console.log({ selectedBox });
       // remove box so it doesnt get reassigned
@@ -1012,7 +987,7 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
     .filter(b => b.program)
     .filter(b => b.program.clickerRating < program.fields.rating)
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
-  console.log({sorted})
+  console.log({ sorted });
   return sorted && sorted.length ? sorted[0] : null;
 }
 
@@ -1047,11 +1022,6 @@ function findUnratedBox(boxes: Box[]): ?Box {
 function findProgramlessBox(boxes: Box[]): ?Box {
   console.info('findProgramlessBox');
   return boxes.find(b => !b.program);
-}
-
-function justFindBox(boxes: Box[]): Box {
-  console.info('justFindBox');
-  return boxes.sort((a, b) => a.channelChangeAt - b.channelChangeAt)[0];
 }
 
 async function getAirtablePrograms() {
