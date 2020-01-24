@@ -845,7 +845,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
           if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
           if (!selectedBox) selectedBox = findUnratedBox(availableBoxes);
           if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
-          if (!selectedBox) selectedBox = findWorstRatedBox(availableBoxes);
+          // if (!selectedBox) selectedBox = findWorstRatedBox(availableBoxes);
           if (!selectedBox) selectedBox = justFindBox(availableBoxes);
         }
         break;
@@ -860,6 +860,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
         if (program.isMinutesFromNow(5)) {
           selectedBox = findBoxGameOver(availableBoxes);
           if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
+          // if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
           if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
           if (!selectedBox) selectedBox = findEmptyBox(availableBoxes);
         }
@@ -1011,17 +1012,27 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
     .filter(b => b.program)
     .filter(b => b.program.clickerRating < program.fields.rating)
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+  console.log({sorted})
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-function findWorstRatedBox(boxes: Box[]): ?Box {
-  console.info('findWorstRatedBox');
-  const sorted = boxes
-    .filter(b => b.program)
-    .filter(b => b.program.clickerRating)
-    .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
-  return sorted && sorted.length ? sorted[0] : null;
-}
+// function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
+//   console.info('findBoxWorseRating');
+//   const sorted = boxes
+//     .filter(b => b.program)
+//     .filter(b => b.program.clickerRating < program.fields.rating)
+//     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+//   return sorted && sorted.length ? sorted[0] : null;
+// }
+
+// function findWorstRatedBox(boxes: Box[]): ?Box {
+//   console.info('findWorstRatedBox');
+//   const sorted = boxes
+//     .filter(b => b.program)
+//     .filter(b => b.program.clickerRating)
+//     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+//   return sorted && sorted.length ? sorted[0] : null;
+// }
 
 function findEmptyBox(boxes: Box[]): ?Box {
   console.info('findEmptyBox');
@@ -1109,3 +1120,4 @@ async function updateLocationBox(
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
 module.exports.filterPrograms = filterPrograms;
+module.exports.findBoxWorseRating = findBoxWorseRating;

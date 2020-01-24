@@ -1,5 +1,5 @@
 const file = require('./location');
-const { ControlCenterProgram, getAvailableBoxes, filterPrograms } = require('./location');
+const { ControlCenterProgram, getAvailableBoxes, filterPrograms, findBoxWorseRating } = require('./location');
 const moment = require('moment');
 
 test('smoke test', () => {
@@ -29,6 +29,26 @@ test('ControlCenterProgram model', () => {
   expect(ccPrograms[0].isMinutesFromNow(20)).toBeTruthy();
 });
 
+test('findBox', () => {
+  const program = {fields: {rating: 6}}
+  const box1 = {
+    program: {
+      clickerRating: 7,
+    },
+  };
+  const box2 = {
+    program: {
+      clickerRating: 3,
+    },
+  };
+  const box3 = {
+    program: {
+      clickerRating: 9,
+    },
+  };
+  const result = findBoxWorseRating([box1, box2, box3], program)
+  expect(result.program.clickerRating).toBe(3);
+});
 describe.skip('filterPrograms', () => {
   test('already showing', () => {
     const ccPrograms = [
