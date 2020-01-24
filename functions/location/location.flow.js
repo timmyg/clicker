@@ -983,24 +983,19 @@ function findBoxBlowout(boxes: Box[]): ?Box {
     .find(b => b.program.game.summary.blowout);
 }
 
-function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
-  console.info('findBoxWorseRating');
-  const sorted = boxes
-    .filter(b => b.program)
-    .filter(b => b.program.clickerRating < program.fields.rating)
-    .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
-  console.log({ sorted });
-  return sorted && sorted.length ? sorted[0] : null;
-}
-
 function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   console.info('findBoxWorseRating');
   return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
 }
 
-function findProgramlessBox(boxes: Box[]): ?Box {
-  console.info('findProgramlessBox');
-  return boxes.find(b => !b.program);
+function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
+  console.info('findBoxWorseRating');
+  const sorted = boxes
+    .filter(b => b.program)
+    .filter(b => b.program.clickerRating)
+    .filter(b => b.program.clickerRating < program.fields.rating)
+    .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+  return sorted && sorted.length ? sorted[0] : null;
 }
 
 async function getAirtablePrograms() {
@@ -1067,7 +1062,7 @@ async function updateLocationBox(
 module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
 module.exports.filterPrograms = filterPrograms;
-module.exports.findBoxWorseRating = findBoxWorseRating;
 module.exports.findBoxGameOver = findBoxGameOver;
 module.exports.findBoxBlowout = findBoxBlowout;
-module.exports.findProgramlessBox = findProgramlessBox;
+module.exports.findBoxWithoutRating = findBoxWithoutRating;
+module.exports.findBoxWorseRating = findBoxWorseRating;
