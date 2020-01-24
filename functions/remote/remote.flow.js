@@ -129,9 +129,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     } else if (source === "control center daily") {
       eventName = "Control Center Daily Zap";
       userId = "system";
-      const text = `*${eventName}* @ ${reservation.location.name} to ${
-        reservation.program.title
-      }`;
+      const text = `*${eventName}* @ ${
+        reservation.location.name
+      } to ${channel}`;
       await new Invoke()
         .service("notification")
         .name("sendControlCenter")
