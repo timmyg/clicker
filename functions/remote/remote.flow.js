@@ -107,7 +107,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       userId = "system";
       const text = `*${eventName}* @ ${reservation.location.name} to ${
         reservation.program.title
-      } _${reservation.program.clickerRating}_ [${
+      } {${reservation.program.clickerRating}} [${
         reservation.program.channelTitle
       } ${channel} *Zone ${reservation.box.zone}*]\n\t_previously ${
         reservation.box.program
