@@ -1011,8 +1011,8 @@ async function getAirtablePrograms() {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
-      view: 'Visible',
-      // filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
+      // view: 'Visible',
+      filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
   // get games, to see if they
