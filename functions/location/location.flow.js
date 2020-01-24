@@ -869,7 +869,6 @@ function filterPrograms(
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
   const currentlyShowingChannels: number[] = boxes.map(b => b.channel);
-  // console.log({ currentlyShowingChannels }, { ccPrograms: ccPrograms.filter(x).map(x => x.db.channel) });
   ccPrograms = ccPrograms.filter(
     ccp => !currentlyShowingChannels.includes(ccp.db.channel)
   );
@@ -963,7 +962,6 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(
         selectedBox = findBoxGameOver(availableBoxes);
         if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
         if (!selectedBox) selectedBox = findProgramlessBox(availableBoxes);
-        if (!selectedBox) selectedBox = findUnratedBox(availableBoxes);
         if (!selectedBox)
           selectedBox = findBoxWorseRating(availableBoxes, program);
       }
@@ -1138,34 +1136,6 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-// function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
-//   console.info('findBoxWorseRating');
-//   const sorted = boxes
-//     .filter(b => b.program)
-//     .filter(b => b.program.clickerRating < program.fields.rating)
-//     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
-//   return sorted && sorted.length ? sorted[0] : null;
-// }
-
-// function findWorstRatedBox(boxes: Box[]): ?Box {
-//   console.info('findWorstRatedBox');
-//   const sorted = boxes
-//     .filter(b => b.program)
-//     .filter(b => b.program.clickerRating)
-//     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
-//   return sorted && sorted.length ? sorted[0] : null;
-// }
-
-function findEmptyBox(boxes: Box[]): ?Box {
-  console.info("findEmptyBox");
-  return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
-}
-
-function findUnratedBox(boxes: Box[]): ?Box {
-  console.info("findUnratedBox");
-  return findProgramlessBox(boxes) || findEmptyBox(boxes);
-}
-
 function findProgramlessBox(boxes: Box[]): ?Box {
   console.info("findProgramlessBox");
   return boxes.find(b => !b.program);
@@ -1240,3 +1210,6 @@ module.exports.ControlCenterProgram = ControlCenterProgram;
 module.exports.getAvailableBoxes = getAvailableBoxes;
 module.exports.filterPrograms = filterPrograms;
 module.exports.findBoxWorseRating = findBoxWorseRating;
+module.exports.findBoxGameOver = findBoxGameOver;
+module.exports.findBoxBlowout = findBoxBlowout;
+module.exports.findProgramlessBox = findProgramlessBox;
