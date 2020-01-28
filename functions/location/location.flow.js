@@ -391,19 +391,18 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
-    await new Invoke()
-      .service('location')
-      .name('updateBoxInfo')
-      // .body({ channel: major, channelMinor: minor, source: "manual" })
-      .body({ channel: major, channelMinor: minor })
-      .pathParams({ id: location.id, boxId })
-      .async()
-      .go();
-
     // if channel is different and is a control center box
     //  - track via analytics
 
     if (originalChannel !== major) {
+      await new Invoke()
+        .service('location')
+        .name('updateBoxInfo')
+        .body({ channel: major, channelMinor: minor, source: 'manual' })
+        .pathParams({ id: location.id, boxId })
+        .async()
+        .go();
+
       const userId = 'system';
       const name = 'Manual Zap';
       const data = {
@@ -451,6 +450,15 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .async()
           .go();
       }
+    } else {
+      // still update channel so we knows it's still online
+      await new Invoke()
+        .service('location')
+        .name('updateBoxInfo')
+        .body({ channel: major, channelMinor: minor })
+        .pathParams({ id: location.id, boxId })
+        .async()
+        .go();
     }
   }
 
