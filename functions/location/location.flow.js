@@ -849,6 +849,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // get boxes that are CC active, and not manually locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
+  console.log('availableBoxes', availableBoxes.length);
 
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
