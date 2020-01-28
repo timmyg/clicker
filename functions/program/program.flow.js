@@ -266,11 +266,17 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(region)
       .and()
       .filter('start')
-      .lt(timeToSearch)
+      // .gt(timeToSearch) // now
+      // .gt(timeToSearchPreviousProgram) // 90 minutes ago
+      .lt(timeToSearch) // now
       .and()
       .filter('end')
-      .gt(timeToSearchPreviousProgram)
+      // .lt(timeToSearchPreviousProgram) // 90 minutes ago
+      // .lt(timeToSearch) // now
+      .gt(timeToSearchPreviousProgram) // 90 minutes ago
       .exec();
+
+    console.log({ timeToSearch, timeToSearchPreviousProgram });
 
     // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
     // delete programs[0].subcategories;
