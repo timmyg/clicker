@@ -902,11 +902,12 @@ function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
     const { channel, channelSource: source, zone, program, label, appActive } = box;
-    let game, programTitle;
+    let game, programTitle, rating;
     if (program) {
       game = program.game;
       console.log(game);
       programTitle = program.title;
+      rating = program.clickerRating;
       if (program.description) {
         programTitle += `: ${program.description.substring(0, 20)}`;
       }
@@ -916,6 +917,7 @@ function buildAirtableNowShowing(location: Venue) {
         location: `${location.name}: ${location.neighborhood}`,
         program: programTitle ? programTitle : '',
         game: game ? JSON.stringify(game) : '',
+        rating: rating ? rating : '',
         channel,
         channelName: program ? program.channelTitle : null,
         source,
