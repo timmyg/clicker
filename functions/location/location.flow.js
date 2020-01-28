@@ -750,7 +750,7 @@ class ControlCenterProgram {
     Object.assign(this, obj);
   }
   isMinutesFromNow(minutes: number) {
-    return moment.duration(moment(this.fields.start).diff(moment(), 'minutes')) < minutes;
+    return moment(this.fields.start).diff(moment(), 'minutes') <= minutes;
   }
 }
 
