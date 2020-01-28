@@ -53,7 +53,7 @@ const nationalChannels: number[] = [
   209, //ESPN2
   208, //ESPNU
   207, //ESPNN
-  614, //ESPNC
+  // 614, //ESPNC
   213, //MLB
   219, //FS1
   220, //NBCSN
