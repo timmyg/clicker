@@ -234,8 +234,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 // });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('GET');
-  // console.log(event.queryStringParameters);
+  console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
   const { channel, time, region, programmingId, programmingIds } = event.queryStringParameters;
   if (!region) {

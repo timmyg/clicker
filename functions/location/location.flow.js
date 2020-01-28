@@ -720,10 +720,20 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   console.log({ boxId, boxIndex });
 
   console.time('get program 2');
+  // HACK adding one minute here so that if this is called at :59,
+  //  it'll get :00 program
+  const inOneMinuteUnix =
+    moment()
+      .add(1, 'm')
+      .unix() * 1000;
   const programResult = await new Invoke()
     .service('program')
     .name('get')
-    .queryParams({ channel: channel, region: location.region })
+    .queryParams({
+      channel: channel,
+      region: location.region,
+      time: inOneMinuteUnix,
+    })
     .go();
   const program = programResult && programResult.data;
   console.log({ program });
