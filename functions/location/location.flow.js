@@ -917,7 +917,7 @@ function buildAirtableNowShowing(location: Venue) {
         location: `${location.name}: ${location.neighborhood}`,
         program: programTitle ? programTitle : '',
         game: game ? JSON.stringify(game) : '',
-        rating: rating ? rating : '',
+        rating: rating,
         channel,
         channelName: program ? program.channelTitle : null,
         source,
