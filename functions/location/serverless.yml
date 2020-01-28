@@ -290,7 +290,7 @@ functions:
     timeout: 30
     events:
       # - schedule: rate(5 minutes)
-      - schedule: cron(*/9 * * * ? *) # Every 9th minute
+      - schedule: cron(*/8 * * * ? *) # Every 8th minute
       - http:
           path: boxes/info
           method: post
