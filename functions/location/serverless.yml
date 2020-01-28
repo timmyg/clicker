@@ -289,7 +289,8 @@ functions:
     description: check what is on each location boxes
     timeout: 30
     events:
-      - schedule: rate(5 minutes)
+      # - schedule: rate(5 minutes)
+      - schedule: cron(*/9 * * * ? *) # Every 9th minute
       - http:
           path: boxes/info
           method: post
@@ -314,7 +315,7 @@ functions:
   controlCenterV2:
     handler: location.controlCenterV2
     events:
-      - schedule: cron(*/10 * * * ? *)
+      - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
           path: 'control-center/v2'
           method: post
