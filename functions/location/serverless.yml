@@ -329,7 +329,7 @@ functions:
     handler: location.updateAirtableNowShowing
     timeout: 30
     events:
-      - schedule: cron(*/15 * * * ? *)
+      - schedule: cron(*/9 * * * ? *)
       - http:
           path: 'airtable/now-showing'
           method: post
