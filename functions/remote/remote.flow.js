@@ -164,8 +164,8 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       .body({
         location: `${reservation.location.name} (${reservation.location.neighborhood})`,
         zone: reservation.box.zone,
-        //  from:,
-        to: reservation.program.channel,
+        from: `${reservation.box.program.channel} (${reservation.box.program.title})`,
+        to: `${reservation.program.channel} (${reservation.program.title})`,
         time: new Date(),
         type: eventName,
         boxId: reservation.box.id,
