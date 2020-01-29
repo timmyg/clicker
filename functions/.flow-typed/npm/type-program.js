@@ -28,4 +28,8 @@ export class Program {
   game: Game;
   createdAt: number;
   updatedAt: number;
+
+  // dynamic
+  startFromNow: number;
+  endFromNow: number;
 }

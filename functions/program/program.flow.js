@@ -53,7 +53,7 @@ const nationalChannels: number[] = [
   209, //ESPN2
   208, //ESPNU
   207, //ESPNN
-  614, //ESPNC
+  // 614, //ESPNC
   213, //MLB
   219, //FS1
   220, //NBCSN
@@ -111,9 +111,9 @@ const minorChannels = [
     subChannels: [
       {
         minor: 1,
-        channelIds: [5661],
+        channelIds: [5661, 626],
       },
-      { minor: 2, channelIds: [625, 376] },
+      { minor: 2, channelIds: [625, 376, 2661] },
     ],
   },
 ];
@@ -234,8 +234,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 // });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('GET');
-  // console.log(event.queryStringParameters);
+  console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
   const { channel, time, region, programmingId, programmingIds } = event.queryStringParameters;
   if (!region) {
@@ -266,11 +265,17 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(region)
       .and()
       .filter('start')
-      .lt(timeToSearch)
+      // .gt(timeToSearch) // now
+      // .gt(timeToSearchPreviousProgram) // 90 minutes ago
+      .lt(timeToSearch) // now
       .and()
       .filter('end')
-      .gt(timeToSearchPreviousProgram)
+      // .lt(timeToSearchPreviousProgram) // 90 minutes ago
+      // .lt(timeToSearch) // now
+      .gt(timeToSearchPreviousProgram) // 90 minutes ago
       .exec();
+
+    console.log({ timeToSearch, timeToSearchPreviousProgram });
 
     // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
     // delete programs[0].subcategories;
@@ -279,15 +284,20 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       delete p.subcategories;
       // $FlowFixMe
       delete p.channelCategories;
+      p.startFromNow = moment(p.start).fromNow();
+      p.endFromNow = moment(p.end).fromNow();
     });
     console.log(`programs: ${programs.length}`);
-    const sortedPrograms = programs.sort((a, b) => a.createdAt - b.createdAt);
+    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     const existingProgram = sortedPrograms[sortedPrograms.length - 1];
+    console.log({ existingProgram });
     if (sortedPrograms.length > 1) {
+      console.log(' is multiple');
       // check if first program is game, and if it is over
       const previousProgram = sortedPrograms[0];
       console.log({ previousProgram });
       if (previousProgram.game && previousProgram.game.status === 'inprogress') {
+        console.log('previous game in progress');
         return respond(200, previousProgram);
       }
     } else if (
@@ -297,6 +307,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       console.info('no current program');
       return respond(200, {});
     }
+    console.log('returning existing program');
     return respond(200, existingProgram);
   } else if (programmingId) {
     console.log({ programmingId });
@@ -608,52 +619,6 @@ class ProgramAirtable {
   get(x: string): any {}
 }
 
-// async function ratePrograms(programs: ProgramAirtable[]) {
-//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-//   const airtableRatingKeywordsName = 'Rating Keywords';
-
-//   const keywordRecords: RatingKeywordsAirtable[] = await base(airtableRatingKeywordsName)
-//     .select({
-//       view: 'Live',
-//     })
-//     .all();
-
-//   const rated = [];
-//   keywordRecords.forEach(kw => {
-//     const termsList: any = kw.get('Terms');
-//     const rating: number = kw.get('Rating');
-//     const terms = termsList.split(',').map(item => item.trim());
-//     terms.map(term => {
-//       let isProperty = false;
-//       if (term.startsWith('{')) {
-//         isProperty = true;
-//         term = term.replace(/{/g, '').replace(/}/g, '');
-//       }
-//       programs.forEach((p: any) => {
-//         if (isProperty) {
-//           console.log(term, p.get(term));
-//           if (p.get(term) === true) {
-//             p.set('rating', rating);
-//             rated.push(p);
-//           }
-//         } else {
-//           const titleHasTerm = p
-//             .get('title')
-//             .toLowerCase()
-//             .includes(term);
-//           if (titleHasTerm) {
-//             if (!p.get('rating')) {
-//               p.set('rating', rating);
-//               rated.push(p);
-//             }
-//           }
-//         }
-//       });
-//     });
-//   });
-//   return rated;
-// }
-
 function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
   programs.forEach(program => {
@@ -731,7 +696,7 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
   console.log('allPrograms:', allPrograms.length);
   allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
   console.log('allPrograms deduped:', allPrograms.length);
-  allPrograms = uniqBy(allPrograms, 'programmingId');
+  allPrograms = uniqBy(allPrograms, 'id');
   console.log('allPrograms new unique:', allPrograms.length);
   let transformedPrograms: Program[] = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
@@ -990,6 +955,7 @@ function build(dtvSchedule: any, regionName: string) {
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
   const id = programmingId + channel + start + region;
+  console.log('..........', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
   return uuid(id, uuid.DNS);
 }
 

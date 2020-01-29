@@ -19,6 +19,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
 
+// ccv1
 module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, async event => {
   // check if any scheduled events for control center today
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -71,7 +72,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
     {
       Location: location,
       Zone: zone,
-      From: from ? from.toString() : null,
+      From: from.toString(),
       To: to.toString(),
       Time: time,
       Type: type,

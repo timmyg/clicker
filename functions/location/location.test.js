@@ -3,10 +3,10 @@ const {
   ControlCenterProgram,
   getAvailableBoxes,
   filterPrograms,
-  findBoxWorseRating,
   findBoxGameOver,
   findBoxBlowout,
-  findProgramlessBox,
+  findBoxWithoutRating,
+  findBoxWorseRating,
 } = require('./location');
 const moment = require('moment');
 
@@ -71,9 +71,6 @@ function createBoxes() {
       },
     },
     {
-      id: 3,
-    },
-    {
       program: {
         clickerRating: 9,
       },
@@ -105,9 +102,9 @@ describe('findBox', () => {
     const result = findBoxBlowout(createBoxes());
     expect(result.id).toBe(5);
   });
-  test('findProgramlessBox', () => {
-    const result = findProgramlessBox(createBoxes());
-    expect(result.id).toBe(3);
+  test('findBoxWithoutRating', () => {
+    const result = findBoxWithoutRating(createBoxes());
+    expect(result.id).toBe(5);
   });
 });
 

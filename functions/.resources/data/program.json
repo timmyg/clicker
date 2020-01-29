@@ -1,6 +1,7 @@
 {
   "queryStringParameters": {
-    "channel": 219,
-    "region": "cincinnati"
+    "channel": 209,
+    "region": "cincinnati",
+    "time": 1580214647000
   }
 }
