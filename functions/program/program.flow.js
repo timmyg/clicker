@@ -53,7 +53,7 @@ const nationalChannels: number[] = [
   209, //ESPN2
   208, //ESPNU
   207, //ESPNN
-  614, //ESPNC
+  // 614, //ESPNC
   213, //MLB
   219, //FS1
   220, //NBCSN
@@ -234,8 +234,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 // });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('GET');
-  // console.log(event.queryStringParameters);
+  console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
   const { channel, time, region, programmingId, programmingIds } = event.queryStringParameters;
   if (!region) {
@@ -697,7 +696,7 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
   console.log('allPrograms:', allPrograms.length);
   allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
   console.log('allPrograms deduped:', allPrograms.length);
-  allPrograms = uniqBy(allPrograms, 'programmingId');
+  allPrograms = uniqBy(allPrograms, 'id');
   console.log('allPrograms new unique:', allPrograms.length);
   let transformedPrograms: Program[] = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
@@ -956,6 +955,7 @@ function build(dtvSchedule: any, regionName: string) {
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
   const id = programmingId + channel + start + region;
+  console.log('..........', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
   return uuid(id, uuid.DNS);
 }
 

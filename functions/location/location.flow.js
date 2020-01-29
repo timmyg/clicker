@@ -391,11 +391,18 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
+    let updateBoxInfoBody: any = {
+      channel: major,
+      channelMinor: minor,
+    };
+    if (originalChannel !== major) {
+      updateBoxInfoBody.source = 'manual';
+    }
+
     await new Invoke()
       .service('location')
       .name('updateBoxInfo')
-      // .body({ channel: major, channelMinor: minor, source: "manual" })
-      .body({ channel: major, channelMinor: minor })
+      .body(updateBoxInfoBody)
       .pathParams({ id: location.id, boxId })
       .async()
       .go();
@@ -713,10 +720,20 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   console.log({ boxId, boxIndex });
 
   console.time('get program 2');
+  // HACK adding one minute here so that if this is called at :58,
+  //  it'll get :00 program
+  const inTwoMinutesUnix =
+    moment()
+      .add(2, 'm')
+      .unix() * 1000;
   const programResult = await new Invoke()
     .service('program')
     .name('get')
-    .queryParams({ channel: channel, region: location.region })
+    .queryParams({
+      channel: channel,
+      region: location.region,
+      time: inTwoMinutesUnix,
+    })
     .go();
   const program = programResult && programResult.data;
   console.log({ program });
@@ -750,7 +767,7 @@ class ControlCenterProgram {
     Object.assign(this, obj);
   }
   isMinutesFromNow(minutes: number) {
-    return moment.duration(moment(this.fields.start).diff(moment(), 'minutes')) < minutes;
+    return moment(this.fields.start).diff(moment(), 'minutes') <= minutes;
   }
 }
 
@@ -842,6 +859,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // get boxes that are CC active, and not manually locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
+  console.log('availableBoxes', availableBoxes.length);
 
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
@@ -902,11 +920,12 @@ function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
     const { channel, channelSource: source, zone, program, label, appActive } = box;
-    let game, programTitle;
+    let game, programTitle, rating;
     if (program) {
       game = program.game;
       console.log(game);
       programTitle = program.title;
+      rating = program.clickerRating;
       if (program.description) {
         programTitle += `: ${program.description.substring(0, 20)}`;
       }
@@ -916,6 +935,7 @@ function buildAirtableNowShowing(location: Venue) {
         location: `${location.name}: ${location.neighborhood}`,
         program: programTitle ? programTitle : '',
         game: game ? JSON.stringify(game) : '',
+        rating: rating,
         channel,
         channelName: program ? program.channelTitle : null,
         source,
