@@ -443,17 +443,21 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .go();
         // await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
 
+        const programResult = await new Invoke()
+          .service('program')
+          .name('get')
+          .queryParams({ channel: box.channel, region: location.region })
+          .go();
+        const program = programResult && programResult.data;
         await new Invoke()
           .service('admin')
           .name('logChannelChange')
           .body({
-            location: `${location.name} (${location.neighborhood})`,
-            zone: box.zone,
-            from: originalChannel,
-            to: major,
+            location,
+            box,
+            program,
             time: new Date(),
             type: name,
-            boxId,
           })
           .async()
           .go();
@@ -895,7 +899,15 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
 // npm run invoke:updateAirtableNowShowing
 module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
-  let locations: Venue[] = await dbLocation.scan().exec();
+  let locations: Venue[] = await dbLocation
+    .scan()
+    .filter('active')
+    .eq(true)
+    .and()
+    .filter('controlCenterV2')
+    .eq(true)
+    .all()
+    .exec();
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableName = 'Now Showing';
   const nowShowing = [];
