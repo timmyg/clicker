@@ -334,7 +334,7 @@ functions:
     description: sync program game id from airtable to programs db
     timeout: 15
     events:
-      - schedule: rate(1 hour)
+      - schedule: cron(*/30 * * * ? *) # every 30th minute
       - http:
           path: sync/airtable/updates
           method: post
