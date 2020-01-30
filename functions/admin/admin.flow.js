@@ -64,19 +64,25 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
 });
 
 module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event => {
-  const { location, zone, from, to, time, type, boxId } = getBody(event);
-  console.log({ location, zone, from, to, time, type, boxId });
+  // const { location, box, program, time, type } = getBody(event);
+  const { LocationString: location }: { LocationString: Venue } = getBody(event);
+  const { BoxString: box }: { BoxString: Box } = getBody(event);
+  const { ProgramString: program }: { ProgramString: Program } = getBody(event);
+  const { time = new Date(), type } = getBody(event);
+
   console.time('send to airtable');
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   await base('Channel Changes').create(
     {
-      Location: location,
-      Zone: zone,
-      From: from.toString(),
-      To: to.toString(),
+      Location: `${location.name} (${location.neighborhood})`,
+      Zone: box.zone,
+      Channel: program.channel,
+      'Channel Title': program.channelTitle,
+      Rating: program.clickerRating,
+      Game: JSON.stringify(program.game),
       Time: time,
       Type: type,
-      'Box Id': boxId,
+      'Box Id': box.id,
     },
     { typecast: true },
   );

@@ -162,13 +162,11 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       .service('admin')
       .name('logChannelChange')
       .body({
-        location: `${reservation.location.name} (${reservation.location.neighborhood})`,
-        zone: reservation.box.zone,
-        from: `${reservation.box.program.channel} (${reservation.box.program.title})`,
-        to: `${reservation.program.channel} (${reservation.program.title})`,
+        location,
+        box: reservation.box,
+        program: reservation.program,
         time: new Date(),
-        type: eventName,
-        boxId: reservation.box.id,
+        type: name,
       })
       .async()
       .go();
