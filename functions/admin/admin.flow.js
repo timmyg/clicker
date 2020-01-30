@@ -64,10 +64,10 @@ module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event 
 });
 
 module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event => {
-  // const { location, box, program, time, type } = getBody(event);
-  const { LocationString: location }: { LocationString: Venue } = getBody(event);
-  const { BoxString: box }: { BoxString: Box } = getBody(event);
-  const { ProgramString: program }: { ProgramString: Program } = getBody(event);
+  console.log(getBody(event));
+  const { location: location }: { location: Venue } = getBody(event);
+  const { box: box }: { box: Box } = getBody(event);
+  const { program: program }: { program: Program } = getBody(event);
   const { time = new Date(), type } = getBody(event);
 
   console.time('send to airtable');
