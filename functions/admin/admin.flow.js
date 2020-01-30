@@ -68,13 +68,14 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   const body = getBody(event);
   const location: Venue = body.location;
   const box: Box = body.location;
-  const program: getBody = body.location;
+  const program: Program = body.location;
   // const { location: location }: { location: Venue } = getBody(event);
   // const { box: box }: { box: Box } = getBody(event);
   // const { program: program }: { program: Program } = getBody(event);
   const { time = new Date(), type } = getBody(event);
 
   console.time('send to airtable');
+  console.log({ location, box, program, time, type });
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   await base('Channel Changes').create(
     {
