@@ -895,7 +895,15 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
 // npm run invoke:updateAirtableNowShowing
 module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
-  let locations: Venue[] = await dbLocation.scan().exec();
+  let locations: Venue[] = await dbLocation
+    .scan()
+    .filter('active')
+    .eq(true)
+    .and()
+    .filter('controlCenterV2')
+    .eq(true)
+    .all()
+    .exec();
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableName = 'Now Showing';
   const nowShowing = [];
