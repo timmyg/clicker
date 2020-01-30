@@ -79,7 +79,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   const locationName = `${location.name} (${location.neighborhood})`;
   const airtableChannelChanges = 'Channel Changes';
 
-  await base(airtableChannelChanges).create(
+  const newChannelChange = await base(airtableChannelChanges).create(
     {
       Location: locationName,
       Zone: box.zone,
@@ -101,7 +101,9 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   console.log('try to find last record to update end');
   const lastChannelChanges: any[] = await base(airtableChannelChanges)
     .select({
-      filterByFormula: `AND( {Box Id} = '${box.id}', {Zone} = '${box.zone}', {End} = BLANK() )`,
+      filterByFormula: `AND( {Record Id} != '${newChannelChange.id}', {Box Id} = '${box.id}', {Zone} = '${
+        box.zone
+      }', {End} = BLANK() )`,
       sort: [{ field: 'Time', direction: 'desc' }],
       maxRecords: 1,
     })
