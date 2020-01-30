@@ -67,8 +67,8 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   console.log(getBody(event));
   const body = getBody(event);
   const location: Venue = body.location;
-  const box: Box = body.location;
-  const program: Program = body.location;
+  const box: Box = body.box;
+  const program: Program = body.program;
   // const { location: location }: { location: Venue } = getBody(event);
   // const { box: box }: { box: Box } = getBody(event);
   // const { program: program }: { program: Program } = getBody(event);
