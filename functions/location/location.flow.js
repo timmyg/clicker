@@ -861,9 +861,12 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
+  console.log(JSON.stringify({ ccPrograms }));
+
   // get boxes that are CC active, and not manually locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
   console.log('availableBoxes', availableBoxes.length);
+  console.log(JSON.stringify({ availableBoxes }));
 
   for (const program of ccPrograms) {
     let selectedBox: ?Box = null;
