@@ -873,7 +873,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     // if (isCloseHighlyRated || isCloseNotHighlyRated) {
     if (program.isMinutesFromNow(0)) {
       selectedBox = findBoxGameOver(availableBoxes);
-      if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
+      // if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
       if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
     } else {

@@ -69,25 +69,27 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   const location: Venue = body.location;
   const box: Box = body.box;
   const program: Program = body.program;
-  // const { location: location }: { location: Venue } = getBody(event);
-  // const { box: box }: { box: Box } = getBody(event);
-  // const { program: program }: { program: Program } = getBody(event);
   const { time = new Date(), type } = getBody(event);
 
   console.time('send to airtable');
   console.log({ location, box, program, time, type });
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  await base('Channel Changes').create(
+
+  const programUsed = box.program || program;
+  const locationName = `${location.name} (${location.neighborhood})`;
+  const airtableChannelChanges = 'Channel Changes';
+
+  await base(airtableChannelChanges).create(
     {
-      Location: `${location.name} (${location.neighborhood})`,
+      Location: locationName,
       Zone: box.zone,
-      Channel: program.channel,
-      'Channel Title': program.channelTitle,
-      Rating: program.clickerRating || 0,
-      Program: program.title,
-      'Program Start': program.start,
-      'Program End': program.end,
-      Game: JSON.stringify(program.game),
+      Channel: programUsed.channel,
+      'Channel Title': programUsed.channelTitle,
+      Rating: programUsed.clickerRating || 0,
+      Program: programUsed.title,
+      'Program Start': programUsed.start,
+      'Program End': programUsed.end,
+      Game: JSON.stringify(programUsed.game),
       Time: time,
       Type: type,
       'Box Id': box.id,
@@ -95,6 +97,22 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
     { typecast: true },
   );
   console.timeEnd('send to airtable');
+
+  console.log('try to find last record to update end');
+  const lastChannelChanges: any[] = await base(airtableChannelChanges)
+    .select({
+      filterByFormula: `AND( {Box Id} = '${box.id}', {Zone} = '${box.zone}', {End} = BLANK() )`,
+      sort: [{ field: 'Time', direction: 'desc' }],
+      maxRecords: 1,
+    })
+    .all();
+  console.log({ lastChannelChanges });
+  if (lastChannelChanges && lastChannelChanges.length) {
+    const [lastChannelChange] = lastChannelChanges;
+    await base(airtableChannelChanges).update(lastChannelChange.id, {
+      End: new Date(),
+    });
+  }
 
   return respond(200);
 });
