@@ -18,3 +18,4 @@
 18. airtable gameStatus, gameOver, isOver columns
 19. remove programs so we can get end time
 20. control center Visible view
+21. airtable channel changes refactor
