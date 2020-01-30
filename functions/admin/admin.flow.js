@@ -84,6 +84,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
       Channel: program.channel,
       'Channel Title': program.channelTitle,
       Rating: program.clickerRating,
+      Program: program.title,
       Game: JSON.stringify(program.game),
       Time: time,
       Type: type,
