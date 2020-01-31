@@ -795,7 +795,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  const currentlyShowingChannels: number[] = boxes.map(b => b.channel);
+  const currentlyShowingChannels: number[] = boxes.filter(b => !!b.zone).map(b => b.channel);
   ccPrograms = ccPrograms.filter(ccp => !currentlyShowingChannels.includes(ccp.db.channel));
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
