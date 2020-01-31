@@ -332,7 +332,7 @@ module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, asy
   try {
     const programs = await base(airtableControlCenter)
       .select({
-        filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= -1 )`,
+        filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 0 )`,
       })
       .all();
 
