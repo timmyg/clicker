@@ -802,9 +802,9 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove channels that location doesnt have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
-  console.info({
-    excludedChannels: !!excludedChannels ? excludedChannels : [],
-  });
+  // console.info({
+  //   excludedChannels: !!excludedChannels ? excludedChannels : [],
+  // });
 
   if (excludedChannels && excludedChannels.length) {
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
@@ -850,8 +850,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     .queryParams({ region, programmingIds })
     // .async()
     .go();
-  console.log({ programsResult });
   const programs = programsResult && programsResult.data;
+  console.log({ programs });
 
   // attach db program
   ccPrograms.map(ccp => {
