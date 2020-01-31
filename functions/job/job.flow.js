@@ -40,12 +40,17 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
     let i = 0;
     for (const box of boxes) {
       const command = 'tune';
+      const channel = getChannelForZone(i);
+      const programResult = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams({ channel: channel, region: location.region })
+        .go();
+      const program = programResult && programResult.data;
       const reservation = {
         location,
         box,
-        program: {
-          channel: getChannelForZone(i),
-        },
+        program,
       };
       const source = 'control center daily';
       await new Invoke()

@@ -7,10 +7,16 @@
           <div class="card">
             <header>Colors</header>
             <div class="colors">
-              <div class="color" id="primary" v-bind:style="{ background: colors.primary }">{{ colors.primary }}</div>
-              <div class="color" id="secondary" v-bind:style="{ background: colors.secondary }">
-                {{ colors.secondary }}
-              </div>
+              <div
+                class="color"
+                id="primary"
+                v-bind:style="{ background: colors.primary }"
+              >{{ colors.primary }}</div>
+              <div
+                class="color"
+                id="secondary"
+                v-bind:style="{ background: colors.secondary }"
+              >{{ colors.secondary }}</div>
             </div>
           </div>
         </div>
@@ -19,6 +25,17 @@
             <header>Logo</header>
             <div>
               <img src="https://clicker-brand.s3.amazonaws.com/logo.png" alt="Clicker logo" />
+            </div>
+          </div>
+        </div>
+        <div class="card-wrapper" v-bind:class="spacing">
+          <div class="card">
+            <header>Logo (monochrome)</header>
+            <div>
+              <img
+                src="https://clicker-brand.s3.amazonaws.com/logo-monochrome.png"
+                alt="Clicker logo monochrome"
+              />
             </div>
           </div>
         </div>
@@ -34,7 +51,10 @@
           <div class="card">
             <header>Logo TV Square</header>
             <div>
-              <img src="https://clicker-brand.s3.amazonaws.com/logo-tv-square-180.png" alt="Clicker tv logo" />
+              <img
+                src="https://clicker-brand.s3.amazonaws.com/logo-tv-square-180.png"
+                alt="Clicker tv logo"
+              />
             </div>
           </div>
         </div>
@@ -42,7 +62,10 @@
           <div class="card">
             <header>Logo Square w/ bg</header>
             <div>
-              <img src="https://clicker-brand.s3.amazonaws.com/logo-square.png" alt="Clicker logo square" />
+              <img
+                src="https://clicker-brand.s3.amazonaws.com/logo-square.png"
+                alt="Clicker logo square"
+              />
             </div>
           </div>
         </div>
@@ -58,7 +81,10 @@
           <div class="card">
             <header>Checkerboard</header>
             <div>
-              <img src="https://clicker-brand.s3.amazonaws.com/checkerboard.png" alt="Clicker checkerboard" />
+              <img
+                src="https://clicker-brand.s3.amazonaws.com/checkerboard.png"
+                alt="Clicker checkerboard"
+              />
             </div>
           </div>
         </div>
@@ -68,23 +94,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Header from './layouts/Header';
-import LayoutBasic from '@/components/layouts/Basic';
+import Vue from "vue";
+import Header from "./layouts/Header";
+import LayoutBasic from "@/components/layouts/Basic";
 export default Vue.extend({
   components: {
     Header,
-    LayoutBasic,
+    LayoutBasic
   },
   data() {
     return {
-      spacing: 'col-12 col-6-md col-4-lg',
+      spacing: "col-12 col-6-md col-4-lg",
       colors: {
-        primary: '#0091ea',
-        secondary: '#55C3F5',
-      },
+        primary: "#0091ea",
+        secondary: "#55C3F5"
+      }
     };
-  },
+  }
 });
 </script>
 
