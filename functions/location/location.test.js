@@ -118,7 +118,12 @@ describe('filterPrograms', () => {
       { fields: { rating: 9 }, db: { channel: 221 } },
     ];
     const location = {
-      boxes: [{ channel: 206 }, { channel: 219 }, { channel: 206 }, { channel: 9 }],
+      boxes: [
+        { zone: '3', channel: 206 },
+        { zone: '1', channel: 219 },
+        { zone: '2', channel: 206 },
+        { zone: '4', channel: 9 },
+      ],
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(3);
@@ -138,13 +143,29 @@ describe('filterPrograms', () => {
     ];
     const location = {
       channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
-      boxes: [{ channel: 5 }, { channel: 9 }, { channel: 19 }],
+      boxes: [{ zone: '1', channel: 5 }, { zone: '2', channel: 9 }, { zone: '3', channel: 19 }],
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(2);
     expect(result[0].db.channel).toBe(219);
     expect(result[1].db.channel).toBe(12);
   });
+});
+test('exclude clicker tv app boxes', () => {
+  const ccPrograms = [
+    { fields: { rating: 4 }, db: { channel: 219 } }, // on app
+    { fields: { rating: 4 }, db: { channel: 209 } },
+    { fields: { rating: 4 }, db: { channel: 9 } }, // on zone 2 box
+    { fields: { rating: 4 }, db: { channel: 206 } }, // on app
+  ];
+  const location = {
+    boxes: [{ channel: 209 }, { channel: 9, zone: '2' }, { channel: 206 }, { appActive: true, channel: 219 }],
+  };
+  const result = filterPrograms(ccPrograms, location);
+  expect(result.length).toBe(3);
+  expect(result[0].db.channel).toBe(219);
+  expect(result[1].db.channel).toBe(209);
+  expect(result[2].db.channel).toBe(206);
 });
 describe('get boxes', () => {
   const openGoodBox = { id: 1, zone: '4' };

@@ -442,13 +442,14 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .async()
           .go();
         // await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
-
+        console.log({ channel: major, region: location.region });
         const programResult = await new Invoke()
           .service('program')
           .name('get')
-          .queryParams({ channel: box.channel, region: location.region })
+          .queryParams({ channel: major, region: location.region })
           .go();
         const program = programResult && programResult.data;
+        console.log({ program });
         await new Invoke()
           .service('admin')
           .name('logChannelChange')
@@ -795,16 +796,16 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  const currentlyShowingChannels: number[] = boxes.map(b => b.channel);
+  const currentlyShowingChannels: number[] = boxes.filter(b => !!b.zone).map(b => b.channel);
   ccPrograms = ccPrograms.filter(ccp => !currentlyShowingChannels.includes(ccp.db.channel));
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
   // remove channels that location doesnt have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
-  console.info({
-    excludedChannels: !!excludedChannels ? excludedChannels : [],
-  });
+  // console.info({
+  //   excludedChannels: !!excludedChannels ? excludedChannels : [],
+  // });
 
   if (excludedChannels && excludedChannels.length) {
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
@@ -850,8 +851,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     .queryParams({ region, programmingIds })
     // .async()
     .go();
-  console.log({ programsResult });
   const programs = programsResult && programsResult.data;
+  console.log({ programs });
 
   // attach db program
   ccPrograms.map(ccp => {

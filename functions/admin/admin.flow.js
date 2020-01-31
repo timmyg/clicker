@@ -75,7 +75,6 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   console.log({ location, box, program, time, type });
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
 
-  const programUsed = box.program || program;
   const locationName = `${location.name} (${location.neighborhood})`;
   const airtableChannelChanges = 'Channel Changes';
 
@@ -83,13 +82,13 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
     {
       Location: locationName,
       Zone: box.zone,
-      Channel: programUsed.channel,
-      'Channel Title': programUsed.channelTitle,
-      Rating: programUsed.clickerRating || 0,
-      Program: programUsed.title,
-      'Program Start': new Date(programUsed.start),
-      'Program End': new Date(programUsed.end),
-      Game: JSON.stringify(programUsed.game),
+      Channel: program.channel,
+      'Channel Title': program.channelTitle,
+      Rating: program.clickerRating || 0,
+      Program: program.title,
+      'Program Start': new Date(program.start),
+      'Program End': new Date(program.end),
+      Game: JSON.stringify(program.game),
       Time: time,
       Type: type,
       'Box Id': box.id,

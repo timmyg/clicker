@@ -49,7 +49,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   const { channel, channelMinor } = reservation.program;
   const api = new LosantApi();
 
-  console.log(command, losantId, client, channel, channelMinor, ip, key, source);
+  console.log({ command, losantId, client, channel, channelMinor, ip, key, source });
   console.time('change channel');
   await api.sendCommand(command, losantId, {
     client,
