@@ -442,13 +442,14 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .async()
           .go();
         // await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
-
+        console.log({ channel: major, region: location.region });
         const programResult = await new Invoke()
           .service('program')
           .name('get')
-          .queryParams({ channel: box.channel, region: location.region })
+          .queryParams({ channel: major, region: location.region })
           .go();
         const program = programResult && programResult.data;
+        console.log({ program });
         await new Invoke()
           .service('admin')
           .name('logChannelChange')
