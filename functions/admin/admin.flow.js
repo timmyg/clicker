@@ -75,8 +75,6 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   console.log({ location, box, program, time, type });
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
 
-  // const programUsed = box.program || program;
-  // const programUsed = program;
   const locationName = `${location.name} (${location.neighborhood})`;
   const airtableChannelChanges = 'Channel Changes';
 

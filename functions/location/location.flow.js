@@ -455,7 +455,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .name('logChannelChange')
           .body({
             location,
-            box,
+            box: location.boxes[i],
             program,
             time: new Date(),
             type: name,
