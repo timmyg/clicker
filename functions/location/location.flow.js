@@ -755,7 +755,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     program,
     channelChangeAt,
   });
-  await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program);
+  await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program, channelChangeAt);
   console.timeEnd('update location box');
 
   return respond(200);
