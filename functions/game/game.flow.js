@@ -332,7 +332,7 @@ module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, asy
   try {
     const programs = await base(airtableControlCenter)
       .select({
-        filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 0 )`,
+        filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 1 )`,
       })
       .all();
 
@@ -347,10 +347,12 @@ module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, asy
           .exec();
         console.log({ recordId, gameId, game });
         if (game) {
-          await base(airtableControlCenter).update(recordId, {
-            gameOver: game.summary.ended,
-            gameStatus: game.summary.description,
-          });
+          if (game.status) {
+            await base(airtableControlCenter).update(recordId, {
+              gameOver: game.summary.ended,
+              gameStatus: game.summary.description,
+            });
+          }
         } else {
           await new Invoke()
             .service('notification')
