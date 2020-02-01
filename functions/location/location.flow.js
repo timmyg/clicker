@@ -397,6 +397,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     };
     if (originalChannel !== major) {
       updateBoxInfoBody.source = 'manual';
+      updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
     }
 
     await new Invoke()
@@ -712,7 +713,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
-  const { channel, channelMinor, source } = getBody(event);
+  const { channel, channelMinor, source, channelChangeAt } = getBody(event);
 
   console.time('get location');
   const location: Venue = await dbLocation
@@ -724,7 +725,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   console.log({ boxId, boxIndex });
 
-  console.time('get program 2');
+  console.time('get program');
   // HACK adding one minute here so that if this is called at :58,
   //  it'll get :00 program
   const inTwoMinutesUnix =
@@ -742,7 +743,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .go();
   const program = programResult && programResult.data;
   console.log({ program });
-  console.timeEnd('get program 2');
+  console.timeEnd('get program');
 
   console.time('update location box');
   console.log({
@@ -752,6 +753,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     channelMinor,
     source,
     program,
+    channelChangeAt,
   });
   await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program);
   console.timeEnd('update location box');
@@ -1059,6 +1061,7 @@ async function updateLocationBox(
   channelMinor?: number,
   source?: string,
   program: Program,
+  channelChangeAt?: number,
 ) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -1068,8 +1071,10 @@ async function updateLocationBox(
   if (channel) {
     updateExpression += `boxes[${boxIndex}].channel = :channel,`;
     expressionAttributeValues[':channel'] = parseInt(channel);
+  }
+  if (channelChangeAt) {
     updateExpression += `boxes[${boxIndex}].channelChangeAt = :channelChangeAt,`;
-    expressionAttributeValues[':channelChangeAt'] = now;
+    expressionAttributeValues[':channelChangeAt'] = channelChangeAt;
   }
   if (source) {
     updateExpression += `boxes[${boxIndex}].channelSource = :channelSource,`;

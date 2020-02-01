@@ -3,6 +3,7 @@ const losantApi = require('losant-rest');
 const { respond, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+const moment = require('moment');
 
 declare class process {
   static env: {
@@ -125,7 +126,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   await new Invoke()
     .service('location')
     .name('updateBoxInfo')
-    .body({ channel, source })
+    .body({ channel, source, channelChangeAt: moment().unix() * 1000 })
     .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
