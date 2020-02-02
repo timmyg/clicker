@@ -347,7 +347,7 @@ module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, asy
           .exec();
         console.log({ recordId, gameId, game });
         if (game) {
-          if (game.status) {
+          if (game.summary) {
             await base(airtableControlCenter).update(recordId, {
               gameOver: game.summary.ended,
               gameStatus: game.summary.description,
