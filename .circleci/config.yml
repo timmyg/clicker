@@ -109,10 +109,10 @@ jobs:
           command: chmod +x .circleci/build-scripts/netlify-deploy-mobile.sh && .circleci/build-scripts/netlify-deploy-mobile.sh
   s3-deploy-antenna:
     executor: aws
-    working_directory: << parameters.package_dir >>
-    parameters:
-      package_dir:
-        type: string
+    # working_directory: << parameters.package_dir >>
+    # parameters:
+    #   package_dir:
+    #     type: string
     steps:
       - checkout
       - run:
@@ -268,7 +268,7 @@ workflows:
     when: << pipeline.parameters.packages-antenna >>
     jobs:
       - s3-deploy-antenna:
-          package_dir: ~/clicker/packages/antenna
+          # package_dir: ~/clicker/packages/antenna
   e2e-app:
     when: << pipeline.parameters.e2e-app >>
     jobs:

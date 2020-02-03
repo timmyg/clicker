@@ -11,5 +11,6 @@ if [ "${CIRCLE_BRANCH}" == "develop" ]; then
 fi
 echo -e "sh dir"
 echo -e pwd
+cd packages/antenna
 tar zcvf $filename *
 aws s3 cp $filename s3://clicker-antenna/app/
