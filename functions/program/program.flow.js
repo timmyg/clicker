@@ -416,7 +416,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
       currentPrograms[i].nextProgramStart = nextProgram.start;
     }
   });
-  console.time('current + next programming combine');
+  console.timeEnd('current + next programming combine');
 
   console.time('remove excluded');
   console.log('exclude', location.channels);
