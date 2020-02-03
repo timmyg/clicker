@@ -120,7 +120,7 @@ jobs:
           command: npm i
       - run:
           name: Upload app zip to s3
-          command: pwd && chmod +x .circleci/build-scripts/s3-deploy-antenna.sh
+          command: pwd && chmod +x .circleci/build-scripts/s3-deploy-antenna.sh  && .circleci/build-scripts/s3-deploy-antenna.sh
   run-e2e:
     executor: cypress
     working_directory: << parameters.package_dir >>
