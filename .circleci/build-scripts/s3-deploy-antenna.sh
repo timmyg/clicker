@@ -12,5 +12,6 @@ fi
 echo -e "sh dir"
 echo -e pwd
 cd packages/antenna
+npm i
 tar zcvf $filename *
 aws s3 cp $filename s3://clicker-antenna/app/
