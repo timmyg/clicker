@@ -1,33 +1,34 @@
 <ion-card *ngIf="(reservation$ | async)">
   <ion-card-content>
-    <div>
-      <label> Location: </label>
-      <span
-        >{{ reservation.location.name }} ({{
-          reservation.location.neighborhood
-        }})</span
-      >
+    <div class="summary-wrapper">
+      <div>
+        <label> Location: </label>
+        <span
+          >{{ reservation.location.name }} ({{
+            reservation.location.neighborhood
+          }})</span
+        >
+      </div>
+      <div>
+        <label> Channel: </label>
+        <span
+          >{{ reservation.program.channelTitle }} ({{
+            reservation.program.title
+          }})</span
+        >
+      </div>
+      <div>
+        <label> TV: </label> <span>{{ reservation.box.label }}</span>
+      </div>
+      <div>
+        <label> Reserved Until: </label>
+        <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
+          getEndTime() | amDateFormat: "h:mma"
+        }}</span>
+        <ng-template #noReservation> One-time change </ng-template>
+      </div>
     </div>
-    <div>
-      <label> Channel: </label>
-      <span
-        >{{ reservation.program.channelTitle }} ({{
-          reservation.program.title
-        }})</span
-      >
-    </div>
-    <div>
-      <label> TV: </label> <span>{{ reservation.box.label }}</span>
-    </div>
-    <div>
-      <label> Reserved Until: </label>
-      <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
-        getEndTime() | amDateFormat: "h:mma"
-      }}</span>
-      <ng-template #noReservation> One-time change </ng-template>
-    </div>
-    <br />
-    <ion-list *ngIf="!isEditChannel">
+    <ion-list class="timeframes" *ngIf="!isEditChannel">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
         <ion-list-header no-padding>
           <span>
@@ -39,17 +40,6 @@
         <ion-row *ngIf="isAppLoading" margin-vertical>
           <ion-spinner name="crescent" class="center"></ion-spinner>
         </ion-row>
-        <!-- <ng-template #appLoaded> -->
-        <!-- <ion-item *ngIf="isEditMode && !isAppLoading">
-          <ion-label flex align-items-center>
-            <span class="dollars">{{ timeframe0.minutes }} minutes</span>
-            <div flex align-items-center>
-              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-              <span>{{ timeframe0.tokens }}</span>
-            </div>
-          </ion-label>
-          <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting || isAppLoading" checked></ion-radio>
-        </ion-item> -->
         <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
@@ -78,7 +68,7 @@
         😎
         <b
           >You, and only you, will be able to freely change the channel during
-          your reservation.</b
+          your reservation timeframe.</b
         >
       </span>
       <ng-template #noReservation

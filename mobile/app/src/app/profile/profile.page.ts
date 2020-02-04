@@ -213,10 +213,13 @@ export class ProfilePage {
       header: "Modify Reservation",
       buttons: [
         {
-          text: "Cancel Reservation",
-          role: "destructive",
+          text: "Add Time",
           handler: () => {
-            this.onReservationCancel(reservation);
+            const reservationToUpdate = Object.assign({}, reservation);
+            this.store.dispatch(
+              new fromReservation.SetForUpdate(reservationToUpdate, "time")
+            );
+            this.router.navigate(["/tabs/reserve"]);
           }
         },
         {
@@ -231,13 +234,10 @@ export class ProfilePage {
           }
         },
         {
-          text: "Add Time",
+          text: "Cancel Reservation",
+          role: "destructive",
           handler: () => {
-            const reservationToUpdate = Object.assign({}, reservation);
-            this.store.dispatch(
-              new fromReservation.SetForUpdate(reservationToUpdate, "time")
-            );
-            this.router.navigate(["/tabs/reserve"]);
+            this.onReservationCancel(reservation);
           }
         }
       ]
