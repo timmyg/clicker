@@ -10,7 +10,7 @@ if (!process.env.IS_LOCAL) {
 }
 const axios = require('axios');
 const moment = require('moment');
-const { uniqBy } = require('lodash');
+const { uniqBy, uniqWith } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
@@ -416,7 +416,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
       currentPrograms[i].nextProgramStart = nextProgram.start;
     }
   });
-  console.time('current + next programming combine');
+  console.timeEnd('current + next programming combine');
 
   console.time('remove excluded');
   console.log('exclude', location.channels);
@@ -522,7 +522,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  const daysToPull = 3;
+  const daysToPull = 4;
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
@@ -534,23 +534,37 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     const results = await pullFromDirecTV(region.name, region.localChannels, region.defaultZip, datesToPull, 24);
     // TODO:SENTRY results is not iterable
     for (const result of results) {
-      const allExistingGames = await base(airtablePrograms)
-        .select({ fields: ['programmingId'] })
-        .all();
-      const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
       const schedule = result.data;
       let allPrograms: Program[] = build(schedule, region.name);
       // allPrograms = allPrograms.filter(p => !!p.live);
       allPrograms = uniqBy(allPrograms, 'programmingId');
-      allPrograms = allPrograms.filter(e => !allExistingProgrammingIds.includes(e.programmingId));
+      // filter out programs already created
+      const allExistingPrograms = await base(airtablePrograms)
+        .select({ fields: ['programmingId', 'start', 'channelTitle'] })
+        .all();
+
+      // filter out allPrograms where there is an existing game with same programmingId, start and channel title
+      console.log('existing programs:', allExistingPrograms.length);
+      console.log('pulled programs:', allPrograms.length);
+      allPrograms = allPrograms.filter((program: Program) => {
+        const { programmingId, start, channelTitle } = program;
+        const alreadyExists = allExistingPrograms.some(
+          ep =>
+            ep.fields.programmingId === programmingId &&
+            moment(ep.fields.start).unix() * 1000 === start &&
+            ep.fields.channelTitle === channelTitle,
+        );
+        return !alreadyExists;
+      });
+      console.log('pulled programs unique:', allPrograms.length);
+
       let allAirtablePrograms = buildAirtablePrograms(allPrograms);
       console.time('create');
       while (!!allAirtablePrograms.length) {
         try {
           const promises = [];
           const programsSlice = allAirtablePrograms.splice(0, 10);
-          console.log('batch putting:', programsSlice.length);
-          console.log('remaining:', allAirtablePrograms.length);
+          // console.log('batch putting:', programsSlice.length, 'remaining:', allAirtablePrograms.length);
           promises.push(base(airtablePrograms).create(programsSlice));
           await Promise.all(promises);
         } catch (e) {
@@ -921,14 +935,14 @@ function build(dtvSchedule: any, regionName: string) {
         // console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
         if (minorChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
-          console.log('minor!');
+          // console.log('minor!');
           const minorChannelMatch: any = minorChannels.find(c => c.channel === program.channel);
-          console.log({ minorChannelMatch });
+          // console.log({ minorChannelMatch });
           const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
-          console.log({ channelMinor });
+          // console.log({ channelMinor });
           if (!!channelMinor) {
             program.channelMinor = channelMinor.minor;
-            console.log('minor set');
+            // console.log('minor set');
           }
         }
 
@@ -960,7 +974,7 @@ function build(dtvSchedule: any, regionName: string) {
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
   const id = programmingId + channel + start + region;
-  console.log('..........', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
+  // console.log('..........', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
   return uuid(id, uuid.DNS);
 }
 
