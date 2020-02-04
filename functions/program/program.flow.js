@@ -522,7 +522,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  const daysToPull = 3;
+  const daysToPull = 4;
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
@@ -543,36 +543,28 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
         .select({ fields: ['programmingId', 'start', 'channelTitle'] })
         .all();
 
-      // const allExistingProgrammingIds = allExistingPrograms.map(g => g.get('programmingId'));
       // filter out allPrograms where there is an existing game with same programmingId, start and channel title
-      allPrograms = allPrograms.filter(program => {
-        const { programmingId, start, channelTitle } = program.fields;
+      console.log('existing programs:', allExistingPrograms.length);
+      console.log('pulled programs:', allPrograms.length);
+      allPrograms = allPrograms.filter((program: Program) => {
+        const { programmingId, start, channelTitle } = program;
         const alreadyExists = allExistingPrograms.some(
-          ep => ep.programmingId === programmingId && ep.start === start && ep.channelTitle === channelTitle,
+          ep =>
+            ep.fields.programmingId === programmingId &&
+            moment(ep.fields.start).unix() * 1000 === start &&
+            ep.fields.channelTitle === channelTitle,
         );
         return !alreadyExists;
       });
+      console.log('pulled programs unique:', allPrograms.length);
 
-      // allPrograms = uniqWith(
-      //   allPrograms,
-      //   (program1, program2) =>
-      //     program1.programmingId === program2.programmingId &&
-      //     program1.start === program2.start &&
-      //     program1.channelTitle === program2.channelTitle,
-      // );
-
-      // allPrograms = allPrograms.filter(e => !allExistingProgrammingIds.includes(e.programmingId));
-      // allPrograms = allPrograms.filter(e => {
-      //   !allExistingGames.ma.includes(e.programmingId);
-      // });
       let allAirtablePrograms = buildAirtablePrograms(allPrograms);
       console.time('create');
       while (!!allAirtablePrograms.length) {
         try {
           const promises = [];
           const programsSlice = allAirtablePrograms.splice(0, 10);
-          console.log('batch putting:', programsSlice.length);
-          console.log('remaining:', allAirtablePrograms.length);
+          // console.log('batch putting:', programsSlice.length, 'remaining:', allAirtablePrograms.length);
           promises.push(base(airtablePrograms).create(programsSlice));
           await Promise.all(promises);
         } catch (e) {
@@ -943,14 +935,14 @@ function build(dtvSchedule: any, regionName: string) {
         // console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
         if (minorChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
-          console.log('minor!');
+          // console.log('minor!');
           const minorChannelMatch: any = minorChannels.find(c => c.channel === program.channel);
-          console.log({ minorChannelMatch });
+          // console.log({ minorChannelMatch });
           const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
-          console.log({ channelMinor });
+          // console.log({ channelMinor });
           if (!!channelMinor) {
             program.channelMinor = channelMinor.minor;
-            console.log('minor set');
+            // console.log('minor set');
           }
         }
 
@@ -982,7 +974,7 @@ function build(dtvSchedule: any, regionName: string) {
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
   const id = programmingId + channel + start + region;
-  console.log('..........', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
+  // console.log('..........', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
   return uuid(id, uuid.DNS);
 }
 
