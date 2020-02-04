@@ -1,35 +1,48 @@
-import { Component } from '@angular/core';
-import { Reservation } from '../state/reservation/reservation.model';
-import { Observable, Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../state/app.reducer';
-import { getAllReservations, getLoading as getReservationLoading } from '../state/reservation';
-import { getUser, getLoading as getWalletLoading, isLoggedIn } from '../state/user';
-import { ModalController, AlertController, ToastController, Platform, ActionSheetController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
-import * as fromReservation from '../state/reservation/reservation.actions';
-import * as fromUser from '../state/user/user.actions';
-import { Router, ActivatedRoute } from '@angular/router';
-import { User } from '../state/user/user.model';
-import * as moment from 'moment';
+import { Component } from "@angular/core";
+import { Reservation } from "../state/reservation/reservation.model";
+import { Observable, Subscription } from "rxjs";
+import { Store } from "@ngrx/store";
+import * as fromStore from "../state/app.reducer";
+import {
+  getAllReservations,
+  getLoading as getReservationLoading
+} from "../state/reservation";
+import {
+  getUser,
+  getLoading as getWalletLoading,
+  isLoggedIn
+} from "../state/user";
+import {
+  ModalController,
+  AlertController,
+  ToastController,
+  Platform,
+  ActionSheetController
+} from "@ionic/angular";
+import { Storage } from "@ionic/storage";
+import * as fromReservation from "../state/reservation/reservation.actions";
+import * as fromUser from "../state/user/user.actions";
+import { Router, ActivatedRoute } from "@angular/router";
+import { User } from "../state/user/user.model";
+import * as moment from "moment";
 // import { Intercom } from 'ng-intercom';
-import { LoginComponent } from '../auth/login/login.component';
-import { UserService } from '../core/services/user.service';
-import { take, first } from 'rxjs/operators';
-import { ofType, Actions } from '@ngrx/effects';
-import { SegmentService } from 'ngx-segment-analytics';
-import { Globals } from '../globals';
-import { ToastOptions } from '@ionic/core';
-import { AppService } from '../core/services/app.service';
-import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
-import { ICurrentConfig } from 'cordova-plugin-ionic/dist/IonicCordova';
-import { ReferralPage } from '../referral/referral.page';
+import { LoginComponent } from "../auth/login/login.component";
+import { UserService } from "../core/services/user.service";
+import { take, first } from "rxjs/operators";
+import { ofType, Actions } from "@ngrx/effects";
+import { SegmentService } from "ngx-segment-analytics";
+import { Globals } from "../globals";
+import { ToastOptions } from "@ionic/core";
+import { AppService } from "../core/services/app.service";
+import { Deploy } from "cordova-plugin-ionic/dist/ngx";
+import { ICurrentConfig } from "cordova-plugin-ionic/dist/IonicCordova";
+import { ReferralPage } from "../referral/referral.page";
 declare var window: any;
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss'],
+  selector: "app-profile",
+  templateUrl: "./profile.page.html",
+  styleUrls: ["./profile.page.scss"]
 })
 export class ProfilePage {
   reservations$: Observable<Reservation[]>;
@@ -44,8 +57,8 @@ export class ProfilePage {
   isLoggedIn$: Observable<boolean>;
   isLoggedIn: boolean;
   rating = {
-    cookieName: 'rating',
-    given: 'given',
+    cookieName: "rating",
+    given: "given"
   };
   showVersionClicks = 0;
 
@@ -65,7 +78,7 @@ export class ProfilePage {
     public actionSheetController: ActionSheetController,
     private segment: SegmentService,
     private globals: Globals,
-    private deploy: Deploy,
+    private deploy: Deploy
   ) {
     this.reservations$ = this.store.select(getAllReservations);
     this.user$ = this.store.select(getUser);
@@ -108,7 +121,7 @@ export class ProfilePage {
 
   async login() {
     this.loginModal = await this.modalController.create({
-      component: LoginComponent,
+      component: LoginComponent
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.loginModal) {
@@ -127,7 +140,7 @@ export class ProfilePage {
     // this.sub2 = this.platform.backButton.pipe(first()).subscribe(() => {
     //   this.intercom.hide();
     // });
-    window.drift.on('ready', function(api) {
+    window.drift.on("ready", function(api) {
       console.log(api);
       // api.widget.show();
       api.openChat();
@@ -141,10 +154,13 @@ export class ProfilePage {
       if (duration > 0) {
         this.showModify(reservation);
       } else {
-        this.showToast('Sorry, your reservation has expired.', true);
+        this.showToast("Sorry, your reservation has expired.", true);
       }
     } else {
-      this.showToast('Sorry, you did not reserve this TV for a time period.', true);
+      this.showToast(
+        "Sorry, you did not reserve this TV for a time period.",
+        true
+      );
     }
   }
 
@@ -152,19 +168,19 @@ export class ProfilePage {
     const toastOptions: ToastOptions = {
       message: message,
       duration: 4000,
-      cssClass: 'ion-text-center',
+      cssClass: "ion-text-center"
     };
     let toast;
     if (showNewReservation) {
       toastOptions.buttons = [
         {
-          side: 'end',
-          text: 'Reserve Now',
+          side: "end",
+          text: "Reserve Now",
           handler: () => {
-            this.router.navigate(['/tabs/reserve']);
+            this.router.navigate(["/tabs/reserve"]);
             toast.dismiss();
-          },
-        },
+          }
+        }
       ];
     }
     toast = await this.toastController.create(toastOptions);
@@ -173,10 +189,12 @@ export class ProfilePage {
 
   createNewReservation(source: string) {
     this.store.dispatch(new fromReservation.Start());
-    this.router.navigate(['/tabs/reserve/locations'], { relativeTo: this.route });
-    if (source === 'fab') {
+    this.router.navigate(["/tabs/reserve/locations"], {
+      relativeTo: this.route
+    });
+    if (source === "fab") {
       this.segment.track(this.globals.events.reservation.clickedButton);
-    } else if (source === 'link') {
+    } else if (source === "link") {
       this.segment.track(this.globals.events.reservation.clickedLink);
     }
   }
@@ -184,60 +202,66 @@ export class ProfilePage {
   // this will make sure it disappears from screen if you stay on screen
   // ... definitely a better way to do this
   isActive(reservation: Reservation) {
-    const remaining = moment.duration(moment(reservation.end).diff(moment())).asSeconds();
+    const remaining = moment
+      .duration(moment(reservation.end).diff(moment()))
+      .asSeconds();
     return remaining > 0;
   }
 
   async showModify(reservation: Reservation) {
     const actionSheet = await this.actionSheetController.create({
-      header: 'Modify Reservation',
+      header: "Modify Reservation",
       buttons: [
         {
-          text: 'Cancel Reservation',
-          role: 'destructive',
+          text: "Cancel Reservation",
+          role: "destructive",
           handler: () => {
             this.onReservationCancel(reservation);
-          },
+          }
         },
         {
-          text: 'Change Channel',
+          text: "Change Channel",
           handler: () => {
             const reservationToUpdate = Object.assign({}, reservation);
             delete reservationToUpdate.program;
-            this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
-            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'channel' }, skipLocationChange: true });
-          },
+            this.store.dispatch(
+              new fromReservation.SetForUpdate(reservationToUpdate, "channel")
+            );
+            this.router.navigate(["/tabs/reserve"]);
+          }
         },
         {
-          text: 'Add Time',
+          text: "Add Time",
           handler: () => {
             const reservationToUpdate = Object.assign({}, reservation);
-            this.store.dispatch(new fromReservation.SetForUpdate(reservationToUpdate));
-            this.router.navigate(['/tabs/reserve'], { queryParams: { edit: 'time' }, skipLocationChange: true });
-          },
-        },
-      ],
+            this.store.dispatch(
+              new fromReservation.SetForUpdate(reservationToUpdate, "time")
+            );
+            this.router.navigate(["/tabs/reserve"]);
+          }
+        }
+      ]
     });
     await actionSheet.present();
   }
 
   async onReservationCancel(reservation: Reservation) {
     const alert = await this.alertController.create({
-      header: 'Are you sure?',
+      header: "Are you sure?",
       message:
-        'You will not be refunded any tokens, but you will be freeing up a TV for others, which is appreciated ✌️',
+        "You will not be refunded any tokens, but you will be freeing up a TV for others, which is appreciated ✌️",
       buttons: [
         {
-          text: 'Cancel Reservation',
-          role: 'destructive',
-          cssClass: 'secondary',
+          text: "Cancel Reservation",
+          role: "destructive",
+          cssClass: "secondary",
           handler: () => {
             this.store.dispatch(new fromReservation.Cancel(reservation));
             this.segment.track(this.globals.events.reservation.cancelled);
             // clearInterval(this.intervalJobId);
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
 
     await alert.present();
@@ -247,9 +271,14 @@ export class ProfilePage {
     this.store.dispatch(new fromReservation.GetAll());
     this.store.dispatch(new fromUser.Refresh());
     // zip(
-    this.actions$.pipe(ofType(fromReservation.GET_RESERVATIONS_SUCCESS), take(1)).subscribe(() => {
-      event.target.complete();
-    });
+    this.actions$
+      .pipe(
+        ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
+        take(1)
+      )
+      .subscribe(() => {
+        event.target.complete();
+      });
   }
 
   async showVersion() {
@@ -260,7 +289,7 @@ export class ProfilePage {
       const toast = await this.toastController.create({
         message: `Version: ${version} 😏 (${configuration.channel})`,
         duration: 3000,
-        cssClass: 'ion-text-center',
+        cssClass: "ion-text-center"
       });
       await toast.present();
       this.showVersionClicks = 0;
@@ -269,27 +298,27 @@ export class ProfilePage {
 
   async onLogout() {
     const alert = await this.alertController.create({
-      header: 'Are you sure?',
-      message: 'Your existing reservations will not be affected.',
+      header: "Are you sure?",
+      message: "Your existing reservations will not be affected.",
       buttons: [
         {
-          text: 'Cancel',
-          role: 'cancel',
+          text: "Cancel",
+          role: "cancel"
         },
         {
-          text: 'Logout',
-          role: 'destructive',
-          cssClass: 'secondary',
+          text: "Logout",
+          role: "destructive",
+          cssClass: "secondary",
           handler: async () => {
-            const originalToken = await this.storage.get('originalToken');
+            const originalToken = await this.storage.get("originalToken");
             await this.storage.clear();
             // await this.storage.remove(items[i].id);
-            await this.storage.set('originalToken', originalToken);
-            await this.storage.set('token', originalToken);
+            await this.storage.set("originalToken", originalToken);
+            await this.storage.set("token", originalToken);
             return location.reload();
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
 
     await alert.present();
@@ -297,52 +326,53 @@ export class ProfilePage {
 
   async rate() {
     const actionSheet = await this.actionSheetController.create({
-      header: 'Rate the Clicker TV app',
+      header: "Rate the Clicker TV app",
       buttons: [
         {
-          text: 'I already left a rating',
+          text: "I already left a rating",
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
             this.showRatingLink = false;
             const toast = await this.toastController.create({
               message: `We appreciate it! 🙌😁😍🎉😻🎈`,
               duration: 3000,
-              cssClass: 'ion-text-center',
+              cssClass: "ion-text-center"
             });
             await toast.present();
             this.segment.track(this.globals.events.rated);
             this.segment.identify(null, { rated: true });
-          },
+          }
         },
         {
-          text: 'Leave rating',
+          text: "Leave rating",
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
-            let link = 'https://tryclicker.com';
-            console.log('checking platform type');
-            if (this.platform.is('ios')) {
-              console.log('is ios');
-              link = 'itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8';
-            } else if (this.platform.is('android')) {
-              console.log('is android');
-              link = 'market://details?id=com.teamclicker.app';
+            let link = "https://tryclicker.com";
+            console.log("checking platform type");
+            if (this.platform.is("ios")) {
+              console.log("is ios");
+              link =
+                "itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8";
+            } else if (this.platform.is("android")) {
+              console.log("is android");
+              link = "market://details?id=com.teamclicker.app";
             }
             window.open(link);
             return null;
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
 
     await actionSheet.present();
   }
 
   getStoreName() {
-    let storeName = 'app store';
-    if (this.platform.is('ios')) {
-      storeName = 'App Store';
-    } else if (this.platform.is('android')) {
-      storeName = 'Play Store';
+    let storeName = "app store";
+    if (this.platform.is("ios")) {
+      storeName = "App Store";
+    } else if (this.platform.is("android")) {
+      storeName = "Play Store";
     }
     return storeName;
   }

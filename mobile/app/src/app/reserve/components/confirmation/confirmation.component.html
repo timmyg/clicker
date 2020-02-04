@@ -24,14 +24,14 @@
       <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
         getEndTime() | amDateFormat: "h:mma"
       }}</span>
-      <ng-template #noReservation> Free one-time change </ng-template>
+      <ng-template #noReservation> One-time change </ng-template>
     </div>
     <br />
-    <ion-list *ngIf="!reservation.location.free">
+    <ion-list *ngIf="!isEditChannel">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
         <ion-list-header no-padding>
           <span>
-            <span *ngIf="isEditMode; else normal">Extend</span>
+            <span *ngIf="isEditTime; else normal">Extend</span>
             <ng-template #normal>Choose</ng-template> Timeframe:
           </span>
         </ion-list-header>
@@ -84,8 +84,8 @@
       <ng-template #noReservation
         >⚠️
         <b
-          >You can change the channel since it's not reserved, but others will
-          be able to change it at any time.</b
+          >This is a one-time channel change, others will be able to change it
+          at any time.</b
         ></ng-template
       >
     </p>
@@ -98,7 +98,7 @@
       [disabled]="
         saving ||
         insufficientFunds() ||
-        isAppLoading ||
+        (!isEditChannel && isAppLoading) ||
         (outOfRange && !overrideDistanceDisable) ||
         isInitializing
       "
@@ -106,8 +106,12 @@
       align-items-center
     >
       <ion-row *ngIf="!saving; else isSaving" align-items-center>
-        <span class="scale">⚡&nbsp;&nbsp;</span>
-        <span padding-horizontal>Change<br />Channel&nbsp;</span>
+        <span *ngIf="!isEditTime" class="scale">⚡&nbsp;&nbsp;</span>
+        <span *ngIf="isEditTime" class="scale">⏱️&nbsp;&nbsp;</span>
+        <span padding-horizontal>
+          <span *ngIf="!isEditTime"> Change<br />Channel&nbsp;</span>
+          <span *ngIf="isEditTime"> Add Time</span>
+        </span>
         <span flex align-items-center
           ><img
             class="coin"

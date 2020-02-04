@@ -8,7 +8,10 @@ import { Reservation } from "../../../state/reservation/reservation.model";
 import { ReserveService } from "../../reserve.service";
 import { Observable, Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import { getReservation } from "src/app/state/reservation";
+import {
+  getReservation,
+  getReservationUpdateType
+} from "src/app/state/reservation";
 import * as fromStore from "../../../state/app.reducer";
 import * as fromReservation from "../../../state/reservation/reservation.actions";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -33,6 +36,7 @@ import { getLoading as getAppLoading } from "src/app/state/app";
 export class ConfirmationComponent implements OnDestroy, OnInit {
   timeframes$: Observable<Timeframe[]>;
   reservation$: Observable<Partial<Reservation>>;
+  reservationUpdateType$: Observable<string>;
   reservationEnd$: Observable<Date>;
   tokenCount$: Observable<number>;
   tokenCount: number;
@@ -42,12 +46,13 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   isLoggedIn: boolean;
   saving: boolean;
   isEditMode: boolean;
+  isEditTime: boolean;
+  isEditChannel: boolean;
   sufficientFunds: boolean;
   rangeDistanceMiles = 1;
   outOfRange: boolean;
   isAppLoading$: Observable<boolean>;
   isAppLoading: boolean;
-  isReservationLengthEdit: boolean;
   isInitializing = true;
   sub: Subscription;
   timeframe0: Timeframe = {
@@ -69,12 +74,14 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   ) {
     this.timeframes$ = this.store.select(getTimeframes);
     this.reservation$ = this.store.select(getReservation);
+    this.reservationUpdateType$ = this.store.select(getReservationUpdateType);
     this.reserveService.emitTitle(this.title);
     this.tokenCount$ = this.store.select(getUserTokenCount);
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     // TODO this is ugly but gets rid of ExpressionChangedAfterItHasBeenCheckedError issue when opening wallet
     this.isAppLoading$ = this.store.pipe(select(getAppLoading));
     this.sub = this.isAppLoading$.subscribe(x => {
+      console.log({ x });
       this.isAppLoading = x;
     });
   }
@@ -88,6 +95,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    setTimeout(() => {
+      console.log(this);
+    }, 5000);
     this.reservation$
       .pipe(
         filter(r => r !== null),
@@ -101,12 +111,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
           new fromApp.LoadTimeframes(reservation.location.id)
         );
         this.reservation = reservation;
-        // initialize reservation
-        // if (this.reservation.location.free) {
-        //   this.reservation.cost = 0;
-        //   this.reservation.minutes = 0;
-        //   this.isInitializing = false;
-        // } else {
         this.timeframes$
           .pipe(
             filter(t => t !== null),
@@ -121,19 +125,22 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
             this.isInitializing = false;
           });
         // }
-        this.route.queryParams.subscribe(params => {
-          // this.reservation.minutes = this.reservation.location.minutes;
-          if (params && params.edit) {
-            if (params.edit === "channel") {
+        // const updateType: string = state.reservation.updateType;
+        // this.route.queryParams.subscribe(params => {
+        // this.reservation.minutes = this.reservation.location.minutes;
+        this.reservationUpdateType$.subscribe(updateType => {
+          if (updateType) {
+            this.isEditMode = true;
+            if (updateType === "channel") {
+              this.isEditChannel = true;
               this.reservation.minutes = 0;
-            } else if (params.edit === "time") {
-              this.isReservationLengthEdit = true;
+              this.reservation.cost = 0;
+            } else if (updateType === "time") {
+              this.isEditTime = true;
             }
           }
+          this.isInitializing = false;
         });
-        if (reservation.id) {
-          this.isEditMode = true;
-        }
       });
     this.tokenCount$.subscribe(tokens => {
       this.tokenCount = tokens;
