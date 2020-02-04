@@ -107,7 +107,7 @@ jobs:
       - run:
           name: Trigger Netlify build + deploy
           command: chmod +x .circleci/build-scripts/netlify-deploy-mobile.sh && .circleci/build-scripts/netlify-deploy-mobile.sh
-  deploy-s3:
+  s3-deploy-antenna:
     executor: aws
     working_directory: << parameters.package_dir >>
     parameters:
@@ -120,7 +120,7 @@ jobs:
           command: npm i
       - run:
           name: Upload app zip to s3
-          command: chmod +x .circleci/build-scripts/s3-deploy-antenna.sh &&  .circleci/build-scripts/s3-deploy-antenna.sh
+          command: pwd && chmod +x .circleci/build-scripts/s3-deploy-antenna.sh  && .circleci/build-scripts/s3-deploy-antenna.sh
   run-e2e:
     executor: cypress
     working_directory: << parameters.package_dir >>
@@ -267,7 +267,7 @@ workflows:
   packages-antenna:
     when: << pipeline.parameters.packages-antenna >>
     jobs:
-      - deploy-s3:
+      - s3-deploy-antenna:
           package_dir: ~/clicker/packages/antenna
   e2e-app:
     when: << pipeline.parameters.e2e-app >>
