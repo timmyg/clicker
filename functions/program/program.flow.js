@@ -10,7 +10,7 @@ if (!process.env.IS_LOCAL) {
 }
 const axios = require('axios');
 const moment = require('moment');
-const { uniqBy } = require('lodash');
+const { uniqBy, uniqWith } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
@@ -534,15 +534,37 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     const results = await pullFromDirecTV(region.name, region.localChannels, region.defaultZip, datesToPull, 24);
     // TODO:SENTRY results is not iterable
     for (const result of results) {
-      const allExistingGames = await base(airtablePrograms)
-        .select({ fields: ['programmingId'] })
-        .all();
-      const allExistingProgrammingIds = allExistingGames.map(g => g.get('programmingId'));
       const schedule = result.data;
       let allPrograms: Program[] = build(schedule, region.name);
       // allPrograms = allPrograms.filter(p => !!p.live);
       allPrograms = uniqBy(allPrograms, 'programmingId');
-      allPrograms = allPrograms.filter(e => !allExistingProgrammingIds.includes(e.programmingId));
+      // filter out programs already created
+      const allExistingPrograms = await base(airtablePrograms)
+        .select({ fields: ['programmingId', 'start', 'channelTitle'] })
+        .all();
+
+      // const allExistingProgrammingIds = allExistingPrograms.map(g => g.get('programmingId'));
+      // filter out allPrograms where there is an existing game with same programmingId, start and channel title
+      allPrograms = allPrograms.filter(program => {
+        const { programmingId, start, channelTitle } = program.fields;
+        const alreadyExists = allExistingPrograms.some(
+          ep => ep.programmingId === programmingId && ep.start === start && ep.channelTitle === channelTitle,
+        );
+        return !alreadyExists;
+      });
+
+      // allPrograms = uniqWith(
+      //   allPrograms,
+      //   (program1, program2) =>
+      //     program1.programmingId === program2.programmingId &&
+      //     program1.start === program2.start &&
+      //     program1.channelTitle === program2.channelTitle,
+      // );
+
+      // allPrograms = allPrograms.filter(e => !allExistingProgrammingIds.includes(e.programmingId));
+      // allPrograms = allPrograms.filter(e => {
+      //   !allExistingGames.ma.includes(e.programmingId);
+      // });
       let allAirtablePrograms = buildAirtablePrograms(allPrograms);
       console.time('create');
       while (!!allAirtablePrograms.length) {
