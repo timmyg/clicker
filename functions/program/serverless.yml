@@ -331,7 +331,7 @@ functions:
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
     runtime: nodejs12.x
-    description: sync program game id from airtable to programs db
+    description: sync program game id/rating from airtable to programs db
     timeout: 15
     events:
       - schedule: cron(*/30 * * * ? *) # every 30th minute
