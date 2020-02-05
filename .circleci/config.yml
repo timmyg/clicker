@@ -180,12 +180,12 @@ workflows:
     when: << pipeline.parameters.trigger >>
     jobs:
       - trigger-workflows:
-        filters:
-          branches:
-            only:
-              - master
-              - release
-              - develop
+          # filters:
+        branches:
+          only:
+            - master
+            - release
+            - develop
   functions-admin:
     when: << pipeline.parameters.functions-admin >>
     jobs:
