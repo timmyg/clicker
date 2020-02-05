@@ -188,6 +188,7 @@ const dbProgram = dynamoose.model(
     nextProgramStart: Number,
     points: Number,
     synced: Boolean, // synced with description from separate endpoint
+    isSports: Boolean,
   },
   {
     saveUnknown: ['game'],
@@ -415,6 +416,9 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
       currentPrograms[i].nextProgramTitle = nextProgram.title;
       currentPrograms[i].nextProgramStart = nextProgram.start;
     }
+    if (currentPrograms[i].mainCategory === 'Sports') {
+      currentPrograms[i].isSports = true;
+    }
   });
   console.timeEnd('current + next programming combine');
 
@@ -431,9 +435,14 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.timeEnd('remove excluded');
 
-  console.time('sort by rating');
+  console.time('sort');
+  // sort
   currentPrograms = currentPrograms.sort((a, b) => (b.clickerRating || 0) - (a.clickerRating || 0));
-  console.timeEnd('sort by rating');
+  currentPrograms = [
+    ...currentPrograms.filter(cp => cp.mainCategory === 'Sports'),
+    ...currentPrograms.filter(cp => cp.mainCategory !== 'Sports'),
+  ];
+  console.timeEnd('sort');
 
   return respond(200, currentPrograms);
 });

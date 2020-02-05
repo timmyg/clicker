@@ -16,7 +16,8 @@
           >
         </ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content no-padding-top>
+      <ion-card-content no-padding-top [ngClass]="{ 'non-sports': !program.isSports }">
+      <!-- <ion-card-content no-padding-top> -->
         <ion-grid no-padding>
           <ion-row align-items-center>
             <ng-container *ngIf="program.start; else noProgram">

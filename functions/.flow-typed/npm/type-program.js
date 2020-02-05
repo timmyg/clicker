@@ -32,4 +32,5 @@ export class Program {
   // dynamic
   startFromNow: number;
   endFromNow: number;
+  isSports: boolean;
 }
