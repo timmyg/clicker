@@ -253,4 +253,12 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       this.overideDistanceClicks = 0;
     }
   }
+
+  getLocationName() {
+    return `${this.reservation.location.name} (${this.reservation.location.neighborhood})`
+  }
+
+  getChannelDescription() {
+    return `${this.reservation.program.channelTitle} (${this.reservation.program.title})`
+  }
 }

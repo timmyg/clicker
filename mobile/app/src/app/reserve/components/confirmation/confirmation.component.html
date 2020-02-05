@@ -4,28 +4,24 @@
       <div>
         <label> Location: </label>
         <span
-          >{{ reservation.location.name }} ({{
-            reservation.location.neighborhood
-          }})</span
+          >{{ getLocationName() | truncate:[24] }}</span
         >
       </div>
       <div>
         <label> Channel: </label>
         <span
-          >{{ reservation.program.channelTitle }} ({{
-            reservation.program.title
-          }})</span
+          >{{ getChannelDescription()  | truncate:[24] }}</span
         >
       </div>
       <div>
-        <label> TV: </label> <span>{{ reservation.box.label }}</span>
-      </div>
-      <div>
-        <label> Reserved Until: </label>
-        <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
+        <label> Reserved: </label>
+        <span *ngIf="reservation.minutes || isEditMode; else noReservation">TV{{ reservation.box.label }} until {{
           getEndTime() | amDateFormat: "h:mma"
         }}</span>
         <ng-template #noReservation> One-time change </ng-template>
+      </div>
+      <div>
+        
       </div>
     </div>
     <ion-list class="timeframes" *ngIf="!isEditChannel">
@@ -67,7 +63,7 @@
       <span *ngIf="reservation.minutes !== 0; else noReservation">
         😎
         <b
-          >You, and only you, will be able to freely change the channel during
+          >You will be able to freely change the channel during
           your reservation timeframe.</b
         >
       </span>

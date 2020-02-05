@@ -26,6 +26,7 @@ import { AuthModule } from "../auth/auth.module";
 import { LoginComponent } from "../auth/login/login.component";
 import { Deploy } from "cordova-plugin-ionic/dist/ngx";
 import { SuggestComponent } from "./components/locations/suggest/suggest.component";
+import { TruncatePipe } from "../pipes/truncate.pipe";
 
 const routes: Routes = [
   {
@@ -83,7 +84,8 @@ const routes: Routes = [
     LocationsFilterPipe,
     InfoComponent,
     SuggestComponent,
-    LocationComponent
+    LocationComponent,
+    TruncatePipe
   ],
   providers: [Deploy],
   entryComponents: [

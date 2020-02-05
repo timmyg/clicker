@@ -2,10 +2,8 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  Output,
-  EventEmitter
 } from "@angular/core";
-import { Observable, Subscription, SubscriptionLike } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { Program } from "src/app/state/program/program.model";
 import { Store } from "@ngrx/store";
 import { getAllPrograms, getLoading } from "src/app/state/program";

@@ -30,6 +30,7 @@ import { SegmentModule } from "ngx-segment-analytics";
 import { Globals } from "./globals";
 
 import * as Sentry from "@sentry/browser";
+import { TruncatePipe } from "./pipes/truncate.pipe";
 
 Sentry.init({
   dsn: environment.sentry.dsn,
@@ -116,7 +117,7 @@ export function initUserStuff(store: Store<AppState>): Function {
     Geolocation,
     Diagnostic,
     // SentryErrorHandler,
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
+    // { provide: ErrorHandler, useClass: SentryErrorHandler }
   ],
   bootstrap: [AppComponent]
 })
