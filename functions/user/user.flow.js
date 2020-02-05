@@ -64,6 +64,7 @@ const dbUser = dynamoose.model(
     card: Object, // set in api
     spent: Number,
     zaps: Number,
+    minutes: Number,
     referredByCode: String,
     tokens: {
       type: Number,
@@ -326,7 +327,11 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
 
   if (user && user.tokens >= tokens) {
     // TODO audit
-    user = await dbUser.update({ id: userId }, { $ADD: { tokens: -tokens, zaps: 1 } }, { returnValues: 'ALL_NEW' });
+    user = await dbUser.update(
+      { id: userId },
+      { $ADD: { tokens: -tokens, zaps: 1, minutes } },
+      { returnValues: 'ALL_NEW' },
+    );
     return respond(200, user);
   } else {
     console.error('Insufficient Funds');
