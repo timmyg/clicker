@@ -432,7 +432,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('remove excluded');
 
   console.time('sort by rating');
-  currentPrograms = currentPrograms.sort((a, b) => (a.clickerRating || 0) - (b.clickerRating || 0));
+  currentPrograms = currentPrograms.sort((a, b) => (b.clickerRating || 0) - (a.clickerRating || 0));
   console.timeEnd('sort by rating');
 
   return respond(200, currentPrograms);
