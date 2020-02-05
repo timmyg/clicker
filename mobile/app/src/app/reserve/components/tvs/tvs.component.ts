@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { TV } from "src/app/state/location/tv.model";
 import { Observable, Subscription } from "rxjs";
 import { Reservation } from "src/app/state/reservation/reservation.model";
@@ -22,7 +22,7 @@ import { getUserGeolocation } from "src/app/state/user";
   templateUrl: "./tvs.component.html",
   styleUrls: ["./tvs.component.scss"]
 })
-export class TvsComponent implements OnDestroy {
+export class TvsComponent implements OnDestroy, OnInit {
   tvs$: Observable<TV[]>;
   reservation$: Observable<Partial<Reservation>>;
   reservation: Partial<Reservation>;
@@ -43,11 +43,12 @@ export class TvsComponent implements OnDestroy {
     private actions$: Actions
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
-    this.tvs$.pipe(first()).subscribe(tvs => { 
+    this.tvs$.pipe(first()).subscribe(tvs => {
+      console.log(this.reservation$);
       if (tvs.length === 1 && !tvs[0].reserved) {
-        this.onTvClick(tvs[0])
+        this.onTvClick(tvs[0], true);
       }
-    })
+    });
     this.reservation$ = this.store.select(getReservation);
     this.reservation$.subscribe(r => (this.reservation = r));
     this.reserveService.emitTitle(this.title);
@@ -69,7 +70,7 @@ export class TvsComponent implements OnDestroy {
     this.refreshSubscription.unsubscribe();
   }
 
-  async onTvClick(tv: TV) {
+  async onTvClick(tv: TV, removeFromHistory?: boolean) {
     if (tv.reserved) {
       const toast = await this.toastController.create({
         message: `📺 ${tv.label} is reserved until ${moment(tv.end).format(
@@ -83,7 +84,10 @@ export class TvsComponent implements OnDestroy {
     }
     this.store.dispatch(new fromReservation.SetTv(tv));
     await this.segment.track(this.globals.events.reservation.selectedTV, tv);
-    this.router.navigate(["../confirmation"], { relativeTo: this.route });
+    this.router.navigate(["../confirmation"], {
+      relativeTo: this.route,
+      replaceUrl: removeFromHistory
+    });
   }
 
   refresh() {
