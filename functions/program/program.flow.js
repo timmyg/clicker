@@ -435,6 +435,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   currentPrograms = currentPrograms.sort((a, b) => a.clickerRating - b.clickerRating);
   console.timeEnd('sort by rating');
 
+  
   return respond(200, currentPrograms);
 });
 
