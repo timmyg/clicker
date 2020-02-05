@@ -431,65 +431,12 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.timeEnd('remove excluded');
 
-  console.time('rank');
-  const rankedPrograms: Program[] = rankPrograms(currentPrograms);
-  // const rankedPrograms = rankPrograms(currentNational.concat(currentPremium, currentLocal));
-  console.timeEnd('rank');
-  return respond(200, rankedPrograms);
+  console.time('sort by rating');
+  currentPrograms = currentPrograms.sort((a, b) => a.clickerRating - b.clickerRating);
+  console.timeEnd('sort by rating');
+
+  return respond(200, currentPrograms);
 });
-
-function rankPrograms(programs: Program[]) {
-  programs.forEach((program, i) => {
-    programs[i] = rank(program);
-  });
-  return programs.sort((a, b) => b.points - a.points);
-}
-
-function rank(program: Program) {
-  if (!program || !program.title) {
-    return program;
-  }
-  const terms = [
-    // { term: ' @ ', points: 2 },
-    { term: 'reds', points: 3 },
-    { term: 'fc cincinnati', points: 3 },
-    { term: 'bengals', points: 3 },
-    { term: 'bearcats', points: 3 },
-    { term: 'xavier', points: 3 },
-    { term: 'college football', points: 1 },
-  ];
-  const { title } = program;
-  const searchTarget = title;
-  let totalPoints = 0;
-  terms.forEach(({ term, points }) => {
-    searchTarget.toLowerCase().includes(term.toLowerCase()) ? (totalPoints += points) : null;
-  });
-
-  program.live ? (totalPoints += 1) : null;
-  program.repeat ? (totalPoints -= 2) : null;
-
-  program.mainCategory === 'Sports' ? (totalPoints += 2) : null;
-  program.channelTitle === 'ESPNHD' ? (totalPoints += 1) : null;
-
-  program.sports = program.mainCategory === 'Sports';
-
-  if (program.subcategories) {
-    program.subcategories.includes('Playoffs') || program.subcategories.includes('Playoff') ? (totalPoints += 5) : null;
-    // if (program.subcategories.includes('Golf')) {
-    if (
-      (program.title.includes('PGA Championship') ||
-        program.title.includes('U.S. Open') ||
-        program.title.includes('Open Championship')) &&
-      program.live
-    ) {
-      totalPoints += 5;
-    }
-    // }
-  }
-
-  program.points = totalPoints;
-  return program;
-}
 
 module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
   try {

@@ -1,28 +1,37 @@
-import { Action } from '@ngrx/store';
-import { Reservation } from './reservation.model';
-import { Location } from '../location/location.model';
-import { Program } from '../program/program.model';
-import { TV } from '../location/tv.model';
+import { Action } from "@ngrx/store";
+import { Reservation } from "./reservation.model";
+import { Location } from "../location/location.model";
+import { Program } from "../program/program.model";
+import { TV } from "../location/tv.model";
 
-export const GET_RESERVATIONS = '[RESERVATION] Get Reservations';
-export const GET_RESERVATIONS_SUCCESS = '[RESERVATION] Get Reservations Success';
-export const GET_RESERVATIONS_FAIL = '[RESERVATION] Get Reservations Fail';
-export const CREATE_RESERVATION = '[RESERVATION] Create Reservation';
-export const CREATE_RESERVATION_SUCCESS = '[RESERVATION] Create Reservation Success';
-export const CREATE_RESERVATION_FAIL = '[RESERVATION] Create Reservation Fail';
-export const UPDATE_RESERVATION = '[RESERVATION] Update Reservation';
-export const UPDATE_RESERVATION_SUCCESS = '[RESERVATION] Update Reservation Success';
-export const UPDATE_RESERVATION_FAIL = '[RESERVATION] Update Reservation Fail';
-export const CANCEL_RESERVATION = '[RESERVATION] Cancel Reservation';
-export const CANCEL_RESERVATION_SUCCESS = '[RESERVATION] Cancel Reservation Success';
-export const CANCEL_RESERVATION_FAIL = '[RESERVATION] Cancel Reservation Fail';
-export const START_RESERVATION = '[RESERVATION WIZARD] Start New Reservation';
-export const SET_RESERVATION_FOR_UPDATE = '[RESERVATION WIZARD] Set Existing Reservation for Update';
-export const SET_RESERVATION_LOCATION = '[RESERVATION WIZARD] Set Reservation Location';
-export const SET_RESERVATION_LOCATION_SUCCESS = '[RESERVATION] Set Reservation Location Success';
-export const SET_RESERVATION_LOCATION_FAIL = '[RESERVATION] Set Reservation Location Fail';
-export const SET_RESERVATION_PROGRAM = '[RESERVATION WIZARD] Set Reservation Program';
-export const SET_RESERVATION_TV = '[RESERVATION WIZARD] Set Reservation TV';
+export const GET_RESERVATIONS = "[RESERVATION] Get Reservations";
+export const GET_RESERVATIONS_SUCCESS =
+  "[RESERVATION] Get Reservations Success";
+export const GET_RESERVATIONS_FAIL = "[RESERVATION] Get Reservations Fail";
+export const CREATE_RESERVATION = "[RESERVATION] Create Reservation";
+export const CREATE_RESERVATION_SUCCESS =
+  "[RESERVATION] Create Reservation Success";
+export const CREATE_RESERVATION_FAIL = "[RESERVATION] Create Reservation Fail";
+export const UPDATE_RESERVATION = "[RESERVATION] Update Reservation";
+export const UPDATE_RESERVATION_SUCCESS =
+  "[RESERVATION] Update Reservation Success";
+export const UPDATE_RESERVATION_FAIL = "[RESERVATION] Update Reservation Fail";
+export const CANCEL_RESERVATION = "[RESERVATION] Cancel Reservation";
+export const CANCEL_RESERVATION_SUCCESS =
+  "[RESERVATION] Cancel Reservation Success";
+export const CANCEL_RESERVATION_FAIL = "[RESERVATION] Cancel Reservation Fail";
+export const START_RESERVATION = "[RESERVATION WIZARD] Start New Reservation";
+export const SET_RESERVATION_FOR_UPDATE =
+  "[RESERVATION WIZARD] Set Existing Reservation for Update";
+export const SET_RESERVATION_LOCATION =
+  "[RESERVATION WIZARD] Set Reservation Location";
+export const SET_RESERVATION_LOCATION_SUCCESS =
+  "[RESERVATION] Set Reservation Location Success";
+export const SET_RESERVATION_LOCATION_FAIL =
+  "[RESERVATION] Set Reservation Location Fail";
+export const SET_RESERVATION_PROGRAM =
+  "[RESERVATION WIZARD] Set Reservation Program";
+export const SET_RESERVATION_TV = "[RESERVATION WIZARD] Set Reservation TV";
 
 export class Start implements Action {
   readonly type = START_RESERVATION;
@@ -88,12 +97,16 @@ export class CancelFail implements Action {
 
 export class SetForUpdate implements Action {
   readonly type = SET_RESERVATION_FOR_UPDATE;
-  constructor(public payload: Reservation) {}
+  constructor(public reservation: Reservation, public updateType: string) {}
 }
 
 export class SetLocation implements Action {
   readonly type = SET_RESERVATION_LOCATION;
-  constructor(public location: Location, public latitude: number, public longitude: number) {}
+  constructor(
+    public location: Location,
+    public latitude: number,
+    public longitude: number
+  ) {}
 }
 
 export class SetLocationSuccess implements Action {
