@@ -12,7 +12,6 @@
   <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
-  <!-- <ng-template #loaded> -->
   <section [hidden]="!(userCard$ | async) || (isLoading$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
@@ -72,5 +71,4 @@
       >
     </form>
   </section>
-  <!-- </ng-template> -->
 </ion-content>

@@ -28,14 +28,19 @@
                   {{ program.title }}
                   <span class="faded" *ngIf="isReplay()">(Replay)</span
                   ><ion-icon
-                    *ngIf="program.points >= 5"
+                    *ngIf="program.clickerRating >= 8"
                     name="flame"
                     class="trending"
                   ></ion-icon>
                 </h1>
               </ion-col>
 
-              <ion-col size="12" no-padding>
+              <ion-col size="12" class="ion-text-center" no-padding>
+                <span *ngIf="program.game && program.game.summary">
+                  {{ program.game.summary.description }}
+                </span>
+              </ion-col>
+              <ion-col size="12" class="ion-text-center" no-padding>
                 <span class="faded" *ngIf="program.nextProgramTitle">
                   Next: {{ getNextProgramTitle() }} at
                   {{ program.nextProgramStart | amDateFormat: "h:mma" }}

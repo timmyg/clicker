@@ -269,7 +269,7 @@ export class ProfilePage {
 
   doRefresh(event) {
     this.store.dispatch(new fromReservation.GetAll());
-    this.store.dispatch(new fromUser.Refresh());
+    this.store.dispatch(new fromUser.Load());
     // zip(
     this.actions$
       .pipe(ofType(fromReservation.GET_RESERVATIONS_SUCCESS), take(1))

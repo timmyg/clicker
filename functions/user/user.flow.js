@@ -63,6 +63,7 @@ const dbUser = dynamoose.model(
     stripeCustomer: String,
     card: Object, // set in api
     spent: Number,
+    zaps: Number,
     referredByCode: String,
     tokens: {
       type: Number,
@@ -116,9 +117,9 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   // add token to each user, save
-  await dbUser.update({ id: userId }, { $ADD: { tokens: 1, spent: 0 } });
+  await dbUser.update({ id: userId }, { $ADD: { tokens: 1 } });
   await dbUser.update({ id: userId }, { referredByCode: code });
-  await dbUser.update({ id: referrerUser.id }, { $ADD: { tokens: 1, spent: 0 } });
+  await dbUser.update({ id: referrerUser.id }, { $ADD: { tokens: 1 } });
 
   const text = '*New referral*';
   await new Invoke()
@@ -325,7 +326,7 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
 
   if (user && user.tokens >= tokens) {
     // TODO audit
-    user = await dbUser.update({ id: userId }, { $ADD: { tokens: -tokens } }, { returnValues: 'ALL_NEW' });
+    user = await dbUser.update({ id: userId }, { $ADD: { tokens: -tokens, zaps: 1 } }, { returnValues: 'ALL_NEW' });
     return respond(200, user);
   } else {
     console.error('Insufficient Funds');
