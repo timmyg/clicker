@@ -213,22 +213,22 @@ export class ProfilePage {
       header: "Modify Reservation",
       buttons: [
         {
-          text: "Add Time",
-          handler: () => {
-            const reservationToUpdate = Object.assign({}, reservation);
-            this.store.dispatch(
-              new fromReservation.SetForUpdate(reservationToUpdate, "time")
-            );
-            this.router.navigate(["/tabs/reserve"]);
-          }
-        },
-        {
           text: "Change Channel",
           handler: () => {
             const reservationToUpdate = Object.assign({}, reservation);
             delete reservationToUpdate.program;
             this.store.dispatch(
               new fromReservation.SetForUpdate(reservationToUpdate, "channel")
+            );
+            this.router.navigate(["/tabs/reserve"]);
+          }
+        },
+        {
+          text: "Add Time",
+          handler: () => {
+            const reservationToUpdate = Object.assign({}, reservation);
+            this.store.dispatch(
+              new fromReservation.SetForUpdate(reservationToUpdate, "time")
             );
             this.router.navigate(["/tabs/reserve"]);
           }

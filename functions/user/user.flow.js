@@ -318,7 +318,7 @@ module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
-  const { tokens } = getBody(event);
+  const { tokens, minutes } = getBody(event);
   let user = await dbUser
     .queryOne('id')
     .eq(userId)
