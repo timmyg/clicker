@@ -1,63 +1,63 @@
-import { ReferralPageModule } from './../referral/referral.module';
-import { ReferralPage } from './../referral/referral.page';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { ReferralPageModule } from "./../referral/referral.module";
+import { ReferralPage } from "./../referral/referral.page";
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { Routes, RouterModule } from "@angular/router";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { ReservePage } from './reserve.page';
-import { LocationsComponent } from './components/locations/locations.component';
-import { ProgramsComponent } from './components/programs/programs.component';
-import { TvsComponent } from './components/tvs/tvs.component';
-import { MomentModule } from 'ngx-moment';
-import { ConfirmationComponent } from './components/confirmation/confirmation.component';
-import { SharedModule } from '../shared/shared.module';
-import { ProgramsFilterPipe } from './pipes/programs-filter.pipe';
-import { ReservationGuard } from '../guards/reservation.guard';
-import { ProgramComponent } from './components/programs/program/program.component';
-import { LocationsFilterPipe } from './pipes/locations-filter.pipe';
-import { InfoComponent } from './components/programs/info/info.component';
-import { LocationComponent } from './components/locations/location/location.component';
-import { WalletModule } from '../wallet/wallet.module';
-import { WalletPage } from '../wallet/wallet.page';
-import { AuthModule } from '../auth/auth.module';
-import { LoginComponent } from '../auth/login/login.component';
-import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
-import { SuggestComponent } from './components/locations/suggest/suggest.component';
+import { ReservePage } from "./reserve.page";
+import { LocationsComponent } from "./components/locations/locations.component";
+import { ProgramsComponent } from "./components/programs/programs.component";
+import { TvsComponent } from "./components/tvs/tvs.component";
+import { MomentModule } from "ngx-moment";
+import { ConfirmationComponent } from "./components/confirmation/confirmation.component";
+import { SharedModule } from "../shared/shared.module";
+import { ProgramsFilterPipe } from "./pipes/programs-filter.pipe";
+import { ReservationGuard } from "../guards/reservation.guard";
+import { ProgramComponent } from "./components/programs/program/program.component";
+import { LocationsFilterPipe } from "./pipes/locations-filter.pipe";
+import { InfoComponent } from "./components/programs/info/info.component";
+import { LocationComponent } from "./components/locations/location/location.component";
+import { WalletModule } from "../wallet/wallet.module";
+import { WalletPage } from "../wallet/wallet.page";
+import { AuthModule } from "../auth/auth.module";
+import { LoginComponent } from "../auth/login/login.component";
+import { Deploy } from "cordova-plugin-ionic/dist/ngx";
+import { SuggestComponent } from "./components/locations/suggest/suggest.component";
 
 const routes: Routes = [
   {
-    path: '',
+    path: "",
     component: ReservePage,
     children: [
       {
-        path: 'locations',
-        component: LocationsComponent,
+        path: "locations",
+        component: LocationsComponent
       },
       {
-        path: 'programs',
+        path: "programs",
         component: ProgramsComponent,
-        canActivate: [ReservationGuard],
+        canActivate: [ReservationGuard]
       },
       {
-        path: 'tvs',
+        path: "tvs",
         component: TvsComponent,
-        canActivate: [ReservationGuard],
+        canActivate: [ReservationGuard]
       },
       {
-        path: 'confirmation',
+        path: "confirmation",
         component: ConfirmationComponent,
-        canActivate: [ReservationGuard],
+        canActivate: [ReservationGuard]
       },
       {
-        path: '',
-        redirectTo: 'locations',
-        pathMatch: 'full',
-      },
-    ],
-  },
+        path: "",
+        redirectTo: "locations",
+        pathMatch: "full"
+      }
+    ]
+  }
 ];
 
 @NgModule({
@@ -70,7 +70,7 @@ const routes: Routes = [
     MomentModule,
     AuthModule,
     ReferralPageModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(routes)
   ],
   declarations: [
     ReservePage,
@@ -83,9 +83,15 @@ const routes: Routes = [
     LocationsFilterPipe,
     InfoComponent,
     SuggestComponent,
-    LocationComponent,
+    LocationComponent
   ],
   providers: [Deploy],
-  entryComponents: [LoginComponent, InfoComponent, WalletPage, SuggestComponent, ReferralPage],
+  entryComponents: [
+    LoginComponent,
+    InfoComponent,
+    WalletPage,
+    SuggestComponent,
+    ReferralPage
+  ]
 })
 export class ReservePageModule {}

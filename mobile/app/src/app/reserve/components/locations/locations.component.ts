@@ -207,10 +207,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       );
       this.store.dispatch(new fromUser.Refresh());
       this.actions$
-        .pipe(
-          ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
-          take(1)
-        )
+        .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS), take(1))
         .subscribe(() => {
           this.reserveService.emitRefreshed();
         });

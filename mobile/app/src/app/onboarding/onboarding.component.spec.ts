@@ -1,14 +1,14 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { OnboardingComponent } from './onboarding.component';
+import { OnboardingComponent } from "./onboarding.component";
 
-describe('OnboardingComponent', () => {
+describe("OnboardingComponent", () => {
   let component: OnboardingComponent;
   let fixture: ComponentFixture<OnboardingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OnboardingComponent],
+      declarations: [OnboardingComponent]
     }).compileComponents();
   }));
 
@@ -18,7 +18,7 @@ describe('OnboardingComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,11 +1,17 @@
-import { Component, Input, EventEmitter, Output, ViewChild } from '@angular/core';
-import { Program } from 'src/app/state/program/program.model';
-import { IonItemSliding } from '@ionic/angular';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  ViewChild
+} from "@angular/core";
+import { Program } from "src/app/state/program/program.model";
+import { IonItemSliding } from "@ionic/angular";
 
 @Component({
-  selector: 'app-program',
-  templateUrl: './program.component.html',
-  styleUrls: ['./program.component.scss'],
+  selector: "app-program",
+  templateUrl: "./program.component.html",
+  styleUrls: ["./program.component.scss"]
 })
 export class ProgramComponent {
   @Input() program: Program;
@@ -18,7 +24,9 @@ export class ProgramComponent {
   }
 
   isReplay() {
-    const isSport = this.program.title.indexOf(' @ ') > -1 || this.program.title.indexOf(' at ') > -1;
+    const isSport =
+      this.program.title.indexOf(" @ ") > -1 ||
+      this.program.title.indexOf(" at ") > -1;
     if (this.program.repeat && isSport) {
       return true;
     }
@@ -31,7 +39,7 @@ export class ProgramComponent {
       if (nextProgramTitle.length < maxLength) {
         return nextProgramTitle;
       } else {
-        return nextProgramTitle.substring(0, maxLength - 3) + '...';
+        return nextProgramTitle.substring(0, maxLength - 3) + "...";
       }
     }
   }

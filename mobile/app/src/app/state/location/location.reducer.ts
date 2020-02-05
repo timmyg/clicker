@@ -1,5 +1,5 @@
-import * as fromLocation from './location.actions';
-import { Location } from './location.model';
+import * as fromLocation from "./location.actions";
+import { Location } from "./location.model";
 
 export interface State {
   locations: Location[];
@@ -10,22 +10,25 @@ export interface State {
 export const initialState: State = {
   locations: [],
   loading: false,
-  error: '',
+  error: ""
 };
 
-export function reducer(state = initialState, action: fromLocation.LocationActions): State {
+export function reducer(
+  state = initialState,
+  action: fromLocation.LocationActions
+): State {
   switch (action.type) {
     case fromLocation.GET_ALL_LOCATIONS:
       return {
         ...state,
-        loading: true,
+        loading: true
       };
 
     case fromLocation.GET_ALL_LOCATIONS_SUCCESS: {
       return {
         ...state,
         loading: false,
-        locations: action.payload,
+        locations: action.payload
       };
     }
 
@@ -33,7 +36,7 @@ export function reducer(state = initialState, action: fromLocation.LocationActio
       return {
         ...state,
         loading: false,
-        error: 'error!',
+        error: "error!"
       };
 
     default: {

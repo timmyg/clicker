@@ -2,7 +2,9 @@
   <ion-toolbar>
     <ion-title> Program Info </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+      <ion-button (click)="onCloseClick()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -14,7 +16,9 @@
   <br />
   <label>Description</label>
   <div>
-    <span *ngIf="program.description; else noDescription"> {{ program.description }}</span>
+    <span *ngIf="program.description; else noDescription">
+      {{ program.description }}</span
+    >
     <ng-template #noDescription>No description available</ng-template>
   </div>
 </ion-content>

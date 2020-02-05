@@ -2,12 +2,18 @@
   <ion-toolbar>
     <ion-title> Login </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+      <ion-button (click)="onCloseClick()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <form #phoneForm="ngForm" (ngSubmit)="onPhoneSubmit(phoneForm.form)" *ngIf="!codeSent">
+  <form
+    #phoneForm="ngForm"
+    (ngSubmit)="onPhoneSubmit(phoneForm.form)"
+    *ngIf="!codeSent"
+  >
     <p class="ion-text-center">Input your phone number below to login.</p>
     <section>
       <ion-input
@@ -27,12 +33,17 @@
         [disabled]="!phone || phone.length !== 10 || waiting"
         >Next</ion-button
       >
-      <p class="ion-text-center"><em> Your number is only used for authentication and is never shared.</em></p>
+      <p class="ion-text-center">
+        <em>
+          Your number is only used for authentication and is never shared.</em
+        >
+      </p>
     </section>
   </form>
   <form #codeForm="ngForm" (ngSubmit)="onCodeSubmit()" *ngIf="codeSent">
     <p class="ion-text-center">
-      We have sent you an access code via text message for verification. Please enter it below.
+      We have sent you an access code via text message for verification. Please
+      enter it below.
     </p>
     <section>
       <ion-input
@@ -44,7 +55,12 @@
         name="code"
         [disabled]="waiting"
       ></ion-input>
-      <ion-button expand="block" type="submit" size="large" margin-top [disabled]="!isEligibleCode() || waiting"
+      <ion-button
+        expand="block"
+        type="submit"
+        size="large"
+        margin-top
+        [disabled]="!isEligibleCode() || waiting"
         >Login</ion-button
       >
     </section>

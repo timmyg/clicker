@@ -1,21 +1,21 @@
-import { Action } from '@ngrx/store';
-import { Plan } from './plan.model';
-import { Timeframe } from './timeframe.model';
+import { Action } from "@ngrx/store";
+import { Plan } from "./plan.model";
+import { Timeframe } from "./timeframe.model";
 
-export const SET_PARTNER = '[APP] Set Partner';
-export const SET_PARTNER_SUCCESS = '[APP] Set Partner Success';
-export const SET_PARTNER_FAIL = '[APP] Set Partner Fail';
-export const LOAD_PLANS = '[APP] Load Plans';
-export const LOAD_PLANS_SUCCESS = '[APP] Load Plans Success';
-export const LOAD_PLANS_FAIL = '[APP] Load Plans Fail';
-export const LOAD_TIMEFRAMES = '[APP] Load Timeframes';
-export const LOAD_TIMEFRAMES_SUCCESS = '[APP] Load Timeframes Success';
-export const LOAD_TIMEFRAMES_FAIL = '[APP] Load Timeframes Fail';
-export const CLEAR_TIMEFRAMES = '[APP] Clear Timeframes';
-export const CLEAR_PLANS = '[APP] Clear Plans';
-export const SEND_MESSAGE = '[APP] Send Message';
-export const SEND_MESSAGE_SUCCESS = '[APP] Send Message Success';
-export const SEND_MESSAGE_FAIL = '[APP] Send Message Fail';
+export const SET_PARTNER = "[APP] Set Partner";
+export const SET_PARTNER_SUCCESS = "[APP] Set Partner Success";
+export const SET_PARTNER_FAIL = "[APP] Set Partner Fail";
+export const LOAD_PLANS = "[APP] Load Plans";
+export const LOAD_PLANS_SUCCESS = "[APP] Load Plans Success";
+export const LOAD_PLANS_FAIL = "[APP] Load Plans Fail";
+export const LOAD_TIMEFRAMES = "[APP] Load Timeframes";
+export const LOAD_TIMEFRAMES_SUCCESS = "[APP] Load Timeframes Success";
+export const LOAD_TIMEFRAMES_FAIL = "[APP] Load Timeframes Fail";
+export const CLEAR_TIMEFRAMES = "[APP] Clear Timeframes";
+export const CLEAR_PLANS = "[APP] Clear Plans";
+export const SEND_MESSAGE = "[APP] Send Message";
+export const SEND_MESSAGE_SUCCESS = "[APP] Send Message Success";
+export const SEND_MESSAGE_FAIL = "[APP] Send Message Fail";
 
 export class SetPartner implements Action {
   readonly type = SET_PARTNER;

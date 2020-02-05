@@ -1,6 +1,6 @@
-import * as fromApp from './app.actions';
-import { Plan } from './plan.model';
-import { Timeframe } from './timeframe.model';
+import * as fromApp from "./app.actions";
+import { Plan } from "./plan.model";
+import { Timeframe } from "./timeframe.model";
 
 export interface State {
   partner: string;
@@ -15,16 +15,19 @@ export const initialState: State = {
   plans: null,
   timeframes: null,
   loading: false,
-  error: '',
+  error: ""
 };
 
-export function reducer(state = initialState, action: fromApp.AppActions): State {
+export function reducer(
+  state = initialState,
+  action: fromApp.AppActions
+): State {
   switch (action.type) {
     case fromApp.LOAD_PLANS:
     case fromApp.LOAD_TIMEFRAMES:
       return {
         ...state,
-        loading: true,
+        loading: true
       };
 
     case fromApp.SET_PARTNER: {
@@ -34,24 +37,24 @@ export function reducer(state = initialState, action: fromApp.AppActions): State
     case fromApp.CLEAR_TIMEFRAMES:
       return {
         ...state,
-        timeframes: null,
+        timeframes: null
       };
     case fromApp.CLEAR_PLANS:
       return {
         ...state,
-        plans: null,
+        plans: null
       };
     case fromApp.LOAD_PLANS_SUCCESS:
       return {
         ...state,
         loading: false,
-        plans: action.plans,
+        plans: action.plans
       };
     case fromApp.LOAD_TIMEFRAMES_SUCCESS:
       return {
         ...state,
         loading: false,
-        timeframes: action.timeframes,
+        timeframes: action.timeframes
       };
 
     case fromApp.LOAD_PLANS_FAIL:
@@ -59,7 +62,7 @@ export function reducer(state = initialState, action: fromApp.AppActions): State
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload
       };
 
     default: {

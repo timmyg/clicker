@@ -1,4 +1,4 @@
-<ion-card *ngIf="(reservation$ | async)">
+<ion-card *ngIf="reservation$ | async">
   <ion-card-content>
     <div class="summary-wrapper">
       <div>
@@ -40,7 +40,7 @@
         <ion-row *ngIf="isAppLoading" margin-vertical>
           <ion-spinner name="crescent" class="center"></ion-spinner>
         </ion-row>
-        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
+        <ion-item *ngFor="let timeframe of timeframes$ | async">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>

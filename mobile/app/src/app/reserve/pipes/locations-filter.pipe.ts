@@ -1,11 +1,15 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { Location } from 'src/app/state/location/location.model';
+import { Pipe, PipeTransform } from "@angular/core";
+import { Location } from "src/app/state/location/location.model";
 
 @Pipe({
-  name: 'locationsFilter',
+  name: "locationsFilter"
 })
 export class LocationsFilterPipe implements PipeTransform {
-  transform(locations: Location[], searchText: string, showHidden: boolean): any[] {
+  transform(
+    locations: Location[],
+    searchText: string,
+    showHidden: boolean
+  ): any[] {
     if (!locations) return [];
     if (!searchText) {
       if (!showHidden) {
@@ -15,7 +19,10 @@ export class LocationsFilterPipe implements PipeTransform {
     }
     searchText = searchText.toLowerCase();
     locations = locations.filter(l => {
-      return l.name.toLowerCase().includes(searchText) || l.neighborhood.toLowerCase().includes(searchText);
+      return (
+        l.name.toLowerCase().includes(searchText) ||
+        l.neighborhood.toLowerCase().includes(searchText)
+      );
     });
     if (!showHidden) {
       locations = locations.filter(l => l.hidden !== true);

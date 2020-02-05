@@ -2,13 +2,26 @@
   <ion-toolbar>
     <ion-title> Suggest a Location </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+      <ion-button (click)="onCloseClick()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
   <ion-item>
-    <ion-textarea autoGrow="true" #suggestionInput [(ngModel)]="suggestion"></ion-textarea>
+    <ion-textarea
+      autoGrow="true"
+      #suggestionInput
+      [(ngModel)]="suggestion"
+    ></ion-textarea>
   </ion-item>
-  <ion-button expand="block" type="submit" size="large" (click)="onSubmit()" margin-top>Submit</ion-button>
+  <ion-button
+    expand="block"
+    type="submit"
+    size="large"
+    (click)="onSubmit()"
+    margin-top
+    >Submit</ion-button
+  >
 </ion-content>

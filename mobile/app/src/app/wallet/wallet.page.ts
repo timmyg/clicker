@@ -1,26 +1,35 @@
-import { Component } from '@angular/core';
-import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
-import { FormGroup } from '@angular/forms';
-import { ToastController, ModalController, AlertController } from '@ionic/angular';
-import * as fromApp from '../state/app/app.actions';
-import * as fromUser from '../state/user/user.actions';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../state/app.reducer';
-import { Observable } from 'rxjs';
-import { Card } from 'src/app/state/user/card.model';
-import { getUserCard, getUserId } from 'src/app/state/user';
-import { getLoading, getPlans } from 'src/app/state/app';
-import { getUserTokenCount } from '../state/user';
-import { SegmentService } from 'ngx-segment-analytics';
-import { Globals } from '../globals';
-import { Plan } from '../state/app/plan.model';
-import { first, take } from 'rxjs/operators';
-import { Actions, ofType } from '@ngrx/effects';
+import { Component } from "@angular/core";
+import {
+  StripeService,
+  Elements,
+  Element as StripeElement,
+  ElementsOptions
+} from "ngx-stripe";
+import { FormGroup } from "@angular/forms";
+import {
+  ToastController,
+  ModalController,
+  AlertController
+} from "@ionic/angular";
+import * as fromApp from "../state/app/app.actions";
+import * as fromUser from "../state/user/user.actions";
+import { Store } from "@ngrx/store";
+import * as fromStore from "../state/app.reducer";
+import { Observable } from "rxjs";
+import { Card } from "src/app/state/user/card.model";
+import { getUserCard, getUserId } from "src/app/state/user";
+import { getLoading, getPlans } from "src/app/state/app";
+import { getUserTokenCount } from "../state/user";
+import { SegmentService } from "ngx-segment-analytics";
+import { Globals } from "../globals";
+import { Plan } from "../state/app/plan.model";
+import { first, take } from "rxjs/operators";
+import { Actions, ofType } from "@ngrx/effects";
 
 @Component({
-  selector: 'app-wallet',
-  templateUrl: './wallet.page.html',
-  styleUrls: ['./wallet.page.scss'],
+  selector: "app-wallet",
+  templateUrl: "./wallet.page.html",
+  styleUrls: ["./wallet.page.scss"]
 })
 export class WalletPage {
   elements: Elements;
@@ -31,7 +40,7 @@ export class WalletPage {
   waiting: boolean;
 
   elementsOptions: ElementsOptions = {
-    locale: 'en',
+    locale: "en"
   };
 
   selectedPlan: Plan;
@@ -45,7 +54,7 @@ export class WalletPage {
     public alertController: AlertController,
     private segment: SegmentService,
     private globals: Globals,
-    private actions$: Actions,
+    private actions$: Actions
   ) {
     this.userCard$ = this.store.select(getUserCard);
     this.plans$ = this.store.select(getPlans);
@@ -67,14 +76,14 @@ export class WalletPage {
       this.elements = elements;
       // Only mount the element the first time
       if (!this.card) {
-        this.card = this.elements.create('card', {
+        this.card = this.elements.create("card", {
           style: {
             base: {
-              fontSize: '18px',
-            },
-          },
+              fontSize: "18px"
+            }
+          }
         });
-        this.card.mount('#card-element');
+        this.card.mount("#card-element");
       }
     });
   }
@@ -87,27 +96,29 @@ export class WalletPage {
         // https://stripe.com/docs/charges
         this.store.dispatch(new fromUser.UpdateCard(result.token.id));
 
-        this.actions$.pipe(ofType(fromUser.UPDATE_CARD_SUCCESS), take(1)).subscribe(async () => {
-          const toast = await this.toastController.create({
-            message: `💳 Card successfully added. 👐`,
-            duration: 3000,
-            cssClass: 'ion-text-center',
+        this.actions$
+          .pipe(ofType(fromUser.UPDATE_CARD_SUCCESS), take(1))
+          .subscribe(async () => {
+            const toast = await this.toastController.create({
+              message: `💳 Card successfully added. 👐`,
+              duration: 3000,
+              cssClass: "ion-text-center"
+            });
+            toast.present();
+            this.waiting = false;
+            this.segment.track(this.globals.events.payment.sourceAdded, {
+              type: "Credit Card"
+            });
           });
-          toast.present();
-          this.waiting = false;
-          this.segment.track(this.globals.events.payment.sourceAdded, {
-            type: 'Credit Card',
-          });
-        });
         this.actions$
           .pipe(ofType(fromUser.UPDATE_CARD_FAIL))
           .pipe(first())
           .subscribe(async (error: any) => {
             const whoops = await this.toastController.create({
               message: error.payload.error.message,
-              color: 'danger',
+              color: "danger",
               duration: 4000,
-              cssClass: 'ion-text-center',
+              cssClass: "ion-text-center"
             });
             whoops.present();
             this.waiting = false;
@@ -118,8 +129,8 @@ export class WalletPage {
         const toast = await this.toastController.create({
           message: result.error.message,
           duration: 3000,
-          color: 'danger',
-          cssClass: 'ion-text-center',
+          color: "danger",
+          cssClass: "ion-text-center"
         });
         toast.present();
         this.waiting = false;
@@ -131,42 +142,44 @@ export class WalletPage {
     this.waiting = true;
     this.store.dispatch(new fromUser.AddFunds(this.selectedPlan));
 
-    this.actions$.pipe(ofType(fromUser.ADD_FUNDS_SUCCESS), take(1)).subscribe(async () => {
-      this.waiting = false;
-      const toast = await this.toastController.create({
-        message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens. 🎉`,
-        duration: 3000,
-        cssClass: 'ion-text-center',
-      });
-      toast.present();
-      this.onClose();
-      this.segment.track(this.globals.events.payment.fundsAdded, {
-        amount: this.selectedPlan.dollars,
-      });
-      this.store
-        .select(getUserId)
-        .pipe(first(val => !!val))
-        .subscribe(async userId => {
-          this.segment.identify(
-            userId,
-            { paid: true },
-            {
-              // Intercom: { hideDefaultLauncher: true },
-            },
-          );
+    this.actions$
+      .pipe(ofType(fromUser.ADD_FUNDS_SUCCESS), take(1))
+      .subscribe(async () => {
+        this.waiting = false;
+        const toast = await this.toastController.create({
+          message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens. 🎉`,
+          duration: 3000,
+          cssClass: "ion-text-center"
         });
-    });
+        toast.present();
+        this.onClose();
+        this.segment.track(this.globals.events.payment.fundsAdded, {
+          amount: this.selectedPlan.dollars
+        });
+        this.store
+          .select(getUserId)
+          .pipe(first(val => !!val))
+          .subscribe(async userId => {
+            this.segment.identify(
+              userId,
+              { paid: true },
+              {
+                // Intercom: { hideDefaultLauncher: true },
+              }
+            );
+          });
+      });
     this.actions$
       .pipe(ofType(fromUser.ADD_FUNDS_FAIL))
       .pipe(first())
       .subscribe(async (err: fromUser.AddFundsFail) => {
-        console.error('add funds failed', err.payload.error.message);
+        console.error("add funds failed", err.payload.error.message);
         this.waiting = false;
         const toast = await this.toastController.create({
-          color: 'danger',
+          color: "danger",
           message: err.payload.error.message,
           duration: 3000,
-          cssClass: 'ion-text-center',
+          cssClass: "ion-text-center"
         });
         toast.present();
       });
@@ -182,17 +195,17 @@ export class WalletPage {
 
   async removeCard() {
     const alert = await this.alertController.create({
-      header: 'Are you sure?',
-      message: 'You will need to add a new credit card to purchase tokens.',
+      header: "Are you sure?",
+      message: "You will need to add a new credit card to purchase tokens.",
       buttons: [
         {
-          text: 'Cancel',
-          role: 'cancel',
+          text: "Cancel",
+          role: "cancel"
         },
         {
-          text: 'Remove Card',
-          role: 'destructive',
-          cssClass: 'secondary',
+          text: "Remove Card",
+          role: "destructive",
+          cssClass: "secondary",
           handler: async () => {
             this.waiting = true;
             this.store.dispatch(new fromUser.DeleteCard());
@@ -200,14 +213,14 @@ export class WalletPage {
               const toast = await this.toastController.create({
                 message: `Card removed. 👍`,
                 duration: 3000,
-                cssClass: 'ion-text-center',
+                cssClass: "ion-text-center"
               });
               toast.present();
               this.waiting = false;
             }, 3000);
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
 
     await alert.present();

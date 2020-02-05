@@ -1,33 +1,33 @@
-import { Component, OnDestroy } from '@angular/core';
-import { TV } from 'src/app/state/location/tv.model';
-import { Observable, Subscription } from 'rxjs';
-import { Reservation } from 'src/app/state/reservation/reservation.model';
-import { Store } from '@ngrx/store';
-import { ReserveService } from '../../reserve.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import * as fromStore from '../../../state/app.reducer';
-import * as fromReservation from '../../../state/reservation/reservation.actions';
-import { getReservation, getReservationTvs } from 'src/app/state/reservation';
-import { ToastController } from '@ionic/angular';
-import * as moment from 'moment';
-import { Actions, ofType } from '@ngrx/effects';
-import { first } from 'rxjs/operators';
-import { getLoading } from 'src/app/state/location';
-import { Globals } from 'src/app/globals';
-import { SegmentService } from 'ngx-segment-analytics';
-import { getUserGeolocation } from 'src/app/state/user';
+import { Component, OnDestroy } from "@angular/core";
+import { TV } from "src/app/state/location/tv.model";
+import { Observable, Subscription } from "rxjs";
+import { Reservation } from "src/app/state/reservation/reservation.model";
+import { Store } from "@ngrx/store";
+import { ReserveService } from "../../reserve.service";
+import { Router, ActivatedRoute } from "@angular/router";
+import * as fromStore from "../../../state/app.reducer";
+import * as fromReservation from "../../../state/reservation/reservation.actions";
+import { getReservation, getReservationTvs } from "src/app/state/reservation";
+import { ToastController } from "@ionic/angular";
+import * as moment from "moment";
+import { Actions, ofType } from "@ngrx/effects";
+import { first } from "rxjs/operators";
+import { getLoading } from "src/app/state/location";
+import { Globals } from "src/app/globals";
+import { SegmentService } from "ngx-segment-analytics";
+import { getUserGeolocation } from "src/app/state/user";
 
 @Component({
-  selector: 'app-tvs',
-  templateUrl: './tvs.component.html',
-  styleUrls: ['./tvs.component.scss'],
+  selector: "app-tvs",
+  templateUrl: "./tvs.component.html",
+  styleUrls: ["./tvs.component.scss"]
 })
 export class TvsComponent implements OnDestroy {
   tvs$: Observable<TV[]>;
   reservation$: Observable<Partial<Reservation>>;
   reservation: Partial<Reservation>;
   refreshSubscription: Subscription;
-  title = 'Choose TV';
+  title = "Choose TV";
   isLoading$: Observable<boolean>;
   userGeolocation$: Observable<{ latitude; longitude }>;
   userGeolocation: { latitude; longitude };
@@ -40,13 +40,15 @@ export class TvsComponent implements OnDestroy {
     private globals: Globals,
     private route: ActivatedRoute,
     private toastController: ToastController,
-    private actions$: Actions,
+    private actions$: Actions
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
     this.reservation$ = this.store.select(getReservation);
     this.reservation$.subscribe(r => (this.reservation = r));
     this.reserveService.emitTitle(this.title);
-    this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
+    this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(
+      () => this.refresh()
+    );
     this.userGeolocation$ = this.store.select(getUserGeolocation);
     this.userGeolocation$.subscribe(userGeolocation => {
       console.log({ userGeolocation });
@@ -65,16 +67,18 @@ export class TvsComponent implements OnDestroy {
   async onTvClick(tv: TV) {
     if (tv.reserved) {
       const toast = await this.toastController.create({
-        message: `📺 ${tv.label} is reserved until ${moment(tv.end).format('h:mma')}.`,
+        message: `📺 ${tv.label} is reserved until ${moment(tv.end).format(
+          "h:mma"
+        )}.`,
         duration: 2000,
-        cssClass: 'ion-text-center',
+        cssClass: "ion-text-center"
       });
       toast.present();
       return await this.segment.track(this.globals.events.tv.reserved);
     }
     this.store.dispatch(new fromReservation.SetTv(tv));
     await this.segment.track(this.globals.events.reservation.selectedTV, tv);
-    this.router.navigate(['../confirmation'], { relativeTo: this.route });
+    this.router.navigate(["../confirmation"], { relativeTo: this.route });
   }
 
   refresh() {
@@ -83,8 +87,8 @@ export class TvsComponent implements OnDestroy {
       new fromReservation.SetLocation(
         this.reservation.location,
         this.userGeolocation.latitude,
-        this.userGeolocation.longitude,
-      ),
+        this.userGeolocation.longitude
+      )
     );
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))

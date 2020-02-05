@@ -1,4 +1,4 @@
-<section *ngIf="(partner$ | async) as partner; else normal">
+<section *ngIf="partner$ | async as partner; else normal">
   <ion-card>
     <ion-card-header>
       <ion-card-subtitle>Coming Soon</ion-card-subtitle>
@@ -8,11 +8,13 @@
     <ion-card-content>
       <span [ngSwitch]="partner">
         <span *ngSwitchCase="'bwr'"
-          >Ever wanted to change the channel from your seat? Clicker TV gives you that ability - and is coming soon to
-          Buffalo Wings &amp; Rings</span
+          >Ever wanted to change the channel from your seat? Clicker TV gives
+          you that ability - and is coming soon to Buffalo Wings &amp;
+          Rings</span
         >
         <span *ngSwitchDefault>
-          Ever wanted to change the channel from your seat? Clicker TV gives you that ability - check back soon.
+          Ever wanted to change the channel from your seat? Clicker TV gives you
+          that ability - check back soon.
         </span>
       </span>
     </ion-card-content>

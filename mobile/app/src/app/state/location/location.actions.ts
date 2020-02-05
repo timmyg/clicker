@@ -1,16 +1,16 @@
-import { Action } from '@ngrx/store';
-import { Location } from './location.model';
-import { Geolocation } from './geolocation.model';
+import { Action } from "@ngrx/store";
+import { Location } from "./location.model";
+import { Geolocation } from "./geolocation.model";
 
-export const GET_ALL_LOCATIONS = '[LOCATION] Get All Locations';
-export const GET_ALL_LOCATIONS_SUCCESS = '[LOCATION] Get All Locations Success';
-export const GET_ALL_LOCATIONS_FAIL = '[LOCATION] Get All Locations Fail';
-export const TURN_ON = '[LOCATION] Turn On Locations';
-export const TURN_ON_SUCCESS = '[LOCATION] Turn On Locations Success';
-export const TURN_ON_FAIL = '[LOCATION] Turn On Locations Fail';
-export const TURN_OFF = '[LOCATION] Turn Off';
-export const TURN_OFF_SUCCESS = '[LOCATION] Turn Off Success';
-export const TURN_OFF_FAIL = '[LOCATION] Turn Off Fail';
+export const GET_ALL_LOCATIONS = "[LOCATION] Get All Locations";
+export const GET_ALL_LOCATIONS_SUCCESS = "[LOCATION] Get All Locations Success";
+export const GET_ALL_LOCATIONS_FAIL = "[LOCATION] Get All Locations Fail";
+export const TURN_ON = "[LOCATION] Turn On Locations";
+export const TURN_ON_SUCCESS = "[LOCATION] Turn On Locations Success";
+export const TURN_ON_FAIL = "[LOCATION] Turn On Locations Fail";
+export const TURN_OFF = "[LOCATION] Turn Off";
+export const TURN_OFF_SUCCESS = "[LOCATION] Turn Off Success";
+export const TURN_OFF_FAIL = "[LOCATION] Turn Off Fail";
 
 // Get Location List
 export class GetAll implements Action {

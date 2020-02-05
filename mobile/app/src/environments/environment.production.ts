@@ -1,22 +1,22 @@
 export const environment = {
   production: true,
-  stage: 'prod',
-  apiBaseUrl: 'https://api.tryclicker.com',
-  packageId: 'com.teamclicker.app',
+  stage: "prod",
+  apiBaseUrl: "https://api.tryclicker.com",
+  packageId: "com.teamclicker.app",
   auth0: {
-    domain: 'clikr.auth0.com',
-    clientId: 'w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc',
+    domain: "clikr.auth0.com",
+    clientId: "w0ovjOfDoC8PoYGdf6pXTNJEQHqKLDEc"
   },
   intercom: {
-    appId: 'lp9l5d9l',
+    appId: "lp9l5d9l"
   },
   stripe: {
-    publishableKey: 'pk_live_LUgXVojsYzm2R5BfCvzhYqg800QyIkTHbr',
+    publishableKey: "pk_live_LUgXVojsYzm2R5BfCvzhYqg800QyIkTHbr"
   },
   segment: {
-    writeKey: 'Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I',
+    writeKey: "Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I"
   },
   sentry: {
-    dsn: 'https://0c8d9e0468744ff789f544918d02e952@sentry.io/1777153',
-  },
+    dsn: "https://0c8d9e0468744ff789f544918d02e952@sentry.io/1777153"
+  }
 };
