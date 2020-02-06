@@ -157,6 +157,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   const pathParams = getPathParameters(event);
   const { partner, clicker, app } = event.headers;
   console.log({ partner, clicker, app });
+  console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
 
@@ -165,7 +166,9 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     longitude = pathParams.longitude;
     console.log('lat/lng', latitude, longitude);
   }
+  console.time('db call');
   let allLocations: Venue[] = await dbLocation.scan().exec();
+  console.timeEnd('db call');
 
   // set whether open tv's
   allLocations.forEach((l, i, locations) => {
@@ -193,20 +196,24 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
-
+  console.timeEnd('entire');
   return respond(200, sorted);
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('GET!');
   const { id } = getPathParameters(event);
 
+  console.time('get from db');
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
+  console.timeEnd('get from db');
 
   // loop through boxes, and update reserved status if necessary
   if (location.boxes) {
+    console.time('update reserved status');
     let updated = false;
     location.boxes.forEach((o, i, boxes) => {
       // check if box is reserved and end time is in past
@@ -215,10 +222,14 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
         updated = true;
       }
     });
+    console.timeEnd('update reserved status');
     if (updated) {
+      console.time('save boxes');
       await location.save();
+      console.timeEnd('save boxes');
     }
 
+    console.time('filter + sort');
     location.boxes = location.boxes.filter(b => b.appActive);
 
     // filter out inactive boxes
@@ -226,12 +237,13 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     location.boxes = location.boxes.sort((a, b) => {
       return a.label.localeCompare(b.label);
     });
+    console.timeEnd('filter + sort');
   }
 
   // delete location.losantId;
 
   // set distance
-  console.log(event);
+  console.time('set geo distance');
   if (event.queryStringParameters) {
     const { latitude, longitude } = event.queryStringParameters;
     console.log({ latitude, longitude });
@@ -248,6 +260,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     const roundedMiles = Math.round(10 * miles) / 10;
     location.distance = roundedMiles;
   }
+  console.timeEnd('set geo distance');
 
   return respond(200, location);
 });
@@ -564,66 +577,66 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
 });
 
-module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id } = getPathParameters(event);
+// module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { id } = getPathParameters(event);
 
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  const { boxes } = location;
-  for (const box of boxes) {
-    const command = 'key';
-    const key = 'poweroff';
-    const reservation = {
-      location,
-      box,
-      program: {
-        // channel: box.setupChannel,
-      },
-    };
-    console.log('turning off box', box);
-    await new Invoke()
-      .service('remote')
-      .name('command')
-      .body({ reservation, command, key })
-      .async()
-      .go();
-    console.log('turned off box', box);
-  }
-  return respond(200, 'ok');
-});
+//   const location: Venue = await dbLocation
+//     .queryOne('id')
+//     .eq(id)
+//     .exec();
+//   const { boxes } = location;
+//   for (const box of boxes) {
+//     const command = 'key';
+//     const key = 'poweroff';
+//     const reservation = {
+//       location,
+//       box,
+//       program: {
+//         // channel: box.setupChannel,
+//       },
+//     };
+//     console.log('turning off box', box);
+//     await new Invoke()
+//       .service('remote')
+//       .name('command')
+//       .body({ reservation, command, key })
+//       .async()
+//       .go();
+//     console.log('turned off box', box);
+//   }
+//   return respond(200, 'ok');
+// });
 
-module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id } = getPathParameters(event);
+// module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { id } = getPathParameters(event);
 
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  const { boxes } = location;
-  for (const box of boxes) {
-    const command = 'key';
-    const key = 'poweron';
-    const reservation = {
-      location,
-      box,
-      program: {
-        // channel: box.setupChannel,
-      },
-    };
-    console.log('turning on box', box);
-    await new Invoke()
-      .service('remote')
-      .name('command')
-      .body({ reservation, command, key })
-      .headers(event.headers)
-      .async()
-      .go();
-    console.log('turned on', box);
-  }
-  return respond(200, 'ok');
-});
+//   const location: Venue = await dbLocation
+//     .queryOne('id')
+//     .eq(id)
+//     .exec();
+//   const { boxes } = location;
+//   for (const box of boxes) {
+//     const command = 'key';
+//     const key = 'poweron';
+//     const reservation = {
+//       location,
+//       box,
+//       program: {
+//         // channel: box.setupChannel,
+//       },
+//     };
+//     console.log('turning on box', box);
+//     await new Invoke()
+//       .service('remote')
+//       .name('command')
+//       .body({ reservation, command, key })
+//       .headers(event.headers)
+//       .async()
+//       .go();
+//     console.log('turned on', box);
+//   }
+//   return respond(200, 'ok');
+// });
 
 module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   // const { id } = getPathParameters(event);

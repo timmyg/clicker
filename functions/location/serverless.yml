@@ -81,10 +81,6 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-            # ProvisionedThroughput:
-            #   ReadCapacityUnits: ${self:custom.tableThroughput}
-            #   WriteCapacityUnits: ${self:custom.tableThroughput}
-
 functions:
   health:
     handler: location.health
@@ -96,7 +92,7 @@ functions:
     handler: location.get
     events:
       - http:
-          path: {id}
+          path: '{id}'
           method: get
           cors:
             origin: '*'
@@ -124,7 +120,7 @@ functions:
     handler: location.all
     events:
       - http:
-          path: /geo/{latitude}/{longitude}
+          path: 'geo/{latitude}/{longitude}'
           method: get
           cors:
             origin: '*'
@@ -144,37 +140,37 @@ functions:
     handler: location.connected
     events:
       - http:
-          path: device/{losantId}/connected
+          path: 'device/{losantId}/connected'
           method: post
   disconnected:
     handler: location.disconnected
     events:
       - http:
-          path: device/{losantId}/disconnected
+          path: 'device/{losantId}/disconnected'
           method: post
   update:
     handler: location.update
     events:
       - http:
-          path: {id}
+          path: '{id}'
           method: put
   setBoxes:
     handler: location.setBoxes
     events:
       - http:
-          path: {id}/boxes
+          path: '{id}/boxes'
           method: put
   setLabels:
     handler: location.setLabels
     events:
       - http:
-          path: {id}/boxes/labels
+          path: '{id}/boxes/labels'
           method: put
   identifyBoxes:
     handler: location.identifyBoxes
     events:
       - http:
-          path: {id}/boxes/identify
+          path: '{id}/boxes/identify'
           method: post
   saveBoxesInfo:
     description: called from antenna to update whats on each box
@@ -182,19 +178,19 @@ functions:
     timeout: 12
     events:
       - http:
-          path: {id}/boxes/info
+          path: '{id}/boxes/info'
           method: post
   setBoxReserved:
     handler: location.setBoxReserved
     events:
       - http:
-          path: {id}/boxes/{boxId}/reserved
+          path: '{id}/boxes/{boxId}/reserved'
           method: post
   setBoxFree:
     handler: location.setBoxFree
     events:
       - http:
-          path: {id}/boxes/{boxId}/free
+          path: '{id}/boxes/{boxId}/free'
           method: post
   updateBoxInfo:
     description: called by saveBoxesInfo for manual and remote for other changes
@@ -205,13 +201,13 @@ functions:
   #   handler: location.allOff
   #   events:
   #     - http:
-  #         path: {id}/boxes/off
+  #         path: '{id}/boxes/off'
   #         method: post
   # allOn:
   #   handler: location.allOn
   #   events:
   #     - http:
-  #         path: {id}/boxes/on
+  #         path: '{id}/boxes/on'
   #         method: post
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
@@ -227,7 +223,7 @@ functions:
     handler: location.controlCenterLocationsByRegion
     events:
       - http:
-          path: regions/{regions}
+          path: 'regions/{regions}'
           method: get
   controlCenterV2:
     handler: location.controlCenterV2
@@ -240,7 +236,7 @@ functions:
     handler: location.controlCenterV2byLocation
     events:
       - http:
-          path: {id}/control-center/v2
+          path: '{id}/control-center/v2'
           method: post
   updateAirtableNowShowing:
     handler: location.updateAirtableNowShowing
