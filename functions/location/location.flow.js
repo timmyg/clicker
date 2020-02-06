@@ -158,6 +158,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   const pathParams = getPathParameters(event);
   const { partner, clicker, app } = event.headers;
   console.log({ partner, clicker, app });
+  console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
 
@@ -166,7 +167,9 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     longitude = pathParams.longitude;
     console.log('lat/lng', latitude, longitude);
   }
+  console.time('db call');
   let allLocations: Venue[] = await dbLocation.scan().exec();
+  console.timeEnd('db call');
 
   // set whether open tv's
   allLocations.forEach((l, i, locations) => {
@@ -194,7 +197,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
-
+  console.timeEnd('entire');
   return respond(200, sorted);
 });
 

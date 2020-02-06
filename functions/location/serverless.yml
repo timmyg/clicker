@@ -81,10 +81,6 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-            # ProvisionedThroughput:
-            #   ReadCapacityUnits: ${self:custom.tableThroughput}
-            #   WriteCapacityUnits: ${self:custom.tableThroughput}
-
 functions:
   health:
     handler: location.health
