@@ -234,7 +234,7 @@ functions:
     events:
       - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
-          path: 'control-center/v2'
+          path: control-center/v2
           method: post
   controlCenterV2byLocation:
     handler: location.controlCenterV2byLocation
@@ -248,7 +248,7 @@ functions:
     events:
       - schedule: cron(*/9 * * * ? *)
       - http:
-          path: 'airtable/now-showing'
+          path: airtable/now-showing
           method: post
   updateAllBoxesPrograms:
     handler: location.updateAllBoxesPrograms

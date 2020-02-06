@@ -12,7 +12,7 @@
     "invoke:update": "serverless invoke local --function update --path ../.resources/data/location-update.json",
     "invoke:boxes:add": "serverless invoke local --function addBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:all": "serverless invoke local --function getBoxes --path ../.resources/data/boxes.json",
-    "invoke:get": "serverless invoke local --function get --path ../.resources/data/location-update.json",
+    "invoke:get": "serverless invoke local --function get --stage develop --path ../.resources/data/location-update.json",
     "invoke:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json",
     "invoke:boxes:updateBoxInfo": "serverless invoke local --function updateBoxInfo --stage develop --path ../.resources/data/box-update.json",

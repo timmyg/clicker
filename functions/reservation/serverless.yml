@@ -111,7 +111,7 @@ functions:
     handler: reservation.get
     events:
       - http:
-          path: {id}
+          path: '{id}'
           method: get
   create:
     handler: reservation.create
@@ -132,7 +132,7 @@ functions:
     handler: reservation.cancel
     events:
       - http:
-          path: {id}
+          path: '{id}'
           method: delete
           cors:
             origin: '*'
@@ -147,7 +147,7 @@ functions:
     timeout: 20
     events:
       - http:
-          path: path: {id}
+          path: '{id}'
           method: put
           cors:
             origin: '*'
