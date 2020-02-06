@@ -1,3 +1,4 @@
+import { AppService } from "./core/services/app.service";
 import { Injectable } from "@angular/core";
 import {
   HttpEvent,
@@ -14,7 +15,7 @@ import { getPartner } from "./state/app";
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
-  constructor(private store$: Store<any>) {}
+  constructor(private store$: Store<any>, public appService: AppService) {}
 
   public intercept(
     request: HttpRequest<any>,
@@ -39,21 +40,6 @@ export class ApiInterceptor implements HttpInterceptor {
         })
       );
     }
-    // return this.store$.pipe(
-    //   select(getUserAuthToken),
-    //   filter(authToken => authToken && authToken.length > 0),
-    //   mergeMap((authToken: string) => {
-    //     if (authToken) {
-    //       request = request.clone({
-    //         url: `${environment.apiBaseUrl}/${request.url}`,
-    //         headers: request.headers.set('Authorization', `Bearer ${authToken}`),
-    //       });
-    //     } else {
-    //       console.warn(`Bad Token: ${authToken}`);
-    //     }
-    //     return of(request);
-    //   }),
-    // );
     return Observable.create(observer => {
       const authToken$ = this.store$.pipe(select(getUserAuthToken));
       const partner$ = this.store$.pipe(select(getPartner));
@@ -63,6 +49,9 @@ export class ApiInterceptor implements HttpInterceptor {
           "Authorization",
           `Bearer ${authToken}`
         );
+        console.log(request.url);
+        console.log("version", this.appService.getVersion());
+        // headers = headers.append("partner", partner);
         if (partner) {
           headers = headers.append("partner", partner);
         }

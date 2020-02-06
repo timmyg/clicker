@@ -15,9 +15,6 @@ import { SegmentService } from "ngx-segment-analytics";
 import { getUserId } from "./state/user";
 import { Globals } from "./globals";
 import { first } from "rxjs/operators";
-import { version } from "../../package.json";
-// import { Intercom } from 'ng-intercom';
-import { environment } from "src/environments/environment";
 import { AppService } from "./core/services/app.service";
 
 @Component({
@@ -33,10 +30,12 @@ export class AppComponent {
     private store: Store<fromStore.AppState>,
     private segment: SegmentService,
     private globals: Globals,
-    // public intercom: Intercom,
     public appService: AppService
   ) {
     this.partner$ = this.store.select(getPartner);
+    console.log("set version", version);
+
+    this.appService.setVersion(version);
     this.initializeApp();
   }
 
@@ -63,7 +62,6 @@ export class AppComponent {
           });
       } catch (e) {}
     });
-    this.appService.setVersion(version);
     this.platform.resume.subscribe(() => {
       this.segment.track(this.globals.events.opened, { version });
       this.store.dispatch(new fromUser.Refresh());

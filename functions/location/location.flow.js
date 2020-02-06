@@ -207,18 +207,17 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
   // loop through boxes, and update reserved status if necessary
   if (location.boxes) {
+    let updated = false;
     location.boxes.forEach((o, i, boxes) => {
       // check if box is reserved and end time is in past
       if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
-        // if so, update to not reserved
-        // delete boxes[i].end;
-        // delete boxes[i].reserved;
-        // boxes[i].end
         boxes[i].reserved = false;
-        // boxes[i] = { ...boxes[i] };
+        updated = true;
       }
     });
-    await location.save();
+    if (updated) {
+      await location.save();
+    }
 
     location.boxes = location.boxes.filter(b => b.appActive);
 

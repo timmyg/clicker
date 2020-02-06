@@ -28,9 +28,9 @@ import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { SegmentModule } from "ngx-segment-analytics";
 import { Globals } from "./globals";
+import { version } from "../../package.json";
 
 import * as Sentry from "@sentry/browser";
-import { TruncatePipe } from "./pipes/truncate.pipe";
 
 Sentry.init({
   dsn: environment.sentry.dsn,
@@ -53,6 +53,8 @@ export function checkParams(store: Store<AppState>): Function {
       const partner = urlParams.get("partner");
       if (partner) {
         store.dispatch(new fromApp.SetPartner(partner));
+        // store.dispatch(new fromApp.SetPartner(partner));
+        console.log({ version });
       }
       resolve(true);
     });
@@ -115,7 +117,7 @@ export function initUserStuff(store: Store<AppState>): Function {
       multi: true
     },
     Geolocation,
-    Diagnostic,
+    Diagnostic
     // SentryErrorHandler,
     // { provide: ErrorHandler, useClass: SentryErrorHandler }
   ],

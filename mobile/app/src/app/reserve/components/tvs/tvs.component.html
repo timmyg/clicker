@@ -5,7 +5,7 @@
   <ion-spinner name="crescent" class="center"></ion-spinner>
 </ion-row>
 <ion-row [class.content-loading]="isLoading$ | async">
-  <ion-col *ngFor="let tv of tvs$ | async" size="4">
+  <ion-col *ngFor="let tv of (tvs$ | async)" size="4">
     <ion-button
       color="light"
       size="large"
