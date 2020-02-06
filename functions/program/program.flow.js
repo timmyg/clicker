@@ -353,6 +353,8 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
+  console.time('entire call');
+  console.time('get location');
   console.log({ locationId });
   const { data: location }: { data: Venue } = await new Invoke()
     .service('location')
@@ -360,8 +362,8 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .pathParams({ id: locationId })
     .headers(event.headers)
     .go();
+  console.timeEnd('get location');
 
-  const initialChannels = nationalChannels;
   // get all programs for right now
   const now = moment().unix() * 1000;
   const in25Mins =
@@ -371,7 +373,6 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming setup queries');
 
-  console.log(location.region, now, in25Mins);
   const programsQuery = dbProgram
     .query('region')
     .eq(location.region)
@@ -383,7 +384,6 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .gt(now)
     .all()
     .exec();
-  console.log(2);
 
   const programsNextQuery = dbProgram
     .query('region')
@@ -396,18 +396,16 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .lt(in25Mins)
     .all()
     .exec();
-  console.log(3);
   console.timeEnd('current + next programming setup queries');
 
-  console.time('current + next programming run query');
+  console.time('current + next programming query');
   const [programs: Program[], programsNext: Program[]] = await Promise.all([programsQuery, programsNextQuery]);
-  console.log(programs.length, programsNext.length);
-  console.time('current + next programming run query');
-
-  let currentPrograms: Program[] = programs;
-  const nextPrograms: Program[] = programsNext;
+  // console.log(programs.length, programsNext.length);
+  console.timeEnd('current + next programming query');
 
   console.time('current + next programming combine');
+  let currentPrograms: Program[] = programs;
+  const nextPrograms: Program[] = programsNext;
   currentPrograms.forEach((program, i) => {
     const nextProgram = nextPrograms.find(
       np => np.channel === program.channel && np.programmingId !== program.programmingId,
@@ -422,16 +420,13 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.timeEnd('current + next programming combine');
 
+  // console.log('exclude', location.channels);
   console.time('remove excluded');
-  console.log('exclude', location.channels);
   if (location.channels && location.channels.exclude) {
     const excludedChannels = location.channels.exclude.map(function(item) {
       return parseInt(item, 10);
     });
-    console.log(excludedChannels);
-    // console.log(currentPrograms.length);
     currentPrograms = currentPrograms.filter(p => !excludedChannels.includes(p.channel));
-    console.log(currentPrograms.length);
   }
   console.timeEnd('remove excluded');
 
@@ -444,6 +439,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   ];
   console.timeEnd('sort');
 
+  console.timeEnd('entire call');
   return respond(200, currentPrograms);
 });
 
