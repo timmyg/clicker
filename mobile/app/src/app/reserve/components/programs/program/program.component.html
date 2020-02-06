@@ -3,7 +3,7 @@
     <ion-item-option (click)="onMoreInfo(slidingItem)">Info</ion-item-option>
   </ion-item-options>
   <ion-item>
-    <ion-card (click)="onProgramClick()" no-margin>
+    <ion-card (click)="onProgramClick()">
       <div class="slide-indicator">
         <ion-icon name="arrow-dropright" class="icon"></ion-icon>
       </div>
@@ -16,8 +16,11 @@
           >
         </ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content no-padding-top [ngClass]="{ 'non-sports': !program.isSports }">
-      <!-- <ion-card-content no-padding-top> -->
+      <ion-card-content
+        no-padding-top
+        [ngClass]="{ 'non-sports': !program.isSports }"
+      >
+        <!-- <ion-card-content no-padding-top> -->
         <ion-grid no-padding>
           <ion-row align-items-center>
             <ng-container *ngIf="program.start; else noProgram">
@@ -27,13 +30,15 @@
               <ion-col size="11">
                 <h1 class="title">
                   {{ program.title }}
-                  <span class="faded" *ngIf="isReplay()">(Replay)</span
-                  ><ion-icon
+                  <ion-icon
                     *ngIf="program.clickerRating >= 8"
                     name="flame"
                     class="trending"
                   ></ion-icon>
                 </h1>
+                <ion-chip color="secondary" *ngIf="isReplay()">
+                  <label color="secondary">Replay</label></ion-chip
+                >
               </ion-col>
 
               <ion-col size="12" class="ion-text-center" no-padding>

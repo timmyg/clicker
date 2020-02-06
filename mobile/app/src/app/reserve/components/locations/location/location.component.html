@@ -9,24 +9,10 @@
     >
   </ion-item-options>
   <ion-item>
-    <ion-card (click)="isAvailable() && onLocationClick()" no-margin>
+    <ion-card (click)="isAvailable() && onLocationClick()">
       <ion-card-header>
         <ion-card-subtitle>
-          <span
-            >{{ location.neighborhood }}
-            <span *ngIf="!isAvailable()">(inactive)</span>
-            <!-- <ion-chip color="primary" *ngIf="location.free">
-              <label color="primary"> Free </label></ion-chip
-            > -->
-            <ion-chip color="primary" *ngIf="location.announcement">
-              <label color="primary">
-                {{ location.announcement }}</label
-              ></ion-chip
-            >
-            <ion-chip color="secondary" *ngIf="location.openTvs">
-              <label color="secondary">TVs Available</label></ion-chip
-            >
-          </span>
+          <span>{{ location.neighborhood }} </span>
           <ion-icon
             *ngIf="!location.connected"
             name="wifi"
@@ -43,8 +29,23 @@
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content no-padding-top>
-        <img [src]="location.img" class="logo" />
-        <h1>{{ location.name }}</h1>
+        <ion-row>
+          <img [src]="location.img" class="logo" />
+          <h1>{{ location.name }}</h1>
+        </ion-row>
+        <ion-row>
+          <ion-chip color="primary" *ngIf="location.announcement">
+            <label color="primary">
+              {{ location.announcement }}</label
+            ></ion-chip
+          >
+          <ion-chip color="secondary" *ngIf="isAvailable() && location.openTvs">
+            <label color="secondary">TVs Available</label></ion-chip
+          >
+          <ion-chip color="danger" *ngIf="!isAvailable()">
+            <label color="danger">Inactive</label></ion-chip
+          >
+        </ion-row>
       </ion-card-content>
     </ion-card>
   </ion-item>

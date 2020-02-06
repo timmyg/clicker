@@ -26,5 +26,12 @@ span.icon {
 }
 
 .non-sports {
-  opacity: .5;
+  opacity: 0.5;
+}
+
+ion-card {
+  margin: 8px;
+  ion-card-header {
+    padding-bottom: 8px;
+  }
 }
