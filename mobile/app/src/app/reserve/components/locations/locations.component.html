@@ -41,9 +41,9 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
     >
       <ng-container
         *ngFor="
-          let location of locations$
+          let location of (locations$
             | async
-            | locationsFilter: searchTerm:showHidden
+            | locationsFilter: searchTerm:showHidden)
         "
       >
         <app-location
@@ -83,7 +83,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
         Find locations around you by
         <a (click)="forceAllow()">allowing location services</a>
       </p>
-      <p class="ion-text-center" padding-top>
+      <p class="ion-text-center">
         <a (click)="suggestLocation()">🍺 Suggest a new location</a>
       </p>
       <p class="ion-text-center">
