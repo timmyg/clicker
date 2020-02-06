@@ -6,6 +6,7 @@ export interface State {
   partner: string;
   plans: Plan[];
   timeframes: Timeframe[];
+  version: string;
   loading: boolean;
   error: string;
 }
@@ -14,6 +15,7 @@ export const initialState: State = {
   partner: null,
   plans: null,
   timeframes: null,
+  version: null,
   loading: false,
   error: ""
 };
@@ -30,6 +32,14 @@ export function reducer(
         loading: true
       };
 
+    case fromApp.SET_PARTNER: {
+      state.partner = action.payload;
+      return state;
+    }
+    case fromApp.SET_VERSION: {
+      state.version = action.version;
+      return state;
+    }
     case fromApp.SET_PARTNER: {
       state.partner = action.payload;
       return state;
@@ -72,6 +82,7 @@ export function reducer(
 }
 
 export const getPartner = (state: State) => state.partner;
+export const getVersion = (state: State) => state.version;
 export const getPlans = (state: State) => state.plans;
 export const getTimeframes = (state: State) => state.timeframes;
 export const getLoading = (state: State) => state.loading;

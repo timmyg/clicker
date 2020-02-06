@@ -5,6 +5,7 @@ import { Timeframe } from "./timeframe.model";
 export const SET_PARTNER = "[APP] Set Partner";
 export const SET_PARTNER_SUCCESS = "[APP] Set Partner Success";
 export const SET_PARTNER_FAIL = "[APP] Set Partner Fail";
+export const SET_VERSION = "[APP] Set Version";
 export const LOAD_PLANS = "[APP] Load Plans";
 export const LOAD_PLANS_SUCCESS = "[APP] Load Plans Success";
 export const LOAD_PLANS_FAIL = "[APP] Load Plans Fail";
@@ -28,6 +29,11 @@ export class SetPartnerSuccess implements Action {
 
 export class SetPartnerFail implements Action {
   readonly type = SET_PARTNER_FAIL;
+}
+
+export class SetVersion implements Action {
+  readonly type = SET_VERSION;
+  constructor(public version: string) {}
 }
 
 export class LoadPlans implements Action {
@@ -86,6 +92,7 @@ export type AppActions =
   | SetPartner
   | SetPartnerSuccess
   | SetPartnerFail
+  | SetVersion
   | LoadPlans
   | LoadPlansSuccess
   | LoadPlansFail

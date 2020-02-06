@@ -12,11 +12,11 @@ export class ReservationService {
     return this.httpClient.get<Reservation[]>(`${this.prefix}/active/user`);
   }
 
-  get(reservation: Reservation): Observable<Array<Reservation>> {
-    return this.httpClient.get<Reservation[]>(
-      `${this.prefix}/${reservation.id}`
-    );
-  }
+  // get(reservation: Reservation): Observable<Array<Reservation>> {
+  //   return this.httpClient.get<Reservation[]>(
+  //     `${this.prefix}/${reservation.id}`
+  //   );
+  // }
 
   create(reservation: Partial<Reservation>): Observable<Reservation> {
     return this.httpClient.post<Reservation>(`${this.prefix}`, reservation);

@@ -23,7 +23,7 @@ import { AppService } from "./core/services/app.service";
 })
 export class AppComponent {
   partner$: Observable<string>;
-  public version: string = version;
+  // public version: string = version;
 
   constructor(
     private platform: Platform,
@@ -33,13 +33,14 @@ export class AppComponent {
     public appService: AppService
   ) {
     this.partner$ = this.store.select(getPartner);
-    console.log("set version", version);
+    // console.log("set version", version);
 
-    this.appService.setVersion(version);
+    // this.appService.setVersion(version);
     this.initializeApp();
   }
 
   async initializeApp() {
+    const version = this.appService.getVersion();
     this.platform.ready().then(async () => {
       try {
         this.store

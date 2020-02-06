@@ -178,14 +178,8 @@ functions:
     handler: game.getStatus
     events:
       - http:
-          path: 'score'
+          path: score
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncNextFewDays:
     handler: game.syncNextFewDays
     memorySize: 1024
@@ -195,14 +189,8 @@ functions:
     events:
       - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
       - http:
-          path: 'sync'
+          path: sync
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncActive:
     handler: game.syncActive
     memorySize: 1024
@@ -217,12 +205,6 @@ functions:
       - http:
           path: sync/scores
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncAirtable:
     handler: game.syncAirtable
     timeout: 30
@@ -234,17 +216,11 @@ functions:
       - http:
           path: sync/airtable
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   get:
     handler: game.get
     events:
       - http:
-          path: '{id}'
+          path: { id }
           method: get
   # getByStartTimeAndNetwork:
   #   handler: game.getByStartTimeAndNetwork
@@ -265,12 +241,6 @@ functions:
       - http:
           path: scoreboard
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   updateAirtableGamesStatus:
     handler: game.updateAirtableGamesStatus
     timeout: 30

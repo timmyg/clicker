@@ -22,6 +22,16 @@ export class AppEffects {
     )
   );
   @Effect()
+  setVersion$: Observable<Action> = this.actions$.pipe(
+    ofType(AppActions.SET_VERSION),
+    switchMap(() =>
+      this.appService.getPlans().pipe(
+        switchMap((plans: Plan[]) => [new AppActions.LoadPlansSuccess(plans)]),
+        catchError(err => of(new AppActions.LoadPlansFail(err)))
+      )
+    )
+  );
+  @Effect()
   loadTimeframes$: Observable<Action> = this.actions$.pipe(
     ofType(AppActions.LOAD_TIMEFRAMES),
     switchMap((action: AppActions.LoadTimeframes) =>

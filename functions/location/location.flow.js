@@ -156,7 +156,8 @@ const dbLocation = dynamoose.model(
 module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
-  const { partner } = event.headers;
+  const { partner, clicker, app } = event.headers;
+  console.log({ partner, clicker, app });
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
 

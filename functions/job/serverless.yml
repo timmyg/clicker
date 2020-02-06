@@ -50,26 +50,14 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   controlCenter:
     handler: job.controlCenter
     timeout: 30
     events:
       - schedule: cron(*/5 * * * ? *)
       - http:
-          path: 'control-center'
+          path: control-center
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   # ccv1
   updateAllGamesStatus:
     handler: job.updateAllGamesStatus
@@ -77,39 +65,21 @@ functions:
     events:
       - schedule: cron(*/1 * * * ? *)
       - http:
-          path: 'game-status'
+          path: game-status
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   controlCenterDailyInit:
     handler: job.controlCenterDailyInit
     timeout: 30
     events:
       - schedule: cron(59 9 * * ? *) # every day @ 5:59am eastern
       - http:
-          path: 'control-center/daily'
+          path: control-center/daily
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncLocationsBoxes:
     handler: job.syncLocationsBoxes
     timeout: 30
     events:
       - schedule: cron(00 11 * * ? *) # every day @ 7:00am eastern
       - http:
-          path: 'boxes/sync'
+          path: boxes/sync
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
