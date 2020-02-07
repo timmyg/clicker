@@ -34,13 +34,9 @@
     <br />
     <label>Vegas</label>
     <div>
-      <span>
-        <ul>
-          <li><b>{{program.game.away?.name.abbr}}</b>: {{program.game.away?.book.spread}} ({{program.game.away?.book.moneyline}})</li>
-          <li><b>{{program.game.home?.name.abbr}}</b>: {{program.game.home?.book.spread}} ({{program.game.home?.book.moneyline}})</li>
-          <li><b>O/U</b>: {{program.game.book?.total}}</li>
-        </ul>
-      </span>
+          <div><b>{{program.game.away?.name.abbr}}</b>: {{program.game.away?.book.spread}} ({{program.game.away?.book.moneyline}})</div>
+          <div><b>{{program.game.home?.name.abbr}}</b>: {{program.game.home?.book.spread}} ({{program.game.home?.book.moneyline}})</div>
+          <div><b>O/U</b>: {{program.game.book?.total}}</div>
     </div>
   </div>
 </ion-content>
