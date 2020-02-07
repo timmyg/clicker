@@ -168,7 +168,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.time('db call');
   let allLocations: Venue[] = await dbLocation.scan().exec();
-  console.log("locations", allLocations.length);
+  console.log('locations', allLocations.length);
   console.timeEnd('db call');
 
   // set whether open tv's
@@ -949,7 +949,7 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
 
 module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
-  return respond(200, { html: `<h1>it works:</h1><p>${id}</p>` });
+  return respond(200, { html: `<br/><br/><p class="ion-text-center">Now Showing coming soon</p>` });
 });
 
 function buildAirtableNowShowing(location: Venue) {

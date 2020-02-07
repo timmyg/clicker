@@ -14,8 +14,9 @@ img.logo {
   height: 100%;
   width: 30px;
   position: absolute;
-  right: 0;
+  left: -5px;
   .icon {
+    opacity: .5;
     align-self: center;
     // font-size: 40px;
   }

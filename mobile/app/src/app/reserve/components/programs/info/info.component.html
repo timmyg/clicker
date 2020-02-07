@@ -21,21 +21,26 @@
     >
     <ng-template #noDescription>No description available</ng-template>
   </div>
-  <br />
-  <label>Game Status</label>
-  <div>
-    <span *ngIf="program.game && program.game.summary && program.game.summary.description">
-      {{ program.game.summary.description}}</span
-    >
+  <div *ngIf="program.game && program.game.summary && program.game.summary.description">
+    <br />
+    <label>Game Status</label>
+    <div>
+      <span>
+        {{ program.game.summary.description}}</span
+      >
+    </div>
   </div>
-  <label>Vegas</label>
-  <div>
-    <span *ngIf="program.game && program.game.book && program.game.home && program.game.home.book">
-      <ul>
-        <li><b>{{game.away.name.abbr}}</b>: {{game.away.book.spread}} ({{game.away.book.moneyline}})</li>
-        <li><b>{{game.home.name.abbr}}</b>: {{game.home.book.spread}} ({{game.home.book.moneyline}})</li>
-        <li><b>O/U</b>: {{game.book.total}}</li>
-      </ul>
-    </span>
+  <div *ngIf="program.game && program.game.book && program.game.home && program.game.home.book">
+    <br />
+    <label>Vegas</label>
+    <div>
+      <span>
+        <ul>
+          <li><b>{{program.game.away?.name.abbr}}</b>: {{program.game.away?.book.spread}} ({{program.game.away?.book.moneyline}})</li>
+          <li><b>{{program.game.home?.name.abbr}}</b>: {{program.game.home?.book.spread}} ({{program.game.home?.book.moneyline}})</li>
+          <li><b>O/U</b>: {{program.game.book?.total}}</li>
+        </ul>
+      </span>
+    </div>
   </div>
 </ion-content>
