@@ -7,6 +7,7 @@ import { map, switchMap, catchError } from "rxjs/operators";
 import { Location } from "./location.model";
 import * as LocationActions from "./location.actions";
 import { LocationService } from "../../core/services/location.service";
+import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 
 @Injectable()
 export class LocationsEffects {
@@ -30,9 +31,10 @@ export class LocationsEffects {
     switchMap((action: LocationActions.GetDetailsPage) =>
       this.locationService.getDetails(action.locationId).pipe(
         map(
-          (html: string) =>
-            new LocationActions.GetDetailsPageSuccess(html)
-        ),
+          (html: string) => {
+          console.log('hiii', html) 
+            return new LocationActions.GetDetailsPageSuccess(html)
+          }),
         catchError(err => of(new LocationActions.GetDetailsPageFail(err)))
       )
     )

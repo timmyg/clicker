@@ -26,8 +26,12 @@ export class LocationService {
 
   getDetails(locationId: string): Observable<string> {
     return this.httpClient.get<Response>(`${this.prefix}/${locationId}/details/page`).pipe(map(response => {
-      const data = response.json();
-      return data['html'];
+      console.log('response2', response)
+      // const data = response.json();
+      // console.log(data)
+      // console.log({data})
+      return response['html'];
+      // return ''
     }))
   }
 

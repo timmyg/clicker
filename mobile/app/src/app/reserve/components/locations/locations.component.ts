@@ -269,7 +269,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
 
   async onLocationDetail(location: Location) {
       this.locationDetailModal = await this.modalController.create({
-        component: LocationDetailPage
+        component: LocationDetailPage,
+        componentProps: { locationId: location.id }
       });
       this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
         if (this.locationDetailModal) {

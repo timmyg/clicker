@@ -21,7 +21,7 @@ export function reducer(
 ): State {
   switch (action.type) {
     case fromLocation.GET_ALL_LOCATIONS:
-    case fromLocation.GET_DETAILS_PAGE:
+    // case fromLocation.GET_DETAILS_PAGE:
       return {
         ...state,
         loading: true
@@ -35,6 +35,7 @@ export function reducer(
       };
     }
     case fromLocation.GET_DETAILS_PAGE_SUCCESS: {
+      console.log({action})
       return {
         ...state,
         loading: false,
