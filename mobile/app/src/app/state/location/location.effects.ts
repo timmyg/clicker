@@ -25,6 +25,20 @@ export class LocationsEffects {
   );
 
   @Effect()
+  getDetails$: Observable<Action> = this.actions$.pipe(
+    ofType(LocationActions.GET_DETAILS_PAGE),
+    switchMap((action: LocationActions.GetDetailsPage) =>
+      this.locationService.getDetails(action.locationId).pipe(
+        map(
+          (html: string) =>
+            new LocationActions.GetDetailsPageSuccess(html)
+        ),
+        catchError(err => of(new LocationActions.GetDetailsPageFail(err)))
+      )
+    )
+  );
+
+  @Effect()
   turnOn$: Observable<Action> = this.actions$.pipe(
     ofType(LocationActions.TURN_ON),
     switchMap((action: LocationActions.TurnOn) =>

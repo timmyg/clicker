@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Location } from "../../state/location/location.model";
 import { Geolocation } from "../../state/location/geolocation.model";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class LocationService {
@@ -22,6 +23,14 @@ export class LocationService {
     }
     return this.httpClient.get<Location[]>(url, { params });
   }
+
+  getDetails(locationId: string): Observable<string> {
+    return this.httpClient.get<Response>(`${this.prefix}/${locationId}/details/page`).pipe(map(response => {
+      const data = response.json();
+      return data['html'];
+    }))
+  }
+
 
   get(
     locationId: string,

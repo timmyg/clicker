@@ -5,5 +5,5 @@
 </ion-header>
 
 <ion-content padding-horizontal>
-  <div [innerHTML]="html"></div>
+  <div [innerHTML]="locationDetailHtml$ | async"></div>
 </ion-content>

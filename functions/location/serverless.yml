@@ -264,3 +264,11 @@ functions:
       - http:
           path: '{id}/details/page'
           method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - app
+              - clicker
+              - authorization
+              - content-type

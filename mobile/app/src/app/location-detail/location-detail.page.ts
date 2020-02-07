@@ -1,4 +1,10 @@
 import { Component } from "@angular/core";
+import { Observable } from "rxjs";
+import { Actions } from "@ngrx/effects";
+import { getDetailsPage, getLoading } from "src/app/state/location";
+import { Store } from "@ngrx/store";
+import * as fromStore from "src/app/state/app.reducer";
+import * as fromLocation from "src/app/state/location/location.actions";
 
 @Component({
   selector: "app-location-detail",
@@ -6,25 +12,22 @@ import { Component } from "@angular/core";
   styleUrls: ["./location-detail.page.scss"]
 })
 export class LocationDetailPage {
-  // referralCode$: Observable<string>;
-  // referred$: Observable<boolean>;
-  // isLoading$: Observable<boolean>;
-  // invitedByCode: string;
-  html: string;
+  locationDetailHtml$: Observable<string>;
+  isLoading$: Observable<boolean>;
+  // html: string;
 
-  // constructor(
-  //   private store: Store<fromStore.AppState>,
-  //   public modalController: ModalController,
-  //   private actions$: Actions,
-  //   private toastController: ToastController
-  // ) {
-  //   this.referralCode$ = this.store.select(getUserReferralCode);
-  //   this.referred$ = this.store.select(isReferred);
-  //   this.isLoading$ = this.store.select(getLoading);
-  // }
+  constructor(
+    private store: Store<fromStore.AppState>,
+    private actions$: Actions,
+  ) {
+    this.locationDetailHtml$ = this.store.select(getDetailsPage);
+    this.isLoading$ = this.store.select(getLoading);
+  }
 
   ngOnInit() {
-    this.html = "<h3>yo</h3>"
+    this.store.dispatch(
+      new fromLocation.GetDetailsPage('locationid')
+    );
   }
 
   // onCloseClick() {
