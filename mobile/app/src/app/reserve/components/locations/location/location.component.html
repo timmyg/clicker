@@ -1,11 +1,10 @@
 <ion-item-sliding
   [ngClass]="{ inactive: !isAvailable() }"
-  [disabled]="!isAvailable() || !isManager()"
   #slidingItem
 >
   <ion-item-options side="start">
-    <ion-item-option (click)="onManageClick(slidingItem)"
-      >Manage</ion-item-option
+    <ion-item-option (click)="onInfoClick(slidingItem)"
+      >Info</ion-item-option
     >
   </ion-item-options>
   <ion-item>

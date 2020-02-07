@@ -27,6 +27,8 @@ import { LoginComponent } from "../auth/login/login.component";
 import { Deploy } from "cordova-plugin-ionic/dist/ngx";
 import { SuggestComponent } from "./components/locations/suggest/suggest.component";
 import { TruncatePipe } from "../pipes/truncate.pipe";
+import { LocationDetailPage } from "../location-detail/location-detail.page";
+import { LocationDetailPageModule } from "../location-detail/location-detail.module";
 
 const routes: Routes = [
   {
@@ -71,6 +73,7 @@ const routes: Routes = [
     MomentModule,
     AuthModule,
     ReferralPageModule,
+    LocationDetailPageModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
@@ -93,7 +96,8 @@ const routes: Routes = [
     InfoComponent,
     WalletPage,
     SuggestComponent,
-    ReferralPage
+    ReferralPage,
+    LocationDetailPage
   ]
 })
 export class ReservePageModule {}

@@ -31,6 +31,7 @@ import { Globals } from "src/app/globals";
 // import { Intercom } from 'ng-intercom';
 import { GeolocationOptions } from "@ionic-native/geolocation/ngx";
 import { SuggestComponent } from "./suggest/suggest.component";
+import { LocationDetailPage } from "src/app/location-detail/location-detail.page";
 
 const permissionGeolocation = {
   name: "permission.geolocation",
@@ -78,6 +79,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   isLoggedIn: boolean;
   suggestModal;
   referralModal;
+  locationDetailModal;
   loginModal;
 
   constructor(
@@ -265,6 +267,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.segment.track(this.globals.events.permissions.geolocation.denied);
   }
 
+  async onLocationDetail(location: Location) {
+      this.locationDetailModal = await this.modalController.create({
+        component: LocationDetailPage
+      });
+      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+        if (this.locationDetailModal) {
+          this.locationDetailModal.close();
+        }
+      });
+      return await this.locationDetailModal.present();
+  }
+  
   async onLocationManage(location: Location) {
     const actionSheet = await this.actionSheetController.create({
       header: "Manage Location",

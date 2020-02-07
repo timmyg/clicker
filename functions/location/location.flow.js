@@ -946,6 +946,11 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
   return respond(200);
 });
 
+module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  return respond(200, `<h1>it works:<h1><p>${id}</p>`);
+});
+
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {

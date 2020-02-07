@@ -12,6 +12,7 @@ export class LocationComponent {
   @Input() userRoles: string[];
   @Output() onClick = new EventEmitter<Location>();
   @Output() onManage = new EventEmitter<Location>();
+  @Output() onLocationDetail = new EventEmitter<Location>();
 
   isManager() {
     const { userLocations, userRoles } = this;
@@ -33,6 +34,11 @@ export class LocationComponent {
 
   onManageClick(slidingItem) {
     this.onManage.emit(this.location);
+    slidingItem.close();
+  }
+
+  onInfoClick(slidingItem) {
+    this.onLocationDetail.emit(this.location);
     slidingItem.close();
   }
 

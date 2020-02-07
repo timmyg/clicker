@@ -52,6 +52,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
           [userLocations]="userLocations"
           (onClick)="onLocationClick($event)"
           (onManage)="onLocationManage($event)"
+          (onLocationDetail)="onLocationDetail($event)"
         ></app-location>
       </ng-container>
       <ng-container

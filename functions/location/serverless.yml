@@ -257,3 +257,10 @@ functions:
       - http:
           path: boxes/programs
           method: post
+  getLocationDetailsPage:
+    handler: location.getLocationDetailsPage
+    description: location details rendered html page for app
+    events:
+      - http:
+          path: '{id}/details/page'
+          method: get
