@@ -73,8 +73,8 @@ const dbGame = dynamoose.model(
       logo: String,
       rank: Number,
       book: {
-        moneyline: Number,
-        spread: Number,
+        moneyline: String,
+        spread: String,
       },
     },
     home: {
@@ -89,8 +89,8 @@ const dbGame = dynamoose.model(
       logo: String,
       rank: Number,
       book: {
-        moneyline: Number,
-        spread: Number,
+        moneyline: String,
+        spread: String,
       },
     },
     book: {
@@ -666,6 +666,16 @@ function transformGame(game: any): Game {
   }
   const transformedGame = objectMapper(game, map);
   transformedGame.summary = buildStatus(transformedGame);
+  // team.book.spread > 0 ? `+${team.book.spread}` : team.book.spread;
+  try {
+    const { home, away } = transformedGame.home;
+    transformGame.home.book.spread = home.book.spread > 0 ? `+${home.book.spread}` : home.book.spread;
+    transformGame.away.book.spread = away.book.spread > 0 ? `+${away.book.spread}` : away.book.spread;
+    transformGame.home.book.moneyline = home.book.moneyline > 0 ? `+${home.book.moneyline}` : home.book.moneyline;
+    transformGame.away.book.moneyline = away.book.moneyline > 0 ? `+${away.book.moneyline}` : away.book.moneyline;
+  } catch (e) {
+    console.error(e);
+  }
   return transformedGame;
 }
 

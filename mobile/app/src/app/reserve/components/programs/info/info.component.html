@@ -28,4 +28,14 @@
       {{ program.game.summary.description}}</span
     >
   </div>
+  <label>Vegas</label>
+  <div>
+    <span *ngIf="program.game && program.game.book && program.game.home && program.game.home.book">
+      <ul>
+        <li><b>{{game.away.name.abbr}}</b>: {{game.away.book.spread}} ({{game.away.book.moneyline}})</li>
+        <li><b>{{game.home.name.abbr}}</b>: {{game.home.book.spread}} ({{game.home.book.moneyline}})</li>
+        <li><b>O/U</b>: {{game.book.total}}</li>
+      </ul>
+    </span>
+  </div>
 </ion-content>
