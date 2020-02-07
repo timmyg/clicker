@@ -39,7 +39,7 @@ describe('transformGame', () => {
     expect(result.away.logo).toBe('https://static.sprtactn.co/teamlogos/ncaaf/100/wvu.png');
     expect(result.away.rank).toBeFalsy();
     expect(result.away.book.moneyline).toBe('+575');
-    expect(result.away.book.spread).toBe('+18');
+    expect(result.away.book.spread).toBe('+184');
   });
 });
 describe('get status', () => {
