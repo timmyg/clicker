@@ -9,6 +9,18 @@ img.logo {
   opacity: 0.4;
 }
 
+.slide-indicator {
+  display: flex;
+  height: 100%;
+  width: 30px;
+  position: absolute;
+  right: 0;
+  .icon {
+    align-self: center;
+    // font-size: 40px;
+  }
+}
+
 ion-icon.disconnected {
   color: var(--ion-color-danger);
 }

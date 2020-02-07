@@ -3,11 +3,9 @@
     <ion-item-option (click)="onMoreInfo(slidingItem)">Info</ion-item-option>
   </ion-item-options>
   <ion-item>
-    <ion-card (click)="onProgramClick()">
+    <ion-card (click)="onProgramClick()" class="ion-activatable">
       <div class="slide-indicator">
-        <ion-icon name="arrow-dropright" class="icon"></ion-icon>
-        <!-- <ion-icon name="ellipsis-vertical"  class="icon"></ion-icon> -->
-        <!-- <ion-icon name="apps"  class="icon"></ion-icon> -->
+        <ion-icon name="more" class="icon" size="large"></ion-icon>
       </div>
       <ion-card-header>
         <ion-card-subtitle>
@@ -52,6 +50,7 @@
           </ion-row>
         </ion-grid>
       </ion-card-content>
+      <ion-ripple-effect></ion-ripple-effect>
     </ion-card>
   </ion-item>
 </ion-item-sliding>

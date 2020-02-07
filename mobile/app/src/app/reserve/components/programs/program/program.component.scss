@@ -1,15 +1,7 @@
-ion-icon.trending {
-  // color: #e65100;
-  color: var(--ion-color-primary);
-}
-
-span.icon {
-  font-size: 20px;
-}
-
-.icon.sport {
-  display: inline-block;
-}
+// ion-icon.trending {
+//   // color: #e65100;
+//   color: var(--ion-color-primary);
+// }
 
 .title {
   padding-left: 10px;
@@ -22,7 +14,7 @@ span.icon {
 .slide-indicator {
   display: flex;
   height: 100%;
-  width: 10px;
+  width: 30px;
   position: absolute;
   right: 0;
   .icon {

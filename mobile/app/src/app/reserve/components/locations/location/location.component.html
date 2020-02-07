@@ -8,7 +8,10 @@
     >
   </ion-item-options>
   <ion-item>
-    <ion-card (click)="isAvailable() && onLocationClick()">
+    <ion-card (click)="isAvailable() && onLocationClick()" class="ion-activatable">
+      <div class="slide-indicator">
+        <ion-icon name="more" class="icon" size="large"></ion-icon>
+      </div>
       <ion-card-header>
         <ion-card-subtitle>
           <span>{{ location.neighborhood }} </span>
@@ -46,6 +49,7 @@
           >
         </ion-row>
       </ion-card-content>
+      <ion-ripple-effect></ion-ripple-effect>
     </ion-card>
   </ion-item>
 </ion-item-sliding>
