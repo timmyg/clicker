@@ -18,9 +18,11 @@
   height: 100%;
   width: 30px;
   position: absolute;
-  left: 0;
+  left: -5px;
   .icon {
+    opacity: .3;
     align-self: center;
+    // font-size: 40px;
   }
 }
 
