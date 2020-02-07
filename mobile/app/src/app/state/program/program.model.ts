@@ -14,6 +14,7 @@ export interface Program {
   mainCategory: string; // "Sports" or "TV" or "Movies"
   points: number; // ranking points
   live: boolean;
+  clickerRating: number;
   repeat: boolean;
   sports: boolean;
   icon: string;
