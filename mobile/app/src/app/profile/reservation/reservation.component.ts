@@ -1,10 +1,14 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Reservation } from 'src/app/state/reservation/reservation.model';
-import * as moment from 'moment';
-import { ModalController, AlertController, ToastController } from '@ionic/angular';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../../state/app.reducer';
-import { Router } from '@angular/router';
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { Reservation } from "src/app/state/reservation/reservation.model";
+import * as moment from "moment";
+import {
+  ModalController,
+  AlertController,
+  ToastController
+} from "@ionic/angular";
+import { Store } from "@ngrx/store";
+import * as fromStore from "../../state/app.reducer";
+import { Router } from "@angular/router";
 
 interface TimeLeft {
   label: string;
@@ -12,9 +16,9 @@ interface TimeLeft {
 }
 
 @Component({
-  selector: 'app-reservation',
-  templateUrl: './reservation.component.html',
-  styleUrls: ['./reservation.component.scss'],
+  selector: "app-reservation",
+  templateUrl: "./reservation.component.html",
+  styleUrls: ["./reservation.component.scss"]
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
@@ -27,13 +31,16 @@ export class ReservationComponent implements OnInit {
     private store: Store<fromStore.AppState>,
     private router: Router,
     public modalController: ModalController,
-    public toastController: ToastController,
+    public toastController: ToastController
   ) {}
 
   ngOnInit() {
     this.setTimeLeftRefresher();
     const secondsToRefresh = 25;
-    this.intervalJobId = setInterval(() => this.setTimeLeftRefresher(), secondsToRefresh * 1000);
+    this.intervalJobId = setInterval(
+      () => this.setTimeLeftRefresher(),
+      secondsToRefresh * 1000
+    );
   }
 
   ngOnDestroy(): void {
@@ -73,7 +80,7 @@ export class ReservationComponent implements OnInit {
     }
     return {
       label,
-      minutes,
+      minutes
     };
   }
 }

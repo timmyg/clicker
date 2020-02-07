@@ -1,22 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController, IonTextarea, ToastController } from '@ionic/angular';
-import * as fromApp from 'src/app/state/app/app.actions';
-import * as fromStore from 'src/app/state/app.reducer';
-import { Store } from '@ngrx/store';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ModalController, IonTextarea, ToastController } from "@ionic/angular";
+import * as fromApp from "src/app/state/app/app.actions";
+import * as fromStore from "src/app/state/app.reducer";
+import { Store } from "@ngrx/store";
 
 @Component({
-  selector: 'app-suggest',
-  templateUrl: './suggest.component.html',
-  styleUrls: ['./suggest.component.scss'],
+  selector: "app-suggest",
+  templateUrl: "./suggest.component.html",
+  styleUrls: ["./suggest.component.scss"]
 })
 export class SuggestComponent implements OnInit {
-  @ViewChild('suggestionInput', { static: false }) suggestionInput: IonTextarea;
+  @ViewChild("suggestionInput", { static: false }) suggestionInput: IonTextarea;
   suggestion: string;
 
   constructor(
     public modalController: ModalController,
     private store: Store<fromStore.AppState>,
-    public toastController: ToastController,
+    public toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -33,10 +33,10 @@ export class SuggestComponent implements OnInit {
     this.store.dispatch(new fromApp.SendMessage(text));
     this.onCloseClick();
     const thanks = await this.toastController.create({
-      message: 'Submitted. Thanks!',
-      color: 'success',
+      message: "Submitted. Thanks!",
+      color: "success",
       duration: 4000,
-      cssClass: 'ion-text-center',
+      cssClass: "ion-text-center"
     });
     thanks.present();
     // this.actions$

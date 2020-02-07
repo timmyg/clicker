@@ -2,7 +2,9 @@
   <ion-toolbar>
     <ion-title> Program Info </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onCloseClick()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+      <ion-button (click)="onCloseClick()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -14,7 +16,31 @@
   <br />
   <label>Description</label>
   <div>
-    <span *ngIf="program.description; else noDescription"> {{ program.description }}</span>
+    <span *ngIf="program.description; else noDescription">
+      {{ program.description }}</span
+    >
     <ng-template #noDescription>No description available</ng-template>
+  </div>
+  <div *ngIf="program.game && program.game.summary && program.game.summary.description">
+    <br />
+    <label>Game Status</label>
+    <div>
+      <span>
+        {{ program.game.summary.description}}</span
+      >
+    </div>
+  </div>
+  <div *ngIf="program.game && program.game.book && program.game.home && program.game.home.book">
+    <br />
+    <label>Vegas</label>
+    <div>
+      <span>
+        <ul>
+          <li><b>{{program.game.away?.name.abbr}}</b>: {{program.game.away?.book.spread}} ({{program.game.away?.book.moneyline}})</li>
+          <li><b>{{program.game.home?.name.abbr}}</b>: {{program.game.home?.book.spread}} ({{program.game.home?.book.moneyline}})</li>
+          <li><b>O/U</b>: {{program.game.book?.total}}</li>
+        </ul>
+      </span>
+    </div>
   </div>
 </ion-content>

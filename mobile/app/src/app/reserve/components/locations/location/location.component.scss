@@ -1,14 +1,38 @@
 img.logo {
-  height: 40px;
-  width: inherit;
+  height: 30px;
+  width: 30px;
   float: left;
-  padding: 0 10px 10px 0;
+  margin-right: 10px;
 }
 
 .inactive {
   opacity: 0.4;
 }
 
+.slide-indicator {
+  display: flex;
+  height: 100%;
+  width: 30px;
+  position: absolute;
+  left: -5px;
+  .icon {
+    opacity: .5;
+    align-self: center;
+    // font-size: 40px;
+  }
+}
+
 ion-icon.disconnected {
   color: var(--ion-color-danger);
+}
+
+ion-card {
+  margin: 8px;
+  ion-card-header {
+    padding-bottom: 8px;
+  }
+}
+
+.w-100 {
+  width: 100%;
 }

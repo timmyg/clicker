@@ -109,12 +109,6 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   create:
     handler: user.create
     events:
@@ -125,6 +119,8 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   wallet:
@@ -137,6 +133,8 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   updateCard:
@@ -149,6 +147,8 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   removeCard:
@@ -161,101 +161,95 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   replenish:
     handler: user.replenish
     events:
       - http:
-          path: 'replenish'
+          path: replenish
           method: post
           cors:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   charge:
     handler: user.charge
     events:
       - http:
-          path: 'charge'
+          path: charge
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   subscribe:
     handler: user.subscribe
     events:
       - http:
-          path: 'subscribe'
+          path: subscribe
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   transaction:
     handler: user.transaction
     events:
       - http:
-          path: 'transaction'
+          path: transaction
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   alias:
     handler: user.alias
     events:
       - http:
-          path: 'alias/{fromId}/{toId}'
+          path: alias/{fromId}/{toId}
           method: post
           cors:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   verifyStart:
     handler: user.verifyStart
     events:
       - http:
-          path: 'verify/start'
+          path: verify/start
           method: post
           cors:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   verify:
     handler: user.verify
     events:
       - http:
-          path: 'verify'
+          path: verify
           method: post
           cors:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   referral:
     handler: user.referral
     events:
       - http:
-          path: 'referral'
+          path: referral
           method: post
           cors:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type

@@ -1,38 +1,45 @@
-import { ReferralPage } from './../../../referral/referral.page';
-import { LoginComponent } from 'src/app/auth/login/login.component';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Location } from 'src/app/state/location/location.model';
-import { ReserveService } from '../../reserve.service';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { getAllLocations, getLoading } from 'src/app/state/location';
-import { getUserLocations, getUserRoles, isLoggedIn } from 'src/app/state/user';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../../../state/app.reducer';
-import * as fromLocation from '../../../state/location/location.actions';
-import * as fromUser from '../../../state/user/user.actions';
-import * as fromReservation from '../../../state/reservation/reservation.actions';
-import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, ActionSheetController, ToastController, Platform, ModalController } from '@ionic/angular';
-import { first, take } from 'rxjs/operators';
-import { Reservation } from 'src/app/state/reservation/reservation.model';
-import { Geolocation as Geo } from 'src/app/state/location/geolocation.model';
-import { ofType, Actions } from '@ngrx/effects';
-import { Plugins } from '@capacitor/core';
+import { ReferralPage } from "./../../../referral/referral.page";
+import { LoginComponent } from "src/app/auth/login/login.component";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Location } from "src/app/state/location/location.model";
+import { ReserveService } from "../../reserve.service";
+import { Observable, Subscription, BehaviorSubject } from "rxjs";
+import { getAllLocations, getLoading } from "src/app/state/location";
+import { getUserLocations, getUserRoles, isLoggedIn } from "src/app/state/user";
+import { Store } from "@ngrx/store";
+import * as fromStore from "../../../state/app.reducer";
+import * as fromLocation from "../../../state/location/location.actions";
+import * as fromUser from "../../../state/user/user.actions";
+import * as fromReservation from "../../../state/reservation/reservation.actions";
+import { Router, ActivatedRoute } from "@angular/router";
+import {
+  NavController,
+  ActionSheetController,
+  ToastController,
+  Platform,
+  ModalController
+} from "@ionic/angular";
+import { first, take } from "rxjs/operators";
+import { Reservation } from "src/app/state/reservation/reservation.model";
+import { Geolocation as Geo } from "src/app/state/location/geolocation.model";
+import { ofType, Actions } from "@ngrx/effects";
+import { Plugins } from "@capacitor/core";
 const { Geolocation } = Plugins;
-import { Storage } from '@ionic/storage';
-import { SegmentService } from 'ngx-segment-analytics';
-import { Globals } from 'src/app/globals';
+import { Storage } from "@ionic/storage";
+import { SegmentService } from "ngx-segment-analytics";
+import { Globals } from "src/app/globals";
 // import { Intercom } from 'ng-intercom';
-import { GeolocationOptions } from '@ionic-native/geolocation/ngx';
-import { SuggestComponent } from './suggest/suggest.component';
+import { GeolocationOptions } from "@ionic-native/geolocation/ngx";
+import { SuggestComponent } from "./suggest/suggest.component";
+import { LocationDetailPage } from "src/app/location-detail/location-detail.page";
 
 const permissionGeolocation = {
-  name: 'permission.geolocation',
+  name: "permission.geolocation",
   values: {
-    allowed: 'allowed',
-    probably: 'probably',
-    denied: 'denied',
-  },
+    allowed: "allowed",
+    probably: "probably",
+    denied: "denied"
+  }
 };
 
 // not working in browser
@@ -43,12 +50,12 @@ const geolocationOptions: GeolocationOptions = {
 };
 
 @Component({
-  templateUrl: './locations.component.html',
-  styleUrls: ['./locations.component.scss'],
+  templateUrl: "./locations.component.html",
+  styleUrls: ["./locations.component.scss"]
 })
 export class LocationsComponent implements OnDestroy, OnInit {
   locations$: Observable<Location[]>;
-  title = 'Choose Location';
+  title = "Choose Location";
   isLoading$: Observable<boolean>;
   userLocations$: Observable<string[]>;
   userLocations: string[];
@@ -72,6 +79,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   isLoggedIn: boolean;
   suggestModal;
   referralModal;
+  locationDetailModal;
   loginModal;
 
   constructor(
@@ -88,24 +96,28 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private segment: SegmentService,
     private globals: Globals,
     // public intercom: Intercom,
-    public platform: Platform,
+    public platform: Platform
   ) {
     this.locations$ = this.store.select(getAllLocations);
     this.reserveService.emitTitle(this.title);
     this.reserveService.emitTitle(this.title);
-    this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(() => this.refresh());
+    this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(
+      () => this.refresh()
+    );
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     this.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
     });
-    this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(() => {
-      this.showHidden = !this.showHidden;
-      if (this.showHidden) {
-        this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
-      } else {
-        this.refresh();
+    this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(
+      () => {
+        this.showHidden = !this.showHidden;
+        if (this.showHidden) {
+          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation));
+        } else {
+          this.refresh();
+        }
       }
-    });
+    );
   }
 
   async ngOnInit() {
@@ -117,14 +129,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
       this.userLocations = userLocations;
     });
     this.isLoading$.pipe().subscribe(isLoading => {
-      if (!isLoading && !this.evaluatingGeolocation && !this.reserveService.isRefreshing) {
+      if (
+        !isLoading &&
+        !this.evaluatingGeolocation &&
+        !this.reserveService.isRefreshing
+      ) {
         this.locations$.pipe().subscribe(locations => {
           // console.log({ locations });
           const { latitude, longitude } = this.userGeolocation;
           this.segment.track(this.globals.events.location.listedAll, {
             locations: locations.length,
             latitude,
-            longitude,
+            longitude
           });
         });
       }
@@ -133,38 +149,47 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.userRoles$.pipe().subscribe(userRoles => {
       this.userRoles = userRoles;
     });
-    this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(searchTerm => {
-      this.searchTerm = searchTerm;
-      this.segment.track(this.globals.events.location.search, { term: this.searchTerm });
-    });
-    this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(() => {
-      this.searchTerm = null;
-    });
+    this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
+      searchTerm => {
+        this.searchTerm = searchTerm;
+        this.segment.track(this.globals.events.location.search, {
+          term: this.searchTerm
+        });
+      }
+    );
+    this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(
+      () => {
+        this.searchTerm = null;
+      }
+    );
   }
 
   ngOnDestroy() {
     this.refreshSubscription.unsubscribe();
     this.searchSubscription.unsubscribe();
     this.closeSearchSubscription.unsubscribe();
-    if (this.sub) this.sub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   private async redirectIfUpdating() {
     // TODO should be a better way to get reservation
     const state = await this.store.pipe(first()).toPromise();
     const reservation: Partial<Reservation> = state.reservation.reservation;
+    const updateType: string = state.reservation.updateType;
     // check if editing existing reservation
     if (reservation && reservation.id) {
       // is editing
-      if (!reservation.program) {
-        this.navCtrl.navigateForward(['../programs'], {
-          relativeTo: this.route,
-          queryParamsHandling: 'merge',
+      if (updateType === "channel") {
+        this.navCtrl.navigateForward(["../programs"], {
+          relativeTo: this.route
+          // queryParamsHandling: 'merge',
         });
-      } else {
-        this.navCtrl.navigateForward(['../confirmation'], {
-          relativeTo: this.route,
-          queryParamsHandling: 'merge',
+      } else if (updateType === "time") {
+        this.navCtrl.navigateForward(["../confirmation"], {
+          relativeTo: this.route
+          // queryParamsHandling: 'merge',
         });
       }
     } else {
@@ -174,25 +199,29 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async refresh() {
-    console.time('geolocation 1');
+    console.time("geolocation 1");
     await Geolocation.getCurrentPosition(geolocationOptions).then(response => {
-      console.timeEnd('geolocation 1');
+      console.timeEnd("geolocation 1");
       const { latitude, longitude } = response.coords;
       this.userGeolocation = { latitude, longitude };
-      this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
+      this.store.dispatch(
+        new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
+      );
       this.store.dispatch(new fromUser.Refresh());
-      this.actions$.pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS), take(1)).subscribe(() => {
-        this.reserveService.emitRefreshed();
-      });
+      this.actions$
+        .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS), take(1))
+        .subscribe(() => {
+          this.reserveService.emitRefreshed();
+        });
       this.actions$
         .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_FAIL))
         .pipe(first())
         .subscribe(async () => {
           const whoops = await this.toastController.create({
-            message: 'Something went wrong. Please try again.',
-            color: 'danger',
+            message: "Something went wrong. Please try again.",
+            color: "danger",
             duration: 4000,
-            cssClass: 'ion-text-center',
+            cssClass: "ion-text-center"
           });
           whoops.present();
           this.reserveService.emitRefreshed();
@@ -210,7 +239,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     //   this.intercom.hide();
     // });
     this.suggestModal = await this.modalController.create({
-      component: SuggestComponent,
+      component: SuggestComponent
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.suggestModal) this.suggestModal.close();
@@ -219,48 +248,67 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async allowLocation() {
-    await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.probably);
+    await this.storage.set(
+      permissionGeolocation.name,
+      permissionGeolocation.values.probably
+    );
     this.evaluateGeolocation();
     this.disableButton = true;
     this.segment.track(this.globals.events.permissions.geolocation.allowed);
   }
 
   async denyLocation() {
-    await this.storage.set(permissionGeolocation.name, permissionGeolocation.values.denied);
+    await this.storage.set(
+      permissionGeolocation.name,
+      permissionGeolocation.values.denied
+    );
     this.askForGeolocation$.next(false);
     this.evaluateGeolocation();
     this.segment.track(this.globals.events.permissions.geolocation.denied);
   }
 
+  async onLocationDetail(location: Location) {
+      this.locationDetailModal = await this.modalController.create({
+        component: LocationDetailPage,
+        componentProps: { locationId: location.id }
+      });
+      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+        if (this.locationDetailModal) {
+          this.locationDetailModal.close();
+        }
+      });
+      return await this.locationDetailModal.present();
+  }
+  
   async onLocationManage(location: Location) {
     const actionSheet = await this.actionSheetController.create({
-      header: 'Manage Location',
+      header: "Manage Location",
       buttons: [
         {
-          text: 'Turn off all TVs',
-          icon: 'power',
-          cssClass: 'color-danger',
+          text: "Turn off all TVs",
+          icon: "power",
+          cssClass: "color-danger",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOff(location));
-          },
+          }
         },
         {
-          text: 'Turn on all TVs',
-          icon: 'power',
-          cssClass: 'color-success',
+          text: "Turn on all TVs",
+          icon: "power",
+          cssClass: "color-success",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOn(location));
-          },
+          }
         },
         {
-          text: 'Turn on all TVs + autotune',
-          icon: 'power',
-          cssClass: 'color-success',
+          text: "Turn on all TVs + autotune",
+          icon: "power",
+          cssClass: "color-success",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOn(location, true));
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
     await actionSheet.present();
   }
@@ -281,23 +329,31 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.evaluatingGeolocation = false;
           this.geolocationDeclined = false;
           this.disableButton = false;
-          this.storage.set(permissionGeolocation.name, permissionGeolocation.values.allowed);
+          this.storage.set(
+            permissionGeolocation.name,
+            permissionGeolocation.values.allowed
+          );
           this.userGeolocation = { latitude, longitude };
-          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
+          this.store.dispatch(
+            new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
+          );
           this.reserveService.emitShowingLocations();
         })
         .catch(async error => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
-          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
+          this.store.dispatch(
+            new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
+          );
           this.reserveService.emitShowingLocations();
           this.disableButton = false;
-          console.error('Error getting location', error);
+          console.error("Error getting location", error);
           const whoops = await this.toastController.create({
-            message: 'Error getting your location. Make sure location services are enabled for this app.',
-            color: 'light',
+            message:
+              "Error getting your location. Make sure location services are enabled for this app.",
+            color: "light",
             duration: 6000,
-            cssClass: 'ion-text-center',
+            cssClass: "ion-text-center"
           });
           whoops.present();
         });
@@ -316,7 +372,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async openReferral() {
     if (this.isLoggedIn) {
       this.referralModal = await this.modalController.create({
-        component: ReferralPage,
+        component: ReferralPage
       });
       this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
         if (this.referralModal) {
@@ -330,21 +386,23 @@ export class LocationsComponent implements OnDestroy, OnInit {
         duration: 4000,
         buttons: [
           {
-            side: 'end',
-            text: 'Login',
+            side: "end",
+            text: "Login",
             handler: async () => {
               this.loginModal = await this.modalController.create({
-                component: LoginComponent,
+                component: LoginComponent
               });
-              this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-                if (this.loginModal) {
-                  this.loginModal.close();
-                }
-              });
+              this.sub = this.platform.backButton
+                .pipe(first())
+                .subscribe(() => {
+                  if (this.loginModal) {
+                    this.loginModal.close();
+                  }
+                });
               return await this.loginModal.present();
-            },
-          },
-        ],
+            }
+          }
+        ]
       });
       toast.present();
     }
@@ -355,13 +413,21 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.reserveService.emitCloseSearch();
     console.log(location);
     const { latitude, longitude } = this.userGeolocation;
-    this.store.dispatch(new fromReservation.SetLocation(location, latitude, longitude));
+    this.store.dispatch(
+      new fromReservation.SetLocation(location, latitude, longitude)
+    );
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())
       .subscribe(async () => {
-        await this.segment.track(this.globals.events.reservation.selectedLocation, location);
-        this.router.navigate(['../programs'], { relativeTo: this.route, queryParamsHandling: 'merge' });
+        await this.segment.track(
+          this.globals.events.reservation.selectedLocation,
+          location
+        );
+        this.router.navigate(["../programs"], {
+          relativeTo: this.route,
+          queryParamsHandling: "merge"
+        });
       });
   }
 

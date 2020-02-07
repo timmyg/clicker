@@ -1,0 +1,13 @@
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
+
+import { LocationDetailPage } from "./location-detail.page";
+
+@NgModule({
+  imports: [CommonModule, FormsModule, IonicModule],
+  declarations: [LocationDetailPage],
+  providers: [LocationDetailPage]
+})
+export class LocationDetailPageModule {}

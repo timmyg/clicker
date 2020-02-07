@@ -1,34 +1,55 @@
-<ion-item-sliding [ngClass]="{ inactive: !isAvailable() }" [disabled]="!isAvailable() || !isManager()" #slidingItem>
+<ion-item-sliding
+  [ngClass]="{ inactive: !isAvailable() }"
+  #slidingItem
+>
   <ion-item-options side="start">
-    <ion-item-option (click)="onManageClick(slidingItem)">Manage</ion-item-option>
+    <ion-item-option (click)="onInfoClick(slidingItem)"
+      >Info</ion-item-option
+    >
   </ion-item-options>
   <ion-item>
-    <ion-card (click)="isAvailable() && onLocationClick()" no-margin>
+    <ion-card (click)="isAvailable() && onLocationClick()" class="ion-activatable">
+      <div class="slide-indicator">
+        <ion-icon name="more" class="icon" size="large"></ion-icon>
+      </div>
       <ion-card-header>
         <ion-card-subtitle>
-          <span
-            >{{ location.neighborhood }} <span *ngIf="!isAvailable()">(inactive)</span>
-            <ion-chip color="primary" *ngIf="location.free"> <label color="primary"> Free </label></ion-chip>
-            <ion-chip color="primary" *ngIf="location.announcement">
-              <label color="primary"> {{ location.announcement }}</label></ion-chip
-            >
-            <ion-chip color="secondary" *ngIf="location.openTvs">
-              <label color="secondary">TVs Available</label></ion-chip
-            >
-          </span>
-          <ion-icon *ngIf="!location.connected" name="wifi" class="disconnected"></ion-icon>
+          <span>{{ location.neighborhood }} </span>
+          <ion-icon
+            *ngIf="!location.connected"
+            name="wifi"
+            class="disconnected"
+          ></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 
           <span float-right *ngIf="location.distance">
-            <span *ngIf="location.distance >= 0.2; else near"> {{ getDistance() }} miles </span>
+            <span *ngIf="location.distance >= 0.2; else near">
+              {{ getDistance() }} miles
+            </span>
             <ng-template #near> Near </ng-template>
           </span>
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content no-padding-top>
-        <img [src]="location.img" class="logo" />
-        <h1>{{ location.name }}</h1>
+        <ion-row>
+          <img [src]="location.img" class="logo" />
+          <h1>{{ location.name }}</h1>
+        </ion-row>
+        <ion-row>
+          <ion-chip color="primary" *ngIf="location.announcement">
+            <label color="primary">
+              {{ location.announcement }}</label
+            ></ion-chip
+          >
+          <ion-chip color="secondary" *ngIf="isAvailable() && location.openTvs">
+            <label color="secondary">TVs Available</label></ion-chip
+          >
+          <ion-chip color="danger" *ngIf="!isAvailable()">
+            <label color="danger">Inactive</label></ion-chip
+          >
+        </ion-row>
       </ion-card-content>
+      <ion-ripple-effect></ion-ripple-effect>
     </ion-card>
   </ion-item>
 </ion-item-sliding>

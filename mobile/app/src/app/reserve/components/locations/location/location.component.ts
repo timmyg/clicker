@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Location } from 'src/app/state/location/location.model';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Location } from "src/app/state/location/location.model";
 
 @Component({
-  selector: 'app-location',
-  templateUrl: './location.component.html',
-  styleUrls: ['./location.component.scss'],
+  selector: "app-location",
+  templateUrl: "./location.component.html",
+  styleUrls: ["./location.component.scss"]
 })
 export class LocationComponent {
   @Input() location: Location;
@@ -12,11 +12,15 @@ export class LocationComponent {
   @Input() userRoles: string[];
   @Output() onClick = new EventEmitter<Location>();
   @Output() onManage = new EventEmitter<Location>();
+  @Output() onLocationDetail = new EventEmitter<Location>();
 
   isManager() {
     const { userLocations, userRoles } = this;
     if (userLocations && userRoles) {
-      return userLocations.indexOf(this.location.id) > -1 || userRoles.indexOf('superman') > -1;
+      return (
+        userLocations.indexOf(this.location.id) > -1 ||
+        userRoles.indexOf("superman") > -1
+      );
     }
   }
 
@@ -33,6 +37,11 @@ export class LocationComponent {
     slidingItem.close();
   }
 
+  onInfoClick(slidingItem) {
+    this.onLocationDetail.emit(this.location);
+    slidingItem.close();
+  }
+
   getDistance() {
     const { distance } = this.location;
     if (distance <= 10) {
@@ -40,7 +49,7 @@ export class LocationComponent {
     } else if (distance > 10 && distance <= 500) {
       return Math.round(distance);
     } else {
-      return '500+';
+      return "500+";
     }
   }
 }

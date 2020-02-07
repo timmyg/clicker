@@ -11,8 +11,8 @@ class Team {
   logo: string;
   rank: number;
   book: {
-    moneyline: number,
-    spread: number,
+    moneyline: string,
+    spread: string,
   };
 }
 

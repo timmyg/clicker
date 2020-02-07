@@ -56,59 +56,25 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   command:
     handler: remote.command
     memorySize: 512
     events:
       - http:
-          path: '/command'
+          path: command
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   checkBoxesInfo:
     handler: remote.checkBoxesInfo
     timeout: 12
     events:
       - http:
-          path: '/boxes/info'
+          path: boxes/info
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncWidgetBoxes:
     handler: remote.syncWidgetBoxes
-    # events:
-    #   - http:
-    #       path: 'boxes/sync'
-    #       method: post
-    #       cors:
-    #         origin: '*'
-    #         headers:
-    #           - partner
-    #           - authorization
-    #           - content-type
   debug:
     handler: remote.debug
     events:
       - http:
-          path: '/debug'
+          path: debug
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type

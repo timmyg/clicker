@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
-import { Observable } from 'rxjs';
-import { Location } from '../../state/location/location.model';
-import { Geolocation } from '../../state/location/geolocation.model';
+import { Observable } from "rxjs";
+import { Location } from "../../state/location/location.model";
+import { Geolocation } from "../../state/location/geolocation.model";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class LocationService {
@@ -15,7 +16,7 @@ export class LocationService {
     const { latitude, longitude } = { ...geolocation };
     let params;
     if (miles) {
-      params = new HttpParams().set('miles', miles.toString());
+      params = new HttpParams().set("miles", miles.toString());
     }
     if (latitude && longitude) {
       url += `/geo/${latitude}/${longitude}`;
@@ -23,15 +24,34 @@ export class LocationService {
     return this.httpClient.get<Location[]>(url, { params });
   }
 
-  get(locationId: string, latitude: number, longitude: number): Observable<Location> {
-    return this.httpClient.get<Location>(`${this.prefix}/${locationId}?latitude=${latitude}&longitude=${longitude}`);
+  getDetails(locationId: string): Observable<string> {
+    return this.httpClient.get<Response>(`${this.prefix}/${locationId}/details/page`).pipe(map(response => {
+      return response['html'];
+    }))
+  }
+
+
+  get(
+    locationId: string,
+    latitude: number,
+    longitude: number
+  ): Observable<Location> {
+    return this.httpClient.get<Location>(
+      `${this.prefix}/${locationId}?latitude=${latitude}&longitude=${longitude}`
+    );
   }
 
   turnOn(locationId: string, autotune: boolean): Observable<any> {
-    return this.httpClient.post<Location>(`${this.prefix}/${locationId}/boxes/on`, { autotune });
+    return this.httpClient.post<Location>(
+      `${this.prefix}/${locationId}/boxes/on`,
+      { autotune }
+    );
   }
 
   turnOff(locationId: string): Observable<any> {
-    return this.httpClient.post<Location>(`${this.prefix}/${locationId}/boxes/off`, {});
+    return this.httpClient.post<Location>(
+      `${this.prefix}/${locationId}/boxes/off`,
+      {}
+    );
   }
 }

@@ -1,46 +1,46 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { Platform } from '@ionic/angular';
-import { Plugins } from '@capacitor/core';
-import * as fromUser from './state/user/user.actions';
+import { Platform } from "@ionic/angular";
+import { Plugins } from "@capacitor/core";
+import * as fromUser from "./state/user/user.actions";
 
 const { Device, SplashScreen } = Plugins;
-import { Store } from '@ngrx/store';
+import { Store } from "@ngrx/store";
 
-import * as fromStore from './state/app.reducer';
-import { Observable } from 'rxjs';
-import { getPartner } from './state/app';
-import { SegmentService } from 'ngx-segment-analytics';
+import * as fromStore from "./state/app.reducer";
+import { Observable } from "rxjs";
+import { getPartner } from "./state/app";
+import { SegmentService } from "ngx-segment-analytics";
 
-import { getUserId } from './state/user';
-import { Globals } from './globals';
-import { first } from 'rxjs/operators';
-import { version } from '../../package.json';
-// import { Intercom } from 'ng-intercom';
-import { environment } from 'src/environments/environment';
-import { AppService } from './core/services/app.service';
+import { getUserId } from "./state/user";
+import { Globals } from "./globals";
+import { first } from "rxjs/operators";
+import { AppService } from "./core/services/app.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
+  selector: "app-root",
+  templateUrl: "app.component.html"
 })
 export class AppComponent {
   partner$: Observable<string>;
-  public version: string = version;
+  // public version: string = version;
 
   constructor(
     private platform: Platform,
     private store: Store<fromStore.AppState>,
     private segment: SegmentService,
     private globals: Globals,
-    // public intercom: Intercom,
-    public appService: AppService,
+    public appService: AppService
   ) {
     this.partner$ = this.store.select(getPartner);
+    // console.log("set version", version);
+
+    // this.appService.setVersion(version);
     this.initializeApp();
   }
 
   async initializeApp() {
+    const version = this.appService.getVersion();
     this.platform.ready().then(async () => {
       try {
         this.store
@@ -53,8 +53,8 @@ export class AppComponent {
               userId,
               { version, manufacturer, model, osVersion, platform, uuid },
               {
-                Intercom: { hideDefaultLauncher: true },
-              },
+                Intercom: { hideDefaultLauncher: true }
+              }
             );
             await this.segment.track(this.globals.events.opened);
             // await this.intercom.boot({ app_id: environment.intercom.appId });
@@ -63,7 +63,6 @@ export class AppComponent {
           });
       } catch (e) {}
     });
-    this.appService.setVersion(version);
     this.platform.resume.subscribe(() => {
       this.segment.track(this.globals.events.opened, { version });
       this.store.dispatch(new fromUser.Refresh());

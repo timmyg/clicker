@@ -3,40 +3,60 @@
     <ion-item-option (click)="onMoreInfo(slidingItem)">Info</ion-item-option>
   </ion-item-options>
   <ion-item>
-    <ion-card (click)="onProgramClick()" no-margin>
-      <div class="slide-indicator"><ion-icon name="arrow-dropright" class="icon"></ion-icon></div>
+    <ion-card (click)="onProgramClick()" class="ion-activatable">
+      <div class="slide-indicator">
+        <ion-icon name="more" class="icon" size="large"></ion-icon>
+      </div>
       <ion-card-header>
         <ion-card-subtitle>
-          <span>{{ program.channelTitle }}</span>
+          <span>&nbsp;{{ program.channelTitle }}</span>
+          <span>&nbsp;{{ program.icon }} </span>
+          <span *ngIf="program.clickerRating >= 8">
+            🔥
+          </span>
+          
           <span float-right
-            >{{ program.start | amDateFormat: 'h:mma' }} - {{ program.end | amDateFormat: 'h:mma' }}</span
+            >{{ program.start | amDateFormat: "h:mma" }} -
+            {{ program.end | amDateFormat: "h:mma" }}</span
           >
         </ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content no-padding-top>
+      <ion-card-content
+        no-padding-top
+        [ngClass]="{ 'non-sports': !program.isSports }"
+      >
         <ion-grid no-padding>
           <ion-row align-items-center>
             <ng-container *ngIf="program.start; else noProgram">
-              <ion-col size="1" no-padding align-items-center>
-                <span class="icon"> {{ program.icon }} </span>
-              </ion-col>
-              <ion-col size="11">
-                <h1 class="title">
-                  {{ program.title }} <span class="faded" *ngIf="isReplay()">(Replay)</span
-                  ><ion-icon *ngIf="program.points >= 5" name="flame" class="trending"></ion-icon>
-                </h1>
-              </ion-col>
-
-              <ion-col size="12" no-padding>
-                <span class="faded" *ngIf="program.nextProgramTitle">
-                  Next: {{ getNextProgramTitle() }} at {{ program.nextProgramStart | amDateFormat: 'h:mma' }}
-                </span>
+              <ion-col size="12">
+                  <h1 class="title">
+                    {{ program.title | truncate:[24] }}
+                  </h1>
+                  <span *ngIf="program.nextProgramTitle">
+                    <em>Next: {{ getNextProgramTitle() }} at
+                      {{ program.nextProgramStart | amDateFormat: "h:mma" }}</em></span
+                  >
+                  <div class="flex align-items-center">
+                    <ion-chip color="secondary" *ngIf="program.game && program.game.summary">
+                      <label color="secondary">{{ program.game.summary.description }}</label></ion-chip
+                    >
+                    <ion-chip color="secondary" *ngIf="vegas">
+                      <label color="secondary">{{vegas}}</label></ion-chip
+                    >
+                    <ion-chip color="secondary" *ngIf="vegasOverUnder">
+                      <label color="secondary">{{vegasOverUnder}}</label></ion-chip
+                    >
+                    <ion-chip color="secondary" *ngIf="isReplay()">
+                      <label color="secondary">Replay</label></ion-chip
+                    >
+                  </div>
               </ion-col>
             </ng-container>
             <ng-template #noProgram> &nbsp;</ng-template>
           </ion-row>
         </ion-grid>
       </ion-card-content>
+      <ion-ripple-effect></ion-ripple-effect>
     </ion-card>
   </ion-item>
 </ion-item-sliding>

@@ -1,15 +1,23 @@
 <ion-slides pager="true" [options]="options" *ngIf="ready && !onboarded">
   <ion-slide class="what">
     <ion-card>
-      <div class="ion-text-end skip" padding-end><span (click)="onGetStarted()">Skip</span></div>
-      <img src="https://clicker-brand.s3.amazonaws.com/logo-tv.png" class="logo" />
+      <div class="ion-text-end skip" padding-end>
+        <span (click)="onGetStarted()">Skip</span>
+      </div>
+      <img
+        src="https://clicker-brand.s3.amazonaws.com/logo-tv.png"
+        class="logo"
+      />
       <ion-card-header>
-        <ion-card-title>Welcome to <span class="brand-text">Clicker TV</span></ion-card-title>
+        <ion-card-title
+          >Welcome to <span class="brand-text">Clicker TV</span></ion-card-title
+        >
       </ion-card-header>
       <ion-card-content>
         <span>
-          <span class="brand-text">Clicker TV</span> puts you in charge of the remote at your favorite bars and
-          restaurants in just a few clicks:</span
+          <span class="brand-text">Clicker TV</span> puts you in charge of the
+          remote at your favorite bars and restaurants in just a few
+          clicks:</span
         >
         <ol text-left>
           <li>Select your location</li>
@@ -19,13 +27,14 @@
         </ol>
         <ion-chip color="primary" padding>
           <ion-label>
-            <div>
-              You can change the channel<br />
-              now for <b>free</b>!
-            </div>
+            <div>We put a <b>free token</b> in your account!</div>
           </ion-label>
         </ion-chip>
-        <div margin-top><ion-button color="primary" (click)="onGetStarted()" size="large">Get Started</ion-button></div>
+        <div margin-top>
+          <ion-button color="primary" (click)="onGetStarted()" size="large"
+            >Get Started</ion-button
+          >
+        </div>
       </ion-card-content>
     </ion-card>
   </ion-slide>

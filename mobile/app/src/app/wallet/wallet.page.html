@@ -2,7 +2,9 @@
   <ion-toolbar>
     <ion-title> Wallet </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onClose()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -10,7 +12,6 @@
   <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
-  <!-- <ng-template #loaded> -->
   <section [hidden]="!(userCard$ | async) || (isLoading$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
@@ -19,12 +20,24 @@
           <ion-label flex align-items-center>
             <span class="dollars">${{ f.dollars }}</span>
             <div flex align-items-center>
-              <ion-chip *ngIf="f.best" color="primary" padding-right> Best Deal </ion-chip>
-              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+              <ion-chip *ngIf="f.best" color="primary" padding-right>
+                Best Deal
+              </ion-chip>
+              <img
+                class="coin ion-float-right"
+                src="./assets/coin.svg"
+                width="22"
+                height="22"
+              />
               <span>{{ f.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" [value]="f" [disabled]="waiting" checked></ion-radio>
+          <ion-radio
+            slot="start"
+            [value]="f"
+            [disabled]="waiting"
+            checked
+          ></ion-radio>
         </ion-item>
       </ion-radio-group>
     </ion-list>
@@ -38,9 +51,8 @@
       >Purchase ${{ selectedPlan.dollars }}</ion-button
     >
     <p class="ion-text-center" *ngIf="!waiting">
-        💳 {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4 }} <br /><a
-        color="danger"
-        (click)="removeCard()"
+      💳 {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ |
+      async)?.last4 }} <br /><a color="danger" (click)="removeCard()"
         >Remove Card</a
       >
     </p>
@@ -49,8 +61,14 @@
     <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
     <form novalidate (ngSubmit)="addCard()">
       <div id="card-element" class="field"></div>
-      <ion-button type="submit" expand="block" color="primary" size="large" [disabled]="waiting">Add Card</ion-button>
+      <ion-button
+        type="submit"
+        expand="block"
+        color="primary"
+        size="large"
+        [disabled]="waiting"
+        >Add Card</ion-button
+      >
     </form>
   </section>
-  <!-- </ng-template> -->
 </ion-content>

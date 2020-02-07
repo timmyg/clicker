@@ -17,4 +17,6 @@ export interface Program {
   repeat: boolean;
   sports: boolean;
   icon: string;
+  isSports: boolean;
+  game: any;
 }

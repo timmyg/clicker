@@ -1,65 +1,77 @@
 <ion-card *ngIf="reservation$ | async">
   <ion-card-content>
-    <div>
-      <label> Location: </label> <span>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</span>
+    <div class="summary-wrapper">
+      <div>
+        <label> Location: </label>
+        <span
+          >{{ getLocationName() | truncate:[24] }}</span
+        >
+      </div>
+      <div>
+        <label> Channel: </label>
+        <span
+          >{{ getChannelDescription()  | truncate:[24] }}</span
+        >
+      </div>
+      <div>
+        <label> Reserved: </label>
+        <span *ngIf="reservation.minutes || isEditMode; else noReservation">TV{{ reservation.box.label }} until {{
+          getEndTime() | amDateFormat: "h:mma"
+        }}</span>
+        <ng-template #noReservation> One-time change </ng-template>
+      </div>
+      <div>
+        
+      </div>
     </div>
-    <div>
-      <label> Channel: </label> <span>{{ reservation.program.channelTitle }} ({{ reservation.program.title }})</span>
-    </div>
-    <div>
-      <label> TV: </label> <span>{{ reservation.box.label }}</span>
-    </div>
-    <div>
-      <label> Reserved Until: </label>
-      <span *ngIf="reservation.minutes || isEditMode; else noReservation">{{
-        getEndTime() | amDateFormat: 'h:mma'
-      }}</span>
-      <ng-template #noReservation> Free one-time change </ng-template>
-    </div>
-    <br />
-    <ion-list *ngIf="!reservation.location.free">
+    <ion-list class="timeframes" *ngIf="!isEditChannel">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
         <ion-list-header no-padding>
           <span>
-            <span *ngIf="isEditMode; else normal">Extend</span> <ng-template #normal>Choose</ng-template> Timeframe:
+            <span *ngIf="isEditTime; else normal">Extend</span>
+            <ng-template #normal>Choose</ng-template> Timeframe:
           </span>
         </ion-list-header>
         <!-- hacky - should put as first item in observable somehow? -->
         <ion-row *ngIf="isAppLoading" margin-vertical>
           <ion-spinner name="crescent" class="center"></ion-spinner>
         </ion-row>
-        <!-- <ng-template #appLoaded> -->
-        <!-- <ion-item *ngIf="isEditMode && !isAppLoading">
-          <ion-label flex align-items-center>
-            <span class="dollars">{{ timeframe0.minutes }} minutes</span>
-            <div flex align-items-center>
-              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
-              <span>{{ timeframe0.tokens }}</span>
-            </div>
-          </ion-label>
-          <ion-radio slot="start" [value]="timeframe0" [disabled]="waiting || isAppLoading" checked></ion-radio>
-        </ion-item> -->
         <ion-item *ngFor="let timeframe of timeframes$ | async">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>
-              <img class="coin ion-float-right" src="./assets/coin.svg" width="22" height="22" />
+              <img
+                class="coin ion-float-right"
+                src="./assets/coin.svg"
+                width="22"
+                height="22"
+              />
               <span>{{ timeframe.tokens }}</span>
             </div>
           </ion-label>
-          <ion-radio slot="start" [value]="timeframe" [disabled]="waiting || isAppLoading" checked></ion-radio>
+          <ion-radio
+            slot="start"
+            [value]="timeframe"
+            [disabled]="waiting || isAppLoading"
+            checked
+          ></ion-radio>
         </ion-item>
         <!-- </ng-template> -->
       </ion-radio-group>
     </ion-list>
-    <p class="ion-text-center" padding-top>
-      <span *ngIf="!reservation.location.free && reservation.cost !== 0; else free">
-        😎 <b>You, and only you, will be able to freely change the channel during your reservation.</b>
+    <p class="ion-text-center" padding-top *ngIf="!isEditMode">
+      <span *ngIf="reservation.minutes !== 0; else noReservation">
+        😎
+        <b
+          >You will be able to freely change the channel during
+          your reservation timeframe.</b
+        >
       </span>
-      <ng-template #free
+      <ng-template #noReservation
         >⚠️
         <b
-          >You can change this TV for free since it's not reserved, but others will be able to change it at any time.</b
+          >This is a one-time channel change, others will be able to change it
+          at any time.</b
         ></ng-template
       >
     </p>
@@ -70,31 +82,57 @@
       id="confirm"
       slot="end"
       [disabled]="
-        saving || insufficientFunds() || isAppLoading || (outOfRange && !overrideDistanceDisable) || isInitializing
+        saving ||
+        insufficientFunds() ||
+        (!isEditChannel && isAppLoading) ||
+        (outOfRange && !overrideDistanceDisable) ||
+        isInitializing
       "
       margin-top
       align-items-center
     >
       <ion-row *ngIf="!saving; else isSaving" align-items-center>
-        <span class="scale">⚡&nbsp;&nbsp;</span> <span padding-horizontal>Change<br />Channel&nbsp;</span>
+        <span *ngIf="!isEditTime" class="scale">⚡&nbsp;&nbsp;</span>
+        <span *ngIf="isEditTime" class="scale">⏱️&nbsp;&nbsp;</span>
+        <span padding-horizontal>
+          <span *ngIf="!isEditTime"> Change<br />Channel&nbsp;</span>
+          <span *ngIf="isEditTime"> Add Time</span>
+        </span>
         <span flex align-items-center
-          ><img class="coin" src="./assets/coin.svg" width="22" height="22" padding-start />
+          ><img
+            class="coin"
+            src="./assets/coin.svg"
+            width="22"
+            height="22"
+            padding-start
+          />
           {{ reservation.cost }}</span
         >
       </ion-row>
-      <ng-template #isSaving> <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span> </ng-template>
+      <ng-template #isSaving>
+        <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span>
+      </ng-template>
     </ion-button>
     <ion-row class="ion-text-center" *ngIf="insufficientFunds()" margin-top>
       <ion-text color="danger">
-        Heads up! You only have {{ tokenCount }} <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
+        Heads up! You only have {{ tokenCount }}
+        <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please
-        <span *ngIf="!isLoggedIn"><a [routerLink]="'/tabs/profile'">login</a> and </span> <span>add funds</span>.
+        <span *ngIf="!isLoggedIn"
+          ><a [routerLink]="'/tabs/profile'">login</a> and
+        </span>
+        <span>add funds</span>.
       </ion-text>
     </ion-row>
     <ion-row class="ion-text-center" *ngIf="outOfRange" margin-top>
       <ion-text color="danger" (click)="onClickOverrideDistance()">
         Sorry, you are too far away from
-        <b>{{ reservation.location.name }} ({{ reservation.location.neighborhood }})</b> to change the channel.
+        <b
+          >{{ reservation.location.name }} ({{
+            reservation.location.neighborhood
+          }})</b
+        >
+        to change the channel.
       </ion-text>
     </ion-row>
   </ion-card-content>
