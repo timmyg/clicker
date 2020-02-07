@@ -168,6 +168,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.time('db call');
   let allLocations: Venue[] = await dbLocation.scan().exec();
+  console.log("locations", allLocations.length);
   console.timeEnd('db call');
 
   // set whether open tv's
