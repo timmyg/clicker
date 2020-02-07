@@ -553,7 +553,7 @@ async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursF
 }
 
 module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
-  const updatedAirtablePrograms = await getAirtableProgramsInWindow(true);
+  const updatedAirtablePrograms = await getAirtableProgramsInWindow(true, 2, 1);
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
