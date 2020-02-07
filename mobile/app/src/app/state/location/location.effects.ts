@@ -32,7 +32,6 @@ export class LocationsEffects {
       this.locationService.getDetails(action.locationId).pipe(
         map(
           (html: string) => {
-          console.log('hiii', html) 
             return new LocationActions.GetDetailsPageSuccess(html)
           }),
         catchError(err => of(new LocationActions.GetDetailsPageFail(err)))

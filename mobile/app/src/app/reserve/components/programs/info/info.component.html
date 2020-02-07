@@ -21,4 +21,11 @@
     >
     <ng-template #noDescription>No description available</ng-template>
   </div>
+  <br />
+  <label>Game Status</label>
+  <div>
+    <span *ngIf="program.game && program.game.summary && program.game.summary.description">
+      {{ program.game.summary.description}}</span
+    >
+  </div>
 </ion-content>

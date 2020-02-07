@@ -6,10 +6,17 @@
     <ion-card (click)="onProgramClick()">
       <div class="slide-indicator">
         <ion-icon name="arrow-dropright" class="icon"></ion-icon>
+        <!-- <ion-icon name="ellipsis-vertical"  class="icon"></ion-icon> -->
+        <!-- <ion-icon name="apps"  class="icon"></ion-icon> -->
       </div>
       <ion-card-header>
         <ion-card-subtitle>
-          <span>{{ program.channelTitle }}</span>
+          <span>&nbsp;{{ program.channelTitle }}</span>
+          <span>&nbsp;{{ program.icon }} </span>
+          <span *ngIf="program.clickerRating >= 8">
+            🔥
+          </span>
+          
           <span float-right
             >{{ program.start | amDateFormat: "h:mma" }} -
             {{ program.end | amDateFormat: "h:mma" }}</span
@@ -20,37 +27,25 @@
         no-padding-top
         [ngClass]="{ 'non-sports': !program.isSports }"
       >
-        <!-- <ion-card-content no-padding-top> -->
         <ion-grid no-padding>
           <ion-row align-items-center>
             <ng-container *ngIf="program.start; else noProgram">
-              <ion-col size="1" no-padding align-items-center>
-                <span class="icon"> {{ program.icon }} </span>
-              </ion-col>
-              <ion-col size="11">
+              <ion-col size="12">
                 <h1 class="title">
                   {{ program.title }}
-                  <ion-icon
-                    *ngIf="program.clickerRating >= 8"
-                    name="flame"
-                    class="trending"
-                  ></ion-icon>
                 </h1>
-                <ion-chip color="secondary" *ngIf="isReplay()">
-                  <label color="secondary">Replay</label></ion-chip
-                >
-              </ion-col>
-
-              <ion-col size="12" class="ion-text-center" no-padding>
-                <span *ngIf="program.game && program.game.summary">
-                  {{ program.game.summary.description }}
-                </span>
-              </ion-col>
-              <ion-col size="12" class="ion-text-center" no-padding>
-                <span class="faded" *ngIf="program.nextProgramTitle">
-                  Next: {{ getNextProgramTitle() }} at
-                  {{ program.nextProgramStart | amDateFormat: "h:mma" }}
-                </span>
+                <div class="flex align-items-center">
+                  <ion-chip color="secondary" *ngIf="program.game && program.game.summary">
+                    <label color="secondary">{{ program.game.summary.description }}</label></ion-chip
+                  >
+                  <ion-chip color="secondary" *ngIf="isReplay()">
+                    <label color="secondary">Replay</label></ion-chip
+                  >
+                  <ion-chip color="secondary" *ngIf="program.nextProgramTitle">
+                    <label color="secondary">Next: {{ getNextProgramTitle() }} at
+                      {{ program.nextProgramStart | amDateFormat: "h:mma" }}</label></ion-chip
+                  >
+                </div>
               </ion-col>
             </ng-container>
             <ng-template #noProgram> &nbsp;</ng-template>

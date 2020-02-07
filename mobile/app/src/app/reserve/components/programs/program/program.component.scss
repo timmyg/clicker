@@ -1,9 +1,14 @@
 ion-icon.trending {
-  color: #e65100;
+  // color: #e65100;
+  color: var(--ion-color-primary);
 }
 
 span.icon {
   font-size: 20px;
+}
+
+.icon.sport {
+  display: inline-block;
 }
 
 .title {

@@ -16,6 +16,11 @@ export const getDetailsPage = createSelector(
   fromLocations.getDetailsPage
 );
 
+export const getDetailsLoading = createSelector(
+  getLocationsState,
+  fromLocations.getDetailsLoading
+);
+
 export const getLoading = createSelector(
   getLocationsState,
   fromLocations.getLoading

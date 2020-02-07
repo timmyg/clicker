@@ -1,11 +1,10 @@
 import { Component, Input } from "@angular/core";
 import { Observable } from "rxjs";
-import { Actions } from "@ngrx/effects";
-import { getDetailsPage, getLoading } from "src/app/state/location";
+import { getDetailsPage, getDetailsLoading } from "src/app/state/location";
 import { Store } from "@ngrx/store";
 import * as fromStore from "src/app/state/app.reducer";
 import * as fromLocation from "src/app/state/location/location.actions";
-import { ClassGetter } from "@angular/compiler/src/output/output_ast";
+import { ModalController } from "@ionic/angular";
 
 @Component({
   selector: "app-location-detail",
@@ -20,19 +19,19 @@ export class LocationDetailPage {
 
   constructor(
     private store: Store<fromStore.AppState>,
+    public modalController: ModalController,
   ) {
     this.locationDetailHtml$ = this.store.select(getDetailsPage);
-    // this.locationDetailHtml$.subscribe(x => {
-    //   console.log({x})
-    //   this.html = x
-    // })
-    this.isLoading$ = this.store.select(getLoading);
+    this.isLoading$ = this.store.select(getDetailsLoading);
   }
 
   ngOnInit() {
-    console.log('dispatch')
     this.store.dispatch(
       new fromLocation.GetDetailsPage(this.locationId)
     );
+  }
+
+  onCloseClick() {
+    this.modalController.dismiss();
   }
 }

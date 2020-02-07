@@ -1,12 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Location Detail</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCloseClick()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding-horizontal>
-  <!-- test2 -->
-  <div [innerHTML]="locationDetailHtml$ | async"></div>
-  <!-- {{locationDetailHtml$ | async}} -->
-  <!-- {{html}} -->
+  <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
+    <ion-spinner name="crescent" class="center"></ion-spinner>
+  </ion-row>
+  <ng-template #ready>
+    <div [innerHTML]="locationDetailHtml$ | async"></div>
+  </ng-template>
 </ion-content>
