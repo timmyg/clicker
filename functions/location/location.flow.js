@@ -189,14 +189,16 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
         { latitude, longitude },
         { latitude: locationLatitude, longitude: locationLongitude },
       );
+      // console.log({ meters });
       const miles = geolib.convertUnit('mi', meters);
       const roundedMiles = Math.round(10 * miles) / 10;
       locations[i].distance = roundedMiles;
-      if (milesRadius) {
-        allLocations = allLocations.filter(l => l.distance <= milesRadius);
-      }
     }
   });
+  if (milesRadius && latitude && longitude) {
+    allLocations = allLocations.filter(l => l.distance <= milesRadius);
+  }
+  console.log('locations after geo', allLocations.length);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   console.timeEnd('entire');
   console.log('returning', sorted.length);
