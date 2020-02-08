@@ -1,5 +1,5 @@
 {
-  "queryParameters": {
+  "queryStringParameters": {
     "miles": 100
   },
   "headers": {}

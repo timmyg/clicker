@@ -81,6 +81,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   referralModal;
   locationDetailModal;
   loginModal;
+  geolocationError;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -337,6 +338,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.store.dispatch(
             new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
           );
+          this.geolocationError = true
           this.reserveService.emitShowingLocations();
         })
         .catch(async error => {
@@ -348,14 +350,15 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.reserveService.emitShowingLocations();
           this.disableButton = false;
           console.error("Error getting location", error);
-          const whoops = await this.toastController.create({
-            message:
-              "Error getting your location. Make sure location services are enabled for this app.",
-            color: "light",
-            duration: 6000,
-            cssClass: "ion-text-center"
-          });
-          whoops.present();
+          // const message = "Error getting your location. Make sure location services are enabled for this app."
+          this.geolocationError = true
+          // const whoops = await this.toastController.create({
+          //   message,
+          //   color: "light",
+          //   duration: 6000,
+          //   cssClass: "ion-text-center"
+          // });
+          // whoops.present();
         });
     } else {
       this.askForGeolocation$.next(true);

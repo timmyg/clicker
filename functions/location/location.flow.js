@@ -160,6 +160,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
+  console.log({ milesRadius });
 
   if (pathParams) {
     latitude = pathParams.latitude;
@@ -191,13 +192,14 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
       const miles = geolib.convertUnit('mi', meters);
       const roundedMiles = Math.round(10 * miles) / 10;
       locations[i].distance = roundedMiles;
+      if (milesRadius) {
+        allLocations = allLocations.filter(l => l.distance <= milesRadius);
+      }
     }
   });
-  if (milesRadius) {
-    allLocations = allLocations.filter(l => l.distance <= milesRadius);
-  }
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   console.timeEnd('entire');
+  console.log('returning', sorted.length);
   return respond(200, sorted);
 });
 
