@@ -35,6 +35,14 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
   </section>
 
   <ng-template #showLocations>
+    <p
+        *ngIf="geolocationDeclined && !evaluatingGeolocation"
+        class="ion-text-center"
+        padding
+      >
+        Find locations around you by
+        <a (click)="forceAllow()">allowing location services</a>
+      </p>
     <ion-list
       lines="none"
       [class.content-loading]="(isLoading$ | async) || waiting"
@@ -75,15 +83,6 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
           </ion-card-content>
         </ion-card>
       </ng-container>
-
-      <p
-        *ngIf="geolocationDeclined && !evaluatingGeolocation"
-        class="ion-text-center"
-        padding
-      >
-        Find locations around you by
-        <a (click)="forceAllow()">allowing location services</a>
-      </p>
       <p class="ion-text-center">
         <a (click)="suggestLocation()">🍺 Suggest a new location</a>
       </p>
