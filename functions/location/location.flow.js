@@ -953,7 +953,21 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
 
 module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
-  return respond(200, { html: `<br/><br/><p class="ion-text-center">Now Showing coming soon</p>` });
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(id)
+    .exec();
+  let html = `
+  <section>
+  <h3>{{location.name}} ({{location.neighborhood}})</h3>
+    <ul>`;
+  location.boxes.forEach(box => {
+    html += `<li><b>Box ${box.label}</b>: ${box.channel} <em>${box.program ? box.program.title : ''}</em></li>`;
+  });
+  html += `
+    </ul>
+  </section>`;
+  return respond(200, { html });
 });
 
 function buildAirtableNowShowing(location: Venue) {
