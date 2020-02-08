@@ -959,10 +959,13 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .exec();
   let html = `
   <section>
-  <h3>{{location.name}} ({{location.neighborhood}})</h3>
+  <h3>Now Showing at ${location.name} (${location.neighborhood})</h3>
     <ul>`;
-  location.boxes.forEach(box => {
-    html += `<li><b>Box ${box.label}</b>: ${box.channel} <em>${box.program ? box.program.title : ''}</em></li>`;
+  const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
+  boxes.forEach(box => {
+    if (box.channel) {
+      html += `<li><b>Box ${box.label}</b>: ${box.channel} <em>${box.program ? box.program.title : ''}</em></li>`;
+    }
   });
   html += `
     </ul>
