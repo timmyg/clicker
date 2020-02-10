@@ -1,5 +1,6 @@
 <ion-item-sliding
   [ngClass]="{ inactive: !isAvailable() }"
+  [disabled]="!isAvailable()"
   #slidingItem
 >
   <ion-item-options side="start">

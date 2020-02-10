@@ -29,7 +29,7 @@
             <ng-container *ngIf="program.start; else noProgram">
               <ion-col size="12">
                   <h1 class="title">
-                    {{ program.title | truncate:[24] }}
+                    {{ program.title | truncate:[30] }}
                   </h1>
                   <span *ngIf="program.nextProgramTitle">
                     <em>Next: {{ getNextProgramTitle() }} at

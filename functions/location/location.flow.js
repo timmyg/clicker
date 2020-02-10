@@ -160,6 +160,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
+  console.log({ milesRadius });
 
   if (pathParams) {
     latitude = pathParams.latitude;
@@ -188,16 +189,19 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
         { latitude, longitude },
         { latitude: locationLatitude, longitude: locationLongitude },
       );
+      // console.log({ meters });
       const miles = geolib.convertUnit('mi', meters);
       const roundedMiles = Math.round(10 * miles) / 10;
       locations[i].distance = roundedMiles;
     }
   });
-  if (milesRadius) {
+  if (milesRadius && latitude && longitude) {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
+  console.log('locations after geo', allLocations.length);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
   console.timeEnd('entire');
+  console.log('returning', sorted.length);
   return respond(200, sorted);
 });
 
@@ -949,7 +953,25 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
 
 module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
-  return respond(200, { html: `<br/><br/><p class="ion-text-center">Now Showing coming soon</p>` });
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(id)
+    .exec();
+  let html = `
+  <section>
+  <h3>Now Showing:</h3>
+  <h4>${location.name} (${location.neighborhood})</h4>
+    <ul>`;
+  const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
+  boxes.forEach(box => {
+    if (box.channel) {
+      html += `<li><b>Box ${box.label}</b>: ${box.channel} <em>${box.program ? box.program.title : ''}</em></li>`;
+    }
+  });
+  html += `
+    </ul>
+  </section>`;
+  return respond(200, { html });
 });
 
 function buildAirtableNowShowing(location: Venue) {

@@ -668,12 +668,15 @@ function transformGame(game: any): Game {
   transformedGame.summary = buildStatus(transformedGame);
   // team.book.spread > 0 ? `+${team.book.spread}` : team.book.spread;
   try {
-    const { home, away } = transformedGame.home;
-    transformGame.home.book.spread = parseFloat(home.book.spread) > 0 ? `+${home.book.spread}` : `${home.book.spread}`;
-    transformGame.away.book.spread = parseFloat(away.book.spread) > 0 ? `+${away.book.spread}` : `${away.book.spread}`;
-    transformGame.home.book.moneyline =
+    const { home, away } = transformedGame;
+    console.log('hi', transformedGame.home.book);
+    transformedGame.home.book.spread =
+      parseFloat(home.book.spread) > 0 ? `+${home.book.spread}` : `${home.book.spread}`;
+    transformedGame.away.book.spread =
+      parseFloat(away.book.spread) > 0 ? `+${away.book.spread}` : `${away.book.spread}`;
+    transformedGame.home.book.moneyline =
       parseFloat(home.book.moneyline) > 0 ? `+${home.book.moneyline}` : `${home.book.moneyline}`;
-    transformGame.away.book.moneyline =
+    transformedGame.away.book.moneyline =
       parseFloat(away.book.moneyline) > 0 ? `+${away.book.moneyline}` : `${away.book.moneyline}`;
   } catch (e) {
     console.error(e);
