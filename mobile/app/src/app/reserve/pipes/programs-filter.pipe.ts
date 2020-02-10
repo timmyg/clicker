@@ -1,8 +1,8 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { Program } from 'src/app/state/program/program.model';
+import { Pipe, PipeTransform } from "@angular/core";
+import { Program } from "src/app/state/program/program.model";
 
 @Pipe({
-  name: 'programsFilter',
+  name: "programsFilter"
 })
 export class ProgramsFilterPipe implements PipeTransform {
   transform(programs: Program[], searchText: string): any[] {
@@ -11,7 +11,8 @@ export class ProgramsFilterPipe implements PipeTransform {
     searchText = searchText.toLowerCase();
     return programs.filter(p => {
       return (
-        p.channelTitle.toLowerCase().includes(searchText) || (p.title && p.title.toLowerCase().includes(searchText))
+        p.channelTitle.toLowerCase().includes(searchText) ||
+        (p.title && p.title.toLowerCase().includes(searchText))
       );
     });
   }

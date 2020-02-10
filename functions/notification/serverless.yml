@@ -55,52 +55,12 @@ custom:
 functions:
   sendAntenna:
     handler: notification.sendAntenna
-    events:
-      - http:
-          path: ''
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   sendApp:
     handler: notification.sendApp
-    events:
-      - http:
-          path: 'app'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   sendControlCenter:
     handler: notification.sendControlCenter
-    events:
-      - http:
-          path: ''
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   sendLanding:
     handler: notification.sendLanding
-    events:
-      - http:
-          path: ''
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   sendTasks:
     handler: notification.sendTasks
   health:
@@ -109,9 +69,3 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type

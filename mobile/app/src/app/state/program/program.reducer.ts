@@ -1,5 +1,5 @@
-import * as fromProgram from './program.actions';
-import { Program } from './program.model';
+import * as fromProgram from "./program.actions";
+import { Program } from "./program.model";
 
 export interface State {
   programs: Program[];
@@ -10,15 +10,18 @@ export interface State {
 export const initialState: State = {
   programs: [],
   loading: false,
-  error: '',
+  error: ""
 };
 
-export function reducer(state = initialState, action: fromProgram.ProgramActions): State {
+export function reducer(
+  state = initialState,
+  action: fromProgram.ProgramActions
+): State {
   switch (action.type) {
     case fromProgram.GET_PROGRAMS: {
       return {
         ...state,
-        loading: true,
+        loading: true
       };
     }
 
@@ -26,7 +29,7 @@ export function reducer(state = initialState, action: fromProgram.ProgramActions
       return {
         ...state,
         loading: false,
-        programs: action.payload,
+        programs: action.payload
       };
     }
 
@@ -34,7 +37,7 @@ export function reducer(state = initialState, action: fromProgram.ProgramActions
       return {
         ...state,
         loading: false,
-        error: 'error loading programs',
+        error: "error loading programs"
       };
     }
 

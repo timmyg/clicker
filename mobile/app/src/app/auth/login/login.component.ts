@@ -1,26 +1,26 @@
 // import { Component, ViewChild } from '@angular/core';
-import { ModalController, ToastController, IonInput } from '@ionic/angular';
-import { SegmentService } from 'ngx-segment-analytics';
-import { Globals } from 'src/app/globals';
-import { UserService } from 'src/app/core/services/user.service';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import * as fromStore from '../../state/app.reducer';
-import * as fromUser from '../../state/user/user.actions';
-import { getUserId } from 'src/app/state/user';
-import { first } from 'rxjs/operators';
-import * as decode from 'jwt-decode';
-import { Device } from '@capacitor/core';
-import { Component, ViewChild } from '@angular/core';
+import { ModalController, ToastController, IonInput } from "@ionic/angular";
+import { SegmentService } from "ngx-segment-analytics";
+import { Globals } from "src/app/globals";
+import { UserService } from "src/app/core/services/user.service";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import * as fromStore from "../../state/app.reducer";
+import * as fromUser from "../../state/user/user.actions";
+import { getUserId } from "src/app/state/user";
+import { first } from "rxjs/operators";
+import * as decode from "jwt-decode";
+import { Device } from "@capacitor/core";
+import { Component, ViewChild } from "@angular/core";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent {
-  @ViewChild('phoneInput', { static: false }) phoneInput: IonInput;
-  @ViewChild('codeInput', { static: false }) codeInput: IonInput;
+  @ViewChild("phoneInput", { static: false }) phoneInput: IonInput;
+  @ViewChild("codeInput", { static: false }) codeInput: IonInput;
   phone: string;
   code: string;
   codeSent: boolean;
@@ -34,7 +34,7 @@ export class LoginComponent {
     private segment: SegmentService,
     private globals: Globals,
     private userService: UserService,
-    private store: Store<fromStore.AppState>,
+    private store: Store<fromStore.AppState>
   ) {
     this.userId$ = this.store.select(getUserId);
   }
@@ -67,38 +67,41 @@ export class LoginComponent {
       async err => {
         console.error(err);
         const toastInvalid = await this.toastController.create({
-          message: 'Invalid phone number. Please enter your 10 digit phone number starting with area code.',
-          color: 'danger',
+          message:
+            "Invalid phone number. Please enter your 10 digit phone number starting with area code.",
+          color: "danger",
           duration: 5000,
-          cssClass: 'ion-text-center',
+          cssClass: "ion-text-center"
         });
         toastInvalid.present();
         this.waiting = false;
-      },
+      }
     );
   }
 
   onCodeSubmit() {
     this.waiting = true;
     // TODO move to store
-    this.userService.loginVerify(`+1${this.phone}`, this.code, this.deviceUuid).subscribe(
-      token => {
-        this.segment.track(this.globals.events.login.completed);
-        this.waiting = false;
-        this.saveTokenAndClose(token);
-      },
-      async err => {
-        console.error(err);
-        const toastInvalid = await this.toastController.create({
-          message: 'Invalid code.',
-          color: 'danger',
-          duration: 3000,
-          cssClass: 'ion-text-center',
-        });
-        toastInvalid.present();
-        this.waiting = false;
-      },
-    );
+    this.userService
+      .loginVerify(`+1${this.phone}`, this.code, this.deviceUuid)
+      .subscribe(
+        token => {
+          this.segment.track(this.globals.events.login.completed);
+          this.waiting = false;
+          this.saveTokenAndClose(token);
+        },
+        async err => {
+          console.error(err);
+          const toastInvalid = await this.toastController.create({
+            message: "Invalid code.",
+            color: "danger",
+            duration: 3000,
+            cssClass: "ion-text-center"
+          });
+          toastInvalid.present();
+          this.waiting = false;
+        }
+      );
   }
 
   isEligibleCode() {
@@ -116,7 +119,7 @@ export class LoginComponent {
       const toast = await this.toastController.create({
         message: `🎊 Successfully logged in. 🎊`,
         duration: 2000,
-        cssClass: 'ion-text-center',
+        cssClass: "ion-text-center"
       });
       toast.present();
       this.modalController.dismiss();

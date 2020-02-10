@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { WalletPage } from '../wallet.page';
-import { Observable, Subscription } from 'rxjs';
-import { ModalController, ToastController, Platform } from '@ionic/angular';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../../state/app.reducer';
-import { getUserRoles, isLoggedIn, getLoading } from 'src/app/state/user';
-import { LoginComponent } from 'src/app/auth/login/login.component';
-import { first } from 'rxjs/operators';
+import { Component, OnInit } from "@angular/core";
+import { WalletPage } from "../wallet.page";
+import { Observable, Subscription } from "rxjs";
+import { ModalController, ToastController, Platform } from "@ionic/angular";
+import { Store } from "@ngrx/store";
+import * as fromStore from "../../state/app.reducer";
+import { getUserRoles, isLoggedIn, getLoading } from "src/app/state/user";
+import { LoginComponent } from "src/app/auth/login/login.component";
+import { first } from "rxjs/operators";
 
 @Component({
-  selector: 'app-coins',
-  templateUrl: './coins.component.html',
-  styleUrls: ['./coins.component.scss'],
+  selector: "app-coins",
+  templateUrl: "./coins.component.html",
+  styleUrls: ["./coins.component.scss"]
 })
 export class CoinsComponent implements OnInit {
   tokenCount$: Observable<number>;
@@ -29,7 +29,7 @@ export class CoinsComponent implements OnInit {
     private walletPage: WalletPage,
     public modalController: ModalController,
     public toastController: ToastController,
-    private platform: Platform,
+    private platform: Platform
   ) {
     this.tokenCount$ = this.walletPage.getCoinCount();
     this.userRoles$ = this.store.select(getUserRoles);
@@ -59,7 +59,7 @@ export class CoinsComponent implements OnInit {
     // if (this.userRoles && (this.userRoles.includes('money') || this.userRoles.includes('superman'))) {
     if (this.isLoggedIn) {
       this.walletModal = await this.modalController.create({
-        component: WalletPage,
+        component: WalletPage
       });
       this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
         if (this.walletModal) this.walletModal.close();
@@ -71,19 +71,21 @@ export class CoinsComponent implements OnInit {
         duration: 4000,
         buttons: [
           {
-            side: 'end',
-            text: 'Login',
+            side: "end",
+            text: "Login",
             handler: async () => {
               this.loginModal = await this.modalController.create({
-                component: LoginComponent,
+                component: LoginComponent
               });
-              this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-                if (this.loginModal) this.loginModal.close();
-              });
+              this.sub = this.platform.backButton
+                .pipe(first())
+                .subscribe(() => {
+                  if (this.loginModal) this.loginModal.close();
+                });
               return await this.loginModal.present();
-            },
-          },
-        ],
+            }
+          }
+        ]
       });
       toast.present();
     }

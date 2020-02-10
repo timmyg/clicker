@@ -56,6 +56,8 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   timeframes:
@@ -68,6 +70,8 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   health:
@@ -76,21 +80,3 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  # blogPostUpdated:
-  #   handler: app.blogPostUpdated
-  #   events:
-  #     - http:
-  #         path: blog
-  #         method: post
-  #         cors:
-  #           origin: '*'
-  #           headers:
-  #             - partner
-  #             - authorization
-  #             - content-type

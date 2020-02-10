@@ -149,23 +149,28 @@ const dbLocation = dynamoose.model(
     saveUnknown: ['program'],
     timestamps: true,
     allowEmptyArray: true,
-    // update: true,
   },
 );
 
 module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
-  const { partner } = event.headers;
+  const { partner, clicker, app } = event.headers;
+  console.log({ partner, clicker, app });
+  console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
+  console.log({ milesRadius });
 
   if (pathParams) {
     latitude = pathParams.latitude;
     longitude = pathParams.longitude;
     console.log('lat/lng', latitude, longitude);
   }
+  console.time('db call');
   let allLocations: Venue[] = await dbLocation.scan().exec();
+  console.log('locations', allLocations.length);
+  console.timeEnd('db call');
 
   // set whether open tv's
   allLocations.forEach((l, i, locations) => {
@@ -184,42 +189,52 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
         { latitude, longitude },
         { latitude: locationLatitude, longitude: locationLongitude },
       );
+      // console.log({ meters });
       const miles = geolib.convertUnit('mi', meters);
       const roundedMiles = Math.round(10 * miles) / 10;
       locations[i].distance = roundedMiles;
     }
   });
-  if (milesRadius) {
+  if (milesRadius && latitude && longitude) {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
+  console.log('locations after geo', allLocations.length);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
-
+  console.timeEnd('entire');
+  console.log('returning', sorted.length);
   return respond(200, sorted);
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('GET!');
   const { id } = getPathParameters(event);
 
+  console.time('get from db');
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
+  console.timeEnd('get from db');
 
   // loop through boxes, and update reserved status if necessary
   if (location.boxes) {
+    console.time('update reserved status');
+    let updated = false;
     location.boxes.forEach((o, i, boxes) => {
       // check if box is reserved and end time is in past
       if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
-        // if so, update to not reserved
-        // delete boxes[i].end;
-        // delete boxes[i].reserved;
-        // boxes[i].end
         boxes[i].reserved = false;
-        // boxes[i] = { ...boxes[i] };
+        updated = true;
       }
     });
-    await location.save();
+    console.timeEnd('update reserved status');
+    if (updated) {
+      console.time('save boxes');
+      await location.save();
+      console.timeEnd('save boxes');
+    }
 
+    console.time('filter + sort');
     location.boxes = location.boxes.filter(b => b.appActive);
 
     // filter out inactive boxes
@@ -227,12 +242,13 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     location.boxes = location.boxes.sort((a, b) => {
       return a.label.localeCompare(b.label);
     });
+    console.timeEnd('filter + sort');
   }
 
   // delete location.losantId;
 
   // set distance
-  console.log(event);
+  console.time('set geo distance');
   if (event.queryStringParameters) {
     const { latitude, longitude } = event.queryStringParameters;
     console.log({ latitude, longitude });
@@ -249,6 +265,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     const roundedMiles = Math.round(10 * miles) / 10;
     location.distance = roundedMiles;
   }
+  console.timeEnd('set geo distance');
 
   return respond(200, location);
 });
@@ -565,66 +582,66 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
 });
 
-module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id } = getPathParameters(event);
+// module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { id } = getPathParameters(event);
 
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  const { boxes } = location;
-  for (const box of boxes) {
-    const command = 'key';
-    const key = 'poweroff';
-    const reservation = {
-      location,
-      box,
-      program: {
-        // channel: box.setupChannel,
-      },
-    };
-    console.log('turning off box', box);
-    await new Invoke()
-      .service('remote')
-      .name('command')
-      .body({ reservation, command, key })
-      .async()
-      .go();
-    console.log('turned off box', box);
-  }
-  return respond(200, 'ok');
-});
+//   const location: Venue = await dbLocation
+//     .queryOne('id')
+//     .eq(id)
+//     .exec();
+//   const { boxes } = location;
+//   for (const box of boxes) {
+//     const command = 'key';
+//     const key = 'poweroff';
+//     const reservation = {
+//       location,
+//       box,
+//       program: {
+//         // channel: box.setupChannel,
+//       },
+//     };
+//     console.log('turning off box', box);
+//     await new Invoke()
+//       .service('remote')
+//       .name('command')
+//       .body({ reservation, command, key })
+//       .async()
+//       .go();
+//     console.log('turned off box', box);
+//   }
+//   return respond(200, 'ok');
+// });
 
-module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id } = getPathParameters(event);
+// module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
+//   const { id } = getPathParameters(event);
 
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  const { boxes } = location;
-  for (const box of boxes) {
-    const command = 'key';
-    const key = 'poweron';
-    const reservation = {
-      location,
-      box,
-      program: {
-        // channel: box.setupChannel,
-      },
-    };
-    console.log('turning on box', box);
-    await new Invoke()
-      .service('remote')
-      .name('command')
-      .body({ reservation, command, key })
-      .headers(event.headers)
-      .async()
-      .go();
-    console.log('turned on', box);
-  }
-  return respond(200, 'ok');
-});
+//   const location: Venue = await dbLocation
+//     .queryOne('id')
+//     .eq(id)
+//     .exec();
+//   const { boxes } = location;
+//   for (const box of boxes) {
+//     const command = 'key';
+//     const key = 'poweron';
+//     const reservation = {
+//       location,
+//       box,
+//       program: {
+//         // channel: box.setupChannel,
+//       },
+//     };
+//     console.log('turning on box', box);
+//     await new Invoke()
+//       .service('remote')
+//       .name('command')
+//       .body({ reservation, command, key })
+//       .headers(event.headers)
+//       .async()
+//       .go();
+//     console.log('turned on', box);
+//   }
+//   return respond(200, 'ok');
+// });
 
 module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   // const { id } = getPathParameters(event);
@@ -932,6 +949,29 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
     console.error(e);
   }
   return respond(200);
+});
+
+module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(id)
+    .exec();
+  let html = `
+  <section>
+  <h3>Now Showing:</h3>
+  <h4>${location.name} (${location.neighborhood})</h4>
+    <ul>`;
+  const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
+  boxes.forEach(box => {
+    if (box.channel) {
+      html += `<li><b>Box ${box.label}</b>: ${box.channel} <em>${box.program ? box.program.title : ''}</em></li>`;
+    }
+  });
+  html += `
+    </ul>
+  </section>`;
+  return respond(200, { html });
 });
 
 function buildAirtableNowShowing(location: Venue) {

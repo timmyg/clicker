@@ -1,6 +1,6 @@
-import * as fromUser from './user.actions';
-import { User } from './user.model';
-import { Card } from './card.model';
+import * as fromUser from "./user.actions";
+import { User } from "./user.model";
+import { Card } from "./card.model";
 
 export interface State {
   me: User;
@@ -26,10 +26,13 @@ export const initialState: State = {
   geo: null,
   authToken: null,
   loading: false,
-  error: null,
+  error: null
 };
 
-export function reducer(state = initialState, action: fromUser.UserActions): State {
+export function reducer(
+  state = initialState,
+  action: fromUser.UserActions
+): State {
   switch (action.type) {
     case fromUser.LOAD:
     case fromUser.LOAD_WALLET:
@@ -37,7 +40,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
     case fromUser.ADD_REFERRAL:
       return {
         ...state,
-        loading: true,
+        loading: true
       };
 
     case fromUser.SET_GEOLOCATION:
@@ -45,8 +48,8 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
         ...state,
         geo: {
           latitude: action.latitude,
-          longitude: action.longitude,
-        },
+          longitude: action.longitude
+        }
         // loading: true,
       };
 
@@ -54,7 +57,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       return {
         ...state,
         loading: false,
-        me: action.payload,
+        me: action.payload
       };
     case fromUser.LOAD_WALLET_SUCCESS:
       state.tokens = action.payload.tokens;
@@ -63,17 +66,17 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       state.referredByCode = action.payload.referredByCode;
       return {
         ...state,
-        loading: false,
+        loading: false
       };
     case fromUser.SET_AUTH_TOKEN:
       state.authToken = action.payload;
       return {
-        ...state,
+        ...state
       };
     case fromUser.ADD_REFERRAL_SUCCESS:
     case fromUser.DELETE_CARD_SUCCESS:
       return {
-        ...state,
+        ...state
       };
 
     case fromUser.LOAD_FAIL:
@@ -83,7 +86,7 @@ export function reducer(state = initialState, action: fromUser.UserActions): Sta
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload
       };
 
     default: {
@@ -102,9 +105,10 @@ export const isReferred = (state: State) => !!state.referredByCode;
 export const getUserGeolocation = (state: State) => state.geo;
 export const getUserLocations = (state: State) =>
   state.me &&
-  state.me['https://mobile.tryclicker.com/app_metadata'] &&
-  state.me['https://mobile.tryclicker.com/app_metadata'].locations;
-export const getUserRoles = (state: State) => state.me && state.me['https://mobile.tryclicker.com/roles'];
+  state.me["https://mobile.tryclicker.com/app_metadata"] &&
+  state.me["https://mobile.tryclicker.com/app_metadata"].locations;
+export const getUserRoles = (state: State) =>
+  state.me && state.me["https://mobile.tryclicker.com/roles"];
 export const isLoggedIn = (state: State) => state.me && !state.me.guest;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

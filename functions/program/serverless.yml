@@ -262,12 +262,6 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   getAll:
     handler: program.getAll
     runtime: nodejs12.x
@@ -275,12 +269,14 @@ functions:
     timeout: 20
     events:
       - http:
-          path: 'location/{locationId}'
+          path: location/{locationId}
           method: get
           cors:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   syncRegions:
@@ -294,14 +290,8 @@ functions:
       # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
       # - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
       - http:
-          path: 'sync'
+          path: sync
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncRegionNextFewHours:
     handler: program.syncRegionNextFewHours
     runtime: nodejs12.x
@@ -322,12 +312,6 @@ functions:
       - http:
           path: sync/airtable
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
     runtime: nodejs12.x
@@ -338,12 +322,6 @@ functions:
       - http:
           path: sync/airtable/updates
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   consumeNewProgramUpdateDetails:
     memorySize: 512
     timeout: 15
@@ -399,5 +377,5 @@ functions:
     runtime: nodejs12.x
     events:
       - http:
-          path: '/game'
+          path: game
           method: post

@@ -1,10 +1,10 @@
-import { Action } from '@ngrx/store';
-import { Program } from './program.model';
-import { Location } from '../location/location.model';
+import { Action } from "@ngrx/store";
+import { Program } from "./program.model";
+import { Location } from "../location/location.model";
 
-export const GET_PROGRAMS = '[PROGRAM] Get Programs';
-export const GET_PROGRAMS_SUCCESS = '[PROGRAM] Get Programs Success';
-export const GET_PROGRAMS_FAIL = '[PROGRAM] Get Programs Fail';
+export const GET_PROGRAMS = "[PROGRAM] Get Programs";
+export const GET_PROGRAMS_SUCCESS = "[PROGRAM] Get Programs Success";
+export const GET_PROGRAMS_FAIL = "[PROGRAM] Get Programs Fail";
 
 export class GetAllByLocation implements Action {
   readonly type = GET_PROGRAMS;
@@ -21,4 +21,7 @@ export class GetAllByLocationFail implements Action {
   constructor(public payload: any) {}
 }
 
-export type ProgramActions = GetAllByLocation | GetAllByLocationSuccess | GetAllByLocationFail;
+export type ProgramActions =
+  | GetAllByLocation
+  | GetAllByLocationSuccess
+  | GetAllByLocationFail;

@@ -148,7 +148,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const result = await new Invoke()
     .service('user')
     .name('transaction')
-    .body({ tokens: cost })
+    .body({ tokens: cost, minutes: reservation.minutes })
     .headers(event.headers)
     .go();
   console.log('result', result);
@@ -221,7 +221,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const { statusCode, data } = await new Invoke()
     .service('user')
     .name('transaction')
-    .body({ tokens: updatedReservation.cost })
+    .body({ tokens: updatedReservation.cost, minutes: updatedReservation.minutes })
     .headers(event.headers)
     .go();
   console.timeEnd('deduct transaction');

@@ -1,4 +1,4 @@
-import { TV } from '../location/tv.model';
+import { TV } from "../location/tv.model";
 
 export interface Location {
   id: string;
@@ -11,7 +11,7 @@ export interface Location {
   announcement?: string;
   ip: string;
   zip: number;
-  free?: boolean;
+  // free?: boolean;
   openTvs?: boolean;
   active?: boolean;
   connected?: boolean;

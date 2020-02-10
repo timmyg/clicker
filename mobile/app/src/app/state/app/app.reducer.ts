@@ -1,11 +1,12 @@
-import * as fromApp from './app.actions';
-import { Plan } from './plan.model';
-import { Timeframe } from './timeframe.model';
+import * as fromApp from "./app.actions";
+import { Plan } from "./plan.model";
+import { Timeframe } from "./timeframe.model";
 
 export interface State {
   partner: string;
   plans: Plan[];
   timeframes: Timeframe[];
+  version: string;
   loading: boolean;
   error: string;
 }
@@ -14,19 +15,31 @@ export const initialState: State = {
   partner: null,
   plans: null,
   timeframes: null,
+  version: null,
   loading: false,
-  error: '',
+  error: ""
 };
 
-export function reducer(state = initialState, action: fromApp.AppActions): State {
+export function reducer(
+  state = initialState,
+  action: fromApp.AppActions
+): State {
   switch (action.type) {
     case fromApp.LOAD_PLANS:
     case fromApp.LOAD_TIMEFRAMES:
       return {
         ...state,
-        loading: true,
+        loading: true
       };
 
+    case fromApp.SET_PARTNER: {
+      state.partner = action.payload;
+      return state;
+    }
+    case fromApp.SET_VERSION: {
+      state.version = action.version;
+      return state;
+    }
     case fromApp.SET_PARTNER: {
       state.partner = action.payload;
       return state;
@@ -34,24 +47,24 @@ export function reducer(state = initialState, action: fromApp.AppActions): State
     case fromApp.CLEAR_TIMEFRAMES:
       return {
         ...state,
-        timeframes: null,
+        timeframes: null
       };
     case fromApp.CLEAR_PLANS:
       return {
         ...state,
-        plans: null,
+        plans: null
       };
     case fromApp.LOAD_PLANS_SUCCESS:
       return {
         ...state,
         loading: false,
-        plans: action.plans,
+        plans: action.plans
       };
     case fromApp.LOAD_TIMEFRAMES_SUCCESS:
       return {
         ...state,
         loading: false,
-        timeframes: action.timeframes,
+        timeframes: action.timeframes
       };
 
     case fromApp.LOAD_PLANS_FAIL:
@@ -59,7 +72,7 @@ export function reducer(state = initialState, action: fromApp.AppActions): State
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload
       };
 
     default: {
@@ -69,6 +82,7 @@ export function reducer(state = initialState, action: fromApp.AppActions): State
 }
 
 export const getPartner = (state: State) => state.partner;
+export const getVersion = (state: State) => state.version;
 export const getPlans = (state: State) => state.plans;
 export const getTimeframes = (state: State) => state.timeframes;
 export const getLoading = (state: State) => state.loading;

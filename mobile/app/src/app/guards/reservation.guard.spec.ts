@@ -1,15 +1,15 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, async, inject } from "@angular/core/testing";
 
-import { ReservationGuard } from './reservation.guard';
+import { ReservationGuard } from "./reservation.guard";
 
-describe('ReservationGuard', () => {
+describe("ReservationGuard", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ReservationGuard],
+      providers: [ReservationGuard]
     });
   });
 
-  it('should ...', inject([ReservationGuard], (guard: ReservationGuard) => {
+  it("should ...", inject([ReservationGuard], (guard: ReservationGuard) => {
     expect(guard).toBeTruthy();
   }));
 });

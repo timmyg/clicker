@@ -61,12 +61,6 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   checkControlCenterEvents:
     handler: admin.checkControlCenterEvents
     events:
@@ -74,12 +68,6 @@ functions:
       - http:
           path: check/control-center
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   runEndToEndTests:
     handler: admin.runEndToEndTests
     events:
@@ -87,24 +75,12 @@ functions:
       - http:
           path: e2e
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   logChannelChange:
     handler: admin.logChannelChange
     events:
       - http:
           path: channel-change
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   airtableRemoveExpired:
     handler: admin.airtableRemoveExpired
     memorySize: 512

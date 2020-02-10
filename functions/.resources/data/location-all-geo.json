@@ -1,0 +1,10 @@
+{
+  "queryStringParameters": {
+    "miles": 100
+  },
+  "pathParameters": {
+    "latitude": 39.1526888,
+    "longitude": -84.45151299999999
+  },
+  "headers": {}
+}

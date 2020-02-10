@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Storage } from '@ionic/storage';
-import { mergeMap, map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { Observable, from, of } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { Storage } from "@ionic/storage";
+import { mergeMap, map } from "rxjs/operators";
 const storage = {
-  token: 'token',
-  originalToken: 'originalToken',
-  anonymous: 'anonymous',
+  token: "token",
+  originalToken: "originalToken",
+  anonymous: "anonymous"
 };
 
-import { Plan } from 'src/app/state/app/plan.model';
+import { Plan } from "src/app/state/app/plan.model";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root"
 })
 export class UserService {
   private prefix = `users`;
@@ -42,7 +42,7 @@ export class UserService {
             });
           });
         }
-      }),
+      })
     );
   }
 
@@ -51,7 +51,10 @@ export class UserService {
   }
 
   alias(fromId: string, toId: string): Observable<any> {
-    return this.httpClient.post<any>(`${this.prefix}/alias/${fromId}/${toId}`, {});
+    return this.httpClient.post<any>(
+      `${this.prefix}/alias/${fromId}/${toId}`,
+      {}
+    );
   }
 
   updateCard(token: string): Observable<any> {
