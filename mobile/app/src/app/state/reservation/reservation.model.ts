@@ -1,6 +1,6 @@
-import { Location } from '../location/location.model';
-import { Program } from '../program/program.model';
-import { TV } from '../location/tv.model';
+import { Location } from "../location/location.model";
+import { Program } from "../program/program.model";
+import { TV } from "../location/tv.model";
 
 export class Reservation {
   constructor() {}

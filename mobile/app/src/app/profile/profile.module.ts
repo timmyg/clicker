@@ -1,30 +1,30 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { Routes, RouterModule } from "@angular/router";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { ProfilePage } from './profile.page';
-import { MomentModule } from 'ngx-moment';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SharedModule } from '../shared/shared.module';
-import { ReservationComponent } from './reservation/reservation.component';
-import { AuthModule } from '../auth/auth.module';
-import { LoginComponent } from '../auth/login/login.component';
-import { FeatureFlag } from '../directives/feature-flag.directive';
-import { WalletModule } from '../wallet/wallet.module';
-import { WalletPage } from '../wallet/wallet.page';
-import { CoinsComponent } from '../wallet/coins/coins.component';
-import { Deploy } from 'cordova-plugin-ionic/dist/ngx';
-import { ReferralPageModule } from '../referral/referral.module';
-import { ReferralPage } from '../referral/referral.page';
+import { ProfilePage } from "./profile.page";
+import { MomentModule } from "ngx-moment";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { SharedModule } from "../shared/shared.module";
+import { ReservationComponent } from "./reservation/reservation.component";
+import { AuthModule } from "../auth/auth.module";
+import { LoginComponent } from "../auth/login/login.component";
+import { FeatureFlag } from "../directives/feature-flag.directive";
+import { WalletModule } from "../wallet/wallet.module";
+import { WalletPage } from "../wallet/wallet.page";
+import { CoinsComponent } from "../wallet/coins/coins.component";
+import { Deploy } from "cordova-plugin-ionic/dist/ngx";
+import { ReferralPageModule } from "../referral/referral.module";
+import { ReferralPage } from "../referral/referral.page";
 
 const routes: Routes = [
   {
-    path: '',
-    component: ProfilePage,
-  },
+    path: "",
+    component: ProfilePage
+  }
 ];
 
 @NgModule({
@@ -39,10 +39,10 @@ const routes: Routes = [
     FontAwesomeModule,
     AuthModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(routes)
   ],
   declarations: [ProfilePage, ReservationComponent, FeatureFlag],
   entryComponents: [LoginComponent, WalletPage, CoinsComponent, ReferralPage],
-  providers: [Deploy],
+  providers: [Deploy]
 })
 export class ProfilePageModule {}

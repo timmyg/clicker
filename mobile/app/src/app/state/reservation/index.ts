@@ -1,15 +1,37 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-import * as fromReservations from './reservation.reducer';
-import { State as ReservationState } from './reservation.reducer';
+import { createSelector, createFeatureSelector } from "@ngrx/store";
+import * as fromReservations from "./reservation.reducer";
+import { State as ReservationState } from "./reservation.reducer";
 
-export const getReservationsState = createFeatureSelector<ReservationState>('reservation');
+export const getReservationsState = createFeatureSelector<ReservationState>(
+  "reservation"
+);
 
-export const getReservation = createSelector(getReservationsState, fromReservations.getReservation);
+export const getReservation = createSelector(
+  getReservationsState,
+  fromReservations.getReservation
+);
 
-export const getReservationTvs = createSelector(getReservationsState, fromReservations.getReservationTvs);
+export const getReservationUpdateType = createSelector(
+  getReservationsState,
+  fromReservations.getReservationUpdateType
+);
 
-export const getAllReservations = createSelector(getReservationsState, fromReservations.getAllReservations);
+export const getReservationTvs = createSelector(
+  getReservationsState,
+  fromReservations.getReservationTvs
+);
 
-export const getLoading = createSelector(getReservationsState, fromReservations.getLoading);
+export const getAllReservations = createSelector(
+  getReservationsState,
+  fromReservations.getAllReservations
+);
 
-export const getError = createSelector(getReservationsState, fromReservations.getError);
+export const getLoading = createSelector(
+  getReservationsState,
+  fromReservations.getLoading
+);
+
+export const getError = createSelector(
+  getReservationsState,
+  fromReservations.getError
+);

@@ -14,7 +14,7 @@ const plans = [
     best: true,
   },
 ];
-const timeframes = [{ tokens: 0, minutes: 0 }, { tokens: 1, minutes: 30 }, { tokens: 2, minutes: 60 }];
+const timeframes = [{ tokens: 1, minutes: 30 }, { tokens: 2, minutes: 60 }];
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);

@@ -81,10 +81,6 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-            # ProvisionedThroughput:
-            #   ReadCapacityUnits: ${self:custom.tableThroughput}
-            #   WriteCapacityUnits: ${self:custom.tableThroughput}
-
 functions:
   health:
     handler: location.health
@@ -92,12 +88,6 @@ functions:
       - http:
           path: health
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   get:
     handler: location.get
     events:
@@ -108,6 +98,8 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   all:
@@ -120,18 +112,22 @@ functions:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   allByGeolocation:
     handler: location.all
     events:
       - http:
-          path: '/geo/{latitude}/{longitude}'
+          path: 'geo/{latitude}/{longitude}'
           method: get
           cors:
             origin: '*'
             headers:
               - partner
+              - app
+              - clicker
               - authorization
               - content-type
   create:
@@ -140,83 +136,42 @@ functions:
       - http:
           path: ''
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   connected:
     handler: location.connected
     events:
       - http:
           path: 'device/{losantId}/connected'
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   disconnected:
     handler: location.disconnected
     events:
       - http:
           path: 'device/{losantId}/disconnected'
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   update:
     handler: location.update
     events:
       - http:
           path: '{id}'
           method: put
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   setBoxes:
     handler: location.setBoxes
     events:
       - http:
           path: '{id}/boxes'
           method: put
-          cors:
-            origin: '*'
-            # headers:
-            #   - partner
-            #   - authorization
   setLabels:
     handler: location.setLabels
     events:
       - http:
           path: '{id}/boxes/labels'
           method: put
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   identifyBoxes:
     handler: location.identifyBoxes
     events:
       - http:
           path: '{id}/boxes/identify'
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   saveBoxesInfo:
     description: called from antenna to update whats on each box
     handler: location.saveBoxesInfo
@@ -225,65 +180,35 @@ functions:
       - http:
           path: '{id}/boxes/info'
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   setBoxReserved:
     handler: location.setBoxReserved
     events:
       - http:
           path: '{id}/boxes/{boxId}/reserved'
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   setBoxFree:
     handler: location.setBoxFree
     events:
       - http:
           path: '{id}/boxes/{boxId}/free'
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   updateBoxInfo:
     description: called by saveBoxesInfo for manual and remote for other changes
     handler: location.updateBoxInfo
     timeout: 12
     memorySize: 512
-  allOff:
-    handler: location.allOff
-    events:
-      - http:
-          path: '{id}/boxes/off'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
-  allOn:
-    handler: location.allOn
-    events:
-      - http:
-          path: '{id}/boxes/on'
-          method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
+  # allOff:
+  #   handler: location.allOff
+  #   events:
+  #     - http:
+  #         path: '{id}/boxes/off'
+  #         method: post
+  # allOn:
+  #   handler: location.allOn
+  #   events:
+  #     - http:
+  #         path: '{id}/boxes/on'
+  #         method: post
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
     description: check what is on each location boxes
@@ -294,30 +219,18 @@ functions:
       - http:
           path: boxes/info
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   controlCenterLocationsByRegion:
     handler: location.controlCenterLocationsByRegion
     events:
       - http:
           path: 'regions/{regions}'
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - partner
-              - authorization
-              - content-type
   controlCenterV2:
     handler: location.controlCenterV2
     events:
       - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
-          path: 'control-center/v2'
+          path: control-center/v2
           method: post
   controlCenterV2byLocation:
     handler: location.controlCenterV2byLocation
@@ -331,7 +244,7 @@ functions:
     events:
       - schedule: cron(*/9 * * * ? *)
       - http:
-          path: 'airtable/now-showing'
+          path: airtable/now-showing
           method: post
   updateAllBoxesPrograms:
     handler: location.updateAllBoxesPrograms
@@ -344,3 +257,18 @@ functions:
       - http:
           path: boxes/programs
           method: post
+  getLocationDetailsPage:
+    handler: location.getLocationDetailsPage
+    description: location details rendered html page for app
+    events:
+      - http:
+          path: '{id}/details/page'
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - app
+              - clicker
+              - authorization
+              - content-type

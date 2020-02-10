@@ -2,10 +2,17 @@
   <ion-toolbar>
     <ion-title>My Reservations</ion-title>
     <ion-buttons slot="start">
-      <ion-button (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut"> Logout </ion-button>
+      <ion-button
+        (click)="onLogout()"
+        *ngIf="(user$ | async)?.guest !== true; else loggedOut"
+      >
+        Logout
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
-    <ng-template #loggedOut> <ion-button (click)="login()">Login</ion-button> </ng-template>
+    <ng-template #loggedOut>
+      <ion-button (click)="login()">Login</ion-button>
+    </ng-template>
   </ion-toolbar>
 </ion-header>
 
@@ -35,21 +42,35 @@
 
   <ion-grid padding-horizontal padding-top size="12">
     <!-- <ion-row margin-bottom> <b>My Reservations</b> </ion-row> -->
-    <ion-row *ngIf="(isReservationsLoading$ | async); else ready" margin-vertical>
+    <ion-row
+      *ngIf="(isReservationsLoading$ | async); else ready"
+      margin-vertical
+    >
       <ion-spinner name="crescent" class="center"></ion-spinner>
     </ion-row>
     <ng-template #ready>
       <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
         <div *ngFor="let r of (reservations$ | async)">
-          <app-reservation [reservation]="r" (onModify)="onModify($event)"></app-reservation>
+          <app-reservation
+            [reservation]="r"
+            (onModify)="onModify($event)"
+          ></app-reservation>
         </div>
       </div>
       <ng-template #empty>
-        <div padding-horizontal class="ion-text-center"><p>No active reservations</p></div>
+        <div padding-horizontal class="ion-text-center">
+          <p>No active reservations</p>
+        </div>
       </ng-template>
-      <p class="ion-text-center"><a (click)="createNewReservation('link')">📺 Change the channel</a></p>
-      <p class="ion-text-center"><a *ngIf="showRatingLink" (click)="rate()">⭐ Rate this app</a></p>
-      <p class="ion-text-center"><a (click)="openFeedback()">💬 Contact us</a></p>
+      <p class="ion-text-center">
+        <a (click)="createNewReservation('link')">📺 Change the channel</a>
+      </p>
+      <p class="ion-text-center">
+        <a *ngIf="showRatingLink" (click)="rate()">⭐ Rate this app</a>
+      </p>
+      <p class="ion-text-center">
+        <a (click)="openFeedback()">💬 Contact us</a>
+      </p>
     </ng-template>
   </ion-grid>
 </ion-content>

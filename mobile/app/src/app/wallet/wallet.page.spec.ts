@@ -1,14 +1,14 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { WalletPage } from './wallet.page';
+import { WalletPage } from "./wallet.page";
 
-describe('WalletPage', () => {
+describe("WalletPage", () => {
   let component: WalletPage;
   let fixture: ComponentFixture<WalletPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [WalletPage],
+      declarations: [WalletPage]
     }).compileComponents();
   }));
 
@@ -18,7 +18,7 @@ describe('WalletPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
