@@ -973,17 +973,16 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .go();
   console.timeEnd('get upcoming programs');
 
-  // TODO EST is hardcoded!
-  // upcomingPrograms.map(p => (p.fromNow = moment(p.fields.start).tz('America/New_York').format('h:mma')));
   console.time('mappin');
   upcomingPrograms.map(p => {
-    if (p.rating >= 9) {
+    if (p.fields.rating >= 8) {
       p.highlyRated = true;
     }
     return (p.fromNow = moment(p.fields.start)
       .tz('America/New_York')
       .fromNow());
   });
+  console.log({ upcomingPrograms });
   const template = `\
     <section> \
     <h3>{{location.name}} ({{location.neighborhood}})</h4> \
@@ -1000,10 +999,11 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       <h4>Upcoming:</h4> \
       <ul> \
         {{#upcomingPrograms}} \
-          <li>
-            {{#highlyRated}}<b>{{/highlyRated}}
-            {{fields.channelTitle}}: {{fields.title}} <em>{{fromNow}}</em>
-            {{#highlyRated}}</b>{{/highlyRated}}
+          <li> \
+            {{#highlyRated}}<b>{{/highlyRated}} \
+            {{fields.channelTitle}}: {{fields.title}} \
+            {{#highlyRated}}</b>{{/highlyRated}} \
+            <em>({{fromNow}})</em> \
           </li> \
         {{/upcomingPrograms}} \
       </ul> \
