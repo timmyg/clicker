@@ -960,7 +960,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .queryOne('id')
     .eq(id)
     .exec();
-  const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
+  const boxes = location.boxes.filter(box => !!box.zone).sort((a, b) => a.zone.localeCompare(b.zone));
 
   const { data: upcomingPrograms } = await new Invoke()
     .service('program')
@@ -985,7 +985,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       <ul> \
       {{#boxes}} \
         <li> \
-          <b>Box {{label}}</b>: {{channel}} <em>{{program.title}}</em> \
+          <b>Box {{zone}}</b>: {{channel}} <em>{{program.title}}</em> \
         </li> \
       {{/boxes}} \
       </ul> \ 
