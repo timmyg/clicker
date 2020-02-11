@@ -956,21 +956,26 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
 
 module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
+  console.time('get location');
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
+  console.timeEnd('get location');
   const boxes = location.boxes.filter(box => !!box.zone).sort((a, b) => a.zone.localeCompare(b.zone));
 
+  console.time('get upcoming programs');
   const { data: upcomingPrograms } = await new Invoke()
     .service('program')
     .name('upcoming')
     .queryParams({ locationId: location.id })
     .headers(event.headers)
     .go();
+  console.timeEnd('get upcoming programs');
 
   // TODO EST is hardcoded!
   // upcomingPrograms.map(p => (p.fromNow = moment(p.fields.start).tz('America/New_York').format('h:mma')));
+  console.time('mappin');
   upcomingPrograms.map(p => {
     if (p.rating >= 9) {
       p.highlyRated = true;
@@ -1005,6 +1010,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     </section> \
   `;
   const html = mustache.render(template, { location, boxes, upcomingPrograms });
+  console.timeEnd('mappin');
   return respond(200, { html });
 });
 
