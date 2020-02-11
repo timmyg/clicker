@@ -998,7 +998,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       </ul> \
     </section> \
   `;
-  const html = mustache.render(template, { location, upcomingPrograms });
+  const html = mustache.render(template, { location, boxes, upcomingPrograms });
   return respond(200, { html });
 });
 
