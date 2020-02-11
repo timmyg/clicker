@@ -541,9 +541,7 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
     .toISOString();
 
   let filterByFormula: string[] = [`{start} > '${fourHoursAgo}'`, `{start} < '${fourHoursFromNow}'`];
-  // if (hasRating) {
   filterByFormula.push(`{rating} != BLANK()`);
-  // }
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
       filterByFormula: `AND(${filterByFormula.join(',')})`,
@@ -563,12 +561,9 @@ module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
     .headers(event.headers)
     .go();
 
-  console.log(location);
   const locationProgrammingIds = location.boxes.filter(b => !!b.zone).map(b => b.program && b.program.programmingId);
-  console.log({ locationProgrammingIds });
   const allUpcomingPrograms = await getAirtableProgramsInWindow();
-  console.log(allUpcomingPrograms.length);
-  const upcomingPrograms = allUpcomingPrograms.filter(upcoming => locationProgrammingIds.includes(upcoming.episodeId));
+  const upcomingPrograms = allUpcomingPrograms.filter(upcoming => !locationProgrammingIds.includes(upcoming.episodeId));
 
   return respond(200, upcomingPrograms);
 });

@@ -3,6 +3,7 @@ const { respond, getBody, getPathParameters, Invoke, Raven, RavenLambdaWrapper }
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
+const mustache = require('mustache');
 const uuid = require('uuid/v1');
 const Airtable = require('airtable');
 // const awsXRay = require('aws-xray-sdk');
@@ -972,6 +973,27 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   html += `
     </ul>
   </section>`;
+
+  // upcoming
+  const { data: upcomingPrograms } = await new Invoke()
+    .service('program')
+    .name('get')
+    .queryParams({ locationId: location.id })
+    .headers(event.headers)
+    .go();
+
+  const template = `<section>
+    <h3>Upcoming:</h3>
+    <ul>
+      {{#upcomingPrograms}}
+        <li>{{channelTitle}}: {{title}}</li>
+      {{/upcomingPrograms}}
+    </ul>
+    </section>
+    `;
+  const html2 = mustache.render(template, { upcomingPrograms });
+  html += html2;
+
   return respond(200, { html });
 });
 
