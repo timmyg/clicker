@@ -2,7 +2,9 @@
 const { respond, getBody, getPathParameters, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
-const moment = require('moment');
+const moment = require('moment-timezone');
+// const momentHelper = require('helper-moment');
+const mustache = require('mustache');
 const uuid = require('uuid/v1');
 const Airtable = require('airtable');
 // const awsXRay = require('aws-xray-sdk');
@@ -206,7 +208,6 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('GET!');
   const { id } = getPathParameters(event);
 
   console.time('get from db');
@@ -235,7 +236,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     }
 
     console.time('filter + sort');
-    location.boxes = location.boxes.filter(b => b.appActive);
+    if (event.headers && event.headers.app && event.headers.app.length) {
+      location.boxes = location.boxes.filter(b => b.appActive);
+    }
 
     // filter out inactive boxes
     // sort boxes alphabetically
@@ -957,20 +960,47 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .queryOne('id')
     .eq(id)
     .exec();
-  let html = `
-  <section>
-  <h3>Now Showing:</h3>
-  <h4>${location.name} (${location.neighborhood})</h4>
-    <ul>`;
   const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
-  boxes.forEach(box => {
-    if (box.channel) {
-      html += `<li><b>Box ${box.label}</b>: ${box.channel} <em>${box.program ? box.program.title : ''}</em></li>`;
-    }
-  });
-  html += `
-    </ul>
-  </section>`;
+
+  const { data: upcomingPrograms } = await new Invoke()
+    .service('program')
+    .name('upcoming')
+    .queryParams({ locationId: location.id })
+    .headers(event.headers)
+    .go();
+
+  // TODO EST is hardcoded!
+  // upcomingPrograms.map(p => (p.fromNow = moment(p.fields.start).tz('America/New_York').format('h:mma')));
+  upcomingPrograms.map(
+    p =>
+      (p.fromNow = moment(p.fields.start)
+        .tz('America/New_York')
+        .fromNow()),
+  );
+  const template = `\
+    <section> \
+    {{#location}}
+    <h4>{{name}} ({{neighborhood}})</h4> \
+    <h3>Now Showing:</h3> \
+      <ul> \
+      {{#boxes}} \
+        <li> \
+          <b>Box {{label}}</b>: {{channel}} <em>{{program.title}}</em> \
+        </li> \
+      {{/boxes}} \
+      </ul> \ 
+    {{/location}} \
+    </section> \  
+    <section> \
+      <h3>Upcoming:</h3> \
+      <ul> \
+        {{#upcomingPrograms}} \
+          <li>{{fields.channelTitle}}: {{fields.title}} <em>{{fromNow}}</em></li> \
+        {{/upcomingPrograms}} \
+      </ul> \
+    </section> \
+  `;
+  const html = mustache.render(template, { location, upcomingPrograms });
   return respond(200, { html });
 });
 

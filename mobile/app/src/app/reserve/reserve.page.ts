@@ -32,6 +32,8 @@ export class ReservePage {
   pageSub: Subscription;
   routerListerSub: Subscription;
   channelsClick = 0;
+  updateAvailable: boolean;
+  channelsEnabled: boolean;
 
   constructor(
     public reserveService: ReserveService,
@@ -63,6 +65,17 @@ export class ReservePage {
       this.goBack();
     });
   }
+
+  async updateIfAvailable() {
+    if (this.platform.is("capacitor")) {
+      const update = await this.deploy.checkForUpdate();
+      if (update.available) {
+        // We have an update!
+        this.updateAvailable = true;
+      }
+    }
+  }
+
   ngOnDestroy() {
     if (this.sub) this.sub.unsubscribe();
     if (this.pageSub) this.pageSub.unsubscribe();
@@ -111,6 +124,12 @@ export class ReservePage {
       if (this.walletModal) this.walletModal.close();
     });
     return await this.walletModal.present();
+  }
+
+  async forceUpdate(channel = "Production") {
+    console.log(channel);
+    await this.deploy.configure({ channel });
+    await this.deploy.sync({ updateMethod: "auto" });
   }
 
   isSearchablePage() {
@@ -175,26 +194,11 @@ export class ReservePage {
 
   async toggleChannel() {
     this.channelsClick++;
-    console.log(this.channelsClick);
     if (this.channelsClick === 7) {
-      if (!this.platform.is("capacitor")) {
-        return this.showToast(`capacitor only`);
-      }
-      const channel = "Master";
-      await this.deploy.configure({ channel });
-      await this.deploy.sync({ updateMethod: "auto" });
-      this.showToast(`🕵️‍♀ switch to channel: ${channel}`);
-    } else if (this.channelsClick === 14) {
-      const channel = "Develop";
-      await this.deploy.configure({ channel });
-      await this.deploy.sync({ updateMethod: "auto" });
-      this.showToast(`🕵️‍♀ switch to channel: ${channel}`);
-    } else if (this.channelsClick === 21) {
-      const channel = "Production";
-      await this.deploy.configure({ channel });
-      await this.deploy.sync({ updateMethod: "auto" });
-      this.showToast(`🕵️‍♀ switch to channel: ${channel}`);
+      this.channelsEnabled = true;
       this.channelsClick = 0;
+    } else {
+      this.channelsEnabled = false;
     }
   }
 
