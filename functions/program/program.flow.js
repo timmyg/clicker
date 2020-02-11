@@ -545,6 +545,7 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
       filterByFormula: `AND(${filterByFormula.join(',')})`,
+      sort: [{ field: 'start', direction: 'asc' }],
     })
     .all();
   return updatedAirtablePrograms;

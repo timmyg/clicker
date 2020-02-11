@@ -986,7 +986,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       <ul> \
       {{#boxes}} \
         <li> \
-          <b>Box {{zone}}</b>: {{channel}} <em>{{program.title}}</em> \
+          <b>Box {{zone}}</b>: {{program.channelTitle}} <em>{{program.title}}</em> \
         </li> \
       {{/boxes}} \
       </ul> \ 
@@ -996,7 +996,9 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       <ul> \
         {{#upcomingPrograms}} \
           <li>
+            {{#highlyRated}}<b>{{/highlyRated}}
             {{fields.channelTitle}}: {{fields.title}} <em>{{fromNow}}</em>
+            {{#highlyRated}}</b>{{/highlyRated}}
           </li> \
         {{/upcomingPrograms}} \
       </ul> \
