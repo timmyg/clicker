@@ -234,7 +234,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     }
 
     console.time('filter + sort');
-    if (event.headers.app && event.headers.app.length) {
+    if (event.headers && event.headers.app && event.headers.app.length) {
       location.boxes = location.boxes.filter(b => b.appActive);
     }
 
