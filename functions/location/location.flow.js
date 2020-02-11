@@ -971,12 +971,12 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 
   // TODO EST is hardcoded!
   // upcomingPrograms.map(p => (p.fromNow = moment(p.fields.start).tz('America/New_York').format('h:mma')));
-  upcomingPrograms.map(
-    p =>
-      (p.fromNow = moment(p.fields.start)
-        .tz('America/New_York')
-        .fromNow()),
-  );
+  upcomingPrograms.map(p => {
+    p.emoji = getEmoji(p.rating);
+    return (p.fromNow = moment(p.fields.start)
+      .tz('America/New_York')
+      .fromNow());
+  });
   const template = `\
     <section> \
     <h3>{{location.name}} ({{location.neighborhood}})</h4> \
@@ -993,7 +993,10 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       <h4>Upcoming:</h4> \
       <ul> \
         {{#upcomingPrograms}} \
-          <li>{{fields.channelTitle}}: {{fields.title}} <em>{{fromNow}}</em></li> \
+          <li>
+            {{emoji}}&nbsp;
+            {{fields.channelTitle}}: {{fields.title}} <em>{{fromNow}}</em>
+          </li> \
         {{/upcomingPrograms}} \
       </ul> \
     </section> \
@@ -1001,6 +1004,28 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   const html = mustache.render(template, { location, boxes, upcomingPrograms });
   return respond(200, { html });
 });
+
+function getEmoji(rating: number): string {
+  switch (rating) {
+    case 10:
+    case 9:
+      return 🤩;
+    case 8:
+    case 7:
+      return 😃;
+    case 6:
+    case 5:
+      return 😊;
+    case 4:
+    case 3:
+      return 😐;
+    case 2:
+    case 1:
+      return 😴;
+    default:
+      return '';
+  }
+}
 
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
