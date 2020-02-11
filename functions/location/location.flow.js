@@ -3,6 +3,7 @@ const { respond, getBody, getPathParameters, Invoke, Raven, RavenLambdaWrapper }
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment');
+const momentHelper = require('helper-moment');
 const mustache = require('mustache');
 const uuid = require('uuid/v1');
 const Airtable = require('airtable');
@@ -959,40 +960,41 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .queryOne('id')
     .eq(id)
     .exec();
-  let html = `
-  <section>
-  <h3>Now Showing:</h3>
-  <h4>${location.name} (${location.neighborhood})</h4>
-    <ul>`;
   const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
-  boxes.forEach(box => {
-    if (box.channel) {
-      html += `<li><b>Box ${box.label}</b>: ${box.channel} <em>${box.program ? box.program.title : ''}</em></li>`;
-    }
-  });
-  html += `
-    </ul>
-  </section>`;
+  const nowShowingTemplate = ` \
+  <section> \
+  <h3>Now Showing:</h3> \
+  <h4>{{name}} ({{neighborhood}})</h4> \
+    <ul> \
+    {{#boxes}} \
+      <li> \
+        <b>Box {{label}}</b>: {{channel}} <em>{{program.title}}</em> \
+      </li> \
+    {{/boxes}} \
+    </ul> \ 
+  </section> \  
+  `;
+  const nowShowingHtml = mustache.render(nowShowingTemplate, location);
 
-  // upcoming
   const { data: upcomingPrograms } = await new Invoke()
     .service('program')
-    .name('get')
+    .name('upcoming')
     .queryParams({ locationId: location.id })
     .headers(event.headers)
     .go();
 
-  const template = `<section>
-    <h3>Upcoming:</h3>
-    <ul>
-      {{#upcomingPrograms}}
-        <li>{{channelTitle}}: {{title}}</li>
-      {{/upcomingPrograms}}
-    </ul>
-    </section>
+  upcomingPrograms.map(p => (p.startPretty = moment(p.fields.start).format('h:mma')));
+  const upcomingTemplate = `<section> \
+    <h3>Upcoming:</h3> \
+    <ul> \
+      {{#upcomingPrograms}} \
+        <li>{{fields.channelTitle}}: {{fields.title}} at {{startPretty}}</li> \
+      {{/upcomingPrograms}} \
+    </ul> \
+    </section> \
     `;
-  const html2 = mustache.render(template, { upcomingPrograms });
-  html += html2;
+  const upcomingHtml = mustache.render(upcomingTemplate, { upcomingPrograms });
+  const html = nowShowingHtml + upcomingHtml;
 
   return respond(200, { html });
 });
