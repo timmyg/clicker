@@ -2,8 +2,8 @@
 const { respond, getBody, getPathParameters, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
-const moment = require('moment');
-const momentHelper = require('helper-moment');
+const moment = require('moment-timezone');
+// const momentHelper = require('helper-moment');
 const mustache = require('mustache');
 const uuid = require('uuid/v1');
 const Airtable = require('airtable');
@@ -961,20 +961,6 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .eq(id)
     .exec();
   const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
-  const nowShowingTemplate = ` \
-  <section> \
-  <h3>Now Showing:</h3> \
-  <h4>{{name}} ({{neighborhood}})</h4> \
-    <ul> \
-    {{#boxes}} \
-      <li> \
-        <b>Box {{label}}</b>: {{channel}} <em>{{program.title}}</em> \
-      </li> \
-    {{/boxes}} \
-    </ul> \ 
-  </section> \  
-  `;
-  const nowShowingHtml = mustache.render(nowShowingTemplate, location);
 
   const { data: upcomingPrograms } = await new Invoke()
     .service('program')
@@ -983,19 +969,38 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .headers(event.headers)
     .go();
 
-  upcomingPrograms.map(p => (p.startPretty = moment(p.fields.start).format('h:mma')));
-  const upcomingTemplate = `<section> \
-    <h3>Upcoming:</h3> \
-    <ul> \
-      {{#upcomingPrograms}} \
-        <li>{{fields.channelTitle}}: {{fields.title}} at {{startPretty}}</li> \
-      {{/upcomingPrograms}} \
-    </ul> \
+  // TODO EST is hardcoded!
+  // upcomingPrograms.map(p => (p.fromNow = moment(p.fields.start).tz('America/New_York').format('h:mma')));
+  upcomingPrograms.map(
+    p =>
+      (p.fromNow = moment(p.fields.start)
+        .tz('America/New_York')
+        .fromNow()),
+  );
+  const template = `\
+    <section> \
+    {{#location}}
+    <h4>{{name}} ({{neighborhood}})</h4> \
+    <h3>Now Showing:</h3> \
+      <ul> \
+      {{#boxes}} \
+        <li> \
+          <b>Box {{label}}</b>: {{channel}} <em>{{program.title}}</em> \
+        </li> \
+      {{/boxes}} \
+      </ul> \ 
+    {{/location}} \
+    </section> \  
+    <section> \
+      <h3>Upcoming:</h3> \
+      <ul> \
+        {{#upcomingPrograms}} \
+          <li>{{fields.channelTitle}}: {{fields.title}} <em>{{fromNow}}</em></li> \
+        {{/upcomingPrograms}} \
+      </ul> \
     </section> \
-    `;
-  const upcomingHtml = mustache.render(upcomingTemplate, { upcomingPrograms });
-  const html = nowShowingHtml + upcomingHtml;
-
+  `;
+  const html = mustache.render(template, { location, upcomingPrograms });
   return respond(200, { html });
 });
 

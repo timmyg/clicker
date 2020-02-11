@@ -16,6 +16,7 @@ export class LocationDetailPage {
   html: string;
   isLoading$: Observable<boolean>;
   @Input() locationId: string;
+  loadDataManually: boolean;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -26,12 +27,21 @@ export class LocationDetailPage {
   }
 
   ngOnInit() {
-    this.store.dispatch(
-      new fromLocation.GetDetailsPage(this.locationId)
-    );
+    this.loadData();
   }
 
   onCloseClick() {
     this.modalController.dismiss();
+  }
+
+  doRefresh(event) {
+    this.loadData();
+    event.target.complete();
+  }
+
+  private loadData() {
+    this.store.dispatch(
+      new fromLocation.GetDetailsPage(this.locationId)
+    );
   }
 }
