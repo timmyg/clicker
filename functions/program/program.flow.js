@@ -530,7 +530,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursFromNow = 4) {
+async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Control Center';
   const fourHoursAgo = moment()
@@ -541,9 +541,7 @@ async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursF
     .toISOString();
 
   let filterByFormula: string[] = [`{start} > '${fourHoursAgo}'`, `{start} < '${fourHoursFromNow}'`];
-  if (hasGameAttached) {
-    filterByFormula.push(`{rating} != BLANK()`);
-  }
+  filterByFormula.push(`{rating} != BLANK()`);
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
       filterByFormula: `AND(${filterByFormula.join(',')})`,
@@ -552,8 +550,26 @@ async function getAirtableProgramsInWindow(hasGameAttached, hoursAgo = 4, hoursF
   return updatedAirtablePrograms;
 }
 
+module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId } = event.queryStringParameters;
+
+  console.log({ locationId });
+  const { data: location }: { data: Venue } = await new Invoke()
+    .service('location')
+    .name('get')
+    .pathParams({ id: locationId })
+    .headers(event.headers)
+    .go();
+
+  const locationProgrammingIds = location.boxes.filter(b => !!b.zone).map(b => b.program && b.program.programmingId);
+  const allUpcomingPrograms = await getAirtableProgramsInWindow();
+  const upcomingPrograms = allUpcomingPrograms.filter(upcoming => !locationProgrammingIds.includes(upcoming.episodeId));
+
+  return respond(200, upcomingPrograms);
+});
+
 module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
-  const updatedAirtablePrograms = await getAirtableProgramsInWindow(true, 2, 1);
+  const updatedAirtablePrograms = await getAirtableProgramsInWindow(2, 1);
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');

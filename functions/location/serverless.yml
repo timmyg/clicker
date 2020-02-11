@@ -260,6 +260,7 @@ functions:
   getLocationDetailsPage:
     handler: location.getLocationDetailsPage
     description: location details rendered html page for app
+    timeout: 10
     events:
       - http:
           path: '{id}/details/page'

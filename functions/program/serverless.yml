@@ -379,3 +379,10 @@ functions:
       - http:
           path: game
           method: post
+  upcoming:
+    handler: program.upcoming
+    runtime: nodejs12.x
+    events:
+      - http:
+          path: '{locationId}/upcoming'
+          method: get

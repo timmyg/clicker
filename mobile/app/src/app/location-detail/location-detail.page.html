@@ -10,6 +10,15 @@
 </ion-header>
 
 <ion-content padding-horizontal>
+  <ion-refresher slot="fixed" [pullMax]="300" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Pull to refresh"
+      refreshingSpinner="crescent"
+      refreshingText=""
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-row *ngIf="(isLoading$ | async); else ready" margin-vertical>
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
