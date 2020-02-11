@@ -119,5 +119,35 @@
       [value]="percentageComplete"
     ></ion-progress-bar>
   </ion-row>
+  <ion-row
+    flex
+    *ngIf="updateAvailable"
+    class="ion-justify-content-center"
+    padding-vertical
+  >
+    <ion-button (click)="forceUpdate()">
+      <ion-icon slot="start" name="trophy"></ion-icon>
+      Update Available! Click to update.
+    </ion-button>
+  </ion-row>
+  <ion-row
+    flex
+    *ngIf="channelsEnabled"
+    class="ion-justify-content-center"
+    padding-vertical
+  >
+    <ion-button color="primary" (click)="forceUpdate()">
+      <ion-icon slot="start" name="trophy"></ion-icon>
+      Update to Production channel.
+    </ion-button>
+    <ion-button color="medium" (click)="forceUpdate('Master')">
+      <ion-icon slot="start" name="trophy"></ion-icon>
+      Update to Master channel.
+    </ion-button>
+    <ion-button color="dark" (click)="forceUpdate('Develop')">
+      <ion-icon slot="start" name="trophy"></ion-icon>
+      Update to Develop channel.
+    </ion-button>
+  </ion-row>
   <router-outlet></router-outlet>
 </ion-content>
