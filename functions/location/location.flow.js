@@ -206,7 +206,6 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('GET!');
   const { id } = getPathParameters(event);
 
   console.time('get from db');
@@ -235,7 +234,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     }
 
     console.time('filter + sort');
-    location.boxes = location.boxes.filter(b => b.appActive);
+    if (event.headers.app && event.headers.app.length) {
+      location.boxes = location.boxes.filter(b => b.appActive);
+    }
 
     // filter out inactive boxes
     // sort boxes alphabetically
