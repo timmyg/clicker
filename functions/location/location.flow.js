@@ -1009,19 +1009,19 @@ function getEmoji(rating: number): string {
   switch (rating) {
     case 10:
     case 9:
-      return 🤩;
+      return '🤩';
     case 8:
     case 7:
-      return 😃;
+      return '😃';
     case 6:
     case 5:
-      return 😊;
+      return '😊';
     case 4:
     case 3:
-      return 😐;
+      return '😐';
     case 2:
     case 1:
-      return 😴;
+      return '😴';
     default:
       return '';
   }
