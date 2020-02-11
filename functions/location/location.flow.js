@@ -972,7 +972,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   // TODO EST is hardcoded!
   // upcomingPrograms.map(p => (p.fromNow = moment(p.fields.start).tz('America/New_York').format('h:mma')));
   upcomingPrograms.map(p => {
-    p.emoji = getEmoji(p.rating);
+    // p.emoji = getEmoji(p.rating);
     return (p.fromNow = moment(p.fields.start)
       .tz('America/New_York')
       .fromNow());
@@ -1005,27 +1005,27 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   return respond(200, { html });
 });
 
-function getEmoji(rating: number): string {
-  switch (rating) {
-    case 10:
-    case 9:
-      return '🤩'.codePointAt(0).toString(16);
-    case 8:
-    case 7:
-      return '😃'.codePointAt(0).toString(16);
-    case 6:
-    case 5:
-      return '😊'.codePointAt(0).toString(16);
-    case 4:
-    case 3:
-      return '😐'.codePointAt(0).toString(16);
-    case 2:
-    case 1:
-      return '😴'.codePointAt(0).toString(16);
-    default:
-      return '';
-  }
-}
+// function getEmoji(rating: number): string {
+//   switch (rating) {
+//     case 10:
+//     case 9:
+//       return '🤩'.codePointAt(0).toString(16);
+//     case 8:
+//     case 7:
+//       return '😃'.codePointAt(0).toString(16);
+//     case 6:
+//     case 5:
+//       return '😊'.codePointAt(0).toString(16);
+//     case 4:
+//     case 3:
+//       return '😐'.codePointAt(0).toString(16);
+//     case 2:
+//     case 1:
+//       return '😴'.codePointAt(0).toString(16);
+//     default:
+//       return '';
+//   }
+// }
 
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
