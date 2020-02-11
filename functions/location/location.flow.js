@@ -979,8 +979,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   );
   const template = `\
     <section> \
-    {{#location}}
-    <h4>{{name}} ({{neighborhood}})</h4> \
+    <h4>{{location.name}} ({{location.neighborhood}})</h4> \
     <h3>Now Showing:</h3> \
       <ul> \
       {{#boxes}} \
@@ -989,7 +988,6 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
         </li> \
       {{/boxes}} \
       </ul> \ 
-    {{/location}} \
     </section> \  
     <section> \
       <h3>Upcoming:</h3> \
