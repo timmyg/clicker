@@ -37,7 +37,7 @@ export default {
       })
     ])
       .then(([posts]) => {
-        // console.log(JSON.stringify(posts.items[0]));
+        console.log(JSON.stringify(posts.items[0]));
         return {
           posts: posts.items
         };
