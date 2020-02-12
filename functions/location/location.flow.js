@@ -982,7 +982,9 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       .tz('America/New_York')
       .fromNow());
   });
+  const currentProgrammingIds = location.boxes.filter(b => !!b.program).map(b => b.program.programmingId);
   console.log({ upcomingPrograms });
+  upcomingPrograms.filter(p => !currentProgrammingIds.includes(p.fields.programmingId));
   const template = `\
     <section> \
     <h3>{{location.name}} ({{location.neighborhood}})</h4> \
