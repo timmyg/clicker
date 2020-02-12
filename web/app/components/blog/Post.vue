@@ -1,7 +1,10 @@
 <template>
   <article>
     <!-- <div class="img-wrapper"> -->
-    <img :src="post.fields.featuredImage.fields.file.url + '?fit=fill&w=1500&h=450&f=center'" />
+    <img
+      v-if="post.fields.featuredImage"
+      :src="post.fields.featuredImage.fields.file.url + '?fit=fill&w=1500&h=450&f=center'"
+    />
     <!-- </div> -->
     <h1 class="title is-2">{{ post.fields.title }}</h1>
     <hr />
@@ -11,7 +14,7 @@
 
 <script>
 export default {
-  props: ['post'],
+  props: ["post"]
 };
 </script>
 

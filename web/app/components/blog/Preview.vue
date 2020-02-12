@@ -1,8 +1,9 @@
 <template>
-  <article>
+  <article v-if="post.fields">
     <nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }" class="title">
       <div class="wrap">
         <img
+          v-if="post.fields.featuredImage"
           class="primary thumbnail"
           :src="post.fields.featuredImage.fields.file.url + '?fit=scale&w=350&h=196'"
           :srcset="
@@ -26,15 +27,14 @@
         :key="tag"
         :to="{ name: 'tags-tag', params: { tag: tag } }"
         class="tag"
-        >{{ tag }}</nuxt-link
-      >
+      >{{ tag }}</nuxt-link>
     </div>
   </article>
 </template>
 
 <script>
 export default {
-  props: ['post'],
+  props: ["post"]
 };
 </script>
 
