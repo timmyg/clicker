@@ -1,10 +1,12 @@
 <template>
   <div>
-    <span v-if="submitted" class="success">Thank you! We'll be in contact.</span>
-    <p
-      v-else-if="error"
-      class="error"
-    >Oh no! Something is wrong on our end. We've been alerted, please try again in a bit.</p>
+    <span v-if="submitted" class="success"
+      >Thank you! We'll be in contact.</span
+    >
+    <p v-else-if="error" class="error">
+      Oh no! Something is wrong on our end. We've been alerted, please try again
+      in a bit.
+    </p>
     <form
       class="footer-form newsletter-form field field-grouped"
       id="signup-form"
@@ -44,7 +46,9 @@
           type="submit"
           :disabled="submitting"
           class="button button-primary button-block button-shadow"
-        >I'm Interested</button>
+        >
+          I'm Interested
+        </button>
         <!-- <button
           type="submit"
           :disabled="submitting"
@@ -73,13 +77,13 @@ export default {
     //   return this.submitting ? "Submitting..." : "I'm Interested";
     // },
     onSubmit() {
-      console.log("onsubmit");
+      // console.log("onsubmit");
       if (!this.email || !this.email.length) {
         return false;
       }
       this.submitting = true;
       const { email, emailBot1, emailBot2 } = this;
-      console.log({ email, emailBot1, emailBot2 });
+      // console.log({ email, emailBot1, emailBot2 });
       if (emailBot1 !== "dave@dmb.com" || emailBot2 !== "matthews@dmb.com") {
         console.info("get outta here bot!");
         // return;
