@@ -965,7 +965,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   const boxes = location.boxes.filter(box => !!box.zone).sort((a, b) => a.zone.localeCompare(b.zone));
 
   console.time('get upcoming programs');
-  const { data: upcomingPrograms } = await new Invoke()
+  let { data: upcomingPrograms } = await new Invoke()
     .service('program')
     .name('upcoming')
     .queryParams({ locationId: location.id })
@@ -984,7 +984,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   });
   const currentProgrammingIds = location.boxes.filter(b => !!b.program).map(b => b.program.programmingId);
   console.log({ upcomingPrograms });
-  upcomingPrograms.filter(p => !currentProgrammingIds.includes(p.fields.programmingId));
+  upcomingPrograms = upcomingPrograms.filter(p => !currentProgrammingIds.includes(p.fields.programmingId));
   const template = `\
     <section> \
     <h3>{{location.name}} ({{location.neighborhood}})</h4> \
