@@ -956,51 +956,63 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
 
 module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
+  console.time('get location');
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)
     .exec();
-  const boxes = location.boxes.sort((a, b) => a.label.localeCompare(b.label));
+  console.timeEnd('get location');
+  const boxes = location.boxes.filter(box => !!box.zone).sort((a, b) => a.zone.localeCompare(b.zone));
 
-  const { data: upcomingPrograms } = await new Invoke()
+  console.time('get upcoming programs');
+  let { data: upcomingPrograms } = await new Invoke()
     .service('program')
     .name('upcoming')
     .queryParams({ locationId: location.id })
     .headers(event.headers)
     .go();
+  console.timeEnd('get upcoming programs');
 
-  // TODO EST is hardcoded!
-  // upcomingPrograms.map(p => (p.fromNow = moment(p.fields.start).tz('America/New_York').format('h:mma')));
-  upcomingPrograms.map(
-    p =>
-      (p.fromNow = moment(p.fields.start)
-        .tz('America/New_York')
-        .fromNow()),
-  );
+  console.time('mappin');
+  upcomingPrograms.map(p => {
+    if (p.fields.rating >= 8) {
+      p.highlyRated = true;
+    }
+    return (p.fromNow = moment(p.fields.start)
+      .tz('America/New_York')
+      .fromNow());
+  });
+  const currentProgrammingIds = location.boxes.filter(b => !!b.program).map(b => b.program.programmingId);
+  console.log({ upcomingPrograms });
+  upcomingPrograms = upcomingPrograms.filter(p => !currentProgrammingIds.includes(p.fields.programmingId));
   const template = `\
     <section> \
-    {{#location}}
-    <h4>{{name}} ({{neighborhood}})</h4> \
-    <h3>Now Showing:</h3> \
+    <h3>{{location.name}} ({{location.neighborhood}})</h4> \
+    <h4>Now Showing:</h4> \
       <ul> \
       {{#boxes}} \
         <li> \
-          <b>Box {{label}}</b>: {{channel}} <em>{{program.title}}</em> \
+          <b>Box {{zone}}</b>: {{program.channelTitle}} <em>{{program.title}}</em> \
         </li> \
       {{/boxes}} \
       </ul> \ 
-    {{/location}} \
     </section> \  
     <section> \
-      <h3>Upcoming:</h3> \
+      <h4>Upcoming:</h4> \
       <ul> \
         {{#upcomingPrograms}} \
-          <li>{{fields.channelTitle}}: {{fields.title}} <em>{{fromNow}}</em></li> \
+          <li> \
+            {{#highlyRated}}<b>{{/highlyRated}} \
+            {{fields.channelTitle}}: {{fields.title}} \
+            {{#highlyRated}}</b>{{/highlyRated}} \
+            <em>({{fromNow}})</em> \
+          </li> \
         {{/upcomingPrograms}} \
       </ul> \
     </section> \
   `;
-  const html = mustache.render(template, { location, upcomingPrograms });
+  const html = mustache.render(template, { location, boxes, upcomingPrograms });
+  console.timeEnd('mappin');
   return respond(200, { html });
 });
 

@@ -545,11 +545,14 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   filterByFormula.push(`{start} < '${fourHoursFromNow}'`);
   filterByFormula.push(`{rating} != BLANK()`);
   filterByFormula.push(`{isOver} != 'Y'`);
+  console.time('airtable call');
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
       filterByFormula: `AND(${filterByFormula.join(',')})`,
+      sort: [{ field: 'start', direction: 'asc' }],
     })
     .all();
+  console.timeEnd('airtable call');
   return updatedAirtablePrograms;
 }
 

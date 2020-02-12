@@ -7,6 +7,7 @@
     />
     <!-- </div> -->
     <h1 class="title is-2">{{ post.fields.title }}</h1>
+    <h5 class="date">{{(post.fields.date || post.sys.createdAt) | moment('MMMM Do YYYY')}}</h5>
     <hr />
     <div v-html="$md.render(post.fields.content)"></div>
   </article>

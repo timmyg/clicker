@@ -15,7 +15,7 @@
         />
         <div class="secondary">
           <h4 class="title">{{ post.fields.title }}</h4>
-          <time>{{ post.sys.createdAt | moment('MMMM Do YYYY') }}</time>
+          <time>{{ (post.fields.date || post.sys.createdAt) | moment('MMMM Do YYYY') }}</time>
           <p>{{ post.fields.summary }}</p>
         </div>
       </div>

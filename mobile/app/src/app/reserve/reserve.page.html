@@ -138,15 +138,20 @@
   >
     <ion-button color="primary" (click)="forceUpdate()">
       <ion-icon slot="start" name="trophy"></ion-icon>
-      Update to Production channel.
+      Update to Production channel
     </ion-button>
-    <ion-button color="medium" (click)="forceUpdate('Master')">
-      <ion-icon slot="start" name="trophy"></ion-icon>
-      Update to Master channel.
+    <h6>Developer Options:</h6>
+    <ion-button color="light" (click)="forceUpdate('Master')">
+      <ion-icon slot="start" name="color-wand"></ion-icon>
+      Update to Master channel
+    </ion-button>
+    <ion-button color="medium" (click)="forceUpdate('Release')">
+      <ion-icon slot="start" name="color-wand"></ion-icon>
+      Update to Release channel
     </ion-button>
     <ion-button color="dark" (click)="forceUpdate('Develop')">
-      <ion-icon slot="start" name="trophy"></ion-icon>
-      Update to Develop channel.
+      <ion-icon slot="start" name="color-wand"></ion-icon>
+      Update to Develop channel
     </ion-button>
   </ion-row>
   <router-outlet></router-outlet>
