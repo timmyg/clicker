@@ -8,21 +8,21 @@
       <Pricing />
       <Faq />
       <Testimonials />
-      <Signup />
+      <Signup :dividers="true" />
     </div>
   </layout-basic>
 </template>
 
 <script>
-import Hero from '@/components/landing/Hero';
-import Faq from '@/components/landing/Faq';
-import Features from '@/components/landing/Features';
-import LayoutBasic from '@/components/layouts/Basic';
-import Products from '@/components/landing/Products';
-import Pricing from '@/components/landing/Pricing';
-import Signup from '@/components/landing/Signup';
-import FeaturesCards from '@/components/landing/FeaturesCards';
-import Testimonials from '@/components/landing/Testimonials';
+import Hero from "@/components/landing/Hero";
+import Faq from "@/components/landing/Faq";
+import Features from "@/components/landing/Features";
+import LayoutBasic from "@/components/layouts/Basic";
+import Products from "@/components/landing/Products";
+import Pricing from "@/components/landing/Pricing";
+import Signup from "@/components/landing/Signup";
+import FeaturesCards from "@/components/landing/FeaturesCards";
+import Testimonials from "@/components/landing/Testimonials";
 export default {
   components: {
     Faq,
@@ -33,8 +33,8 @@ export default {
     Pricing,
     Signup,
     FeaturesCards,
-    Testimonials,
-  },
+    Testimonials
+  }
 };
 </script>
 

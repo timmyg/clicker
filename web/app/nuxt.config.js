@@ -7,7 +7,7 @@ let dynamicRoutes = () => {
   return Promise.all([
     client.getEntries({
       content_type: "blogPost",
-      order: "-sys.createdAt"
+      order: "-fields.date"
     })
   ])
     .then(([posts]) => {

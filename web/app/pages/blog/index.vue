@@ -4,8 +4,8 @@
     <main>
       <div class="container">
         <div class="columns">
-          <div class="column is-offset-2 is-8">
-            <div v-for="(post, index) in posts" :key="index">
+          <div class="column is-offset-2 is-8 mt-16">
+            <div v-for="(post, index) in posts" :key="index" class="pt-8">
               <Preview :post="post" />
               <hr />
             </div>
@@ -33,7 +33,7 @@ export default {
     return Promise.all([
       client.getEntries({
         content_type: "blogPost",
-        order: "-sys.createdAt"
+        order: "-fields.date"
       })
     ])
       .then(([posts]) => {
@@ -48,7 +48,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// main {
-//   padding-top: 100px;
-// }
+@import "tailwindcss";
 </style>
