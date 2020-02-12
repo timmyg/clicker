@@ -1008,6 +1008,9 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
             <em>({{fromNow}})</em> \
           </li> \
         {{/upcomingPrograms}} \
+        {{^upcomingPrograms}} \
+          Check back soon for upcoming games.
+        {{/upcomingPrograms}} \
       </ul> \
     </section> \
   `;
