@@ -7,13 +7,23 @@
       <div class="site-footer-inner">
         <div class="footer-top space-between text-xxs">
           <div class="brand">
-            <img src="https://clicker-brand.s3.amazonaws.com/logo-tv.png" alt="Clicker logo" width="32" height="32" />
+            <img
+              src="https://clicker-brand.s3.amazonaws.com/logo-tv.png"
+              alt="Clicker logo"
+              width="32"
+              height="32"
+            />
           </div>
           <div class="footer-social">
             <ul class="list-reset">
               <li>
                 <a href="https://www.facebook.com/tryclicker/" target="_blank">
-                  <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <title>Facebook</title>
                     <path
                       d="M6.023 16L6 9H3V6h3V4c0-2.7 1.672-4 4.08-4 1.153 0 2.144.086 2.433.124v2.821h-1.67c-1.31 0-1.563.623-1.563 1.536V6H13l-1 3H9.28v7H6.023z"
@@ -38,7 +48,12 @@
               </li>-->
               <li>
                 <a href="https://www.instagram.com/clickertv" target="_blank">
-                  <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <title>Instagram</title>
                     <g>
                       <circle cx="12.145" cy="3.892" r="1" />
@@ -58,9 +73,9 @@
         <div class="footer-bottom space-between text-xxs invert-order-desktop">
           <nav class="footer-nav">
             <ul class="list-reset">
-              <!-- <li>
+              <li>
                 <a href="/blog">Blog</a>
-              </li>-->
+              </li>
               <li>
                 <a href="/brand">Brand</a>
               </li>

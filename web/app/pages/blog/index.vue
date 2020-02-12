@@ -16,33 +16,33 @@
 </template>
 
 <script>
-import { createClient } from '~/plugins/contentful.js';
-import Header from '@/components/layouts/Header';
-import Preview from '~/components/blog/Preview';
-import LayoutBasic from '@/components/layouts/Basic';
+import { createClient } from "~/plugins/contentful.js";
+import Header from "@/components/layouts/Header";
+import Preview from "~/components/blog/Preview";
+import LayoutBasic from "@/components/layouts/Basic";
 
 const client = createClient();
 export default {
   components: {
     Header,
     LayoutBasic,
-    Preview,
+    Preview
   },
   asyncData({ env }) {
     return Promise.all([
       client.getEntries({
-        content_type: 'blogPost',
-        order: '-sys.createdAt',
-      }),
+        content_type: "blogPost",
+        order: "-sys.createdAt"
+      })
     ])
       .then(([posts]) => {
-        // console.log(JSON.stringify(posts.items[0]));
+        console.log(JSON.stringify(posts.items[0]));
         return {
-          posts: posts.items,
+          posts: posts.items
         };
       })
       .catch(e => console.error(e));
-  },
+  }
 };
 </script>
 

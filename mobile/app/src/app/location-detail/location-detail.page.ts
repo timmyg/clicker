@@ -16,7 +16,6 @@ export class LocationDetailPage {
   html: string;
   isLoading$: Observable<boolean>;
   @Input() locationId: string;
-  loadDataManually: boolean;
 
   constructor(
     private store: Store<fromStore.AppState>,
