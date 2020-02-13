@@ -56,6 +56,9 @@
         >{{getButtonText()}}</button>-->
       </div>
     </form>
+    <div v-if="oneMonthFree" class="promo brand-font">
+      You're getting your first month free!
+    </div>
   </div>
 </template>
 
@@ -69,7 +72,11 @@ export default {
       emailBot2: "matthews@dmb.com",
       submitting: false,
       submitted: false,
-      error: false
+      error: false,
+      oneMonthFree:
+        this.$route.query &&
+        this.$route.query.promo &&
+        this.$route.query.promo === "bizcard-1month"
     };
   },
   methods: {
@@ -92,13 +99,17 @@ export default {
       // console.log(email);
       if (this.$segment) {
         this.$segment.alias(email);
-        this.$segment.track("Interested", { email });
+        this.$segment.track("Interested", {
+          email,
+          queryParams: this.$route.query
+        });
       }
       this.$http
         .post(`${process.env.NUXT_ENV_API_BASE}/leads`, {
           email,
           emailBot1,
-          emailBot2
+          emailBot2,
+          promo: this.$route.query && this.$route.query.promo
         })
         .then(() => {
           this.submitting = false;
@@ -115,6 +126,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.promo {
+  // text-align: center;
+  font-size: 14px;
+  color: #0091ea;
+}
 .get-outta-here-bot {
   opacity: 0;
   position: absolute;

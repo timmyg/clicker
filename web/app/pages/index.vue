@@ -1,16 +1,17 @@
 <template>
-  <div id="app">
-    <Landing />
-  </div>
+  <div id="app"><Landing /></div>
 </template>
 
 <script>
-import Landing from '~/components/landing/Landing';
+import Landing from "~/components/landing/Landing";
 
 export default {
   components: {
-    Landing,
+    Landing
   },
+  mounted() {
+    console.log(this.$segment.page("landing"));
+  }
 };
 </script>
 
