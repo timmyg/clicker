@@ -1,5 +1,6 @@
 import { createClient } from "./plugins/contentful.js";
 const path = require("path");
+require("dotenv").config();
 
 let dynamicRoutes = () => {
   console.log("create dynamic routes");
@@ -16,7 +17,10 @@ let dynamicRoutes = () => {
     })
     .catch(e => console.error("dynamic routes errpor :(", e));
 };
-console.log("process.env.NUXT_ENV_API_BASE", process.env.NUXT_ENV_API_BASE);
+console.log(
+  "process.env.NUXT_ENV_SEGMENT_KEY",
+  process.env.NUXT_ENV_SEGMENT_KEY
+);
 module.exports = {
   mode: "spa",
 
