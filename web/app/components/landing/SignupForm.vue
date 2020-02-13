@@ -88,13 +88,12 @@ export default {
         console.info("get outta here bot!");
         // return;
       }
-      // console.log("$analytics");
-      // console.log(this.$analytics);
+      console.log(this.$segment);
       // console.log(email);
-      if (this.$analytics) {
-        this.$analytics.alias(email);
+      if (this.$segment) {
+        this.$segment.alias(email);
+        this.$segment.track("Interested", { email });
       }
-      // console.log(this.$http);
       this.$http
         .post(`${process.env.NUXT_ENV_API_BASE}/leads`, {
           email,
