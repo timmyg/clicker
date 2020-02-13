@@ -12,7 +12,10 @@ const webSignupsListId = '5ca63bbb28858a47be1b5f9a';
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   const { email, emailBot1, emailBot2, promo } = body;
-  const text = `*New Landing Signup*: ${email}`;
+  let text = `*New Landing Signup*: ${email}`;
+  if (promo) {
+    text += ` [*promo*: ${promo}]`;
+  }
   console.log({ email, emailBot1, emailBot2 });
   if (emailBot1 !== 'dave@dmb.com' || emailBot2 !== 'matthews@dmb.com') {
     return respond(400, "i honestly think you're a bot");
