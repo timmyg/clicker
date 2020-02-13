@@ -1,4 +1,3 @@
-// import { createClient } from "./plugins/contentful.js";
 const path = require("path");
 require("dotenv").config();
 const contentful = require("contentful");

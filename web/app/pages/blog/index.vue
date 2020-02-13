@@ -17,7 +17,6 @@
 </template>
 
 <script>
-// import { createClient } from "~/plugins/contentful.js";
 import Header from "@/components/layouts/Header";
 import Preview from "~/components/blog/Preview";
 import LayoutBasic from "@/components/layouts/Basic";
