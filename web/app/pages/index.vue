@@ -10,7 +10,9 @@ export default {
     Landing
   },
   mounted() {
-    console.log(this.$segment.page("landing"));
+    if (this.$segment) {
+      this.$segment.page("landing");
+    }
   }
 };
 </script>

@@ -7,8 +7,7 @@ const client = contentful.createClient({
 });
 
 let dynamicRoutes = () => {
-  console.log("create dynamic routes");
-  const client = createClient();
+  console.info("creating dynamic routes");
   return Promise.all([
     client.getEntries({
       content_type: "blogPost",
