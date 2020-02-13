@@ -4,8 +4,8 @@
     <main>
       <div class="container">
         <div class="columns">
-          <div class="column is-offset-2 is-8 mt-16">
-            <div v-for="(post, index) in posts" :key="index" class="pt-8">
+          <div class="column is-offset-2 is-8 lg:mt-8">
+            <div v-for="(post, index) in posts" :key="index" class="pb-4">
               <Preview :post="post" />
               <hr />
             </div>
