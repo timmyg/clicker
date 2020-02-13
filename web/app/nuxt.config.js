@@ -16,7 +16,7 @@ let dynamicRoutes = () => {
     })
     .catch(e => console.error("dynamic routes errpor :(", e));
 };
-
+console.log("process.env.NUXT_ENV_API_BASE", process.env.NUXT_ENV_API_BASE);
 module.exports = {
   mode: "spa",
 
@@ -24,10 +24,11 @@ module.exports = {
     routes: dynamicRoutes
   },
   modules: [
+    "@nuxtjs/dotenv",
     "@nuxtjs/markdownit",
     "@nuxtjs/style-resources",
     "@nuxt/http",
-    "@nuxtjs/dotenv"
+    "@dansmaculotte/nuxt-segment"
   ],
   plugins: ["~/plugins/vue-moment.js", "~/plugins/filters.js"],
   css: [
@@ -35,6 +36,9 @@ module.exports = {
     // '~assets/css/tailwind.css',
     // '@/assets/vendor/wirecss/scss/wire.scss'
   ],
+  segment: {
+    writeKey: process.env.NUXT_ENV_SEGMENT_KEY
+  },
 
   /*
    ** Headers of the page
