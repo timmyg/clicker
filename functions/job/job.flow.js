@@ -66,7 +66,7 @@ module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async 
 });
 
 function getChannelForZone(ix: number): number {
-  const initChannels = [206, 209, 212, 219, 213];
+  const initChannels = [206, 209, 219, 208, 213];
   return initChannels[ix % initChannels.length];
 }
 
