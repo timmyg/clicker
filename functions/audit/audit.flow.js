@@ -3,11 +3,11 @@ const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverl
 const dynamo = require('dynamodb');
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION } = process.env;
 console.log(AWS_ACCESS_KEY_ID.substring(0, 4), AWS_SECRET_ACCESS_KEY.substring(0, 4), AWS_REGION.substring(0, 4));
-dynamo.AWS.config.update({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
-  region: AWS_REGION,
-});
+// dynamo.AWS.config.update({
+//   accessKeyId: AWS_ACCESS_KEY_ID,
+//   secretAccessKey: AWS_SECRET_ACCESS_KEY,
+//   region: AWS_REGION,
+// });
 const Joi = require('@hapi/joi');
 // declare class process {
 //   static env: {
