@@ -15,16 +15,17 @@ const Joi = require('@hapi/joi');
 // dynamo.AWS.config.update({ region: 'us-east-1' });
 
 const Audit = dynamo.define('tableAudit', {
-  hashKey: 'date',
-  // rangeKey: 'entityId',
+  hashKey: 'yymmdd',
+  rangeKey: 'entityId',
 
   // add the timestamp attributes (updatedAt, createdAt)
   timestamps: true,
 
   schema: {
-    date: Joi.string(),
+    yymmdd: Joi.string(),
+    entity: Joi.string(),
     entityId: Joi.string(),
-    type: Joi.string(),
+    locationId: Joi.string(),
   },
 });
 
