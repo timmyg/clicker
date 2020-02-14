@@ -10,6 +10,9 @@ parameters:
   functions-analytics:
     type: boolean
     default: false
+  functions-audit:
+    type: boolean
+    default: false
   functions-app:
     type: boolean
     default: false
@@ -196,6 +199,11 @@ workflows:
     jobs:
       - serverless-build-test-deploy:
           package_dir: ~/clicker/functions/analytics
+  functions-audit:
+    when: << pipeline.parameters.functions-audit >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/audit
   functions-app:
     when: << pipeline.parameters.functions-app >>
     jobs:

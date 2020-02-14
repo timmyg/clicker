@@ -2,6 +2,7 @@ active:
   - functions/admin
   - functions/analytics
   - functions/app
+  - functions/audit
   - functions/game
   - functions/job
   - functions/lead
