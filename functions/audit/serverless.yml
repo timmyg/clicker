@@ -28,14 +28,14 @@ resources:
         TableName: ${self:custom.tableAudit}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          - AttributeName: date
+          - AttributeName: dateDay
             AttributeType: S
-          - AttributeName: entityId
+          - AttributeName: dateTimestamp
             AttributeType: S
         KeySchema:
-          - AttributeName: date
+          - AttributeName: dateDay
             KeyType: HASH
-          - AttributeName: entityId
+          - AttributeName: dateTimestamp
             KeyType: RANGE
 plugins:
   - serverless-prune-plugin

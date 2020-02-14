@@ -15,14 +15,15 @@ const Joi = require('@hapi/joi');
 // dynamo.AWS.config.update({ region: 'us-east-1' });
 
 const Audit = dynamo.define('tableAudit', {
-  hashKey: 'yymmdd',
-  rangeKey: 'entityId',
+  hashKey: 'dateDay',
+  rangeKey: 'dateTimestamp',
 
   // add the timestamp attributes (updatedAt, createdAt)
   timestamps: true,
 
   schema: {
-    yymmdd: Joi.string(),
+    dateDay: Joi.string(),
+    dateTimestamp: Joi.string(),
     entity: Joi.string(),
     entityId: Joi.string(),
     locationId: Joi.string(),
@@ -34,9 +35,9 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
-  const { date, entityId, type } = getBody(event);
-  console.log({ date, entityId, type });
-  var audit = new Audit({ date, entityId, type });
+  const { dateDay, dateTimestamp, entity, entityId, locationId } = getBody(event);
+  console.log({ dateDay, dateTimestamp, entity, entityId, locationId });
+  var audit = new Audit({ dateDay, dateTimestamp, entity, entityId, locationId });
   const result = await audit.save();
   return respond(200, result);
 });
