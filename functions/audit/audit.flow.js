@@ -1,6 +1,7 @@
 // @flow
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const dynamo = require('dynamodb');
+dynamo.AWS.config.update({ region: 'us-east-1' });
 const Joi = require('@hapi/joi');
 // declare class process {
 //   static env: {
