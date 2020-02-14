@@ -1,4 +1,4 @@
-// @flow
+//      
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const dynamo = require('dynamodb');
 const Joi = require('@hapi/joi');

@@ -4,7 +4,7 @@ provider:
   name: aws
   memorySize: 128
   versionFunctions: false
-  runtime: nodejs12.x
+  runtime: nodejs10.x
   # tracing: true
   logRetentionInDays: 14
   deploymentBucket:
