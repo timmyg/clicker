@@ -14,19 +14,19 @@ const Joi = require('@hapi/joi');
 // console.log({ dynamo }, { env: process.env });
 // dynamo.AWS.config.update({ region: 'us-east-1' });
 
-// const Audit = dynamo.define(process.env.tableAudit, {
-//   hashKey: 'date',
-//   rangeKey: 'entityId',
+const Audit = dynamo.define('tableAudit', {
+  hashKey: 'date2',
+  // rangeKey: 'entityId',
 
-//   // add the timestamp attributes (updatedAt, createdAt)
-//   timestamps: true,
+  // add the timestamp attributes (updatedAt, createdAt)
+  timestamps: true,
 
-//   schema: {
-//     date: Joi.string(),
-//     entityId: Joi.string(),
-//     type: Joi.string(),
-//   },
-// });
+  schema: {
+    date2: Joi.string(),
+    // entityId: Joi.string(),
+    // type: Joi.string(),
+  },
+});
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
@@ -34,6 +34,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const { date, entityId, type } = getBody(event);
+  console.log({ date, entityId, type });
   var audit = new Audit({ date, entityId, type });
   const result = await audit.save();
   return respond(200, result);

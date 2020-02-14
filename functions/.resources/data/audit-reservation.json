@@ -1,6 +1,7 @@
 {
   "body": {
     "type": "reservation create",
-    "locationId": "blahblah"
+    "entityId": "blahblah",
+    "date": "20200214"
   }
 }
