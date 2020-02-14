@@ -1,7 +1,9 @@
 {
   "body": {
-    "type": "reservation create",
+    "entity": "reservation:create",
     "entityId": "blahblah",
-    "date": "20200214"
+    "dateDay": "20200214",
+    "dateTimestamp": "202002143893498",
+    "locationId": "lsfj-3455435-sdflksf"
   }
 }

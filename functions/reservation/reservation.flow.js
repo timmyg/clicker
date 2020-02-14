@@ -175,7 +175,13 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   await new Invoke()
     .service('audit')
     .name('create')
-    .body({ date: '20200214', entityId: '456', type: 'reservation:create' })
+    .body({
+      dateDay: '20200214',
+      dateTimestamp: '20200214093485345',
+      entity: 'reservation:create',
+      entityId: '9340850395-43335',
+      locationId: '093845-3454353453',
+    })
     .headers(event.headers)
     .async()
     .go();

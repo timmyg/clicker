@@ -24,12 +24,10 @@
     "serverless-sentry": "^1.2.0"
   },
   "dependencies": {
-    "@hapi/joi": "^15.1.1",
-    "aws-sdk": "^2.580.0",
+    "aws-sdk": "^2.619.0",
     "aws-xray-sdk": "^2.5.0",
     "dotenv": "^6.2.0",
-    "dtrace-provider": "^0.8.8",
-    "dynamodb": "^1.2.1",
+    "dynamodb-toolbox": "^0.1.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
   }
 }
