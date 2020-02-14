@@ -12,7 +12,6 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-// import { createClient } from '~/plugins/contentful.js';
 import Post from "~/components/blog/Post";
 
 // const client = createClient();

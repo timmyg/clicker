@@ -17,12 +17,10 @@
 </template>
 
 <script>
-// import { createClient } from "~/plugins/contentful.js";
 import Header from "@/components/layouts/Header";
 import Preview from "~/components/blog/Preview";
 import LayoutBasic from "@/components/layouts/Basic";
 
-// const client = createClient();
 const contentful = require("contentful");
 const client = contentful.createClient({
   space: process.env.NUXT_ENV_CONTENTFUL_SPACE_ID,

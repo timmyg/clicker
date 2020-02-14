@@ -95,7 +95,7 @@ export default {
         console.info("get outta here bot!");
         // return;
       }
-      console.log(this.$segment);
+      // console.log(this.$segment);
       // console.log(email);
       if (this.$segment) {
         this.$segment.alias(email);

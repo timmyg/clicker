@@ -1,4 +1,3 @@
-// import { createClient } from "./plugins/contentful.js";
 const path = require("path");
 require("dotenv").config();
 const contentful = require("contentful");
@@ -8,8 +7,7 @@ const client = contentful.createClient({
 });
 
 let dynamicRoutes = () => {
-  console.log("create dynamic routes");
-  const client = createClient();
+  console.info("creating dynamic routes");
   return Promise.all([
     client.getEntries({
       content_type: "blogPost",

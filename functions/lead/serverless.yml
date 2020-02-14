@@ -60,6 +60,8 @@ functions:
       - http:
           path: ''
           method: post
+          cors:
+            origin: '*'
   health:
     handler: lead.health
     events:
