@@ -1,7 +1,12 @@
 // @flow
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const dynamo = require('dynamodb');
-dynamo.AWS.config.update({ region: 'us-east-1' });
+const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION } = process.env;
+dynamo.AWS.config.update({
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  region: AWS_REGION,
+});
 const Joi = require('@hapi/joi');
 // declare class process {
 //   static env: {
