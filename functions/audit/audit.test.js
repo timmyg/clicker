@@ -1,4 +1,4 @@
-const file = require('./admin');
+const file = require('./audit');
 
 test('smoke test', () => {
   const response = file.health();

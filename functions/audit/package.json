@@ -1,10 +1,10 @@
 {
-  "name": "admin",
+  "name": "audit",
   "version": "1.0.0",
   "description": "",
-  "main": "admin.js",
+  "main": "audit.js",
   "scripts": {
-    "build": "npx flow-remove-types admin.flow.js -o admin.js",
+    "build": "npx flow-remove-types audit.flow.js -o audit.js",
     "test": "npm run build && jest --coverage",
     "invoke:health": "serverless invoke local --function health --stage develop",
     "invoke:create": "serverless invoke local --function create --stage develop --path ../.resources/data/audit-reservation.json"
@@ -26,6 +26,7 @@
   "dependencies": {
     "aws-sdk": "^2.580.0",
     "aws-xray-sdk": "^2.5.0",
-    "dotenv": "^6.2.0"
+    "dotenv": "^6.2.0",
+    "serverless-helpers": "0.0.7"
   }
 }
