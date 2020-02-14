@@ -11,7 +11,8 @@ const Joi = require('@hapi/joi');
 //   };
 // }
 
-console.log({ dynamo });
+console.log({ dynamo }, { env: process.env });
+dynamo.AWS.config.update({ region: 'us-east-1' });
 
 const Audit = dynamo.define(process.env.tableAudit, {
   hashKey: 'date',
