@@ -11,7 +11,7 @@ const Joi = require('@hapi/joi');
 //   };
 // }
 
-const Audit = dynamo.define(process.env.tableReservation, {
+const Audit = dynamo.define(process.env.tableAudit, {
   hashKey: 'date',
   rangeKey: 'entityId',
 

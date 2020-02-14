@@ -22,7 +22,7 @@ provider:
       Resource: '*'
 resources:
   Resources:
-    GamesTable:
+    AuditsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.tableAudit}
