@@ -68,13 +68,13 @@ custom:
     basePath: ../
 functions:
   health:
-    handler: admin.health
+    handler: audit.health
     events:
       - http:
           path: health
           method: get
   create:
-    handler: admin.create
+    handler: audit.create
     events:
       - http:
           path: ''
