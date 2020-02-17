@@ -66,6 +66,7 @@ const dbUser = dynamoose.model(
     lifetimeSpent: Number,
     lifetimeMinutes: Number,
     lifetimeZaps: Number,
+    lifetimeTokens: Number,
     lifetimeTokenValue: Number,
     tokens: {
       type: Number,
@@ -231,7 +232,7 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
   // update user
   const updatedUser = await dbUser.update(
     { id: userId },
-    { $ADD: { tokens, lifetimeSpent: dollars } },
+    { $ADD: { tokens, lifetimeTokens: tokens, lifetimeSpent: dollars } },
     { returnValues: 'ALL_NEW' },
   );
   console.log('2', updatedUser);
