@@ -179,24 +179,19 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
 
-  try {
-    if (user.stripeCustomer) {
-      const customer = await stripe.customers.update(user.stripeCustomer, {
-        source: stripeCardToken,
-      });
-      return respond(200, customer);
-    } else {
-      const customer = await stripe.customers.create({
-        source: stripeCardToken,
-        description: userId,
-        phone: user.phone,
-      });
-      await dbUser.update({ id: userId }, { stripeCustomer: customer.id });
-      return respond(201, customer);
-    }
-  } catch (e) {
-    console.error(e);
-    return respond(400, e);
+  if (user.stripeCustomer) {
+    const customer = await stripe.customers.update(user.stripeCustomer, {
+      source: stripeCardToken,
+    });
+    return respond(200, customer);
+  } else {
+    const customer = await stripe.customers.create({
+      source: stripeCardToken,
+      description: userId,
+      phone: user.phone,
+    });
+    await dbUser.update({ id: userId }, { stripeCustomer: customer.id });
+    return respond(201, customer);
   }
 });
 
@@ -216,120 +211,108 @@ module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
-  try {
-    const userId = getUserId(event);
-    const plan = getBody(event);
-    const user = await dbUser
-      .queryOne('id')
-      .eq(userId)
-      .exec();
+  const userId = getUserId(event);
+  const plan = getBody(event);
+  const user = await dbUser
+    .queryOne('id')
+    .eq(userId)
+    .exec();
 
-    const { dollars, tokens } = plan;
+  const { dollars, tokens } = plan;
 
-    // charge via stripe
-    const charge = await stripe.charges.create({
-      amount: dollars * 100,
-      currency: 'usd',
-      customer: user.stripeCustomer,
+  // charge via stripe
+  const charge = await stripe.charges.create({
+    amount: dollars * 100,
+    currency: 'usd',
+    customer: user.stripeCustomer,
+  });
+
+  // update user
+  const updatedUser = await dbUser.update(
+    { id: userId },
+    { $ADD: { tokens, 'lifetime.spent': dollars } },
+    { returnValues: 'ALL_NEW' },
+  );
+
+  // update tokenValue
+  const tokenValue = getTokenValue(updatedUser);
+  const updatedUserWithCost = await dbUser.update(
+    { id: userId },
+    { 'lifetime.tokenValue': tokenValue },
+    { returnValues: 'ALL_NEW' },
+  );
+
+  const text = `$${dollars} Added to Wallet! (${user.phone}, user: ${userId.substr(userId.length - 5)})`;
+  await new Invoke()
+    .service('notification')
+    .name('sendApp')
+    .body({ text })
+    .async()
+    .go();
+
+  await new Invoke()
+    .service('audit')
+    .name('create')
+    .body({
+      type: 'user:wallet:replenished',
+      entity: updatedUserWithCost,
     });
 
-    // update user
-    const updatedUser = await dbUser.update(
-      { id: userId },
-      { $ADD: { tokens, 'lifetime.spent': dollars } },
-      { returnValues: 'ALL_NEW' },
-    );
-
-    // update tokenValue
-    const tokenValue = getTokenValue(updatedUser);
-    const updatedUserWithCost = await dbUser.update(
-      { id: userId },
-      { 'lifetime.tokenValue': tokenValue },
-      { returnValues: 'ALL_NEW' },
-    );
-
-    const text = `$${dollars} Added to Wallet! (${user.phone}, user: ${userId.substr(userId.length - 5)})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendApp')
-      .body({ text })
-      .async()
-      .go();
-
-    await new Invoke()
-      .service('audit')
-      .name('create')
-      .body({
-        type: 'user:wallet:replenished',
-        entity: updatedUserWithCost,
-      });
-
-    return respond(200, updatedUserWithCost);
-  } catch (e) {
-    return respond(400, e);
-  }
+  return respond(200, updatedUserWithCost);
 });
 
 module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
-  try {
-    const { token, amount, email, company, name } = getBody(event);
+  const { token, amount, email, company, name } = getBody(event);
 
-    // create customer in stripe
-    const customer = await stripe.customers.create({
-      source: token,
-      name: company,
-      description: name,
-      email,
-    });
+  // create customer in stripe
+  const customer = await stripe.customers.create({
+    source: token,
+    name: company,
+    description: name,
+    email,
+  });
 
-    console.log(customer);
+  console.log(customer);
 
-    // charge via stripe
-    const charge = await stripe.charges.create({
-      customer: customer.id,
-      receipt_email: email,
-      amount: amount * 100,
-      currency: 'usd',
-    });
+  // charge via stripe
+  const charge = await stripe.charges.create({
+    customer: customer.id,
+    receipt_email: email,
+    amount: amount * 100,
+    currency: 'usd',
+  });
 
-    console.log(charge);
+  console.log(charge);
 
-    return respond(200, charge);
-  } catch (e) {
-    return respond(400, e);
-  }
+  return respond(200, charge);
 });
 
 module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
-  try {
-    const { token, email, company, name, start, plan } = getBody(event);
+  const { token, email, company, name, start, plan } = getBody(event);
 
-    // create customer in stripe
-    const customer = await stripe.customers.create({
-      source: token,
-      name: company,
-      description: name,
-      email,
-    });
+  // create customer in stripe
+  const customer = await stripe.customers.create({
+    source: token,
+    name: company,
+    description: name,
+    email,
+  });
 
-    console.log(customer);
+  console.log(customer);
 
-    // create subscription via stripe
-    const startTimestamp = ~~((start || Date.now()) / 1000);
-    console.log({ startTimestamp });
-    const subscription = await stripe.subscriptions.create({
-      customer: customer.id,
-      billing_cycle_anchor: startTimestamp,
-      items: [{ plan }],
-      prorate: false,
-    });
+  // create subscription via stripe
+  const startTimestamp = ~~((start || Date.now()) / 1000);
+  console.log({ startTimestamp });
+  const subscription = await stripe.subscriptions.create({
+    customer: customer.id,
+    billing_cycle_anchor: startTimestamp,
+    items: [{ plan }],
+    prorate: false,
+  });
 
-    console.log(subscription);
+  console.log(subscription);
 
-    return respond(200, subscription);
-  } catch (e) {
-    return respond(400, e);
-  }
+  return respond(200, subscription);
 });
 
 module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
