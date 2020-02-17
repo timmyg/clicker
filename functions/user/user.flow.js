@@ -220,12 +220,15 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
 
   const { dollars, tokens } = plan;
 
+  console.log({ dollars, tokens });
+
   // charge via stripe
   const charge = await stripe.charges.create({
     amount: dollars * 100,
     currency: 'usd',
     customer: user.stripeCustomer,
   });
+  console.log('1');
 
   // update user
   const updatedUser = await dbUser.update(
@@ -233,14 +236,17 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
     { $ADD: { tokens, 'lifetime.spent': dollars } },
     { returnValues: 'ALL_NEW' },
   );
+  console.log('2');
 
   // update tokenValue
   const tokenValue = getTokenValue(updatedUser);
+  console.log({ updatedUser, tokenValue });
   const updatedUserWithCost = await dbUser.update(
     { id: userId },
     { 'lifetime.tokenValue': tokenValue },
     { returnValues: 'ALL_NEW' },
   );
+  console.log('3', updatedUserWithCost);
 
   const text = `$${dollars} Added to Wallet! (${user.phone}, user: ${userId.substr(userId.length - 5)})`;
   await new Invoke()
