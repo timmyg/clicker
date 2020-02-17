@@ -4,7 +4,7 @@ const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverl
 const fetch = require('node-fetch');
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
-const airtableControlCenterV1 = 'Control Center v1';
+const airtableControlCenter = 'Control Center';
 
 declare class process {
   static env: {
@@ -19,23 +19,26 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
 
-// ccv1
 module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, async event => {
-  // check if any scheduled events for control center today
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  // find games scheduled for the next 24 hours
-  let games = await base(airtableControlCenterV1)
+  let games = await base(airtableControlCenter)
     .select({
-      view: 'Scheduled',
-      filterByFormula: `AND( {Started Hours Ago} <= 0, {Started Hours Ago} > -14 )`,
+      filterByFormula: `AND( {rating} != BLANK(), {startHoursFromNow} >= 0, {startHoursFromNow} <= 10 )`,
     })
     .all();
   console.log(`found ${games.length} games`);
   console.log(games);
-  if (!!games.length) {
-    await sendControlCenterSlack(`*${games.length}* games scheduled today`);
+  if (games.length >= 4) {
+    await sendControlCenterSlack(`${games.length} games scheduled for next 12 hours`);
   } else {
-    await sendControlCenterSlack(`No games scheduled today`);
+    const text = `*${games.length}* games scheduled for next 12 hours!`;
+    await sendControlCenterSlack(text);
+    await new Invoke()
+      .service('notification')
+      .name('sendTasks')
+      .body({ text, importance: 1 })
+      .async()
+      .go();
   }
   return respond(200);
 });
