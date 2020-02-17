@@ -2,7 +2,6 @@ endpoints.txt
 admin.js
 analytics.js
 app.js
-audit.js
 game.js
 job.js
 lead.js
