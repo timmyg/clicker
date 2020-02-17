@@ -968,7 +968,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   let { data: upcomingPrograms } = await new Invoke()
     .service('program')
     .name('upcoming')
-    .queryParams({ locationId: location.id })
+    .body({ location })
     .headers(event.headers)
     .go();
   console.timeEnd('get upcoming programs');
