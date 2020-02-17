@@ -63,12 +63,10 @@ const dbUser = dynamoose.model(
     stripeCustomer: String,
     card: Object, // set in api
     referredByCode: String,
-    lifetime: {
-      spent: Number,
-      minutes: Number,
-      zaps: Number,
-      tokenValue: Number,
-    },
+    lifetimeSpent: Number,
+    lifetimeMinutes: Number,
+    lifetimeZaps: Number,
+    lifetimeTokenValue: Number,
     tokens: {
       type: Number,
       required: true,
@@ -233,17 +231,17 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
   // update user
   const updatedUser = await dbUser.update(
     { id: userId },
-    { $ADD: { tokens, 'lifetime.spent': dollars } },
+    { $ADD: { tokens, lifetimeSpent: dollars } },
     { returnValues: 'ALL_NEW' },
   );
-  console.log('2');
+  console.log('2', updatedUser);
 
   // update tokenValue
   const tokenValue = getTokenValue(updatedUser);
   console.log({ updatedUser, tokenValue });
   const updatedUserWithCost = await dbUser.update(
     { id: userId },
-    { 'lifetime.tokenValue': tokenValue },
+    { lifetimeTokenValue: tokenValue },
     { returnValues: 'ALL_NEW' },
   );
   console.log('3', updatedUserWithCost);
@@ -332,7 +330,7 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   if (user && user.tokens >= tokens) {
     user = await dbUser.update(
       { id: userId },
-      { $ADD: { tokens: -tokens, 'lifetime.zaps': 1, 'lifetime.minutes': minutes } },
+      { $ADD: { tokens: -tokens, lifetimeZaps: 1, lifetimeMinutes: minutes } },
       { returnValues: 'ALL_NEW' },
     );
     await new Invoke()
@@ -442,7 +440,7 @@ async function getToken(phone) {
 }
 
 function getTokenValue(user: User) {
-  return Math.ceil((user.lifetime.spent / user.lifetime.tokens) * 100) / 100;
+  return Math.ceil((user.lifetimeSpent / user.lifetimeTokens) * 100) / 100;
 }
 
 module.exports.getTokenValue = getTokenValue;
