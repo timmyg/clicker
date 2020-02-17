@@ -12,7 +12,7 @@ const Audit = new Model('Audit', {
   schema: {
     dayType: { type: 'string', alias: 'id' },
     timestamp: { type: 'string' },
-    reservation: { type: 'object' },
+    reservation: { type: 'map' },
   },
 });
 
