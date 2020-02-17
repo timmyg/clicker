@@ -25,8 +25,8 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ type, reservation });
   const timestamp = moment().unix() * 1000;
   const date = moment().format('YYYYMMDD');
-  const dateType = `${date}-${type}`;
-  const item = Audit.put({ dateType, timestamp, reservation });
+  const dayType = `${date}-${type}`;
+  const item = Audit.put({ dayType, timestamp, reservation });
   const result = await DocumentClient.put(item).promise();
   return respond(200, result);
 });
