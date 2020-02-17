@@ -177,7 +177,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     .name('create')
     .body({
       type: 'reservation:create',
-      reservation,
+      entity: reservation,
     })
     .headers(event.headers)
     .async()
@@ -256,6 +256,14 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     .async()
     .go();
   console.timeEnd('remote command');
+
+  await new Invoke()
+    .service('audit')
+    .name('create')
+    .body({
+      type: 'reservation:update',
+      reservation,
+    });
 
   return respond(200, `nice`);
 });

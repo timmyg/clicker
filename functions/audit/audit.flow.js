@@ -12,7 +12,7 @@ const Audit = new Model('Audit', {
   schema: {
     dayType: { type: 'string', alias: 'id' },
     timestamp: { type: 'string' },
-    reservation: { type: 'map' },
+    entity: { type: 'map' },
   },
 });
 
@@ -21,12 +21,12 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
-  const { type, reservation } = getBody(event);
-  console.log({ type, reservation });
+  const { type, entity } = getBody(event);
+  console.log({ type, entity });
   const timestamp = moment().unix() * 1000;
   const date = moment().format('YYYYMMDD');
   const dayType = `${date}-${type}`;
-  const item = Audit.put({ dayType, timestamp, reservation });
+  const item = Audit.put({ dayType, timestamp, entity });
   const result = await DocumentClient.put(item).promise();
   return respond(200, result);
 });

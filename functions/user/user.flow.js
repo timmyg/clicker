@@ -62,10 +62,13 @@ const dbUser = dynamoose.model(
     },
     stripeCustomer: String,
     card: Object, // set in api
-    spent: Number,
-    zaps: Number,
-    minutes: Number,
     referredByCode: String,
+    lifetime: {
+      spent: Number,
+      minutes: Number,
+      zaps: Number,
+      tokenValue: Number,
+    },
     tokens: {
       type: Number,
       required: true,
@@ -188,7 +191,6 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
         description: userId,
         phone: user.phone,
       });
-      // TODO audit
       await dbUser.update({ id: userId }, { stripeCustomer: customer.id });
       return respond(201, customer);
     }
@@ -221,7 +223,6 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
       .queryOne('id')
       .eq(userId)
       .exec();
-    // TODO audit plan
 
     const { dollars, tokens } = plan;
 
@@ -232,12 +233,18 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
       customer: user.stripeCustomer,
     });
 
-    // TODO audit
-
     // update user
     const updatedUser = await dbUser.update(
       { id: userId },
-      { $ADD: { tokens, spent: dollars } },
+      { $ADD: { tokens, 'lifetime.spent': dollars } },
+      { returnValues: 'ALL_NEW' },
+    );
+
+    // update tokenValue
+    const tokenValue = getTokenValue(updatedUser);
+    const updatedUserWithCost = await dbUser.update(
+      { id: userId },
+      { 'lifetime.tokenValue': tokenValue },
       { returnValues: 'ALL_NEW' },
     );
 
@@ -249,7 +256,15 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
       .async()
       .go();
 
-    return respond(200, updatedUser);
+    await new Invoke()
+      .service('audit')
+      .name('create')
+      .body({
+        type: 'user:wallet:replenished',
+        entity: updatedUserWithCost,
+      });
+
+    return respond(200, updatedUserWithCost);
   } catch (e) {
     return respond(400, e);
   }
@@ -326,12 +341,18 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
 
   if (user && user.tokens >= tokens) {
-    // TODO audit
     user = await dbUser.update(
       { id: userId },
-      { $ADD: { tokens: -tokens, zaps: 1, minutes } },
+      { $ADD: { tokens: -tokens, 'lifetime.zaps': 1, 'lifetime.minutes': minutes } },
       { returnValues: 'ALL_NEW' },
     );
+    await new Invoke()
+      .service('audit')
+      .name('create')
+      .body({
+        type: 'user:transaction',
+        entity: user,
+      });
     return respond(200, user);
   } else {
     console.error('Insufficient Funds');
@@ -373,7 +394,13 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 
   // TODO update reservations to new user!
 
-  // TODO audit transaction
+  await new Invoke()
+    .service('audit')
+    .name('create')
+    .body({
+      type: 'user:alias',
+      entity: { fromUser, toUser },
+    });
 
   return respond(201, user);
 });
@@ -424,3 +451,9 @@ async function getToken(phone) {
     return jwt.sign({ sub: user.id }, key);
   }
 }
+
+function getTokenValue(user: User) {
+  return Math.ceil((user.lifetime.spent / user.lifetime.tokens) * 100) / 100;
+}
+
+module.exports.getTokenValue = getTokenValue;
