@@ -5,39 +5,30 @@
       <section class="container">
         <form id="pay" v-on:submit.prevent="pay" v-if="!completed">
           <div v-if="isOneTime">
-            <div class="label-wrapper">
-              <label>Amount</label>
-            </div>
+            <div class="label-wrapper"><label>Amount</label></div>
             <span>${{ amount }}</span>
           </div>
           <div v-if="isSubscription">
-            <div class="label-wrapper">
-              <label>Amount</label>
-            </div>
-            <span>${{ amount }}/month (starting {{ start || now | moment('M/D/YY') }})</span>
+            <div class="label-wrapper"><label>Amount</label></div>
+            <span
+              >${{ amount }}/month (starting
+              {{ start || now | moment("M/D/YY") }})</span
+            >
           </div>
           <div>
-            <div class="label-wrapper">
-              <label>Email</label>
-            </div>
+            <div class="label-wrapper"><label>Email</label></div>
             <input type="text" class="custom" v-model="email" />
           </div>
           <div>
-            <div class="label-wrapper">
-              <label>Name</label>
-            </div>
+            <div class="label-wrapper"><label>Name</label></div>
             <input type="text" class="custom" v-model="name" />
           </div>
           <div>
-            <div class="label-wrapper">
-              <label>Company</label>
-            </div>
+            <div class="label-wrapper"><label>Company</label></div>
             <input type="text" class="custom" v-model="company" />
           </div>
           <div>
-            <div class="label-wrapper">
-              <label>Credit Card</label>
-            </div>
+            <div class="label-wrapper"><label>Credit Card</label></div>
             <card
               v-if="loadedStripe"
               class="stripe-card"
@@ -46,17 +37,22 @@
             />
           </div>
           <p class="error" v-if="error">{{ error }}</p>
-          <button class="button button-primary button-block button-shadow" :disabled="submitting">
+          <button
+            class="button button-primary button-block button-shadow"
+            :disabled="submitting"
+          >
             <span v-if="isSubscription">Setup ${{ amount }}/month autopay</span>
             <span v-if="isOneTime">Pay ${{ amount }}</span>
           </button>
         </form>
         <section class="completed" v-else>
           <span v-if="isSubscription">
-            Successfully setup ${{ amount }}/month autopay for the {{ start || now | moment('Do') }} of every
-            month.
+            Successfully setup ${{ amount }}/month autopay for the
+            {{ start || now | moment("Do") }} of every month.
           </span>
-          <span v-if="isOneTime">${{ amount }} payment completed. Email receipt is on the way.</span>
+          <span v-if="isOneTime"
+            >${{ amount }} payment completed. Email receipt is on the way.</span
+          >
           <div class="emojis mt-24">
             <div>🎉</div>
             <div>🎊</div>
@@ -70,10 +66,10 @@
 </template>
 
 <script>
-import { Card, createToken } from 'vue-stripe-elements-plus';
-import Header from '@/components/layouts/Header';
-import LayoutBasic from '@/components/layouts/Basic';
-import * as moment from 'moment';
+import { Card, createToken } from "vue-stripe-elements-plus";
+import Header from "@/components/layouts/Header";
+import LayoutBasic from "@/components/layouts/Basic";
+import * as moment from "moment";
 
 export default {
   data() {
@@ -94,33 +90,41 @@ export default {
       stripeOptions: {
         style: {
           base: {
-            fontSize: '18px',
-          },
-        },
+            fontSize: "18px"
+          }
+        }
       },
-      stripePublishableKey: process.env.NUXT_ENV_STRIPE_PUBLISHABLE_KEY,
+      stripePublishableKey: process.env.NUXT_ENV_STRIPE_PUBLISHABLE_KEY
     };
   },
 
   components: { Card, Header, LayoutBasic },
 
-  mounted: function() {
-    const { amount, company, email, name, type, start, plan } = this.$route.query;
+  mounted() {
+    const {
+      amount,
+      company,
+      email,
+      name,
+      type,
+      start,
+      plan
+    } = this.$route.query;
     this.amount = amount;
     this.company = company;
     this.email = email;
     this.name = name;
     this.type = type;
     this.plan = plan;
-    this.start = start ? moment(start, 'M-D-YYYY').toDate() : null;
-    this.isSubscription = type === 'subscription';
-    this.isOneTime = type === 'onetime';
+    this.start = start ? moment(start, "M-D-YYYY").toDate() : null;
+    this.isSubscription = type === "subscription";
+    this.isOneTime = type === "onetime";
   },
 
   created() {
     if (process.browser) {
-      let domElement = document.createElement('script');
-      domElement.setAttribute('src', 'https://js.stripe.com/v3/');
+      let domElement = document.createElement("script");
+      domElement.setAttribute("src", "https://js.stripe.com/v3/");
       domElement.onload = () => {
         this.loadedStripe = true;
       };
@@ -136,7 +140,7 @@ export default {
       const { amount, company, email, name, plan, start } = this;
       if (!amount || !company || !email || !name) {
         this.submitting = false;
-        return (this.error = 'Please fill out all fields');
+        return (this.error = "Please fill out all fields");
       }
       createToken()
         .then(data => {
@@ -152,10 +156,10 @@ export default {
             email,
             name,
             plan,
-            start: start ? moment(start).unix() * 1000 : null,
+            start: start ? moment(start).unix() * 1000 : null
           };
           // return;
-          const endpoint = this.isOneTime ? 'users/charge' : 'users/subscribe';
+          const endpoint = this.isOneTime ? "users/charge" : "users/subscribe";
           this.$http
             .post(`${process.env.NUXT_ENV_API_BASE}/${endpoint}`, body)
             .then(x => {
@@ -182,8 +186,8 @@ export default {
       // .finally(() => {
       //   this.submitting = false;
       // });
-    },
-  },
+    }
+  }
 };
 </script>
 
