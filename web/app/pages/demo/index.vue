@@ -3,10 +3,9 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
-      {{ users }}
-      <h3>Demo...</h3>
-      <span v-for="user in users" class="user" :key="user['.key']">
-        <span>{{ user.name }} - {{ user.email }}</span>
+      <h3>Zaps:</h3>
+      <span v-for="zap in zaps" class="zap" :key="zap['.key']">
+        <span>{{ zap.channel }}</span>
       </span>
     </div>
   </main>
@@ -14,20 +13,14 @@
 </template>
 
 <script>
-// import * as firebase from "firebase/app";
-// import "firebase/database";
-// import "vuefire";
 import firebase from "firebase/app";
 import "firebase/database";
 
 export default {
-  // firebase: {
-  //   users: usersRef
-  // },
-  data: () => ({ users: [] }),
+  data: () => ({ zaps: [] }),
   mounted() {
     if (!firebase.apps.length) {
-      var config = {
+      const config = {
         apiKey: "AIzaSyAPdo-yLm5jCzCwI8A0eJsifXofZHANnpo",
         authDomain: "clicker-1577130258869.firebaseapp.com",
         databaseURL: "https://clicker-1577130258869.firebaseio.com",
@@ -38,18 +31,14 @@ export default {
       };
       firebase.initializeApp(config);
     }
-    console.log({ firebase });
     const db = firebase.database();
-
-    console.log("mounted");
-    const ref = db.ref("users");
-    console.log({ ref });
+    const ref = db.ref("zaps");
     ref.push({ email: "3@lkjdsf.com", name: "324234" });
-    db.ref("users").on("value", value => {
+    db.ref("zaps").on("value", value => {
       console.log({ value });
-      this.users = value.val();
+      this.zaps = value.val();
     });
-    db.ref("users").on("child_added", child_added => {
+    db.ref("zaps").on("child_added", child_added => {
       console.log({ child_added });
       console.log(child_added.val());
     });

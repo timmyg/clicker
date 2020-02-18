@@ -132,6 +132,7 @@ const dbLocation = dynamoose.model(
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },
     },
+    demo: Boolean,
     free: Boolean,
     img: String,
     region: String,
