@@ -105,17 +105,8 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 async function demoZapViaFirebase(boxId: string, channel: number) {
   if (!firebase.apps.length) {
-    // const config = {
-    //   apiKey: 'AIzaSyAPdo-yLm5jCzCwI8A0eJsifXofZHANnpo',
-    //   authDomain: 'clicker-1577130258869.firebaseapp.com',
-    //   databaseURL: 'https://clicker-1577130258869.firebaseio.com',
-    //   projectId: 'clicker-1577130258869',
-    //   storageBucket: 'clicker-1577130258869.appspot.com',
-    //   messagingSenderId: '114978862752',
-    //   appId: '1:114978862752:web:ea19ead12d703e012d7bc5',
-    // };
     firebase.initializeApp({
-      credential: firebase.credential.cert(JSON.parse(process.env.FIREBASE)),
+      credential: firebase.credential.cert(JSON.parse(process.env.firebase)),
       databaseURL: 'https://clicker-1577130258869.firebaseio.com',
     });
   }
