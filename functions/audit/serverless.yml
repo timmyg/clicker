@@ -1,0 +1,82 @@
+service: audit
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  memorySize: 128
+  versionFunctions: false
+  runtime: nodejs10.x
+  # tracing: true
+  logRetentionInDays: 14
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    tableAudit: ${self:custom.tableAudit}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
+resources:
+  Resources:
+    AuditsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableAudit}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: dayType
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        KeySchema:
+          - AttributeName: dayType
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+plugins:
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+  - serverless-domain-manager
+  - serverless-sentry
+  - serverless-dotenv-plugin
+  - serverless-plugin-tracing
+
+custom:
+  stage: ${opt:stage}
+  tableAudit: audits-${self:custom.stage}
+  prune:
+    automatic: true
+    number: 3
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: audit
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
+functions:
+  health:
+    handler: audit.health
+    events:
+      - http:
+          path: health
+          method: get
+  create:
+    handler: audit.create
+    events:
+      - http:
+          path: ''
+          method: post

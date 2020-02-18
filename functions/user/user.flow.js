@@ -62,10 +62,12 @@ const dbUser = dynamoose.model(
     },
     stripeCustomer: String,
     card: Object, // set in api
-    spent: Number,
-    zaps: Number,
-    minutes: Number,
     referredByCode: String,
+    lifetimeSpent: Number,
+    lifetimeMinutes: Number,
+    lifetimeZaps: Number,
+    lifetimeTokens: Number,
+    lifetimeTokenValue: Number,
     tokens: {
       type: Number,
       required: true,
@@ -176,25 +178,19 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
 
-  try {
-    if (user.stripeCustomer) {
-      const customer = await stripe.customers.update(user.stripeCustomer, {
-        source: stripeCardToken,
-      });
-      return respond(200, customer);
-    } else {
-      const customer = await stripe.customers.create({
-        source: stripeCardToken,
-        description: userId,
-        phone: user.phone,
-      });
-      // TODO audit
-      await dbUser.update({ id: userId }, { stripeCustomer: customer.id });
-      return respond(201, customer);
-    }
-  } catch (e) {
-    console.error(e);
-    return respond(400, e);
+  if (user.stripeCustomer) {
+    const customer = await stripe.customers.update(user.stripeCustomer, {
+      source: stripeCardToken,
+    });
+    return respond(200, customer);
+  } else {
+    const customer = await stripe.customers.create({
+      source: stripeCardToken,
+      description: userId,
+      phone: user.phone,
+    });
+    await dbUser.update({ id: userId }, { stripeCustomer: customer.id });
+    return respond(201, customer);
   }
 });
 
@@ -214,107 +210,114 @@ module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
-  try {
-    const userId = getUserId(event);
-    const plan = getBody(event);
-    const user = await dbUser
-      .queryOne('id')
-      .eq(userId)
-      .exec();
-    // TODO audit plan
+  const userId = getUserId(event);
+  const plan = getBody(event);
+  const user = await dbUser
+    .queryOne('id')
+    .eq(userId)
+    .exec();
 
-    const { dollars, tokens } = plan;
+  const { dollars, tokens } = plan;
 
-    // charge via stripe
-    const charge = await stripe.charges.create({
-      amount: dollars * 100,
-      currency: 'usd',
-      customer: user.stripeCustomer,
+  console.log({ dollars, tokens });
+
+  // charge via stripe
+  const charge = await stripe.charges.create({
+    amount: dollars * 100,
+    currency: 'usd',
+    customer: user.stripeCustomer,
+  });
+  console.log('1');
+
+  // update user
+  const updatedUser = await dbUser.update(
+    { id: userId },
+    { $ADD: { tokens, lifetimeTokens: tokens, lifetimeSpent: dollars } },
+    { returnValues: 'ALL_NEW' },
+  );
+  console.log('2', updatedUser);
+
+  // update tokenValue
+  const tokenValue = getTokenValue(updatedUser);
+  console.log({ updatedUser, tokenValue });
+  const updatedUserWithCost = await dbUser.update(
+    { id: userId },
+    { lifetimeTokenValue: tokenValue },
+    { returnValues: 'ALL_NEW' },
+  );
+  console.log('3', updatedUserWithCost);
+
+  const text = `$${dollars} Added to Wallet! (${user.phone}, user: ${userId.substr(userId.length - 5)})`;
+  await new Invoke()
+    .service('notification')
+    .name('sendApp')
+    .body({ text })
+    .async()
+    .go();
+
+  await new Invoke()
+    .service('audit')
+    .name('create')
+    .body({
+      type: 'user:wallet:replenished',
+      entity: updatedUserWithCost,
     });
 
-    // TODO audit
-
-    // update user
-    const updatedUser = await dbUser.update(
-      { id: userId },
-      { $ADD: { tokens, spent: dollars } },
-      { returnValues: 'ALL_NEW' },
-    );
-
-    const text = `$${dollars} Added to Wallet! (${user.phone}, user: ${userId.substr(userId.length - 5)})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendApp')
-      .body({ text })
-      .async()
-      .go();
-
-    return respond(200, updatedUser);
-  } catch (e) {
-    return respond(400, e);
-  }
+  return respond(200, updatedUserWithCost);
 });
 
 module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
-  try {
-    const { token, amount, email, company, name } = getBody(event);
+  const { token, amount, email, company, name } = getBody(event);
 
-    // create customer in stripe
-    const customer = await stripe.customers.create({
-      source: token,
-      name: company,
-      description: name,
-      email,
-    });
+  // create customer in stripe
+  const customer = await stripe.customers.create({
+    source: token,
+    name: company,
+    description: name,
+    email,
+  });
 
-    console.log(customer);
+  console.log(customer);
 
-    // charge via stripe
-    const charge = await stripe.charges.create({
-      customer: customer.id,
-      receipt_email: email,
-      amount: amount * 100,
-      currency: 'usd',
-    });
+  // charge via stripe
+  const charge = await stripe.charges.create({
+    customer: customer.id,
+    receipt_email: email,
+    amount: amount * 100,
+    currency: 'usd',
+  });
 
-    console.log(charge);
+  console.log(charge);
 
-    return respond(200, charge);
-  } catch (e) {
-    return respond(400, e);
-  }
+  return respond(200, charge);
 });
 
 module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
-  try {
-    const { token, email, company, name, start, plan } = getBody(event);
+  const { token, email, company, name, start, plan } = getBody(event);
 
-    // create customer in stripe
-    const customer = await stripe.customers.create({
-      source: token,
-      name: company,
-      description: name,
-      email,
-    });
+  // create customer in stripe
+  const customer = await stripe.customers.create({
+    source: token,
+    name: company,
+    description: name,
+    email,
+  });
 
-    console.log(customer);
+  console.log(customer);
 
-    // create subscription via stripe
-    const startTimestamp = ~~((start || Date.now()) / 1000);
-    console.log({ startTimestamp });
-    const subscription = await stripe.subscriptions.create({
-      customer: customer.id,
-      billing_cycle_anchor: startTimestamp,
-      items: [{ plan }],
-      prorate: false,
-    });
+  // create subscription via stripe
+  const startTimestamp = ~~((start || Date.now()) / 1000);
+  console.log({ startTimestamp });
+  const subscription = await stripe.subscriptions.create({
+    customer: customer.id,
+    billing_cycle_anchor: startTimestamp,
+    items: [{ plan }],
+    prorate: false,
+  });
 
-    console.log(subscription);
+  console.log(subscription);
 
-    return respond(200, subscription);
-  } catch (e) {
-    return respond(400, e);
-  }
+  return respond(200, subscription);
 });
 
 module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
@@ -326,12 +329,18 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
 
   if (user && user.tokens >= tokens) {
-    // TODO audit
     user = await dbUser.update(
       { id: userId },
-      { $ADD: { tokens: -tokens, zaps: 1, minutes } },
+      { $ADD: { tokens: -tokens, lifetimeZaps: 1, lifetimeMinutes: minutes } },
       { returnValues: 'ALL_NEW' },
     );
+    await new Invoke()
+      .service('audit')
+      .name('create')
+      .body({
+        type: 'user:transaction',
+        entity: user,
+      });
     return respond(200, user);
   } else {
     console.error('Insufficient Funds');
@@ -373,7 +382,13 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 
   // TODO update reservations to new user!
 
-  // TODO audit transaction
+  await new Invoke()
+    .service('audit')
+    .name('create')
+    .body({
+      type: 'user:alias',
+      entity: { fromUser, toUser },
+    });
 
   return respond(201, user);
 });
@@ -424,3 +439,9 @@ async function getToken(phone) {
     return jwt.sign({ sub: user.id }, key);
   }
 }
+
+function getTokenValue(user: User) {
+  return Math.ceil((user.lifetimeSpent / user.lifetimeTokens) * 100) / 100;
+}
+
+module.exports.getTokenValue = getTokenValue;

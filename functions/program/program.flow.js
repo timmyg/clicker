@@ -557,15 +557,7 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
 }
 
 module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId } = event.queryStringParameters;
-
-  console.log({ locationId });
-  const { data: location }: { data: Venue } = await new Invoke()
-    .service('location')
-    .name('get')
-    .pathParams({ id: locationId })
-    .headers(event.headers)
-    .go();
+  const { location } = getBody(event);
 
   const locationProgrammingIds = location.boxes.filter(b => !!b.zone).map(b => b.program && b.program.programmingId);
   const allUpcomingPrograms = await getAirtableProgramsInWindow();
