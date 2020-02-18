@@ -5,7 +5,8 @@
     <div class="container">
       <h3>Zaps:</h3>
       <span v-for="zap in zaps" class="zap" :key="zap['.key']">
-        <span>{{ zap.channel }}</span>
+        <span>{{ zap.channel }}</span
+        ><br />
       </span>
     </div>
   </main>
@@ -18,7 +19,7 @@ import "firebase/database";
 
 export default {
   data: () => ({ zaps: [] }),
-  mounted() {
+  async mounted() {
     if (!firebase.apps.length) {
       const config = {
         apiKey: "AIzaSyAPdo-yLm5jCzCwI8A0eJsifXofZHANnpo",
@@ -33,7 +34,8 @@ export default {
     }
     const db = firebase.database();
     const ref = db.ref("zaps");
-    ref.push({ email: "3@lkjdsf.com", name: "324234" });
+    const result = await ref.push({ boxId: "3@lkjdsf.com", channel: "324234" });
+    console.log({ result });
     db.ref("zaps").on("value", value => {
       console.log({ value });
       this.zaps = value.val();
