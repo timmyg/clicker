@@ -118,7 +118,8 @@ async function demoZapViaFirebase(boxId: string, channel: number) {
   }
   const db = firebase.database();
   const zapsRef = db.ref('zaps');
-  await zapsRef.push({ boxId, channel });
+  const result = await zapsRef.push({ boxId, channel });
+  console.log({ result });
 }
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
