@@ -14,7 +14,7 @@ const {
   RavenLambdaWrapper,
 } = require('serverless-helpers');
 const uuid = require('uuid/v1');
-const firebase = require('firebase-admin');
+const firebase = require('firebase');
 
 declare class process {
   static env: {
