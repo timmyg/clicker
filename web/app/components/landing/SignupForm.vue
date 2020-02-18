@@ -59,6 +59,15 @@
     <div v-if="oneMonthFree" class="promo brand-font">
       You're getting your first month free!
     </div>
+    <div class="promo brand-font">
+      <a
+        href="https://calendly.com/clicker-tim-g/15min"
+        target="_blank"
+        class="right"
+      >
+        or, schedule a call</a
+      >
+    </div>
   </div>
 </template>
 
@@ -126,6 +135,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.right {
+  float: right;
+}
 .promo {
   // text-align: center;
   font-size: 14px;

@@ -11,7 +11,7 @@
             rotate: { z: -20 }
           }"
         >
-          <a href="/">
+          <a :href="link || '/'">
             <img
               src="https://clicker-brand.s3.amazonaws.com/logo.png"
               width="150"
@@ -62,7 +62,7 @@
 
 <script>
 export default {
-  props: ["subtitle"],
+  props: ["subtitle", "link"],
   computed: {
     currentRouteName() {
       return this.$route.name;
