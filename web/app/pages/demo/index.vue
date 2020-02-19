@@ -3,23 +3,35 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
-      <h3>Zaps:</h3>
-      <span v-for="zap in zaps" class="zap" :key="zap['.key']">
-        <span>{{ zap.channel }}</span
-        ><br />
-      </span>
+      <div class="flex flex-wrap mb-4">
+        <DemoTV
+          v-for="tv in tvs"
+          :key="tv.boxId"
+          v-bind:channel="tv.channel"
+          v-bind:boxId="tv.boxId"
+          v-bind:label="tv.label"
+        />
+      </div>
     </div>
   </main>
-  <!-- </layout-basic> -->
 </template>
 
 <script>
 import firebase from "firebase/app";
 import "firebase/database";
 const zapsRefName = `zaps-${process.env.NUXT_ENV_STAGE}`;
+import DemoTV from "@/components/DemoTV";
 
 export default {
-  data: () => ({ zaps: [] }),
+  data: () => ({
+    tvs: [
+      { boxId: 1, label: "1", channel: 201 },
+      { boxId: 2, label: "2", channel: 202 },
+      { boxId: 3, label: "3", channel: 203 },
+      { boxId: 4, label: "4", channel: 204 }
+    ]
+  }),
+  components: { DemoTV },
   async mounted() {
     if (!firebase.apps.length) {
       const config = {
@@ -41,6 +53,11 @@ export default {
       .on("child_added", child_added => {
         console.log("child_added only new");
         console.log(child_added.val());
+        // this.tvs
+        const newTv = child_added.val();
+        const i = this.tvs.findIndex(tv => tv.boxId == newTv.boxId);
+        console.log({ i });
+        this.tvs[i].channel = newTv.channel;
       });
   }
 };
