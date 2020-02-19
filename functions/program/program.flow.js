@@ -364,6 +364,22 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
   console.timeEnd('get location');
 
+  if (location.demo) {
+    const demoPrograms: any[] = [
+      {
+        title: 'Cincinnati @ Xavier',
+        channelTitle: 'FS1',
+        channel: 219,
+        start: 0,
+        end: 0,
+        clickerRating: 7,
+        subcategories: ['Basketball'],
+        game: { home: { book: { spread: '-4', moneyline: '-144' } }, summary: { description: 'UC 59 - XU 71' } },
+      },
+    ];
+    return respond(200, demoPrograms);
+  }
+
   // get all programs for right now
   const now = moment().unix() * 1000;
   const in25Mins =
