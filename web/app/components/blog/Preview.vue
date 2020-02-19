@@ -1,9 +1,6 @@
 <template>
   <article v-if="post.fields">
-    <nuxt-link
-      :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }"
-      class="title"
-    >
+    <nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }" class="title">
       <div class="wrap">
         <img
           v-if="post.fields.featuredImage"
@@ -25,32 +22,37 @@
         />
         <div class="secondary">
           <h2 class="brand-font text-2xl pt-4">{{ post.fields.title }}</h2>
-          <div class="text-sm text-gray-500">
+          <div class>
             {{
-              (post.fields.date || post.sys.createdAt) | moment("MMMM Do YYYY")
+            (post.fields.date || post.sys.createdAt) | moment("MMMM Do YYYY")
             }}
             by {{ post.fields.author }}
+          </div>
+          <div class="tags" v-if="post.fields.tags">
+            <span
+              v-for="tag in getTags()"
+              :key="tag"
+              :to="{ name: 'tags-tag', params: { tag: tag } }"
+              class="text-sm text-gray-500"
+            >{{ tag }}</span>
           </div>
           <p class="pb-8">{{ post.fields.summary }}</p>
         </div>
       </div>
     </nuxt-link>
-
-    <div class="tags">
-      <nuxt-link
-        v-for="tag in post.fields.tags"
-        :key="tag"
-        :to="{ name: 'tags-tag', params: { tag: tag } }"
-        class="tag"
-        >{{ tag }}</nuxt-link
-      >
-    </div>
   </article>
 </template>
 
 <script>
 export default {
-  props: ["post"]
+  props: ["post"],
+  methods: {
+    getTags() {
+      return this.post.fields.tags
+        .split(",")
+        .map(tag => tag.toLowerCase().trim());
+    }
+  }
 };
 </script>
 
@@ -61,6 +63,12 @@ export default {
 // }
 a:hover .wrap {
   opacity: 0.8;
+}
+.tags span {
+  background: #f9f9f9;
+  border-radius: 5px;
+  margin-right: 6px;
+  padding: 3px;
 }
 
 .wrap {
