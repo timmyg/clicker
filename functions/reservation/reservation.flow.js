@@ -114,7 +114,7 @@ async function demoZapViaFirebase(boxId: string, channel: number) {
   const db = firebase.database();
   const refName = `zaps-${process.env.stage}`;
   const zapsRef = db.ref(refName);
-  const result = await zapsRef.push({ boxId, channel });
+  const result = await zapsRef.push({ boxId, channel, timestamp: Date.now() });
   console.log({ result });
 }
 
