@@ -1,8 +1,6 @@
 <template>
   <div>
-    <span v-if="submitted" class="success"
-      >Thank you! We'll be in contact.</span
-    >
+    <span v-if="submitted" class="success">Thank you! We'll be in contact.</span>
     <p v-else-if="error" class="error">
       Oh no! Something is wrong on our end. We've been alerted, please try again
       in a bit.
@@ -46,9 +44,7 @@
           type="submit"
           :disabled="submitting"
           class="button button-primary button-block button-shadow"
-        >
-          I'm Interested
-        </button>
+        >I'm Interested</button>
         <!-- <button
           type="submit"
           :disabled="submitting"
@@ -56,17 +52,13 @@
         >{{getButtonText()}}</button>-->
       </div>
     </form>
-    <div v-if="oneMonthFree" class="promo brand-font">
-      You're getting your first month free!
-    </div>
+    <div v-if="oneMonthFree" class="promo brand-font">You're getting your first month free!</div>
     <div class="promo brand-font">
       <a
         href="https://calendly.com/clicker-tim-g/15min"
         target="_blank"
-        class="right"
-      >
-        or, schedule a call</a
-      >
+        class="right schedule-call"
+      >or, schedule a call</a>
     </div>
   </div>
 </template>
@@ -137,6 +129,10 @@ export default {
 <style lang="scss" scoped>
 .right {
   float: right;
+}
+.schedule-call {
+  position: absolute;
+  right: 0;
 }
 .promo {
   // text-align: center;
