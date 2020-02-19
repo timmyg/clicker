@@ -16,7 +16,7 @@
 <script>
 import firebase from "firebase/app";
 import "firebase/database";
-const refName = `zaps-${process.env.NUXT_ENV_STAGE}`;
+const zapsRefName = `zaps-${process.env.NUXT_ENV_STAGE}`;
 
 export default {
   data: () => ({ zaps: [] }),
@@ -34,15 +34,14 @@ export default {
       firebase.initializeApp(config);
     }
     const db = firebase.database();
-    const ref = db.ref("");
-    db.ref("zaps").on("value", value => {
-      console.log({ value });
-      this.zaps = value.val();
-    });
-    db.ref("zaps").on("child_added", child_added => {
-      console.log({ child_added });
-      console.log(child_added.val());
-    });
+    const ref = db.ref(zapsRefName);
+    db.ref(zapsRefName)
+      .orderByChild("timestamp")
+      .startAt(Date.now())
+      .on("child_added", child_added => {
+        console.log("child_added only new");
+        console.log(child_added.val());
+      });
   }
 };
 </script>
