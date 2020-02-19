@@ -16,6 +16,7 @@
 <script>
 import firebase from "firebase/app";
 import "firebase/database";
+const refName = `zaps-${process.env.NUXT_ENV_STAGE}`;
 
 export default {
   data: () => ({ zaps: [] }),
@@ -33,9 +34,7 @@ export default {
       firebase.initializeApp(config);
     }
     const db = firebase.database();
-    const ref = db.ref("zaps");
-    const result = await ref.push({ boxId: "3@lkjdsf.com", channel: "324234" });
-    console.log({ result });
+    const ref = db.ref("");
     db.ref("zaps").on("value", value => {
       console.log({ value });
       this.zaps = value.val();

@@ -18,6 +18,7 @@ const firebase = require('firebase-admin');
 
 declare class process {
   static env: {
+    firebase: string,
     stage: string,
     tableReservation: string,
     NODE_ENV: string,
@@ -111,7 +112,8 @@ async function demoZapViaFirebase(boxId: string, channel: number) {
     });
   }
   const db = firebase.database();
-  const zapsRef = db.ref('zaps');
+  const refName = `zaps-${process.env.stage}`;
+  const zapsRef = db.ref(refName);
   const result = await zapsRef.push({ boxId, channel });
   console.log({ result });
 }
