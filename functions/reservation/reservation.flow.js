@@ -137,6 +137,12 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   if (reservation.location.demo) {
     // demo location, send zap via firestore
     await demoZapViaFirebase(reservation.box.id, reservation.program.channel);
+    await new Invoke()
+      .service('notification')
+      .name('sendControlCenter')
+      .body({ text: "Demo Zap" })
+      .async()
+      .go();
     return respond(200);
   }
 
