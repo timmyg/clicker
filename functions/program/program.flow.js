@@ -370,8 +370,14 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Cincinnati @ Xavier',
         channelTitle: 'FS1',
         channel: 219,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .unix() * 1000,
         clickerRating: 7,
         subcategories: ['Basketball'],
         game: { home: { book: { spread: '-4', moneyline: '-144' } }, summary: { description: 'UC 59 - XU 71' } },
