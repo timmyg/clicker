@@ -367,17 +367,56 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   if (location.demo) {
     const demoPrograms: any[] = [
       {
+        title: 'PGA Championship',
+        channelTitle: 'Golf',
+        channel: 218,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(4, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 9,
+        subcategories: ['Golf'],
+      },
+      {
+        title: 'Clemson vs. Ohio State',
+        channelTitle: 'FOX',
+        channel: 19,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 10,
+        subcategories: ['Football'],
+      },
+      {
         title: 'Cincinnati @ Xavier',
         channelTitle: 'FS1',
         channel: 219,
         start:
           moment()
             .subtract(1, 'h')
+            .minutes(0)
             .unix() * 1000,
         end:
           moment()
             .add(1, 'h')
+            .minutes(0)
             .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
         game: { home: { book: { spread: '-4', moneyline: '-144' } }, summary: { description: 'UC 59 - XU 71' } },
@@ -386,8 +425,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Arsenal vs. Bayern',
         channelTitle: 'NBCSN',
         channel: 220,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Soccer'],
       },
@@ -395,8 +443,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'College Gameday',
         channelTitle: 'ESPN',
         channel: 206,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(3, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
       },
@@ -404,26 +461,36 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Duke @ North Carolina',
         channelTitle: 'ESPN2',
         channel: 200,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(2, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
       },
-      {
-        title: 'Clemson vs. Ohio State',
-        channelTitle: 'FOX',
-        channel: 19,
-        start: 0,
-        end: 0,
-        clickerRating: 7,
-        subcategories: ['Football'],
-      },
+
       {
         title: 'Texas Tech vs. Louisville',
         channelTitle: 'ACCN',
         channel: 612,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
       },
@@ -431,8 +498,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'XFL: Wildcats @ Roughnecks',
         channelTitle: 'ABC',
         channel: 9,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(2, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
       },
@@ -440,8 +516,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'FC Cincinnati @ Louisville City',
         channelTitle: 'WSRT',
         channel: 64,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Soccer'],
       },
@@ -449,8 +534,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Florida State @ Wake Forest',
         channelTitle: 'ESPNU',
         channel: 208,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(2, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
       },
@@ -459,8 +553,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         channelTitle: 'ESPNC',
         replay: true,
         channel: 618,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
       },
@@ -468,8 +571,17 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Navy @ Notre Dame',
         channelTitle: 'NBC',
         channel: 5,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
       },
@@ -477,26 +589,36 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'WWE Raw',
         channelTitle: 'TNT',
         channel: 245,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(3, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Wrestling'],
       },
-      {
-        title: 'PGA Championship',
-        channelTitle: 'Golf',
-        channel: 218,
-        start: 0,
-        end: 0,
-        clickerRating: 7,
-        subcategories: ['Golf'],
-      },
+
       {
         title: 'Orioles @ Reds',
         channelTitle: 'FSN',
         channel: 661,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
         clickerRating: 7,
         subcategories: ['Baseball'],
       },
@@ -504,6 +626,24 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'UFC 247: Jones vs. Reyes',
         channelTitle: 'FS2',
         channel: 612,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['MMA'],
+      },
+      {
+        title: 'Friends',
+        channelTitle: 'TBS',
+        channel: 9,
         start: 0,
         end: 0,
         clickerRating: 7,
