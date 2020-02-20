@@ -1,61 +1,57 @@
 <template>
   <section
-    class="w-full lg:w-1/2 bg-gray-300 h-48 flex flex-wrap content-center justify-center"
+    class="wrapper w-full lg:w-1/2 flex flex-wrap content-center justify-center"
   >
-    <!-- <span class="text-3xl">{{ channel }}</span> -->
-    <!-- <div>boxId: {{ boxId }}</div> -->
-    <!-- <div>label: {{ label }}</div> -->
-    <video :id="boxId" width="800" height="450" autoplay loop muted>
-      <source :src="getVideo(channel)" type="video/mp4" />
-      <!-- <source src="movie.ogg" type="video/ogg" /> -->
-      Your browser does not support the video tag.
-    </video>
+    <div class="tv-wrapper">
+      <video
+        v-bind:class="{ hidden: !isChanging }"
+        id="static"
+        autoplay
+        loop
+        muted
+      >
+        <source
+          src="https://clicker-demo.s3.amazonaws.com/static.mp4"
+          type="video/mp4"
+        />
+      </video>
+      <video
+        v-bind:class="{ hidden: isChanging }"
+        :id="boxId"
+        autoplay
+        loop
+        muted
+        :key="channel"
+      >
+        <source :src="getVideo(channel)" type="video/mp4" />
+      </video>
+      <div class="tv-label">TV {{ label }}</div>
+    </div>
   </section>
 </template>
 
 <script>
-const programs = [
-  { channel: 206, link: "https://clicker-demo.s3.amazonaws.com/gameday.mp4" },
-  {
-    channel: 220,
-    link: "https://clicker-demo.s3.amazonaws.com/premier-league.mp4"
-  },
-  { channel: 219, link: "https://clicker-demo.s3.amazonaws.com/xavier-uc.mp4" },
-  { channel: 209, link: "https://clicker-demo.s3.amazonaws.com/unc-duke.mp4" },
-  {
-    channel: 19,
-    link: "https://clicker-demo.s3.amazonaws.com/ohio-state-clemson.mp4"
-  },
-  {
-    channel: 612,
-    link: "https://clicker-demo.s3.amazonaws.com/louisville-texas-tech.mp4"
-  },
-  { channel: 9, link: "https://clicker-demo.s3.amazonaws.com/xfl.mp4" },
-  {
-    channel: 64,
-    link: "https://clicker-demo.s3.amazonaws.com/fc-cincinnati.mp4"
-  },
-  {
-    channel: 208,
-    link: "https://clicker-demo.s3.amazonaws.com/florida-state-wake.mp4"
-  },
-  { channel: 618, link: "https://clicker-demo.s3.amazonaws.com/kobe.mp4" },
-  { channel: 5, link: "https://clicker-demo.s3.amazonaws.com/notre-dame.mp4" },
-  { channel: 245, link: "https://clicker-demo.s3.amazonaws.com/wwe.mp4" },
-  { channel: 218, link: "https://clicker-demo.s3.amazonaws.com/golf.mp4" },
-  { channel: 661, link: "https://clicker-demo.s3.amazonaws.com/reds.mp4" },
-  { channel: 612, link: "https://clicker-demo.s3.amazonaws.com/mma.mp4" }
-];
 export default {
-  props: ["channel", "boxId", "label"],
+  props: ["channel", "boxId", "label", "allPrograms"],
+  data: function() {
+    return {
+      isChanging: false
+    };
+  },
+  watch: {
+    channel: function(newVal, oldVal) {
+      // watch it
+      console.log("channel changed: ", newVal, " | was: ", oldVal);
+      this.isChanging = true;
+      setTimeout(() => (this.isChanging = false), 1000);
+    }
+  },
   methods: {
     getVideo(channel) {
-      const program = programs.find(p => p.channel === channel);
-      console.log({ program });
-      if (program) {
-        return program.link;
-      }
-      return programs[0].link;
+      console.log({ channel });
+      console.log(this.allPrograms);
+      const program = this.allPrograms.find(p => p.channel === channel);
+      return program.link;
     }
   }
 };
@@ -63,4 +59,35 @@ export default {
 
 <style lang="scss" scoped>
 @import "tailwindcss";
+video {
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  // opacity: 0.3;
+}
+.wrapper {
+  height: 50vh;
+  padding: 30px;
+}
+.tv-wrapper {
+  border: 14px solid black;
+  border-radius: 5px;
+  position: relative;
+}
+.tv-label {
+  font-family: "Saira", sans-serif;
+  position: absolute;
+  // right: -10px;
+  // bottom: -10px;
+  right: calc(50% - 2rem);
+  bottom: -2.5rem;
+  background: white;
+  width: 4rem;
+  height: 2rem;
+  text-align: center;
+  border-radius: 3px;
+}
 </style>

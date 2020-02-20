@@ -367,7 +367,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   if (location.demo) {
     const demoPrograms: any[] = [
       {
-        title: 'PGA Championship',
+        title: '2019 Masters',
         channelTitle: 'Golf',
         channel: 218,
         start:
