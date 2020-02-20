@@ -25,10 +25,10 @@ import DemoTV from "@/components/DemoTV";
 export default {
   data: () => ({
     tvs: [
-      { boxId: 1, label: "1", channel: 201 },
-      { boxId: 2, label: "2", channel: 202 },
-      { boxId: 3, label: "3", channel: 203 },
-      { boxId: 4, label: "4", channel: 204 }
+      { boxId: 1, label: "1", channel: 206 },
+      { boxId: 2, label: "2", channel: 208 },
+      { boxId: 3, label: "3", channel: 218 },
+      { boxId: 4, label: "4", channel: 219 }
     ]
   }),
   components: { DemoTV },
@@ -51,12 +51,9 @@ export default {
       .orderByChild("timestamp")
       .startAt(Date.now())
       .on("child_added", child_added => {
-        console.log("child_added only new");
         console.log(child_added.val());
-        // this.tvs
         const newTv = child_added.val();
         const i = this.tvs.findIndex(tv => tv.boxId == newTv.boxId);
-        console.log({ i });
         this.tvs[i].channel = newTv.channel;
       });
   }
