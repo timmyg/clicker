@@ -137,12 +137,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
       ) {
         this.locations$.pipe().subscribe(locations => {
           // console.log({ locations });
-          const { latitude, longitude } = this.userGeolocation;
-          this.segment.track(this.globals.events.location.listedAll, {
-            locations: locations.length,
-            latitude,
-            longitude
-          });
+          if (this.userGeolocation) {
+            const { latitude, longitude } = this.userGeolocation;
+            this.segment.track(this.globals.events.location.listedAll, {
+              locations: locations.length,
+              latitude,
+              longitude
+            });
+          }
         });
       }
     });
@@ -210,7 +212,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
       );
       this.store.dispatch(new fromUser.Refresh());
       this.actions$
-        .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS), take(1))
+        .pipe(
+          ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
+          take(1)
+        )
         .subscribe(() => {
           this.reserveService.emitRefreshed();
         });
@@ -269,18 +274,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async onLocationDetail(location: Location) {
-      this.locationDetailModal = await this.modalController.create({
-        component: LocationDetailPage,
-        componentProps: { locationId: location.id }
-      });
-      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-        if (this.locationDetailModal) {
-          this.locationDetailModal.close();
-        }
-      });
-      return await this.locationDetailModal.present();
+    this.locationDetailModal = await this.modalController.create({
+      component: LocationDetailPage,
+      componentProps: { locationId: location.id }
+    });
+    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+      if (this.locationDetailModal) {
+        this.locationDetailModal.close();
+      }
+    });
+    return await this.locationDetailModal.present();
   }
-  
+
   async onLocationManage(location: Location) {
     const actionSheet = await this.actionSheetController.create({
       header: "Manage Location",
@@ -338,7 +343,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.store.dispatch(
             new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
           );
-          this.geolocationError = true
+          this.geolocationError = true;
           this.reserveService.emitShowingLocations();
         })
         .catch(async error => {
@@ -351,7 +356,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.disableButton = false;
           console.error("Error getting location", error);
           // const message = "Error getting your location. Make sure location services are enabled for this app."
-          this.geolocationError = true
+          this.geolocationError = true;
           // const whoops = await this.toastController.create({
           //   message,
           //   color: "light",

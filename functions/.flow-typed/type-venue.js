@@ -70,6 +70,7 @@ export class Venue {
   region: string;
   active: boolean;
   hidden: boolean;
+  demo: boolean;
   connected: boolean;
   setup: boolean;
   controlCenter: boolean;

@@ -13,6 +13,7 @@ provider:
     stage: ${self:custom.stage}
     tableReservation: ${self:custom.tableReservation}
     tableThroughputs: ${self:custom.tableThroughputs.${self:custom.stage}}
+    firebase: ${env:FIREBASE}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

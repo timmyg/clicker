@@ -5,6 +5,14 @@
       {{ (post.fields.date || post.sys.createdAt) | moment("MMMM Do YYYY") }} by
       {{ post.fields.author }}
     </div>
+    <div class="tags" v-if="post.fields.tags">
+      <span
+        v-for="tag in getTags()"
+        :key="tag"
+        :to="{ name: 'tags-tag', params: { tag: tag } }"
+        class="text-sm text-gray-500"
+      >{{ tag }}</span>
+    </div>
     <img
       v-if="post.fields.featuredImage"
       class="py-8"
@@ -14,10 +22,7 @@
       "
     />
     <div class="xl:px-16">
-      <div
-        v-html="$md.render(post.fields.content)"
-        class="leading-relaxed"
-      ></div>
+      <div v-html="$md.render(post.fields.content)" class="leading-relaxed"></div>
     </div>
     <hr />
     <Signup />
@@ -28,7 +33,14 @@
 import Signup from "@/components/landing/Signup";
 export default {
   props: ["post"],
-  components: { Signup }
+  components: { Signup },
+  methods: {
+    getTags() {
+      return this.post.fields.tags
+        .split(",")
+        .map(tag => tag.toLowerCase().trim());
+    }
+  }
 };
 </script>
 
@@ -36,5 +48,11 @@ export default {
 @import "tailwindcss";
 ul {
   list-style: inherit;
+}
+.tags span {
+  background: #f9f9f9;
+  border-radius: 5px;
+  margin-right: 6px;
+  padding: 3px;
 }
 </style>

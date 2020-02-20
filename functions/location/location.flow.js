@@ -132,6 +132,7 @@ const dbLocation = dynamoose.model(
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },
     },
+    demo: Boolean,
     free: Boolean,
     img: String,
     region: String,
@@ -216,6 +217,18 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(id)
     .exec();
   console.timeEnd('get from db');
+
+  // demo stuff
+  if (location.demo) {
+    const demoBoxes: any[] = [
+      { id: '1', label: '1' },
+      { id: '2', label: '2' },
+      { id: '3', label: '3' },
+      { id: '4', label: '4' },
+    ];
+    location.boxes = demoBoxes;
+    return respond(200, location);
+  }
 
   // loop through boxes, and update reserved status if necessary
   if (location.boxes) {

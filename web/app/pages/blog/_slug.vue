@@ -1,6 +1,6 @@
 <template>
   <layout-basic>
-    <Header v-bind:subtitle="'Blog'"></Header>
+    <Header v-bind:subtitle="'Blog'" v-bind:link="'/blog'"></Header>
     <main class="container">
       <div class="columns">
         <div class="column is-offset-2 is-8"><Post :post="post" /></div>

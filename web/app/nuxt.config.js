@@ -20,10 +20,6 @@ let dynamicRoutes = () => {
     })
     .catch(e => console.error("dynamic routes errpor :(", e));
 };
-console.log(
-  "process.env.NUXT_ENV_SEGMENT_KEY",
-  process.env.NUXT_ENV_SEGMENT_KEY
-);
 module.exports = {
   mode: "spa",
 

@@ -5,9 +5,11 @@
   "main": "index.js",
   "dependencies": {
     "directv-remote": "git+https://github.com/timmyg/directv-remote.git",
+    "firebase": "^7.8.2",
     "http-server": "^0.11.1",
     "lerna": "^3.20.2",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "vuefire": "^2.2.1"
   },
   "devDependencies": {
     "cordova-res": "^0.6.0",

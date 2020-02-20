@@ -1,6 +1,14 @@
-### mobile app
+# mobile app
 
-##### native releases
+## development
+
+start locally
+
+```
+npm start
+```
+
+### native releases
 
 1. bump `package.json` version number
 2. native:
@@ -17,5 +25,3 @@
 - iPhone XS Max for 6.5"
 - iPhone 8+ for 5.5"
 - Pixel 3
-
-

@@ -1,6 +1,6 @@
 <template>
   <layout-basic>
-    <Header v-bind:subtitle="'Blog'"></Header>
+    <Header v-bind:subtitle="'Blog'" v-bind:link="'/blog'"></Header>
     <main>
       <div class="container">
         <div class="columns">

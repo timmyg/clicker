@@ -54,6 +54,10 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
+  e2eScheduleEnabled:
+    prod: true
+    release: false
+    develop: false
 functions:
   health:
     handler: admin.health
@@ -73,7 +77,9 @@ functions:
   runEndToEndTests:
     handler: admin.runEndToEndTests
     events:
-      - schedule: cron(0 10 * * ? *) # every day @ 6am eastern
+      - schedule:
+        rate: cron(0 10 * * ? *) # every day @ 6am eastern
+        enabled: ${self:custom.e2eScheduleEnabled.${self:provider.stage}}
       - http:
           path: e2e
           method: post

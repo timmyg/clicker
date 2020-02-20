@@ -14,9 +14,11 @@ const {
   RavenLambdaWrapper,
 } = require('serverless-helpers');
 const uuid = require('uuid/v1');
+const firebase = require('firebase-admin');
 
 declare class process {
   static env: {
+    firebase: string,
     stage: string,
     tableReservation: string,
     NODE_ENV: string,
@@ -102,6 +104,20 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
 
+async function demoZapViaFirebase(boxId: string, channel: number) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      credential: firebase.credential.cert(JSON.parse(process.env.firebase)),
+      databaseURL: 'https://clicker-1577130258869.firebaseio.com',
+    });
+  }
+  const db = firebase.database();
+  const refName = `zaps-${process.env.stage}`;
+  const zapsRef = db.ref(refName);
+  const result = await zapsRef.push({ boxId, channel, timestamp: Date.now() });
+  console.log({ result });
+}
+
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   let reservation: Reservation = getBody(event);
   const { cost } = reservation;
@@ -116,6 +132,14 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     .headers(event.headers)
     .go();
   console.timeEnd('ensure location active');
+
+  console.log(reservation.location.demo, reservation.box.id, reservation.program.channel);
+  if (reservation.location.demo) {
+    // demo location, send zap via firestore
+    await demoZapViaFirebase(reservation.box.id, reservation.program.channel);
+    return respond(200);
+  }
+
   // console.log(locationResult);
   const locationResultBody = data;
   if (!locationResultBody.active) {
