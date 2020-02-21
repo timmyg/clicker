@@ -372,6 +372,13 @@ functions:
       - http:
           path: ''
           method: get
+  regions:
+    handler: program.regions
+    runtime: nodejs12.x
+    events:
+      - http:
+          path: regions
+          method: get
   updateGame:
     handler: program.updateGame
     runtime: nodejs12.x
