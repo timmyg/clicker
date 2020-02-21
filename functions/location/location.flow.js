@@ -369,10 +369,11 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async event => {
-  const regions = await new Invoke()
+  const { data: regions } = await new Invoke()
     .service('program')
     .name('regions')
     .go();
+  console.log({ regions });
 
   const airtableDataTable = 'Data';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -383,7 +384,7 @@ module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async eve
     .all();
   const airtableRegionIds: string[] = airtableRegions.map(l => l.fields.id);
   const newRegions = regions.filter(dbRegion => {
-    return !airtableRegions.includes(dbRegion.id);
+    return !airtableRegionIds.includes(dbRegion.id);
   });
 
   let count = 0;
