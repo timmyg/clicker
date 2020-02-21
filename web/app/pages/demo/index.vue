@@ -15,12 +15,7 @@
       </div>
     </div>
     <div class="hidden">
-      <link
-        v-for="program in allPrograms"
-        :key="program.link"
-        :href="program.link"
-        rel="prefetch"
-      />
+      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="prefetch" />
     </div>
   </main>
 </template>
@@ -117,7 +112,8 @@ export default {
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css?family=Saira&display=swap");
 main {
-  background-image: url("/images/demo/brickwall.png");
+  background-image: url("/images/demo/wood-1.jpg");
+  background-size: 200px;
   background-repeat: repeat;
   height: 100vh;
 }

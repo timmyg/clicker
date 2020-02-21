@@ -464,7 +464,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
       {
         title: 'Duke @ North Carolina',
         channelTitle: 'ESPN2',
-        channel: 200,
+        channel: 209,
         start:
           moment()
             .subtract(2, 'h')
@@ -648,8 +648,16 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Friends',
         channelTitle: 'TBS',
         channel: 9,
-        start: 0,
-        end: 0,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
         clickerRating: 7,
         subcategories: ['MMA'],
       },
