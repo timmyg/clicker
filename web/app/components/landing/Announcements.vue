@@ -2,7 +2,7 @@
   <section class="announcements section center-content">
     <div class="container brand-font">
       <div v-for="announcement in activeAnnouncements" :key="announcement.text" class="announcement">
-        <span class="text">{{announcement.text}}</span>
+        <span v-html="announcement.text" class="text"></span>
       </div>
     </div>
   </section>
@@ -13,7 +13,7 @@ import * as moment from 'moment';
 export default {
     data: () => ({
       allAnnouncements: [
-        {text: "Come Say Hi at the Mid-America Restaurant Expo in Columbus, OH on 2/23 and 2/24!", start:  moment('2020-2-21', 'YYYY/M/D'), end:  moment('2020-2-25', 'YYYY/M/D')}
+        {text: "Come Say Hi at the <b>Mid-America Restaurant Expo</b> in Columbus, OH on 2/23 and 2/24! (Innovation Alley, Table 2)", start:  moment('2020-2-21', 'YYYY/M/D'), end:  moment('2020-2-25', 'YYYY/M/D')}
       ]
     }),
     computed: {
