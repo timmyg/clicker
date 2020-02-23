@@ -3,6 +3,9 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
+      <div class="sign">
+        <img src="/images/demo/sign.png" />
+      </div>
       <div class="flex flex-wrap mb-4">
         <DemoTV
           v-for="tv in tvs"
@@ -15,7 +18,7 @@
       </div>
     </div>
     <div class="hidden">
-      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="prefetch" />
+      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="preload" />
     </div>
   </main>
 </template>
@@ -115,6 +118,13 @@ main {
   background-image: url("/images/demo/wood-1.jpg");
   background-size: 200px;
   background-repeat: repeat;
+  // height: 100vh;
   height: 100vh;
+}
+.sign {
+  width: 60%;
+  margin: 0 auto;
+  padding-top: 1%;
+  border-radius: 10px;
 }
 </style>

@@ -2,6 +2,7 @@
   <layout-basic>
     <div class="site-content">
       <Hero />
+      <Announcements />
       <Products />
       <Features />
       <FeaturesCards />
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+import Announcements from "@/components/landing/Announcements";
 import Hero from "@/components/landing/Hero";
 import Faq from "@/components/landing/Faq";
 import Features from "@/components/landing/Features";
@@ -25,6 +27,7 @@ import FeaturesCards from "@/components/landing/FeaturesCards";
 import Testimonials from "@/components/landing/Testimonials";
 export default {
   components: {
+    Announcements,
     Faq,
     Features,
     Hero,
