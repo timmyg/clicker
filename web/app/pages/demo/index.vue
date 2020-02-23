@@ -32,8 +32,8 @@ import DemoTV from "@/components/DemoTV";
 export default {
   data: () => ({
     tvs: [
-      { boxId: 1, label: "1", channel: 206 },
-      { boxId: 2, label: "2", channel: 220 },
+      { boxId: 1, label: "1", channel: 19 },
+      { boxId: 2, label: "2", channel: 206 },
       { boxId: 3, label: "3", channel: 218 },
       { boxId: 4, label: "4", channel: 219 }
     ],

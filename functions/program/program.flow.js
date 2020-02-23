@@ -421,24 +421,24 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         subcategories: ['Basketball'],
         game: { home: { book: { spread: '-4', moneyline: '-144' } }, summary: { description: 'UC 59 - XU 71' } },
       },
-      {
-        title: 'Arsenal vs. Bayern',
-        channelTitle: 'NBCSN',
-        channel: 220,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Soccer'],
-      },
+      // {
+      //   title: 'Arsenal vs. Bayern',
+      //   channelTitle: 'NBCSN',
+      //   channel: 220,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Soccer'],
+      // },
       {
         title: 'College Gameday',
         channelTitle: 'ESPN',
@@ -457,24 +457,24 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         clickerRating: 7,
         subcategories: ['Football'],
       },
-      {
-        title: 'Duke @ North Carolina',
-        channelTitle: 'ESPN2',
-        channel: 209,
-        start:
-          moment()
-            .subtract(2, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Basketball'],
-      },
+      // {
+      //   title: 'Duke @ North Carolina',
+      //   channelTitle: 'ESPN2',
+      //   channel: 209,
+      //   start:
+      //     moment()
+      //       .subtract(2, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Basketball'],
+      // },
 
       {
         title: 'Texas Tech vs. Louisville',
