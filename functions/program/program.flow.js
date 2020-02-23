@@ -480,187 +480,187 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         subcategories: ['Basketball'],
       },
 
-      {
-        title: 'Texas Tech vs. Louisville',
-        channelTitle: 'ACCN',
-        channel: 612,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Basketball'],
-      },
-      {
-        title: 'XFL: Wildcats @ Roughnecks',
-        channelTitle: 'ABC',
-        channel: 9,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(2, 'h')
-            .minutes(30)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Football'],
-      },
-      {
-        title: 'FC Cincinnati @ Louisville City',
-        channelTitle: 'WSRT',
-        channel: 64,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Soccer'],
-      },
-      {
-        title: 'Florida State @ Wake Forest',
-        channelTitle: 'ESPNU',
-        channel: 208,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(2, 'h')
-            .minutes(30)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Football'],
-      },
-      {
-        title: '2016: Jazz @ Lakers',
-        channelTitle: 'ESPNC',
-        replay: true,
-        channel: 618,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Basketball'],
-      },
-      {
-        title: 'Navy @ Notre Dame',
-        channelTitle: 'NBC',
-        channel: 5,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Football'],
-      },
-      {
-        title: 'WWE Raw',
-        channelTitle: 'TNT',
-        channel: 245,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(3, 'h')
-            .minutes(30)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Wrestling'],
-      },
+      // {
+      //   title: 'Texas Tech vs. Louisville',
+      //   channelTitle: 'ACCN',
+      //   channel: 612,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Basketball'],
+      // },
+      // {
+      //   title: 'XFL: Wildcats @ Roughnecks',
+      //   channelTitle: 'ABC',
+      //   channel: 9,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(2, 'h')
+      //       .minutes(30)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Football'],
+      // },
+      // {
+      //   title: 'FC Cincinnati @ Louisville City',
+      //   channelTitle: 'WSRT',
+      //   channel: 64,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Soccer'],
+      // },
+      // {
+      //   title: 'Florida State @ Wake Forest',
+      //   channelTitle: 'ESPNU',
+      //   channel: 208,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(2, 'h')
+      //       .minutes(30)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Football'],
+      // },
+      // {
+      //   title: '2016: Jazz @ Lakers',
+      //   channelTitle: 'ESPNC',
+      //   replay: true,
+      //   channel: 618,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Basketball'],
+      // },
+      // {
+      //   title: 'Navy @ Notre Dame',
+      //   channelTitle: 'NBC',
+      //   channel: 5,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Football'],
+      // },
+      // {
+      //   title: 'WWE Raw',
+      //   channelTitle: 'TNT',
+      //   channel: 245,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(3, 'h')
+      //       .minutes(30)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Wrestling'],
+      // },
 
-      {
-        title: 'Orioles @ Reds',
-        channelTitle: 'FSN',
-        channel: 661,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['Baseball'],
-      },
-      {
-        title: 'UFC 247: Jones vs. Reyes',
-        channelTitle: 'FS2',
-        channel: 612,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        isSports: true,
-        clickerRating: 7,
-        subcategories: ['MMA'],
-      },
-      {
-        title: 'Friends',
-        channelTitle: 'TBS',
-        channel: 9,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        clickerRating: 7,
-        subcategories: ['MMA'],
-      },
+      // {
+      //   title: 'Orioles @ Reds',
+      //   channelTitle: 'FSN',
+      //   channel: 661,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['Baseball'],
+      // },
+      // {
+      //   title: 'UFC 247: Jones vs. Reyes',
+      //   channelTitle: 'FS2',
+      //   channel: 612,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   isSports: true,
+      //   clickerRating: 7,
+      //   subcategories: ['MMA'],
+      // },
+      // {
+      //   title: 'Friends',
+      //   channelTitle: 'TBS',
+      //   channel: 9,
+      //   start:
+      //     moment()
+      //       .subtract(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   end:
+      //     moment()
+      //       .add(1, 'h')
+      //       .minutes(0)
+      //       .unix() * 1000,
+      //   clickerRating: 7,
+      //   subcategories: ['MMA'],
+      // },
     ];
     return respond(200, demoPrograms);
   }

@@ -3,9 +3,7 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
-      <div class="sign">
-        <img src="/images/demo/sign.png" />
-      </div>
+      <div class="sign"><img src="/images/demo/sign.png" /></div>
       <div class="flex flex-wrap mb-4">
         <DemoTV
           v-for="tv in tvs"
@@ -18,7 +16,12 @@
       </div>
     </div>
     <div class="hidden">
-      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="preload" />
+      <link
+        v-for="program in allPrograms"
+        :key="program.link"
+        :href="program.link"
+        rel="preload"
+      />
     </div>
   </main>
 </template>
@@ -39,47 +42,47 @@ export default {
     ],
     allPrograms: [
       {
-        channel: 206,
+        channel: 220,
         link: "https://clicker-demo.s3.amazonaws.com/gameday.mp4"
       },
       {
-        channel: 220,
+        channel: 218,
         link: "https://clicker-demo.s3.amazonaws.com/premier-league.mp4"
       },
       {
-        channel: 219,
+        channel: 19,
         link: "https://clicker-demo.s3.amazonaws.com/xavier-uc.mp4"
       },
       {
-        channel: 209,
+        channel: 219,
         link: "https://clicker-demo.s3.amazonaws.com/unc-duke.mp4"
-      },
-      {
-        channel: 19,
-        link: "https://clicker-demo.s3.amazonaws.com/ohio-state-clemson.mp4"
-      },
-      {
-        channel: 612,
-        link: "https://clicker-demo.s3.amazonaws.com/louisville-texas-tech.mp4"
-      },
-      { channel: 9, link: "https://clicker-demo.s3.amazonaws.com/xfl.mp4" },
-      {
-        channel: 64,
-        link: "https://clicker-demo.s3.amazonaws.com/fc-cincinnati.mp4"
-      },
-      {
-        channel: 208,
-        link: "https://clicker-demo.s3.amazonaws.com/florida-state-wake.mp4"
-      },
-      { channel: 618, link: "https://clicker-demo.s3.amazonaws.com/kobe.mp4" },
-      {
-        channel: 5,
-        link: "https://clicker-demo.s3.amazonaws.com/notre-dame.mp4"
-      },
-      { channel: 245, link: "https://clicker-demo.s3.amazonaws.com/wwe.mp4" },
-      { channel: 218, link: "https://clicker-demo.s3.amazonaws.com/golf.mp4" },
-      { channel: 661, link: "https://clicker-demo.s3.amazonaws.com/reds.mp4" },
-      { channel: 612, link: "https://clicker-demo.s3.amazonaws.com/mma.mp4" }
+      }
+      // {
+      //   channel: 19,
+      //   link: "https://clicker-demo.s3.amazonaws.com/ohio-state-clemson.mp4"
+      // },
+      // {
+      //   channel: 612,
+      //   link: "https://clicker-demo.s3.amazonaws.com/louisville-texas-tech.mp4"
+      // },
+      // { channel: 9, link: "https://clicker-demo.s3.amazonaws.com/xfl.mp4" },
+      // {
+      //   channel: 64,
+      //   link: "https://clicker-demo.s3.amazonaws.com/fc-cincinnati.mp4"
+      // },
+      // {
+      //   channel: 208,
+      //   link: "https://clicker-demo.s3.amazonaws.com/florida-state-wake.mp4"
+      // },
+      // { channel: 618, link: "https://clicker-demo.s3.amazonaws.com/kobe.mp4" },
+      // {
+      //   channel: 5,
+      //   link: "https://clicker-demo.s3.amazonaws.com/notre-dame.mp4"
+      // },
+      // { channel: 245, link: "https://clicker-demo.s3.amazonaws.com/wwe.mp4" },
+      // { channel: 218, link: "https://clicker-demo.s3.amazonaws.com/golf.mp4" },
+      // { channel: 661, link: "https://clicker-demo.s3.amazonaws.com/reds.mp4" },
+      // { channel: 612, link: "https://clicker-demo.s3.amazonaws.com/mma.mp4" }
     ]
   }),
   components: { DemoTV },
