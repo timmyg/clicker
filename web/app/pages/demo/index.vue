@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="hidden">
-      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="prefetch" />
+      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="preload" />
     </div>
   </main>
 </template>
