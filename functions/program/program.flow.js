@@ -32,6 +32,7 @@ declare class process {
 }
 
 type region = {
+  id: string,
   name: string,
   defaultZip: string,
   localChannels: number[],
@@ -39,12 +40,13 @@ type region = {
 
 const allRegions: region[] = [
   {
-    name: 'cincinnati',
+    name: 'Cincinnati',
+    id: 'cincinnati',
     defaultZip: '45202',
     localChannels: [5, 9, 12, 19, 661, 660],
   },
-  { name: 'chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
-  { name: 'nyc', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
+  { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
+  { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
 ];
 // const minorChannels: number[] = [661];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO'];
@@ -209,8 +211,10 @@ const dbProgram = dynamoose.model(
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
-  // const x = await getProgramDetails({ programmingId: 'SH003895120000' });
-  // console.log({ x });
+});
+
+module.exports.regions = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200, allRegions);
 });
 
 // module.exports.getScheduleTest = RavenLambdaWrapper.handler(Raven, async event => {
@@ -384,170 +388,169 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         clickerRating: 9,
         subcategories: ['Golf'],
       },
-      // {
-      //   title: 'Clemson vs. Ohio State',
-      //   channelTitle: 'FOX',
-      //   channel: 19,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(30)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 10,
-      //   subcategories: ['Football'],
-      // },
-      // {
-      //   title: 'Cincinnati @ Xavier',
-      //   channelTitle: 'FS1',
-      //   channel: 219,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Basketball'],
-      //   game: { home: { book: { spread: '-4', moneyline: '-144' } }, summary: { description: 'UC 59 - XU 71' } },
-      // },
-      // // {
-      // //   title: 'Arsenal vs. Bayern',
-      // //   channelTitle: 'NBCSN',
-      // //   channel: 220,
-      // //   start:
-      // //     moment()
-      // //       .subtract(1, 'h')
-      // //       .minutes(0)
-      // //       .unix() * 1000,
-      // //   end:
-      // //     moment()
-      // //       .add(1, 'h')
-      // //       .minutes(0)
-      // //       .unix() * 1000,
-      // //   isSports: true,
-      // //   clickerRating: 7,
-      // //   subcategories: ['Soccer'],
-      // // },
-      // {
-      //   title: 'College Gameday',
-      //   channelTitle: 'ESPN',
-      //   channel: 206,
-      //   start:
-      //     moment()
-      //       .subtract(3, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Football'],
-      // },
-      // // {
-      // //   title: 'Duke @ North Carolina',
-      // //   channelTitle: 'ESPN2',
-      // //   channel: 209,
-      // //   start:
-      // //     moment()
-      // //       .subtract(2, 'h')
-      // //       .minutes(0)
-      // //       .unix() * 1000,
-      // //   end:
-      // //     moment()
-      // //       .add(1, 'h')
-      // //       .minutes(0)
-      // //       .unix() * 1000,
-      // //   isSports: true,
-      // //   clickerRating: 7,
-      // //   subcategories: ['Basketball'],
-      // // },
-
-      // {
-      //   title: 'Texas Tech vs. Louisville',
-      //   channelTitle: 'ACCN',
-      //   channel: 612,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Basketball'],
-      // },
-      // {
-      //   title: 'XFL: Wildcats @ Roughnecks',
-      //   channelTitle: 'ABC',
-      //   channel: 9,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(2, 'h')
-      //       .minutes(30)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Football'],
-      // },
-      // {
-      //   title: 'FC Cincinnati @ Louisville City',
-      //   channelTitle: 'WSRT',
-      //   channel: 64,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Soccer'],
-      // },
-      // {
-      //   title: 'Florida State @ Wake Forest',
-      //   channelTitle: 'ESPNU',
-      //   channel: 208,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(2, 'h')
-      //       .minutes(30)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Football'],
-      // },
+      {
+        title: 'Clemson vs. Ohio State',
+        channelTitle: 'FOX',
+        channel: 19,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 10,
+        subcategories: ['Football'],
+      },
+      {
+        title: 'Cincinnati @ Xavier',
+        channelTitle: 'FS1',
+        channel: 219,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Basketball'],
+        game: { home: { book: { spread: '-4', moneyline: '-144' } }, summary: { description: 'UC 59 - XU 71' } },
+      },
+      {
+        title: 'Arsenal vs. Bayern',
+        channelTitle: 'NBCSN',
+        channel: 220,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Soccer'],
+      },
+      {
+        title: 'College Gameday',
+        channelTitle: 'ESPN',
+        channel: 206,
+        start:
+          moment()
+            .subtract(3, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Football'],
+      },
+      {
+        title: 'Duke @ North Carolina',
+        channelTitle: 'ESPN2',
+        channel: 209,
+        start:
+          moment()
+            .subtract(2, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Basketball'],
+      },
+      {
+        title: 'Texas Tech vs. Louisville',
+        channelTitle: 'ACCN',
+        channel: 612,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Basketball'],
+      },
+      {
+        title: 'XFL: Wildcats @ Roughnecks',
+        channelTitle: 'ABC',
+        channel: 9,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(2, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Football'],
+      },
+      {
+        title: 'FC Cincinnati @ Louisville City',
+        channelTitle: 'WSRT',
+        channel: 64,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Soccer'],
+      },
+      {
+        title: 'Florida State @ Wake Forest',
+        channelTitle: 'ESPNU',
+        channel: 208,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(2, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Football'],
+      },
       {
         title: '2016: Jazz @ Lakers',
         channelTitle: 'ESPNC',
@@ -743,12 +746,12 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     for (const region of allRegions) {
-      const { defaultZip, name, localChannels } = region;
-      console.log(`sync local channels: ${name}/${defaultZip} for channels ${localChannels.join(', ')}`);
+      const { defaultZip, id, localChannels } = region;
+      console.log(`sync local channels: ${id}/${defaultZip} for channels ${localChannels.join(', ')}`);
       await new Invoke()
         .service('program')
         .name('syncRegionNextFewHours')
-        .body({ name, localChannels, defaultZip })
+        .body({ id, localChannels, defaultZip })
         .async()
         .go();
     }
@@ -761,8 +764,8 @@ module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(JSON.stringify(event));
-  const { name: regionName, defaultZip, localChannels } = getBody(event);
-  await syncRegionChannels(regionName, localChannels, defaultZip);
+  const { id: regionId, defaultZip, localChannels } = getBody(event);
+  await syncRegionChannels(regionId, localChannels, defaultZip);
   respond(200);
 });
 
@@ -780,11 +783,11 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     datesToPull.push(dateToSync);
   });
   for (const region of allRegions) {
-    const results = await pullFromDirecTV(region.name, region.localChannels, region.defaultZip, datesToPull, 24);
+    const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
     // TODO:SENTRY results is not iterable
     for (const result of results) {
       const schedule = result.data;
-      let allPrograms: Program[] = build(schedule, region.name);
+      let allPrograms: Program[] = build(schedule, region.id);
       // allPrograms = allPrograms.filter(p => !!p.live);
       allPrograms = uniqBy(allPrograms, 'programmingId');
       // filter out programs already created
