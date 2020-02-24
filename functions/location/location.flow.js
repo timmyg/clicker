@@ -223,8 +223,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     const demoBoxes: any[] = [
       { id: '1', label: 'TV 1' },
       { id: '2', label: 'TV 2' },
-      // { id: '3', label: 'TV 3' },
-      // { id: '4', label: 'TV 4' },
+      { id: '3', label: 'TV 3' },
+      { id: '4', label: 'TV 4' },
     ];
     location.boxes = demoBoxes;
     return respond(200, location);
