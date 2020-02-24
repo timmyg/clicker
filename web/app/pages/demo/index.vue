@@ -122,6 +122,7 @@ export default {
     }
     const db = firebase.database();
     const ref = db.ref(zapsRefName);
+    console.log("connecting to", zapsRefName);
     db.ref(zapsRefName)
       .orderByChild("timestamp")
       .startAt(Date.now())
