@@ -1133,7 +1133,7 @@ function buildAirtableNowShowing(location: Venue) {
 
 function getAvailableBoxes(boxes: Box[]): Box[] {
   // remove manually changed boxes
-  const manualChangeMinutesAgo = 30;
+  const manualChangeMinutesAgo = 60;
   const manualChangeBuffer = 15;
 
   return (
