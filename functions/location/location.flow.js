@@ -842,6 +842,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
       time: inTwoMinutesUnix,
     })
     .go();
+  console.log({ programResult });
   const program = programResult && programResult.data;
   console.log({ program });
   console.timeEnd('get program');
