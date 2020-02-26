@@ -7,6 +7,7 @@ const {
   findBoxBlowout,
   findBoxWithoutRating,
   findBoxWorseRating,
+  filterProgramsByTargeting,
 } = require('./location');
 const moment = require('moment');
 
@@ -285,5 +286,97 @@ describe('get boxes', () => {
       expect(result[1].id).toBe(2);
       expect(result[2].id).toBe(5);
     });
+  });
+});
+
+describe("filterProgramsByTargeting: remove programs that aren't targeted", () => {
+  test('with matching region and non-matching location', () => {
+    const ccProgram = {
+      fields: {
+        targetingIds: ['region:cincinnati', 'location:230948234'],
+      },
+    };
+    const location = {
+      id: 'non-matching',
+      region: 'cincinnati',
+    };
+    const result = filterProgramsByTargeting([ccProgram], location);
+    expect(result.length).toBe(1);
+  });
+  test('with matching region and matching location', () => {
+    const ccProgram = {
+      fields: {
+        targetingIds: ['region:cincinnati', 'location:matching'],
+      },
+    };
+    const location = {
+      id: 'matching',
+      region: 'cincinnati',
+    };
+    const result = filterProgramsByTargeting([ccProgram], location);
+    expect(result.length).toBe(1);
+  });
+  test('with non-matching region and non-matching location', () => {
+    const ccProgram = {
+      fields: {
+        targetingIds: ['region:chicago', 'location:non-matching'],
+      },
+    };
+    const location = {
+      id: '30945435',
+      region: 'cincinnati',
+    };
+    const result = filterProgramsByTargeting([ccProgram], location);
+    expect(result.length).toBe(0);
+  });
+  test('with non-matching region and matching location', () => {
+    const ccProgram = {
+      fields: {
+        targetingIds: ['region:chicago', 'location:matching'],
+      },
+    };
+    const location = {
+      id: 'matching',
+      region: 'cincinnati',
+    };
+    const result = filterProgramsByTargeting([ccProgram], location);
+    expect(result.length).toBe(1);
+  });
+  test('with no region and no matching location', () => {
+    const ccProgram = {
+      fields: {
+        targetingIds: ['location:other'],
+      },
+    };
+    const location = {
+      id: '938475',
+      region: 'cincinnati',
+    };
+    const result = filterProgramsByTargeting([ccProgram], location);
+    expect(result.length).toBe(0);
+  });
+  test('with multiple regions', () => {
+    const ccProgram = {
+      fields: {
+        targetingIds: ['region:cincinnati', 'region:nyc'],
+      },
+    };
+    const location = {
+      id: '938475',
+      region: 'cincinnati',
+    };
+    const result = filterProgramsByTargeting([ccProgram], location);
+    expect(result.length).toBe(1);
+  });
+  test('with program with no targetingIds', () => {
+    const ccProgram = {
+      fields: {},
+    };
+    const location = {
+      id: 'matching',
+      region: 'cincinnati',
+    };
+    const result = filterProgramsByTargeting([ccProgram], location);
+    expect(result.length).toBe(1);
   });
 });
