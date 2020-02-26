@@ -869,7 +869,7 @@ class ControlCenterProgram {
     rating: number,
     programmingId: string,
     title: string,
-    // channel: number, // do not use (region specific)
+    targetingIds: string[],
   };
   db: Program;
   constructor(obj: any) {
@@ -937,7 +937,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
 
   // get control center programs
-  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
+  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
@@ -1209,7 +1209,7 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-async function getAirtablePrograms() {
+async function getAirtablePrograms(location: Venue) {
   const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
@@ -1218,6 +1218,8 @@ async function getAirtablePrograms() {
       filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
+  console.log({ location });
+  console.log({ ccPrograms });
   return ccPrograms.map(p => new ControlCenterProgram(p));
 }
 
