@@ -148,41 +148,41 @@ function buildStatus(game: Game): GameStatus {
   const gameStatus = new GameStatus();
   gameStatus.started = ['complete', 'inprogress'].includes(game.status) ? true : false;
   gameStatus.ended = ['complete'].includes(game.status) ? true : false;
-  gameStatus.description = getDescription(game);
+  gameStatus.description = game.scoreboard && game.scoreboard.display;
   gameStatus.blowout = ['complete', 'inprogress'].includes(game.status) ? isBlowout(game) : false;
   return gameStatus;
 }
 
-function getDescription(game: Game): string {
-  // console.log({ game44: game });
-  const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
-  // console.log('game.leagueName', game.leagueName, game.status);
-  switch (game.status) {
-    case 'scheduled': {
-      return `${score} (${moment.tz(game.start, 'America/New_York').format('M/D h:mma')} EST)`;
-    }
-    case 'inprogress': {
-      switch (game.leagueName) {
-        case 'epl':
-        case 'seriea':
-        case 'laliga':
-        case 'bundesliga':
-        case 'ligue1': {
-          return `${score} (${game.scoreboard.display})`;
-        }
-        default: {
-          return `${score} (${game.scoreboard.clock} - ${game.scoreboard.period})`;
-        }
-      }
-    }
-    case 'complete': {
-      return `${score} (${game.scoreboard.display})`;
-    }
-    default: {
-      return '';
-    }
-  }
-}
+// function getDescription(game: Game): string {
+//   // console.log({ game44: game });
+//   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
+//   // console.log('game.leagueName', game.leagueName, game.status);
+//   switch (game.status) {
+//     case 'scheduled': {
+//       return `${score} (${moment.tz(game.start, 'America/New_York').format('M/D h:mma')} EST)`;
+//     }
+//     case 'inprogress': {
+//       switch (game.leagueName) {
+//         case 'epl':
+//         case 'seriea':
+//         case 'laliga':
+//         case 'bundesliga':
+//         case 'ligue1': {
+//           return `${score} (${game.scoreboard.display})`;
+//         }
+//         default: {
+//           return `${score} (${game.scoreboard.clock} - ${game.scoreboard.period})`;
+//         }
+//       }
+//     }
+//     case 'complete': {
+//       return `${score} (${game.scoreboard.display})`;
+//     }
+//     default: {
+//       return '';
+//     }
+//   }
+// }
 
 function isBlowout(game: Game): boolean {
   switch (game.leagueName) {
@@ -198,12 +198,13 @@ function isBlowout(game: Game): boolean {
       const isBlowout = Math.abs(game.home.score - game.away.score) >= 3;
       return isNearEnd && isBlowout;
     }
-    case 'nfl': {
+    case 'xfl':
+    case 'nfl':
       // 6:00 left in 4th quarter and 17+ point difference
       const isNearEnd = game.scoreboard.period === 4 && +game.scoreboard.clock.split(':')[0] <= 6;
       const isBlowout = Math.abs(game.home.score - game.away.score) >= 17;
       return isNearEnd && isBlowout;
-    }
+
     case 'ncaaf': {
       // 6:00 left in 4th quarter and 17+ point difference
       const isNearEnd = game.scoreboard.period === 4 && +game.scoreboard.clock.split(':')[0] <= 6;
@@ -235,7 +236,7 @@ function isBlowout(game: Game): boolean {
       return isNearEnd && isBlowout;
     }
     default:
-      return true;
+      return false;
   }
 }
 
