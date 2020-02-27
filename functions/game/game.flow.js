@@ -508,6 +508,7 @@ async function pullFromActionNetwork(dates: Date[]) {
   actionSports.push({ sport: 'mlb' });
   actionSports.push({ sport: 'nhl' });
   actionSports.push({ sport: 'soccer' });
+  actionSports.push({ sport: 'xfl' });
   // actionSports.push({ sport: 'pga' });
   // actionSports.push({ sport: 'boxing' });
   const method = 'get';
