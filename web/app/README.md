@@ -2,6 +2,7 @@
 
 _landing page_
 
+
 ```bash
 # install dependencies
 $ npm i

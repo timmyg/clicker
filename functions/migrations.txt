@@ -19,3 +19,5 @@
 19. remove programs so we can get end time
 20. control center Visible view
 21. airtable channel changes refactor
+22. data table with views
+23. link programs to data with targeting, targetingIds fields

@@ -1,28 +1,10 @@
 <template>
-  <section
-    class="wrapper w-full lg:w-1/2 flex flex-wrap content-center justify-center"
-  >
+  <section class="wrapper w-full lg:w-1/2 flex flex-wrap content-center justify-center">
     <div class="tv-wrapper">
-      <video
-        v-bind:class="{ hidden: !isChanging }"
-        id="static"
-        autoplay
-        loop
-        muted
-      >
-        <source
-          src="https://clicker-demo.s3.amazonaws.com/static.mp4"
-          type="video/mp4"
-        />
+      <video v-bind:class="{ hidden: !isChanging }" id="static" autoplay loop muted>
+        <source src="https://clicker-demo.s3.amazonaws.com/static.mp4" type="video/mp4" />
       </video>
-      <video
-        v-bind:class="{ hidden: isChanging }"
-        :id="boxId"
-        autoplay
-        loop
-        muted
-        :key="channel"
-      >
+      <video v-bind:class="{ hidden: isChanging }" :id="boxId" autoplay loop muted :key="channel">
         <source :src="getVideo(channel)" type="video/mp4" />
       </video>
       <div class="tv-label">TV {{ label }}</div>
@@ -71,6 +53,7 @@ video {
 .wrapper {
   height: 50vh;
   padding: 30px;
+  height: 80%;
 }
 .tv-wrapper {
   border: 14px solid black;

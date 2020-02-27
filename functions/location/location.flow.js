@@ -221,10 +221,10 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   // demo stuff
   if (location.demo) {
     const demoBoxes: any[] = [
-      { id: '1', label: '1' },
-      { id: '2', label: '2' },
-      { id: '3', label: '3' },
-      { id: '4', label: '4' },
+      { id: '1', label: 'TV 1' },
+      { id: '2', label: 'TV 2' },
+      { id: '3', label: 'TV 3' },
+      { id: '4', label: 'TV 4' },
     ];
     location.boxes = demoBoxes;
     return respond(200, location);
@@ -366,6 +366,74 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   return respond(201, updatedLocation);
+});
+
+module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async event => {
+  const { data: regions } = await new Invoke()
+    .service('program')
+    .name('regions')
+    .go();
+  console.log({ regions });
+
+  const airtableDataTable = 'Data';
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableRegions = await base(airtableDataTable)
+    .select({
+      filterByFormula: `{type} = 'region'`,
+    })
+    .all();
+  const airtableRegionIds: string[] = airtableRegions.map(l => l.fields.id);
+  const newRegions = regions.filter(dbRegion => {
+    return !airtableRegionIds.includes(dbRegion.id);
+  });
+
+  let count = 0;
+  if (newRegions && newRegions.length) {
+    const promises = [];
+    newRegions.forEach(newRegion => {
+      count++;
+      promises.push(
+        base(airtableDataTable).create({
+          id: newRegion.id,
+          type: 'region',
+          name: newRegion.name,
+        }),
+      );
+    });
+    await Promise.all(promises);
+  }
+  return respond(200, { count });
+});
+
+module.exports.syncAirtableLocations = RavenLambdaWrapper.handler(Raven, async event => {
+  const dbLocations: Venue[] = await dbLocation.scan().exec();
+  const airtableDataTable = 'Data';
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableLocations = await base(airtableDataTable)
+    .select({
+      filterByFormula: `{type} = 'location'`,
+    })
+    .all();
+  const airtableLocationIds: string[] = airtableLocations.map(l => l.fields.id);
+  const newLocations = dbLocations.filter(dbLocation => {
+    return !airtableLocationIds.includes(dbLocation.id);
+  });
+  let count = 0;
+  if (newLocations && newLocations.length) {
+    const promises = [];
+    newLocations.forEach(newLocation => {
+      count++;
+      promises.push(
+        base(airtableDataTable).create({
+          id: newLocation.id,
+          type: 'location',
+          name: `${newLocation.name}: ${newLocation.neighborhood}`,
+        }),
+      );
+    });
+    await Promise.all(promises);
+  }
+  return respond(200, { count });
 });
 
 module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event => {
@@ -774,6 +842,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
       time: inTwoMinutesUnix,
     })
     .go();
+  console.log({ programResult });
   const program = programResult && programResult.data;
   console.log({ program });
   console.timeEnd('get program');
@@ -800,7 +869,7 @@ class ControlCenterProgram {
     rating: number,
     programmingId: string,
     title: string,
-    // channel: number, // do not use (region specific)
+    targetingIds: string[],
   };
   db: Program;
   constructor(obj: any) {
@@ -868,7 +937,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
 
   // get control center programs
-  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms();
+  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
@@ -897,7 +966,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
-  console.log(JSON.stringify({ ccPrograms }));
+  // console.log(JSON.stringify({ ccPrograms }));
 
   // get boxes that are CC active, and not manually locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
@@ -1065,7 +1134,7 @@ function buildAirtableNowShowing(location: Venue) {
 
 function getAvailableBoxes(boxes: Box[]): Box[] {
   // remove manually changed boxes
-  const manualChangeMinutesAgo = 30;
+  const manualChangeMinutesAgo = 60;
   const manualChangeBuffer = 15;
 
   return (
@@ -1140,16 +1209,42 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-async function getAirtablePrograms() {
+async function getAirtablePrograms(location: Venue) {
   const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
+  let ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
       // view: 'Visible',
       filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
+  console.log({ location });
+  console.log({ ccPrograms });
+  ccPrograms = filterProgramsByTargeting(ccPrograms, location);
   return ccPrograms.map(p => new ControlCenterProgram(p));
+}
+
+// remove programs not targeted at this location
+function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
+  ccPrograms = ccPrograms.filter(ccp => {
+    const targetingRegionIds =
+      ccp.fields.targetingIds && ccp.fields.targetingIds.length
+        ? ccp.fields.targetingIds.filter(str => str.startsWith('region:')).map(str => str.replace('region:', ''))
+        : [];
+    const targetingLocationIds =
+      ccp.fields.targetingIds && ccp.fields.targetingIds.length
+        ? ccp.fields.targetingIds.filter(str => str.startsWith('location:')).map(str => str.replace('location:', ''))
+        : [];
+    if (targetingRegionIds.length && targetingLocationIds.length) {
+      return targetingRegionIds.includes(location.region) || targetingLocationIds.includes(location.id);
+    } else if (targetingRegionIds.length) {
+      return targetingRegionIds.includes(location.region);
+    } else if (targetingLocationIds.length) {
+      return targetingLocationIds.includes(location.id);
+    }
+    return true;
+  });
+  return ccPrograms;
 }
 
 async function updateLocationBox(
@@ -1211,3 +1306,4 @@ module.exports.findBoxGameOver = findBoxGameOver;
 module.exports.findBoxBlowout = findBoxBlowout;
 module.exports.findBoxWithoutRating = findBoxWithoutRating;
 module.exports.findBoxWorseRating = findBoxWorseRating;
+module.exports.filterProgramsByTargeting = filterProgramsByTargeting;

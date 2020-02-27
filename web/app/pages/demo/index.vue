@@ -3,6 +3,7 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
+      <div class="sign"><img src="/images/demo/sign.png" /></div>
       <div class="flex flex-wrap mb-4">
         <DemoTV
           v-for="tv in tvs"
@@ -19,7 +20,7 @@
         v-for="program in allPrograms"
         :key="program.link"
         :href="program.link"
-        rel="prefetch"
+        rel="preload"
       />
     </div>
   </main>
@@ -34,54 +35,75 @@ import DemoTV from "@/components/DemoTV";
 export default {
   data: () => ({
     tvs: [
-      { boxId: 1, label: "1", channel: 206 },
-      { boxId: 2, label: "2", channel: 220 },
-      { boxId: 3, label: "3", channel: 218 },
-      { boxId: 4, label: "4", channel: 219 }
+      { boxId: 1, label: "1", channel: 618 },
+      { boxId: 2, label: "2", channel: 218 },
+      { boxId: 3, label: "3", channel: 206 },
+      { boxId: 4, label: "4", channel: 208 }
     ],
     allPrograms: [
       {
         channel: 206,
-        link: "https://clicker-demo.s3.amazonaws.com/gameday.mp4"
+        link: "http://localhost:4040/images/demo/programs/gameday.mp4"
       },
       {
         channel: 220,
-        link: "https://clicker-demo.s3.amazonaws.com/premier-league.mp4"
+        link: "http://localhost:4040/images/demo/programs/premier-league.mp4"
       },
       {
         channel: 219,
-        link: "https://clicker-demo.s3.amazonaws.com/xavier-uc.mp4"
+        link: "http://localhost:4040/images/demo/programs/xavier-uc.mp4"
       },
       {
         channel: 209,
-        link: "https://clicker-demo.s3.amazonaws.com/unc-duke.mp4"
+        link: "http://localhost:4040/images/demo/programs/unc-duke.mp4"
       },
       {
         channel: 19,
-        link: "https://clicker-demo.s3.amazonaws.com/ohio-state-clemson.mp4"
+        link:
+          "http://localhost:4040/images/demo/programs/ohio-state-clemson.mp4"
       },
       {
         channel: 612,
-        link: "https://clicker-demo.s3.amazonaws.com/louisville-texas-tech.mp4"
+        link:
+          "http://localhost:4040/images/demo/programs/louisville-texas-tech.mp4"
       },
-      { channel: 9, link: "https://clicker-demo.s3.amazonaws.com/xfl.mp4" },
+      {
+        channel: 9,
+        link: "http://localhost:4040/images/demo/programs/xfl.mp4"
+      },
       {
         channel: 64,
-        link: "https://clicker-demo.s3.amazonaws.com/fc-cincinnati.mp4"
+        link: "http://localhost:4040/images/demo/programs/fc-cincinnati.mp4"
       },
       {
         channel: 208,
-        link: "https://clicker-demo.s3.amazonaws.com/florida-state-wake.mp4"
+        link:
+          "http://localhost:4040/images/demo/programs/florida-state-wake.mp4"
       },
-      { channel: 618, link: "https://clicker-demo.s3.amazonaws.com/kobe.mp4" },
+      {
+        channel: 618,
+        link: "http://localhost:4040/images/demo/programs/kobe.mp4"
+      },
       {
         channel: 5,
-        link: "https://clicker-demo.s3.amazonaws.com/notre-dame.mp4"
+        link: "http://localhost:4040/images/demo/programs/notre-dame.mp4"
       },
-      { channel: 245, link: "https://clicker-demo.s3.amazonaws.com/wwe.mp4" },
-      { channel: 218, link: "https://clicker-demo.s3.amazonaws.com/golf.mp4" },
-      { channel: 661, link: "https://clicker-demo.s3.amazonaws.com/reds.mp4" },
-      { channel: 612, link: "https://clicker-demo.s3.amazonaws.com/mma.mp4" }
+      {
+        channel: 245,
+        link: "http://localhost:4040/images/demo/programs/wwe.mp4"
+      },
+      {
+        channel: 218,
+        link: "http://localhost:4040/images/demo/programs/golf.mp4"
+      },
+      {
+        channel: 661,
+        link: "http://localhost:4040/images/demo/programs/reds.mp4"
+      },
+      {
+        channel: 612,
+        link: "http://localhost:4040/images/demo/programs/mma.mp4"
+      }
     ]
   }),
   components: { DemoTV },
@@ -117,8 +139,16 @@ export default {
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css?family=Saira&display=swap");
 main {
-  background-image: url("/images/demo/brickwall.png");
+  background-image: url("/images/demo/wood-1.jpg");
+  background-size: 200px;
   background-repeat: repeat;
+  // height: 100vh;
   height: 100vh;
+}
+.sign {
+  width: 60%;
+  margin: 0 auto;
+  padding-top: 1%;
+  border-radius: 10px;
 }
 </style>
