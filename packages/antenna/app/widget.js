@@ -125,11 +125,11 @@ class Widget {
                 logger.info('getTuned', { boxId, client, ip });
                 _remote.getTuned(client || '0', (err, response) => {
                   if (err) {
-                    logger.error('getTuned error!!', err);
+                    logger.error('getTuned error!!', err, ip);
                     if (err && err.message && err.message.includes('getaddrinfo ENOTFOUND')) {
-                      logger.error('BAD IP ADDRESS');
+                      logger.error('BAD IP ADDRESS', ip);
                     } else if (err && err.message && err.message.includes('Forbidden.Command not allowed.')) {
-                      logger.error('NEED TO ENABLE CURRENT PROGRAM ACCESS');
+                      logger.error('NEED TO ENABLE CURRENT PROGRAM ACCESS', ip);
                     }
                   } else {
                     boxesInfo.push({ boxId, info: response });

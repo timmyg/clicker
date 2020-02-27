@@ -814,7 +814,9 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
+  console.log({ locationId, boxId });
   const { channel, channelMinor, source, channelChangeAt } = getBody(event);
+  console.log({ channel });
 
   console.time('get location');
   const location: Venue = await dbLocation
@@ -822,6 +824,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .eq(locationId)
     .exec();
   console.timeEnd('get location');
+  console.log(location.name);
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   console.log({ boxId, boxIndex });
