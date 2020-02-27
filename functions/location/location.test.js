@@ -179,7 +179,7 @@ describe('get boxes', () => {
     channelSource: 'manual',
     channelChangeAt:
       moment()
-        .subtract(27, 'm')
+        .subtract(33, 'm')
         .unix() * 1000,
   };
   const reservedManuallyChangedGameOn = {
