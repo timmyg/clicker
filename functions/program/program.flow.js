@@ -1241,10 +1241,10 @@ function build(dtvSchedule: any, regionName: string) {
 
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
-  console.log(programmingId, channel, start, region);
+  // console.log(programmingId, channel, start, region);
   const id = programmingId + channel + start;
   // console.log('....', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
-  console.log({ id });
+  // console.log({ id });
   return uuid(id, uuid.DNS);
 }
 

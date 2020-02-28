@@ -18,9 +18,9 @@ test('smoke test', () => {
 test('generateId generates the same id when same program', () => {
   const region1 = 'cincinnati';
   const program = {
-    chNum: 206,
-    airTime: moment().toDate(),
-    region: region1,
+    channel: 206,
+    start: moment().toDate(),
+    programmingId: 'ep1',
   };
   const program1Id = generateId(program);
   const program2Id = generateId(program);
