@@ -782,6 +782,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       .toDate();
     datesToPull.push(dateToSync);
   });
+  console.log({ datesToPull });
   for (const region of allRegions) {
     const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
     // TODO:SENTRY results is not iterable
@@ -789,7 +790,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       const schedule = result.data;
       let allPrograms: Program[] = build(schedule, region.id);
       // allPrograms = allPrograms.filter(p => !!p.live);
-      allPrograms = uniqBy(allPrograms, 'programmingId');
+      // allPrograms = uniqBy(allPrograms, 'programmingId');
       // filter out programs already created
       const allExistingPrograms = await base(airtablePrograms)
         .select({ fields: ['programmingId', 'start', 'channelTitle'] })
@@ -913,24 +914,26 @@ function buildAirtablePrograms(programs: Program[]) {
       description,
       channel,
       channelMinor,
-      region,
       channelTitle,
       live,
       start,
       end,
+      region,
     } = program;
+    const meta = { channel, channelMinor, region };
     transformed.push({
       fields: {
         programmingId,
         title,
         description,
-        channel,
-        channelMinor,
-        region,
+        // channel,
+        // channelMinor,
+        // region,
         channelTitle,
         live,
         start,
         end,
+        meta: JSON.stringify(meta),
       },
     });
   });
@@ -1239,8 +1242,10 @@ function build(dtvSchedule: any, regionName: string) {
 
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
-  const id = programmingId + channel + start + region;
-  console.log('....', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
+  // console.log(programmingId, channel, start, region);
+  const id = programmingId + channel + start;
+  // console.log('....', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
+  // console.log({ id });
   return uuid(id, uuid.DNS);
 }
 
