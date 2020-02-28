@@ -6,8 +6,8 @@ android {
         applicationId "com.teamclicker.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 12
-        versionName "0.7.0"
+        versionCode 13
+        versionName "0.9.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
