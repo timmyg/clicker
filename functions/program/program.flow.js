@@ -925,9 +925,9 @@ function buildAirtablePrograms(programs: Program[]) {
         programmingId,
         title,
         description,
-        channel,
-        channelMinor,
-        region,
+        // channel,
+        // channelMinor,
+        // region,
         channelTitle,
         live,
         start,
@@ -1241,8 +1241,8 @@ function build(dtvSchedule: any, regionName: string) {
 
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
-  const id = programmingId + channel + start + region;
-  console.log('....', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
+  const id = programmingId + channel + start;
+  // console.log('....', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
   return uuid(id, uuid.DNS);
 }
 
