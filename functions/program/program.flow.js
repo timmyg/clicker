@@ -782,6 +782,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       .toDate();
     datesToPull.push(dateToSync);
   });
+  console.log({ datesToPull });
   for (const region of allRegions) {
     const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
     // TODO:SENTRY results is not iterable
