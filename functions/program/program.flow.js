@@ -777,7 +777,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const daysToPull = 4;
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
-      .subtract(15, 'hrs')
+      .subtract(5, 'hrs')
       .add(i, 'days')
       .toDate();
     datesToPull.push(dateToSync);
