@@ -27,16 +27,32 @@ test('generateId generates the same id when same program', () => {
   expect(program1Id).toEqual(program2Id);
 });
 
-test('generateId generates different ids when different programs', () => {
-  const region1 = 'cincinnati';
-  const region2 = 'chicago';
+test('generateId generates different ids when different times', () => {
   const program1 = {
-    chNum: 206,
-    region: region1,
+    channel: 206,
+    start: 20000000,
+    programmingId: 'ep1',
   };
   const program2 = {
-    chNum: 206,
-    region: region2,
+    channel: 206,
+    start: 20000001,
+    programmingId: 'ep1',
+  };
+  const program1Id = generateId(program1);
+  const program2Id = generateId(program2);
+  expect(program1Id).not.toEqual(program2Id);
+});
+
+test('generateId generates different ids when different channels', () => {
+  const program1 = {
+    channel: 206,
+    start: 20000000,
+    programmingId: 'ep1',
+  };
+  const program2 = {
+    channel: 12,
+    start: 20000000,
+    programmingId: 'ep1',
   };
   const program1Id = generateId(program1);
   const program2Id = generateId(program2);
