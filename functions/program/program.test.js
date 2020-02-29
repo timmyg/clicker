@@ -64,7 +64,7 @@ test('build programs', () => {
   data.schedule.forEach((s, i) => {
     s.schedules.forEach((c, i, channels) => {});
   });
-  const response = build(data.schedule, null, ['324', '661-1']);
+  const response = build(data.schedule, 'cincinnati');
   // console.log({ response });
   expect(response[0]).toHaveProperty('region');
   expect(response[0]).toHaveProperty('start');

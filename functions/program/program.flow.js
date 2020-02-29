@@ -1223,6 +1223,7 @@ function build(dtvSchedule: any, regionId: string) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
+        console.log(allRegions, regionId);
         const region: region = allRegions.find(r => r.id === regionId);
         program.isLocal = region.localChannels.includes(program.channel);
         program.live = program.ltd === 'Live' ? true : false;
