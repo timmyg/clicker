@@ -49,7 +49,7 @@ const allRegions: region[] = [
   { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
 ];
 // const minorChannels: number[] = [661];
-const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NBCSHD', 'NHLaHD'];
+const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
 const nationalChannels: number[] = [
   206, //ESPN
   209, //ESPN2
@@ -191,6 +191,7 @@ const dbProgram = dynamoose.model(
     points: Number,
     synced: Boolean, // synced with description from separate endpoint
     isSports: Boolean,
+    isLocal: Boolean,
   },
   {
     saveUnknown: ['game'],
@@ -570,96 +571,96 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         clickerRating: 7,
         subcategories: ['Basketball'],
       },
-      // {
-      //   title: 'Navy @ Notre Dame',
-      //   channelTitle: 'NBC',
-      //   channel: 5,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Football'],
-      // },
-      // {
-      //   title: 'WWE Raw',
-      //   channelTitle: 'TNT',
-      //   channel: 245,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(3, 'h')
-      //       .minutes(30)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Wrestling'],
-      // },
+      {
+        title: 'Navy @ Notre Dame',
+        channelTitle: 'NBC',
+        channel: 5,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Football'],
+      },
+      {
+        title: 'WWE Raw',
+        channelTitle: 'TNT',
+        channel: 245,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(3, 'h')
+            .minutes(30)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Wrestling'],
+      },
 
-      // {
-      //   title: 'Orioles @ Reds',
-      //   channelTitle: 'FSN',
-      //   channel: 661,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['Baseball'],
-      // },
-      // {
-      //   title: 'UFC 247: Jones vs. Reyes',
-      //   channelTitle: 'FS2',
-      //   channel: 612,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   isSports: true,
-      //   clickerRating: 7,
-      //   subcategories: ['MMA'],
-      // },
-      // {
-      //   title: 'Friends',
-      //   channelTitle: 'TBS',
-      //   channel: 9,
-      //   start:
-      //     moment()
-      //       .subtract(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   end:
-      //     moment()
-      //       .add(1, 'h')
-      //       .minutes(0)
-      //       .unix() * 1000,
-      //   clickerRating: 7,
-      //   subcategories: ['MMA'],
-      // },
+      {
+        title: 'Orioles @ Reds',
+        channelTitle: 'FSN',
+        channel: 661,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['Baseball'],
+      },
+      {
+        title: 'UFC 247: Jones vs. Reyes',
+        channelTitle: 'FS2',
+        channel: 612,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        isSports: true,
+        clickerRating: 7,
+        subcategories: ['MMA'],
+      },
+      {
+        title: 'Friends',
+        channelTitle: 'TBS',
+        channel: 9,
+        start:
+          moment()
+            .subtract(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        end:
+          moment()
+            .add(1, 'h')
+            .minutes(0)
+            .unix() * 1000,
+        clickerRating: 7,
+        subcategories: ['MMA'],
+      },
     ];
     return respond(200, demoPrograms);
   }
@@ -1190,7 +1191,7 @@ function buildProgramObjects(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, regionName: string) {
+function build(dtvSchedule: any, regionId: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
@@ -1222,9 +1223,11 @@ function build(dtvSchedule: any, regionName: string) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
+        const region: region = allRegions.find(r => r.id === regionId);
+        program.isLocal = region.localChannels.includes(program.channel);
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
-        program.region = regionName;
+        program.region = regionId;
         program.start = moment(program.airTime).unix() * 1000;
         program.end =
           moment(program.airTime)
