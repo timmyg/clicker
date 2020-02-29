@@ -49,7 +49,7 @@ const allRegions: region[] = [
   { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
 ];
 // const minorChannels: number[] = [661];
-const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO'];
+const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NBCSHD', 'NHLaHD'];
 const nationalChannels: number[] = [
   206, //ESPN
   209, //ESPN2
