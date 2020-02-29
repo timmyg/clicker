@@ -27,12 +27,15 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.controlCenterDailyInit = RavenLambdaWrapper.handler(Raven, async event => {
-  // TODO pull actual regions
-  const regions = ['cincinnati'];
+  const { data: allRegions } = await new Invoke()
+    .service('program')
+    .name('regions')
+    .go();
+  const allRegionIds = allRegions.map(r => r.id);
   const { data: locations }: { data: Venue[] } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')
-    .pathParams({ regions })
+    .pathParams({ regions: allRegionIds })
     .headers(event.headers)
     .go();
   for (location of locations) {
@@ -71,12 +74,16 @@ function getChannelForZone(ix: number): number {
 }
 
 module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  // TODO pull actual regions
-  const regions = ['cincinnati'];
+  const { data: allRegions } = await new Invoke()
+    .service('program')
+    .name('regions')
+    .go();
+  const allRegionIds = allRegions.map(r => r.id);
+
   const { data: locations }: { data: Venue[] } = await new Invoke()
     .service('location')
     .name('controlCenterLocationsByRegion')
-    .pathParams({ regions })
+    .pathParams({ regions: allRegionIds })
     .headers(event.headers)
     .go();
   for (location of locations) {
