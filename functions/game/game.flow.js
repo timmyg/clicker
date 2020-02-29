@@ -23,6 +23,7 @@ class GameStatus {
   blowout: boolean;
   ended: boolean;
   description: string;
+  liveRating: boolean;
 }
 
 if (process.env.NODE_ENV === 'test') {
@@ -102,6 +103,7 @@ const dbGame = dynamoose.model(
       blowout: Boolean,
       ended: Boolean,
       description: String,
+      liveRating: Boolean,
     },
   },
   {
@@ -150,39 +152,71 @@ function buildStatus(game: Game): GameStatus {
   gameStatus.ended = ['complete'].includes(game.status) ? true : false;
   gameStatus.description = game.scoreboard && game.scoreboard.display;
   gameStatus.blowout = ['complete', 'inprogress'].includes(game.status) ? isBlowout(game) : false;
+  gameStatus.liveRating = getLiveRating(game);
   return gameStatus;
 }
 
-// function getDescription(game: Game): string {
-//   // console.log({ game44: game });
-//   const score = `${game.away.name.abbr} ${game.away.score || 0} @ ${game.home.name.abbr} ${game.home.score || 0}`;
-//   // console.log('game.leagueName', game.leagueName, game.status);
-//   switch (game.status) {
-//     case 'scheduled': {
-//       return `${score} (${moment.tz(game.start, 'America/New_York').format('M/D h:mma')} EST)`;
-//     }
-//     case 'inprogress': {
-//       switch (game.leagueName) {
-//         case 'epl':
-//         case 'seriea':
-//         case 'laliga':
-//         case 'bundesliga':
-//         case 'ligue1': {
-//           return `${score} (${game.scoreboard.display})`;
-//         }
-//         default: {
-//           return `${score} (${game.scoreboard.clock} - ${game.scoreboard.period})`;
-//         }
-//       }
-//     }
-//     case 'complete': {
-//       return `${score} (${game.scoreboard.display})`;
-//     }
-//     default: {
-//       return '';
-//     }
-//   }
-// }
+function getLiveRating(game: Game): number {
+  if (!game.scoreboard) return 0;
+  switch (game.leagueName) {
+    case 'mlb':
+      if ([1, 2, 3].includes(game.scoreboard.period)) {
+        return 1;
+      }
+      if ([4, 5, 6].includes(game.scoreboard.period)) {
+        if (Math.abs(game.home.score - game.away.score) <= 2) {
+          return 4;
+        }
+        return 2;
+      }
+      if (game.scoreboard.period >= 7) {
+        if (Math.abs(game.home.score - game.away.score) <= 1) {
+          return 9;
+        } else if (Math.abs(game.home.score - game.away.score) <= 3) {
+          return 5;
+        } else {
+          return 2;
+        }
+      }
+    case 'nhl':
+      if (game.scoreboard.period >= 3 && Math.abs(game.home.score - game.away.score) <= 1) {
+        return 9;
+      }
+      return 2;
+    case 'xfl':
+    case 'nfl':
+    case 'ncaaf':
+      if (game.scoreboard.period >= 4 && Math.abs(game.home.score - game.away.score) <= 7) {
+        return 9;
+      }
+      return 2;
+    case 'ncaab':
+      if (game.scoreboard.period >= 2 && Math.abs(game.home.score - game.away.score) <= 5) {
+        return 9;
+      }
+      return 2;
+    case 'wnba':
+    case 'nba':
+      if (game.scoreboard.period >= 4 && Math.abs(game.home.score - game.away.score) <= 7) {
+        return 9;
+      }
+      return 2;
+    case 'epl':
+    case 'seriea':
+    case 'laliga':
+    case 'bundesliga':
+    case 'ligue1':
+      // const isNearEnd = game.scoreboard.period === 2 && +game.scoreboard.clock >= 80;
+      // const isBlowout = Math.abs(game.home.score - game.away.score) >= 3;
+      // return isNearEnd && isBlowout;
+      if (+game.scoreboard.clock >= 80 && Math.abs(game.home.score - game.away.score) <= 1) {
+        return 9;
+      }
+      return 2;
+    default:
+      return 0;
+  }
+}
 
 function isBlowout(game: Game): boolean {
   switch (game.leagueName) {
