@@ -1293,8 +1293,8 @@ async function updateLocationBox(
   // console.log({ params });
   // console.log('returned');
   try {
-    await docClient.update(params).promise();
-    // console.log({ x });
+    const x = await docClient.update(params).promise();
+    console.log({ x });
   } catch (err) {
     console.log({ err });
     return err;
