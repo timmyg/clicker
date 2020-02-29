@@ -1226,7 +1226,9 @@ function build(dtvSchedule: any, regionId: string) {
 
         console.log(allRegions, regionId);
         const region: region = allRegions.find(r => r.id === regionId);
-        program.isLocal = region.localChannels.includes(program.channel);
+        if (region.localChannels.includes(program.channel)) {
+          program.isLocal = true;
+        }
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
         program.region = regionId;
