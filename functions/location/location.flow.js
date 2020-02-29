@@ -1204,10 +1204,11 @@ function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box
 
 function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   console.info('findBoxWorseRating');
+  const ratingBuffer = 2;
   const sorted = boxes
     .filter(b => b.program)
     .filter(b => b.program.clickerRating)
-    .filter(b => b.program.clickerRating < program.fields.rating)
+    .filter(b => program.fields.rating - b.program.clickerRating >= ratingBuffer)
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
   return sorted && sorted.length ? sorted[0] : null;
 }

@@ -95,6 +95,16 @@ describe('findBox', () => {
     const result = findBoxWorseRating(createBoxes(), program);
     expect(result.program.clickerRating).toBe(3);
   });
+  test('findBoxWorseRating at least 2 null', () => {
+    const program = { fields: { rating: 4 } };
+    const result = findBoxWorseRating(createBoxes(), program);
+    expect(result).toBe(null);
+  });
+  test('findBoxWorseRating at least 2', () => {
+    const program = { fields: { rating: 5 } };
+    const result = findBoxWorseRating(createBoxes(), program);
+    expect(result.program.clickerRating).toBe(3);
+  });
   test('findBoxGameOver', () => {
     const result = findBoxGameOver(createBoxes());
     expect(result.id).toBe(4);
