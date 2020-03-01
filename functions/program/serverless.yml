@@ -264,6 +264,7 @@ functions:
           method: get
   getAll:
     handler: program.getAll
+    provisionedConcurrency: 1
     runtime: nodejs12.x
     memorySize: 1024
     timeout: 20
