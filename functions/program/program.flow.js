@@ -1250,7 +1250,25 @@ function build(dtvSchedule: any, regionId: string) {
 }
 
 function getDefaultRating(program: Program): ?number {
-  const defaultRatings = [{ search: 'sportscenter', rating: 1 }];
+  const defaultRatings = [
+    { search: 'sportscenter', rating: 1 },
+    { search: 'around the horn', rating: 1 },
+    { search: 'nfl live', rating: 1 },
+    { search: 'will cain show', rating: 1 },
+    { search: 'nba: the jump', rating: 1 },
+    { search: 'daily wager', rating: 1 },
+    { search: 'the herd', rating: 1 },
+    { search: 'skip and shannon', rating: 1 },
+  ];
+
+  // first things first
+  // speak for yourself
+  // high noon
+  // golic & wingo
+  // first take
+  // get up
+  // the dan le batard show
+
   console.log(program.title, defaultRatings[0].search);
   const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
   console.log({ match });
