@@ -923,6 +923,7 @@ function buildAirtablePrograms(programs: Program[]) {
       region,
     } = program;
     const meta = { channel, channelMinor, region };
+    const defaultClickerRating = getDefaultRating(program);
     transformed.push({
       fields: {
         programmingId,
@@ -935,6 +936,7 @@ function buildAirtablePrograms(programs: Program[]) {
         live,
         start,
         end,
+        rating: defaultClickerRating,
         meta: JSON.stringify(meta),
       },
     });
@@ -1223,8 +1225,6 @@ function build(dtvSchedule: any, regionId: string) {
         program.channelCategories = channel.chCat;
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
-
-        program.clickerRating = getDefaultRating(program);
 
         // console.log(allRegions, regionId);
         const region: region = allRegions.find(r => r.id === regionId);
