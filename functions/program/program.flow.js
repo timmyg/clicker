@@ -1224,7 +1224,9 @@ function build(dtvSchedule: any, regionId: string) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
-        console.log(allRegions, regionId);
+        program.clickerRating = getDefaultRating(program);
+
+        // console.log(allRegions, regionId);
         const region: region = allRegions.find(r => r.id === regionId);
         if (region.localChannels.includes(program.channel)) {
           program.isLocal = true;
@@ -1245,6 +1247,16 @@ function build(dtvSchedule: any, regionId: string) {
   // filter out duplicates - happens with sd/hd channels
   const filteredPrograms = uniqBy(programs, 'id');
   return filteredPrograms;
+}
+
+function getDefaultRating(program: Program): ?number {
+  const defaultRatings = [{ search: 'sportscenter', rating: 1 }];
+  console.log(program.title, defaultRatings[0].search);
+  const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
+  console.log({ match });
+  if (match) {
+    return match.rating;
+  }
 }
 
 function generateId(program: Program) {
@@ -1277,3 +1289,4 @@ module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
+module.exports.getDefaultRating = getDefaultRating;
