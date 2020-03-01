@@ -23,7 +23,7 @@ class GameStatus {
   blowout: boolean;
   ended: boolean;
   description: string;
-  liveRating: boolean;
+  liveRating: number;
 }
 
 if (process.env.NODE_ENV === 'test') {
@@ -103,7 +103,7 @@ const dbGame = dynamoose.model(
       blowout: Boolean,
       ended: Boolean,
       description: String,
-      liveRating: Boolean,
+      liveRating: Number,
     },
   },
   {
