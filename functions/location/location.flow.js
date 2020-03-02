@@ -1259,6 +1259,8 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
       ccp.fields.targetingIds && ccp.fields.targetingIds.length
         ? ccp.fields.targetingIds.filter(str => str.startsWith('location:')).map(str => str.replace('location:', ''))
         : [];
+    const isTargetedRegion = targetingRegionIds.includes(location.region);
+    const isTargetedLocation = targetingLocationIds.includes(location.id);
     if (targetingRegionIds.length && targetingLocationIds.length) {
       return targetingRegionIds.includes(location.region) || targetingLocationIds.includes(location.id);
     } else if (targetingRegionIds.length) {
@@ -1268,7 +1270,41 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
     }
     return true;
   });
-  return ccPrograms;
+
+  // return ccPrograms;
+
+  // remove duplicates if targeted more than once
+
+  // only iterate over uniques, but search all
+  const uniques: ControlCenterProgram[] = [];
+  const uniquesMap = new Map();
+  for (const item of ccPrograms) {
+    if (!uniquesMap.has(item.fields.programmingId)) {
+      uniquesMap.set(item.fields.programmingId, true);
+      uniques.push(item);
+    }
+  }
+
+  // console.log('uniques', uniques);
+  const results = [];
+  uniques.forEach(ccp => {
+    const duplicates: ControlCenterProgram[] =
+      ccPrograms.filter(ccp2 => ccp2.fields.programmingId === ccp.fields.programmingId) || [];
+    if (duplicates.length) {
+      const a = duplicates.find(
+        d => d.fields.targetingIds && d.fields.targetingIds.find(str => str.startsWith('location:')),
+      );
+      const b = duplicates.find(
+        d => d.fields.targetingIds && d.fields.targetingIds.find(str => str.startsWith('region:')),
+      );
+      const c = duplicates[0];
+      const winner: ControlCenterProgram = a || b || c;
+      results.push(winner);
+    } else {
+      results.push(ccp);
+    }
+  });
+  return results;
 }
 
 async function updateLocationBox(

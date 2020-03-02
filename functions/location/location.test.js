@@ -411,6 +411,16 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
         rating: 4,
       },
     };
+    const other2 = {
+      fields: {
+        rating: 6,
+      },
+    };
+    const other3 = {
+      fields: {
+        rating: 1,
+      },
+    };
     test('10 shows on all boxes', () => {
       const result = replicatePrograms([other, ten, other, other], 6);
       expect(result.filter(ccp => ccp.fields.rating === 10).length).toBe(6);
@@ -432,13 +442,13 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
       expect(result.length).toBe(4);
     });
     test('8 shows on same amount of boxes', () => {
-      const result = replicatePrograms([eight, other, other, other], 12);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(1);
+      const result = replicatePrograms([eight, other, other2, other3], 12);
+      expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(1);
       expect(result.length).toBe(4);
     });
   });
-  test('targeting ids', () => {
-    test('chooses most relevant', () => {
+  describe('targeting ids', () => {
+    test('chooses most relevant already in order', () => {
       const ccPrograms = [
         {
           fields: {
@@ -461,7 +471,7 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
       };
       const result = filterProgramsByTargeting(ccPrograms, location);
       expect(result.length).toBe(1);
-      expect(result[0].rating).toBe(8);
+      expect(result[0].fields.rating).toBe(8);
     });
     test('chooses most relevant flip-flopped', () => {
       const ccPrograms = [
@@ -486,7 +496,7 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
       };
       const result = filterProgramsByTargeting(ccPrograms, location);
       expect(result.length).toBe(1);
-      expect(result[0].rating).toBe(8);
+      expect(result[0].fields.rating).toBe(8);
     });
   });
 });
