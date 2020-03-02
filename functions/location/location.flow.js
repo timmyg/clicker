@@ -941,6 +941,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
+  ccPrograms = replicatePrograms(ccPrograms, location.boxes.filter(b => b.zone).length);
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
@@ -1213,7 +1214,26 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-async function getAirtablePrograms(location: Venue) {
+function replicatePrograms(ccPrograms: ControlCenterProgram[], boxesCount: number): ControlCenterProgram[] {
+  const programsWithReplication = ccPrograms;
+  ccPrograms.forEach(ccp => {
+    if (ccp.fields.rating === 10) {
+      for (let i = 0; i < boxesCount - 1; i++) {
+        programsWithReplication.push(ccp);
+      }
+    } else if (ccp.fields.rating === 9) {
+      // determine 40% of boxes count (and subtract one since one already exists)
+      const replicationCount = Math.floor(boxesCount * 0.4);
+      console.log({ replicationCount });
+      for (let i = 0; i < replicationCount - 1; i++) {
+        programsWithReplication.push(ccp);
+      }
+    }
+  });
+  return programsWithReplication;
+}
+
+async function getAirtablePrograms(location: Venue): ControlCenterProgram[] {
   const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
@@ -1311,3 +1331,4 @@ module.exports.findBoxBlowout = findBoxBlowout;
 module.exports.findBoxWithoutRating = findBoxWithoutRating;
 module.exports.findBoxWorseRating = findBoxWorseRating;
 module.exports.filterProgramsByTargeting = filterProgramsByTargeting;
+module.exports.replicatePrograms = replicatePrograms;

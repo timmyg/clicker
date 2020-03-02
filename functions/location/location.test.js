@@ -8,6 +8,7 @@ const {
   findBoxWithoutRating,
   findBoxWorseRating,
   filterProgramsByTargeting,
+  replicatePrograms,
 } = require('./location');
 const moment = require('moment');
 
@@ -389,8 +390,55 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
     const result = filterProgramsByTargeting([ccProgram], location);
     expect(result.length).toBe(1);
   });
-  test.skip('most relevant targeting id', () => {
-    test('a', () => {
+  describe('replicatePrograms for highly rated games', () => {
+    const ten = {
+      fields: {
+        rating: 10,
+      },
+    };
+    const nine = {
+      fields: {
+        rating: 9,
+      },
+    };
+    const eight = {
+      fields: {
+        rating: 8,
+      },
+    };
+    const other = {
+      fields: {
+        rating: 4,
+      },
+    };
+    test('10 shows on all boxes', () => {
+      const result = replicatePrograms([other, ten, other, other], 6);
+      expect(result.filter(ccp => ccp.fields.rating === 10).length).toBe(6);
+      expect(result.length).toBe(9);
+    });
+    test('9 shows on ~40% of 6 boxes', () => {
+      const result = replicatePrograms([nine, other, other], 6);
+      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
+      expect(result.length).toBe(4);
+    });
+    test('9 shows on ~40% of 5 boxes', () => {
+      const result = replicatePrograms([nine], 5);
+      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
+      expect(result.length).toBe(2);
+    });
+    test('9 shows on ~40% of 8 boxes', () => {
+      const result = replicatePrograms([other, nine], 8);
+      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
+      expect(result.length).toBe(4);
+    });
+    test('8 shows on same amount of boxes', () => {
+      const result = replicatePrograms([eight, other, other, other], 12);
+      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(1);
+      expect(result.length).toBe(4);
+    });
+  });
+  test('targeting ids', () => {
+    test('chooses most relevant', () => {
       const ccPrograms = [
         {
           fields: {
@@ -415,7 +463,7 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
       expect(result.length).toBe(1);
       expect(result[0].rating).toBe(8);
     });
-    test('b', () => {
+    test('chooses most relevant flip-flopped', () => {
       const ccPrograms = [
         {
           fields: {
