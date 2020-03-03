@@ -137,7 +137,7 @@ describe('filterPrograms', () => {
         { zone: '4', channel: 9 },
       ],
     };
-    const result = filterPrograms(ccPrograms, location);
+    const result = filterPrograms(ccPrograms, location, [206, 219, 206, 9]);
     expect(result.length).toBe(3);
     // ensure sorted
     expect(result[0].db.channel).toBe(5);
@@ -157,7 +157,7 @@ describe('filterPrograms', () => {
       channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
       boxes: [{ zone: '1', channel: 5 }, { zone: '2', channel: 9 }, { zone: '3', channel: 19 }],
     };
-    const result = filterPrograms(ccPrograms, location);
+    const result = filterPrograms(ccPrograms, location, [9, 703, 219, 5, 709, 12]);
     expect(result.length).toBe(2);
     expect(result[0].db.channel).toBe(219);
     expect(result[1].db.channel).toBe(12);
@@ -178,7 +178,7 @@ test("don't remove if 9 or 10 since they'll be replicated", () => {
       { zone: '4', channel: 220 },
     ],
   };
-  const result = filterPrograms(ccPrograms, location);
+  const result = filterPrograms(ccPrograms, location, [9, 206, 220, 703]);
   expect(result.length).toBe(3);
   expect(result[0].db.channel).toBe(9);
   expect(result[1].db.channel).toBe(703);
@@ -194,7 +194,7 @@ test('exclude clicker tv app boxes', () => {
   const location = {
     boxes: [{ channel: 209 }, { channel: 9, zone: '2' }, { channel: 206 }, { appActive: true, channel: 219 }],
   };
-  const result = filterPrograms(ccPrograms, location);
+  const result = filterPrograms(ccPrograms, location, [219, 209, 9, 206]);
   expect(result.length).toBe(3);
   expect(result[0].db.channel).toBe(219);
   expect(result[1].db.channel).toBe(209);
@@ -420,16 +420,19 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
     const nine = {
       fields: {
         rating: 9,
+        programmingId: 'uljre2',
       },
     };
     const eight = {
       fields: {
         rating: 8,
+        programmingId: 'abccf',
       },
     };
     const other = {
       fields: {
         rating: 4,
+        programmingId: 'klsdjf',
       },
     };
     const other2 = {
@@ -461,6 +464,16 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
       const result = replicatePrograms([other, nine], 8);
       expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
       expect(result.length).toBe(4);
+    });
+    test('9 shows on ~40% of 8 boxes, removes if already on two', () => {
+      const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, nine.fields.programmingId]);
+      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(1);
+      expect(result.length).toBe(2);
+    });
+    test('9 shows on ~40% of 8 boxes, removes if already on one', () => {
+      const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, eight.fields.programmingId]);
+      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
+      expect(result.length).toBe(3);
     });
     test('8 shows on same amount of boxes', () => {
       const result = replicatePrograms([eight, other, other2, other3], 12);

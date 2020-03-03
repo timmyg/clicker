@@ -944,7 +944,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
-  ccPrograms = replicatePrograms(ccPrograms, location.boxes.filter(b => b.zone).length);
+  const currentlyShowingProgrammingIds: number[] = location.boxes.filter(b => !!b.zone).map(b => b.programmingId);
+  ccPrograms = replicatePrograms(ccPrograms, location.boxes.filter(b => b.zone).length, currentlyShowingProgrammingIds);
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
@@ -972,8 +973,6 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
-
-  // console.log(JSON.stringify({ ccPrograms }));
 
   // get boxes that are CC active, and not manually locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
@@ -1217,18 +1216,34 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-function replicatePrograms(ccPrograms: ControlCenterProgram[], boxesCount: number): ControlCenterProgram[] {
+function replicatePrograms(
+  ccPrograms: ControlCenterProgram[],
+  boxesCount: number,
+  currentlyShowingProgrammingIds: number[] = [],
+): ControlCenterProgram[] {
   const programsWithReplication = ccPrograms;
   ccPrograms.forEach(ccp => {
     if (ccp.fields.rating === 10) {
-      for (let i = 0; i < boxesCount - 1; i++) {
+      // subtract one because one already exists
+      let replicationCount = boxesCount - 1;
+      // subtract another if channel already on
+      if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
+        const count = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
+        replicationCount = replicationCount - count;
+      }
+      for (let i = 0; i < replicationCount; i++) {
         programsWithReplication.push(ccp);
       }
     } else if (ccp.fields.rating === 9) {
-      // determine 40% of boxes count (and subtract one since one already exists)
-      const replicationCount = Math.floor(boxesCount * 0.4);
-      console.log({ replicationCount });
-      for (let i = 0; i < replicationCount - 1; i++) {
+      // determine 40% of boxes count
+      // subtract one since one already exists
+      let replicationCount = Math.floor(boxesCount * 0.4) - 1;
+      // subtract another if channel already on
+      if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
+        const count = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
+        replicationCount = replicationCount - count;
+      }
+      for (let i = 0; i < replicationCount; i++) {
         programsWithReplication.push(ccp);
       }
     }
