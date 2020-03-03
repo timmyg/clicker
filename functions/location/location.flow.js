@@ -1232,9 +1232,9 @@ function replicatePrograms(
       let replicationCount = 0;
       // subtract one because there is already one in programsWithReplication
       if (ccp.fields.rating === 10) {
-        replicationCount = boxesCount - 1;
+        replicationCount = boxesCount;
       } else if (ccp.fields.rating === 9) {
-        replicationCount = Math.floor(boxesCount * 0.4) - 1;
+        replicationCount = Math.floor(boxesCount * 0.4);
       }
       console.log('intended replication count: ', replicationCount);
       // subtract another if channel already on
@@ -1251,7 +1251,8 @@ function replicatePrograms(
           ccp2 => ccp2.fields.programmingId !== ccp.fields.programmingId,
         );
       }
-      for (let i = 0; i < replicationCount; i++) {
+      // subtract one because its already in there once
+      for (let i = 0; i < replicationCount - 1; i++) {
         console.log('loop');
         programsWithReplication.push(ccp);
       }
