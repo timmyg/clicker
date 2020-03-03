@@ -1225,9 +1225,9 @@ function replicatePrograms(
 ): ControlCenterProgram[] {
   console.info('replicatePrograms');
   console.info({ boxesCount, currentlyShowingProgrammingIds });
-  const programsWithReplication = ccPrograms;
+  let programsWithReplication = ccPrograms;
   ccPrograms.forEach(ccp => {
-    console.info(ccp.fields.rating);
+    console.info('rating', ccp.fields.rating);
     if ([10, 9].includes(ccp.fields.rating)) {
       let replicationCount = 0;
       // subtract one because there is already one in programsWithReplication
@@ -1245,6 +1245,12 @@ function replicatePrograms(
         console.log({ replicationCount });
       }
       console.log({ replicationCount });
+      // remove from array if already showing
+      if (replicationCount <= 0) {
+        programsWithReplication = programsWithReplication.filter(
+          ccp2 => ccp2.fields.programmingId !== ccp.fields.programmingId,
+        );
+      }
       for (let i = 0; i < replicationCount; i++) {
         console.log('loop');
         programsWithReplication.push(ccp);
