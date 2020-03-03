@@ -467,8 +467,8 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
     });
     test('9 shows on ~40% of 8 boxes, removes if already on two', () => {
       const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, nine.fields.programmingId]);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(1);
-      expect(result.length).toBe(2);
+      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(0);
+      expect(result.length).toBe(1);
     });
     test('9 shows on ~40% of 8 boxes, removes if already on one', () => {
       const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, eight.fields.programmingId]);
