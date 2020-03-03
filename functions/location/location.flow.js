@@ -1251,7 +1251,7 @@ function replicatePrograms(
       //   );
       // }
       // subtract one because its already in there once
-      for (let i = 0; i < replicationCount - 1; i++) {
+      for (let i = 0; i < replicationCount; i++) {
         console.log('loop');
         programsWithReplication.push(ccp);
       }
