@@ -1242,7 +1242,9 @@ function replicatePrograms(
         replicationCount = replicationCount - existingCount;
         console.log({ replicationCount });
       }
+      console.log({ replicationCount });
       for (let i = 0; i < replicationCount; i++) {
+        console.log('loop');
         programsWithReplication.push(ccp);
       }
     }
