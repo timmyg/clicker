@@ -1221,27 +1221,26 @@ function replicatePrograms(
   boxesCount: number,
   currentlyShowingProgrammingIds: number[] = [],
 ): ControlCenterProgram[] {
+  console.info('replicatePrograms');
+  console.info({ boxesCount, currentlyShowingProgrammingIds });
   const programsWithReplication = ccPrograms;
   ccPrograms.forEach(ccp => {
-    if (ccp.fields.rating === 10) {
-      // subtract one because one already exists
-      let replicationCount = boxesCount - 1;
+    console.info(ccp.fields.rating);
+    if ([10, 9].includes(ccp.fields.rating)) {
+      let replicationCount = 0;
+      // subtract one because there is already one in programsWithReplication
+      if (ccp.fields.rating === 10) {
+        replicationCount = boxesCount - 1;
+      } else if (ccp.fields.rating === 9) {
+        replicationCount = Math.floor(boxesCount * 0.4) - 1;
+      }
+      console.log('intended replication count: ', replicationCount);
       // subtract another if channel already on
       if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
-        const count = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
-        replicationCount = replicationCount - count;
-      }
-      for (let i = 0; i < replicationCount; i++) {
-        programsWithReplication.push(ccp);
-      }
-    } else if (ccp.fields.rating === 9) {
-      // determine 40% of boxes count
-      // subtract one since one already exists
-      let replicationCount = Math.floor(boxesCount * 0.4) - 1;
-      // subtract another if channel already on
-      if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
-        const count = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
-        replicationCount = replicationCount - count;
+        const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
+        console.log({ existingCount });
+        replicationCount = replicationCount - existingCount;
+        console.log({ replicationCount });
       }
       for (let i = 0; i < replicationCount; i++) {
         programsWithReplication.push(ccp);
