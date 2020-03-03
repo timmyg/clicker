@@ -944,7 +944,9 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
-  const currentlyShowingProgrammingIds: number[] = location.boxes.filter(b => !!b.zone).map(b => b.programmingId);
+  const currentlyShowingProgrammingIds: string[] = location.boxes
+    .filter(b => !!b.zone)
+    .map(b => b.program && b.program.programmingId);
   ccPrograms = replicatePrograms(ccPrograms, location.boxes.filter(b => b.zone).length, currentlyShowingProgrammingIds);
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
@@ -1219,7 +1221,7 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
 function replicatePrograms(
   ccPrograms: ControlCenterProgram[],
   boxesCount: number,
-  currentlyShowingProgrammingIds: number[] = [],
+  currentlyShowingProgrammingIds: string[] = [],
 ): ControlCenterProgram[] {
   console.info('replicatePrograms');
   console.info({ boxesCount, currentlyShowingProgrammingIds });
