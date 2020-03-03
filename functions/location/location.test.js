@@ -123,11 +123,11 @@ describe('findBox', () => {
 describe('filterPrograms', () => {
   test('already showing', () => {
     const ccPrograms = [
-      { fields: { rating: 9 }, db: { channel: 206 } }, // showing
+      { fields: { rating: 7 }, db: { channel: 206 } }, // showing
       { fields: { rating: 6 }, db: { channel: 209 } },
       { fields: { rating: 6 }, db: { channel: 219 } }, // showing
-      { fields: { rating: 10 }, db: { channel: 5 } },
-      { fields: { rating: 9 }, db: { channel: 221 } },
+      { fields: { rating: 8 }, db: { channel: 5 } },
+      { fields: { rating: 7 }, db: { channel: 221 } },
     ];
     const location = {
       boxes: [
@@ -162,6 +162,27 @@ describe('filterPrograms', () => {
     expect(result[0].db.channel).toBe(219);
     expect(result[1].db.channel).toBe(12);
   });
+});
+test("don't remove if 9 or 10 since they'll be replicated", () => {
+  const ccPrograms = [
+    { fields: { rating: 10 }, db: { channel: 9 } },
+    { fields: { rating: 8 }, db: { channel: 206 } },
+    { fields: { rating: 4 }, db: { channel: 220 } },
+    { fields: { rating: 9 }, db: { channel: 703 } },
+  ];
+  const location = {
+    boxes: [
+      { zone: '1', channel: 5 },
+      { zone: '2', channel: 9 },
+      { zone: '3', channel: 703 },
+      { zone: '4', channel: 220 },
+    ],
+  };
+  const result = filterPrograms(ccPrograms, location);
+  expect(result.length).toBe(3);
+  expect(result[0].db.channel).toBe(9);
+  expect(result[1].db.channel).toBe(703);
+  expect(result[2].db.channel).toBe(206);
 });
 test('exclude clicker tv app boxes', () => {
   const ccPrograms = [

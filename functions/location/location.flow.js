@@ -903,16 +903,19 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
+  // remove programs currently showing, unless 9 or 10 as we are replicating those
   const currentlyShowingChannels: number[] = boxes.filter(b => !!b.zone).map(b => b.channel);
-  ccPrograms = ccPrograms.filter(ccp => !currentlyShowingChannels.includes(ccp.db.channel));
+  ccPrograms = ccPrograms.filter(ccp => {
+    if (ccp.fields.rating >= 9) {
+      return true;
+    }
+    return !currentlyShowingChannels.includes(ccp.db.channel);
+  });
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
-  // remove channels that location doesnt have
+  // remove channels that location doesn't have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
-  // console.info({
-  //   excludedChannels: !!excludedChannels ? excludedChannels : [],
-  // });
 
   if (excludedChannels && excludedChannels.length) {
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
