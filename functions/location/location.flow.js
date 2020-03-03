@@ -1223,14 +1223,13 @@ function replicatePrograms(
   boxesCount: number,
   currentlyShowingProgrammingIds: string[] = [],
 ): ControlCenterProgram[] {
-  console.info('replicatePrograms');
-  console.info({ boxesCount, currentlyShowingProgrammingIds });
-  let programsWithReplication = ccPrograms;
+  // console.info('replicatePrograms');
+  // console.info({ boxesCount, currentlyShowingProgrammingIds });
+  let programsWithReplication = [];
   ccPrograms.forEach(ccp => {
-    console.info('rating', ccp.fields.rating);
+    // console.info('rating', ccp.fields.rating);
     if ([10, 9].includes(ccp.fields.rating)) {
       let replicationCount = 0;
-      // subtract one because there is already one in programsWithReplication
       if (ccp.fields.rating === 10) {
         replicationCount = boxesCount;
       } else if (ccp.fields.rating === 9) {
@@ -1244,18 +1243,20 @@ function replicatePrograms(
         replicationCount = replicationCount - existingCount;
         console.log({ replicationCount });
       }
-      console.log({ replicationCount });
-      // remove from array if already showing
-      if (replicationCount <= 0) {
-        programsWithReplication = programsWithReplication.filter(
-          ccp2 => ccp2.fields.programmingId !== ccp.fields.programmingId,
-        );
-      }
+      console.log('final', { replicationCount });
+      // // remove from array if already showing
+      // if (replicationCount <= 0) {
+      //   programsWithReplication = programsWithReplication.filter(
+      //     ccp2 => ccp2.fields.programmingId !== ccp.fields.programmingId,
+      //   );
+      // }
       // subtract one because its already in there once
       for (let i = 0; i < replicationCount - 1; i++) {
         console.log('loop');
         programsWithReplication.push(ccp);
       }
+    } else {
+      programsWithReplication.push(ccp);
     }
   });
   return programsWithReplication;
