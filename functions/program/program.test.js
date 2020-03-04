@@ -6,6 +6,7 @@ const {
   getChannels,
   getChannelsWithMinor,
   transformSIUrl,
+  getDefaultRating,
 } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
@@ -64,7 +65,7 @@ test('build programs', () => {
   data.schedule.forEach((s, i) => {
     s.schedules.forEach((c, i, channels) => {});
   });
-  const response = build(data.schedule, null, ['324', '661-1']);
+  const response = build(data.schedule, 'cincinnati');
   // console.log({ response });
   expect(response[0]).toHaveProperty('region');
   expect(response[0]).toHaveProperty('start');
@@ -84,4 +85,13 @@ const channels = [5, 9, 12, 19, 661.1];
 
 test('getMajorChannels', () => {
   expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
+});
+
+describe('getDefaultRating', () => {
+  test('rated', () => {
+    expect(getDefaultRating({ title: 'SportsCenter With Scott Van Pelt' })).toEqual(1);
+  });
+  test('unrated', () => {
+    expect(getDefaultRating({ title: 'Winter X Games' })).toEqual(undefined);
+  });
 });

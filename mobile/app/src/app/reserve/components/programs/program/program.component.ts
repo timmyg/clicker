@@ -58,7 +58,7 @@ export class ProgramComponent implements OnInit {
   setVegas() {
     try {
       const game = this.program && this.program.game
-      if (game && game.home) {
+      if (game && game.home && game.home.name) {
         this.vegas = `${game.home.name.abbr} ${game.home.book.spread} (${game.home.book.moneyline})`
         this.vegasOverUnder = `${game.book.total}`
       }

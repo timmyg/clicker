@@ -814,7 +814,9 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
+  console.log({ locationId, boxId });
   const { channel, channelMinor, source, channelChangeAt } = getBody(event);
+  console.log({ channel });
 
   console.time('get location');
   const location: Venue = await dbLocation
@@ -822,6 +824,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .eq(locationId)
     .exec();
   console.timeEnd('get location');
+  console.log(location.name);
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   console.log({ boxId, boxIndex });
@@ -900,16 +903,19 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
+  // remove programs currently showing, unless 9 or 10 as we are replicating those
   const currentlyShowingChannels: number[] = boxes.filter(b => !!b.zone).map(b => b.channel);
-  ccPrograms = ccPrograms.filter(ccp => !currentlyShowingChannels.includes(ccp.db.channel));
+  ccPrograms = ccPrograms.filter(ccp => {
+    if (ccp.fields.rating >= 9) {
+      return true;
+    }
+    return !currentlyShowingChannels.includes(ccp.db.channel);
+  });
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
-  // remove channels that location doesnt have
+  // remove channels that location doesn't have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
-  // console.info({
-  //   excludedChannels: !!excludedChannels ? excludedChannels : [],
-  // });
 
   if (excludedChannels && excludedChannels.length) {
     ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
@@ -938,6 +944,10 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
+  const currentlyShowingProgrammingIds: string[] = location.boxes
+    .filter(b => !!b.zone)
+    .map(b => b.program && b.program.programmingId);
+  ccPrograms = replicatePrograms(ccPrograms, location.boxes.filter(b => b.zone).length, currentlyShowingProgrammingIds);
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
@@ -965,8 +975,6 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
-
-  // console.log(JSON.stringify({ ccPrograms }));
 
   // get boxes that are CC active, and not manually locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
@@ -1201,15 +1209,60 @@ function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box
 
 function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   console.info('findBoxWorseRating');
+  const ratingBuffer = 2;
   const sorted = boxes
     .filter(b => b.program)
     .filter(b => b.program.clickerRating)
-    .filter(b => b.program.clickerRating < program.fields.rating)
+    .filter(b => program.fields.rating - b.program.clickerRating >= ratingBuffer)
     .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-async function getAirtablePrograms(location: Venue) {
+function replicatePrograms(
+  ccPrograms: ControlCenterProgram[],
+  boxesCount: number,
+  currentlyShowingProgrammingIds: string[] = [],
+): ControlCenterProgram[] {
+  // console.info('replicatePrograms');
+  // console.info({ boxesCount, currentlyShowingProgrammingIds });
+  let programsWithReplication = [];
+  ccPrograms.forEach(ccp => {
+    // console.info('rating', ccp.fields.rating);
+    if ([10, 9].includes(ccp.fields.rating)) {
+      let replicationCount = 0;
+      if (ccp.fields.rating === 10) {
+        replicationCount = boxesCount;
+      } else if (ccp.fields.rating === 9) {
+        replicationCount = Math.floor(boxesCount * 0.4);
+      }
+      console.log('intended replication count: ', replicationCount);
+      // subtract another if channel already on
+      if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
+        const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
+        console.log({ existingCount });
+        replicationCount = replicationCount - existingCount;
+        console.log({ replicationCount });
+      }
+      console.log('final', { replicationCount });
+      // // remove from array if already showing
+      // if (replicationCount <= 0) {
+      //   programsWithReplication = programsWithReplication.filter(
+      //     ccp2 => ccp2.fields.programmingId !== ccp.fields.programmingId,
+      //   );
+      // }
+      // subtract one because its already in there once
+      for (let i = 0; i < replicationCount; i++) {
+        console.log('loop');
+        programsWithReplication.push(ccp);
+      }
+    } else {
+      programsWithReplication.push(ccp);
+    }
+  });
+  return programsWithReplication;
+}
+
+async function getAirtablePrograms(location: Venue): ControlCenterProgram[] {
   const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
@@ -1235,6 +1288,8 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
       ccp.fields.targetingIds && ccp.fields.targetingIds.length
         ? ccp.fields.targetingIds.filter(str => str.startsWith('location:')).map(str => str.replace('location:', ''))
         : [];
+    const isTargetedRegion = targetingRegionIds.includes(location.region);
+    const isTargetedLocation = targetingLocationIds.includes(location.id);
     if (targetingRegionIds.length && targetingLocationIds.length) {
       return targetingRegionIds.includes(location.region) || targetingLocationIds.includes(location.id);
     } else if (targetingRegionIds.length) {
@@ -1244,7 +1299,41 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
     }
     return true;
   });
-  return ccPrograms;
+
+  // return ccPrograms;
+
+  // remove duplicates if targeted more than once
+
+  // only iterate over uniques, but search all
+  const uniques: ControlCenterProgram[] = [];
+  const uniquesMap = new Map();
+  for (const item of ccPrograms) {
+    if (!uniquesMap.has(item.fields.programmingId)) {
+      uniquesMap.set(item.fields.programmingId, true);
+      uniques.push(item);
+    }
+  }
+
+  // console.log('uniques', uniques);
+  const results = [];
+  uniques.forEach(ccp => {
+    const duplicates: ControlCenterProgram[] =
+      ccPrograms.filter(ccp2 => ccp2.fields.programmingId === ccp.fields.programmingId) || [];
+    if (duplicates.length) {
+      const a = duplicates.find(
+        d => d.fields.targetingIds && d.fields.targetingIds.find(str => str.startsWith('location:')),
+      );
+      const b = duplicates.find(
+        d => d.fields.targetingIds && d.fields.targetingIds.find(str => str.startsWith('region:')),
+      );
+      const c = duplicates[0];
+      const winner: ControlCenterProgram = a || b || c;
+      results.push(winner);
+    } else {
+      results.push(ccp);
+    }
+  });
+  return results;
 }
 
 async function updateLocationBox(
@@ -1290,8 +1379,8 @@ async function updateLocationBox(
   // console.log({ params });
   // console.log('returned');
   try {
-    await docClient.update(params).promise();
-    // console.log({ x });
+    const x = await docClient.update(params).promise();
+    console.log({ x });
   } catch (err) {
     console.log({ err });
     return err;
@@ -1307,3 +1396,4 @@ module.exports.findBoxBlowout = findBoxBlowout;
 module.exports.findBoxWithoutRating = findBoxWithoutRating;
 module.exports.findBoxWorseRating = findBoxWorseRating;
 module.exports.filterProgramsByTargeting = filterProgramsByTargeting;
+module.exports.replicatePrograms = replicatePrograms;

@@ -47,9 +47,10 @@ const allRegions: region[] = [
   },
   { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
+  { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
 ];
 // const minorChannels: number[] = [661];
-const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO'];
+const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
 const nationalChannels: number[] = [
   206, //ESPN
   209, //ESPN2
@@ -191,6 +192,7 @@ const dbProgram = dynamoose.model(
     points: Number,
     synced: Boolean, // synced with description from separate endpoint
     isSports: Boolean,
+    isLocal: Boolean,
   },
   {
     saveUnknown: ['game'],
@@ -921,6 +923,7 @@ function buildAirtablePrograms(programs: Program[]) {
       region,
     } = program;
     const meta = { channel, channelMinor, region };
+    const defaultClickerRating = getDefaultRating(program);
     transformed.push({
       fields: {
         programmingId,
@@ -933,6 +936,7 @@ function buildAirtablePrograms(programs: Program[]) {
         live,
         start,
         end,
+        rating: defaultClickerRating,
         meta: JSON.stringify(meta),
       },
     });
@@ -1190,7 +1194,7 @@ function buildProgramObjects(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, regionName: string) {
+function build(dtvSchedule: any, regionId: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
@@ -1222,9 +1226,14 @@ function build(dtvSchedule: any, regionName: string) {
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
 
+        // console.log(allRegions, regionId);
+        const region: region = allRegions.find(r => r.id === regionId);
+        if (region.localChannels.includes(program.channel)) {
+          program.isLocal = true;
+        }
         program.live = program.ltd === 'Live' ? true : false;
         program.repeat = program.repeat;
-        program.region = regionName;
+        program.region = regionId;
         program.start = moment(program.airTime).unix() * 1000;
         program.end =
           moment(program.airTime)
@@ -1240,12 +1249,40 @@ function build(dtvSchedule: any, regionName: string) {
   return filteredPrograms;
 }
 
+function getDefaultRating(program: Program): ?number {
+  const defaultRatings = [
+    { search: 'sportscenter', rating: 1 },
+    { search: 'around the horn', rating: 1 },
+    { search: 'nfl live', rating: 1 },
+    { search: 'will cain show', rating: 1 },
+    { search: 'nba: the jump', rating: 1 },
+    { search: 'daily wager', rating: 1 },
+    { search: 'the herd', rating: 1 },
+    { search: 'skip and shannon', rating: 1 },
+  ];
+
+  // first things first
+  // speak for yourself
+  // high noon
+  // golic & wingo
+  // first take
+  // get up
+  // the dan le batard show
+
+  console.log(program.title, defaultRatings[0].search);
+  const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
+  console.log({ match });
+  if (match) {
+    return match.rating;
+  }
+}
+
 function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
-  // console.log(programmingId, channel, start, region);
-  const id = programmingId + channel + start;
-  // console.log('....', programmingId, channel, start, region, id, uuid(id, uuid.DNS));
-  // console.log({ id });
+  let id = programmingId + channel + start;
+  if (region) {
+    id += region;
+  }
   return uuid(id, uuid.DNS);
 }
 
@@ -1270,3 +1307,4 @@ module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
+module.exports.getDefaultRating = getDefaultRating;

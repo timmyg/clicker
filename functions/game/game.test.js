@@ -46,11 +46,12 @@ describe('get status', () => {
   describe('nfl', () => {
     test('completed', () => {
       const data = require('../.resources/db/games/football/nfl/completed.json');
-      const { started, blowout, ended, description } = buildStatus(data);
+      const { started, blowout, ended, description, liveRating } = buildStatus(data);
       expect(description).toBe('Final');
       expect(started).toBeTruthy();
       expect(ended).toBeTruthy();
       expect(blowout).toBeFalsy();
+      expect(liveRating).toBe(9);
     });
     test('blowout', () => {
       const data = require('../.resources/db/games/football/nfl/blowout.json');

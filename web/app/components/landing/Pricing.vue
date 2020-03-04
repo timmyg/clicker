@@ -35,6 +35,7 @@
                     <li class="is-checked">TV layout strategy guidance</li>
                     <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">Email + chat support</li>
+                    <li class="is-checked">1-5 DirecTV boxes</li>
                   </ul>
                 </div>
               </div>
@@ -67,6 +68,7 @@
                     <li class="is-checked">TV layout strategy guidance</li>
                     <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">Email + chat support</li>
+                    <li class="is-checked">1-5 DirecTV boxes</li>
                   </ul>
                 </div>
               </div>
