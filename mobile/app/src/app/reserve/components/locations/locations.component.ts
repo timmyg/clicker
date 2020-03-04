@@ -2,6 +2,7 @@ import { ReferralPage } from "./../../../referral/referral.page";
 import { LoginComponent } from "src/app/auth/login/login.component";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Location } from "src/app/state/location/location.model";
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { ReserveService } from "../../reserve.service";
 import { Observable, Subscription, BehaviorSubject } from "rxjs";
 import { getAllLocations, getLoading } from "src/app/state/location";
@@ -49,6 +50,7 @@ const geolocationOptions: GeolocationOptions = {
   // maximumAge: 600000, // 10 minutes
 };
 
+@AutoUnsubscribe()
 @Component({
   templateUrl: "./locations.component.html",
   styleUrls: ["./locations.component.scss"]
@@ -68,6 +70,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   searchSubscription: Subscription;
   closeSearchSubscription: Subscription;
   hiddenLocationsSubscription: Subscription;
+  geolocationSubscription: Subscription;
   askForGeolocation$ = new BehaviorSubject<boolean>(true);
   userGeolocation: Geo;
   evaluatingGeolocation = true;
@@ -129,12 +132,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.isLoading$ = this.store.select(getLoading);
     // this.userLocations$ = this.store.select(getUserLocations);
     this.userGeolocation$ = this.store.select(getUserGeolocation);
-    this.userGeolocation$.pipe().subscribe(userGeolocation => {
+    this.geolocationSubscription = this.userGeolocation$.pipe().subscribe(userGeolocation => {
       this.userGeolocation = userGeolocation;
       console.log('geolocation updated', this.userGeolocation);
     });
     this.locations$.pipe(first()).subscribe(locations => {
-      // console.log({locations});
       if (!locations || !locations.length) {
         this.actions$
         .pipe(ofType(fromUser.SET_GEOLOCATION))
@@ -192,6 +194,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.refreshSubscription.unsubscribe();
     this.searchSubscription.unsubscribe();
     this.closeSearchSubscription.unsubscribe();
+    this.geolocationSubscription.unsubscribe();
     if (this.sub) {
       this.sub.unsubscribe();
     }
