@@ -53,7 +53,7 @@
       </div>
     </form>
     <div v-if="oneMonthFree" class="promo brand-font">You're getting your first month free!</div>
-    <div class="promo brand-font">
+    <div v-if="!submitted" class="promo brand-font">
       <a
         href="https://calendly.com/clicker-tim-g/15min"
         target="_blank"
