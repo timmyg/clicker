@@ -21,7 +21,8 @@ let dynamicRoutes = () => {
     .catch(e => console.error("dynamic routes errpor :(", e));
 };
 module.exports = {
-  mode: "spa",
+  // mode: "spa",
+  mode: "universal",
 
   generate: {
     routes: dynamicRoutes
@@ -33,7 +34,11 @@ module.exports = {
     "@nuxt/http",
     "@dansmaculotte/nuxt-segment"
   ],
-  plugins: ["~/plugins/vue-moment.js", "~/plugins/filters.js"],
+  plugins: [
+    "~/plugins/vue-moment.js",
+    "~/plugins/filters.js",
+    { src: "~/plugins/scroll-reveal", ssr: false }
+  ],
   css: [
     "~assets/scss/style.scss"
     // '~assets/css/tailwind.css',
