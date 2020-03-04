@@ -23,7 +23,7 @@
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
               v-scroll-reveal="{ scale: 0.9 }"
             >
-              <img src="/images/landing/wall-tvs.png" alt="Wall with three tvs" />
+              <img src="/images/landing/clicker-in-bar.png" alt="Crowded bar with tvs" />
             </div>
           </div>
         </div>
@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import Header from '@/components/layouts/Header';
-import SignupForm from '@/components/landing/SignupForm';
+import Header from "@/components/layouts/Header";
+import SignupForm from "@/components/landing/SignupForm";
 export default {
-  components: { Header, SignupForm },
+  components: { Header, SignupForm }
 };
 </script>
 
