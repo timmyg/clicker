@@ -115,9 +115,9 @@ export function initUserStuff(store: Store<AppState>): Function {
       multi: true
     },
     Geolocation,
-    Diagnostic
-    // SentryErrorHandler,
-    // { provide: ErrorHandler, useClass: SentryErrorHandler }
+    Diagnostic,
+    SentryErrorHandler,
+    { provide: ErrorHandler, useClass: SentryErrorHandler }
   ],
   bootstrap: [AppComponent]
 })
