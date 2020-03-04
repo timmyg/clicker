@@ -300,7 +300,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       permissionGeolocation.values.denied
     );
     this.askForGeolocation$.next(false);
-    // this.evaluateGeolocation();
+    this.store.dispatch(new fromLocation.GetAll());
     this.segment.track(this.globals.events.permissions.geolocation.denied);
   }
 
@@ -451,8 +451,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
   onLocationClick(location: Location) {
     this.waiting = true;
     this.reserveService.emitCloseSearch();
-    console.log(location);
-    const { latitude, longitude } = this.userGeolocation;
+    const latitude = this.userGeolocation && this.userGeolocation.latitude;
+    const longitude = this.userGeolocation && this.userGeolocation.longitude;
     this.store.dispatch(
       new fromReservation.SetLocation(location, latitude, longitude)
     );
