@@ -59,10 +59,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
   isLoading$: Observable<boolean>;
   // userGeolocation$: Observable<{latitiude: number, longitude: number}>;
   userGeolocation$: Observable<any>;
-  userLocations$: Observable<string[]>;
-  userLocations: string[];
-  userRoles$: Observable<string[]>;
-  userRoles: string[];
+  // userLocations$: Observable<string[]>;
+  // userLocations: string[];
+  // userRoles$: Observable<string[]>;
+  // userRoles: string[];
   searchTerm: string;
   refreshSubscription: Subscription;
   searchSubscription: Subscription;
@@ -127,46 +127,52 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.redirectIfUpdating();
     this.evaluateGeolocation();
     this.isLoading$ = this.store.select(getLoading);
-    this.userLocations$ = this.store.select(getUserLocations);
+    // this.userLocations$ = this.store.select(getUserLocations);
     this.userGeolocation$ = this.store.select(getUserGeolocation);
     this.userGeolocation$.pipe().subscribe(userGeolocation => {
       this.userGeolocation = userGeolocation;
       console.log('geolocation updated', this.userGeolocation);
     });
-    console.log('UL', this.userLocations);
-    this.actions$
-      .pipe(ofType(fromUser.SET_GEOLOCATION))
-      .pipe(first())
-      .subscribe(async () => {
-          this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
-          this.evaluateGeolocation();
-      });
-    this.userLocations$.pipe().subscribe(userLocations => {
-      this.userLocations = userLocations;
-    });
-    this.isLoading$.pipe().subscribe(isLoading => {
-      if (
-        !isLoading &&
-        !this.evaluatingGeolocation &&
-        !this.reserveService.isRefreshing
-      ) {
-        this.locations$.pipe().subscribe(locations => {
-          // console.log({ locations });
-          if (this.userGeolocation) {
-            const { latitude, longitude } = this.userGeolocation;
-            this.segment.track(this.globals.events.location.listedAll, {
-              locations: locations.length,
-              latitude,
-              longitude
-            });
-          }
+    this.locations$.pipe(first()).subscribe(locations => {
+      // console.log({locations});
+      if (!locations || !locations.length) {
+        this.actions$
+        .pipe(ofType(fromUser.SET_GEOLOCATION))
+        .pipe(first())
+        .subscribe(async () => {
+            this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
+            this.evaluateGeolocation();
         });
       }
     });
-    this.userRoles$ = this.store.select(getUserRoles);
-    this.userRoles$.pipe().subscribe(userRoles => {
-      this.userRoles = userRoles;
-    });
+    // console.log('UL', this.userLocations);
+
+    // this.userLocations$.pipe().subscribe(userLocations => {
+    //   this.userLocations = userLocations;
+    // });
+    // this.isLoading$.pipe().subscribe(isLoading => {
+    //   if (
+    //     !isLoading &&
+    //     !this.evaluatingGeolocation &&
+    //     !this.reserveService.isRefreshing
+    //   ) {
+    //     this.locations$.pipe().subscribe(locations => {
+    //       // console.log({ locations });
+    //       if (this.userGeolocation) {
+    //         const { latitude, longitude } = this.userGeolocation;
+    //         this.segment.track(this.globals.events.location.listedAll, {
+    //           locations: locations.length,
+    //           latitude,
+    //           longitude
+    //         });
+    //       }
+    //     });
+    //   }
+    // });
+    // this.userRoles$ = this.store.select(getUserRoles);
+    // this.userRoles$.pipe().subscribe(userRoles => {
+    //   this.userRoles = userRoles;
+    // });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
       searchTerm => {
         this.searchTerm = searchTerm;
