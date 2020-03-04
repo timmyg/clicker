@@ -62,6 +62,7 @@
     "jwt-simple": "^0.5.6",
     "moment": "^2.24.0",
     "ng-intercom": "^8.0.0",
+    "ngx-auto-unsubscribe": "^3.0.1",
     "ngx-moment": "^3.4.0",
     "ngx-segment-analytics": "^1.4.0",
     "ngx-stripe": "^7.4.3",

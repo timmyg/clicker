@@ -264,6 +264,7 @@ functions:
           method: get
   getAll:
     handler: program.getAll
+    provisionedConcurrency: 1
     runtime: nodejs12.x
     memorySize: 1024
     timeout: 20
@@ -389,6 +390,7 @@ functions:
   upcoming:
     handler: program.upcoming
     runtime: nodejs12.x
+    reservedConcurrency: 1
     events:
       - http:
           path: '{locationId}/upcoming'

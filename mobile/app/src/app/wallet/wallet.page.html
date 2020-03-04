@@ -12,7 +12,7 @@
   <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
     <ion-spinner name="crescent" class="center"></ion-spinner>
   </ion-row>
-  <section [hidden]="!(userCard$ | async) || (isLoading$ | async)">
+  <section [hidden]="addCardMode || (isLoading$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
         <ion-list-header> Choose an Amount </ion-list-header>
@@ -46,18 +46,25 @@
       color="primary"
       size="large"
       (click)="purchase()"
-      [disabled]="waiting"
+      [disabled]="waiting || !(userCard$ | async)"
       *ngIf="selectedPlan"
       >Purchase ${{ selectedPlan.dollars }}</ion-button
     >
     <p class="ion-text-center" *ngIf="!waiting">
-      💳 {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ |
-      async)?.last4 }} <br /><a color="danger" (click)="removeCard()"
-        >Remove Card</a
+      💳
+      <span *ngIf="!(userCard$ | async); else hasCard"
+        ><a color="danger" (click)="goToAddCard()">Add a card</a> to
+        continue</span
+      >
+      <ng-template #hasCard>
+        {{ (userCard$ | async)?.brand }} ending in {{ (userCard$ | async)?.last4
+        }} <br /><a color="danger" (click)="removeCard()"
+          >Remove Card</a
+        ></ng-template
       >
     </p>
   </section>
-  <section [hidden]="userCard$ | async">
+  <section [hidden]="!addCardMode">
     <p class="ion-text-center ">Add a credit card to purchase tokens.</p>
     <form novalidate (ngSubmit)="addCard()">
       <div id="card-element" class="field"></div>

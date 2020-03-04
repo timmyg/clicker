@@ -91,7 +91,20 @@ export class ProfilePage {
   }
 
   ngOnInit() {
-    this.store.dispatch(new fromReservation.GetAll());
+    console.log(1);
+
+    this.reservations$.pipe(first()).subscribe(reservations => {
+      console.log({ reservations });
+      if (!reservations) {
+        this.store.dispatch(new fromReservation.GetAll());
+      }
+    });
+    this.user$.pipe(first()).subscribe(user => {
+      console.log({ user });
+      if (!user) {
+        this.store.dispatch(new fromUser.Load());
+      }
+    });
     this.platform.backButton.pipe(first()).subscribe(() => {
       // android
       if (this.loginModal) {
@@ -132,14 +145,6 @@ export class ProfilePage {
   }
 
   async openFeedback() {
-    // await this.intercom.boot({ app_id: environment.intercom.appId });
-    // await this.intercom.showNewMessage();
-    // this.intercom.onHide(() => {
-    //   this.intercom.update({ hide_default_launcher: true });
-    // });
-    // this.sub2 = this.platform.backButton.pipe(first()).subscribe(() => {
-    //   this.intercom.hide();
-    // });
     window.drift.on("ready", function(api) {
       console.log(api);
       // api.widget.show();
@@ -272,7 +277,10 @@ export class ProfilePage {
     this.store.dispatch(new fromUser.Load());
     // zip(
     this.actions$
-      .pipe(ofType(fromReservation.GET_RESERVATIONS_SUCCESS), take(1))
+      .pipe(
+        ofType(fromReservation.GET_RESERVATIONS_SUCCESS),
+        take(1)
+      )
       .subscribe(() => {
         event.target.complete();
       });

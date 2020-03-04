@@ -3,7 +3,8 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
 <ion-row
   *ngIf="
     ((isLoading$ | async) || evaluatingGeolocation) &&
-    !reserveService.isRefreshing
+      !reserveService.isRefreshing;
+    let stuffLoading
   "
   margin-vertical
 >
@@ -29,23 +30,28 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
         margin-top
         (click)="allowLocation()"
         [disabled]="disableButton"
+        color="primary"
         >Allow Location Access
+      </ion-button>
+    </div>
+    <div>
+      <ion-button
+        margin-top
+        (click)="denyGeolocation()"
+        fill="clear"
+        [disabled]="disableButton"
+        color="primary"
+        >No Thanks
       </ion-button>
     </div>
   </section>
 
   <ng-template #showLocations>
-    <p
-        *ngIf="geolocationDeclined && !evaluatingGeolocation"
-        class="ion-text-center"
-        padding
-      >
-        Find locations around you by
-        <a (click)="forceAllow()">allowing location services</a>
-      </p>
     <ion-list
       lines="none"
-      [class.content-loading]="(isLoading$ | async) || waiting"
+      [class.content-loading]="
+        (isLoading$ | async) || evaluatingGeolocation || waiting
+      "
     >
       <ng-container
         *ngFor="
@@ -56,8 +62,6 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       >
         <app-location
           [location]="location"
-          [userRoles]="userRoles"
-          [userLocations]="userLocations"
           (onClick)="onLocationClick($event)"
           (onManage)="onLocationManage($event)"
           (onLocationDetail)="onLocationDetail($event)"
@@ -83,15 +87,20 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
           </ion-card-content>
         </ion-card>
       </ng-container>
+      <p
+        *ngIf="geolocationDeclined && !evaluatingGeolocation"
+        class="ion-text-center"
+        padding
+      >
+        Find locations around you <br />by
+        <a (click)="forceAllow()">allowing location services</a>
+      </p>
       <p class="ion-text-center">
         <a (click)="suggestLocation()">🍺 Suggest a new location</a>
       </p>
       <p class="ion-text-center">
         <a (click)="openReferral()">🎁 Get Free Tokens</a>
       </p>
-      <!-- <p *ngIf="geolocationError" class="ion-text-center">
-        <em>For more accurate locations around you, turn on location services for the Clicker app.</em>
-      </p> -->
     </ion-list>
   </ng-template>
 </section>

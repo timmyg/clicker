@@ -104,8 +104,8 @@ export class SetLocation implements Action {
   readonly type = SET_RESERVATION_LOCATION;
   constructor(
     public location: Location,
-    public latitude: number,
-    public longitude: number
+    public latitude?: number,
+    public longitude?: number
   ) {}
 }
 

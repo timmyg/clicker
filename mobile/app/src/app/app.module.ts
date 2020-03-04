@@ -40,6 +40,7 @@ Sentry.init({
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
   handleError(error) {
+    console.error(error);
     const eventId = Sentry.captureException(error.originalError || error);
     Sentry.showReportDialog({ eventId });
   }
@@ -115,9 +116,9 @@ export function initUserStuff(store: Store<AppState>): Function {
       multi: true
     },
     Geolocation,
-    Diagnostic
-    // SentryErrorHandler,
-    // { provide: ErrorHandler, useClass: SentryErrorHandler }
+    Diagnostic,
+    SentryErrorHandler,
+    { provide: ErrorHandler, useClass: SentryErrorHandler }
   ],
   bootstrap: [AppComponent]
 })
