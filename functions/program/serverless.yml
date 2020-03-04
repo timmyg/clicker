@@ -390,6 +390,7 @@ functions:
   upcoming:
     handler: program.upcoming
     runtime: nodejs12.x
+    reservedConcurrency: 1
     events:
       - http:
           path: '{locationId}/upcoming'

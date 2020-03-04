@@ -6,7 +6,12 @@ import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { ReserveService } from "../../reserve.service";
 import { Observable, Subscription, BehaviorSubject } from "rxjs";
 import { getAllLocations, getLoading } from "src/app/state/location";
-import { getUserLocations, getUserRoles, isLoggedIn, getUserGeolocation} from "src/app/state/user";
+import {
+  getUserLocations,
+  getUserRoles,
+  isLoggedIn,
+  getUserGeolocation
+} from "src/app/state/user";
 import { Store } from "@ngrx/store";
 import * as fromStore from "../../../state/app.reducer";
 import * as fromLocation from "../../../state/location/location.actions";
@@ -111,8 +116,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
       () => this.refresh()
     );
     this.isLoggedIn$ = this.store.select(isLoggedIn);
-    this.isLoggedIn$.subscribe(isLoggedIn => {
-      this.isLoggedIn = isLoggedIn;
+    this.isLoggedIn$.subscribe(isUserLoggedIn => {
+      this.isLoggedIn = isUserLoggedIn;
     });
     this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(
       () => {
@@ -132,21 +137,34 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.isLoading$ = this.store.select(getLoading);
     // this.userLocations$ = this.store.select(getUserLocations);
     this.userGeolocation$ = this.store.select(getUserGeolocation);
-    this.geolocationSubscription = this.userGeolocation$.pipe().subscribe(userGeolocation => {
-      this.userGeolocation = userGeolocation;
-      console.log('geolocation updated', this.userGeolocation);
-    });
+    this.geolocationSubscription = this.userGeolocation$
+      .pipe()
+      .subscribe(userGeolocation => {
+        this.userGeolocation = userGeolocation;
+        console.log("geolocation updated", this.userGeolocation);
+      });
     this.locations$.pipe(first()).subscribe(locations => {
       if (!locations || !locations.length) {
         this.actions$
-        .pipe(ofType(fromUser.SET_GEOLOCATION))
-        .pipe(first())
-        .subscribe(async () => {
-            this.store.dispatch(new fromLocation.GetAll(this.userGeolocation, this.milesRadius));
+          .pipe(ofType(fromUser.SET_GEOLOCATION))
+          .pipe(first())
+          .subscribe(async () => {
+            this.store.dispatch(
+              new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
+            );
             this.evaluateGeolocation();
-        });
+          });
       }
     });
+
+    const geolocationStorage = await this.storage.get(
+      permissionGeolocation.name
+    );
+    console.log({ geolocationStorage });
+    if (geolocationStorage === permissionGeolocation.values.denied) {
+      this.askForGeolocation$.next(false);
+      this.store.dispatch(new fromLocation.GetAll());
+    }
     // console.log('UL', this.userLocations);
 
     // this.userLocations$.pipe().subscribe(userLocations => {
@@ -226,32 +244,32 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async refresh() {
-      this.store.dispatch(
-        new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
-      );
-      this.store.dispatch(new fromUser.Refresh());
-      this.actions$
-        .pipe(
-          ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
-          take(1)
-        )
-        .subscribe(() => {
-          this.reserveService.emitRefreshed();
+    this.store.dispatch(
+      new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
+    );
+    this.store.dispatch(new fromUser.Refresh());
+    this.actions$
+      .pipe(
+        ofType(fromLocation.GET_ALL_LOCATIONS_SUCCESS),
+        take(1)
+      )
+      .subscribe(() => {
+        this.reserveService.emitRefreshed();
+      });
+    this.actions$
+      .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_FAIL))
+      .pipe(first())
+      .subscribe(async () => {
+        const whoops = await this.toastController.create({
+          message: "Something went wrong. Please try again.",
+          color: "danger",
+          duration: 4000,
+          cssClass: "ion-text-center"
         });
-      this.actions$
-        .pipe(ofType(fromLocation.GET_ALL_LOCATIONS_FAIL))
-        .pipe(first())
-        .subscribe(async () => {
-          const whoops = await this.toastController.create({
-            message: "Something went wrong. Please try again.",
-            color: "danger",
-            duration: 4000,
-            cssClass: "ion-text-center"
-          });
-          whoops.present();
-          this.reserveService.emitRefreshed();
-        });
-      this.evaluateGeolocation();
+        whoops.present();
+        this.reserveService.emitRefreshed();
+      });
+    this.evaluateGeolocation();
   }
 
   async suggestLocation() {
@@ -259,7 +277,9 @@ export class LocationsComponent implements OnDestroy, OnInit {
       component: SuggestComponent
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      if (this.suggestModal) this.suggestModal.close();
+      if (this.suggestModal) {
+        this.suggestModal.close();
+      }
     });
     return await this.suggestModal.present();
   }
@@ -274,13 +294,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.segment.track(this.globals.events.permissions.geolocation.allowed);
   }
 
-  async denyLocation() {
+  async denyGeolocation() {
     await this.storage.set(
       permissionGeolocation.name,
       permissionGeolocation.values.denied
     );
     this.askForGeolocation$.next(false);
-    this.evaluateGeolocation();
+    // this.evaluateGeolocation();
     this.segment.track(this.globals.events.permissions.geolocation.denied);
   }
 
@@ -368,6 +388,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           console.error("Error getting location", error);
           // const message = "Error getting your location. Make sure location services are enabled for this app."
           this.geolocationError = true;
+          this.store.dispatch(new fromLocation.GetAll());
           // const whoops = await this.toastController.create({
           //   message,
           //   color: "light",

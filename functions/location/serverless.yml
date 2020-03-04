@@ -276,6 +276,7 @@ functions:
           method: post
   getLocationDetailsPage:
     handler: location.getLocationDetailsPage
+    reservedConcurrency: 1
     description: location details rendered html page for app
     timeout: 10
     events:
