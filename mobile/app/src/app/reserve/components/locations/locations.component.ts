@@ -55,7 +55,7 @@ const geolocationOptions: GeolocationOptions = {
   // maximumAge: 600000, // 10 minutes
 };
 
-@AutoUnsubscribe()
+// @AutoUnsubscribe()
 @Component({
   templateUrl: "./locations.component.html",
   styleUrls: ["./locations.component.scss"]
@@ -209,10 +209,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.refreshSubscription.unsubscribe();
-    this.searchSubscription.unsubscribe();
-    this.closeSearchSubscription.unsubscribe();
-    this.geolocationSubscription.unsubscribe();
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+    }
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+    if (this.closeSearchSubscription) {
+      this.closeSearchSubscription.unsubscribe();
+    }
+    if (this.geolocationSubscription) {
+      this.geolocationSubscription.unsubscribe();
+    }
     if (this.sub) {
       this.sub.unsubscribe();
     }

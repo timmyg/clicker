@@ -38,6 +38,7 @@ export class WalletPage {
   plans$: Observable<Plan[]>;
   isLoading$: Observable<boolean>;
   waiting: boolean;
+  addCardMode = false;
 
   elementsOptions: ElementsOptions = {
     locale: "en"
@@ -97,7 +98,10 @@ export class WalletPage {
         this.store.dispatch(new fromUser.UpdateCard(result.token.id));
 
         this.actions$
-          .pipe(ofType(fromUser.UPDATE_CARD_SUCCESS), take(1))
+          .pipe(
+            ofType(fromUser.UPDATE_CARD_SUCCESS),
+            take(1)
+          )
           .subscribe(async () => {
             const toast = await this.toastController.create({
               message: `💳 Card successfully added. 👐`,
@@ -105,6 +109,7 @@ export class WalletPage {
               cssClass: "ion-text-center"
             });
             toast.present();
+            this.addCardMode = false;
             this.waiting = false;
             this.segment.track(this.globals.events.payment.sourceAdded, {
               type: "Credit Card"
@@ -143,11 +148,16 @@ export class WalletPage {
     this.store.dispatch(new fromUser.AddFunds(this.selectedPlan));
 
     this.actions$
-      .pipe(ofType(fromUser.ADD_FUNDS_SUCCESS), take(1))
+      .pipe(
+        ofType(fromUser.ADD_FUNDS_SUCCESS),
+        take(1)
+      )
       .subscribe(async () => {
         this.waiting = false;
         const toast = await this.toastController.create({
-          message: `💰 Successfully purchased ${this.selectedPlan.tokens} tokens. 🎉`,
+          message: `💰 Successfully purchased ${
+            this.selectedPlan.tokens
+          } tokens. 🎉`,
           duration: 3000,
           cssClass: "ion-text-center"
         });
@@ -191,6 +201,10 @@ export class WalletPage {
 
   onClose() {
     this.modalController.dismiss();
+  }
+
+  goToAddCard() {
+    this.addCardMode = true;
   }
 
   async removeCard() {

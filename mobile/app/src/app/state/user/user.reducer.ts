@@ -50,7 +50,6 @@ export function reducer(
           latitude: action.latitude,
           longitude: action.longitude
         }
-        // loading: true,
       };
 
     case fromUser.LOAD_SUCCESS:
