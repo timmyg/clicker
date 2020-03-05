@@ -509,9 +509,25 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       channel: major,
       channelMinor: minor,
     };
+
+    let program;
     if (originalChannel !== major) {
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
+      updateBoxInfoBody.lockedUntilTime =
+        moment()
+          .add(1, 'h')
+          .unix() * 1000;
+
+      console.log({ channel: major, region: location.region });
+      const programResult = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams({ channel: major, region: location.region })
+        .go();
+      program = programResult && programResult.data;
+      console.log({ program });
+      updateBoxInfoBody.lockedProgrammingId = program && program.programmingId;
     }
 
     await new Invoke()
@@ -556,15 +572,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .body({ text })
           .async()
           .go();
-        // await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
-        console.log({ channel: major, region: location.region });
-        const programResult = await new Invoke()
-          .service('program')
-          .name('get')
-          .queryParams({ channel: major, region: location.region })
-          .go();
-        const program = programResult && programResult.data;
-        console.log({ program });
+
         await new Invoke()
           .service('admin')
           .name('logChannelChange')
@@ -828,7 +836,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   console.log({ locationId, boxId });
-  const { channel, channelMinor, source, channelChangeAt } = getBody(event);
+  const { channel, channelMinor, source, channelChangeAt, lockedUntilTime, lockedProgrammingId } = getBody(event);
   console.log({ channel });
 
   console.time('get location');
@@ -873,7 +881,17 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     program,
     channelChangeAt,
   });
-  await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program, channelChangeAt);
+  await updateLocationBox(
+    locationId,
+    boxIndex,
+    channel,
+    channelMinor,
+    source,
+    program,
+    channelChangeAt,
+    lockedUntilTime,
+    lockedProgrammingId,
+  );
   console.timeEnd('update location box');
 
   return respond(200);
@@ -1344,6 +1362,8 @@ async function updateLocationBox(
   source?: string,
   program: Program,
   channelChangeAt?: number,
+  lockedUntilTime?: date,
+  lockedProgrammingId: string,
 ) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -1365,6 +1385,14 @@ async function updateLocationBox(
   if (program) {
     updateExpression += `boxes[${boxIndex}].program = :program,`;
     expressionAttributeValues[':program'] = program;
+  }
+  if (lockedUntilTime) {
+    updateExpression += `boxes[${boxIndex}].lockedUntilTime = :lockedUntilTime,`;
+    expressionAttributeValues[':lockedUntilTime'] = lockedUntilTime;
+  }
+  if (lockedProgrammingId) {
+    updateExpression += `boxes[${boxIndex}].lockedProgrammingId = :lockedProgrammingId,`;
+    expressionAttributeValues[':lockedProgrammingId'] = lockedProgrammingId;
   }
   updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
   expressionAttributeValues[':updatedAt'] = now;
