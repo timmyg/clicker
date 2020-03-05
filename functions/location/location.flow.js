@@ -287,19 +287,18 @@ function setBoxStatus(box: Box): Box {
         and box.program.start within past 6 hours (to prevent replays)
 
    */
-  if (!box.program) {
+  if (!box.program && [zapTypes.manual, zapTypes.automation].includes(box.channelChangeSource)) {
     box.locked = moment.duration(moment(box.channelChangeAt).diff(moment())).asHours() >= -4;
-    console.log(moment.duration(moment(box.channelChangeAt).diff(moment())).asHours(), box.locked);
     return box;
   }
 
   const isBeforeLockedTime = moment().isBefore(box.lockedUntilTime);
   const isAfterLockedTime = moment().isAfter(box.lockedUntilTime);
   const isZappedProgramStillOn =
+    box.program &&
     box.lockedProgrammingId === box.program.programmingId &&
     moment.duration(moment(box.channelChangeAt).diff(moment(box.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
   if (zapTypes.manual === box.channelChangeSource) {
-    console.log({ isBeforeLockedTime, isZappedProgramStillOn });
     box.locked = isBeforeLockedTime || isZappedProgramStillOn;
   } else if (zapTypes.app === box.channelChangeSource) {
     box.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);

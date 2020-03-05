@@ -539,6 +539,7 @@ describe('setBoxStatus', () => {
   describe('no program', () => {
     test('unlock if channel changed more than 4 hours ago', () => {
       const box = {
+        channelChangeSource: 'manual',
         channelChangeAt:
           moment()
             .subtract(6, 'h')
@@ -549,6 +550,7 @@ describe('setBoxStatus', () => {
     });
     test('locked if channel changed less than 4 hours ago', () => {
       const box = {
+        channelChangeSource: 'manual',
         channelChangeAt:
           moment()
             .subtract(3, 'h')
@@ -559,9 +561,10 @@ describe('setBoxStatus', () => {
     });
   });
   describe('manual zap', () => {
+    const manualBox = { channelChangeSource: 'manual' };
     test('locked when recently changed', () => {
       const box = {
-        channelChangeSource: 'manual',
+        ...manualBox,
         lockedUntilTime: moment().subtract(10, 'm'),
       };
       const { locked } = setBoxStatus(box);
@@ -569,7 +572,7 @@ describe('setBoxStatus', () => {
     });
     test('locked when different program and before lock time', () => {
       const box = {
-        channelChangeSource: 'manual',
+        ...manualBox,
         lockedProgrammingId: 'A',
         lockedUntilTime:
           moment()
@@ -584,7 +587,7 @@ describe('setBoxStatus', () => {
     });
     test('unlocked when different program on', () => {
       const box = {
-        channelChangeSource: 'manual',
+        ...manualBox,
         lockedProgrammingId: 'A',
         lockedUntilTime:
           moment()
@@ -599,7 +602,7 @@ describe('setBoxStatus', () => {
     });
     test('unlocked when changed a while ago with same program on, but way later (repeat program)', () => {
       const box = {
-        channelChangeSource: 'manual',
+        ...manualBox,
         lockedProgrammingId: 'A',
         channelChangeAt:
           moment()
@@ -618,14 +621,99 @@ describe('setBoxStatus', () => {
     });
   });
   describe('automation zap', () => {
-    test('unlocked without program', () => {});
-    test('unlocked with different program on', () => {});
-    test('unlocked with same program on, but way later (repeat program)', () => {});
-    test('locked with same program on', () => {});
-    test('locked with same program on past end time', () => {});
+    const automationBox = { channelChangeSource: 'automation' };
+    test('unlocked with different program on', () => {
+      const box = {
+        ...automationBox,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'B',
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
+    test('unlocked with same program on, but way later (repeat program)', () => {
+      const box = {
+        ...automationBox,
+        channelChangeAt:
+          moment()
+            .subtract(6.1, 'h')
+            .unix() * 1000,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'A',
+          start:
+            moment()
+              .subtract(1.2, 'h')
+              .unix() * 1000,
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
+    test('locked with same program on, recently changed', () => {
+      const box = {
+        ...automationBox,
+        channelChangeAt:
+          moment()
+            .subtract(0.2, 'h')
+            .unix() * 1000,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'A',
+          start:
+            moment()
+              .subtract(1.2, 'h')
+              .unix() * 1000,
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+    test('locked with same program on past end time', () => {
+      const box = {
+        ...automationBox,
+        channelChangeAt:
+          moment()
+            .subtract(0.1, 'h')
+            .unix() * 1000,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'A',
+          end:
+            moment()
+              .subtract(0.2, 'h')
+              .unix() * 1000,
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
   });
   describe('app zap changes', () => {
-    test('locked before reservation end time', () => {});
-    test('unlocked after reservation end time', () => {});
+    const appBox = { channelChangeSource: 'app' };
+    test('locked before reservation end time', () => {
+      const box = {
+        ...appBox,
+        lockedUntilTime:
+          moment()
+            .add(3, 'm')
+            .unix() * 1000,
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+    test('unlocked after reservation end time', () => {
+      const box = {
+        ...appBox,
+        lockedUntilTime:
+          moment()
+            .subtract(3, 'm')
+            .unix() * 1000,
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
   });
 });
