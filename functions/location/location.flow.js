@@ -71,42 +71,10 @@ const dbLocation = dynamoose.model(
         // program: Map, // populated every few minutes
         channelSource: {
           type: String,
-          enum: ['app', 'control center', 'manual', 'control center daily'],
+          enum: ['app', 'control center', 'manual'],
         },
       },
     ],
-    // boxesV2: [
-    //   {
-    //     id: String,
-    //     about: {
-    //       clientAddress: String, // dtv calls this clientAddr
-    //       locationName: String, // dtv name
-    //       label: String, // physical label id on tv (defaults to locationName)
-    //       setupChannel: Number,
-    //       ip: String,
-    //       notes: String,
-    //     },
-    //     controlCenter: {
-    //       zone: String,
-    //     },
-    //     userControl: {
-    //       // clicker tv app
-    //       active: Boolean, // formerly appActive
-    //       reserved: Boolean,
-    //       end: Date,
-    //     },
-    //     current: {
-    //       channel: Number,
-    //       channelChangeAt: Date,
-    //       updatedAt: Date,
-    //       channelSource: {
-    //         type: String,
-    //         enum: ['app', 'control center', 'manual', 'control center daily'],
-    //       },
-    //     },
-    //   },
-    // ],
-
     channels: {
       exclude: {
         type: 'list',
