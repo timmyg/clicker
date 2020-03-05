@@ -159,7 +159,8 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   // set whether open tv's
   allLocations.forEach((l, i, locations) => {
     if (l.boxes) {
-      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate()) < 0);
+      l.boxes = l.boxes.map(b => setBoxStatus(b));
+      l.openTvs = l.boxes.every(b => !b.locked);
     }
   });
 
@@ -214,20 +215,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   // loop through boxes, and update reserved status if necessary
   if (location.boxes) {
     console.time('update reserved status');
-    let updated = false;
-    location.boxes.forEach((o, i, boxes) => {
-      // check if box is reserved and end time is in past
-      if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
-        boxes[i].reserved = false;
-        updated = true;
-      }
-    });
+    location.boxes = location.boxes.map(b => setBoxStatus(b));
     console.timeEnd('update reserved status');
-    if (updated) {
-      console.time('save boxes');
-      await location.save();
-      console.timeEnd('save boxes');
-    }
 
     console.time('filter + sort');
     if (event.headers && event.headers.app && event.headers.app.length) {
@@ -469,8 +458,8 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
     .exec();
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  location.boxes[boxIndex].reserved = true;
-  location.boxes[boxIndex].end = end;
+  // location.boxes[boxIndex].reserved = true;
+  location.boxes[boxIndex].lockedUntilTime = end;
   await location.save();
 
   return respond(200);
@@ -485,8 +474,9 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  location.boxes[boxIndex].reserved = false;
+  // location.boxes[boxIndex].reserved = false;
   // location.boxes[boxIndex].end;
+  location.boxes[boxIndex].lockedUntilTime = new Date();
   await location.save();
 
   return respond(200);
@@ -1283,7 +1273,8 @@ async function getAirtablePrograms(location: Venue): ControlCenterProgram[] {
   console.log({ location });
   console.log({ ccPrograms });
   ccPrograms = filterProgramsByTargeting(ccPrograms, location);
-  return ccPrograms.map(p => new ControlCenterProgram(p));
+  const ccProgramModels: ControlCenterProgram[] = ccPrograms.map(p => new ControlCenterProgram(p));
+  return ccProgramModels;
 }
 
 // remove programs not targeted at this location
