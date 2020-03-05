@@ -15,6 +15,11 @@ const {
 } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 const firebase = require('firebase-admin');
+const zapTypes = {
+  manual: 'manual',
+  app: 'app',
+  automation: 'automation',
+};
 
 declare class process {
   static env: {
@@ -140,7 +145,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     await new Invoke()
       .service('notification')
       .name('sendControlCenter')
-      .body({ text: "Demo Zap" })
+      .body({ text: 'Demo Zap' })
       .async()
       .go();
     return respond(200);
@@ -191,7 +196,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('remote command');
   const command = 'tune';
-  const source = 'app';
+  const source = zapTypes.app;
   await new Invoke()
     .service('remote')
     .name('command')
@@ -277,7 +282,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   // change the channel
   console.time('remote command');
   const command = 'tune';
-  const source = 'app';
+  const source = zapTypes.app;
   await new Invoke()
     .service('remote')
     .name('command')
