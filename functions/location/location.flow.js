@@ -237,19 +237,21 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('set geo distance');
   if (event.queryStringParameters) {
     const { latitude, longitude } = event.queryStringParameters;
-    console.log({ latitude, longitude });
-    const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
-    console.log(
-      { latitude: +latitude, longitude: +longitude },
-      { latitude: locationLatitude, longitude: locationLongitude },
-    );
-    const meters = geolib.getDistanceSimple(
-      { latitude: +latitude, longitude: +longitude },
-      { latitude: locationLatitude, longitude: locationLongitude },
-    );
-    const miles = geolib.convertUnit('mi', meters);
-    const roundedMiles = Math.round(10 * miles) / 10;
-    location.distance = roundedMiles;
+    if (latitude && longitude) {
+      console.log({ latitude, longitude });
+      const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
+      console.log(
+        { latitude: +latitude, longitude: +longitude },
+        { latitude: locationLatitude, longitude: locationLongitude },
+      );
+      const meters = geolib.getDistanceSimple(
+        { latitude: +latitude, longitude: +longitude },
+        { latitude: locationLatitude, longitude: locationLongitude },
+      );
+      const miles = geolib.convertUnit('mi', meters);
+      const roundedMiles = Math.round(10 * miles) / 10;
+      location.distance = roundedMiles;
+    }
   }
   console.timeEnd('set geo distance');
 
