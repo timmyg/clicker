@@ -25,20 +25,25 @@ export class LocationService {
   }
 
   getDetails(locationId: string): Observable<string> {
-    return this.httpClient.get<Response>(`${this.prefix}/${locationId}/details/page`).pipe(map(response => {
-      return response['html'];
-    }))
+    return this.httpClient
+      .get<Response>(`${this.prefix}/${locationId}/details/page`)
+      .pipe(
+        map(response => {
+          return response["html"];
+        })
+      );
   }
-
 
   get(
     locationId: string,
     latitude: number,
     longitude: number
   ): Observable<Location> {
-    return this.httpClient.get<Location>(
-      `${this.prefix}/${locationId}?latitude=${latitude}&longitude=${longitude}`
-    );
+    let url = `${this.prefix}/${locationId}`;
+    if (latitude && longitude) {
+      url += `${url}?latitude=${latitude}&longitude=${longitude}`;
+    }
+    return this.httpClient.get<Location>(url);
   }
 
   turnOn(locationId: string, autotune: boolean): Observable<any> {

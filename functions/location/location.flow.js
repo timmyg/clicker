@@ -235,23 +235,21 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
   // set distance
   console.time('set geo distance');
-  if (event.queryStringParameters) {
+  if (event.queryStringParameters && event.queryStringParameters.latitude && event.queryStringParameters.longitude) {
     const { latitude, longitude } = event.queryStringParameters;
-    if (latitude && longitude) {
-      console.log({ latitude, longitude });
-      const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
-      console.log(
-        { latitude: +latitude, longitude: +longitude },
-        { latitude: locationLatitude, longitude: locationLongitude },
-      );
-      const meters = geolib.getDistanceSimple(
-        { latitude: +latitude, longitude: +longitude },
-        { latitude: locationLatitude, longitude: locationLongitude },
-      );
-      const miles = geolib.convertUnit('mi', meters);
-      const roundedMiles = Math.round(10 * miles) / 10;
-      location.distance = roundedMiles;
-    }
+    console.log({ latitude, longitude });
+    const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
+    console.log(
+      { latitude: +latitude, longitude: +longitude },
+      { latitude: locationLatitude, longitude: locationLongitude },
+    );
+    const meters = geolib.getDistanceSimple(
+      { latitude: +latitude, longitude: +longitude },
+      { latitude: locationLatitude, longitude: locationLongitude },
+    );
+    const miles = geolib.convertUnit('mi', meters);
+    const roundedMiles = Math.round(10 * miles) / 10;
+    location.distance = roundedMiles;
   }
   console.timeEnd('set geo distance');
 
@@ -1365,7 +1363,7 @@ async function updateLocationBox(
   program: Program,
   channelChangeAt?: number,
   lockedUntilTime?: Date,
-  lockedProgrammingId: string,
+  lockedProgrammingId?: string,
 ) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
