@@ -210,7 +210,7 @@ describe('get boxes', () => {
     program: {
       clickerRating: 7,
     },
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(33, 'm')
@@ -219,7 +219,7 @@ describe('get boxes', () => {
   const reservedManuallyChangedGameOn = {
     id: 4,
     zone: '15',
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(50, 'm')
@@ -239,7 +239,7 @@ describe('get boxes', () => {
   const openManuallyChangedDifferentProgram = {
     id: 5,
     zone: '15',
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(2, 'h')
@@ -259,7 +259,7 @@ describe('get boxes', () => {
   const reservedManuallyChangedProgramOver = {
     id: 6,
     zone: '15',
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(40, 'm')

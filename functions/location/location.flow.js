@@ -1247,11 +1247,8 @@ function replicatePrograms(
   boxesCount: number,
   currentlyShowingProgrammingIds: string[] = [],
 ): ControlCenterProgram[] {
-  // console.info('replicatePrograms');
-  // console.info({ boxesCount, currentlyShowingProgrammingIds });
   let programsWithReplication = [];
   ccPrograms.forEach(ccp => {
-    // console.info('rating', ccp.fields.rating);
     if ([10, 9].includes(ccp.fields.rating)) {
       let replicationCount = 0;
       if (ccp.fields.rating === 10) {
@@ -1259,24 +1256,13 @@ function replicatePrograms(
       } else if (ccp.fields.rating === 9) {
         replicationCount = Math.floor(boxesCount * 0.4);
       }
-      console.log('intended replication count: ', replicationCount);
       // subtract another if channel already on
       if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
         const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
-        console.log({ existingCount });
         replicationCount = replicationCount - existingCount;
-        console.log({ replicationCount });
       }
-      console.log('final', { replicationCount });
-      // // remove from array if already showing
-      // if (replicationCount <= 0) {
-      //   programsWithReplication = programsWithReplication.filter(
-      //     ccp2 => ccp2.fields.programmingId !== ccp.fields.programmingId,
-      //   );
-      // }
       // subtract one because its already in there once
       for (let i = 0; i < replicationCount; i++) {
-        console.log('loop');
         programsWithReplication.push(ccp);
       }
     } else {
