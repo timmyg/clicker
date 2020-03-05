@@ -1362,7 +1362,7 @@ async function updateLocationBox(
   source?: string,
   program: Program,
   channelChangeAt?: number,
-  lockedUntilTime?: date,
+  lockedUntilTime?: Date,
   lockedProgrammingId: string,
 ) {
   const AWS = require('aws-sdk');

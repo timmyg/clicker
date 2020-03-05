@@ -122,7 +122,12 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   await new Invoke()
     .service('location')
     .name('updateBoxInfo')
-    .body({ channel, source, channelChangeAt: moment().unix() * 1000 })
+    .body({
+      channel,
+      source,
+      channelChangeAt: moment().unix() * 1000,
+      lockedProgrammingId: reservation.box.program.programmingId,
+    })
     .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
@@ -169,10 +174,6 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
 
   return respond();
-  // } catch (e) {
-  //   console.error(e);
-  //   return respond(400, `Could not tune: ${e.stack}`);
-  // }
 });
 
 module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event => {
