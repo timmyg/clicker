@@ -603,13 +603,13 @@ describe('setBoxStatus', () => {
         lockedProgrammingId: 'A',
         channelChangeAt:
           moment()
-            .subtract(6, 'h')
+            .subtract(6.1, 'h')
             .unix() * 1000,
         program: {
           programmingId: 'A',
           start:
             moment()
-              .subtract(1.5, 'h')
+              .subtract(1.2, 'h')
               .unix() * 1000,
         },
       };
