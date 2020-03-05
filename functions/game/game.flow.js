@@ -131,21 +131,6 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-// ccv1
-module.exports.getStatus = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('getstatus');
-  const { url: webUrl } = getBody(event);
-  const parts = webUrl.split('/');
-  const gameId = parts[parts.length - 1];
-  const game: Game = await dbGame
-    .queryOne('id')
-    .eq(gameId)
-    .exec();
-  console.log('get game', gameId, game);
-  const status: GameStatus = buildStatus(game);
-  return respond(200, status);
-});
-
 function buildStatus(game: Game): GameStatus {
   const gameStatus = new GameStatus();
   gameStatus.started = ['complete', 'inprogress'].includes(game.status) ? true : false;
