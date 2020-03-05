@@ -1,6 +1,6 @@
 <template>
   <article>
-    <h2 class="text-3xl brand-font">{{ post.fields.title }}</h2>
+    <h2 class="text-4xl brand-font">{{ post.fields.title }}</h2>
     <div class="text-sm text-gray-500">
       {{ (post.fields.date || post.sys.createdAt) | moment("MMMM Do YYYY") }} by
       {{ post.fields.author }}

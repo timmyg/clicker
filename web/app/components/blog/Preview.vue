@@ -21,8 +21,8 @@
           sizes="(min-width: 1024px) 400px, 100vw"
         />
         <div class="secondary">
-          <h2 class="brand-font text-2xl pt-4">{{ post.fields.title }}</h2>
-          <div class>
+          <h2 class="brand-font text-3xl pt-4">{{ post.fields.title }}</h2>
+          <div class="text-sm text-gray-500">
             {{
             (post.fields.date || post.sys.createdAt) | moment("MMMM Do YYYY")
             }}
@@ -36,7 +36,7 @@
               class="text-sm text-gray-500"
             >{{ tag }}</span>
           </div>
-          <p class="pb-8">{{ post.fields.summary }}</p>
+          <p class="pt-2 pb-8">{{ post.fields.summary }}</p>
         </div>
       </div>
     </nuxt-link>
