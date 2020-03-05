@@ -12,7 +12,7 @@
             <span class="icon">📺</span>
           </ion-col>
           <ion-col flex align-items-center>
-            <span
+            <span class="info"
               >{{ reservation.program.channelTitle }} on
               {{ reservation.box.label }}</span
             >
@@ -45,6 +45,7 @@
         flex
         align-items-center
       >
+        <img class="logo" src="{{reservation.location.img}}" alt="{{reservation.location}} logo">
         <a (click)="modify()">Modify</a>
       </ion-col>
     </ion-row>

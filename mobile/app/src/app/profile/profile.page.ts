@@ -91,8 +91,6 @@ export class ProfilePage {
   }
 
   ngOnInit() {
-    console.log(1);
-
     this.reservations$.pipe(first()).subscribe(reservations => {
       console.log({ reservations });
       if (!reservations) {

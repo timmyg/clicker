@@ -61,7 +61,6 @@ export class ReservePage {
 
   ngOnInit() {
     this.pageSub = this.platform.backButton.subscribe(() => {
-      console.log("page back");
       this.goBack();
     });
   }

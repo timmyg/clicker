@@ -143,6 +143,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
         this.userGeolocation = userGeolocation;
         console.log("geolocation updated", this.userGeolocation);
       });
+    // load just for other page
+    // this.store.dispatch(new fromUser.Load());
     this.locations$.pipe(first()).subscribe(locations => {
       if (!locations || !locations.length) {
         this.actions$
@@ -383,7 +385,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           //   new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
           // );
           this.geolocationError = false;
-          // this.reserveService.emitShowingLocations();
+          this.reserveService.emitShowingLocations();
         })
         .catch(async error => {
           this.evaluatingGeolocation = false;
@@ -391,7 +393,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           // this.store.dispatch(
           //   new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
           // );
-          // this.reserveService.emitShowingLocations();
+          this.reserveService.emitShowingLocations();
           this.disableButton = false;
           console.error("Error getting location", error);
           // const message = "Error getting your location. Make sure location services are enabled for this app."
