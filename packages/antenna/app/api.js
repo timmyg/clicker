@@ -1,5 +1,5 @@
-const axios = require('axios');
-const logger = require('./logger');
+const axios = require("axios");
+const logger = require("./logger");
 
 class Api {
   constructor(locationId) {
@@ -8,8 +8,8 @@ class Api {
       baseURL: process.env.API_BASE_URL,
       timeout: 6000,
       headers: {
-        'Content-Type': 'application/json',
-      },
+        "Content-Type": "application/json"
+      }
     });
   }
 
@@ -24,13 +24,16 @@ class Api {
 
   async setBoxes(ip, boxes) {
     try {
-      logger.info('update device boxes', { boxes });
+      logger.info("update device boxes", { boxes });
       logger.info(`/locations/${this.locationId}/boxes`);
       logger.info(`here's the boxes`);
       logger.info(boxes);
       logger.info(`/locations/${this.locationId}/boxes`);
 
-      return await this.axios.put(`/locations/${this.locationId}/boxes`, { boxes, ip });
+      return await this.axios.put(`/locations/${this.locationId}/boxes`, {
+        boxes,
+        ip
+      });
     } catch (error) {
       return console.error(error);
     }
@@ -45,19 +48,13 @@ class Api {
     }
   }
 
-  async saveBoxInfo(boxId, info) {
-    try {
-      const res = await this.axios.post(`/locations/${this.locationId}/boxes/${boxId}/info`, info);
-      return res.data;
-    } catch (error) {
-      return console.error(error);
-    }
-  }
-
   async saveBoxesInfo(boxes) {
     try {
-      console.log('saveBoxesInfo ->', boxes);
-      const res = await this.axios.post(`/locations/${this.locationId}/boxes/info`, { boxes });
+      console.log("saveBoxesInfo ->", boxes);
+      const res = await this.axios.post(
+        `/locations/${this.locationId}/boxes/info`,
+        { boxes }
+      );
       return res.data;
     } catch (error) {
       return console.error(error);

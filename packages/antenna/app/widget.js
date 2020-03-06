@@ -113,7 +113,7 @@ class Widget {
               function(box, callback) {
                 const { boxId, client, ip } = box;
                 const _remote = new DirecTV.Remote(ip);
-                logger.info('getTuned', { boxId, client, ip });
+                logger.info(`getTuned... ${boxId}, ${client}, ${ip}` });
                 _remote.getTuned(client || '0', (err, response) => {
                   if (err) {
                     logger.error('getTuned error!!', err, ip);
@@ -130,10 +130,12 @@ class Widget {
               },
               function(err) {
                 if (boxesInfo && boxesInfo.length) {
-                  logger.info('saveBoxesInfo!!', boxesInfo);
+                  logger.info('saveBoxesInfo saving...');
+                  logger.info('boxesInfo');
                   context.api.saveBoxesInfo(boxesInfo);
                 } else {
                   logger.error('no boxes');
+                  logger.error(error);
                 }
               },
             );
