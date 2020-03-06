@@ -348,8 +348,6 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(id)
     .exec();
 
-  let updatedLocation;
-  location.boxes = location.boxes || [];
   for (const dtvBox: DirecTVBoxRaw of boxes) {
     //$FlowFixMe
     const box: Box = {
@@ -377,7 +375,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         Math.random()
           .toString(36)
           .substr(2, 2);
-      console.log('add new box!', box.info.ip);
+      console.log('add new box!', box);
       await dbLocation.update({ id }, { $ADD: { boxes: [box] } });
       // location.boxes.push(box);
       const text = `*New DirecTV Box Added* @ ${location.name} (${location.neighborhood}): ${box.id}`;
@@ -398,7 +396,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
     }
   }
 
-  return respond(201, updatedLocation);
+  return respond(201);
 });
 
 module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async event => {
