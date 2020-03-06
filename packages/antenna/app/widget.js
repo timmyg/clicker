@@ -140,13 +140,14 @@ class Widget {
                 });
               },
               function(err) {
+                logger.info("about to save boxes...");
                 if (boxesInfo && boxesInfo.length) {
                   logger.info("saveBoxesInfo saving...");
                   logger.info("boxesInfo");
                   context.api.saveBoxesInfo(boxesInfo);
                 } else {
                   logger.error("no boxes");
-                  logger.error(error);
+                  logger.error(err);
                 }
               }
             );
