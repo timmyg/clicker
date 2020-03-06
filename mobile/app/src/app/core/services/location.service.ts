@@ -41,7 +41,7 @@ export class LocationService {
   ): Observable<Location> {
     let url = `${this.prefix}/${locationId}`;
     if (latitude && longitude) {
-      url += `${url}?latitude=${latitude}&longitude=${longitude}`;
+      url += `?latitude=${latitude}&longitude=${longitude}`;
     }
     return this.httpClient.get<Location>(url);
   }
