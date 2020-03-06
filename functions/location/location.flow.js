@@ -355,7 +355,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
     const box: Box = {
       info: {
         clientAddress: dtvBox.clientAddr,
-        ip: dtvBox.ip,
+        ip,
       },
     }; // this might blow up?
     // let box: Box | {} = Object.freeze({});
@@ -724,7 +724,7 @@ module.exports.health = async (event: any) => {
 // npm run invoke:updateAllBoxesPrograms
 module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async event => {
   const locations: Venue[] = await dbLocation.scan().exec();
-  for (const location of locations) {
+  for (const location of locations || []) {
     for (const box of location.boxes) {
       if (box.live && box.live.channel) {
         console.time('get program');
