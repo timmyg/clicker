@@ -349,7 +349,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
 
   for (const dtvBox: DirecTVBoxRaw of boxes) {
-    //$FlowFixMe
+    // $FlowFixMe
     const box: Box = {
       info: {
         clientAddress: dtvBox.clientAddr,
@@ -368,7 +368,10 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
       );
     if (!existingBox) {
       box.id = uuid();
-      // box.active = true;
+      box.configuration = {
+        appActive: false,
+        automationActive: false,
+      };
       // set label to locationName or random 2 alphanumeric characters
       box.label =
         box.info.locationName ||
@@ -666,7 +669,8 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
   for (const location of allLocations) {
     console.log(i);
     const { losantId } = location;
-    const body = {
+    // $FlowFixMe
+    const body: CheckBoxesInfoRequest = {
       losantId,
       boxes: [],
     };
