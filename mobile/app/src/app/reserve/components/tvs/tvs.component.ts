@@ -44,7 +44,7 @@ export class TvsComponent implements OnDestroy, OnInit {
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
     this.tvs$.pipe(first()).subscribe(tvs => {
-      if (tvs.length === 1 && !tvs[0].locked) {
+      if (tvs.length === 1 && (!tvs[0] && !tvs[0].live.locked)) {
         this.onTvClick(tvs[0], true);
       }
     });
@@ -70,11 +70,11 @@ export class TvsComponent implements OnDestroy, OnInit {
   }
 
   async onTvClick(tv: TV, removeFromHistory?: boolean) {
-    if (tv.locked) {
+    if (tv.live.locked) {
       const toast = await this.toastController.create({
-        message: `📺 ${tv.label} is reserved until ${moment(tv.end).format(
-          "h:mma"
-        )}.`,
+        message: `📺 ${tv.label} is reserved until ${moment(
+          tv.live.lockedUntil
+        ).format("h:mma")}.`,
         duration: 2000,
         cssClass: "ion-text-center"
       });
