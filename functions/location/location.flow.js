@@ -58,33 +58,30 @@ const dbLocation = dynamoose.model(
     boxes: [
       {
         id: String,
-        clientAddress: String, // dtv calls this clientAddr
-        locationName: String, // dtv name
-        label: String, // physical label id on tv (defaults to locationName)
-        // tunerBond: Boolean, // not sure what this is
-        setupChannel: Number,
-        ip: String,
-
-        // reserved: Boolean,
-        // end: Date,
-        locked: Boolean, // new, dynamic
-        lockedUntilTime: Number, // date
-        lockedProgrammingId: String,
-        lockedMessage: String,
-
-        zone: String,
-        notes: String,
         appActive: Boolean,
         automationActive: Boolean, // new
-        channel: Number,
-        channelMinor: Number,
-        channelChangeAt: Number, // date
-        updatedAt: Number, // date
-        channelChangeSource: {
-          // renamed
-          type: String,
-          enum: [zapTypes.app, zapTypes.automation, zapTypes.manual],
+        zone: String,
+        label: String, // physical label id on tv (defaults to locationName)
+
+        clientAddress: String, // dtv calls this clientAddr
+        locationName: String, // dtv name
+        ip: String,
+
+        current: {
+          locked: Boolean, // new, dynamic
+          lockedUntil: Number, // date
+          lockedProgrammingId: String,
+          lockedMessage: String,
+          channelChangeSource: {
+            type: String,
+            enum: [zapTypes.app, zapTypes.automation, zapTypes.manual],
+          },
+          channel: Number,
+          channelMinor: Number,
+          channelChangeAt: Number, // date
         },
+        updatedAt: Number, // date
+        notes: String,
         // program: Map, // populated every few minutes
       },
     ],
@@ -160,7 +157,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   allLocations.forEach((l, i, locations) => {
     if (l.boxes) {
       l.boxes = l.boxes.map(b => setBoxStatus(b));
-      l.openTvs = l.boxes.every(b => !b.locked);
+      l.openTvs = l.boxes.every(b => !b.live.locked);
     }
   });
 
@@ -268,41 +265,41 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
 function setBoxStatus(box: Box): Box {
   // locked: Boolean, // new
-  // lockedUntilTime: Date,
+  // lockedUntil: Date,
   // lockedProgrammingId: String,
   // lockedMessage: String,
 
   /*
   
   manual zap
-    - locked if before lockedUntilTime
-    - locked if after lockedUntilTime 
+    - locked if before lockedUntil
+    - locked if after lockedUntil 
         and lockedProgrammingId === box.program.programmingId
         and box.program.start within past 6 hours (to prevent replays)
   app zap
-    - locked if before lockedUntilTime
+    - locked if before lockedUntil
   automation zap
     - locked if lockedProgrammingId === box.program.programmingId
         and box.program.start within past 6 hours (to prevent replays)
 
    */
-  if (!box.program && [zapTypes.manual, zapTypes.automation].includes(box.channelChangeSource)) {
-    box.locked = moment.duration(moment(box.channelChangeAt).diff(moment())).asHours() >= -4;
+  if (!box.live.program && [zapTypes.manual, zapTypes.automation].includes(box.live.channelChangeSource)) {
+    box.live.locked = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours() >= -4;
     return box;
   }
 
-  const isBeforeLockedTime = moment().isBefore(box.lockedUntilTime);
-  const isAfterLockedTime = moment().isAfter(box.lockedUntilTime);
+  const isBeforeLockedTime = moment().isBefore(box.live.lockedUntil);
+  const isAfterLockedTime = moment().isAfter(box.live.lockedUntil);
   const isZappedProgramStillOn =
-    box.program &&
-    box.lockedProgrammingId === box.program.programmingId &&
-    moment.duration(moment(box.channelChangeAt).diff(moment(box.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
-  if (zapTypes.manual === box.channelChangeSource) {
-    box.locked = isBeforeLockedTime || isZappedProgramStillOn;
-  } else if (zapTypes.app === box.channelChangeSource) {
-    box.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);
-  } else if (zapTypes.automation === box.channelChangeSource) {
-    box.locked = isZappedProgramStillOn;
+    box.live.program &&
+    box.live.lockedProgrammingId === box.live.program.programmingId &&
+    moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
+  if (zapTypes.manual === box.live.channelChangeSource) {
+    box.live.locked = isBeforeLockedTime || isZappedProgramStillOn;
+  } else if (zapTypes.app === box.live.channelChangeSource) {
+    box.live.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);
+  } else if (zapTypes.automation === box.live.channelChangeSource) {
+    box.live.locked = isZappedProgramStillOn;
   }
 
   return box;
@@ -351,22 +348,34 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 
   let updatedLocation;
   location.boxes = location.boxes || [];
-  for (const box of boxes) {
-    box.clientAddress = box.clientAddr;
-    box.ip = ip;
+  for (const dtvBox: DirecTVBoxRaw of boxes) {
+    //$FlowFixMe
+    const box: Box = {
+      info: {
+        clientAddress: dtvBox.clientAddr,
+        ip: dtvBox.ip,
+      },
+    }; // this might blow up?
+    // let box: Box | {} = Object.freeze({});
+
     const existingBox =
       location.boxes &&
-      location.boxes.find(locationBox => locationBox.ip === box.ip && locationBox.clientAddress === box.clientAddress);
+      location.boxes.find(
+        locationBox =>
+          locationBox.info &&
+          locationBox.info.ip === box.info.ip &&
+          locationBox.info.clientAddress === box.info.clientAddress,
+      );
     if (!existingBox) {
       box.id = uuid();
       // box.active = true;
       // set label to locationName or random 2 alphanumeric characters
       box.label =
-        box.locationName ||
+        box.info.locationName ||
         Math.random()
           .toString(36)
           .substr(2, 2);
-      console.log('add new box!', box.ip);
+      console.log('add new box!', box.info.ip);
       await dbLocation.update({ id }, { $ADD: { boxes: [box] } });
       // location.boxes.push(box);
       const text = `*New DirecTV Box Added* @ ${location.name} (${location.neighborhood}): ${box.id}`;
@@ -468,8 +477,7 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
     .exec();
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  // location.boxes[boxIndex].reserved = true;
-  location.boxes[boxIndex].lockedUntilTime = end;
+  location.boxes[boxIndex].live.lockedUntil = end;
   await location.save();
 
   return respond(200);
@@ -486,7 +494,7 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   // location.boxes[boxIndex].reserved = false;
   // location.boxes[boxIndex].end;
-  location.boxes[boxIndex].lockedUntilTime = moment().unix() * 1000;
+  location.boxes[boxIndex].live.lockedUntil = moment().unix() * 1000;
   await location.save();
 
   return respond(200);
@@ -503,7 +511,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .exec();
   console.log({ location });
 
-  for (const box of boxes) {
+  for (const box: DirecTVBox of boxes) {
     const { boxId, info } = box;
     console.log(boxId, info);
 
@@ -511,11 +519,12 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
     const i: number = location.boxes.findIndex(b => b.id === boxId);
     console.log('box', location.boxes[i], major, minor);
-    const originalChannel = location.boxes[i].channel;
+    const originalChannel = location.boxes[i].live.channel;
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
-    let updateBoxInfoBody: any = {
+    // $FlowFixMe
+    let updateBoxInfoBody: BoxInfoRequest = {
       channel: major,
       channelMinor: minor,
     };
@@ -524,7 +533,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     if (originalChannel !== major) {
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
-      updateBoxInfoBody.lockedUntilTime =
+      updateBoxInfoBody.lockedUntil =
         moment()
           .add(1, 'h')
           .unix() * 1000;
@@ -602,53 +611,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200);
 });
 
-module.exports.setLabels = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id } = getPathParameters(event);
-  const boxesWithLabels = getBody(event);
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  const { boxes } = location;
-  console.log(boxes, boxesWithLabels);
-  const updatedBoxes = boxes.map(x => Object.assign(x, boxesWithLabels.find(y => y.setupChannel == x.setupChannel)));
-  console.log(updatedBoxes);
-  await dbLocation.update({ id }, { boxes: updatedBoxes }, { returnValues: 'ALL_NEW' });
-
-  return respond(200, boxes);
-});
-
-module.exports.identifyBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id } = getPathParameters(event);
-
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  const { boxes } = location;
-  let setupChannel = 801; // first music channel
-  for (const box of boxes) {
-    box.setupChannel = setupChannel;
-    setupChannel++;
-    const command = 'tune';
-    const reservation = {
-      location,
-      box,
-      program: {
-        channel: box.setupChannel,
-      },
-    };
-    await new Invoke()
-      .service('remote')
-      .name('command')
-      .body({ reservation, command })
-      .async()
-      .go();
-  }
-  await dbLocation.update({ id }, { boxes });
-  return respond(200, `hello`);
-});
-
 module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   const { losantId } = getPathParameters(event);
 
@@ -697,69 +659,7 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
 });
 
-// module.exports.allOff = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { id } = getPathParameters(event);
-
-//   const location: Venue = await dbLocation
-//     .queryOne('id')
-//     .eq(id)
-//     .exec();
-//   const { boxes } = location;
-//   for (const box of boxes) {
-//     const command = 'key';
-//     const key = 'poweroff';
-//     const reservation = {
-//       location,
-//       box,
-//       program: {
-//         // channel: box.setupChannel,
-//       },
-//     };
-//     console.log('turning off box', box);
-//     await new Invoke()
-//       .service('remote')
-//       .name('command')
-//       .body({ reservation, command, key })
-//       .async()
-//       .go();
-//     console.log('turned off box', box);
-//   }
-//   return respond(200, 'ok');
-// });
-
-// module.exports.allOn = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { id } = getPathParameters(event);
-
-//   const location: Venue = await dbLocation
-//     .queryOne('id')
-//     .eq(id)
-//     .exec();
-//   const { boxes } = location;
-//   for (const box of boxes) {
-//     const command = 'key';
-//     const key = 'poweron';
-//     const reservation = {
-//       location,
-//       box,
-//       program: {
-//         // channel: box.setupChannel,
-//       },
-//     };
-//     console.log('turning on box', box);
-//     await new Invoke()
-//       .service('remote')
-//       .name('command')
-//       .body({ reservation, command, key })
-//       .headers(event.headers)
-//       .async()
-//       .go();
-//     console.log('turned on', box);
-//   }
-//   return respond(200, 'ok');
-// });
-
 module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
-  // const { id } = getPathParameters(event);
   let allLocations: Venue[] = await dbLocation.scan().exec();
 
   let i = 0;
@@ -772,7 +672,8 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
     };
     if (location.boxes) {
       for (const box of location.boxes) {
-        const { id: boxId, ip, clientAddress: client } = box;
+        const { id: boxId, info } = box;
+        const { ip, clientAddress: client } = info;
         body.boxes.push({ boxId, ip, client });
       }
       console.log('location.boxes', location.boxes.length);
@@ -823,20 +724,20 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
   const locations: Venue[] = await dbLocation.scan().exec();
   for (const location of locations) {
     for (const box of location.boxes) {
-      if (box.channel) {
+      if (box.live && box.live.channel) {
         console.time('get program');
         const programResult = await new Invoke()
           .service('program')
           .name('get')
-          .queryParams({ channel: box.channel, region: location.region })
+          .queryParams({ channel: box.live.channel, region: location.region })
           .go();
         const program = programResult && programResult.data;
         console.timeEnd('get program');
 
         console.time('update location box');
         const boxIndex = location.boxes.findIndex(b => b.id === box.id);
-        console.log(location.id, boxIndex, box.channel, program.title);
-        await updateLocationBox(location.id, boxIndex, box.channel, undefined, undefined, program);
+        console.log(location.id, boxIndex, box.live.channel, program.title);
+        await updateLocationBox(location.id, boxIndex, box.live.channel, undefined, undefined, program);
         console.timeEnd('update location box');
       }
     }
@@ -845,9 +746,8 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
-  console.log({ locationId, boxId });
-  const { channel, channelMinor, source, channelChangeAt, lockedUntilTime, lockedProgrammingId } = getBody(event);
-  console.log({ channel });
+  const body: BoxInfoRequest = getBody(event);
+  const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingId } = body;
 
   console.time('get location');
   const location: Venue = await dbLocation
@@ -899,7 +799,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     source,
     program,
     channelChangeAt,
-    lockedUntilTime,
+    lockedUntil,
     lockedProgrammingId,
   );
   console.timeEnd('update location box');
@@ -945,7 +845,10 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
   // remove programs currently showing, unless 9 or 10 as we are replicating those
-  const currentlyShowingChannels: number[] = boxes.filter(b => !!b.zone).map(b => b.channel);
+  const currentlyShowingChannels: number[] = boxes
+    .filter(b => !!b.zone)
+    .filter(b => b.live && b.live.channel)
+    .map(b => b.live.channel);
   ccPrograms = ccPrograms.filter(ccp => {
     if (ccp.fields.rating >= 9) {
       return true;
@@ -987,7 +890,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
   const currentlyShowingProgrammingIds: string[] = location.boxes
     .filter(b => !!b.zone)
-    .map(b => b.program && b.program.programmingId);
+    .filter(b => !!b.live)
+    .map(b => b.live.program && b.live.program.programmingId);
   ccPrograms = replicatePrograms(ccPrograms, location.boxes.filter(b => b.zone).length, currentlyShowingProgrammingIds);
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
@@ -1113,7 +1017,10 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       .tz('America/New_York')
       .fromNow());
   });
-  const currentProgrammingIds = location.boxes.filter(b => !!b.program).map(b => b.program.programmingId);
+  const currentProgrammingIds = location.boxes
+    .filter(b => !!b.live)
+    .filter(b => !!b.live.program)
+    .map(b => b.live.program.programmingId);
   console.log({ upcomingPrograms });
   upcomingPrograms = upcomingPrograms.filter(p => !currentProgrammingIds.includes(p.fields.programmingId));
   const template = `\
@@ -1153,7 +1060,8 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
-    const { channel, channelChangeSource: source, zone, program, label, appActive } = box;
+    const { zone, label, appActive } = box;
+    const { channel, channelChangeSource: source, program } = box.live;
     let game, programTitle, rating;
     if (program) {
       game = program.game;
@@ -1189,20 +1097,21 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
   return (
     boxes
       // only boxes with zones
-      .filter(b => b.zone && b.zone.length)
+      .filter(b => b.zone)
+      .filter(b => b.live)
       // remove manually changed within past 30 minutes
       .filter(
         b =>
-          b.channelChangeSource !== zapTypes.manual ||
-          (b.channelChangeSource === zapTypes.manual &&
-            moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
+          b.live.channelChangeSource !== zapTypes.manual ||
+          (b.live.channelChangeSource === zapTypes.manual &&
+            moment(b.live.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
       )
       // remove manually changed not in current game window
       .filter(
         b =>
-          b.channelChangeSource !== zapTypes.manual ||
-          (b.channelChangeSource === zapTypes.manual &&
-            moment(b.channelChangeAt).diff(moment(b.program.start), 'minutes') < -manualChangeBuffer),
+          b.live.channelChangeSource !== zapTypes.manual ||
+          (b.live.channelChangeSource === zapTypes.manual &&
+            moment(b.live.channelChangeAt).diff(moment(b.live.program.start), 'minutes') < -manualChangeBuffer),
       )
   );
 }
@@ -1230,32 +1139,38 @@ async function tune(location: Venue, box: Box, channel: number, program: Program
 function findBoxGameOver(boxes: Box[]): ?Box {
   console.info('findBoxGameOver');
   return boxes
-    .filter(b => b.program)
-    .filter(b => b.program.game)
-    .find(b => b.program.game.summary.ended);
+    .filter(b => b.live)
+    .filter(b => b.live.program)
+    .filter(b => b.live.program.game)
+    .find(b => b.live.program.game.summary.ended);
 }
 
 function findBoxBlowout(boxes: Box[]): ?Box {
   console.info('findBoxBlowout');
   return boxes
-    .filter(b => b.program)
-    .filter(b => b.program.game)
-    .find(b => b.program.game.summary.blowout);
+    .filter(b => b.live)
+    .filter(b => b.live.program)
+    .filter(b => b.live.program.game)
+    .find(b => b.live.program.game.summary.blowout);
 }
 
 function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   console.info('findBoxWithoutRating');
-  return boxes.filter(b => b.program).find(b => !b.program.clickerRating);
+  return boxes
+    .filter(b => b.live)
+    .filter(b => b.live.program)
+    .find(b => !b.live.program.clickerRating);
 }
 
 function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   console.info('findBoxWorseRating');
   const ratingBuffer = 2;
   const sorted = boxes
-    .filter(b => b.program)
-    .filter(b => b.program.clickerRating)
-    .filter(b => program.fields.rating - b.program.clickerRating >= ratingBuffer)
-    .sort((a, b) => a.program.clickerRating - b.program.clickerRating);
+    .filter(b => b.live)
+    .filter(b => b.live.program)
+    .filter(b => b.live.program.clickerRating)
+    .filter(b => program.fields.rating - b.live.program.clickerRating >= ratingBuffer)
+    .sort((a, b) => a.live.program.clickerRating - b.live.program.clickerRating);
   return sorted && sorted.length ? sorted[0] : null;
 }
 
@@ -1289,12 +1204,11 @@ function replicatePrograms(
   return programsWithReplication;
 }
 
-async function getAirtablePrograms(location: Venue): ControlCenterProgram[] {
+async function getAirtablePrograms(location: Venue): Promise<ControlCenterProgram[]> {
   const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
-      // view: 'Visible',
       filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
     })
     .all();
@@ -1372,7 +1286,7 @@ async function updateLocationBox(
   source?: string,
   program: Program,
   channelChangeAt?: number,
-  lockedUntilTime?: Date,
+  lockedUntil?: number,
   lockedProgrammingId?: string,
 ) {
   const AWS = require('aws-sdk');
@@ -1396,9 +1310,9 @@ async function updateLocationBox(
     updateExpression += `boxes[${boxIndex}].program = :program,`;
     expressionAttributeValues[':program'] = program;
   }
-  if (lockedUntilTime) {
-    updateExpression += `boxes[${boxIndex}].lockedUntilTime = :lockedUntilTime,`;
-    expressionAttributeValues[':lockedUntilTime'] = lockedUntilTime;
+  if (lockedUntil) {
+    updateExpression += `boxes[${boxIndex}].lockedUntil = :lockedUntil,`;
+    expressionAttributeValues[':lockedUntil'] = lockedUntil;
   }
   if (lockedProgrammingId) {
     updateExpression += `boxes[${boxIndex}].lockedProgrammingId = :lockedProgrammingId,`;

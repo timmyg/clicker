@@ -119,15 +119,18 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
   }
 
+  // $FlowFixMe
+  const updateBoxInfoBody: BoxInfoRequest = {
+    channel,
+    source,
+    channelChangeAt: moment().unix() * 1000,
+    // lockedProgrammingId: reservation.box.program.programmingId,
+  };
+
   await new Invoke()
     .service('location')
     .name('updateBoxInfo')
-    .body({
-      channel,
-      source,
-      channelChangeAt: moment().unix() * 1000,
-      // lockedProgrammingId: reservation.box.program.programmingId,
-    })
+    .body(updateBoxInfoBody)
     .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
@@ -192,7 +195,8 @@ module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event =
 
 module.exports.checkBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    const { losantId, boxes } = getBody(event);
+    const body: CheckBoxesInfoRequest = getBody(event);
+    const { losantId, boxes } = body;
     console.log({ losantId, boxes });
     const api = new LosantApi();
     const payload = { boxes };

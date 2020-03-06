@@ -1,25 +1,39 @@
 // @flow
 class Box {
   id: string;
-  clientAddress: string;
-  locationName: string;
-  label: string;
-  tunerBond: boolean;
-  setupChannel: number;
-  ip: string;
-  zone: string;
-  notes: string;
-  updatedAt: number;
-  program: Program;
   appActive: boolean;
   automationActive: boolean;
-  channel: number;
-  channelChangeAt: number;
-  channelChangeSource: string;
-  locked: boolean;
-  lockedUntilTime: number;
-  lockedProgrammingId: string;
-  lockedMessage: string;
+  label: string;
+  zone: string;
+  info: {
+    clientAddress: string,
+    locationName: string,
+    ip: string,
+    notes: string,
+  };
+  live: {
+    channel: number,
+    channelChangeAt: number,
+    channelChangeSource: string,
+    locked: boolean,
+    lockedUntil: number,
+    lockedProgrammingId: string,
+    lockedMessage: string,
+    program: Program,
+  };
+  updatedAt: number;
+}
+
+class DirecTVBox {
+  boxId: string;
+  info: DirecTVBoxRaw;
+}
+
+class DirecTVBoxRaw {
+  major: number;
+  minor: number;
+  clientAddr: string;
+  ip: string;
 }
 
 export class Venue {

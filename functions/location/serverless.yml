@@ -169,18 +169,6 @@ functions:
       - http:
           path: '{id}/boxes'
           method: put
-  setLabels:
-    handler: location.setLabels
-    events:
-      - http:
-          path: '{id}/boxes/labels'
-          method: put
-  identifyBoxes:
-    handler: location.identifyBoxes
-    events:
-      - http:
-          path: '{id}/boxes/identify'
-          method: post
   saveBoxesInfo:
     description: called from antenna to update whats on each box
     handler: location.saveBoxesInfo
