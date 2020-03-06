@@ -375,7 +375,9 @@ function calculateReservationEndTime(reservation) {
 // TODO duplicate
 function setBoxStatus(box: Box): Box {
   if (!box.live.program && [zapTypes.manual, zapTypes.automation].includes(box.live.channelChangeSource)) {
-    box.live.locked = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours() >= -4;
+    const lastChangeHoursFromNow = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours();
+    console.log({ lastChangeHoursFromNow });
+    box.live.locked = lastChangeHoursFromNow >= -4;
     return box;
   }
 
@@ -392,6 +394,5 @@ function setBoxStatus(box: Box): Box {
   } else if (zapTypes.automation === box.live.channelChangeSource) {
     box.live.locked = isZappedProgramStillOn;
   }
-
   return box;
 }

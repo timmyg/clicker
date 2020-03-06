@@ -82,9 +82,9 @@ const dbLocation = dynamoose.model(
           channel: Number,
           channelMinor: Number,
           channelChangeAt: Number, // date
+          // program: Map, // populated every few minutes
         },
         updatedAt: Number, // date
-        // program: Map, // populated every few minutes
       },
     ],
     channels: {
@@ -285,8 +285,13 @@ function setBoxStatus(box: Box): Box {
         and box.program.start within past 6 hours (to prevent replays)
 
    */
+  // console.log(!box.live.program, [zapTypes.manual, zapTypes.automation].includes(box.live.channelChangeSource));
+
+  // THIS IS DUPLICATED IN
   if (!box.live.program && [zapTypes.manual, zapTypes.automation].includes(box.live.channelChangeSource)) {
-    box.live.locked = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours() >= -4;
+    const lastChangeHoursFromNow = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours();
+    console.log({ lastChangeHoursFromNow });
+    box.live.locked = lastChangeHoursFromNow >= -4;
     return box;
   }
 
@@ -303,7 +308,6 @@ function setBoxStatus(box: Box): Box {
   } else if (zapTypes.automation === box.live.channelChangeSource) {
     box.live.locked = isZappedProgramStillOn;
   }
-
   return box;
 }
 
@@ -852,10 +856,11 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     .filter(b => b.live && b.live.channel)
     .map(b => b.live.channel);
   ccPrograms = ccPrograms.filter(ccp => {
+    const program: Program = ccp.db;
     if (ccp.fields.rating >= 9) {
       return true;
     }
-    return !currentlyShowingChannels.includes(ccp.db.channel);
+    return !currentlyShowingChannels.includes(program.channel);
   });
   console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
 
@@ -917,7 +922,8 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
 
   // attach db program
   ccPrograms.map(ccp => {
-    ccp.db = programs.find(p => p.programmingId === ccp.fields.programmingId);
+    const program: Program = programs.find(p => p.programmingId === ccp.fields.programmingId);
+    ccp.db = program;
   });
 
   // filter out currently showing programs, excluded programs, and sort by rating
@@ -1101,10 +1107,11 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
     boxes
       // only boxes with zones
       .filter(b => b.zone)
-      .filter(b => b.live)
+      // .filter(b => b.live)
       // remove manually changed within past 30 minutes
       .filter(
         b =>
+          !b.live ||
           b.live.channelChangeSource !== zapTypes.manual ||
           (b.live.channelChangeSource === zapTypes.manual &&
             moment(b.live.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
@@ -1112,6 +1119,7 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
       // remove manually changed not in current game window
       .filter(
         b =>
+          !b.live ||
           b.live.channelChangeSource !== zapTypes.manual ||
           (b.live.channelChangeSource === zapTypes.manual &&
             moment(b.live.channelChangeAt).diff(moment(b.live.program.start), 'minutes') < -manualChangeBuffer),
