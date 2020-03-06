@@ -1331,7 +1331,7 @@ async function updateLocationBox(
     updateExpression += `${prefix}.lockedProgrammingId = :lockedProgrammingId,`;
     expressionAttributeValues[':lockedProgrammingId'] = lockedProgrammingId;
   }
-  updateExpression += `${prefix}.updatedAt = :updatedAt`;
+  updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
   expressionAttributeValues[':updatedAt'] = now;
   console.log(expressionAttributeValues);
   var params = {
