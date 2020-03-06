@@ -58,16 +58,19 @@ const dbLocation = dynamoose.model(
     boxes: [
       {
         id: String,
-        appActive: Boolean,
-        automationActive: Boolean, // new
         zone: String,
         label: String, // physical label id on tv (defaults to locationName)
-
-        clientAddress: String, // dtv calls this clientAddr
-        locationName: String, // dtv name
-        ip: String,
-
-        current: {
+        info: {
+          clientAddress: String, // dtv calls this clientAddr
+          locationName: String, // dtv name
+          ip: String,
+          notes: String,
+        },
+        configuration: {
+          appActive: Boolean,
+          automationActive: Boolean, // new
+        },
+        live: {
           locked: Boolean, // new, dynamic
           lockedUntil: Number, // date
           lockedProgrammingId: String,
@@ -81,7 +84,6 @@ const dbLocation = dynamoose.model(
           channelChangeAt: Number, // date
         },
         updatedAt: Number, // date
-        notes: String,
         // program: Map, // populated every few minutes
       },
     ],
@@ -227,7 +229,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
     console.time('filter + sort');
     if (event.headers && event.headers.app && event.headers.app.length) {
-      location.boxes = location.boxes.filter(b => b.appActive);
+      location.boxes = location.boxes.filter(b => b.configuration).filter(b => b.configuration.appActive);
     }
 
     // filter out inactive boxes
@@ -580,7 +582,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       // if control center or app box
       //  - send slack notif
       //  - send to airtable sheet
-      if (!!location.boxes[i].zone || location.boxes[i].appActive) {
+      if (!!location.boxes[i].zone || (location.boxes[i].configuration && location.boxes[i].configuration.appActive)) {
         const text = `Manual Zap @ ${location.name} (${
           location.neighborhood
         }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
@@ -1060,7 +1062,8 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
-    const { zone, label, appActive } = box;
+    const { zone, label } = box;
+    const { appActive } = box.configuration;
     const { channel, channelChangeSource: source, program } = box.live;
     let game, programTitle, rating;
     if (program) {

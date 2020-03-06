@@ -157,8 +157,10 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     return respond(400, 'Sorry, location inactive');
   }
   // ensure tv isnt already reserved
-  const tv = locationResultBody.boxes.find(b => b.id === reservation.box.id);
-  if (!tv || !tv.appActive || (tv.reserved && moment(tv.end).unix() > moment().unix())) {
+  let tv: Box = locationResultBody.boxes.find(b => b.id === reservation.box.id);
+  tv = setBoxStatus(tv);
+
+  if (!tv || !tv.configuration || !tv.configuration.appActive || tv.live.locked) {
     console.log(tv);
     return respond(400, 'Sorry, tv is not available for reservation');
   }
@@ -368,4 +370,28 @@ function calculateReservationEndTime(reservation) {
   reservation.start = moment().toDate();
   const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
   return initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
+}
+
+// TODO duplicate
+function setBoxStatus(box: Box): Box {
+  if (!box.live.program && [zapTypes.manual, zapTypes.automation].includes(box.live.channelChangeSource)) {
+    box.live.locked = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours() >= -4;
+    return box;
+  }
+
+  const isBeforeLockedTime = moment().isBefore(box.live.lockedUntil);
+  const isAfterLockedTime = moment().isAfter(box.live.lockedUntil);
+  const isZappedProgramStillOn =
+    box.live.program &&
+    box.live.lockedProgrammingId === box.live.program.programmingId &&
+    moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
+  if (zapTypes.manual === box.live.channelChangeSource) {
+    box.live.locked = isBeforeLockedTime || isZappedProgramStillOn;
+  } else if (zapTypes.app === box.live.channelChangeSource) {
+    box.live.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);
+  } else if (zapTypes.automation === box.live.channelChangeSource) {
+    box.live.locked = isZappedProgramStillOn;
+  }
+
+  return box;
 }

@@ -1,10 +1,12 @@
 // @flow
 class Box {
   id: string;
-  appActive: boolean;
-  automationActive: boolean;
   label: string;
   zone: string;
+  configuration: {
+    appActive: boolean,
+    automationActive: boolean,
+  };
   info: {
     clientAddress: string,
     locationName: string,
