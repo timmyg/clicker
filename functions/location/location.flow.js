@@ -1331,6 +1331,7 @@ async function updateLocationBox(
   }
   updateExpression += `${prefix}.updatedAt = :updatedAt`;
   expressionAttributeValues[':updatedAt'] = now;
+  console.log(expressionAttributeValues);
   var params = {
     TableName: process.env.tableLocation,
     Key: { id: locationId },
