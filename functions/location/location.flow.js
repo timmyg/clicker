@@ -191,6 +191,16 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id, boxId } = getPathParameters(event);
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(id)
+    .exec();
+  const box = location.boxes.find(b => b.id === boxId);
+  return respond(200, box);
+});
+
+module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
   console.time('get from db');

@@ -132,6 +132,13 @@ functions:
               - clicker
               - authorization
               - content-type
+  getBox:
+    handler: location.getBox
+    description: get box info, for informational purposes only
+    events:
+      - http:
+          path: '{id}/box/{boxId}'
+          method: get
   create:
     handler: location.create
     events:
