@@ -1304,11 +1304,11 @@ async function updateLocationBox(
   const now = moment().unix() * 1000;
   let updateExpression = `set `;
   let expressionAttributeValues = {};
+  const prefix = `boxes[${boxIndex}].live`;
   if (channel) {
     updateExpression += `${prefix}.channel = :channel,`;
     expressionAttributeValues[':channel'] = parseInt(channel);
   }
-  const prefix = `boxes[${boxIndex}].live`;
   if (channelChangeAt) {
     updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;
     expressionAttributeValues[':channelChangeAt'] = channelChangeAt;
