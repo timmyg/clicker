@@ -1305,30 +1305,31 @@ async function updateLocationBox(
   let updateExpression = `set `;
   let expressionAttributeValues = {};
   if (channel) {
-    updateExpression += `boxes[${boxIndex}].channel = :channel,`;
+    updateExpression += `${prefix}.channel = :channel,`;
     expressionAttributeValues[':channel'] = parseInt(channel);
   }
+  const prefix = `boxes[${boxIndex}].live`;
   if (channelChangeAt) {
-    updateExpression += `boxes[${boxIndex}].channelChangeAt = :channelChangeAt,`;
+    updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;
     expressionAttributeValues[':channelChangeAt'] = channelChangeAt;
   }
   if (source) {
-    updateExpression += `boxes[${boxIndex}].channelChangeSource = :channelChangeSource,`;
+    updateExpression += `${prefix}.channelChangeSource = :channelChangeSource,`;
     expressionAttributeValues[':channelChangeSource'] = source;
   }
   if (program) {
-    updateExpression += `boxes[${boxIndex}].program = :program,`;
+    updateExpression += `${prefix}.program = :program,`;
     expressionAttributeValues[':program'] = program;
   }
   if (lockedUntil) {
-    updateExpression += `boxes[${boxIndex}].lockedUntil = :lockedUntil,`;
+    updateExpression += `${prefix}.lockedUntil = :lockedUntil,`;
     expressionAttributeValues[':lockedUntil'] = lockedUntil;
   }
   if (lockedProgrammingId) {
-    updateExpression += `boxes[${boxIndex}].lockedProgrammingId = :lockedProgrammingId,`;
+    updateExpression += `${prefix}.lockedProgrammingId = :lockedProgrammingId,`;
     expressionAttributeValues[':lockedProgrammingId'] = lockedProgrammingId;
   }
-  updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
+  updateExpression += `${prefix}.updatedAt = :updatedAt`;
   expressionAttributeValues[':updatedAt'] = now;
   var params = {
     TableName: process.env.tableLocation,
