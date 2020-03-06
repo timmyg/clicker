@@ -125,6 +125,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     source,
     channelChangeAt: moment().unix() * 1000,
     // lockedProgrammingId: reservation.box.program.programmingId,
+  
   };
 
   await new Invoke()
