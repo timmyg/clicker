@@ -119,7 +119,6 @@ const dbLocation = dynamoose.model(
     active: Boolean,
     hidden: Boolean,
     connected: Boolean,
-    setup: Boolean,
     controlCenter: Boolean,
     controlCenterV2: Boolean,
     announcement: String,
@@ -339,6 +338,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('setBoxes');
   const { boxes, ip } = getBody(event);
   console.log({ boxes, ip });
   const { id } = getPathParameters(event);
@@ -347,10 +347,6 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
     .queryOne('id')
     .eq(id)
     .exec();
-
-  if (location.setup) {
-    return respond(204, 'location has already been setup');
-  }
 
   let updatedLocation;
   location.boxes = location.boxes || [];
