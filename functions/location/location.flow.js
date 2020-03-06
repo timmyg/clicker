@@ -522,7 +522,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
     const i: number = location.boxes.findIndex(b => b.id === boxId);
     console.log('box', location.boxes[i], major, minor);
-    const originalChannel = location.boxes[i].live.channel;
+    const originalChannel = location.boxes[i].live && location.boxes[i].live.channel;
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
