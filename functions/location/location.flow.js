@@ -195,7 +195,7 @@ module.exports.getBox = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(id)
     .exec();
   const box = location.boxes.find(b => b.id === boxId);
-  return respond(200, box);
+  return respond(200, setBoxStatus(box));
 });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
