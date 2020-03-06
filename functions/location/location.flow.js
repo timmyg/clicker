@@ -16,6 +16,11 @@ if (!process.env.IS_LOCAL) {
   console.info('Serverless Offline detected; skipping AWS X-Ray setup');
   AWS = require('aws-sdk');
 }
+const zapTypes = {
+  manual: 'manual',
+  app: 'app',
+  automation: 'automation',
+};
 
 declare class process {
   static env: {
@@ -59,20 +64,28 @@ const dbLocation = dynamoose.model(
         // tunerBond: Boolean, // not sure what this is
         setupChannel: Number,
         ip: String,
-        reserved: Boolean,
-        end: Date,
+
+        // reserved: Boolean,
+        // end: Date,
+        locked: Boolean, // new, dynamic
+        lockedUntilTime: Date,
+        lockedProgrammingId: String,
+        lockedMessage: String,
+
         zone: String,
         notes: String,
         appActive: Boolean,
+        automationActive: Boolean, // new
         channel: Number,
         channelMinor: Number,
         channelChangeAt: Date,
         updatedAt: Date,
-        // program: Map, // populated every few minutes
-        channelSource: {
+        channelChangeSource: {
+          // renamed
           type: String,
-          enum: ['app', 'control center', 'manual'],
+          enum: [zapTypes.app, zapTypes.automation, zapTypes.manual],
         },
+        // program: Map, // populated every few minutes
       },
     ],
     channels: {
@@ -146,7 +159,8 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   // set whether open tv's
   allLocations.forEach((l, i, locations) => {
     if (l.boxes) {
-      l.openTvs = l.boxes.every(b => !b.reserved || moment(b.end).diff(moment().toDate()) < 0);
+      l.boxes = l.boxes.map(b => setBoxStatus(b));
+      l.openTvs = l.boxes.every(b => !b.locked);
     }
   });
 
@@ -201,20 +215,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   // loop through boxes, and update reserved status if necessary
   if (location.boxes) {
     console.time('update reserved status');
-    let updated = false;
-    location.boxes.forEach((o, i, boxes) => {
-      // check if box is reserved and end time is in past
-      if (boxes[i].reserved && moment(boxes[i].end).diff(moment().toDate()) < 0) {
-        boxes[i].reserved = false;
-        updated = true;
-      }
-    });
+    location.boxes = location.boxes.map(b => setBoxStatus(b));
     console.timeEnd('update reserved status');
-    if (updated) {
-      console.time('save boxes');
-      await location.save();
-      console.timeEnd('save boxes');
-    }
 
     console.time('filter + sort');
     if (event.headers && event.headers.app && event.headers.app.length) {
@@ -233,7 +235,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
   // set distance
   console.time('set geo distance');
-  if (event.queryStringParameters) {
+  if (event.queryStringParameters && event.queryStringParameters.latitude && event.queryStringParameters.longitude) {
     const { latitude, longitude } = event.queryStringParameters;
     console.log({ latitude, longitude });
     const { latitude: locationLatitude, longitude: locationLongitude } = location.geo;
@@ -253,6 +255,48 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
   return respond(200, location);
 });
+
+function setBoxStatus(box: Box): Box {
+  // locked: Boolean, // new
+  // lockedUntilTime: Date,
+  // lockedProgrammingId: String,
+  // lockedMessage: String,
+
+  /*
+  
+  manual zap
+    - locked if before lockedUntilTime
+    - locked if after lockedUntilTime 
+        and lockedProgrammingId === box.program.programmingId
+        and box.program.start within past 6 hours (to prevent replays)
+  app zap
+    - locked if before lockedUntilTime
+  automation zap
+    - locked if lockedProgrammingId === box.program.programmingId
+        and box.program.start within past 6 hours (to prevent replays)
+
+   */
+  if (!box.program && [zapTypes.manual, zapTypes.automation].includes(box.channelChangeSource)) {
+    box.locked = moment.duration(moment(box.channelChangeAt).diff(moment())).asHours() >= -4;
+    return box;
+  }
+
+  const isBeforeLockedTime = moment().isBefore(box.lockedUntilTime);
+  const isAfterLockedTime = moment().isAfter(box.lockedUntilTime);
+  const isZappedProgramStillOn =
+    box.program &&
+    box.lockedProgrammingId === box.program.programmingId &&
+    moment.duration(moment(box.channelChangeAt).diff(moment(box.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
+  if (zapTypes.manual === box.channelChangeSource) {
+    box.locked = isBeforeLockedTime || isZappedProgramStillOn;
+  } else if (zapTypes.app === box.channelChangeSource) {
+    box.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);
+  } else if (zapTypes.automation === box.channelChangeSource) {
+    box.locked = isZappedProgramStillOn;
+  }
+
+  return box;
+}
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   try {
@@ -414,8 +458,8 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
     .exec();
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  location.boxes[boxIndex].reserved = true;
-  location.boxes[boxIndex].end = end;
+  // location.boxes[boxIndex].reserved = true;
+  location.boxes[boxIndex].lockedUntilTime = end;
   await location.save();
 
   return respond(200);
@@ -430,8 +474,9 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
     .exec();
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  location.boxes[boxIndex].reserved = false;
+  // location.boxes[boxIndex].reserved = false;
   // location.boxes[boxIndex].end;
+  location.boxes[boxIndex].lockedUntilTime = new Date();
   await location.save();
 
   return respond(200);
@@ -464,9 +509,25 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       channel: major,
       channelMinor: minor,
     };
+
+    let program;
     if (originalChannel !== major) {
-      updateBoxInfoBody.source = 'manual';
+      updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
+      updateBoxInfoBody.lockedUntilTime =
+        moment()
+          .add(1, 'h')
+          .unix() * 1000;
+
+      console.log({ channel: major, region: location.region });
+      const programResult = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams({ channel: major, region: location.region })
+        .go();
+      program = programResult && programResult.data;
+      console.log({ program });
+      updateBoxInfoBody.lockedProgrammingId = program && program.programmingId;
     }
 
     await new Invoke()
@@ -511,15 +572,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .body({ text })
           .async()
           .go();
-        // await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
-        console.log({ channel: major, region: location.region });
-        const programResult = await new Invoke()
-          .service('program')
-          .name('get')
-          .queryParams({ channel: major, region: location.region })
-          .go();
-        const program = programResult && programResult.data;
-        console.log({ program });
+
         await new Invoke()
           .service('admin')
           .name('logChannelChange')
@@ -783,7 +836,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   console.log({ locationId, boxId });
-  const { channel, channelMinor, source, channelChangeAt } = getBody(event);
+  const { channel, channelMinor, source, channelChangeAt, lockedUntilTime, lockedProgrammingId } = getBody(event);
   console.log({ channel });
 
   console.time('get location');
@@ -828,7 +881,17 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     program,
     channelChangeAt,
   });
-  await updateLocationBox(locationId, boxIndex, channel, channelMinor, source, program, channelChangeAt);
+  await updateLocationBox(
+    locationId,
+    boxIndex,
+    channel,
+    channelMinor,
+    source,
+    program,
+    channelChangeAt,
+    lockedUntilTime,
+    lockedProgrammingId,
+  );
   console.timeEnd('update location box');
 
   return respond(200);
@@ -1080,7 +1143,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
-    const { channel, channelSource: source, zone, program, label, appActive } = box;
+    const { channel, channelChangeSource: source, zone, program, label, appActive } = box;
     let game, programTitle, rating;
     if (program) {
       game = program.game;
@@ -1120,15 +1183,15 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
       // remove manually changed within past 30 minutes
       .filter(
         b =>
-          b.channelSource !== 'manual' ||
-          (b.channelSource === 'manual' &&
+          b.channelChangeSource !== zapTypes.manual ||
+          (b.channelChangeSource === zapTypes.manual &&
             moment(b.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
       )
       // remove manually changed not in current game window
       .filter(
         b =>
-          b.channelSource !== 'manual' ||
-          (b.channelSource === 'manual' &&
+          b.channelChangeSource !== zapTypes.manual ||
+          (b.channelChangeSource === zapTypes.manual &&
             moment(b.channelChangeAt).diff(moment(b.program.start), 'minutes') < -manualChangeBuffer),
       )
   );
@@ -1144,7 +1207,7 @@ async function tune(location: Venue, box: Box, channel: number, program: Program
       channel,
     },
   };
-  const source = 'control center';
+  const source = zapTypes.automation;
   console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel}`, box.label);
   await new Invoke()
     .service('remote')
@@ -1191,11 +1254,8 @@ function replicatePrograms(
   boxesCount: number,
   currentlyShowingProgrammingIds: string[] = [],
 ): ControlCenterProgram[] {
-  // console.info('replicatePrograms');
-  // console.info({ boxesCount, currentlyShowingProgrammingIds });
   let programsWithReplication = [];
   ccPrograms.forEach(ccp => {
-    // console.info('rating', ccp.fields.rating);
     if ([10, 9].includes(ccp.fields.rating)) {
       let replicationCount = 0;
       if (ccp.fields.rating === 10) {
@@ -1203,24 +1263,13 @@ function replicatePrograms(
       } else if (ccp.fields.rating === 9) {
         replicationCount = Math.floor(boxesCount * 0.4);
       }
-      console.log('intended replication count: ', replicationCount);
       // subtract another if channel already on
       if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
         const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
-        console.log({ existingCount });
         replicationCount = replicationCount - existingCount;
-        console.log({ replicationCount });
       }
-      console.log('final', { replicationCount });
-      // // remove from array if already showing
-      // if (replicationCount <= 0) {
-      //   programsWithReplication = programsWithReplication.filter(
-      //     ccp2 => ccp2.fields.programmingId !== ccp.fields.programmingId,
-      //   );
-      // }
       // subtract one because its already in there once
       for (let i = 0; i < replicationCount; i++) {
-        console.log('loop');
         programsWithReplication.push(ccp);
       }
     } else {
@@ -1242,7 +1291,8 @@ async function getAirtablePrograms(location: Venue): ControlCenterProgram[] {
   console.log({ location });
   console.log({ ccPrograms });
   ccPrograms = filterProgramsByTargeting(ccPrograms, location);
-  return ccPrograms.map(p => new ControlCenterProgram(p));
+  const ccProgramModels: ControlCenterProgram[] = ccPrograms.map(p => new ControlCenterProgram(p));
+  return ccProgramModels;
 }
 
 // remove programs not targeted at this location
@@ -1312,6 +1362,8 @@ async function updateLocationBox(
   source?: string,
   program: Program,
   channelChangeAt?: number,
+  lockedUntilTime?: Date,
+  lockedProgrammingId?: string,
 ) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -1327,12 +1379,20 @@ async function updateLocationBox(
     expressionAttributeValues[':channelChangeAt'] = channelChangeAt;
   }
   if (source) {
-    updateExpression += `boxes[${boxIndex}].channelSource = :channelSource,`;
-    expressionAttributeValues[':channelSource'] = source;
+    updateExpression += `boxes[${boxIndex}].channelChangeSource = :channelChangeSource,`;
+    expressionAttributeValues[':channelChangeSource'] = source;
   }
   if (program) {
     updateExpression += `boxes[${boxIndex}].program = :program,`;
     expressionAttributeValues[':program'] = program;
+  }
+  if (lockedUntilTime) {
+    updateExpression += `boxes[${boxIndex}].lockedUntilTime = :lockedUntilTime,`;
+    expressionAttributeValues[':lockedUntilTime'] = lockedUntilTime;
+  }
+  if (lockedProgrammingId) {
+    updateExpression += `boxes[${boxIndex}].lockedProgrammingId = :lockedProgrammingId,`;
+    expressionAttributeValues[':lockedProgrammingId'] = lockedProgrammingId;
   }
   updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
   expressionAttributeValues[':updatedAt'] = now;
@@ -1365,3 +1425,4 @@ module.exports.findBoxWithoutRating = findBoxWithoutRating;
 module.exports.findBoxWorseRating = findBoxWorseRating;
 module.exports.filterProgramsByTargeting = filterProgramsByTargeting;
 module.exports.replicatePrograms = replicatePrograms;
+module.exports.setBoxStatus = setBoxStatus;

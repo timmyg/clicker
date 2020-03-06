@@ -13,6 +13,12 @@ declare class process {
   };
 }
 
+const zapTypes = {
+  manual: 'manual',
+  app: 'app',
+  automation: 'automation',
+};
+
 class LosantApi {
   client: any;
   constructor() {
@@ -62,7 +68,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('change channel');
 
   let eventName, userId;
-  if (source === 'app') {
+  if (source === zapTypes.app) {
     eventName = 'App Zap';
     userId = reservation.userId;
     const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title}  [${
@@ -82,7 +88,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
       .body({ text })
       .async()
       .go();
-  } else if (source === 'control center') {
+  } else if (source === zapTypes.automation) {
     eventName = 'Control Center Zap';
     userId = 'system';
     let text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} {${
@@ -116,7 +122,12 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   await new Invoke()
     .service('location')
     .name('updateBoxInfo')
-    .body({ channel, source, channelChangeAt: moment().unix() * 1000 })
+    .body({
+      channel,
+      source,
+      channelChangeAt: moment().unix() * 1000,
+      lockedProgrammingId: reservation.box.program.programmingId,
+    })
     .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
@@ -163,10 +174,6 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
 
   return respond();
-  // } catch (e) {
-  //   console.error(e);
-  //   return respond(400, `Could not tune: ${e.stack}`);
-  // }
 });
 
 module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event => {

@@ -9,6 +9,7 @@ const {
   findBoxWorseRating,
   filterProgramsByTargeting,
   replicatePrograms,
+  setBoxStatus,
 } = require('./location');
 const moment = require('moment');
 
@@ -209,7 +210,7 @@ describe('get boxes', () => {
     program: {
       clickerRating: 7,
     },
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(33, 'm')
@@ -218,7 +219,7 @@ describe('get boxes', () => {
   const reservedManuallyChangedGameOn = {
     id: 4,
     zone: '15',
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(50, 'm')
@@ -238,7 +239,7 @@ describe('get boxes', () => {
   const openManuallyChangedDifferentProgram = {
     id: 5,
     zone: '15',
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(2, 'h')
@@ -258,7 +259,7 @@ describe('get boxes', () => {
   const reservedManuallyChangedProgramOver = {
     id: 6,
     zone: '15',
-    channelSource: 'manual',
+    channelChangeSource: 'manual',
     channelChangeAt:
       moment()
         .subtract(40, 'm')
@@ -531,6 +532,188 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
       const result = filterProgramsByTargeting(ccPrograms, location);
       expect(result.length).toBe(1);
       expect(result[0].fields.rating).toBe(8);
+    });
+  });
+});
+describe('setBoxStatus', () => {
+  describe('no program', () => {
+    test('unlock if channel changed more than 4 hours ago', () => {
+      const box = {
+        channelChangeSource: 'manual',
+        channelChangeAt:
+          moment()
+            .subtract(6, 'h')
+            .unix() * 1000,
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
+    test('locked if channel changed less than 4 hours ago', () => {
+      const box = {
+        channelChangeSource: 'manual',
+        channelChangeAt:
+          moment()
+            .subtract(3, 'h')
+            .unix() * 1000,
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+  });
+  describe('manual zap', () => {
+    const manualBox = { channelChangeSource: 'manual' };
+    test('locked when recently changed', () => {
+      const box = {
+        ...manualBox,
+        lockedUntilTime: moment().subtract(10, 'm'),
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+    test('locked when different program and before lock time', () => {
+      const box = {
+        ...manualBox,
+        lockedProgrammingId: 'A',
+        lockedUntilTime:
+          moment()
+            .add(1, 'm')
+            .unix() * 1000,
+        program: {
+          programmingId: 'B',
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+    test('unlocked when different program on', () => {
+      const box = {
+        ...manualBox,
+        lockedProgrammingId: 'A',
+        lockedUntilTime:
+          moment()
+            .subtract(1.5, 'h')
+            .unix() * 1000,
+        program: {
+          programmingId: 'B',
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
+    test('unlocked when changed a while ago with same program on, but way later (repeat program)', () => {
+      const box = {
+        ...manualBox,
+        lockedProgrammingId: 'A',
+        channelChangeAt:
+          moment()
+            .subtract(6.1, 'h')
+            .unix() * 1000,
+        program: {
+          programmingId: 'A',
+          start:
+            moment()
+              .subtract(1.2, 'h')
+              .unix() * 1000,
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
+  });
+  describe('automation zap', () => {
+    const automationBox = { channelChangeSource: 'automation' };
+    test('unlocked with different program on', () => {
+      const box = {
+        ...automationBox,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'B',
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
+    test('unlocked with same program on, but way later (repeat program)', () => {
+      const box = {
+        ...automationBox,
+        channelChangeAt:
+          moment()
+            .subtract(6.1, 'h')
+            .unix() * 1000,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'A',
+          start:
+            moment()
+              .subtract(1.2, 'h')
+              .unix() * 1000,
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
+    });
+    test('locked with same program on, recently changed', () => {
+      const box = {
+        ...automationBox,
+        channelChangeAt:
+          moment()
+            .subtract(0.2, 'h')
+            .unix() * 1000,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'A',
+          start:
+            moment()
+              .subtract(1.2, 'h')
+              .unix() * 1000,
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+    test('locked with same program on past end time', () => {
+      const box = {
+        ...automationBox,
+        channelChangeAt:
+          moment()
+            .subtract(0.1, 'h')
+            .unix() * 1000,
+        lockedProgrammingId: 'A',
+        program: {
+          programmingId: 'A',
+          end:
+            moment()
+              .subtract(0.2, 'h')
+              .unix() * 1000,
+        },
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+  });
+  describe('app zap changes', () => {
+    const appBox = { channelChangeSource: 'app' };
+    test('locked before reservation end time', () => {
+      const box = {
+        ...appBox,
+        lockedUntilTime:
+          moment()
+            .add(3, 'm')
+            .unix() * 1000,
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeTruthy();
+    });
+    test('unlocked after reservation end time', () => {
+      const box = {
+        ...appBox,
+        lockedUntilTime:
+          moment()
+            .subtract(3, 'm')
+            .unix() * 1000,
+      };
+      const { locked } = setBoxStatus(box);
+      expect(locked).toBeFalsy();
     });
   });
 });

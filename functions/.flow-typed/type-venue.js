@@ -7,54 +7,26 @@ class Box {
   tunerBond: boolean;
   setupChannel: number;
   ip: string;
-  reserved: boolean;
   end: Date;
   zone: string;
   notes: string;
+  updatedAt: Date;
+  program: Program;
   appActive: boolean;
+  automationActive: boolean;
   channel: number;
   channelChangeAt: Date;
-  updatedAt: Date;
-  channelSource: string;
-  program: Program;
-  // clear() {
-  //   delete this.end;
-  //   // delete this.reserved;
-  // }
-}
-
-class BoxV2 {
-  id: string;
-  about: {
-    clientAddress: string,
-    locationName: string,
-    label: string,
-    setupChannel: number,
-    ip: string,
-    notes: string,
-  };
-  controlCenter: {
-    zone: string,
-  };
-  userControl: {
-    // clicker tv app
-    active: boolean, // formerly appActive
-    reserved: boolean,
-    end: Date,
-  };
-  current: {
-    channel: number,
-    channelChangeAt: Date,
-    updatedAt: Date,
-    channelSource: string,
-  };
+  channelChangeSource: string;
+  locked: boolean;
+  lockedUntilTime: Date;
+  lockedProgrammingId: String;
+  lockedMessage: String;
 }
 
 export class Venue {
   id: string;
   losantId: string;
   boxes: Box[];
-  boxesV2: BoxV2[];
   channels: {
     exclude: string[],
   };
