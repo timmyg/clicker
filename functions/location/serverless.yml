@@ -137,7 +137,7 @@ functions:
     description: get box info, for informational purposes only
     events:
       - http:
-          path: '{id}/box/{boxId}'
+          path: '{id}/boxes/{boxId}'
           method: get
   create:
     handler: location.create

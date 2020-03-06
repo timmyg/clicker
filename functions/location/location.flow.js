@@ -190,7 +190,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, sorted);
 });
 
-module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.getBox = RavenLambdaWrapper.handler(Raven, async event => {
   const { id, boxId } = getPathParameters(event);
   const location: Venue = await dbLocation
     .queryOne('id')
