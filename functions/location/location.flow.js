@@ -68,7 +68,7 @@ const dbLocation = dynamoose.model(
         // reserved: Boolean,
         // end: Date,
         locked: Boolean, // new, dynamic
-        lockedUntilTime: Date,
+        lockedUntilTime: Number, // date
         lockedProgrammingId: String,
         lockedMessage: String,
 
@@ -78,8 +78,8 @@ const dbLocation = dynamoose.model(
         automationActive: Boolean, // new
         channel: Number,
         channelMinor: Number,
-        channelChangeAt: Date,
-        updatedAt: Date,
+        channelChangeAt: Number, // date
+        updatedAt: Number, // date
         channelChangeSource: {
           // renamed
           type: String,
@@ -486,7 +486,7 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   // location.boxes[boxIndex].reserved = false;
   // location.boxes[boxIndex].end;
-  location.boxes[boxIndex].lockedUntilTime = new Date();
+  location.boxes[boxIndex].lockedUntilTime = moment().unix() * 1000;
   await location.save();
 
   return respond(200);

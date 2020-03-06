@@ -7,20 +7,19 @@ class Box {
   tunerBond: boolean;
   setupChannel: number;
   ip: string;
-  end: Date;
   zone: string;
   notes: string;
-  updatedAt: Date;
+  updatedAt: number;
   program: Program;
   appActive: boolean;
   automationActive: boolean;
   channel: number;
-  channelChangeAt: Date;
+  channelChangeAt: number;
   channelChangeSource: string;
   locked: boolean;
-  lockedUntilTime: Date;
-  lockedProgrammingId: String;
-  lockedMessage: String;
+  lockedUntilTime: number;
+  lockedProgrammingId: string;
+  lockedMessage: string;
 }
 
 export class Venue {
