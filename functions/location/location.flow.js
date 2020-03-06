@@ -372,6 +372,8 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         appActive: false,
         automationActive: false,
       };
+      // $FlowFixMe
+      box.live = {};
       // set label to locationName or random 2 alphanumeric characters
       box.label =
         box.info.locationName ||
