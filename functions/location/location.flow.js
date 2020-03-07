@@ -283,8 +283,6 @@ function setBoxStatus(box: Box): Box {
     - locked if lockedProgrammingId === box.program.programmingId
         and box.program.start within past 6 hours (to prevent replays)
    */
-  // console.log(!box.status.program, [zapTypes.manual, zapTypes.automation].includes(box.status.channelChangeSource));
-
   if (!box.live) {
     // $FlowFixMe
     box.live = {
@@ -1110,7 +1108,7 @@ function buildAirtableNowShowing(location: Venue) {
 
 function getAvailableBoxes(boxes: Box[]): Box[] {
   boxes = boxes.map(b => setBoxStatus(b));
-  return boxes.filter(b => !b.status.locked);
+  return boxes.filter(b => !b.live.locked);
 }
 
 async function tuneAutomation(location: Venue, box: Box, channel: number, program: Program) {
