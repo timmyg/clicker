@@ -1,18 +1,22 @@
+
 <ion-header>
   <ion-toolbar>
     <ion-title>My Reservations</ion-title>
     <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <!-- <ion-buttons slot="start">
       <ion-button
         (click)="onLogout()"
         *ngIf="(user$ | async)?.guest !== true; else loggedOut"
       >
         Logout
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
     <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
-    <ng-template #loggedOut>
+    <!-- <ng-template #loggedOut>
       <ion-button (click)="login()">Login</ion-button>
-    </ng-template>
+    </ng-template> -->
   </ion-toolbar>
 </ion-header>
 
@@ -63,13 +67,10 @@
         </div>
       </ng-template>
       <p class="ion-text-center">
-        <a (click)="createNewReservation('link')">📺 Change the channel</a>
-      </p>
-      <p class="ion-text-center">
-        <a *ngIf="showRatingLink" (click)="rate()">⭐ Rate this app</a>
-      </p>
-      <p class="ion-text-center">
-        <a (click)="openFeedback()">💬 Contact us</a>
+        <ion-button (click)="createNewReservation('link')">
+          <ion-icon slot="start" name="flash"></ion-icon>
+          Reserve a TV
+        </ion-button>
       </p>
     </ng-template>
   </ion-grid>

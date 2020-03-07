@@ -10,7 +10,6 @@ import {
 import {
   getUser,
   getLoading as getWalletLoading,
-  isLoggedIn
 } from "../state/user";
 import {
   ModalController,
@@ -19,14 +18,11 @@ import {
   Platform,
   ActionSheetController
 } from "@ionic/angular";
-import { Storage } from "@ionic/storage";
 import * as fromReservation from "../state/reservation/reservation.actions";
 import * as fromUser from "../state/user/user.actions";
 import { Router, ActivatedRoute } from "@angular/router";
 import { User } from "../state/user/user.model";
 import * as moment from "moment";
-// import { Intercom } from 'ng-intercom';
-import { LoginComponent } from "../auth/login/login.component";
 import { UserService } from "../core/services/user.service";
 import { take, first } from "rxjs/operators";
 import { ofType, Actions } from "@ngrx/effects";
@@ -36,8 +32,6 @@ import { ToastOptions } from "@ionic/core";
 import { AppService } from "../core/services/app.service";
 import { Deploy } from "cordova-plugin-ionic/dist/ngx";
 import { ICurrentConfig } from "cordova-plugin-ionic/dist/IonicCordova";
-import { ReferralPage } from "../referral/referral.page";
-declare var window: any;
 
 @Component({
   selector: "app-profile",
@@ -51,15 +45,6 @@ export class ProfilePage {
   isWalletLoading$: Observable<boolean>;
   sub: Subscription;
   sub2: Subscription;
-  showRatingLink = false;
-  loginModal;
-  referralModal;
-  isLoggedIn$: Observable<boolean>;
-  isLoggedIn: boolean;
-  rating = {
-    cookieName: "rating",
-    given: "given"
-  };
   showVersionClicks = 0;
 
   constructor(
@@ -67,10 +52,8 @@ export class ProfilePage {
     public modalController: ModalController,
     public alertController: AlertController,
     public appService: AppService,
-    private storage: Storage,
     private router: Router,
     private route: ActivatedRoute,
-    // public intercom: Intercom,
     public toastController: ToastController,
     public userService: UserService,
     private actions$: Actions,
@@ -84,10 +67,7 @@ export class ProfilePage {
     this.user$ = this.store.select(getUser);
     this.isReservationsLoading$ = this.store.select(getReservationLoading);
     this.isWalletLoading$ = this.store.select(getWalletLoading);
-    this.isLoggedIn$ = this.store.select(isLoggedIn);
-    this.isLoggedIn$.subscribe(isLoggedIn => {
-      this.isLoggedIn = isLoggedIn;
-    });
+
   }
 
   ngOnInit() {
@@ -99,19 +79,6 @@ export class ProfilePage {
         this.store.dispatch(new fromReservation.GetAll());
       }
     });
-    this.user$.pipe(first()).subscribe(user => {
-      console.log({ user });
-      if (!user) {
-        this.store.dispatch(new fromUser.Load());
-      }
-    });
-    this.platform.backButton.pipe(first()).subscribe(() => {
-      // android
-      if (this.loginModal) {
-        this.loginModal.close();
-      }
-    });
-    this.configureRating();
   }
 
   ngOnDestroy() {
@@ -121,35 +88,6 @@ export class ProfilePage {
     if (this.sub2) {
       this.sub2.unsubscribe();
     }
-  }
-
-  async configureRating() {
-    const rating = await this.storage.get(this.rating.cookieName);
-    if (rating === this.rating.given) {
-      this.showRatingLink = false;
-    } else {
-      this.showRatingLink = true;
-    }
-  }
-
-  async login() {
-    this.loginModal = await this.modalController.create({
-      component: LoginComponent
-    });
-    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      if (this.loginModal) {
-        this.loginModal.close();
-      }
-    });
-    return await this.loginModal.present();
-  }
-
-  async openFeedback() {
-    window.drift.on("ready", function(api) {
-      console.log(api);
-      // api.widget.show();
-      api.openChat();
-    });
   }
 
   onModify(reservation: Reservation) {
@@ -301,76 +239,7 @@ export class ProfilePage {
     }
   }
 
-  async onLogout() {
-    const alert = await this.alertController.create({
-      header: "Are you sure?",
-      message: "Your existing reservations will not be affected.",
-      buttons: [
-        {
-          text: "Cancel",
-          role: "cancel"
-        },
-        {
-          text: "Logout",
-          role: "destructive",
-          cssClass: "secondary",
-          handler: async () => {
-            const originalToken = await this.storage.get("originalToken");
-            await this.storage.clear();
-            // await this.storage.remove(items[i].id);
-            await this.storage.set("originalToken", originalToken);
-            await this.storage.set("token", originalToken);
-            return location.reload();
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
-  async rate() {
-    const actionSheet = await this.actionSheetController.create({
-      header: "Rate the Clicker TV app",
-      buttons: [
-        {
-          text: "I already left a rating",
-          handler: async () => {
-            await this.storage.set(this.rating.cookieName, this.rating.given);
-            this.showRatingLink = false;
-            const toast = await this.toastController.create({
-              message: `We appreciate it! 🙌😁😍🎉😻🎈`,
-              duration: 3000,
-              cssClass: "ion-text-center"
-            });
-            await toast.present();
-            this.segment.track(this.globals.events.rated);
-            this.segment.identify(null, { rated: true });
-          }
-        },
-        {
-          text: "Leave rating",
-          handler: async () => {
-            await this.storage.set(this.rating.cookieName, this.rating.given);
-            let link = "https://tryclicker.com";
-            console.log("checking platform type");
-            if (this.platform.is("ios")) {
-              console.log("is ios");
-              link =
-                "itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8";
-            } else if (this.platform.is("android")) {
-              console.log("is android");
-              link = "market://details?id=com.teamclicker.app";
-            }
-            window.open(link);
-            return null;
-          }
-        }
-      ]
-    });
-
-    await actionSheet.present();
-  }
+  
 
   getStoreName() {
     let storeName = "app store";

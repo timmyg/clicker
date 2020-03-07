@@ -1,14 +1,9 @@
-import { ReferralPage } from "./../../../referral/referral.page";
-import { LoginComponent } from "src/app/auth/login/login.component";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Location } from "src/app/state/location/location.model";
-import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { ReserveService } from "../../reserve.service";
 import { Observable, Subscription, BehaviorSubject } from "rxjs";
 import { getAllLocations, getLoading } from "src/app/state/location";
 import {
-  getUserLocations,
-  getUserRoles,
   isLoggedIn,
   getUserGeolocation
 } from "src/app/state/user";
@@ -36,7 +31,6 @@ import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
 // import { Intercom } from 'ng-intercom';
 import { GeolocationOptions } from "@ionic-native/geolocation/ngx";
-import { SuggestComponent } from "./suggest/suggest.component";
 import { LocationDetailPage } from "src/app/location-detail/location-detail.page";
 
 const permissionGeolocation = {
@@ -87,8 +81,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
   milesRadius = 100;
   isLoggedIn$: Observable<boolean>;
   isLoggedIn: boolean;
-  suggestModal;
-  referralModal;
   locationDetailModal;
   loginModal;
   geolocationError;
@@ -280,18 +272,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.evaluateGeolocation();
   }
 
-  async suggestLocation() {
-    this.suggestModal = await this.modalController.create({
-      component: SuggestComponent
-    });
-    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      if (this.suggestModal) {
-        this.suggestModal.close();
-      }
-    });
-    return await this.suggestModal.present();
-  }
-
   async allowLocation() {
     await this.storage.set(
       permissionGeolocation.name,
@@ -415,45 +395,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async forceAllow() {
     await this.storage.remove(permissionGeolocation.name);
     location.reload();
-  }
-
-  async openReferral() {
-    if (this.isLoggedIn) {
-      this.referralModal = await this.modalController.create({
-        component: ReferralPage
-      });
-      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-        if (this.referralModal) {
-          this.referralModal.close();
-        }
-      });
-      return await this.referralModal.present();
-    } else {
-      const toast = await this.toastController.create({
-        message: `✋ You must be logged in to get free tokens.`,
-        duration: 4000,
-        buttons: [
-          {
-            side: "end",
-            text: "Login",
-            handler: async () => {
-              this.loginModal = await this.modalController.create({
-                component: LoginComponent
-              });
-              this.sub = this.platform.backButton
-                .pipe(first())
-                .subscribe(() => {
-                  if (this.loginModal) {
-                    this.loginModal.close();
-                  }
-                });
-              return await this.loginModal.present();
-            }
-          }
-        ]
-      });
-      toast.present();
-    }
   }
 
   onLocationClick(location: Location) {

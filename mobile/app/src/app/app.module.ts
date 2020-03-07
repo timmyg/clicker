@@ -30,6 +30,9 @@ import { SegmentModule } from "ngx-segment-analytics";
 import { Globals } from "./globals";
 
 import * as Sentry from "@sentry/browser";
+import { MenuComponent } from "./menu/menu.component";
+import { SuggestComponent } from "./suggest/suggest.component";
+import { MenuModule } from "./menu/menu.module";
 
 Sentry.init({
   dsn: environment.sentry.dsn,
@@ -78,6 +81,7 @@ export function initUserStuff(store: Store<AppState>): Function {
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    MenuModule,
     BrowserModule,
     SegmentModule.forRoot({
       apiKey: environment.segment.writeKey,

@@ -1,0 +1,12 @@
+<ion-list>
+  <ion-menu-toggle>
+    <ion-item (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true; else loggedOut">Logout</ion-item>
+    <ng-template #loggedOut>
+      <ion-item (click)="onLogin()">Login</ion-item>
+    </ng-template>
+    <ion-item (click)="onRate()">Rate</ion-item>
+    <ion-item (click)="onContact()">Contact Us</ion-item>
+    <ion-item (click)="onSuggestLocation()">Suggest New Location</ion-item>
+    <ion-item (click)="onOpenReferral()" menuToggle>Get Free Tokens</ion-item>
+  </ion-menu-toggle>
+</ion-list>

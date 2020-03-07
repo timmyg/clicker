@@ -21,5 +21,18 @@
   </ion-card>
 </section>
 <ng-template #normal
-  ><ion-app> <ion-router-outlet></ion-router-outlet> </ion-app
+  ><ion-app> 
+    <ion-menu contentId="content" side="start">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>
+            <img src="https://clicker-brand.s3.amazonaws.com/logo-tv.png" alt="logo" class="logo">
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <app-menu></app-menu>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="content" main></ion-router-outlet> </ion-app
 ></ng-template>

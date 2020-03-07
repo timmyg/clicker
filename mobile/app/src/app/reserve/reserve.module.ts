@@ -1,5 +1,3 @@
-import { ReferralPageModule } from "./../referral/referral.module";
-import { ReferralPage } from "./../referral/referral.page";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -25,7 +23,6 @@ import { WalletPage } from "../wallet/wallet.page";
 import { AuthModule } from "../auth/auth.module";
 import { LoginComponent } from "../auth/login/login.component";
 import { Deploy } from "cordova-plugin-ionic/dist/ngx";
-import { SuggestComponent } from "./components/locations/suggest/suggest.component";
 import { TruncatePipe } from "../pipes/truncate.pipe";
 import { LocationDetailPage } from "../location-detail/location-detail.page";
 import { LocationDetailPageModule } from "../location-detail/location-detail.module";
@@ -72,7 +69,6 @@ const routes: Routes = [
     WalletModule,
     MomentModule,
     AuthModule,
-    ReferralPageModule,
     LocationDetailPageModule,
     RouterModule.forChild(routes)
   ],
@@ -86,7 +82,6 @@ const routes: Routes = [
     ProgramsFilterPipe,
     LocationsFilterPipe,
     InfoComponent,
-    SuggestComponent,
     LocationComponent,
     TruncatePipe
   ],
@@ -95,8 +90,6 @@ const routes: Routes = [
     LoginComponent,
     InfoComponent,
     WalletPage,
-    SuggestComponent,
-    ReferralPage,
     LocationDetailPage
   ]
 })
