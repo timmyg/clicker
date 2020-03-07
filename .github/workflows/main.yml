@@ -1,6 +1,8 @@
 name: End-to-end tests
 on:
   push:
+    branches:
+      - release
     paths:
       - "functions/**"
       - "mobile/app/**"
