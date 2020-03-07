@@ -366,7 +366,7 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 function calculateReservationEndTime(reservation): number {
-  reservation.start = moment().toDate();
+  reservation.start = moment().unix() * 1000;
   const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
   return initialEndTimeMoment.add(reservation.minutes, 'm').unix() * 1000;
 }
