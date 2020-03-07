@@ -791,6 +791,9 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     for (const result of results) {
       const schedule = result.data;
       let allPrograms: Program[] = build(schedule, region.id);
+      // allPrograms = allPrograms.filter(p => !!p.live);
+      // allPrograms = uniqBy(allPrograms, 'programmingId');
+      // filter out programs already created
       const allExistingPrograms = await base(airtablePrograms)
         .select({ fields: ['programmingId', 'start', 'channelTitle'] })
         .all();

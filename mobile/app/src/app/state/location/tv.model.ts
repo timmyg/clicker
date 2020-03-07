@@ -5,9 +5,8 @@ export interface TV {
   // ip: string;
   // end?: Date;
   // locationName?: string;
-  status: {
+  live: {
     locked?: boolean;
     lockedUntil?: Date;
-    lockedMessage?: string;
   };
 }

@@ -158,9 +158,8 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   }
   // ensure tv isnt already reserved
   let tv: Box = locationResultBody.boxes.find(b => b.id === reservation.box.id);
-  tv = setBoxStatus(tv);
 
-  if (!tv || !tv.configuration || !tv.configuration.appActive || tv.status.locked) {
+  if (!tv || !tv.configuration || !tv.configuration.appActive || tv.live.locked) {
     console.log(tv);
     return respond(400, 'Sorry, tv is not available for reservation');
   }
@@ -370,29 +369,4 @@ function calculateReservationEndTime(reservation): number {
   reservation.start = moment().toDate();
   const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
   return initialEndTimeMoment.add(reservation.minutes, 'm').unix() * 1000;
-}
-
-// TODO duplicate
-function setBoxStatus(box: Box): Box {
-  if (!box.status.program && [zapTypes.manual, zapTypes.automation].includes(box.status.channelChangeSource)) {
-    const lastChangeHoursFromNow = moment.duration(moment(box.status.channelChangeAt).diff(moment())).asHours();
-    console.log({ lastChangeHoursFromNow });
-    box.status.locked = lastChangeHoursFromNow >= -4;
-    return box;
-  }
-
-  const isBeforeLockedTime = moment().isBefore(box.status.lockedUntil);
-  const isAfterLockedTime = moment().isAfter(box.status.lockedUntil);
-  const isZappedProgramStillOn =
-    box.status.program &&
-    box.status.lockedProgrammingId === box.status.program.programmingId &&
-    moment.duration(moment(box.status.channelChangeAt).diff(moment(box.status.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
-  if (zapTypes.manual === box.status.channelChangeSource) {
-    box.status.locked = isBeforeLockedTime || isZappedProgramStillOn;
-  } else if (zapTypes.app === box.status.channelChangeSource) {
-    box.status.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);
-  } else if (zapTypes.automation === box.status.channelChangeSource) {
-    box.status.locked = isZappedProgramStillOn;
-  }
-  return box;
 }

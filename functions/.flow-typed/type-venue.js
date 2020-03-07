@@ -13,7 +13,7 @@ class Box {
     ip: string,
     notes: string,
   };
-  status: {
+  live: {
     channel: number,
     channelChangeAt: number,
     channelChangeSource: string,
