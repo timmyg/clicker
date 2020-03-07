@@ -729,7 +729,7 @@ module.exports.health = async (event: any) => {
 // npm run invoke:updateAllBoxesPrograms
 module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async event => {
   const locations: Venue[] = await dbLocation.scan().exec();
-  console.log({ location });
+  // console.log({ location });
   for (const location of locations) {
     for (const box of location.boxes) {
       if (box.live && box.live.channel) {
