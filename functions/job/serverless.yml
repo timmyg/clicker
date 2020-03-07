@@ -50,6 +50,22 @@ functions:
       - http:
           path: health
           method: get
+  controlCenter:
+    handler: job.controlCenter
+    timeout: 30
+    events:
+      - schedule: cron(*/5 * * * ? *)
+      - http:
+          path: control-center
+          method: post
+  controlCenterDailyInit:
+    handler: job.controlCenterDailyInit
+    timeout: 30
+    events:
+      - schedule: cron(59 9 * * ? *) # every day @ 5:59am eastern
+      - http:
+          path: control-center/daily
+          method: post
   syncLocationsBoxes:
     handler: job.syncLocationsBoxes
     timeout: 30

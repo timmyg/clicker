@@ -363,7 +363,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           //   new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
           // );
           this.geolocationError = false;
-          // this.reserveService.emitShowingLocations();
+          this.reserveService.emitShowingLocations();
         })
         .catch(async error => {
           this.evaluatingGeolocation = false;
@@ -384,6 +384,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           //   cssClass: "ion-text-center"
           // });
           // whoops.present();
+          this.reserveService.emitShowingLocations();
         });
     } else {
       this.askForGeolocation$.next(true);
