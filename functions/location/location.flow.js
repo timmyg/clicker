@@ -764,6 +764,8 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 });
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
+  lskjdff;
+  throw new Error();
   const { id: locationId, boxId } = getPathParameters(event);
   const body: BoxInfoRequest = getBody(event);
   const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingId } = body;
