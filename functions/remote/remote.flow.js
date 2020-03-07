@@ -67,6 +67,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.timeEnd('change channel');
 
+  // slack garbage
   let eventName, userId;
   if (source === zapTypes.app) {
     eventName = 'App Zap';
@@ -125,8 +126,13 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     source,
     channelChangeAt: moment().unix() * 1000,
     // lockedProgrammingId: reservation.box.program.programmingId,
-  
   };
+
+  // if (source === zapTypes.automation) {
+  //   updateBoxInfoBody.lockedProgrammingId
+  //   updateBoxInfoBody.program
+  // }
+  console.log({ updateBoxInfoBody });
 
   await new Invoke()
     .service('location')

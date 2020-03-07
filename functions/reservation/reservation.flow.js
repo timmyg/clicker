@@ -75,8 +75,8 @@ const dbReservation = dynamoose.model(
     },
     cost: { type: Number, required: true },
     minutes: { type: Number, required: true },
-    start: Date,
-    end: Date,
+    start: Number,
+    end: Number,
     cancelled: Boolean,
   },
   {
@@ -366,7 +366,7 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
 
-function calculateReservationEndTime(reservation) {
+function calculateReservationEndTime(reservation): number {
   reservation.start = moment().toDate();
   const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
   return initialEndTimeMoment.add(reservation.minutes, 'm').unix() * 1000;

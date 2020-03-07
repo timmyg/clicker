@@ -963,7 +963,7 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
       continue;
     }
     if (selectedBox) {
-      await tune(location, selectedBox, program.db.channel, program.db);
+      await tuneAutomation(location, selectedBox, program.db.channel, program.db);
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
       availableBoxes = availableBoxes.filter(b => b.id !== (selectedBox && selectedBox.id));
@@ -1142,7 +1142,7 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
   // );
 }
 
-async function tune(location: Venue, box: Box, channel: number, program: Program) {
+async function tuneAutomation(location: Venue, box: Box, channel: number, program: Program) {
   const command = 'tune';
   const reservation = {
     location,
