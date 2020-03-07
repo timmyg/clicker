@@ -43,7 +43,7 @@ test('ControlCenterProgram model', () => {
 function createBoxesByRatings(ratings) {
   return ratings.map(r => {
     return {
-      live: {
+      status: {
         program: {
           clickerRating: r,
         },
@@ -55,7 +55,7 @@ function createBoxesByRatings(ratings) {
 function createBoxes() {
   return [
     {
-      live: {
+      status: {
         program: {
           clickerRating: 7,
         },
@@ -63,7 +63,7 @@ function createBoxes() {
     },
     {
       id: 5,
-      live: {
+      status: {
         program: {
           game: {
             summary: {
@@ -75,14 +75,14 @@ function createBoxes() {
       },
     },
     {
-      live: {
+      status: {
         program: {
           clickerRating: 3,
         },
       },
     },
     {
-      live: {
+      status: {
         program: {
           clickerRating: 9,
         },
@@ -90,7 +90,7 @@ function createBoxes() {
     },
     {
       id: 4,
-      live: {
+      status: {
         program: {
           game: {
             summary: {
@@ -107,7 +107,7 @@ describe('findBox', () => {
   test('findBoxWorseRating', () => {
     const program = { fields: { rating: 6 } };
     const result = findBoxWorseRating(createBoxes(), program);
-    expect(result.live.program.clickerRating).toBe(3);
+    expect(result.status.program.clickerRating).toBe(3);
   });
   test('findBoxWorseRating at least 2 null', () => {
     const program = { fields: { rating: 4 } };
@@ -117,7 +117,7 @@ describe('findBox', () => {
   test('findBoxWorseRating at least 2', () => {
     const program = { fields: { rating: 5 } };
     const result = findBoxWorseRating(createBoxes(), program);
-    expect(result.live.program.clickerRating).toBe(3);
+    expect(result.status.program.clickerRating).toBe(3);
   });
   test('findBoxGameOver', () => {
     const result = findBoxGameOver(createBoxes());
@@ -144,10 +144,10 @@ describe('filterPrograms', () => {
     ];
     const location = {
       boxes: [
-        { zone: '3', live: { channel: 206 } },
-        { zone: '1', live: { channel: 219 } },
-        { zone: '2', live: { channel: 206 } },
-        { zone: '4', live: { channel: 9 } },
+        { zone: '3', status: { channel: 206 } },
+        { zone: '1', status: { channel: 219 } },
+        { zone: '2', status: { channel: 206 } },
+        { zone: '4', status: { channel: 9 } },
       ],
     };
     const result = filterPrograms(ccPrograms, location, [206, 219, 206, 9]);
@@ -171,9 +171,9 @@ describe('filterPrograms', () => {
     const location = {
       channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
       boxes: [
-        { zone: '1', live: { channel: 5 } },
-        { zone: '2', live: { channel: 9 } },
-        { zone: '3', live: { channel: 19 } },
+        { zone: '1', status: { channel: 5 } },
+        { zone: '2', status: { channel: 9 } },
+        { zone: '3', status: { channel: 19 } },
       ],
     };
     const result = filterPrograms(ccPrograms, location, [9, 703, 219, 5, 709, 12]);
@@ -191,10 +191,10 @@ test("don't remove if 9 or 10 since they'll be replicated", () => {
   ];
   const location = {
     boxes: [
-      { zone: '1', live: { channel: 5 } },
-      { zone: '2', live: { channel: 9 } },
-      { zone: '3', live: { channel: 703 } },
-      { zone: '4', live: { channel: 220 } },
+      { zone: '1', status: { channel: 5 } },
+      { zone: '2', status: { channel: 9 } },
+      { zone: '3', status: { channel: 703 } },
+      { zone: '4', status: { channel: 220 } },
     ],
   };
   const result = filterPrograms(ccPrograms, location, [9, 206, 220, 703]);
@@ -212,10 +212,10 @@ test('exclude clicker tv app boxes', () => {
   ];
   const location = {
     boxes: [
-      { live: { channel: 209 } },
-      { live: { channel: 9 }, zone: '2' },
-      { live: { channel: 206 } },
-      { appActive: true, live: { channel: 219 } },
+      { status: { channel: 209 } },
+      { status: { channel: 9 }, zone: '2' },
+      { status: { channel: 206 } },
+      { appActive: true, status: { channel: 219 } },
     ],
   };
   const result = filterPrograms(ccPrograms, location, [219, 209, 9, 206]);
@@ -230,7 +230,7 @@ describe('get boxes', () => {
   const reservedManuallyChangedRecently = {
     id: 3,
     zone: 'A',
-    live: {
+    status: {
       channelChangeSource: 'manual',
       channelChangeAt:
         moment()
@@ -244,7 +244,7 @@ describe('get boxes', () => {
   const reservedManuallyChangedGameOn = {
     id: 4,
     zone: '15',
-    live: {
+    status: {
       channelChangeSource: 'manual',
       channelChangeAt:
         moment()
@@ -266,7 +266,7 @@ describe('get boxes', () => {
   const openManuallyChangedDifferentProgram = {
     id: 5,
     zone: '15',
-    live: {
+    status: {
       channelChangeSource: 'manual',
       channelChangeAt:
         moment()
@@ -288,7 +288,7 @@ describe('get boxes', () => {
   const reservedManuallyChangedProgramOver = {
     id: 6,
     zone: '15',
-    live: {
+    status: {
       channelChangeSource: 'manual',
       channelChangeAt:
         moment()
@@ -570,7 +570,7 @@ describe('setBoxStatus', () => {
   describe('no program', () => {
     test('unlock if channel changed more than 4 hours ago', () => {
       const box = {
-        live: {
+        status: {
           channelChangeSource: 'manual',
           channelChangeAt:
             moment()
@@ -579,11 +579,11 @@ describe('setBoxStatus', () => {
         },
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeFalsy();
+      expect(result.status.locked).toBeFalsy();
     });
     test('locked if channel changed less than 4 hours ago', () => {
       const box = {
-        live: {
+        status: {
           channelChangeSource: 'manual',
           channelChangeAt:
             moment()
@@ -592,25 +592,25 @@ describe('setBoxStatus', () => {
         },
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeTruthy();
+      expect(result.status.locked).toBeTruthy();
     });
   });
   describe('manual zap', () => {
     const manualBox = { channelChangeSource: 'manual' };
     test('locked when recently changed', () => {
-      const live = {
+      const status = {
         ...manualBox,
         lockedUntil:
           moment()
             .subtract(10, 'm')
             .unix() * 1000,
       };
-      const box = { live };
+      const box = { status };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeTruthy();
+      expect(result.status.locked).toBeTruthy();
     });
     test('locked when different program and before lock time', () => {
-      const live = {
+      const status = {
         ...manualBox,
         lockedProgrammingId: 'A',
         lockedUntil:
@@ -621,12 +621,12 @@ describe('setBoxStatus', () => {
           programmingId: 'B',
         },
       };
-      const box = { live };
+      const box = { status };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeTruthy();
+      expect(result.status.locked).toBeTruthy();
     });
     test('unlocked when different program on', () => {
-      const live = {
+      const status = {
         ...manualBox,
         lockedProgrammingId: 'A',
         lockedUntil:
@@ -638,13 +638,13 @@ describe('setBoxStatus', () => {
         },
       };
       const box = {
-        live,
+        status,
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeFalsy();
+      expect(result.status.locked).toBeFalsy();
     });
     test('unlocked when changed a while ago with same program on, but way later (repeat program)', () => {
-      const live = {
+      const status = {
         ...manualBox,
         lockedProgrammingId: 'A',
         channelChangeAt:
@@ -660,16 +660,16 @@ describe('setBoxStatus', () => {
         },
       };
       const box = {
-        live,
+        status,
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeFalsy();
+      expect(result.status.locked).toBeFalsy();
     });
   });
   describe('automation zap', () => {
     const automationBox = { channelChangeSource: 'automation' };
     test('unlocked with different program on', () => {
-      const live = {
+      const status = {
         ...automationBox,
         lockedProgrammingId: 'A',
         program: {
@@ -677,13 +677,13 @@ describe('setBoxStatus', () => {
         },
       };
       const box = {
-        live,
+        status,
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeFalsy();
+      expect(result.status.locked).toBeFalsy();
     });
     test('unlocked with same program on, but way later (repeat program)', () => {
-      const live = {
+      const status = {
         ...automationBox,
         channelChangeAt:
           moment()
@@ -699,13 +699,13 @@ describe('setBoxStatus', () => {
         },
       };
       const box = {
-        live,
+        status,
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeFalsy();
+      expect(result.status.locked).toBeFalsy();
     });
     test('locked with same program on, recently changed', () => {
-      const live = {
+      const status = {
         ...automationBox,
         channelChangeAt:
           moment()
@@ -721,13 +721,13 @@ describe('setBoxStatus', () => {
         },
       };
       const box = {
-        live,
+        status,
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeTruthy();
+      expect(result.status.locked).toBeTruthy();
     });
     test('locked with same program on past end time', () => {
-      const live = {
+      const status = {
         ...automationBox,
         channelChangeAt:
           moment()
@@ -743,17 +743,17 @@ describe('setBoxStatus', () => {
         },
       };
       const box = {
-        live,
+        status,
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeTruthy();
+      expect(result.status.locked).toBeTruthy();
     });
   });
   describe('app zap changes', () => {
     const appBox = { channelChangeSource: 'app' };
     test('locked before reservation end time', () => {
       const box = {
-        live: {
+        status: {
           ...appBox,
           lockedUntil:
             moment()
@@ -762,11 +762,11 @@ describe('setBoxStatus', () => {
         },
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeTruthy();
+      expect(result.status.locked).toBeTruthy();
     });
     test('unlocked after reservation end time', () => {
       const box = {
-        live: {
+        status: {
           ...appBox,
           lockedUntil:
             moment()
@@ -775,7 +775,7 @@ describe('setBoxStatus', () => {
         },
       };
       const result = setBoxStatus(box);
-      expect(result.live.locked).toBeFalsy();
+      expect(result.status.locked).toBeFalsy();
     });
   });
 });
