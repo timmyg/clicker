@@ -158,7 +158,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   allLocations.forEach((l, i, locations) => {
     if (l.boxes) {
       l.boxes = l.boxes.map(b => setBoxStatus(b));
-      l.openTvs = l.boxes.every(b => !b.live.locked);
+      l.openTvs = l.boxes.some(b => !b.live.locked);
     }
   });
 

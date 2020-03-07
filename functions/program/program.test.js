@@ -89,7 +89,7 @@ test('getMajorChannels', () => {
 
 describe('getDefaultRating', () => {
   test('rated', () => {
-    expect(getDefaultRating({ title: 'SportsCenter With Scott Van Pelt' })).toEqual(1);
+    expect(getDefaultRating({ title: 'SportsCenter With Scott Van Pelt' })).toEqual(2);
   });
   test('unrated', () => {
     expect(getDefaultRating({ title: 'Winter X Games' })).toEqual(undefined);
