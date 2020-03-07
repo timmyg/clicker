@@ -286,8 +286,19 @@ function setBoxStatus(box: Box): Box {
    */
   // console.log(!box.status.program, [zapTypes.manual, zapTypes.automation].includes(box.status.channelChangeSource));
 
-  // THIS IS DUPLICATED IN
-  if (!box.status.program && [zapTypes.manual, zapTypes.automation].includes(box.status.channelChangeSource)) {
+  // THIS IS DUPLICATED IN RESERVATIONS
+  // console.log({ box });
+  if (!box.status) {
+    // $FlowFixMe
+    box.status = {
+      locked: false,
+    };
+    return box;
+  }
+  if (
+    (!box.status || !box.status.program) &&
+    [zapTypes.manual, zapTypes.automation].includes(box.status.channelChangeSource)
+  ) {
     const lastChangeHoursFromNow = moment.duration(moment(box.status.channelChangeAt).diff(moment())).asHours();
     console.log({ lastChangeHoursFromNow });
     box.status.locked = lastChangeHoursFromNow >= -4;
@@ -1101,32 +1112,34 @@ function buildAirtableNowShowing(location: Venue) {
 }
 
 function getAvailableBoxes(boxes: Box[]): Box[] {
+  boxes = boxes.map(b => setBoxStatus(b));
+  return boxes.filter(b => !b.status.locked);
   // remove manually changed boxes
-  const manualChangeMinutesAgo = 60;
-  const manualChangeBuffer = 15;
+  // const manualChangeMinutesAgo = 60;
+  // const manualChangeBuffer = 15;
 
-  return (
-    boxes
-      // only boxes with zones
-      .filter(b => b.zone)
-      // .filter(b => b.status)
-      // remove manually changed within past 30 minutes
-      .filter(
-        b =>
-          !b.status ||
-          b.status.channelChangeSource !== zapTypes.manual ||
-          (b.status.channelChangeSource === zapTypes.manual &&
-            moment(b.status.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
-      )
-      // remove manually changed not in current game window
-      .filter(
-        b =>
-          !b.status ||
-          b.status.channelChangeSource !== zapTypes.manual ||
-          (b.status.channelChangeSource === zapTypes.manual &&
-            moment(b.status.channelChangeAt).diff(moment(b.status.program.start), 'minutes') < -manualChangeBuffer),
-      )
-  );
+  // return (
+  //   boxes
+  //     // only boxes with zones
+  //     .filter(b => b.zone)
+  //     // .filter(b => b.status)
+  //     // remove manually changed within past 30 minutes
+  //     .filter(
+  //       b =>
+  //         !b.status ||
+  //         b.status.channelChangeSource !== zapTypes.manual ||
+  //         (b.status.channelChangeSource === zapTypes.manual &&
+  //           moment(b.status.channelChangeAt).diff(moment(), 'minutes') < -manualChangeMinutesAgo),
+  //     )
+  //     // remove manually changed not in current game window
+  //     .filter(
+  //       b =>
+  //         !b.status ||
+  //         b.status.channelChangeSource !== zapTypes.manual ||
+  //         (b.status.channelChangeSource === zapTypes.manual &&
+  //           moment(b.status.channelChangeAt).diff(moment(b.status.program.start), 'minutes') < -manualChangeBuffer),
+  //     )
+  // );
 }
 
 async function tune(location: Venue, box: Box, channel: number, program: Program) {
