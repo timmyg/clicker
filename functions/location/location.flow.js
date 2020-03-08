@@ -297,6 +297,7 @@ function setBoxStatus(box: Box): Box {
     const lastChangeHoursFromNow = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours();
     console.log({ lastChangeHoursFromNow });
     box.live.locked = lastChangeHoursFromNow >= -4;
+    box.live.lockedMessage = 'Sorry, TV is currently locked';
     return box;
   }
 
@@ -308,11 +309,34 @@ function setBoxStatus(box: Box): Box {
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
   if (zapTypes.manual === box.live.channelChangeSource) {
     box.live.locked = isBeforeLockedTime || isZappedProgramStillOn;
+    if (box.live.locked) {
+      box.live.lockedMessage = 'Sorry, TV is locked';
+    }
   } else if (zapTypes.app === box.live.channelChangeSource) {
     box.live.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);
+    if (box.live.locked) {
+      if (isBeforeLockedTime) {
+        const minutes = moment()
+          .add(1, 'm')
+          .diff(moment(), 'minutes');
+        box.live.lockedMessage = `Sorry, TV is locked for the next ${minutes} minutes`;
+      } else if (isAfterLockedTime && isZappedProgramStillOn) {
+        box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> is over`;
+      }
+    }
   } else if (zapTypes.automation === box.live.channelChangeSource) {
     box.live.locked = isZappedProgramStillOn;
+    if (box.live.locked) {
+      box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> is over`;
+    }
   }
+
+  // set locked message
+  // if (box.live.locked) {
+
+  //   box.live.lockedMessage = "Sorry, TV is currently locked."
+  // }
+
   return box;
 }
 

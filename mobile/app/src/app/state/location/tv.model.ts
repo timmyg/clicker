@@ -8,5 +8,6 @@ export interface TV {
   live: {
     locked?: boolean;
     lockedUntil?: Date;
+    lockedMessage? : string
   };
 }

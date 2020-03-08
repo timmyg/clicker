@@ -72,9 +72,10 @@ export class TvsComponent implements OnDestroy, OnInit {
   async onTvClick(tv: TV, removeFromHistory?: boolean) {
     if (tv.live.locked) {
       const toast = await this.toastController.create({
-        message: `📺 ${tv.label} is reserved until ${moment(
-          tv.live.lockedUntil
-        ).format("h:mma")}.`,
+        // message: `📺 ${tv.label} is reserved until ${moment(
+        //   tv.live.lockedUntil
+        // ).format("h:mma")}.`,
+        message: tv.live.lockedMessage,
         duration: 2000,
         cssClass: "ion-text-center"
       });
