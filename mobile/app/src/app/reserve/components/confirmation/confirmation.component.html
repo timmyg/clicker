@@ -78,7 +78,7 @@
       slot="end"
       [disabled]="
         saving ||
-        insufficientFunds() ||
+        ((tokenCount$ | async) < reservation.cost) ||
         (!isEditChannel && isAppLoading) ||
         (outOfRange && !overrideDistanceDisable) ||
         isInitializing
@@ -108,10 +108,10 @@
         <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span>
       </ng-template>
     </ion-button>
-    <ion-row class="ion-text-center" *ngIf="insufficientFunds()" margin-top>
+    <ion-row class="ion-text-center" *ngIf="(tokenCount$ | async) < reservation.cost" margin-top>
       <ion-text color="danger">
-        Heads up! You only have {{ tokenCount }}
-        <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
+        Heads up! You have {{ tokenCount$ | async }}
+        <span *ngIf="(tokenCount$ | async) && (tokenCount$ | async) === 1; else tokens">token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please
         <span *ngIf="!isLoggedIn"
           ><a [routerLink]="'/tabs/profile'">login</a> and

@@ -33,6 +33,7 @@ import * as Sentry from "@sentry/browser";
 import { MenuComponent } from "./menu/menu.component";
 import { SuggestComponent } from "./suggest/suggest.component";
 import { MenuModule } from "./menu/menu.module";
+import { AuthModule } from "./auth/auth.module";
 
 Sentry.init({
   dsn: environment.sentry.dsn,
@@ -82,6 +83,7 @@ export function initUserStuff(store: Store<AppState>): Function {
   entryComponents: [],
   imports: [
     MenuModule,
+    AuthModule,
     BrowserModule,
     SegmentModule.forRoot({
       apiKey: environment.segment.writeKey,

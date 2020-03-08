@@ -11,7 +11,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { SharedModule } from "../shared/shared.module";
 import { ReservationComponent } from "./reservation/reservation.component";
 import { AuthModule } from "../auth/auth.module";
-import { LoginComponent } from "../auth/login/login.component";
+// import { LoginComponent } from "../auth/login/login.component";
 import { FeatureFlag } from "../directives/feature-flag.directive";
 import { WalletModule } from "../wallet/wallet.module";
 import { WalletPage } from "../wallet/wallet.page";
@@ -39,7 +39,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [ProfilePage, ReservationComponent, FeatureFlag],
-  entryComponents: [LoginComponent, WalletPage, CoinsComponent],
+  entryComponents: [WalletPage, CoinsComponent],
   providers: [Deploy]
 })
 export class ProfilePageModule {}

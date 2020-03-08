@@ -78,11 +78,10 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
         <ion-card>
           <ion-card-content class="ion-text-center">
             <p>
-              Sorry, no Clicker locations <span *ngIf="searchTerm && searchTerm.length">matching <b>{{searchTerm} }</b></span> <span *ngIf="this.userGeolocation">within {{ milesRadius }} miles </span> 😢.
+              Sorry, no Clicker locations <span *ngIf="searchTerm && searchTerm.length">matching <b>{{searchTerm}} </b></span><span *ngIf="this.userGeolocation">within {{ milesRadius }} miles </span> 😢.
             </p>
             <p>
-              Bring Clicker to your neighborhood by telling us your favorite bar
-              below.
+              Bring Clicker to your neighborhood by clicking "Suggest New Location" from the menu.
             </p>
           </ion-card-content>
         </ion-card>

@@ -23,7 +23,7 @@
           ></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 
-          <span float-right *ngIf="location.distance">
+          <span float-right *ngIf="location.distance !== undefined">
             <span *ngIf="location.distance >= 0.2; else near">
               {{ getDistance() }} miles
             </span>

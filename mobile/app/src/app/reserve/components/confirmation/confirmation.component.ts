@@ -39,7 +39,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   reservationUpdateType$: Observable<string>;
   reservationEnd$: Observable<Date>;
   tokenCount$: Observable<number>;
-  tokenCount: number;
+  // tokenCount: number;
   isLoggedIn$: Observable<boolean>;
   reservation: Partial<Reservation>;
   title = "Confirmation";
@@ -142,9 +142,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
           this.isInitializing = false;
         });
       });
-    this.tokenCount$.subscribe(tokens => {
-      this.tokenCount = tokens;
-    });
+    // this.tokenCount$.subscribe(tokens => {
+    //   this.tokenCount = tokens;
+    // });
     this.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
     });
@@ -156,9 +156,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       .toDate();
   }
 
-  insufficientFunds() {
-    return this.tokenCount < this.reservation.cost;
-  }
+  // insufficientFunds() {
+  //   return this.tokenCount < this.reservation.cost;
+  // }
 
   onConfirm() {
     console.log("onconfirm");
