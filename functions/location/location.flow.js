@@ -592,10 +592,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       // if control center or app box
       //  - send slack notif
       //  - send to airtable sheet
-      if (!!location.boxes[i].zone || (location.boxes[i].configuration && location.boxes[i].configuration.appActive)) {
+      if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const text = `Manual Zap @ ${location.name} (${
           location.neighborhood
-        }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone})`;
+        }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone || 'no zone'})`;
 
         await new Invoke()
           .service('notification')
@@ -860,7 +860,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 
   // remove programs currently showing, unless 9 or 10 as we are replicating those
   const currentlyShowingChannels: number[] = boxes
-    .filter(b => !!b.zone)
+    .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
     .map(b => b.live.channel);
   ccPrograms = ccPrograms.filter(ccp => {
@@ -904,10 +904,14 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
   const currentlyShowingProgrammingIds: string[] = location.boxes
-    .filter(b => !!b.zone)
-    .filter(b => !!b.live)
+    .filter(b => b.configuration && b.configuration.automationActive)
+    .filter(b => b.live)
     .map(b => b.live.program && b.live.program.programmingId);
-  ccPrograms = replicatePrograms(ccPrograms, location.boxes.filter(b => b.zone).length, currentlyShowingProgrammingIds);
+  ccPrograms = replicatePrograms(
+    ccPrograms,
+    location.boxes.filter(b => b.configuration && b.configuration.automationActive).length,
+    currentlyShowingProgrammingIds,
+  );
   console.info(`all programs: ${ccPrograms.length}`);
   console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
@@ -1013,7 +1017,9 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .eq(id)
     .exec();
   console.timeEnd('get location');
-  const boxes = location.boxes.filter(box => !!box.zone).sort((a, b) => a.zone.localeCompare(b.zone));
+  const boxes = location.boxes
+    .filter(box => !!box.configuration.automationActive)
+    .sort((a, b) => a.zone.localeCompare(b.zone));
 
   console.time('get upcoming programs');
   let { data: upcomingPrograms } = await new Invoke()

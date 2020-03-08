@@ -133,6 +133,10 @@ describe('findBox', () => {
   });
 });
 
+const configuration = {
+  automationActive: true,
+};
+
 describe('filterPrograms', () => {
   test('already showing', () => {
     const ccPrograms = [
@@ -142,15 +146,16 @@ describe('filterPrograms', () => {
       { fields: { rating: 8 }, db: { channel: 5 } },
       { fields: { rating: 7 }, db: { channel: 221 } },
     ];
+
     const location = {
       boxes: [
-        { zone: '3', live: { channel: 206 } },
-        { zone: '1', live: { channel: 219 } },
-        { zone: '2', live: { channel: 206 } },
-        { zone: '4', live: { channel: 9 } },
+        { configuration, zone: '3', live: { channel: 206 } },
+        { configuration, zone: '1', live: { channel: 219 } },
+        { configuration, zone: '2', live: { channel: 206 } },
+        { configuration, zone: '4', live: { channel: 9 } },
       ],
     };
-    const result = filterPrograms(ccPrograms, location, [206, 219, 206, 9]);
+    const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(3);
     // ensure sorted
     console.log('result123');
@@ -168,15 +173,16 @@ describe('filterPrograms', () => {
       { fields: { rating: 4 }, db: { channel: 709 } }, //excluded
       { fields: { rating: 4 }, db: { channel: 12 } },
     ];
+
     const location = {
       channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
       boxes: [
-        { zone: '1', live: { channel: 5 } },
-        { zone: '2', live: { channel: 9 } },
-        { zone: '3', live: { channel: 19 } },
+        { configuration, zone: '1', live: { channel: 5 } },
+        { configuration, zone: '2', live: { channel: 9 } },
+        { configuration, zone: '3', live: { channel: 19 } },
       ],
     };
-    const result = filterPrograms(ccPrograms, location, [9, 703, 219, 5, 709, 12]);
+    const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(2);
     expect(result[0].db.channel).toBe(219);
     expect(result[1].db.channel).toBe(12);
@@ -191,19 +197,19 @@ test("don't remove if 9 or 10 since they'll be replicated", () => {
   ];
   const location = {
     boxes: [
-      { zone: '1', live: { channel: 5 } },
-      { zone: '2', live: { channel: 9 } },
-      { zone: '3', live: { channel: 703 } },
-      { zone: '4', live: { channel: 220 } },
+      { configuration, zone: '1', live: { channel: 5 } },
+      { configuration, zone: '2', live: { channel: 9 } },
+      { configuration, zone: '3', live: { channel: 703 } },
+      { configuration, zone: '4', live: { channel: 220 } },
     ],
   };
-  const result = filterPrograms(ccPrograms, location, [9, 206, 220, 703]);
+  const result = filterPrograms(ccPrograms, location);
   expect(result.length).toBe(3);
   expect(result[0].db.channel).toBe(9);
   expect(result[1].db.channel).toBe(703);
   expect(result[2].db.channel).toBe(206);
 });
-test('exclude clicker tv app boxes', () => {
+test('include clicker tv app boxes', () => {
   const ccPrograms = [
     { fields: { rating: 4 }, db: { channel: 219 } }, // on app
     { fields: { rating: 4 }, db: { channel: 209 } },
@@ -213,12 +219,12 @@ test('exclude clicker tv app boxes', () => {
   const location = {
     boxes: [
       { live: { channel: 209 } },
-      { live: { channel: 9 }, zone: '2' },
+      { configuration, live: { channel: 9 }, zone: '2' },
       { live: { channel: 206 } },
-      { appActive: true, live: { channel: 219 } },
+      { configuration: { appActive: true }, live: { channel: 219 } },
     ],
   };
-  const result = filterPrograms(ccPrograms, location, [219, 209, 9, 206]);
+  const result = filterPrograms(ccPrograms, location);
   expect(result.length).toBe(3);
   expect(result[0].db.channel).toBe(219);
   expect(result[1].db.channel).toBe(209);
