@@ -128,6 +128,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   };
 
   // set lockedPorgrammingId if highly rated automation
+  console.log({ reservation });
   const highRatings = [10, 9, 8, 7];
   const isHighlyRated =
     reservation.box.program &&
