@@ -1141,7 +1141,10 @@ function buildAirtableNowShowing(location: Venue) {
 
 function getAvailableBoxes(boxes: Box[]): Box[] {
   boxes = boxes.map(b => setBoxStatus(b));
-  return boxes.filter(b => !b.live.locked);
+  boxes = boxes.filter(b => b.configuration.automationActive);
+  // return if automation locked as we still want to evaluate those
+  boxes = boxes.filter(b => !b.live.locked || (b.live.locked && b.live.channelChangeSource === zapTypes.automation));
+  return boxes;
 }
 
 async function tuneAutomation(location: Venue, box: Box, channel: number, program: Program) {

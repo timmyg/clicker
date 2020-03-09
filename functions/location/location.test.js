@@ -230,10 +230,21 @@ test('include clicker tv app boxes', () => {
   expect(result[1].db.channel).toBe(209);
   expect(result[2].db.channel).toBe(206);
 });
+const automationActive = {
+  configuration: {
+    automationActive: true,
+  },
+};
+const automationInactive = {
+  configuration: {
+    automationActive: false,
+  },
+};
 describe('get boxes', () => {
-  const openGoodBox = { id: 1, zone: '4' };
-  const openGoodBox2 = { id: 2, zone: '3' };
+  const openGoodBox = { ...automationActive, id: 1, zone: '4' };
+  const openGoodBox2 = { ...automationActive, id: 2, zone: '3' };
   const reservedManuallyChangedRecently = {
+    ...automationActive,
     id: 3,
     zone: 'A',
     live: {
@@ -248,6 +259,7 @@ describe('get boxes', () => {
     },
   };
   const reservedManuallyChangedGameOn = {
+    ...automationActive,
     id: 4,
     zone: '15',
     live: {
@@ -270,15 +282,18 @@ describe('get boxes', () => {
     },
   };
   const openManuallyChangedDifferentProgram = {
+    ...automationActive,
     id: 5,
     zone: '15',
     live: {
       channelChangeSource: 'manual',
+      lockedProgrammingId: 'ABC',
       channelChangeAt:
         moment()
           .subtract(2, 'h')
           .unix() * 1000,
       program: {
+        programmingId: 'DEF',
         start:
           moment()
             .subtract(1, 'h')
@@ -292,6 +307,7 @@ describe('get boxes', () => {
     },
   };
   const reservedManuallyChangedProgramOver = {
+    ...automationActive,
     id: 6,
     zone: '15',
     live: {
@@ -311,7 +327,7 @@ describe('get boxes', () => {
       },
     },
   };
-  const reservedZonelessBox = { id: 7, zone: '' };
+  const reservedZonelessBox = { ...automationInactive, id: 7, zone: '' };
   describe("getAvailableBoxes removes boxes that shouldn't be changed", () => {
     test('openGoodBox', () => {
       const result = getAvailableBoxes([openGoodBox]);
