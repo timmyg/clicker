@@ -18,6 +18,7 @@ class Box {
     channelChangeAt: number,
     channelChangeSource: string,
     locked: boolean,
+    appLocked: boolean,
     lockedUntil: number,
     lockedProgrammingId: string,
     lockedMessage: string,

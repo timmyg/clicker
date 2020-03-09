@@ -287,9 +287,12 @@ function setBoxStatus(box: Box): Box {
     // $FlowFixMe
     box.live = {
       locked: false,
+      appLocked: false,
     };
     return box;
   }
+
+  // dont have live object or program
   if (
     (!box.live || !box.live.program) &&
     [zapTypes.manual, zapTypes.automation].includes(box.live.channelChangeSource)
@@ -297,7 +300,10 @@ function setBoxStatus(box: Box): Box {
     const lastChangeHoursFromNow = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours();
     console.log({ lastChangeHoursFromNow });
     box.live.locked = lastChangeHoursFromNow >= -4;
-    box.live.lockedMessage = 'Sorry, TV is currently locked';
+    box.live.appLocked = box.live.locked;
+    if (box.live.locked) {
+      box.live.lockedMessage = 'Sorry, TV is currently locked';
+    }
     return box;
   }
 
