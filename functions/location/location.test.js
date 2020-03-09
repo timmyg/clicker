@@ -311,52 +311,52 @@ describe('get boxes', () => {
       },
     },
   };
-  //   const reservedZonelessBox = { id: 7, zone: '' };
-  //   describe("getAvailableBoxes removes boxes that shouldn't be changed", () => {
-  //     test('openGoodBox', () => {
-  //       const result = getAvailableBoxes([openGoodBox]);
-  //       expect(result.length).toBe(1);
-  //     });
-  //     test('openGoodBox 2', () => {
-  //       const result = getAvailableBoxes([openGoodBox2]);
-  //       expect(result.length).toBe(1);
-  //     });
-  //     test('openManuallyChangedDifferentProgram', () => {
-  //       const result = getAvailableBoxes([openManuallyChangedDifferentProgram]);
-  //       expect(result.length).toBe(1);
-  //     });
-  //     test('reservedManuallyChangedProgramOver', () => {
-  //       const result = getAvailableBoxes([reservedManuallyChangedProgramOver]);
-  //       expect(result.length).toBe(0);
-  //     });
-  //     test('reservedManuallyChangedRecently', () => {
-  //       const result = getAvailableBoxes([reservedManuallyChangedRecently]);
-  //       expect(result.length).toBe(0);
-  //     });
-  //     test('reservedManuallyChangedGameOn', () => {
-  //       const result = getAvailableBoxes([reservedManuallyChangedGameOn]);
-  //       expect(result.length).toBe(0);
-  //     });
-  //     test('reservedZonelessBox', () => {
-  //       const result = getAvailableBoxes([reservedZonelessBox]);
-  //       expect(result.length).toBe(0);
-  //     });
-  //     test('all of em', () => {
-  //       const result = getAvailableBoxes([
-  //         openGoodBox,
-  //         openGoodBox2,
-  //         openManuallyChangedDifferentProgram,
-  //         reservedManuallyChangedProgramOver,
-  //         reservedManuallyChangedRecently,
-  //         reservedManuallyChangedGameOn,
-  //         reservedZonelessBox,
-  //       ]);
-  //       expect(result.length).toBe(3);
-  //       expect(result[0].id).toBe(1);
-  //       expect(result[1].id).toBe(2);
-  //       expect(result[2].id).toBe(5);
-  //     });
-  //   });
+  const reservedZonelessBox = { id: 7, zone: '' };
+  describe("getAvailableBoxes removes boxes that shouldn't be changed", () => {
+    test('openGoodBox', () => {
+      const result = getAvailableBoxes([openGoodBox]);
+      expect(result.length).toBe(1);
+    });
+    test('openGoodBox 2', () => {
+      const result = getAvailableBoxes([openGoodBox2]);
+      expect(result.length).toBe(1);
+    });
+    test('openManuallyChangedDifferentProgram', () => {
+      const result = getAvailableBoxes([openManuallyChangedDifferentProgram]);
+      expect(result.length).toBe(1);
+    });
+    test('reservedManuallyChangedProgramOver', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedProgramOver]);
+      expect(result.length).toBe(0);
+    });
+    test('reservedManuallyChangedRecently', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedRecently]);
+      expect(result.length).toBe(0);
+    });
+    test('reservedManuallyChangedGameOn', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedGameOn]);
+      expect(result.length).toBe(0);
+    });
+    test('reservedZonelessBox', () => {
+      const result = getAvailableBoxes([reservedZonelessBox]);
+      expect(result.length).toBe(0);
+    });
+    test('all of em', () => {
+      const result = getAvailableBoxes([
+        openGoodBox,
+        openGoodBox2,
+        openManuallyChangedDifferentProgram,
+        reservedManuallyChangedProgramOver,
+        reservedManuallyChangedRecently,
+        reservedManuallyChangedGameOn,
+        reservedZonelessBox,
+      ]);
+      expect(result.length).toBe(3);
+      expect(result[0].id).toBe(1);
+      expect(result[1].id).toBe(2);
+      expect(result[2].id).toBe(5);
+    });
+  });
 });
 
 describe("filterProgramsByTargeting: remove programs that aren't targeted", () => {
