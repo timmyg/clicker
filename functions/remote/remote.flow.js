@@ -121,17 +121,23 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   // $FlowFixMe
-  const updateBoxInfoBody: BoxInfoRequest = {
+  let updateBoxInfoBody: BoxInfoRequest = {
     channel,
     source,
     channelChangeAt: moment().unix() * 1000,
-    lockedProgrammingId: reservation.program.programmingId,
   };
 
-  // if (source === zapTypes.automation) {
-  //   updateBoxInfoBody.lockedProgrammingId
-  //   updateBoxInfoBody.program
-  // }
+  // set lockedPorgrammingId if highly rated automation
+  const highRatings = [10, 9, 8, 7];
+  const isHighlyRated =
+    reservation.box.program &&
+    reservation.box.program.clickerRating &&
+    highRatings.includes(reservation.box.program.clickerRating);
+  if (source === zapTypes.automation && isHighlyRated) {
+    updateBoxInfoBody.lockedProgrammingId = reservation.box.program.programmingId;
+    updateBoxInfoBody.program = reservation.box.program;
+  }
+
   console.log({ updateBoxInfoBody });
 
   await new Invoke()

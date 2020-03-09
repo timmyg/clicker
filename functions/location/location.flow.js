@@ -287,7 +287,6 @@ function setBoxStatus(box: Box): Box {
     // $FlowFixMe
     box.live = {
       locked: false,
-      appLocked: false,
     };
     return box;
   }
@@ -300,7 +299,6 @@ function setBoxStatus(box: Box): Box {
     const lastChangeHoursFromNow = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours();
     console.log({ lastChangeHoursFromNow });
     box.live.locked = lastChangeHoursFromNow >= -4;
-    box.live.appLocked = box.live.locked;
     if (box.live.locked) {
       box.live.lockedMessage = 'Sorry, TV is currently locked';
     }
@@ -960,7 +958,6 @@ module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, asy
     // .async()
     .go();
   const programs = programsResult && programsResult.data;
-  console.log({ programs });
 
   // attach db program
   ccPrograms.map(ccp => {
