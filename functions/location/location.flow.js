@@ -1116,23 +1116,23 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 });
 
 async function findAllLocationsByVersion(version?: number) {
-  const locations2: Venue[] = await dbLocation
+  const locations: Venue[] = await dbLocation
     .scan()
     .filter('_v')
     .null()
     .exec();
-  console.log({ locations2 });
-  const locations1: Venue[] = await dbLocation
-    .query('_v')
-    .not()
-    .eq(1)
-    .exec();
-  console.log({ locations1 });
-  const locations: Venue[] = await dbLocation
-    .query('_v')
-    .null()
-    .exec();
   console.log({ locations });
+  // const locations1: Venue[] = await dbLocation
+  //   .query('_v')
+  //   .not()
+  //   .eq(1)
+  //   .exec();
+  // console.log({ locations1 });
+  // const locations: Venue[] = await dbLocation
+  //   .query('_v')
+  //   .null()
+  //   .exec();
+  // console.log({ locations });
   const promises = [];
   locations.forEach(location => {
     location._v = 1;
