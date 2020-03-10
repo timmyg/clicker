@@ -36,9 +36,9 @@ custom:
   # hooks:
   #   after:deploy:finalize:
   #     - npx sls invoke -f migration
-  scripts:
-    hooks:
-      'deploy:finalize': npx serverless invoke local -f migration
+  # scripts:
+  #   hooks:
+  #     'deploy:finalize': npx serverless invoke local -f migration
   prune:
     automatic: true
     number: 3
