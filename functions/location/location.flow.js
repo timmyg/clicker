@@ -323,7 +323,9 @@ function setBoxStatus(box: Box): Box {
         const minutes = moment(box.live.lockedUntil).diff(moment(), 'minutes');
         box.live.lockedMessage = `Sorry, TV is locked for the next ${minutes} minutes`;
       } else if (isAfterLockedTime && isZappedProgramStillOn) {
-        box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> is over`;
+        box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> on ${
+          box.live.program.channelTitle
+        } is over`;
       }
     }
   } else if (zapTypes.automation === box.live.channelChangeSource) {
