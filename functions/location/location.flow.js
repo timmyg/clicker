@@ -1108,6 +1108,12 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('running db migrations  !!  ! !  !');
+  const AWS = require('aws-sdk');
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  // find all locations without _version: 2
+  // for each, put into new format
+  // save all/individually
+
   return respond();
 });
 
