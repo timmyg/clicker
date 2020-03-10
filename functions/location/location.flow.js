@@ -1106,6 +1106,11 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   return respond(200, { html });
 });
 
+module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('running db migrations  !!  ! !  !');
+  return respond();
+});
+
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {

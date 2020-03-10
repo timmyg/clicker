@@ -29,9 +29,16 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
+  - serverless-hooks-plugin
 
 custom:
   stage: ${opt:stage}
+  hooks:
+    after:deploy:finalize:
+      - sls invoke -f migration
+  scripts:
+    hooks:
+      'deploy:finalize': sls invoke -f functionName &&
   prune:
     automatic: true
     number: 3
@@ -286,3 +293,7 @@ functions:
               - clicker
               - authorization
               - content-type
+  migration:
+    handler: location.migration
+    description: database migration scripts
+    timeout: 10
