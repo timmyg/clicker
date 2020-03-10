@@ -29,7 +29,7 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  # - serverless-plugin-scripts
+  - serverless-plugin-scripts
 
 custom:
   stage: ${opt:stage}
