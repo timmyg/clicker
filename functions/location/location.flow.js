@@ -57,6 +57,13 @@ const dbLocation = dynamoose.model(
         project: true, // ProjectionType: ALL
       },
     },
+    _v: {
+      type: Number,
+      index: {
+        global: true,
+        project: false, // ProjectionType: KEYS_ONLY
+      },
+    },
     boxes: [
       {
         id: String,
