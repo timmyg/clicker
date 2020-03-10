@@ -35,7 +35,7 @@ custom:
   stage: ${opt:stage}
   hooks:
     after:deploy:finalize:
-      - sls invoke -f migration
+      - npx sls invoke -f migration
   scripts:
     hooks:
       'deploy:finalize': sls invoke -f functionName &&
