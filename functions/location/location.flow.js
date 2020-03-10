@@ -1116,6 +1116,12 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 });
 
 async function findAllLocationsByVersion(version?: number) {
+  const locations2: Venue[] = await dbLocation
+    .scan()
+    .filter('_v')
+    .null()
+    .exec();
+  console.log({ locations2 });
   const locations1: Venue[] = await dbLocation
     .query('_v')
     .not()
