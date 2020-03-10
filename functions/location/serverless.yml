@@ -90,7 +90,7 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: versionGlobalIndex
+          - IndexName: _vGlobalIndex
             KeySchema:
               - AttributeName: _v
                 KeyType: HASH
