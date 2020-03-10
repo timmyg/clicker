@@ -39,7 +39,10 @@ class DirecTVBoxRaw {
   ip: string;
 }
 
-export class Venue {
+class Base {
+  _v: number;
+}
+export class Venue extends Base {
   id: string;
   losantId: string;
   boxes: Box[];

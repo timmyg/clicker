@@ -1116,28 +1116,26 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
 });
 
 async function findAllLocationsByVersion(version?: number) {
-  const DynamoDB = require('aws-sdk/clients/dynamodb');
-  // const DocumentClient = new DynamoDB.DocumentClient();
-
-  // const Location = new Model('Location', {
-  //   table: process.env.tableLocation,
-  //   partitionKey: 'id',
-  //   schema: {
-  //     id: { type: 'string' },
-  //   },
-  // });
-  // const params = Location.get({ version: null });
-  // const response = await DocumentClient.get(params).promise();
-  const locations: Venue = await dbLocation
+  const locations: Venue[] = await dbLocation
     .queryOne('_v')
     .null()
     .exec();
   console.log({ locations });
+  const promises = [];
+  locations.forEach(location => {
+    location._v = 1;
+    promises.push(location.save());
+  });
+
+  await Promise.all(promises);
+  console.log('completed');
 }
 
 module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('running db migrations  !!  ! !  !');
+  console.log('-_%^#$@+$(%     running db migrations     -_%^#$@+$(%');
+
   await findAllLocationsByVersion();
+
   return respond();
 });
 
