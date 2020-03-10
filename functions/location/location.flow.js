@@ -1141,7 +1141,7 @@ module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
     date_added: '2019-11-28',
   };
   // Use the 'put' method of MyModel to generate parameters
-  let params = MyModel.put(item);
+  // let params = Location.put(item);
 
   return respond();
 });
