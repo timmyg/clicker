@@ -320,9 +320,7 @@ function setBoxStatus(box: Box): Box {
     box.live.locked = isBeforeLockedTime || (isAfterLockedTime && isZappedProgramStillOn);
     if (box.live.locked) {
       if (isBeforeLockedTime) {
-        const minutes = moment()
-          .add(1, 'm')
-          .diff(moment(), 'minutes');
+        const minutes = moment(box.live.lockedUntil).diff(moment(), 'minutes');
         box.live.lockedMessage = `Sorry, TV is locked for the next ${minutes} minutes`;
       } else if (isAfterLockedTime && isZappedProgramStillOn) {
         box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> is over`;
