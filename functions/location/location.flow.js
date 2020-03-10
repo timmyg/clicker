@@ -1108,40 +1108,29 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   return respond(200, { html });
 });
 
-module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('running db migrations  !!  ! !  !');
+async function findAllLocationsByVersion(version?: number) {
   const DynamoDB = require('aws-sdk/clients/dynamodb');
   const DocumentClient = new DynamoDB.DocumentClient();
 
   const Location = new Model('Location', {
-    // Specify table name
     table: process.env.tableLocation,
-
-    // Define partition and sort keys
     partitionKey: 'id',
-    // sortKey: 'sk',
-
-    // Define schema
     schema: {
       id: { type: 'string' },
-      // pk: { type: 'string', alias: 'id' },
-      // sk: { type: 'string', hidden: true },
-      // data: { type: 'string', alias: 'name' },
-      // status: ['sk', 0], // composite key mapping
-      // date_added: ['sk', 1], // composite key mapping
     },
   });
-  // find all locations without _version: 2
-  // for each, put into new format
-  // save all/individually
-  let item = {
-    id: 123,
-    name: 'Test Name',
-    status: 'active',
-    date_added: '2019-11-28',
-  };
-  // Use the 'put' method of MyModel to generate parameters
-  // let params = Location.put(item);
+
+  const params = Location.get({ version: null });
+
+  const response = await DocumentClient.get(params).promise();
+
+  console.log({ response });
+}
+
+module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('running db migrations  !!  ! !  !');
+
+  await findAllLocationsByVersion();
 
   return respond();
 });
