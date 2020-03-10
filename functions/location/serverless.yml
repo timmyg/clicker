@@ -36,9 +36,9 @@ custom:
   # hooks:
   #   after:deploy:finalize:
   #     - npx sls invoke -f migration
-  # scripts:
-  #   hooks:
-  #     'deploy:finalize': npx serverless invoke local -f migration
+  scripts:
+    hooks:
+      'deploy:finalize': npx serverless invoke local -f migration
   prune:
     automatic: true
     number: 3
@@ -301,7 +301,7 @@ functions:
               - clicker
               - authorization
               - content-type
-  # migration:
-  #   handler: location.migration
-  #   description: database migration scripts
-  #   timeout: 10
+  migration:
+    handler: location.migration
+    description: database migration scripts
+    timeout: 10
