@@ -1106,7 +1106,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   return respond(200, { html });
 });
 
-module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('running db migrations  !!  ! !  !');
   return respond();
 });
