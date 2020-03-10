@@ -1317,6 +1317,7 @@ async function updateLocationBox(
   channelChangeAt?: number,
   lockedUntil?: number,
   lockedProgrammingId?: string,
+  removeLockedUntil?: boolean,
 ) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -1347,6 +1348,10 @@ async function updateLocationBox(
   if (lockedProgrammingId) {
     updateExpression += `${prefix}.lockedProgrammingId = :lockedProgrammingId,`;
     expressionAttributeValues[':lockedProgrammingId'] = lockedProgrammingId;
+  }
+  if (removeLockedUntil) {
+    updateExpression += `${prefix}.lockedUntil = :lockedUntilRemove,`;
+    expressionAttributeValues[':lockedUntilRemove'] = null;
   }
   updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
   expressionAttributeValues[':updatedAt'] = now;
