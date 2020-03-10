@@ -1262,6 +1262,7 @@ function getDefaultRating(program: Program): ?number {
     { search: 'the herd', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
     { search: 'college gameday', rating: 5 },
+    { search: 'mlb tonight', rating: 1 },
   ];
 
   // first things first
