@@ -29,16 +29,16 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  - serverless-hooks-plugin
+  - serverless-plugin-scripts
 
 custom:
   stage: ${opt:stage}
-  hooks:
-    after:deploy:finalize:
-      - npx sls invoke -f migration
+  # hooks:
+  #   after:deploy:finalize:
+  #     - npx sls invoke -f migration
   scripts:
     hooks:
-      'deploy:finalize': sls invoke -f functionName &&
+      'deploy:finalize': sls invoke -f migration &&
   prune:
     automatic: true
     number: 3
