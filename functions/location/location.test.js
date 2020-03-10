@@ -296,7 +296,7 @@ describe('get boxes', () => {
         programmingId: 'DEF',
         start:
           moment()
-            .subtract(1, 'h')
+            .subtract(1.1, 'h')
             .unix() * 1000,
         game: {
           summary: {
