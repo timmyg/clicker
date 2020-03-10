@@ -356,6 +356,7 @@ function setBoxStatus(box: Box): Box {
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const body = getBody(event);
+    body._v = 2;
     console.log(body);
     const location: Venue = await dbLocation.create(body);
     return respond(201, location);
@@ -1115,38 +1116,55 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   return respond(200, { html });
 });
 
-async function findAllLocationsByVersion(version?: number) {
+async function migrateNullToVersion1(version?: number) {
   const locations: Venue[] = await dbLocation
     .scan()
     .filter('_v')
     .null()
     .exec();
-  console.log({ locations });
-  // const locations1: Venue[] = await dbLocation
-  //   .query('_v')
-  //   .not()
-  //   .eq(1)
-  //   .exec();
-  // console.log({ locations1 });
-  // const locations: Venue[] = await dbLocation
-  //   .query('_v')
-  //   .null()
-  //   .exec();
-  // console.log({ locations });
   const promises = [];
   locations.forEach(location => {
     location._v = 1;
     promises.push(location.save());
   });
-
   await Promise.all(promises);
-  console.log('completed');
+}
+
+async function migrateLocationsToVersion2(version?: number) {
+  const locations: Venue[] = await dbLocation
+    .scan()
+    .filter('_v')
+    .eq(1)
+    .exec();
+  const promises = [];
+  locations.forEach(location => {
+    location.boxes.map((b: any) => {
+      const newBox = {
+        configuration: {
+          appActive: b.appActive,
+          automationActive: b.controlCenterV2,
+        },
+        info: {
+          ip: b.ip,
+          clientAddress: b.clientAddress,
+        },
+        live: {
+          channel: b.channel,
+        },
+      };
+      return newBox;
+    });
+    location._v = 2;
+    promises.push(location.save());
+  });
+  await Promise.all(promises);
 }
 
 module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('-_%^#$@+$(%     running db migrations     -_%^#$@+$(%');
 
-  await findAllLocationsByVersion();
+  await migrateNullToVersion1();
+  await migrateLocationsToVersion2();
 
   return respond();
 });
