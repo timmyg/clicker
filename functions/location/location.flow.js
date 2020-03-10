@@ -274,6 +274,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 function setBoxStatus(box: Box): Box {
+  console.log({ box });
   // locked: Boolean, // new
   // lockedUntil: Date,
   // lockedProgrammingId: String,
@@ -306,7 +307,6 @@ function setBoxStatus(box: Box): Box {
     [zapTypes.manual, zapTypes.automation].includes(box.live.channelChangeSource)
   ) {
     const lastChangeHoursFromNow = moment.duration(moment(box.live.channelChangeAt).diff(moment())).asHours();
-    console.log({ lastChangeHoursFromNow });
     box.live.locked = lastChangeHoursFromNow >= -4;
     if (box.live.locked) {
       box.live.lockedMessage = 'Sorry, TV is currently locked';
@@ -314,14 +314,16 @@ function setBoxStatus(box: Box): Box {
     return box;
   }
 
-  const isBeforeLockedTime = moment().isBefore(box.live.lockedUntil);
-  const isAfterLockedTime = moment().isAfter(box.live.lockedUntil);
+  const now = moment();
+  const isBeforeLockedTime = now.isBefore(box.live.lockedUntil);
+  const isAfterLockedTime = !isBeforeLockedTime;
   const isZappedProgramStillOn =
     box.live.program &&
     box.live.lockedProgrammingId === box.live.program.programmingId &&
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
   if (zapTypes.manual === box.live.channelChangeSource) {
     box.live.locked = isBeforeLockedTime || isZappedProgramStillOn;
+    // TODO isBeforeLockedTime is sometimes true
     if (box.live.locked) {
       box.live.lockedMessage = 'Sorry, TV is locked';
     }
@@ -343,13 +345,6 @@ function setBoxStatus(box: Box): Box {
       box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> is over`;
     }
   }
-
-  // set locked message
-  // if (box.live.locked) {
-
-  //   box.live.lockedMessage = "Sorry, TV is currently locked."
-  // }
-
   return box;
 }
 

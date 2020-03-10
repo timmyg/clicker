@@ -288,6 +288,10 @@ describe('get boxes', () => {
     live: {
       channelChangeSource: 'manual',
       lockedProgrammingId: 'ABC',
+      lockedUntil:
+        moment()
+          .subtract(1, 'm')
+          .unix() * 1000,
       channelChangeAt:
         moment()
           .subtract(2, 'h')
@@ -337,6 +341,7 @@ describe('get boxes', () => {
       const result = getAvailableBoxes([openGoodBox2]);
       expect(result.length).toBe(1);
     });
+    // TODO sometimes fails
     test('openManuallyChangedDifferentProgram', () => {
       const result = getAvailableBoxes([openManuallyChangedDifferentProgram]);
       expect(result.length).toBe(1);
