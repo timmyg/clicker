@@ -129,7 +129,7 @@ const dbLocation = dynamoose.model(
     hidden: Boolean,
     connected: Boolean,
     controlCenter: Boolean,
-    controlCenterV2: Boolean,
+    controlCenterV2: Boolean, // TODO remove
     announcement: String,
     notes: String,
     // calculated fields

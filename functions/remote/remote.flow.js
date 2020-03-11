@@ -58,13 +58,17 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.log({ command, losantId, client, channel, channelMinor, ip, key, source });
   console.time('change channel');
-  await api.sendCommand(command, losantId, {
-    client,
-    channel,
-    channelMinor,
-    ip,
-    key,
-  });
+  if (process.env.stage === 'prod') {
+    await api.sendCommand(command, losantId, {
+      client,
+      channel,
+      channelMinor,
+      ip,
+      key,
+    });
+  } else {
+    console.info(`not changing channel via losant (${process.env.stage})`);
+  }
   console.timeEnd('change channel');
 
   // slack garbage
