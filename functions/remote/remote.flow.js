@@ -29,15 +29,21 @@ class LosantApi {
 
   async sendCommand(name, losantId, payload) {
     try {
-      const params = {
-        applicationId: process.env.losantAppId,
-        deviceId: losantId,
-        deviceCommand: { name, payload },
-      };
-      return await this.client.device
-        .sendCommand(params)
-        .then(console.info)
-        .catch(console.error);
+      // TODO: for non-production environment, maybe lets have an override param
+      //  that is set on the location?
+      if (process.env.stage === 'prod') {
+        const params = {
+          applicationId: process.env.losantAppId,
+          deviceId: losantId,
+          deviceCommand: { name, payload },
+        };
+        return await this.client.device
+          .sendCommand(params)
+          .then(console.info)
+          .catch(console.error);
+      } else {
+        console.info(`not changing channel via losant (${process.env.stage})`);
+      }
     } catch (error) {
       return console.error(error);
     }
@@ -58,17 +64,15 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.log({ command, losantId, client, channel, channelMinor, ip, key, source });
   console.time('change channel');
-  if (process.env.stage === 'prod') {
-    await api.sendCommand(command, losantId, {
-      client,
-      channel,
-      channelMinor,
-      ip,
-      key,
-    });
-  } else {
-    console.info(`not changing channel via losant (${process.env.stage})`);
-  }
+
+  await api.sendCommand(command, losantId, {
+    client,
+    channel,
+    channelMinor,
+    ip,
+    key,
+  });
+
   console.timeEnd('change channel');
 
   // slack garbage
