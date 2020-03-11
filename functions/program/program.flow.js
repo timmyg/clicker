@@ -1269,9 +1269,9 @@ function getDefaultRating(program: Program): ?number {
   // get up
   // the dan le batard show
 
-  console.log(program.title, defaultRatings[0].search);
+  // console.log(program.title, defaultRatings[0].search);
   const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
-  console.log({ match });
+  // console.log({ match });
   if (match) {
     return match.rating;
   }
