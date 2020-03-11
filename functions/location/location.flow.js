@@ -129,7 +129,6 @@ const dbLocation = dynamoose.model(
     hidden: Boolean,
     connected: Boolean,
     controlCenter: Boolean,
-    controlCenterV2: Boolean,
     announcement: String,
     notes: String,
     // calculated fields
@@ -871,14 +870,14 @@ class ControlCenterProgram {
   }
 }
 
-module.exports.controlCenterV2 = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   let locations: Venue[] = await dbLocation.scan().exec();
-  locations = locations.filter(l => l.controlCenterV2 === true);
+  locations = locations.filter(l => l.controlCenter === true);
   console.log(locations.map(l => l.name));
   for (const location of locations) {
     await new Invoke()
       .service('location')
-      .name('controlCenterV2byLocation')
+      .name('controlCenterbyLocation')
       .pathParams({ id: location.id })
       .async()
       .go();
@@ -925,8 +924,8 @@ const priority = {
   gameOver: 'game over', // game over
 };
 
-// npm run invoke:controlCenterV2byLocation
-module.exports.controlCenterV2byLocation = RavenLambdaWrapper.handler(Raven, async event => {
+// npm run invoke:controlCenterbyLocation
+module.exports.controlCenterbyLocation = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
   const location: Venue = await dbLocation
     .queryOne('id')
@@ -1017,7 +1016,7 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
     .filter('active')
     .eq(true)
     .and()
-    .filter('controlCenterV2')
+    .filter('controlCenter')
     .eq(true)
     .all()
     .exec();
@@ -1137,7 +1136,7 @@ async function migrateLocationsToVersion2(version?: number) {
       const newBox = {
         configuration: {
           appActive: b.appActive,
-          automationActive: b.controlCenterV2,
+          automationActive: b.controlCenter,
         },
         info: {
           ip: b.ip,
@@ -1149,6 +1148,8 @@ async function migrateLocationsToVersion2(version?: number) {
       };
       return newBox;
     });
+    location.controlCenter = location.controlCenter;
+    delete location.controlCenterV2;
     location._v = 2;
     promises.push(location.save());
   });

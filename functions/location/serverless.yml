@@ -236,18 +236,18 @@ functions:
       - http:
           path: 'regions/{regions}'
           method: get
-  controlCenterV2:
-    handler: location.controlCenterV2
+  controlCenter:
+    handler: location.controlCenter
     events:
       - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
-          path: control-center/v2
+          path: control-center
           method: post
-  controlCenterV2byLocation:
-    handler: location.controlCenterV2byLocation
+  controlCenterbyLocation:
+    handler: location.controlCenterbyLocation
     events:
       - http:
-          path: '{id}/control-center/v2'
+          path: '{id}/control-center'
           method: post
   updateAirtableNowShowing:
     handler: location.updateAirtableNowShowing
