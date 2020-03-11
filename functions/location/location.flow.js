@@ -1149,7 +1149,7 @@ async function migrateLocationsToVersion2(version?: number) {
       return newBox;
     });
     location.controlCenter = location.controlCenter;
-    delete location.controlCenterV2;
+    location.controlCenterV2 = null;
     location._v = 2;
     promises.push(location.save());
   });
