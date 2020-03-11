@@ -1148,7 +1148,11 @@ async function migrateLocationsToVersion2(version?: number) {
       };
       return newBox;
     });
-    location.controlCenter = location.controlCenter;
+    if (location.controlCenterV2) {
+      location.controlCenter = true;
+    } else {
+      location.controlCenter = false;
+    }
     location.controlCenterV2 = null;
     location._v = 2;
     promises.push(location.save());
