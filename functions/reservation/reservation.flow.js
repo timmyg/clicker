@@ -201,7 +201,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   await new Invoke()
     .service('remote')
     .name('command')
-    .body({ reservation, command, source })
+    .body({ reservation, command, source, losantProductionOverride: reservation.location.losantProductionOverride })
     .headers(event.headers)
     .async()
     .go();
@@ -287,7 +287,12 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   await new Invoke()
     .service('remote')
     .name('command')
-    .body({ reservation, command, source })
+    .body({
+      reservation,
+      command,
+      source,
+      losantProductionOverride: originalReservation.location.losantProductionOverride,
+    })
     .headers(event.headers)
     .async()
     .go();

@@ -123,6 +123,7 @@ const dbLocation = dynamoose.model(
     },
     demo: Boolean,
     free: Boolean,
+    losantProductionOverride: Boolean,
     img: String,
     region: String,
     active: Boolean,
@@ -1226,7 +1227,7 @@ async function tuneAutomation(location: Venue, box: Box, channel: number, progra
   await new Invoke()
     .service('remote')
     .name('command')
-    .body({ reservation, command, source })
+    .body({ reservation, command, source, losantProductionOverride: location.losantProductionOverride })
     .async()
     .go();
 }

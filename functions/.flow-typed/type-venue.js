@@ -57,6 +57,7 @@ export class Venue extends Base {
     longitude: number,
   };
   free: boolean;
+  losantProductionOverride: boolean;
   img: string;
   region: string;
   active: boolean;

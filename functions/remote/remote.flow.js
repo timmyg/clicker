@@ -27,11 +27,11 @@ class LosantApi {
     });
   }
 
-  async sendCommand(name, losantId, payload) {
+  async sendCommand(name, losantId, payload, losantProductionOverride?: boolean) {
     try {
       // TODO: for non-production environment, maybe lets have an override param
       //  that is set on the location?
-      if (process.env.stage === 'prod') {
+      if (process.env.stage === 'prod' || losantProductionOverride) {
         const params = {
           applicationId: process.env.losantAppId,
           deviceId: losantId,
@@ -42,7 +42,9 @@ class LosantApi {
           .then(console.info)
           .catch(console.error);
       } else {
-        console.info(`not changing channel via losant (${process.env.stage})`);
+        console.info(
+          `*** not changing channel via losant (${process.env.stage} environment, no losantProductionOverride)`,
+        );
       }
     } catch (error) {
       return console.error(error);
@@ -56,22 +58,27 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   // try {
-  const { command, key, reservation, source } = getBody(event);
+  const { command, key, reservation, source, losantProductionOverride } = getBody(event);
   const { losantId, id: locationId } = reservation.location;
   const { ip, clientAddress: client, id: boxId } = reservation.box;
   const { channel, channelMinor } = reservation.program;
   const api = new LosantApi();
 
-  console.log({ command, losantId, client, channel, channelMinor, ip, key, source });
+  console.log({ command, losantId, client, channel, channelMinor, ip, key, source, losantProductionOverride });
   console.time('change channel');
 
-  await api.sendCommand(command, losantId, {
-    client,
-    channel,
-    channelMinor,
-    ip,
-    key,
-  });
+  await api.sendCommand(
+    command,
+    losantId,
+    {
+      client,
+      channel,
+      channelMinor,
+      ip,
+      key,
+    },
+    losantProductionOverride,
+  );
 
   console.timeEnd('change channel');
 
