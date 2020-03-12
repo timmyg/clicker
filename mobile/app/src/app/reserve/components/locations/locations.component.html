@@ -77,6 +77,9 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       >
         <ion-card>
           <ion-card-content class="ion-text-center">
+            <p *ngIf="searchTerm">
+              <em>Results matching: {{searchTerm}}</em>
+            </p>
             <p>
               Sorry, no Clicker locations <span *ngIf="searchTerm && searchTerm.length">matching <b>{{searchTerm}} </b></span><span *ngIf="this.userGeolocation">within {{ milesRadius }} miles </span> 😢.
             </p>

@@ -3,10 +3,7 @@ import { Location } from "src/app/state/location/location.model";
 import { ReserveService } from "../../reserve.service";
 import { Observable, Subscription, BehaviorSubject } from "rxjs";
 import { getAllLocations, getLoading } from "src/app/state/location";
-import {
-  isLoggedIn,
-  getUserGeolocation
-} from "src/app/state/user";
+import { isLoggedIn, getUserGeolocation } from "src/app/state/user";
 import { Store } from "@ngrx/store";
 import * as fromStore from "../../../state/app.reducer";
 import * as fromLocation from "../../../state/location/location.actions";
@@ -136,7 +133,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
         console.log("geolocation updated", this.userGeolocation);
       });
     this.locations$.subscribe(locations => {
-      console.log({locations});
+      console.log({ locations });
       if (locations && locations.length) {
         this.reserveService.emitShowingLocations();
       }
@@ -369,7 +366,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           //   new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
           // );
           this.geolocationError = false;
-          // this.reserveService.emitShowingLocations();
+          this.reserveService.emitShowingLocations();
         })
         .catch(async error => {
           this.evaluatingGeolocation = false;
@@ -377,7 +374,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           // this.store.dispatch(
           //   new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
           // );
-          // this.reserveService.emitShowingLocations();
+          this.reserveService.emitShowingLocations();
           this.disableButton = false;
           console.error("Error getting location", error);
           // const message = "Error getting your location. Make sure location services are enabled for this app."

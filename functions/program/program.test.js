@@ -87,7 +87,7 @@ test('getMajorChannels', () => {
   expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
 });
 
-describe('getDefaultRating', () => {
+describe.skip('getDefaultRating', () => {
   test('rated', () => {
     expect(getDefaultRating({ title: 'SportsCenter With Scott Van Pelt' })).toEqual(2);
   });

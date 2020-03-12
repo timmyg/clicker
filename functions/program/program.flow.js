@@ -1253,16 +1253,16 @@ function build(dtvSchedule: any, regionId: string) {
 
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
-    { search: 'sportscenter', rating: 2 },
-    { search: 'around the horn', rating: 1 },
-    { search: 'nfl live', rating: 1 },
-    { search: 'will cain show', rating: 1 },
-    { search: 'nba: the jump', rating: 1 },
-    { search: 'daily wager', rating: 1 },
-    { search: 'the herd', rating: 1 },
-    { search: 'skip and shannon', rating: 1 },
-    { search: 'college gameday', rating: 5 },
-    { search: 'mlb tonight', rating: 1 },
+    // { search: 'sportscenter', rating: 1 },
+    // { search: 'around the horn', rating: 1 },
+    // { search: 'nfl live', rating: 1 },
+    // { search: 'will cain show', rating: 1 },
+    // { search: 'nba: the jump', rating: 1 },
+    // { search: 'daily wager', rating: 1 },
+    // { search: 'the herd', rating: 1 },
+    // { search: 'skip and shannon', rating: 1 },
+    // { search: 'college gameday', rating: 1 },
+    // { search: 'mlb tonight', rating: 1 },
   ];
 
   // first things first
@@ -1273,9 +1273,9 @@ function getDefaultRating(program: Program): ?number {
   // get up
   // the dan le batard show
 
-  console.log(program.title, defaultRatings[0].search);
+  // console.log(program.title, defaultRatings[0].search);
   const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
-  console.log({ match });
+  // console.log({ match });
   if (match) {
     return match.rating;
   }
