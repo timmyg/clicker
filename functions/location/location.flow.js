@@ -1205,6 +1205,7 @@ function buildAirtableNowShowing(location: Venue) {
 }
 
 function getAvailableBoxes(boxes: Box[]): Box[] {
+  console.log({ boxes });
   boxes = boxes.map(b => setBoxStatus(b));
   boxes = boxes.filter(b => b.configuration.automationActive);
   // return if automation locked as we still want to evaluate those
