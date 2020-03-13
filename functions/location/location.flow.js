@@ -1135,7 +1135,7 @@ async function migrateLocationsToVersion2(version?: number) {
   console.log('v1 locations', locations.length);
   const promises = [];
   locations.forEach(location => {
-    location.boxes.map((b: any) => {
+    location.boxes = location.boxes.map((b: any) => {
       const newBox = {
         configuration: {
           appActive: b.appActive,
