@@ -60,7 +60,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   // try {
   const { command, key, reservation, source, losantProductionOverride } = getBody(event);
   const { losantId, id: locationId } = reservation.location;
-  const { ip, clientAddress: client, id: boxId } = reservation.box;
+  const box: Box = reservation.box;
+  const { id: boxId, info } = box;
+  const { ip, clientAddress: client } = info;
   const { channel, channelMinor } = reservation.program;
   const api = new LosantApi();
 
