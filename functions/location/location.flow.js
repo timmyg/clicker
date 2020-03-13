@@ -1132,6 +1132,7 @@ async function migrateLocationsToVersion2(version?: number) {
     .filter('_v')
     .eq(1)
     .exec();
+  console.log('v1 locations', locations.length);
   const promises = [];
   locations.forEach(location => {
     location.boxes.map((b: any) => {
@@ -1157,6 +1158,7 @@ async function migrateLocationsToVersion2(version?: number) {
     }
     location.controlCenterV2 = null;
     location._v = 2;
+    console.log({ location });
     promises.push(location.save());
   });
   await Promise.all(promises);
