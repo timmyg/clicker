@@ -1158,7 +1158,7 @@ async function migrateLocationsToVersion2(version?: number) {
     }
     location.controlCenterV2 = null;
     location._v = 2;
-    console.log({ location });
+    console.log(location.boxes);
     promises.push(location.save());
   });
   await Promise.all(promises);
