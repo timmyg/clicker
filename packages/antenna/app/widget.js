@@ -111,46 +111,71 @@ class Widget {
           case "info.current.all":
             // logger.info('info.current.all!!', payload);
             const { boxes } = payload;
-            logger.info("info.current.all!!", "boxes", boxes.length);
+            logger.info("info.current.all!! separated", "boxes", boxes.length);
             const boxesInfo = [];
-            async.eachSeries(
-              boxes,
-              function(box, callback) {
-                const { boxId, client, ip } = box;
-                const _remote = new DirecTV.Remote(ip);
-                logger.info(`getTuned... ${boxId}, ${client}, ${ip}`);
-                _remote.getTuned(client || "0", (err, response) => {
-                  if (err) {
-                    logger.error("getTuned error!!", err, ip);
-                    if (
-                      err.message &&
-                      err.message.includes("getaddrinfo ENOTFOUND")
-                    ) {
-                      logger.error("BAD IP ADDRESS", ip);
-                    } else if (
-                      err.message &&
-                      err.message.includes("Forbidden.Command not allowed.")
-                    ) {
-                      logger.error("NEED TO ENABLE CURRENT PROGRAM ACCESS", ip);
-                    }
-                  } else {
-                    boxesInfo.push({ boxId, info: response });
+            boxes.forEach(box => {
+              const { boxId, client, ip } = box;
+              const _remote = new DirecTV.Remote(ip);
+              logger.info(`getTuned... ${boxId}, ${client}, ${ip}`);
+              _remote.getTuned(client || "0", (err, response) => {
+                if (err) {
+                  logger.error("getTuned error!!", err, ip);
+                  if (
+                    err.message &&
+                    err.message.includes("getaddrinfo ENOTFOUND")
+                  ) {
+                    logger.error("BAD IP ADDRESS", ip);
+                  } else if (
+                    err.message &&
+                    err.message.includes("Forbidden.Command not allowed.")
+                  ) {
+                    logger.error("NEED TO ENABLE CURRENT PROGRAM ACCESS", ip);
                   }
-                  return callback();
-                });
-              },
-              function(err) {
-                logger.info("about to save boxes...");
-                if (boxesInfo && boxesInfo.length) {
-                  logger.info("saveBoxesInfo saving...");
-                  logger.info("boxesInfo");
-                  context.api.saveBoxesInfo(boxesInfo);
                 } else {
-                  logger.error("no boxes");
-                  logger.error(err);
+                  boxesInfo.push({ boxId, info: response });
+                  logger.info("saveBoxesInfo single saving...");
+                  context.api.saveBoxesInfo(boxesInfo);
                 }
-              }
-            );
+              });
+            });
+            // async.eachSeries(
+            //   boxes,
+            //   function(box, callback) {
+            //     const { boxId, client, ip } = box;
+            //     const _remote = new DirecTV.Remote(ip);
+            //     logger.info(`getTuned... ${boxId}, ${client}, ${ip}`);
+            //     _remote.getTuned(client || "0", (err, response) => {
+            //       if (err) {
+            //         logger.error("getTuned error!!", err, ip);
+            //         if (
+            //           err.message &&
+            //           err.message.includes("getaddrinfo ENOTFOUND")
+            //         ) {
+            //           logger.error("BAD IP ADDRESS", ip);
+            //         } else if (
+            //           err.message &&
+            //           err.message.includes("Forbidden.Command not allowed.")
+            //         ) {
+            //           logger.error("NEED TO ENABLE CURRENT PROGRAM ACCESS", ip);
+            //         }
+            //       } else {
+            //         boxesInfo.push({ boxId, info: response });
+            //       }
+            //       return callback();
+            //     });
+            //   },
+            //   function(err) {
+            //     logger.info("about to save boxes...");
+            //     if (boxesInfo && boxesInfo.length) {
+            //       logger.info("saveBoxesInfo saving...");
+            //       logger.info("boxesInfo");
+            //       context.api.saveBoxesInfo(boxesInfo);
+            //     } else {
+            //       logger.error("no boxes");
+            //       logger.error(err);
+            //     }
+            //   }
+            // );
 
             break;
           case "options":
