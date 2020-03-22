@@ -122,7 +122,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
 });
 
 module.exports.airtableRemoveExpired = RavenLambdaWrapper.handler(Raven, async event => {
-  const tableNames = ['Control Center v1', 'Channel Changes', 'Control Center', 'Games', 'Now Showing'];
+  const tableNames = ['Channel Changes', 'Control Center', 'Games', 'Now Showing'];
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let count = 0;
   for (const tableName of tableNames) {

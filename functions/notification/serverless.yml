@@ -57,6 +57,18 @@ functions:
     handler: notification.sendAntenna
   sendApp:
     handler: notification.sendApp
+    events:
+      - http:
+          path: app
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - app
+              - clicker
+              - authorization
+              - content-type
   sendControlCenter:
     handler: notification.sendControlCenter
   sendLanding:

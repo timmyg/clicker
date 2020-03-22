@@ -31,18 +31,20 @@
     "aws-sdk": "^2.580.0",
     "aws-xray-sdk": "^2.5.0",
     "dotenv": "^7.0.0",
+    "dynamodb-toolbox": "^0.1.0",
     "dynamoose": "^1.11.1",
     "geolib": "^2.0.24",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
     "mustache": "^4.0.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
+    "serverless-plugin-scripts": "^1.0.2"
   },
   "devDependencies": {
     "flow-bin": "^0.107.0",
     "flow-remove-types": "^2.107.0",
     "jest": "^24.0.0",
-    "serverless": "^1.42.2",
+    "serverless": "^1.38.0",
     "serverless-domain-manager": "^2.6.13",
     "serverless-dotenv-plugin": "^2.1.1",
     "serverless-plugin-tracing": "^2.0.0",

@@ -862,7 +862,9 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
 module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
   const { location } = getBody(event);
 
-  const locationProgrammingIds = location.boxes.filter(b => !!b.zone).map(b => b.program && b.program.programmingId);
+  const locationProgrammingIds = location.boxes
+    .filter(b => b.configuration.automationActive)
+    .map(b => b.program && b.program.programmingId);
   const allUpcomingPrograms = await getAirtableProgramsInWindow();
   const upcomingPrograms = allUpcomingPrograms.filter(upcoming => !locationProgrammingIds.includes(upcoming.episodeId));
 
@@ -1251,14 +1253,16 @@ function build(dtvSchedule: any, regionId: string) {
 
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
-    { search: 'sportscenter', rating: 1 },
-    { search: 'around the horn', rating: 1 },
-    { search: 'nfl live', rating: 1 },
-    { search: 'will cain show', rating: 1 },
-    { search: 'nba: the jump', rating: 1 },
-    { search: 'daily wager', rating: 1 },
-    { search: 'the herd', rating: 1 },
-    { search: 'skip and shannon', rating: 1 },
+    // { search: 'sportscenter', rating: 1 },
+    // { search: 'around the horn', rating: 1 },
+    // { search: 'nfl live', rating: 1 },
+    // { search: 'will cain show', rating: 1 },
+    // { search: 'nba: the jump', rating: 1 },
+    // { search: 'daily wager', rating: 1 },
+    // { search: 'the herd', rating: 1 },
+    // { search: 'skip and shannon', rating: 1 },
+    // { search: 'college gameday', rating: 1 },
+    // { search: 'mlb tonight', rating: 1 },
   ];
 
   // first things first
@@ -1269,9 +1273,9 @@ function getDefaultRating(program: Program): ?number {
   // get up
   // the dan le batard show
 
-  console.log(program.title, defaultRatings[0].search);
+  // console.log(program.title, defaultRatings[0].search);
   const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
-  console.log({ match });
+  // console.log({ match });
   if (match) {
     return match.rating;
   }

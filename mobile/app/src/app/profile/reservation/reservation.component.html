@@ -1,6 +1,7 @@
 <ion-card no-margin-horizontal>
   <ion-card-content>
     <ion-row>
+      <img [src]="reservation.location.img" class="logo" alt="location logo" />
       <ion-col>
         <ion-row>
           <ion-col
@@ -12,7 +13,7 @@
             <span class="icon">📺</span>
           </ion-col>
           <ion-col flex align-items-center>
-            <span
+            <span class="info"
               >{{ reservation.program.channelTitle }} on
               {{ reservation.box.label }}</span
             >

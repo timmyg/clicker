@@ -27,6 +27,7 @@ export class ReservePage {
   showingLocations: boolean;
   tokenCount$: Observable<number>;
   percentageComplete: number;
+  percentageLeft: number;
   walletModal;
   sub: Subscription;
   pageSub: Subscription;
@@ -61,7 +62,6 @@ export class ReservePage {
 
   ngOnInit() {
     this.pageSub = this.platform.backButton.subscribe(() => {
-      console.log("page back");
       this.goBack();
     });
   }
@@ -113,6 +113,7 @@ export class ReservePage {
             break;
         }
       }
+      this.percentageLeft = this.percentageComplete
     });
   }
 

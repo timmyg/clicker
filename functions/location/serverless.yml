@@ -29,9 +29,16 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
+  - serverless-plugin-scripts
 
 custom:
   stage: ${opt:stage}
+  # hooks:
+  #   after:deploy:finalize:
+  #     - npx sls invoke -f migration
+  scripts:
+    hooks:
+      'deploy:finalize': sls invoke -f migration --stage ${self:custom.stage}
   prune:
     automatic: true
     number: 3
@@ -71,6 +78,8 @@ resources:
             AttributeType: S
           - AttributeName: losantId
             AttributeType: S
+          - AttributeName: _v
+            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -81,6 +90,12 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
+          - IndexName: _vGlobalIndex
+            KeySchema:
+              - AttributeName: _v
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
 functions:
   health:
     handler: location.health
@@ -132,6 +147,13 @@ functions:
               - clicker
               - authorization
               - content-type
+  getBox:
+    handler: location.getBox
+    description: get box info, for informational purposes only
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}'
+          method: get
   create:
     handler: location.create
     events:
@@ -162,18 +184,6 @@ functions:
       - http:
           path: '{id}/boxes'
           method: put
-  setLabels:
-    handler: location.setLabels
-    events:
-      - http:
-          path: '{id}/boxes/labels'
-          method: put
-  identifyBoxes:
-    handler: location.identifyBoxes
-    events:
-      - http:
-          path: '{id}/boxes/identify'
-          method: post
   saveBoxesInfo:
     description: called from antenna to update whats on each box
     handler: location.saveBoxesInfo
@@ -226,18 +236,18 @@ functions:
       - http:
           path: 'regions/{regions}'
           method: get
-  controlCenterV2:
-    handler: location.controlCenterV2
+  controlCenter:
+    handler: location.controlCenter
     events:
       - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
-          path: control-center/v2
+          path: control-center
           method: post
-  controlCenterV2byLocation:
-    handler: location.controlCenterV2byLocation
+  controlCenterbyLocation:
+    handler: location.controlCenterbyLocation
     events:
       - http:
-          path: '{id}/control-center/v2'
+          path: '{id}/control-center'
           method: post
   updateAirtableNowShowing:
     handler: location.updateAirtableNowShowing
@@ -291,3 +301,7 @@ functions:
               - clicker
               - authorization
               - content-type
+  migration:
+    handler: location.migration
+    description: database migration scripts
+    timeout: 10

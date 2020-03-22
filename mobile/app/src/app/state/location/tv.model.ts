@@ -1,9 +1,13 @@
 export interface TV {
   id: string;
-  clientAddress: number;
+  // clientAddress: number;
   label: string;
-  ip: string;
-  reserved?: boolean;
-  end?: Date;
-  locationName?: string;
+  // ip: string;
+  // end?: Date;
+  // locationName?: string;
+  live: {
+    locked?: boolean;
+    lockedUntil?: Date;
+    lockedMessage? : string
+  };
 }

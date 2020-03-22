@@ -15,6 +15,11 @@ const {
 } = require('serverless-helpers');
 const uuid = require('uuid/v1');
 const firebase = require('firebase-admin');
+const zapTypes = {
+  manual: 'manual',
+  app: 'app',
+  automation: 'automation',
+};
 
 declare class process {
   static env: {
@@ -70,8 +75,8 @@ const dbReservation = dynamoose.model(
     },
     cost: { type: Number, required: true },
     minutes: { type: Number, required: true },
-    start: Date,
-    end: Date,
+    start: Number,
+    end: Number,
     cancelled: Boolean,
   },
   {
@@ -140,7 +145,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     await new Invoke()
       .service('notification')
       .name('sendControlCenter')
-      .body({ text: "Demo Zap" })
+      .body({ text: 'Demo Zap' })
       .async()
       .go();
     return respond(200);
@@ -152,8 +157,9 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     return respond(400, 'Sorry, location inactive');
   }
   // ensure tv isnt already reserved
-  const tv = locationResultBody.boxes.find(b => b.id === reservation.box.id);
-  if (!tv || !tv.appActive || (tv.reserved && moment(tv.end).unix() > moment().unix())) {
+  let tv: Box = locationResultBody.boxes.find(b => b.id === reservation.box.id);
+
+  if (!tv || !tv.configuration || !tv.configuration.appActive || tv.live.locked) {
     console.log(tv);
     return respond(400, 'Sorry, tv is not available for reservation');
   }
@@ -191,11 +197,11 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('remote command');
   const command = 'tune';
-  const source = 'app';
+  const source = zapTypes.app;
   await new Invoke()
     .service('remote')
     .name('command')
-    .body({ reservation, command, source })
+    .body({ reservation, command, source, losantProductionOverride: reservation.location.losantProductionOverride })
     .headers(event.headers)
     .async()
     .go();
@@ -277,11 +283,16 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   // change the channel
   console.time('remote command');
   const command = 'tune';
-  const source = 'app';
+  const source = zapTypes.app;
   await new Invoke()
     .service('remote')
     .name('command')
-    .body({ reservation, command, source })
+    .body({
+      reservation,
+      command,
+      source,
+      losantProductionOverride: originalReservation.location.losantProductionOverride,
+    })
     .headers(event.headers)
     .async()
     .go();
@@ -359,8 +370,8 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
 
-function calculateReservationEndTime(reservation) {
-  reservation.start = moment().toDate();
+function calculateReservationEndTime(reservation): number {
+  reservation.start = moment().unix() * 1000;
   const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
-  return initialEndTimeMoment.add(reservation.minutes, 'm').toDate();
+  return initialEndTimeMoment.add(reservation.minutes, 'm').unix() * 1000;
 }
