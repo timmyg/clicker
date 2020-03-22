@@ -10,6 +10,7 @@ export class BoxInfoRequest {
 
 export class CheckBoxesInfoRequest {
   losantId: string;
+  losantProductionOverride: boolean;
   boxes: [
     {
       boxId: string,

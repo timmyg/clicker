@@ -226,10 +226,10 @@ module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event =
 module.exports.checkBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const body: CheckBoxesInfoRequest = getBody(event);
-    const { losantId, boxes } = body;
+    const { losantId, boxes, losantProductionOverride } = body;
     console.log({ losantId, boxes });
     const api = new LosantApi();
-    const payload = { boxes };
+    const payload = { boxes, losantProductionOverride };
 
     const command = 'info.current.all';
     await api.sendCommand(command, losantId, payload);

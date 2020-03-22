@@ -711,10 +711,11 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
   let i = 0;
   for (const location of allLocations) {
     console.log(i);
-    const { losantId } = location;
+    const { losantId, losantProductionOverride } = location;
     // $FlowFixMe
     const body: CheckBoxesInfoRequest = {
       losantId,
+      losantProductionOverride,
       boxes: [],
     };
     if (location.boxes) {
