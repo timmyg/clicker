@@ -304,4 +304,4 @@ functions:
   migration:
     handler: location.migration
     description: database migration scripts
-    timeout: 10
+    timeout: 90
