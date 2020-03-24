@@ -244,7 +244,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     // filter out inactive boxes
     // sort boxes alphabetically
     location.boxes = location.boxes.sort((a, b) => {
-      return a.label.localeCompare(b.label);
+      return (a.label || '').localeCompare(b.label || '');
     });
     console.timeEnd('filter + sort');
   }
