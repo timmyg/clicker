@@ -16,7 +16,7 @@ import * as fromStore from "../../../state/app.reducer";
 import * as fromReservation from "../../../state/reservation/reservation.actions";
 import { Router, ActivatedRoute } from "@angular/router";
 import * as moment from "moment";
-import { ToastController } from "@ionic/angular";
+import { ToastController, ModalController, Platform } from "@ionic/angular";
 import { first, filter } from "rxjs/operators";
 import { isLoggedIn, getUserTokenCount } from "src/app/state/user";
 import { Actions, ofType } from "@ngrx/effects";
@@ -26,6 +26,7 @@ import { Timeframe } from "src/app/state/app/timeframe.model";
 import { getTimeframes } from "src/app/state/app";
 import * as fromApp from "src/app/state/app/app.actions";
 import { getLoading as getAppLoading } from "src/app/state/app";
+import { LoginComponent } from "src/app/auth/login/login.component";
 
 @Component({
   selector: "app-confirmation",
@@ -61,6 +62,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   };
   overideDistanceClicks = 0;
   overrideDistanceDisable = false;
+  loginModal;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -70,7 +72,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     private actions$: Actions,
     private segment: SegmentService,
     private globals: Globals,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public modalController: ModalController,
+    private platform: Platform
   ) {
     this.timeframes$ = this.store.select(getTimeframes);
     this.reservation$ = this.store.select(getReservation);
@@ -246,6 +250,10 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.reservation.minutes = timeframe.minutes;
   }
 
+  onClickOverrideDistanceForce() {
+    this.overrideDistanceDisable = true;
+  }
+  
   onClickOverrideDistance() {
     this.overideDistanceClicks++;
     if (this.overideDistanceClicks === 7) {
@@ -255,10 +263,26 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getLocationName() {
-    return `${this.reservation.location.name} (${this.reservation.location.neighborhood})`
+    return `${this.reservation.location.name} (${
+      this.reservation.location.neighborhood
+    })`;
   }
 
   getChannelDescription() {
-    return `${this.reservation.program.channelTitle} (${this.reservation.program.title})`
+    return `${this.reservation.program.channelTitle} (${
+      this.reservation.program.title
+    })`;
+  }
+
+  async onLogin() {
+    this.loginModal = await this.modalController.create({
+      component: LoginComponent
+    });
+    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+      if (this.loginModal) {
+        this.loginModal.close();
+      }
+    });
+    return await this.loginModal.present();
   }
 }
