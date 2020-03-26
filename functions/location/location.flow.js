@@ -559,6 +559,12 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
   for (const box: DirecTVBox of boxes) {
     const { boxId, info } = box;
+    if (!boxId) {
+      const error = 'must provide boxId';
+      console.error(error);
+      return respond(400, error);
+    }
+
     console.log(boxId, info);
 
     const { major, minor } = info;
