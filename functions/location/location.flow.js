@@ -244,7 +244,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     // filter out inactive boxes
     // sort boxes alphabetically
     location.boxes = location.boxes.sort((a, b) => {
-      return a.label.localeCompare(b.label);
+      return (a.label || '').localeCompare(b.label || '');
     });
     console.timeEnd('filter + sort');
   }
@@ -1138,6 +1138,8 @@ async function migrateLocationsToVersion2(version?: number) {
   locations.forEach(location => {
     location.boxes = location.boxes.map((b: any) => {
       const newBox = {
+        label: b.label,
+        zone: b.zone,
         configuration: {
           appActive: b.appActive,
           automationActive: b.controlCenter,
