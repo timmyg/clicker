@@ -1144,6 +1144,7 @@ async function migrateLocationsToVersion2(version?: number) {
   locations.forEach(location => {
     location.boxes = location.boxes.map((b: any) => {
       const newBox = {
+        id: b.id,
         label: b.label,
         zone: b.zone,
         configuration: {
