@@ -44,7 +44,7 @@ export class TvsComponent implements OnDestroy, OnInit {
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
     this.tvs$.pipe(first()).subscribe(tvs => {
-      if (tvs.length === 1 && (tvs[0] && tvs[0].live && tvs[0].live.locked)) {
+      if (tvs.length === 1) {
         this.onTvClick(tvs[0], true);
       }
     });
