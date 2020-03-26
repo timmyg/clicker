@@ -7,7 +7,7 @@ export class Reservation {
   program: Program;
   cost: number;
   minutes: number;
-  start: Date;
-  end: Date;
+  start: number;
+  end: number;
   cancelled: boolean;
 }

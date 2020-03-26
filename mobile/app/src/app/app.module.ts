@@ -30,6 +30,8 @@ import { SegmentModule } from "ngx-segment-analytics";
 import { Globals } from "./globals";
 
 import * as Sentry from "@sentry/browser";
+import { MenuModule } from "./menu/menu.module";
+import { AuthModule } from "./auth/auth.module";
 
 Sentry.init({
   dsn: environment.sentry.dsn,
@@ -38,11 +40,15 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() {
+    console.log({environment});
+  }
   handleError(error) {
     console.error(error);
-    const eventId = Sentry.captureException(error.originalError || error);
-    Sentry.showReportDialog({ eventId });
+    if (environment.stage !== "local") {
+      const eventId = Sentry.captureException(error.originalError || error);
+      Sentry.showReportDialog({ eventId });
+    }
   }
 }
 
@@ -78,6 +84,8 @@ export function initUserStuff(store: Store<AppState>): Function {
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    MenuModule,
+    AuthModule,
     BrowserModule,
     SegmentModule.forRoot({
       apiKey: environment.segment.writeKey,

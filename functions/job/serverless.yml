@@ -50,23 +50,6 @@ functions:
       - http:
           path: health
           method: get
-  controlCenter:
-    handler: job.controlCenter
-    timeout: 30
-    events:
-      - schedule: cron(*/5 * * * ? *)
-      - http:
-          path: control-center
-          method: post
-  # ccv1
-  updateAllGamesStatus:
-    handler: job.updateAllGamesStatus
-    timeout: 30
-    events:
-      - schedule: cron(*/1 * * * ? *)
-      - http:
-          path: game-status
-          method: post
   controlCenterDailyInit:
     handler: job.controlCenterDailyInit
     timeout: 30

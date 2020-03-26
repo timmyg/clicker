@@ -3,9 +3,12 @@
     <ion-buttons slot="start">
       <ion-back-button
         class="show-back-button"
-        *ngIf="showBack() && !searchMode"
+        *ngIf="showBack() && !searchMode; else menu"
         (click)="goBack()"
       ></ion-back-button>
+      <ng-template #menu>
+        <ion-menu-button autoHide="false"></ion-menu-button>
+      </ng-template>
     </ion-buttons>
     <ion-buttons *ngIf="!searchMode" slot="end" padding-end>
       <app-coins></app-coins>

@@ -1,16 +1,16 @@
-const DirecTV = require('directv-remote');
-const async = require('async');
-const { Device } = require('losant-mqtt');
-const logger = require('./logger');
-const Api = require('./api');
-const browser = require('iotdb-arp');
+const DirecTV = require("directv-remote");
+const async = require("async");
+const { Device } = require("losant-mqtt");
+const logger = require("./logger");
+const Api = require("./api");
+const browser = require("iotdb-arp");
 
 class Widget {
   constructor(losantKey, losantSecret, losantDeviceId, locationId) {
     this.device = new Device({
       id: losantDeviceId,
       key: losantKey,
-      secret: losantSecret,
+      secret: losantSecret
     });
     this.locationId = locationId;
     this.remote = null;
@@ -20,14 +20,14 @@ class Widget {
 
   async syncIpsAndBoxes() {
     const context = this;
-    logger.info('about to search ips....');
+    logger.info("about to search ips....");
     browser.browser({}, (error, device) => {
       if (device) {
         logger.info({ device });
         let { ip } = device;
         if (
           !/^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/.test(
-            ip,
+            ip
           )
         ) {
           logger.info(`.......... invalid ip: ${ip}`);
@@ -45,7 +45,7 @@ class Widget {
       } else if (error) {
         logger.error(error);
       } else {
-        logger.error('no ips found...');
+        logger.error("no ips found...");
       }
     });
   }
@@ -66,32 +66,37 @@ class Widget {
     try {
       const context = this;
       // Listen for commands from Losant
-      this.device.on('command', async command => {
+      this.device.on("command", async command => {
         console.log({ command });
         logger.info({ command });
         const { name, payload } = command;
         const { ip } = payload;
         if (ip) this.remote = new DirecTV.Remote(ip);
         switch (name) {
-          case 'tune':
-            this.remote.tune(payload.channel, payload.channelMinor, payload.client, err => {
-              if (err) return logger.error(err);
-              return logger.info('tuned');
-            });
+          case "tune":
+            this.remote.tune(
+              payload.channel,
+              payload.channelMinor,
+              payload.client,
+              err => {
+                if (err) return logger.error(err);
+                return logger.info("tuned");
+              }
+            );
             break;
-          case 'key':
+          case "key":
             this.remote.processKey(payload.key, payload.client, err => {
               if (err) return logger.error(err);
-              return logger.info('keyed');
+              return logger.info("keyed");
             });
             break;
-          case 'command':
+          case "command":
             this.remote.processCommand(payload.command, (err, response) => {
               if (err) return logger.error(err);
-              return logger.info('command', response);
+              return logger.info("command", response);
             });
             break;
-          case 'channel.info':
+          case "channel.info":
             this.remote.getProgInfo(
               payload.channel,
               payload.channelMinor,
@@ -99,84 +104,109 @@ class Widget {
               payload.client,
               (err, response) => {
                 if (err) return logger.error(err);
-                return logger.info('channel.info', response);
-              },
+                return logger.info("channel.info", response);
+              }
             );
             break;
-          // case 'info.current':
-          //   this.remote.getTuned(payload.client || '0', (err, response) => {
-          //     if (err) return logger.error(JSON.stringify(err));
-          //     logger.info('info.current!!');
-          //     logger.info(JSON.stringify(response), payload);
-          //     context.api.saveBoxInfo(payload.boxId, response);
-          //     return;
-          //   });
-          //   break;
-          case 'info.current.all':
+          case "info.current.all":
             // logger.info('info.current.all!!', payload);
             const { boxes } = payload;
-            logger.info('info.current.all!!', 'boxes', boxes.length);
+            logger.info("info.current.all!! separated", "boxes", boxes.length);
             const boxesInfo = [];
-            async.eachSeries(
-              boxes,
-              function(box, callback) {
-                const { boxId, client, ip } = box;
-                const _remote = new DirecTV.Remote(ip);
-                logger.info('getTuned', { boxId, client, ip });
-                _remote.getTuned(client || '0', (err, response) => {
-                  if (err) {
-                    logger.error('getTuned error!!', err, ip);
-                    if (err && err.message && err.message.includes('getaddrinfo ENOTFOUND')) {
-                      logger.error('BAD IP ADDRESS', ip);
-                    } else if (err && err.message && err.message.includes('Forbidden.Command not allowed.')) {
-                      logger.error('NEED TO ENABLE CURRENT PROGRAM ACCESS', ip);
-                    }
-                  } else {
-                    boxesInfo.push({ boxId, info: response });
+            boxes.forEach(box => {
+              const { boxId, client, ip } = box;
+              const _remote = new DirecTV.Remote(ip);
+              logger.info(`getTuned... ${boxId}, ${client}, ${ip}`);
+              _remote.getTuned(client || "0", (err, response) => {
+                if (err) {
+                  logger.error("getTuned error!!", err, ip);
+                  if (
+                    err.message &&
+                    err.message.includes("getaddrinfo ENOTFOUND")
+                  ) {
+                    logger.error("BAD IP ADDRESS", ip);
+                  } else if (
+                    err.message &&
+                    err.message.includes("Forbidden.Command not allowed.")
+                  ) {
+                    logger.error("NEED TO ENABLE CURRENT PROGRAM ACCESS", ip);
                   }
-                  return callback();
-                });
-              },
-              function(err) {
-                if (boxesInfo && boxesInfo.length) {
-                  logger.info('saveBoxesInfo!!', boxesInfo);
-                  context.api.saveBoxesInfo(boxesInfo);
                 } else {
-                  logger.error('no boxes');
+                  boxesInfo.push({ boxId, info: response });
+                  logger.info("saveBoxesInfo single saving...");
+                  context.api.saveBoxesInfo(boxesInfo);
                 }
-              },
-            );
+              });
+            });
+            // async.eachSeries(
+            //   boxes,
+            //   function(box, callback) {
+            //     const { boxId, client, ip } = box;
+            //     const _remote = new DirecTV.Remote(ip);
+            //     logger.info(`getTuned... ${boxId}, ${client}, ${ip}`);
+            //     _remote.getTuned(client || "0", (err, response) => {
+            //       if (err) {
+            //         logger.error("getTuned error!!", err, ip);
+            //         if (
+            //           err.message &&
+            //           err.message.includes("getaddrinfo ENOTFOUND")
+            //         ) {
+            //           logger.error("BAD IP ADDRESS", ip);
+            //         } else if (
+            //           err.message &&
+            //           err.message.includes("Forbidden.Command not allowed.")
+            //         ) {
+            //           logger.error("NEED TO ENABLE CURRENT PROGRAM ACCESS", ip);
+            //         }
+            //       } else {
+            //         boxesInfo.push({ boxId, info: response });
+            //       }
+            //       return callback();
+            //     });
+            //   },
+            //   function(err) {
+            //     logger.info("about to save boxes...");
+            //     if (boxesInfo && boxesInfo.length) {
+            //       logger.info("saveBoxesInfo saving...");
+            //       logger.info("boxesInfo");
+            //       context.api.saveBoxesInfo(boxesInfo);
+            //     } else {
+            //       logger.error("no boxes");
+            //       logger.error(err);
+            //     }
+            //   }
+            // );
 
             break;
-          case 'options':
+          case "options":
             this.remote.getOptions((err, response) => {
               if (err) return logger.error(err);
-              return logger.info('options', response);
+              return logger.info("options", response);
             });
             break;
-          case 'locations':
+          case "locations":
             this.remote.getLocations(payload.type || 1, (err, response) => {
               if (err) return logger.error(err);
-              return logger.info('locations', response);
+              return logger.info("locations", response);
             });
             break;
-          case 'version':
+          case "version":
             this.remote.getVersion((err, response) => {
               if (err) return logger.error(err);
-              return logger.info('version', response);
+              return logger.info("version", response);
             });
             break;
-          case 'mode':
+          case "mode":
             this.remote.getMode(payload.client, (err, response) => {
               if (err) return logger.error(err);
-              return logger.info('mode', response);
+              return logger.info("mode", response);
             });
             break;
-          case 'sync.boxes':
+          case "sync.boxes":
             await this.syncIpsAndBoxes();
-            return logger.info('sync.boxes');
-          case 'health':
-            return logger.info('healthy');
+            return logger.info("sync.boxes");
+          case "health":
+            return logger.info("healthy");
           default:
             break;
         }

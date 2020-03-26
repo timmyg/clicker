@@ -7,6 +7,7 @@ import { FormsModule } from "@angular/forms";
 @NgModule({
   declarations: [LoginComponent],
   imports: [CommonModule, IonicModule, FormsModule],
+  entryComponents: [LoginComponent],
   exports: [LoginComponent]
 })
 export class AuthModule {}

@@ -1,60 +1,51 @@
 // @flow
 class Box {
   id: string;
-  clientAddress: string;
-  locationName: string;
   label: string;
-  tunerBond: boolean;
-  setupChannel: number;
-  ip: string;
-  reserved: boolean;
-  end: Date;
   zone: string;
-  notes: string;
-  appActive: boolean;
-  channel: number;
-  channelChangeAt: Date;
-  updatedAt: Date;
-  channelSource: string;
-  program: Program;
-  // clear() {
-  //   delete this.end;
-  //   // delete this.reserved;
-  // }
-}
-
-class BoxV2 {
-  id: string;
-  about: {
+  configuration: {
+    appActive: boolean,
+    automationActive: boolean,
+  };
+  info: {
     clientAddress: string,
     locationName: string,
-    label: string,
-    setupChannel: number,
     ip: string,
     notes: string,
   };
-  controlCenter: {
-    zone: string,
-  };
-  userControl: {
-    // clicker tv app
-    active: boolean, // formerly appActive
-    reserved: boolean,
-    end: Date,
-  };
-  current: {
+  live: {
     channel: number,
-    channelChangeAt: Date,
-    updatedAt: Date,
-    channelSource: string,
+    channelChangeAt: number,
+    channelChangeSource: string,
+    locked: boolean,
+    appLocked: boolean,
+    lockedUntil: number,
+    lockedProgrammingId: string,
+    lockedMessage: string,
+    program: Program,
   };
+  updatedAt: number;
 }
 
-export class Venue {
+class DirecTVBox {
+  boxId: string;
+  info: DirecTVBoxRaw;
+}
+
+class DirecTVBoxRaw {
+  major: number;
+  minor: number;
+  clientAddr: string;
+  ip: string;
+}
+
+class Base {
+  _v: number;
+}
+export class Venue extends Base {
   id: string;
   losantId: string;
   boxes: Box[];
-  boxesV2: BoxV2[];
   channels: {
     exclude: string[],
   };
@@ -66,6 +57,7 @@ export class Venue {
     longitude: number,
   };
   free: boolean;
+  losantProductionOverride: boolean;
   img: string;
   region: string;
   active: boolean;

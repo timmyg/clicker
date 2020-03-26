@@ -1,6 +1,7 @@
 <ion-card no-margin-horizontal>
   <ion-card-content>
     <ion-row>
+      <img [src]="reservation.location.img" class="logo" alt="location logo" />
       <ion-col>
         <ion-row>
           <ion-col
@@ -45,7 +46,6 @@
         flex
         align-items-center
       >
-        <img class="logo" src="{{reservation.location.img}}" alt="{{reservation.location}} logo">
         <a (click)="modify()">Modify</a>
       </ion-col>
     </ion-row>

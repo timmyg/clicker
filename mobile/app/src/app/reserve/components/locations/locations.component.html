@@ -81,11 +81,10 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
               <em>Results matching: {{searchTerm}}</em>
             </p>
             <p>
-              Sorry, no Clicker locations within {{ milesRadius }} miles 😢.
+              Sorry, no Clicker locations <span *ngIf="searchTerm && searchTerm.length">matching <b>{{searchTerm}} </b></span><span *ngIf="this.userGeolocation">within {{ milesRadius }} miles </span> 😢.
             </p>
             <p>
-              Bring Clicker to your neighborhood by telling us your favorite bar
-              below.
+              Bring Clicker to your neighborhood by clicking "Suggest New Location" from the menu.
             </p>
           </ion-card-content>
         </ion-card>
@@ -97,12 +96,6 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       >
         Find locations around you <br />by
         <a (click)="forceAllow()">allowing location services</a>
-      </p>
-      <p class="ion-text-center">
-        <a (click)="suggestLocation()">🍺 Suggest a new location</a>
-      </p>
-      <p class="ion-text-center">
-        <a (click)="openReferral()">🎁 Get Free Tokens</a>
       </p>
     </ion-list>
   </ng-template>

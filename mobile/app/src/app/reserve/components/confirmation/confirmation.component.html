@@ -1,28 +1,23 @@
-<ion-card *ngIf="reservation$ | async">
+<ion-card *ngIf="(reservation$ | async)">
   <ion-card-content>
     <div class="summary-wrapper">
       <div>
         <label> Location: </label>
-        <span
-          >{{ getLocationName() | truncate:[24] }}</span
-        >
+        <span>{{ getLocationName() | truncate: [24] }}</span>
       </div>
       <div>
         <label> Channel: </label>
-        <span
-          >{{ getChannelDescription()  | truncate:[24] }}</span
-        >
+        <span>{{ getChannelDescription() | truncate: [24] }}</span>
       </div>
       <div>
         <label> Reserved: </label>
-        <span *ngIf="reservation.minutes || isEditMode; else noReservation">TV{{ reservation.box.label }} until {{
-          getEndTime() | amDateFormat: "h:mma"
-        }}</span>
+        <span *ngIf="reservation.minutes || isEditMode; else noReservation"
+          >{{ reservation.box.label }} until
+          {{ getEndTime() | amDateFormat: "h:mma" }}</span
+        >
         <ng-template #noReservation> One-time change </ng-template>
       </div>
-      <div>
-        
-      </div>
+      <div></div>
     </div>
     <ion-list class="timeframes" *ngIf="!isEditChannel">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
@@ -36,7 +31,7 @@
         <ion-row *ngIf="isAppLoading" margin-vertical>
           <ion-spinner name="crescent" class="center"></ion-spinner>
         </ion-row>
-        <ion-item *ngFor="let timeframe of timeframes$ | async">
+        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label flex align-items-center>
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
             <div flex align-items-center>
@@ -63,8 +58,8 @@
       <span *ngIf="reservation.minutes !== 0; else noReservation">
         😎
         <b
-          >You will be able to freely change the channel during
-          your reservation timeframe.</b
+          >You will be able to freely change the channel during your reservation
+          timeframe.</b
         >
       </span>
       <ng-template #noReservation
@@ -83,7 +78,7 @@
       slot="end"
       [disabled]="
         saving ||
-        insufficientFunds() ||
+        (tokenCount$ | async) < reservation.cost ||
         (!isEditChannel && isAppLoading) ||
         (outOfRange && !overrideDistanceDisable) ||
         isInitializing
@@ -113,26 +108,31 @@
         <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span>
       </ng-template>
     </ion-button>
-    <ion-row class="ion-text-center" *ngIf="insufficientFunds()" margin-top>
+    <ion-row
+      class="ion-text-center"
+      *ngIf="(tokenCount$ | async) < reservation.cost"
+      margin-top
+    >
       <ion-text color="danger">
-        Heads up! You only have {{ tokenCount }}
-        <span *ngIf="tokenCount && tokenCount === 1; else tokens">token</span
+        Heads up! You have {{ tokenCount$ | async }}
+        <span
+          *ngIf="
+            (tokenCount$ | async) && (tokenCount$ | async) === 1;
+            else tokens
+          "
+          >token</span
         ><ng-template #tokens>tokens</ng-template> remaining. Please
-        <span *ngIf="!isLoggedIn"
-          ><a [routerLink]="'/tabs/profile'">login</a> and
-        </span>
+        <span *ngIf="!isLoggedIn"><a (click)="onLogin()">login</a> and </span>
         <span>add funds</span>.
       </ion-text>
     </ion-row>
-    <ion-row class="ion-text-center" *ngIf="outOfRange" margin-top>
+    <ion-row class="ion-text-center" *ngIf="outOfRange && !overrideDistanceDisable" margin-top>
       <ion-text color="danger" (click)="onClickOverrideDistance()">
         Sorry, you are too far away from
         <b
-          >{{ reservation.location.name }} ({{
-            reservation.location.neighborhood
-          }})</b
+          >{{ reservation.location.name }}</b
         >
-        to change the channel.
+        to change the channel. If this is a mistake, <a (click)="onClickOverrideDistanceForce()">click here</a>.
       </ion-text>
     </ion-row>
   </ion-card-content>

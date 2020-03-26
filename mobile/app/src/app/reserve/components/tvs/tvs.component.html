@@ -11,8 +11,9 @@
       size="large"
       expand="block"
       (click)="onTvClick(tv)"
-      [ngClass]="{ reserved: tv.reserved }"
+      [ngClass]="{ reserved: tv.live?.locked }"
       >{{ tv.label }}</ion-button
     >
   </ion-col>
 </ion-row>
+

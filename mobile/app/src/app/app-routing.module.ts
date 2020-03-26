@@ -11,7 +11,6 @@ const routes: Routes = [
     path: "profile",
     loadChildren: "./profile/profile.module#ProfilePageModule"
   }
-  // { path: 'referral', loadChildren: './referral/referral.module#ReferralPageModule' },
 ];
 @NgModule({
   imports: [

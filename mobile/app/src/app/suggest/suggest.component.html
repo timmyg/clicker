@@ -22,6 +22,7 @@
     type="submit"
     size="large"
     (click)="onSubmit()"
+    [disabled]="!suggestion || !suggestion.length"
     margin-top
     >Submit</ion-button
   >

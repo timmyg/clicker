@@ -27,6 +27,7 @@ export class ReservePage {
   showingLocations: boolean;
   tokenCount$: Observable<number>;
   percentageComplete: number;
+  percentageLeft: number;
   walletModal;
   sub: Subscription;
   pageSub: Subscription;
@@ -112,6 +113,7 @@ export class ReservePage {
             break;
         }
       }
+      this.percentageLeft = this.percentageComplete
     });
   }
 

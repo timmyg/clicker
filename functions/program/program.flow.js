@@ -862,7 +862,9 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
 module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
   const { location } = getBody(event);
 
-  const locationProgrammingIds = location.boxes.filter(b => !!b.zone).map(b => b.program && b.program.programmingId);
+  const locationProgrammingIds = location.boxes
+    .filter(b => b.configuration.automationActive)
+    .map(b => b.program && b.program.programmingId);
   const allUpcomingPrograms = await getAirtableProgramsInWindow();
   const upcomingPrograms = allUpcomingPrograms.filter(upcoming => !locationProgrammingIds.includes(upcoming.episodeId));
 
@@ -1259,6 +1261,8 @@ function getDefaultRating(program: Program): ?number {
     // { search: 'daily wager', rating: 1 },
     // { search: 'the herd', rating: 1 },
     // { search: 'skip and shannon', rating: 1 },
+    // { search: 'college gameday', rating: 1 },
+    // { search: 'mlb tonight', rating: 1 },
   ];
 
   // first things first

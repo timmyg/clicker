@@ -23,7 +23,7 @@
           ></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 
-          <span float-right *ngIf="location.distance">
+          <span float-right *ngIf="location.distance !== undefined">
             <span *ngIf="location.distance >= 0.2; else near">
               {{ getDistance() }} miles
             </span>
@@ -33,7 +33,7 @@
       </ion-card-header>
       <ion-card-content no-padding-top>
         <ion-row>
-          <img [src]="location.img" class="logo" />
+          <img [src]="location.img" class="logo" alt="location logo" />
           <h1>{{ location.name }}</h1>
         </ion-row>
         <ion-row>
