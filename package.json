@@ -9,7 +9,8 @@
     "http-server": "^0.11.1",
     "lerna": "^3.20.2",
     "node-fetch": "^2.6.0",
-    "vuefire": "^2.2.1"
+    "vuefire": "^2.2.1",
+    "wait-on": "^4.0.1"
   },
   "devDependencies": {
     "cordova-res": "^0.6.0",
