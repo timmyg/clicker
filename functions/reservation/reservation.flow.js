@@ -61,10 +61,14 @@ const dbReservation = dynamoose.model(
     },
     box: {
       id: { type: String, required: true },
-      ip: { type: String, required: true },
-      clientAddress: { type: String, required: true },
-      locationName: { type: String, required: true },
       label: { type: String, required: true },
+      zone: { type: String, required: true },
+      info: {
+        clientAddress: String, // dtv calls this clientAddr
+        locationName: String, // dtv name
+        ip: String,
+        notes: String,
+      },
     },
     program: {
       id: { type: String, required: true },
