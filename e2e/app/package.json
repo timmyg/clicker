@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:app": "npm start --prefix ../../mobile/app & npx wait-on http://localhost:4100",
     "test": "npx cypress open",
     "test:ci": "npx cypress run"
   },
@@ -13,6 +14,7 @@
     "cypress": "^4.0.2"
   },
   "dependencies": {
-    "indexed-db-utilities": "^2.1.1"
+    "indexed-db-utilities": "^2.1.1",
+    "wait-on": "^4.0.1"
   }
 }
