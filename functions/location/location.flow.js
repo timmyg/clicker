@@ -130,7 +130,6 @@ const dbLocation = dynamoose.model(
     hidden: Boolean,
     connected: Boolean,
     controlCenter: Boolean,
-    controlCenterV2: Boolean, // TODO remove
     announcement: String,
     notes: String,
     // calculated fields
@@ -877,6 +876,10 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   let locations: Venue[] = await dbLocation.scan().exec();
   locations = locations.filter(l => l.controlCenter === true);
   console.log(locations.map(l => l.name));
+  await new Invoke()
+    .service('program')
+    .name('syncAirtableUpdates')
+    .go();
   for (const location of locations) {
     await new Invoke()
       .service('location')
