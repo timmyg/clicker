@@ -159,7 +159,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 function getCurrentProgramText(eventName, location, program) {
-  return `*${eventName}* @ ${location.name} to ${program.title}  [${program.channelTitle} ${program.channel}]`;
+  return `*${eventName}* @ ${location.name} to ${program.title} {${program.clickerRating || 'NR'}}  [${
+    program.channelTitle
+  } ${program.channel}]`;
 }
 
 async function sendNotification(source: string, reservation: Reservation) {
@@ -168,14 +170,16 @@ async function sendNotification(source: string, reservation: Reservation) {
   const { program } = reservation;
   // const { channel } = program;
   const previousProgram = reservation.box && reservation.box.live && reservation.box.live.program;
-  const previousProgramText = `\n\t_previously ${previousProgram.title} ${previousProgram.clickerRating || 'NR'}_`;
+  const previousProgramText = `\n\t_previously ${previousProgram.title} {${previousProgram.clickerRating || 'NR'}} [${
+    previousProgram.channelTitle
+  } ${previousProgram.channel}]_`;
 
   if (source === zapTypes.app) {
     eventName = 'App Zap';
     userId = reservation.userId;
     const text =
       getCurrentProgramText(eventName, reservation.location, program) +
-      ` (${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)}` +
+      ` [${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)}]` +
       previousProgramText;
     await new Invoke()
       .service('notification')
