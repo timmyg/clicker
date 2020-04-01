@@ -170,9 +170,11 @@ async function sendNotification(source: string, reservation: Reservation) {
   const { program } = reservation;
   // const { channel } = program;
   const previousProgram = reservation.box && reservation.box.live && reservation.box.live.program;
-  const previousProgramText = `\n\t_previously ${previousProgram.title} {${previousProgram.clickerRating || 'NR'}} [${
-    previousProgram.channelTitle
-  } ${previousProgram.channel}]_`;
+  const previousProgramText = previousProgram
+    ? `\n\t_previously ${previousProgram.title} {${previousProgram.clickerRating || 'NR'}} [${
+        previousProgram.channelTitle
+      } ${previousProgram.channel}]_`
+    : '';
 
   if (source === zapTypes.app) {
     eventName = 'App Zap';
