@@ -873,6 +873,7 @@ class ControlCenterProgram {
 }
 
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log(JSON.stringify({event}))
   let locations: Venue[] = await dbLocation.scan().exec();
   locations = locations.filter(l => l.controlCenter === true);
   console.log(locations.map(l => l.name));
