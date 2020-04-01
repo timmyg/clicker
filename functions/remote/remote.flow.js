@@ -84,58 +84,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.timeEnd('change channel');
 
-  // slack garbage
-  let eventName, userId;
-  if (source === zapTypes.app) {
-    eventName = 'App Zap';
-    userId = reservation.userId;
-    const text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title}  [${
-      reservation.program.channelTitle
-    } ${channel}] (${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(
-      userId.length - 5,
-    )}\n\t_previously ${
-      reservation.box.program
-        ? `${reservation.box.program.title} {${
-            reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
-          }}`
-        : '?'
-    } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${reservation.box.channel}]_`;
-    await new Invoke()
-      .service('notification')
-      .name('sendApp')
-      .body({ text })
-      .async()
-      .go();
-  } else if (source === zapTypes.automation) {
-    eventName = 'Control Center Zap';
-    userId = 'system';
-    let text = `*${eventName}* @ ${reservation.location.name} to ${reservation.program.title} {${
-      reservation.program.clickerRating
-    }} [${reservation.program.channelTitle} ${channel} *Zone ${reservation.box.zone}*]\n\t_previously ${
-      reservation.box.program
-        ? `${reservation.box.program.title} {${
-            reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
-          }}`
-        : '?'
-    } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${reservation.box.channel}]_`;
-    // ccv1
-    if (!reservation.program.clickerRating) {
-      text = `*${eventName}* @ ${reservation.location.name} to ${channel} on *Zone ${reservation.box.zone}*`;
-      text += `\n\t_previously ${
-        reservation.box.program
-          ? `${reservation.box.program.title} {${
-              reservation.box.program.clickerRating ? reservation.box.program.clickerRating : 'NR'
-            }}`
-          : '?'
-      } [${reservation.box.program ? reservation.box.program.channelTitle : ''} ${reservation.box.channel}]_`;
-    }
-    await new Invoke()
-      .service('notification')
-      .name('sendControlCenter')
-      .body({ text })
-      .async()
-      .go();
-  }
+  await sendNotification(source, reservation);
 
   // $FlowFixMe
   let updateBoxInfoBody: BoxInfoRequest = {
@@ -144,7 +93,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     channelChangeAt: moment().unix() * 1000,
   };
 
-  // set lockedPorgrammingId if highly rated automation
+  // set lockedProgrammingId if highly rated automation
   console.log({ reservation });
   const highRatings = [10, 9, 8, 7];
   const isHighlyRated =
@@ -165,7 +114,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     .async()
     .go();
 
-  const name = eventName;
+  const name = source;
   const data = {
     boxLabel: reservation.box.label,
     boxZone: reservation.box.zone,
@@ -187,7 +136,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   await new Invoke()
     .service('analytics')
     .name('track')
-    .body({ userId, name, data })
+    .body({ userId: reservation.userId, name, data })
     .async()
     .go();
   console.timeEnd('track event');
@@ -208,6 +157,52 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
 
   return respond();
 });
+
+function getCurrentProgramText(eventName, location, program) {
+  return `*${eventName}* @ ${location.name} to ${program.title} {${program.clickerRating || 'NR'}}  [${
+    program.channelTitle
+  } ${program.channel}]`;
+}
+
+async function sendNotification(source: string, reservation: Reservation) {
+  console.log({ source, reservation });
+  let eventName, userId;
+  const { program } = reservation;
+  // const { channel } = program;
+  const previousProgram = reservation.box && reservation.box.live && reservation.box.live.program;
+  const previousProgramText = previousProgram
+    ? `\n\t_previously ${previousProgram.title} {${previousProgram.clickerRating || 'NR'}} [${
+        previousProgram.channelTitle
+      } ${previousProgram.channel}]_`
+    : '';
+
+  if (source === zapTypes.app) {
+    eventName = 'App Zap';
+    userId = reservation.userId;
+    const text =
+      getCurrentProgramText(eventName, reservation.location, program) +
+      ` [${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)}]` +
+      previousProgramText;
+    await new Invoke()
+      .service('notification')
+      .name('sendApp')
+      .body({ text })
+      .async()
+      .go();
+  } else if (source === zapTypes.automation) {
+    eventName = 'Control Center Zap';
+    const text =
+      getCurrentProgramText(eventName, reservation.location, program) +
+      ` Zone ${reservation.box.zone} ` +
+      previousProgramText;
+    await new Invoke()
+      .service('notification')
+      .name('sendControlCenter')
+      .body({ text })
+      .async()
+      .go();
+  }
+}
 
 module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   try {
