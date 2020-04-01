@@ -2,16 +2,15 @@
 Cypress.config("pageLoadTimeout", 12000);
 Cypress.config("defaultCommandTimeout", 12000);
 
-// environmen
+// const environment = require('../../../src/environments/environment');
 
 // describe('creating reservations', () => {
 context("Reservations", () => {
-  beforeEach("create test location", done => {
-    cy.request("POST", "/test/seed/post", {
-      title: "First Post",
-      authorId: 1,
-      body: "..."
-    });
+  // cy.log('environment!', environment)
+  beforeEach("create test location", () => {
+    // const body = require('./')
+    const location = require('../fixtures/requests/location.json');
+    cy.request("POST", "https://api-develop.tryclicker.com/locations", location);
   });
 
   beforeEach("login + set geolocation", done => {
