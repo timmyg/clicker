@@ -19,8 +19,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
-          start: cd e2e && npm run start:app
-          working-directory: mobile/app
+          working-directory: mobile/app/e2e
+          start: cd .. && npm i && npm start
+          wait-on: "http://localhost:4100"
           record: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
