@@ -16,11 +16,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Cypress run
+      - name: Start app and run end-to-end tests
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app/e2e
-          start: npm run start:app
+          start: npm run install-dependencies:app && npm run start:app
           wait-on: "http://localhost:4100"
           record: true
         env:
