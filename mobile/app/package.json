@@ -5,7 +5,8 @@
   "homepage": "https://tryclicker.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4100 --host local.tryclicker.com",
+    "start": "ng serve --port 4100",
+    "start:host": "ng serve --port 4100 --host local.tryclicker.com",
     "build": "ng build --configuration=production",
     "build:env": "ng build --configuration=$ENV",
     "build:release": "ng build --configuration=release",
