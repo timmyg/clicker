@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:app": "npm start --prefix ../ & npx wait-on http://localhost:4100",
+    "start:app": "npm start --prefix ../",
+    "start:app:wait": "npm start --prefix ../ && npx wait-on http://localhost:4100",
     "test": "npx cypress open",
     "test:ci": "npx cypress run",
     "run:test": "npm run start:app && npm run test",
