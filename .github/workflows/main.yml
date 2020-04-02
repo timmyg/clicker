@@ -2,6 +2,7 @@ name: End-to-end tests
 on:
   push:
     branches:
+      - develop
       - release
     paths:
       - "functions/**"
@@ -18,7 +19,8 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
-          working-directory: e2e/app
+          start: npm start
+          working-directory: mobile/app/e2e
           record: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
