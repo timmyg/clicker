@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install-dependencies:app": "npm install --prefix ../ ../ ",
     "start:app": "npm start --prefix ../",
     "start:app:wait": "npm start --prefix ../ && npx wait-on http://localhost:4100",
     "test": "npx cypress open",
