@@ -21,6 +21,10 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           working-directory: mobile/app
+      - name: Start server in the background
+        run: npm start &
+        with:
+          working-directory: mobile/app
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
