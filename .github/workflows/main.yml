@@ -32,5 +32,7 @@ jobs:
           start: npm run test:ci
           wait-on: "http://localhost:4100"
           record: true
+          browser: chrome
+          headless: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
