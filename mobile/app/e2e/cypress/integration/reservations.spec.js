@@ -1,16 +1,23 @@
 // TODO remove these when the app isnt so slow
-Cypress.config("pageLoadTimeout", 12000);
-Cypress.config("defaultCommandTimeout", 12000);
+// Cypress.config("pageLoadTimeout", 12000);
+// Cypress.config("defaultCommandTimeout", 12000);
 
 // const environment = require('../../../src/environments/environment');
 
 // describe('creating reservations', () => {
 context("Reservations", () => {
-  // cy.log('environment!', environment)
-  beforeEach("create test location", () => {
-    // const body = require('./')
-    const location = require('../fixtures/requests/location.json');
-    cy.request("POST", "https://api-develop.tryclicker.com/locations", location);
+  before("create test location", () => {
+    const location = require("../fixtures/requests/location.json");
+    cy.request(
+      "POST",
+      "https://api-develop.tryclicker.com/locations",
+      location
+    );
+  });
+
+  after("delete test location", () => {
+    const { id } = require("../fixtures/requests/location.json");
+    cy.request("DELETE", `https://api-develop.tryclicker.com/locations/${id}`);
   });
 
   beforeEach("login + set geolocation", done => {

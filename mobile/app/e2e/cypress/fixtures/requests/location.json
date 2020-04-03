@@ -1,13 +1,14 @@
 {
-    "name": "Test Wicked Wolf ! !",
-    "neighborhood": "Hoboken",
-    "losantId": "xxx",
-    "img": "https://www.hoboken-bar.net/wp-content/uploads/2018/03/hbn-wwt-logo-400x400.png",
-    "geo": {
-        "latitude": 40.7499343,
-        "longitude": -74.0254294
-    },
-    "active": true,
-    "boxes": [],
-    "packages": ["31", "54"]
+  "id": "03cad623-7972-5568-9ad1-69c1115a4fdd",
+  "name": "Test Wicked Wolf",
+  "neighborhood": "Hoboken",
+  "losantId": "xxx",
+  "img": "https://www.hoboken-bar.net/wp-content/uploads/2018/03/hbn-wwt-logo-400x400.png",
+  "geo": {
+    "latitude": 40.7499343,
+    "longitude": -74.0254294
+  },
+  "active": true,
+  "boxes": [],
+  "packages": ["31", "54"]
 }
