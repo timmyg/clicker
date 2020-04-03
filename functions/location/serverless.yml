@@ -154,6 +154,12 @@ functions:
       - http:
           path: '{id}/boxes/{boxId}'
           method: get
+  delete:
+    handler: location.delete
+    events:
+      - http:
+          path: '{id}'
+          method: delete
   create:
     handler: location.create
     events:

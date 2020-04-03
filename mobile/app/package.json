@@ -19,9 +19,8 @@
     "build:android:prod": "ng build --configuration=production && npx cap sync android && npx cap open android",
     "generate:assets": "npx cordova-res",
     "test": "ng test",
-    "test:ui": "npx cypress run",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "npx cypress open",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {

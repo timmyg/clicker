@@ -348,6 +348,12 @@ function setBoxStatus(box: Box): Box {
   return box;
 }
 
+module.exports.delete = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  const location: Venue = await dbLocation.delete({ id });
+  return respond(202, location);
+});
+
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const body = getBody(event);

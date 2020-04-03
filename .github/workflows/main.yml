@@ -31,8 +31,8 @@ jobs:
           working-directory: mobile/app/e2e
           start: npm run test:ci
           wait-on: "http://localhost:4100"
-          record: true
           browser: chrome
+          record: true
           headless: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
