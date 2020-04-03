@@ -20,6 +20,7 @@
     "generate:assets": "npx cordova-res",
     "test": "ng test",
     "e2e": "npx cypress open",
+    "e2e:headless": "npx cypress run --headless",
     "lint": "ng lint"
   },
   "private": true,
@@ -86,7 +87,7 @@
     "@types/node": "^10.12.29",
     "codelyzer": "~4.5.0",
     "cordova-res": "^0.6.0",
-    "cypress": "^3.4.1",
+    "cypress": "^4.3.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.4",
