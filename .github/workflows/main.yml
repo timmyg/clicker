@@ -29,8 +29,8 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
-          working-directory: mobile/app/e2e
-          start: npm run test:ci
+          working-directory: mobile/app
+          start: npm run e2e
           wait-on: "http://localhost:4100"
           browser: chrome
           record: true
