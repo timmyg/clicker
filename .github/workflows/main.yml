@@ -22,7 +22,7 @@ jobs:
         with:
           working-directory: mobile/app
       - name: Start server in the background
-        run: pwd && cd mobile/app && pwd && npm start &
+        run: cd mobile/app && npm start &
         # with:
         #   working-directory: mobile/app
       - name: Cypress run
