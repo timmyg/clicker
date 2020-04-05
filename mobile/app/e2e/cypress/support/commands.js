@@ -13,7 +13,7 @@
 
 Cypress.Commands.add("landingPage", callback => {
   const baseUrl = "http://localhost:4100";
-  cy.fixture("location.json").as("fakeLocation");
+  cy.fixture("geolocation.json").as("fakeLocation");
   cy.get("@fakeLocation").then(fakeLocation => {
     cy.visit(baseUrl, {
       onBeforeLoad(win) {

@@ -1,4 +1,5 @@
 <div class="wrapper" [class.loading]="isLoading$ | async" (click)="onClick()">
   <img class="title-image" src="./assets/coin.svg" width="22" height="22" />
-  <span>&nbsp;{{ tokenCount$ | async }}</span>
+  <span>&nbsp;</span>
+  <span class="count">{{ tokenCount$ | async }}</span>
 </div>
