@@ -2,7 +2,6 @@ name: End-to-end tests
 on:
   push:
     branches:
-      - develop
       - release
     paths:
       - "functions/**"
