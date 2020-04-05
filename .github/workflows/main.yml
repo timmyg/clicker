@@ -25,7 +25,7 @@ jobs:
         working-directory: mobile/app
         run: cd mobile/app && npm start &
         # with:
-        #   working-directory: mobile/app
+        working-directory: mobile/app
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
