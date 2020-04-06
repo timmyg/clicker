@@ -7,13 +7,13 @@ Cypress.config("defaultCommandTimeout", timeout);
 
 // describe('creating reservations', () => {
 context("Reservations", () => {
-  before("create test location", () => {
+  before("create test location", (done) => {
     const location = require("../fixtures/requests/location.json");
     cy.request(
       "POST",
       "https://api-develop.tryclicker.com/locations",
       location
-    );
+    ).then((x) => done());
   });
 
   after("delete test location", () => {

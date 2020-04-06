@@ -29,7 +29,7 @@ jobs:
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          start: npm run e2e:headless
+          # start: npm run e2e:headless
           wait-on: "http://localhost:4100"
           # browser: chrome
           record: true
