@@ -25,6 +25,7 @@ npm start
 - iPhone XS Max for 6.5"
 - iPhone 8+ for 5.5"
 - Pixel 3
+- 
 
 
 
