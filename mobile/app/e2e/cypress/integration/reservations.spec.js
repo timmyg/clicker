@@ -1,5 +1,5 @@
 // TODO remove these when the app isnt so slow
-const timeout = 8000;
+const timeout = 12000;
 Cypress.config("pageLoadTimeout", timeout);
 Cypress.config("defaultCommandTimeout", timeout);
 
@@ -7,13 +7,13 @@ Cypress.config("defaultCommandTimeout", timeout);
 
 // describe('creating reservations', () => {
 context("Reservations", () => {
-  before("create test location", (done) => {
+  before("create test location", () => {
     const location = require("../fixtures/requests/location.json");
     cy.request(
       "POST",
       "https://api-develop.tryclicker.com/locations",
       location
-    ).then((x) => done());
+    );
   });
 
   after("delete test location", () => {
@@ -34,10 +34,14 @@ context("Reservations", () => {
   });
 
   it("should create a reservation", () => {
-    cy.get("app-coins .count").then(($count) => {
-      cy.log("count", $count);
-      expect($count).to.have.text("1");
-    });
+    // cy.get("app-coins .coins")
+    //   .then(($count) => {
+    //     cy.log("count", $count);
+    //     expect($count).to.have.text("1");
+    //   });
+    cy.get("app-coins")
+      .find(".count")
+      .contains("1");
     cy.get("app-location:nth-of-type(1) ion-card-content h1")
       .contains("Test Wicked Wolf")
       .click();
