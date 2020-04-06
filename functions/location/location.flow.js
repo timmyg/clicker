@@ -358,7 +358,15 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const body = getBody(event);
     body._v = 2;
-    console.log(body);
+    if (body.id) {
+      const existingLocation: Venue = await dbLocation
+        .queryOne('id')
+        .eq(body.id)
+        .exec();
+      if (existingLocation) {
+        return respond(200, existingLocation);
+      }
+    }
     const location: Venue = await dbLocation.create(body);
     return respond(201, location);
   } catch (e) {
