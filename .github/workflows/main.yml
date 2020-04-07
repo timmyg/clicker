@@ -29,6 +29,6 @@ jobs:
           # wait-on: "http://localhost:4100"
           # browser: chrome
           record: true
-          # headless: true
+          headless: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
