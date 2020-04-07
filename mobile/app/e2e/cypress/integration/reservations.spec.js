@@ -43,8 +43,8 @@ context("Reservations", () => {
       .find(".count")
       .contains("1");
     cy.get("app-location:nth-of-type(1) ion-card-content h1")
-      // .contains("Test Wicked Wolf")
-      .contains("blha blah bad")
+      .contains("Test Wicked Wolf")
+      // .contains("blha blah bad")
       .click({ force: true });
     cy.get(
       "ion-list[data-atm='programs']:not(.content-loading) app-program:nth-of-type(2) ion-card-content .title"
