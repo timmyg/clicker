@@ -22,14 +22,14 @@ jobs:
           working-directory: mobile/app
       - name: Start server in the background
         # run: cd mobile/app && npm start &
-        run: pwd && cd mobile/app && pwd && ls && npm start &
-        # working-directory: mobile/app
+        run: pwd && ls && npm start:wait
+        working-directory: mobile/app
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
           # start: npm run e2e:headless
-          wait-on: "http://localhost:4100"
+          # wait-on: "http://localhost:4100"
           browser: chrome
           record: true
           # headless: true
