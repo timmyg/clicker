@@ -44,14 +44,14 @@ context("Reservations", () => {
       .contains("1");
     cy.get("app-location:nth-of-type(1) ion-card-content h1")
       .contains("Test Wicked Wolf")
-      .click();
+      .click({ force: true });
     cy.get(
       "ion-list[data-atm='programs']:not(.content-loading) app-program:nth-of-type(2) ion-card-content .title"
     ).click({ force: true });
     cy.get("app-tvs ion-button")
       .contains("2")
-      .click();
-    cy.get("ion-button#confirm:not([disabled])").click();
+      .click({ force: true });
+    cy.get("ion-button#confirm:not([disabled])").click({ force: true });
     cy.get("app-reservation").should(($reservations) => {
       expect($reservations).to.have.length(1);
     });
