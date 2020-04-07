@@ -25,10 +25,10 @@ jobs:
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
+          record: true
+          headless: true
           # start: npm run e2e:headless
           # wait-on: "http://localhost:4100"
           # browser: chrome
-          record: true
-          headless: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
