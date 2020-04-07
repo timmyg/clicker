@@ -14,14 +14,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
       - name: Install app dependencies
         uses: bahmutov/npm-install@v1
         with:
           working-directory: mobile/app
       - name: Start server in the background
-        # run: cd mobile/app && npm start &
         run: pwd && ls && npm run start:wait
         working-directory: mobile/app
       - name: Cypress run
@@ -30,7 +27,7 @@ jobs:
           working-directory: mobile/app
           # start: npm run e2e:headless
           # wait-on: "http://localhost:4100"
-          browser: chrome
+          # browser: chrome
           record: true
           # headless: true
         env:
