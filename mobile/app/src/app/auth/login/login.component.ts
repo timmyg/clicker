@@ -19,8 +19,8 @@ import { Component, ViewChild } from "@angular/core";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent {
-  @ViewChild("phoneInput", { static: false }) phoneInput: IonInput;
-  @ViewChild("codeInput", { static: false }) codeInput: IonInput;
+  @ViewChild("phoneInput") phoneInput: IonInput;
+  @ViewChild("codeInput") codeInput: IonInput;
   phone: string;
   code: string;
   codeSent: boolean;

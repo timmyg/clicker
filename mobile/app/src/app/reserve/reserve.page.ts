@@ -20,7 +20,7 @@ import { Deploy } from "cordova-plugin-ionic/dist/ngx";
   encapsulation: ViewEncapsulation.None
 })
 export class ReservePage {
-  @ViewChild("searchbar", { static: false }) searchbar: IonSearchbar;
+  @ViewChild("searchbar") searchbar: IonSearchbar;
   title: String;
   searchMode: boolean;
   showingLocations: boolean;
