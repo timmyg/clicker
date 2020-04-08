@@ -187,6 +187,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
       locations[i].distance = roundedMiles;
     }
   });
+  console.log({ allLocations });
   if (milesRadius && latitude && longitude) {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
