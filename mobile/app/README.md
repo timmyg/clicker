@@ -26,3 +26,6 @@ npm start
 - iPhone 8+ for 5.5"
 - Pixel 3
 
+
+
+

@@ -31,7 +31,8 @@ Cypress.Commands.add("landingPage", callback => {
 });
 
 Cypress.Commands.add("initialSetup", callback => {
-  cy.viewport("iphone-6+");
+  // cy.viewport("iphone-6+");
+  cy.viewport("macbook-15");
   const dbName = "_ionicstorage";
   const storeName = "_ionickv";
   indexedDB.deleteDatabase(dbName);

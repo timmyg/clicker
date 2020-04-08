@@ -1,7 +1,6 @@
 import { Component, ViewChild, ViewEncapsulation } from "@angular/core";
 import {
   NavController,
-  Events,
   IonSearchbar,
   ModalController,
   Platform,
@@ -41,7 +40,7 @@ export class ReservePage {
     private navCtrl: NavController,
     private router: Router,
     private platform: Platform,
-    public events: Events,
+    // public events: Events,
     public modalController: ModalController,
     private walletPage: WalletPage,
     public toastController: ToastController,
