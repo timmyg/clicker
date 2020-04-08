@@ -21,7 +21,7 @@ jobs:
       #   with:
       #     working-directory: mobile/app
       - name: Start server in the background
-        run: node  d-v && ls && pwd && npm ci && npm run start:wait
+        run: node -v && ls && pwd && npm ci && npm run start:wait
         working-directory: mobile/app
       - name: Cypress run
         uses: cypress-io/github-action@v1
