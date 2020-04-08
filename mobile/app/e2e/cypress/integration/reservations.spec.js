@@ -7,6 +7,11 @@ Cypress.config("defaultCommandTimeout", timeout);
 
 // describe('creating reservations', () => {
 context("Reservations", () => {
+  beforeEach(() => {
+    // run these tests as if in a desktop
+    // browser with a 720p monitor
+    cy.viewport(1280, 720)
+  })
   before("create test location", () => {
     const location = require("../fixtures/requests/location.json");
     cy.request(
