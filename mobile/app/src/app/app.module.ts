@@ -2,7 +2,7 @@ import {
   NgModule,
   APP_INITIALIZER,
   Injectable,
-  ErrorHandler
+  ErrorHandler,
 } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouteReuseStrategy } from "@angular/router";
@@ -35,13 +35,13 @@ import { AuthModule } from "./auth/auth.module";
 
 Sentry.init({
   dsn: environment.sentry.dsn,
-  environment: environment.stage
+  environment: environment.stage,
 });
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {
-    console.log({environment});
+    console.log({ environment });
   }
   handleError(error) {
     console.error(error);
@@ -54,7 +54,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 export function checkParams(store: Store<AppState>): Function {
   return () =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       const urlParams = new URLSearchParams(window.location.search);
       const partner = urlParams.get("partner");
       if (partner) {
@@ -67,12 +67,12 @@ export function checkParams(store: Store<AppState>): Function {
 
 export function initUserStuff(store: Store<AppState>): Function {
   return () =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       store.dispatch(new fromUser.Load()); // TODO should this be refresh?
       store
         .select((state: any) => state.user)
         .pipe(
-          filter(user => user.authToken && user.authToken.length),
+          filter((user) => user.authToken && user.authToken.length),
           take(1)
         )
         .subscribe(() => {
@@ -87,15 +87,15 @@ export function initUserStuff(store: Store<AppState>): Function {
     MenuModule,
     AuthModule,
     BrowserModule,
-    SegmentModule.forRoot({
-      apiKey: environment.segment.writeKey,
-      debug: !environment.production,
-      loadOnInitialization: true
-    }),
+    // SegmentModule.forRoot({
+    //   apiKey: environment.segment.writeKey,
+    //   debug: !environment.production,
+    //   loadOnInitialization: true
+    // }),
     IonicModule.forRoot(),
     AppRoutingModule,
     StateModule.forRoot(),
-    CoreModule.forRoot()
+    CoreModule.forRoot(),
     // IntercomModule.forRoot({
     //   appId: environment.intercom.appId, // from your Intercom config
     //   updateOnRouterChange: true, // will automatically run `update` on router event changes. Default: `false`
@@ -107,13 +107,13 @@ export function initUserStuff(store: Store<AppState>): Function {
       provide: APP_INITIALIZER,
       useFactory: checkParams,
       multi: true,
-      deps: [Store]
+      deps: [Store],
     },
     {
       provide: APP_INITIALIZER,
       useFactory: initUserStuff,
       multi: true,
-      deps: [Store]
+      deps: [Store],
     },
     StatusBar,
     SplashScreen,
@@ -121,13 +121,13 @@ export function initUserStuff(store: Store<AppState>): Function {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,
-      multi: true
+      multi: true,
     },
     Geolocation,
     Diagnostic,
     SentryErrorHandler,
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

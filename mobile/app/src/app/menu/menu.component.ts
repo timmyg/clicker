@@ -1,30 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController, ActionSheetController, ToastController, Platform, ModalController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
-import { SegmentService } from 'ngx-segment-analytics';
-import { Globals } from '../globals';
-import { LoginComponent } from '../auth/login/login.component';
-import { Subscription, Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-import { ReferralPage } from '../referral/referral.page';
+import { Component, OnInit } from "@angular/core";
 import {
-  isLoggedIn
-} from "../state/user";
-import { User } from '@sentry/browser';
-import { Store } from '@ngrx/store';
+  AlertController,
+  ActionSheetController,
+  ToastController,
+  Platform,
+  ModalController,
+} from "@ionic/angular";
+import { Storage } from "@ionic/storage";
+// import { SegmentService } from 'ngx-segment-analytics';
+import { Globals } from "../globals";
+import { LoginComponent } from "../auth/login/login.component";
+import { Subscription, Observable } from "rxjs";
+import { first } from "rxjs/operators";
+import { ReferralPage } from "../referral/referral.page";
+import { isLoggedIn } from "../state/user";
+import { User } from "@sentry/browser";
+import { Store } from "@ngrx/store";
 import * as fromStore from "../state/app.reducer";
 import * as fromUser from "../state/user/user.actions";
-import {
-  getUser,
-  getLoading as getWalletLoading,
-} from "../state/user";
-import { SuggestComponent } from '../suggest/suggest.component';
+import { getUser, getLoading as getWalletLoading } from "../state/user";
+import { SuggestComponent } from "../suggest/suggest.component";
 declare var window: any;
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
+  selector: "app-menu",
+  templateUrl: "./menu.component.html",
+  styleUrls: ["./menu.component.scss"],
 })
 export class MenuComponent {
   user$: Observable<User>;
@@ -33,43 +34,46 @@ export class MenuComponent {
   loginModal;
   rating = {
     cookieName: "rating",
-    given: "given"
+    given: "given",
   };
   showRatingLink = false;
   sub: Subscription;
   isLoggedIn$: Observable<boolean>;
   isLoggedIn: boolean;
 
-  constructor(public alertController: AlertController,
-    private storage: Storage, public actionSheetController: ActionSheetController, 
+  constructor(
+    public alertController: AlertController,
+    private storage: Storage,
+    public actionSheetController: ActionSheetController,
     public toastController: ToastController,
-    private segment: SegmentService,
+    // private segment: SegmentService,
     private platform: Platform,
     public modalController: ModalController,
     private globals: Globals,
-    private store: Store<fromStore.AppState>) {
-      this.isLoggedIn$ = this.store.select(isLoggedIn);
-      this.isLoggedIn$.subscribe(isLoggedIn => {
-        this.isLoggedIn = isLoggedIn;
-      });
-      this.user$ = this.store.select(getUser);
-    }
+    private store: Store<fromStore.AppState>
+  ) {
+    this.isLoggedIn$ = this.store.select(isLoggedIn);
+    this.isLoggedIn$.subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+    });
+    this.user$ = this.store.select(getUser);
+  }
 
-    ngOnInit() {
-      this.user$.pipe(first()).subscribe(user => {
-        console.log({ user });
-        if (!user) {
-          this.store.dispatch(new fromUser.Load());
-        }
-      });
-      this.platform.backButton.pipe(first()).subscribe(() => {
-        // android
-        if (this.loginModal) {
-          this.loginModal.close();
-        }
-      });
-      this.configureRating();
-    }
+  ngOnInit() {
+    this.user$.pipe(first()).subscribe((user) => {
+      console.log({ user });
+      if (!user) {
+        this.store.dispatch(new fromUser.Load());
+      }
+    });
+    this.platform.backButton.pipe(first()).subscribe(() => {
+      // android
+      if (this.loginModal) {
+        this.loginModal.close();
+      }
+    });
+    this.configureRating();
+  }
 
   async onLogout() {
     const alert = await this.alertController.create({
@@ -78,7 +82,7 @@ export class MenuComponent {
       buttons: [
         {
           text: "Cancel",
-          role: "cancel"
+          role: "cancel",
         },
         {
           text: "Logout",
@@ -91,9 +95,9 @@ export class MenuComponent {
             await this.storage.set("originalToken", originalToken);
             await this.storage.set("token", originalToken);
             return location.reload();
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
@@ -111,12 +115,12 @@ export class MenuComponent {
             const toast = await this.toastController.create({
               message: `We appreciate it! 🙌😁😍🎉😻🎈`,
               duration: 3000,
-              cssClass: "ion-text-center"
+              cssClass: "ion-text-center",
             });
             await toast.present();
-            this.segment.track(this.globals.events.rated);
-            this.segment.identify(null, { rated: true });
-          }
+            // this.segment.track(this.globals.events.rated);
+            // this.segment.identify(null, { rated: true });
+          },
         },
         {
           text: "Leave rating",
@@ -134,9 +138,9 @@ export class MenuComponent {
             }
             window.open(link);
             return null;
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await actionSheet.present();
@@ -144,7 +148,7 @@ export class MenuComponent {
 
   async onLogin() {
     this.loginModal = await this.modalController.create({
-      component: LoginComponent
+      component: LoginComponent,
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.loginModal) {
@@ -164,7 +168,7 @@ export class MenuComponent {
 
   async onSuggestLocation() {
     this.suggestModal = await this.modalController.create({
-      component: SuggestComponent
+      component: SuggestComponent,
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.suggestModal) {
@@ -177,7 +181,7 @@ export class MenuComponent {
   async onOpenReferral() {
     if (this.isLoggedIn) {
       this.referralModal = await this.modalController.create({
-        component: ReferralPage
+        component: ReferralPage,
       });
       this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
         if (this.referralModal) {
@@ -195,7 +199,7 @@ export class MenuComponent {
             text: "Login",
             handler: async () => {
               this.loginModal = await this.modalController.create({
-                component: LoginComponent
+                component: LoginComponent,
               });
               this.sub = this.platform.backButton
                 .pipe(first())
@@ -205,9 +209,9 @@ export class MenuComponent {
                   }
                 });
               return await this.loginModal.present();
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
       toast.present();
     }
@@ -221,5 +225,4 @@ export class MenuComponent {
       this.showRatingLink = true;
     }
   }
-
 }

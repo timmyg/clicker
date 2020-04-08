@@ -14,13 +14,13 @@ import { Actions, ofType } from "@ngrx/effects";
 import { first } from "rxjs/operators";
 import { getLoading } from "src/app/state/location";
 import { Globals } from "src/app/globals";
-import { SegmentService } from "ngx-segment-analytics";
+// import { SegmentService } from "ngx-segment-analytics";
 import { getUserGeolocation } from "src/app/state/user";
 
 @Component({
   selector: "app-tvs",
   templateUrl: "./tvs.component.html",
-  styleUrls: ["./tvs.component.scss"]
+  styleUrls: ["./tvs.component.scss"],
 })
 export class TvsComponent implements OnDestroy, OnInit {
   tvs$: Observable<TV[]>;
@@ -36,26 +36,26 @@ export class TvsComponent implements OnDestroy, OnInit {
     private store: Store<fromStore.AppState>,
     public reserveService: ReserveService,
     private router: Router,
-    private segment: SegmentService,
+    // private segment: SegmentService,
     private globals: Globals,
     private route: ActivatedRoute,
     private toastController: ToastController,
     private actions$: Actions
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
-    this.tvs$.pipe(first()).subscribe(tvs => {
+    this.tvs$.pipe(first()).subscribe((tvs) => {
       if (tvs.length === 1) {
         this.onTvClick(tvs[0], true);
       }
     });
     this.reservation$ = this.store.select(getReservation);
-    this.reservation$.subscribe(r => (this.reservation = r));
+    this.reservation$.subscribe((r) => (this.reservation = r));
     this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(
       () => this.refresh()
     );
     this.userGeolocation$ = this.store.select(getUserGeolocation);
-    this.userGeolocation$.subscribe(userGeolocation => {
+    this.userGeolocation$.subscribe((userGeolocation) => {
       console.log({ userGeolocation });
       this.userGeolocation = userGeolocation;
     });
@@ -77,16 +77,16 @@ export class TvsComponent implements OnDestroy, OnInit {
         // ).format("h:mma")}.`,
         message: tv.live && tv.live.lockedMessage,
         duration: 2000,
-        cssClass: "ion-text-center"
+        cssClass: "ion-text-center",
       });
       toast.present();
-      return await this.segment.track(this.globals.events.tv.reserved);
+      // return await this.segment.track(this.globals.events.tv.reserved);
     }
     this.store.dispatch(new fromReservation.SetTv(tv));
-    await this.segment.track(this.globals.events.reservation.selectedTV, tv);
+    // await this.segment.track(this.globals.events.reservation.selectedTV, tv);
     this.router.navigate(["../confirmation"], {
       relativeTo: this.route,
-      replaceUrl: removeFromHistory
+      replaceUrl: removeFromHistory,
     });
   }
 
