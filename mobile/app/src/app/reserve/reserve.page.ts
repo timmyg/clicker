@@ -1,7 +1,6 @@
 import { Component, ViewChild, ViewEncapsulation } from "@angular/core";
 import {
   NavController,
-  // Events,
   IonSearchbar,
   ModalController,
   Platform,
