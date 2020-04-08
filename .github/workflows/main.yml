@@ -14,12 +14,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Install app dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: mobile/app
+      # - name: Install app dependencies
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     working-directory: mobile/app
       - name: Start server in the background
-        run: ls && pwd && npm run start:wait
+        run: ls && pwd && npm ci && npm run start:wait
         working-directory: mobile/app
       - name: Cypress run
         uses: cypress-io/github-action@v1
