@@ -18,18 +18,16 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           working-directory: mobile/app
-      # - name: Start server in the background
-      #   run: npm i && npm run start:wait
-      #   working-directory: mobile/app
+      - name: Start server in the background
+        run: ls && pwd && npm run start:wait
+        working-directory: mobile/app
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          wait-on: "http://localhost:4200"
           # start: npm run e2e:headless
+          # wait-on: "http://localhost:4100"
           # browser: chrome
-          # with:
-          start: npm start
           record: true
           headless: true
         env:
