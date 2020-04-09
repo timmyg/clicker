@@ -20,7 +20,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       else showLocations
     "
   >
-    <ion-icon name="pin" class="location"></ion-icon>
+    <ion-icon name="location" class="location"></ion-icon>
     <p>
       Clicker TV needs access to your location for more accurate location
       details. This data is not shared or stored.
@@ -78,13 +78,20 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
         <ion-card>
           <ion-card-content class="ion-text-center">
             <p *ngIf="searchTerm">
-              <em>Results matching: {{searchTerm}}</em>
+              <em>Results matching: {{ searchTerm }}</em>
             </p>
             <p>
-              Sorry, no Clicker locations <span *ngIf="searchTerm && searchTerm.length">matching <b>{{searchTerm}} </b></span><span *ngIf="this.userGeolocation">within {{ milesRadius }} miles </span> 😢.
+              Sorry, no Clicker locations
+              <span *ngIf="searchTerm && searchTerm.length"
+                >matching <b>{{ searchTerm }} </b></span
+              ><span *ngIf="this.userGeolocation"
+                >within {{ milesRadius }} miles
+              </span>
+              😢.
             </p>
             <p>
-              Bring Clicker to your neighborhood by clicking "Suggest New Location" from the menu.
+              Bring Clicker to your neighborhood by clicking "Suggest New
+              Location" from the menu.
             </p>
           </ion-card-content>
         </ion-card>
