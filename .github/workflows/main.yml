@@ -16,10 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Install app dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: mobile/app
+      # - name: Install app dependencies
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     working-directory: mobile/app
       # - name: Start server in the background
       #   run: npm ci && npm run build && npx http-server ./dist
       #   working-directory: mobile/app
