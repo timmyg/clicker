@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { Program } from "src/app/state/program/program.model";
 import { Store } from "@ngrx/store";
@@ -18,12 +14,12 @@ import { first } from "rxjs/operators";
 import { ofType, Actions } from "@ngrx/effects";
 import { InfoComponent } from "./info/info.component";
 import { ModalController, ToastController, Platform } from "@ionic/angular";
-import { SegmentService } from "ngx-segment-analytics";
+// import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
 
 @Component({
   templateUrl: "./programs.component.html",
-  styleUrls: ["./programs.component.scss"]
+  styleUrls: ["./programs.component.scss"],
 })
 export class ProgramsComponent implements OnDestroy, OnInit {
   programs$: Observable<Program[]>;
@@ -44,7 +40,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     public toastController: ToastController,
     private router: Router,
     private platform: Platform,
-    private segment: SegmentService,
+    // private segment: SegmentService,
     private globals: Globals,
     private route: ActivatedRoute,
     private actions$: Actions
@@ -53,11 +49,11 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
-      searchTerm => {
+      (searchTerm) => {
         this.searchTerm = searchTerm;
-        this.segment.track(this.globals.events.program.search, {
-          term: this.searchTerm
-        });
+        // this.segment.track(this.globals.events.program.search, {
+        //   term: this.searchTerm
+        // });
       }
     );
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(
@@ -74,7 +70,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.isLoading$ = this.store.select(getLoading);
     this.reservation$
       .pipe(first())
-      .subscribe(reservation =>
+      .subscribe((reservation) =>
         this.store.dispatch(
           new fromProgram.GetAllByLocation(reservation.location)
         )
@@ -84,7 +80,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   refresh() {
     this.reservation$
       .pipe(first())
-      .subscribe(reservation =>
+      .subscribe((reservation) =>
         this.store.dispatch(
           new fromProgram.GetAllByLocation(reservation.location)
         )
@@ -103,7 +99,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
           message: "Something went wrong. Please try again.",
           color: "danger",
           duration: 4000,
-          cssClass: "ion-text-center"
+          cssClass: "ion-text-center",
         });
         whoops.present();
         this.reserveService.emitRefreshed();
@@ -130,10 +126,10 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     if (!!updateType) {
       this.router.navigate(["../confirmation"], { relativeTo: this.route });
     } else {
-      this.segment.track(
-        this.globals.events.reservation.selectedProgram,
-        program
-      );
+      // this.segment.track(
+      //   this.globals.events.reservation.selectedProgram,
+      //   program
+      // );
       this.router.navigate(["../tvs"], { relativeTo: this.route });
     }
   }
@@ -141,12 +137,12 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   async onProgramInfo(program: Program) {
     this.infoModal = await this.modalController.create({
       component: InfoComponent,
-      componentProps: { program }
+      componentProps: { program },
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.infoModal) this.infoModal.close();
     });
     this.infoModal.present();
-    return await this.segment.track(this.globals.events.program.info);
+    // return await this.segment.track(this.globals.events.program.info);
   }
 }

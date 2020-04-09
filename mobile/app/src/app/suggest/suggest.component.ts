@@ -10,7 +10,7 @@ import { Store } from "@ngrx/store";
   styleUrls: ["./suggest.component.scss"]
 })
 export class SuggestComponent implements OnInit {
-  @ViewChild("suggestionInput", { static: false }) suggestionInput: IonTextarea;
+  @ViewChild("suggestionInput") suggestionInput: IonTextarea;
   suggestion: string;
 
   constructor(

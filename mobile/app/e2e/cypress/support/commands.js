@@ -1,4 +1,3 @@
-
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -11,27 +10,29 @@
 //
 //
 
-Cypress.Commands.add("landingPage", callback => {
+Cypress.Commands.add("landingPage", (callback) => {
   const baseUrl = "http://localhost:4100";
   cy.fixture("geolocation.json").as("fakeLocation");
-  cy.get("@fakeLocation").then(fakeLocation => {
+  cy.get("@fakeLocation").then((fakeLocation) => {
     cy.visit(baseUrl, {
       onBeforeLoad(win) {
         cy.stub(win.navigator.geolocation, "getCurrentPosition").callsFake(
-          cb => {
+          (cb) => {
             console.log(fakeLocation);
             return cb(fakeLocation);
           }
         );
         // todo setTimeout shouldnt be needed here
         setTimeout(() => callback(), 3000);
-      }
+      },
     });
   });
 });
 
-Cypress.Commands.add("initialSetup", callback => {
-  cy.viewport("iphone-6+");
+Cypress.Commands.add("initialSetup", (callback) => {
+  // cy.viewport("iphone-6+");
+  cy.viewport("iphone-x");
+  // cy.viewport("macbook-15");
   const dbName = "_ionicstorage";
   const storeName = "_ionickv";
   indexedDB.deleteDatabase(dbName);

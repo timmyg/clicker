@@ -2,37 +2,36 @@ name: End-to-end tests
 on:
   push:
     branches:
-      - release
+      # - develop
+      # - release
+      - "*"
+      - "!master"
     paths:
       - "functions/**"
       - "mobile/app/**"
 jobs:
   e2e:
+    name: mobile app
     runs-on: ubuntu-latest
-    # on:
-    #   schedule:
-    #     - cron: "0 9,21 * * * "
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Install app dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: mobile/app
-      - name: Start server in the background
-        # run: cd mobile/app && npm start &
-        run: pwd && cd mobile/app && pwd && npm start &
-        # working-directory: mobile/app
+      # - name: Install app dependencies
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     working-directory: mobile/app
+      # - name: Start server in the background
+      #   run: npm ci && npm run build && npx http-server ./dist
+      #   working-directory: mobile/app
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          # start: npm run e2e:headless
+          build: npx ng build --aot
+          start: npx http-server www
           wait-on: "http://localhost:4100"
-          # browser: chrome
+          browser: chrome
           record: true
-          # headless: true
+          headless: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

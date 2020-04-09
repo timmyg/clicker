@@ -15,7 +15,7 @@ import {
   ActionSheetController,
   ToastController,
   Platform,
-  ModalController
+  ModalController,
 } from "@ionic/angular";
 import { first, take } from "rxjs/operators";
 import { Reservation } from "src/app/state/reservation/reservation.model";
@@ -24,7 +24,7 @@ import { ofType, Actions } from "@ngrx/effects";
 import { Plugins } from "@capacitor/core";
 const { Geolocation } = Plugins;
 import { Storage } from "@ionic/storage";
-import { SegmentService } from "ngx-segment-analytics";
+// import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
 // import { Intercom } from 'ng-intercom';
 import { GeolocationOptions } from "@ionic-native/geolocation/ngx";
@@ -35,8 +35,8 @@ const permissionGeolocation = {
   values: {
     allowed: "allowed",
     probably: "probably",
-    denied: "denied"
-  }
+    denied: "denied",
+  },
 };
 
 // not working in browser
@@ -49,7 +49,7 @@ const geolocationOptions: GeolocationOptions = {
 // @AutoUnsubscribe()
 @Component({
   templateUrl: "./locations.component.html",
-  styleUrls: ["./locations.component.scss"]
+  styleUrls: ["./locations.component.scss"],
 })
 export class LocationsComponent implements OnDestroy, OnInit {
   locations$: Observable<Location[]>;
@@ -93,7 +93,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private navCtrl: NavController,
     private actions$: Actions,
     private storage: Storage,
-    private segment: SegmentService,
+    // private segment: SegmentService,
     private globals: Globals,
     // public intercom: Intercom,
     public platform: Platform
@@ -105,7 +105,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       () => this.refresh()
     );
     this.isLoggedIn$ = this.store.select(isLoggedIn);
-    this.isLoggedIn$.subscribe(isUserLoggedIn => {
+    this.isLoggedIn$.subscribe((isUserLoggedIn) => {
       this.isLoggedIn = isUserLoggedIn;
     });
     this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(
@@ -128,17 +128,17 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.userGeolocation$ = this.store.select(getUserGeolocation);
     this.geolocationSubscription = this.userGeolocation$
       .pipe()
-      .subscribe(userGeolocation => {
+      .subscribe((userGeolocation) => {
         this.userGeolocation = userGeolocation;
         console.log("geolocation updated", this.userGeolocation);
       });
-    this.locations$.subscribe(locations => {
+    this.locations$.subscribe((locations) => {
       console.log({ locations });
       if (locations && locations.length) {
         this.reserveService.emitShowingLocations();
       }
     });
-    this.locations$.pipe(first()).subscribe(locations => {
+    this.locations$.pipe(first()).subscribe((locations) => {
       if (!locations || !locations.length) {
         this.actions$
           .pipe(ofType(fromUser.SET_GEOLOCATION))
@@ -189,11 +189,11 @@ export class LocationsComponent implements OnDestroy, OnInit {
     //   this.userRoles = userRoles;
     // });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
-      searchTerm => {
+      (searchTerm) => {
         this.searchTerm = searchTerm;
-        this.segment.track(this.globals.events.location.search, {
-          term: this.searchTerm
-        });
+        // this.segment.track(this.globals.events.location.search, {
+        //   term: this.searchTerm
+        // });
       }
     );
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(
@@ -231,12 +231,12 @@ export class LocationsComponent implements OnDestroy, OnInit {
       // is editing
       if (updateType === "channel") {
         this.navCtrl.navigateForward(["../programs"], {
-          relativeTo: this.route
+          relativeTo: this.route,
           // queryParamsHandling: 'merge',
         });
       } else if (updateType === "time") {
         this.navCtrl.navigateForward(["../confirmation"], {
-          relativeTo: this.route
+          relativeTo: this.route,
           // queryParamsHandling: 'merge',
         });
       }
@@ -267,7 +267,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           message: "Something went wrong. Please try again.",
           color: "danger",
           duration: 4000,
-          cssClass: "ion-text-center"
+          cssClass: "ion-text-center",
         });
         whoops.present();
         this.reserveService.emitRefreshed();
@@ -282,7 +282,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     );
     this.evaluateGeolocation();
     this.disableButton = true;
-    this.segment.track(this.globals.events.permissions.geolocation.allowed);
+    // this.segment.track(this.globals.events.permissions.geolocation.allowed);
   }
 
   async denyGeolocation() {
@@ -292,13 +292,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
     );
     this.askForGeolocation$.next(false);
     this.store.dispatch(new fromLocation.GetAll());
-    this.segment.track(this.globals.events.permissions.geolocation.denied);
+    // this.segment.track(this.globals.events.permissions.geolocation.denied);
   }
 
   async onLocationDetail(location: Location) {
     this.locationDetailModal = await this.modalController.create({
       component: LocationDetailPage,
-      componentProps: { locationId: location.id }
+      componentProps: { locationId: location.id },
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.locationDetailModal) {
@@ -318,7 +318,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           cssClass: "color-danger",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOff(location));
-          }
+          },
         },
         {
           text: "Turn on all TVs",
@@ -326,7 +326,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           cssClass: "color-success",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOn(location));
-          }
+          },
         },
         {
           text: "Turn on all TVs + autotune",
@@ -334,9 +334,9 @@ export class LocationsComponent implements OnDestroy, OnInit {
           cssClass: "color-success",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOn(location, true));
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     await actionSheet.present();
   }
@@ -349,7 +349,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
         permissionStatus === permissionGeolocation.values.probably)
     ) {
       await Geolocation.getCurrentPosition(geolocationOptions)
-        .then(response => {
+        .then((response) => {
           const { latitude, longitude } = response.coords;
           console.log(latitude, longitude);
           this.store.dispatch(new fromUser.SetGeolocation(latitude, longitude));
@@ -368,7 +368,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.geolocationError = false;
           this.reserveService.emitShowingLocations();
         })
-        .catch(async error => {
+        .catch(async (error) => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
           // this.store.dispatch(
@@ -413,13 +413,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())
       .subscribe(async () => {
-        await this.segment.track(
-          this.globals.events.reservation.selectedLocation,
-          location
-        );
+        // await this.segment.track(
+        //   this.globals.events.reservation.selectedLocation,
+        //   location
+        // );
         this.router.navigate(["../programs"], {
           relativeTo: this.route,
-          queryParamsHandling: "merge"
+          queryParamsHandling: "merge",
         });
       });
   }
