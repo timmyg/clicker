@@ -27,9 +27,10 @@ jobs:
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          build: npm run build
-          start: npx http-server ./dist
-          wait-on: "http://127.0.0.1:8080"
+          # build: npm run build
+          # start: npx http-server ./dist
+          start: npm run start &
+          wait-on: "http://localhost:4200"
           # browser: chrome
           record: true
           headless: true
