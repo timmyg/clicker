@@ -28,7 +28,7 @@ jobs:
         with:
           working-directory: mobile/app
           build: npm run build
-          start: npx http-server ./dist
+          start: npx http-server ./www
           # start: npm run start &
           wait-on: "http://localhost:8080"
           # browser: chrome
