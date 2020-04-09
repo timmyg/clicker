@@ -29,7 +29,7 @@ jobs:
           working-directory: mobile/app
           build: npm run build
           start: npx http-server ./dist
-          # wait-on: "http://localhost:4100"
+          wait-on: "http://127.0.0.1:8080"
           # browser: chrome
           record: true
           headless: true
