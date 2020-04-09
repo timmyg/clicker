@@ -30,7 +30,7 @@ jobs:
           # build: npm run build
           # start: npx http-server ./dist
           start: npm run start &
-          wait-on: "http://localhost:4200"
+          wait-on: "http://localhost:4100"
           # browser: chrome
           record: true
           headless: true
