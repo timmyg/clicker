@@ -29,9 +29,8 @@ jobs:
           working-directory: mobile/app
           build: npx ng build --aot
           start: npx http-server www
-          # start: npm run start &
-          wait-on: "http://localhost:8080"
-          # browser: chrome
+          wait-on: "http://localhost:4100"
+          browser: chrome
           record: true
           headless: true
         env:
