@@ -23,11 +23,20 @@ jobs:
       # - name: Start server in the background
       #   run: npm ci && npm run build && npx http-server ./dist
       #   working-directory: mobile/app
+      - name: set env
+        if: contains(github.ref, "develop")
+        run: ENV=develop
+      - name: set env
+        if: contains(github.ref, "release")
+        run: ENV=release
+      - name: set env
+        if: contains(github.ref, "master")
+        run: ENV=production
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          build: npm run set-env:${GITHUB_REF##*/} && npm run build:env
+          build: echo $ENV && npm run build:env
           start: npm run start:static
           wait-on: "http://localhost:4100"
           browser: chrome
