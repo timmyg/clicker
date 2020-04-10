@@ -28,7 +28,7 @@ jobs:
         with:
           working-directory: mobile/app
           build: npm run build
-          start: npx http-server www
+          start: npm run start:static
           wait-on: "http://localhost:4100"
           browser: chrome
           record: true
