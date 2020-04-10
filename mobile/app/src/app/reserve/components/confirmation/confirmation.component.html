@@ -47,7 +47,7 @@
           <ion-radio
             slot="start"
             [value]="timeframe"
-            [disabled]="waiting || isAppLoading"
+            [disabled]="isAppLoading"
             checked
           ></ion-radio>
         </ion-item>
@@ -73,7 +73,7 @@
     <ion-button
       size="large"
       expand="block"
-      (click)="onConfirm(reservation)"
+      (click)="onConfirm()"
       id="confirm"
       slot="end"
       [disabled]="
