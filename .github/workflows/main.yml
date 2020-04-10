@@ -27,7 +27,7 @@ jobs:
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          build: npm run build
+          build: npm run set-env:${GITHUB_REF##*/} && npm run build:env
           start: npm run start:static
           wait-on: "http://localhost:4100"
           browser: chrome
