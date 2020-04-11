@@ -39,7 +39,7 @@ jobs:
         run: |
           # echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')"
           # echo "0"
-          echo "0"
+          echo "tgtgtg0"
           echo ${GITHUB_REF##*/}
           if [ "${GITHUB_REF##*/}" == "master" ]; then
             echo "1"  
@@ -58,7 +58,7 @@ jobs:
         with:
           working-directory: mobile/app
           build: echo $ENV && npm run build:env
-          start: npm run start:static
+          start: echo $ENV && npm run start:static
           wait-on: "http://localhost:4100"
           browser: chrome
           record: true
