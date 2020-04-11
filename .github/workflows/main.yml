@@ -37,17 +37,19 @@ jobs:
       - name: Extract branch name
         shell: bash
         run: |
-          echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')"
+          # echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')"
+          # echo "0"
           echo "0"
-          if [ "${BRANCH_NAME}" == "master" ]; then
+          echo ${GITHUB_REF##*/}
+          if [ "${GITHUB_REF##*/}" == "master" ]; then
             echo "1"  
             export ENV=production
           fi
-          if [ "${BRANCH_NAME}" == "release" ]; then
+          if [ "${GITHUB_REF##*/}" == "release" ]; then
             echo "2"  
             export ENV=release
           fi
-          if [ "${BRANCH_NAME}" == "develop" ]; then
+          if [ "${GITHUB_REF##*/}" == "develop" ]; then
             echo "3"  
             export ENV=develop
           fi
