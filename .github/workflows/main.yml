@@ -34,10 +34,10 @@ jobs:
       #   run: ENV=production
       # - name: Branch name
       #   run: echo running on branch ${GITHUB_REF##*/}
-      - name: set environment variables
-        uses: allenevans/set-env@v1.0.0
-        with:
-          MY_ENV_VAR: ${GITHUB_REF##*/}
+      # - name: set environment variables
+      #   uses: allenevans/set-env@v1.0.0
+      #   with:
+      #     MY_ENV_VAR: ${GITHUB_REF##*/}
       - name: Extract branch name
         shell: bash
         run: |
