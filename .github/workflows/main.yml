@@ -38,14 +38,18 @@ jobs:
         shell: bash
         run: |
           echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')"
+          echo "0"
           if [ "${BRANCH_NAME}" == "master" ]; then
-              ENV=production
+            echo "1"  
+            export ENV=production
           fi
           if [ "${BRANCH_NAME}" == "release" ]; then
-              ENV=release
+            echo "2"  
+            export ENV=release
           fi
           if [ "${BRANCH_NAME}" == "develop" ]; then
-              ENV=develop
+            echo "3"  
+            export ENV=develop
           fi
       - name: Cypress run
         uses: cypress-io/github-action@v1
