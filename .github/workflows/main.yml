@@ -23,15 +23,30 @@ jobs:
       # - name: Start server in the background
       #   run: npm ci && npm run build && npx http-server ./dist
       #   working-directory: mobile/app
-      - name: set env
-        if: contains(github.ref, "develop")
-        run: ENV=develop
-      - name: set env
-        if: contains(github.ref, "release")
-        run: ENV=release
-      - name: set env
-        if: contains(github.ref, "master")
-        run: ENV=production
+      # - name: set env
+      #   if: contains(github.ref, "develop")
+      #   run: ENV=develop
+      # - name: set env
+      #   if: contains(github.ref, "release")
+      #   run: ENV=release
+      # - name: set env
+      #   if: contains(github.ref, "master")
+      #   run: ENV=production
+      # - name: Branch name
+      #   run: echo running on branch ${GITHUB_REF##*/}
+      - name: Extract branch name
+        shell: bash
+        run: |
+          echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')"
+          if [ "${BRANCH_NAME}" == "master" ]; then
+              ENV=production
+          fi
+          if [ "${BRANCH_NAME}" == "release" ]; then
+              ENV=release
+          fi
+          if [ "${BRANCH_NAME}" == "develop" ]; then
+              ENV=develop
+          fi
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
