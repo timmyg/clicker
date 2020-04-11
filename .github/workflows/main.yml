@@ -34,31 +34,39 @@ jobs:
       #   run: ENV=production
       # - name: Branch name
       #   run: echo running on branch ${GITHUB_REF##*/}
+      - name: set environment variables
+        uses: allenevans/set-env@v1.0.0
+        with:
+          MY_ENV_VAR: ${GITHUB_REF##*/}
       - name: Extract branch name
         shell: bash
         run: |
           # echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')"
           # echo "0"
           echo "tgtgtg0"
+          echo MY_ENV_VAR
           echo ${GITHUB_REF##*/}
           if [ "${GITHUB_REF##*/}" == "master" ]; then
             echo "1"  
             export ENV=production
+            echo "::set-env ENV=production"
           fi
           if [ "${GITHUB_REF##*/}" == "release" ]; then
             echo "2"  
             export ENV=release
+            echo "::set-env ENV=release"
           fi
           if [ "${GITHUB_REF##*/}" == "develop" ]; then
             echo "3"  
             export ENV=develop
+            echo "::set-env ENV=develop"
           fi
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          build: echo $ENV && npm run build:env
-          start: echo $ENV && npm run start:static
+          build: npm run build:env
+          start: npm run start:static
           wait-on: "http://localhost:4100"
           browser: chrome
           record: true
