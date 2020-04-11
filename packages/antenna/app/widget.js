@@ -112,8 +112,8 @@ class Widget {
             // logger.info('info.current.all!!', payload);
             const { boxes } = payload;
             logger.info("info.current.all!! separated", "boxes", boxes.length);
-            const boxesInfo = [];
             boxes.forEach(box => {
+              const boxesInfo = [];
               const { boxId, client, ip } = box;
               const _remote = new DirecTV.Remote(ip);
               logger.info(`getTuned... ${boxId}, ${client}, ${ip}`);
