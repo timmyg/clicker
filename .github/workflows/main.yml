@@ -38,32 +38,28 @@ jobs:
       #   uses: allenevans/set-env@v1.0.0
       #   with:
       #     MY_ENV_VAR: ${GITHUB_REF##*/}
-      - name: Set output
-        id: vars
-        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
-      - name: Check output
-        run: echo "helllllooo 123123" && echo ${{ steps.vars.outputs.short_ref }}
+      # - name: Set output
+      #   id: vars
+      #   run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+      # - name: Check output
+      #   run: echo "helllllooo 123123" && echo ${{ steps.vars.outputs.short_ref }}
       - name: Extract branch name
         shell: bash
         run: |
-          # echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')"
-          # echo "0"
           echo "tgtgtg0"
-          echo MY_ENV_VAR
           echo ${GITHUB_REF##*/}
-          if [ "${GITHUB_REF##*/}" == "master" ]; then
+          branch=${GITHUB_REF##*/}
+          echo $branch
+          if [ branch == "master" ]; then
             echo "1"  
-            export ENV=production
             echo "::set-env ENV=production"
           fi
-          if [ "${GITHUB_REF##*/}" == "release" ]; then
+          if [ branch == "release" ]; then
             echo "2"  
-            export ENV=release
             echo "::set-env ENV=release"
           fi
-          if [ "${GITHUB_REF##*/}" == "develop" ]; then
+          if [ branch == "develop" ]; then
             echo "3"  
-            export ENV=develop
             echo "::set-env ENV=develop"
           fi
       - name: Cypress run
