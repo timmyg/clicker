@@ -2,8 +2,6 @@ name: End-to-end tests
 on:
   push:
     branches:
-      # - develop
-      # - release
       - "*"
       - "!master"
     paths:
@@ -16,50 +14,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      # - name: Install app dependencies
-      #   uses: bahmutov/npm-install@v1
-      #   with:
-      #     working-directory: mobile/app
-      # - name: Start server in the background
-      #   run: npm ci && npm run build && npx http-server ./dist
-      #   working-directory: mobile/app
-      # - name: set env
-      #   if: contains(github.ref, "develop")
-      #   run: ENV=develop
-      # - name: set env
-      #   if: contains(github.ref, "release")
-      #   run: ENV=release
-      # - name: set env
-      #   if: contains(github.ref, "master")
-      #   run: ENV=production
-      # - name: Branch name
-      #   run: echo running on branch ${GITHUB_REF##*/}
-      # - name: set environment variables
-      #   uses: allenevans/set-env@v1.0.0
-      #   with:
-      #     MY_ENV_VAR: ${GITHUB_REF##*/}
-      # - name: Set output
-      #   id: vars
-      #   run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
-      # - name: Check output
-      #   run: echo "helllllooo 123123" && echo ${{ steps.vars.outputs.short_ref }}
       - name: Extract branch name
         shell: bash
         run: |
-          echo "tgtgtg0"
-          echo ${GITHUB_REF##*/}
           branch=${GITHUB_REF##*/}
           echo $branch
           if [ branch == "master" ]; then
-            echo "1"  
             echo "::set-env ENV=production"
+            echo "::set-env cypress_apiBaseUrl=https://api.tryclicker.com"
           fi
           if [ branch == "release" ]; then
-            echo "2"  
             echo "::set-env ENV=release"
+            echo "::set-env cypress_apiBaseUrl=https://api-release.tryclicker.com"
           fi
           if [ branch == "develop" ]; then
-            echo "3"  
             echo "::set-env ENV=develop"
           fi
       - name: Cypress run
