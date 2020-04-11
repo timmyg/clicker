@@ -670,6 +670,7 @@ describe('setBoxStatus', () => {
       const result = setBoxStatus(box);
       expect(result.live.locked).toBeFalsy();
     });
+    // TODO sometimes fails
     test('unlocked when changed a while ago with same program on, but way later (repeat program)', () => {
       const live = {
         ...manualBox,
