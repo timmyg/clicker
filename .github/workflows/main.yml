@@ -38,6 +38,11 @@ jobs:
       #   uses: allenevans/set-env@v1.0.0
       #   with:
       #     MY_ENV_VAR: ${GITHUB_REF##*/}
+     - name: Set output
+        id: vars
+        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+      - name: Check output
+        run: echo "helllllooo 123123" && echo ${{ steps.vars.outputs.short_ref }}
       - name: Extract branch name
         shell: bash
         run: |
