@@ -130,10 +130,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
       .pipe()
       .subscribe((userGeolocation) => {
         this.userGeolocation = userGeolocation;
-        console.log("geolocation updated", this.userGeolocation);
       });
     this.locations$.subscribe((locations) => {
-      console.log({ locations });
       if (locations && locations.length) {
         this.reserveService.emitShowingLocations();
       }
@@ -155,7 +153,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
     const geolocationStorage = await this.storage.get(
       permissionGeolocation.name
     );
-    console.log({ geolocationStorage });
     if (geolocationStorage === permissionGeolocation.values.denied) {
       this.askForGeolocation$.next(false);
       this.store.dispatch(new fromLocation.GetAll());
@@ -219,6 +216,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async refresh() {
+    console.log("refresh");
     this.store.dispatch(
       new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
     );
@@ -244,7 +242,12 @@ export class LocationsComponent implements OnDestroy, OnInit {
         whoops.present();
         this.reserveService.emitRefreshed();
       });
-    this.evaluateGeolocation();
+      const permissionStatus = await this.storage.get(permissionGeolocation.name);
+      if (
+        permissionStatus &&
+        (permissionStatus === permissionGeolocation.values.allowed)) {
+        this.evaluateGeolocation();
+      }
   }
 
   async allowLocation() {
@@ -323,7 +326,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
       await Geolocation.getCurrentPosition(geolocationOptions)
         .then((response) => {
           const { latitude, longitude } = response.coords;
-          console.log(latitude, longitude);
           this.store.dispatch(new fromUser.SetGeolocation(latitude, longitude));
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;

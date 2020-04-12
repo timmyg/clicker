@@ -68,7 +68,6 @@ export class ProfilePage {
 
   ngOnInit() {
     this.reservations$.pipe(first()).subscribe((reservations) => {
-      console.log({ reservations });
       if (!reservations) {
         this.store.dispatch(new fromReservation.GetAll());
       }

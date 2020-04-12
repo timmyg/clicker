@@ -28,7 +28,6 @@ export class SuggestComponent implements OnInit {
   }
 
   async onSubmit() {
-    console.log(this.suggestion);
     const text = `New Location Suggestion: ${this.suggestion}`;
     this.store.dispatch(new fromApp.SendMessage(text));
     this.onCloseClick();

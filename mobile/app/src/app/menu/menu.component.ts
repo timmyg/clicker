@@ -61,7 +61,6 @@ export class MenuComponent {
 
   ngOnInit() {
     this.user$.pipe(first()).subscribe((user) => {
-      console.log({ user });
       if (!user) {
         this.store.dispatch(new fromUser.Load());
       }
@@ -127,13 +126,10 @@ export class MenuComponent {
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
             let link = "https://tryclicker.com";
-            console.log("checking platform type");
             if (this.platform.is("ios")) {
-              console.log("is ios");
               link =
                 "itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8";
             } else if (this.platform.is("android")) {
-              console.log("is android");
               link = "market://details?id=com.teamclicker.app";
             }
             window.open(link);
@@ -160,7 +156,6 @@ export class MenuComponent {
 
   async onContact() {
     window.drift.on("ready", function(api) {
-      console.log(api);
       // api.widget.show();
       api.openChat();
     });

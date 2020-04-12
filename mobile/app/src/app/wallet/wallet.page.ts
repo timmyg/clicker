@@ -196,7 +196,6 @@ export class WalletPage {
   }
 
   async onAmountChange(e) {
-    console.log({e});
     this.selectedPlan = e.detail.value;
   }
 

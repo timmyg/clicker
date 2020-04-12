@@ -34,8 +34,6 @@ export class AppComponent {
     public appService: AppService
   ) {
     this.partner$ = this.store.select(getPartner);
-    // console.log("set version", version);
-
     // this.appService.setVersion(version);
     this.initializeApp();
   }

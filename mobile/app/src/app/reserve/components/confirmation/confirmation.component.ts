@@ -85,7 +85,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     // TODO this is ugly but gets rid of ExpressionChangedAfterItHasBeenCheckedError issue when opening wallet
     this.isAppLoading$ = this.store.pipe(select(getAppLoading));
     this.sub = this.isAppLoading$.subscribe((x) => {
-      console.log({ x });
       this.isAppLoading = x;
     });
   }

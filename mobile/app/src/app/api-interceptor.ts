@@ -49,8 +49,6 @@ export class ApiInterceptor implements HttpInterceptor {
           "Authorization",
           `Bearer ${authToken}`
         );
-        // console.log(request.url);
-        // console.log("version", );
         headers = headers.append("app", this.appService.getVersion());
         if (partner) {
           headers = headers.append("partner", partner);

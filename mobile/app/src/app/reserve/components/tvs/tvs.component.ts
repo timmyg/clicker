@@ -56,7 +56,6 @@ export class TvsComponent implements OnDestroy, OnInit {
     );
     this.userGeolocation$ = this.store.select(getUserGeolocation);
     this.userGeolocation$.subscribe((userGeolocation) => {
-      console.log({ userGeolocation });
       this.userGeolocation = userGeolocation;
     });
   }
@@ -91,7 +90,6 @@ export class TvsComponent implements OnDestroy, OnInit {
   }
 
   refresh() {
-    console.log(this.reservation.location);
     this.store.dispatch(
       new fromReservation.SetLocation(
         this.reservation.location,

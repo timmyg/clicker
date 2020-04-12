@@ -40,9 +40,6 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {
-    console.log({ environment });
-  }
   handleError(error) {
     console.error(error);
     if (environment.stage !== "local") {
