@@ -7,7 +7,7 @@ import {
   ModalController,
 } from "@ionic/angular";
 import { Storage } from "@ionic/storage";
-// import { SegmentService } from 'ngx-segment-analytics';
+import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from "../globals";
 import { LoginComponent } from "../auth/login/login.component";
 import { Subscription, Observable } from "rxjs";
@@ -46,7 +46,7 @@ export class MenuComponent {
     private storage: Storage,
     public actionSheetController: ActionSheetController,
     public toastController: ToastController,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private platform: Platform,
     public modalController: ModalController,
     private globals: Globals,
@@ -118,8 +118,8 @@ export class MenuComponent {
               cssClass: "ion-text-center",
             });
             await toast.present();
-            // this.segment.track(this.globals.events.rated);
-            // this.segment.identify(null, { rated: true });
+            this.segment.track(this.globals.events.rated);
+            this.segment.identify(null, { rated: true });
           },
         },
         {

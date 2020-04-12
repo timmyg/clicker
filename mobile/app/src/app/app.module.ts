@@ -87,11 +87,11 @@ export function initUserStuff(store: Store<AppState>): Function {
     MenuModule,
     AuthModule,
     BrowserModule,
-    // SegmentModule.forRoot({
-    //   apiKey: environment.segment.writeKey,
-    //   debug: !environment.production,
-    //   loadOnInitialization: true
-    // }),
+    SegmentModule.forRoot({
+      apiKey: environment.segment.writeKey,
+      debug: !environment.production,
+      loadOnInitialization: true
+    }),
     IonicModule.forRoot(),
     AppRoutingModule,
     StateModule.forRoot(),

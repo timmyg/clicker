@@ -14,7 +14,7 @@ import { first } from "rxjs/operators";
 import { ofType, Actions } from "@ngrx/effects";
 import { InfoComponent } from "./info/info.component";
 import { ModalController, ToastController, Platform } from "@ionic/angular";
-// import { SegmentService } from "ngx-segment-analytics";
+import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
 
 @Component({
@@ -40,7 +40,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     public toastController: ToastController,
     private router: Router,
     private platform: Platform,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private globals: Globals,
     private route: ActivatedRoute,
     private actions$: Actions
@@ -51,9 +51,9 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
       (searchTerm) => {
         this.searchTerm = searchTerm;
-        // this.segment.track(this.globals.events.program.search, {
-        //   term: this.searchTerm
-        // });
+        this.segment.track(this.globals.events.program.search, {
+          term: this.searchTerm
+        });
       }
     );
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(
@@ -126,10 +126,10 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     if (!!updateType) {
       this.router.navigate(["../confirmation"], { relativeTo: this.route });
     } else {
-      // this.segment.track(
-      //   this.globals.events.reservation.selectedProgram,
-      //   program
-      // );
+      this.segment.track(
+        this.globals.events.reservation.selectedProgram,
+        program
+      );
       this.router.navigate(["../tvs"], { relativeTo: this.route });
     }
   }
@@ -143,6 +143,6 @@ export class ProgramsComponent implements OnDestroy, OnInit {
       if (this.infoModal) this.infoModal.close();
     });
     this.infoModal.present();
-    // return await this.segment.track(this.globals.events.program.info);
+    return await this.segment.track(this.globals.events.program.info);
   }
 }

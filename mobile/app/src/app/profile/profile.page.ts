@@ -23,7 +23,7 @@ import * as moment from "moment";
 import { UserService } from "../core/services/user.service";
 import { take, first } from "rxjs/operators";
 import { ofType, Actions } from "@ngrx/effects";
-// import { SegmentService } from "ngx-segment-analytics";
+import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "../globals";
 import { ToastOptions } from "@ionic/core";
 import { AppService } from "../core/services/app.service";
@@ -56,7 +56,7 @@ export class ProfilePage {
     private actions$: Actions,
     private platform: Platform,
     public actionSheetController: ActionSheetController,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private globals: Globals,
     private deploy: Deploy
   ) {
@@ -130,9 +130,9 @@ export class ProfilePage {
       relativeTo: this.route,
     });
     if (source === "fab") {
-      // this.segment.track(this.globals.events.reservation.clickedButton);
+      this.segment.track(this.globals.events.reservation.clickedButton);
     } else if (source === "link") {
-      // this.segment.track(this.globals.events.reservation.clickedLink);
+      this.segment.track(this.globals.events.reservation.clickedLink);
     }
   }
 
@@ -194,7 +194,7 @@ export class ProfilePage {
           cssClass: "secondary",
           handler: () => {
             this.store.dispatch(new fromReservation.Cancel(reservation));
-            // this.segment.track(this.globals.events.reservation.cancelled);
+            this.segment.track(this.globals.events.reservation.cancelled);
             // clearInterval(this.intervalJobId);
           },
         },

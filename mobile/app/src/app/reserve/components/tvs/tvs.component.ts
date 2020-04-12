@@ -14,7 +14,7 @@ import { Actions, ofType } from "@ngrx/effects";
 import { first } from "rxjs/operators";
 import { getLoading } from "src/app/state/location";
 import { Globals } from "src/app/globals";
-// import { SegmentService } from "ngx-segment-analytics";
+import { SegmentService } from "ngx-segment-analytics";
 import { getUserGeolocation } from "src/app/state/user";
 
 @Component({
@@ -36,7 +36,7 @@ export class TvsComponent implements OnDestroy, OnInit {
     private store: Store<fromStore.AppState>,
     public reserveService: ReserveService,
     private router: Router,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private globals: Globals,
     private route: ActivatedRoute,
     private toastController: ToastController,
@@ -80,10 +80,10 @@ export class TvsComponent implements OnDestroy, OnInit {
         cssClass: "ion-text-center",
       });
       toast.present();
-      // return await this.segment.track(this.globals.events.tv.reserved);
+      return await this.segment.track(this.globals.events.tv.reserved);
     }
     this.store.dispatch(new fromReservation.SetTv(tv));
-    // await this.segment.track(this.globals.events.reservation.selectedTV, tv);
+    await this.segment.track(this.globals.events.reservation.selectedTV, tv);
     this.router.navigate(["../confirmation"], {
       relativeTo: this.route,
       replaceUrl: removeFromHistory,

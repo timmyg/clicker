@@ -24,7 +24,7 @@ import { ofType, Actions } from "@ngrx/effects";
 import { Plugins } from "@capacitor/core";
 const { Geolocation } = Plugins;
 import { Storage } from "@ionic/storage";
-// import { SegmentService } from "ngx-segment-analytics";
+import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
 // import { Intercom } from 'ng-intercom';
 import { GeolocationOptions } from "@ionic-native/geolocation/ngx";
@@ -93,7 +93,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     private navCtrl: NavController,
     private actions$: Actions,
     private storage: Storage,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private globals: Globals,
     // public intercom: Intercom,
     public platform: Platform
@@ -160,40 +160,12 @@ export class LocationsComponent implements OnDestroy, OnInit {
       this.askForGeolocation$.next(false);
       this.store.dispatch(new fromLocation.GetAll());
     }
-    // console.log('UL', this.userLocations);
-
-    // this.userLocations$.pipe().subscribe(userLocations => {
-    //   this.userLocations = userLocations;
-    // });
-    // this.isLoading$.pipe().subscribe(isLoading => {
-    //   if (
-    //     !isLoading &&
-    //     !this.evaluatingGeolocation &&
-    //     !this.reserveService.isRefreshing
-    //   ) {
-    //     this.locations$.pipe().subscribe(locations => {
-    //       // console.log({ locations });
-    //       if (this.userGeolocation) {
-    //         const { latitude, longitude } = this.userGeolocation;
-    //         this.segment.track(this.globals.events.location.listedAll, {
-    //           locations: locations.length,
-    //           latitude,
-    //           longitude
-    //         });
-    //       }
-    //     });
-    //   }
-    // });
-    // this.userRoles$ = this.store.select(getUserRoles);
-    // this.userRoles$.pipe().subscribe(userRoles => {
-    //   this.userRoles = userRoles;
-    // });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
       (searchTerm) => {
         this.searchTerm = searchTerm;
-        // this.segment.track(this.globals.events.location.search, {
-        //   term: this.searchTerm
-        // });
+        this.segment.track(this.globals.events.location.search, {
+          term: this.searchTerm
+        });
       }
     );
     this.closeSearchSubscription = this.reserveService.closeSearchEmitted$.subscribe(
@@ -282,7 +254,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     );
     this.evaluateGeolocation();
     this.disableButton = true;
-    // this.segment.track(this.globals.events.permissions.geolocation.allowed);
+    this.segment.track(this.globals.events.permissions.geolocation.allowed);
   }
 
   async denyGeolocation() {
@@ -292,7 +264,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     );
     this.askForGeolocation$.next(false);
     this.store.dispatch(new fromLocation.GetAll());
-    // this.segment.track(this.globals.events.permissions.geolocation.denied);
+    this.segment.track(this.globals.events.permissions.geolocation.denied);
   }
 
   async onLocationDetail(location: Location) {
@@ -413,10 +385,10 @@ export class LocationsComponent implements OnDestroy, OnInit {
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
       .pipe(first())
       .subscribe(async () => {
-        // await this.segment.track(
-        //   this.globals.events.reservation.selectedLocation,
-        //   location
-        // );
+        await this.segment.track(
+          this.globals.events.reservation.selectedLocation,
+          location
+        );
         this.router.navigate(["../programs"], {
           relativeTo: this.route,
           queryParamsHandling: "merge",

@@ -20,7 +20,7 @@ import { Card } from "src/app/state/user/card.model";
 import { getUserCard, getUserId } from "src/app/state/user";
 import { getLoading, getPlans } from "src/app/state/app";
 import { getUserTokenCount } from "../state/user";
-// import { SegmentService } from "ngx-segment-analytics";
+import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "../globals";
 import { Plan } from "../state/app/plan.model";
 import { first, take } from "rxjs/operators";
@@ -53,7 +53,7 @@ export class WalletPage {
     private stripeService: StripeService,
     private modalController: ModalController,
     public alertController: AlertController,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private globals: Globals,
     private actions$: Actions
   ) {
@@ -111,9 +111,9 @@ export class WalletPage {
             toast.present();
             this.addCardMode = false;
             this.waiting = false;
-            // this.segment.track(this.globals.events.payment.sourceAdded, {
-            //   type: "Credit Card"
-            // });
+            this.segment.track(this.globals.events.payment.sourceAdded, {
+              type: "Credit Card"
+            });
           });
         this.actions$
           .pipe(ofType(fromUser.UPDATE_CARD_FAIL))
@@ -163,20 +163,20 @@ export class WalletPage {
         });
         toast.present();
         this.onClose();
-        // this.segment.track(this.globals.events.payment.fundsAdded, {
-        //   amount: this.selectedPlan.dollars
-        // });
+        this.segment.track(this.globals.events.payment.fundsAdded, {
+          amount: this.selectedPlan.dollars
+        });
         this.store
           .select(getUserId)
           .pipe(first((val) => !!val))
           .subscribe(async (userId) => {
-            // this.segment.identify(
-            //   userId,
-            //   { paid: true },
-            //   {
-            //     // Intercom: { hideDefaultLauncher: true },
-            //   }
-            // );
+            this.segment.identify(
+              userId,
+              { paid: true },
+              {
+                // Intercom: { hideDefaultLauncher: true },
+              }
+            );
           });
       });
     this.actions$
