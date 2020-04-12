@@ -18,6 +18,21 @@ then
     mv -v ./mobile/app/* ./
     echo "ls -lrt:";
     ls -lrt
+    echo "branch: $CIRCLE_BRANCH"
+    if [ "$CIRCLE_BRANCH" = "master" ]
+    then
+        echo "1"
+        export ENV=production
+    elif [ "$CIRCLE_BRANCH" = "release" ]
+    then
+        echo "2"
+        export ENV=release
+    elif [ "$CIRCLE_BRANCH" = "develop" ]
+    then
+        echo "3"
+        export ENV=develop
+    fi
+
 else 
     echo "Not an Appflow build"; 
 fi
