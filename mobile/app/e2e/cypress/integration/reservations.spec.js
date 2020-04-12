@@ -8,7 +8,6 @@ const apiBaseUrl =
 
 context("Reservations", () => {
   before("create test location", () => {
-    cy.log("apiBaseUrl", apiBaseUrl);
     const location = require("../fixtures/requests/location.json");
     cy.request("POST", `${apiBaseUrl}/locations`, location);
   });
@@ -43,6 +42,9 @@ context("Reservations", () => {
     cy.get("app-tvs ion-button")
       .contains("2")
       .click({ force: true });
+    cy.get("ion-radio-group ion-radio")
+      .first()
+      .click() 
     cy.get("ion-button#confirm:not([disabled])").click({ force: true });
     cy.get("app-reservation").should($reservations => {
       expect($reservations).to.have.length(1);

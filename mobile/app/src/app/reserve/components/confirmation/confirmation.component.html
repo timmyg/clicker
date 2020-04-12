@@ -33,7 +33,7 @@
         </ion-row>
         <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label class="flex ion-align-items-center">
-            <span class="dollars">{{ timeframe.minutes }} minutes</span>
+            <span data-atm-class="timeframe" class="timeframe">{{ timeframe.minutes }} minutes</span>
             <div class="flex ion-align-items-center">
               <img
                 class="coin ion-float-right"
