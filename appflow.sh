@@ -18,16 +18,16 @@ then
     mv -v ./mobile/app/* ./
     echo "ls -lrt:";
     ls -lrt
-    echo "branch: $CIRCLE_BRANCH"
-    if [ "$CIRCLE_BRANCH" = "master" ]
+    echo "branch: $CI_GIT_REF"
+    if [ "$CI_GIT_REF" = "master" ]
     then
         echo "1"
         export ENV=production
-    elif [ "$CIRCLE_BRANCH" = "release" ]
+    elif [ "$CI_GIT_REF" = "release" ]
     then
         echo "2"
         export ENV=release
-    elif [ "$CIRCLE_BRANCH" = "develop" ]
+    elif [ "$CI_GIT_REF" = "develop" ]
     then
         echo "3"
         export ENV=develop
