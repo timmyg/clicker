@@ -9,24 +9,24 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding-horizontal>
+<ion-content class="ion-padding-horizontal">
   <ion-text color="primary" class="ion-text-center">
     <h3>Every time you invite a friend, you both get a free token.</h3>
   </ion-text>
-  <ion-row align-items-center margin-top >
+  <ion-row class="ion-margin-top ion-align-items-center" >
     <div class="ion-text-center center">
       👨‍👩‍👧‍👦 Share your invite code      
     </div>
   </ion-row>
-  <ion-row margin-top flex align-items-center>
+  <ion-row class="flex ion-align-items-center ion-margin-top" >
     <h2 class="center">
       <b class="selectable">{{ referralCode$ | async }}</b>
     </h2>
   </ion-row>
-  <ion-row *ngIf="!(this.referred$ | async); else alreadyReferred" margin-top>
+  <ion-row *ngIf="!(this.referred$ | async); else alreadyReferred" class="ion-margin-top">
     <!-- <ion-item> -->
     <ion-col size="8">
-      <ion-item no-padding>
+      <ion-item class="ion-no-padding">
         <ion-label position="floating">✉️ Invited? Enter code here.</ion-label>
         <ion-input
           size="large "
@@ -35,7 +35,7 @@
         ></ion-input>
       </ion-item>
     </ion-col>
-    <ion-col size="4" flex align-items-end justify-content-bottom>
+    <ion-col size="4" class="flex ion-align-items-end ion-justify-content-bottom">
       <ion-button
         (click)="onInviteCode()"
         [disabled]="(isLoading$ | async) || (!invitedByCode || !invitedByCode.length)"
@@ -44,10 +44,10 @@
     </ion-col>
     <!-- </ion-item> -->
   </ion-row>
-  <ion-row margin-top>
+  <ion-row class="ion-margin-top">
     <ng-template #alreadyReferred>
       <br/>
-      <div class="ion-text-center center" margin-top>👌 You received your free token from a referral.</div>
+      <div class="ion-text-center center ion-margin-top">👌 You received your free token from a referral.</div>
     </ng-template>
   </ion-row>
 </ion-content>

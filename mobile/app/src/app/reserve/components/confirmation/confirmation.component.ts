@@ -99,9 +99,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      console.log(this);
-    }, 5000);
     this.reservation$
       .pipe(
         filter((r) => r !== null),
@@ -122,9 +119,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
           )
           .subscribe((timeframes) => {
             if (this.reservation.minutes !== 0) {
-              const timeframe = timeframes[0];
-              this.reservation.cost = timeframe.tokens;
-              this.reservation.minutes = timeframe.minutes;
+              // const timeframe = timeframes[0];
+              // this.reservation.cost = timeframe.tokens;
+              // this.reservation.minutes = timeframe.minutes;
             }
             this.isInitializing = false;
           });
@@ -165,7 +162,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   // }
 
   onConfirm() {
-    console.log("onconfirm");
     const { reservation: r } = this;
     this.saving = true;
     this.isEditMode
@@ -181,7 +177,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       )
       .pipe(first())
       .subscribe(() => {
-        console.log("success");
         // if (this.isEditMode) {
         //   this.segment.track(this.globals.events.reservation.updated, {
         //     minutes: r.minutes,
@@ -248,6 +243,10 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     const timeframe = e.detail.value;
     this.reservation.cost = timeframe.tokens;
     this.reservation.minutes = timeframe.minutes;
+  }
+
+  hasTimeframe() {
+    return !!this.reservation.cost;
   }
 
   onClickOverrideDistanceForce() {

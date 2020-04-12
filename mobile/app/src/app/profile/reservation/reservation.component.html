@@ -1,4 +1,4 @@
-<ion-card no-margin-horizontal>
+<ion-card class="ion-no-margin-horizontal">
   <ion-card-content>
     <ion-row>
       <img [src]="reservation.location.img" class="logo" alt="location logo" />
@@ -6,13 +6,11 @@
         <ion-row>
           <ion-col
             size="3"
-            flex
-            class="ion-justify-content-center"
-            align-items-center
+            class="flex ion-justify-content-center ion-align-items-center"
           >
             <span class="icon">📺</span>
           </ion-col>
-          <ion-col flex align-items-center>
+          <ion-col class="flex ion-align-items-center">
             <span class="info"
               >{{ reservation.program.channelTitle }} on
               {{ reservation.box.label }}</span
@@ -22,13 +20,11 @@
         <ion-row>
           <ion-col
             size="3"
-            flex
-            class="ion-justify-content-center"
-            align-items-center
+            class="flex ion-justify-content-center ion-align-items-center"
           >
             <span class="icon">⏱️</span>
           </ion-col>
-          <ion-col flex align-items-center>
+          <ion-col class="flex ion-align-items-center">
             <span *ngIf="timeLeft?.minutes > 0"
               >{{ timeLeft?.label }} left</span
             >
@@ -41,10 +37,7 @@
       </ion-col>
       <ion-col
         size="3"
-        class="ion-text-center"
-        padding-top
-        flex
-        align-items-center
+        class="flex ion-text-center ion-padding-top ion-align-items-center"
       >
         <a (click)="modify()">Modify</a>
       </ion-col>

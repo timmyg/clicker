@@ -21,20 +21,20 @@
     </div>
     <ion-list class="timeframes" *ngIf="!isEditChannel">
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
-        <ion-list-header no-padding>
-          <span>
+        <ion-list-header class="ion-no-padding">
+          <ion-label>
             <span *ngIf="isEditTime; else normal">Extend</span>
             <ng-template #normal>Choose</ng-template> Timeframe:
-          </span>
+          </ion-label>
         </ion-list-header>
         <!-- hacky - should put as first item in observable somehow? -->
-        <ion-row *ngIf="isAppLoading" margin-vertical>
-          <ion-spinner name="crescent" class="center"></ion-spinner>
+        <ion-row *ngIf="isAppLoading" class="ion-margin-vertical">
+          <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
         </ion-row>
         <ion-item *ngFor="let timeframe of (timeframes$ | async)">
-          <ion-label flex align-items-center>
+          <ion-label class="flex ion-align-items-center">
             <span class="dollars">{{ timeframe.minutes }} minutes</span>
-            <div flex align-items-center>
+            <div class="flex ion-align-items-center">
               <img
                 class="coin ion-float-right"
                 src="./assets/coin.svg"
@@ -54,7 +54,7 @@
         <!-- </ng-template> -->
       </ion-radio-group>
     </ion-list>
-    <p class="ion-text-center" padding-top *ngIf="!isEditMode">
+    <p class="ion-text-center ion-padding-top" *ngIf="!isEditMode">
       <span *ngIf="reservation.minutes !== 0; else noReservation">
         😎
         <b
@@ -76,6 +76,7 @@
       (click)="onConfirm()"
       id="confirm"
       slot="end"
+      *ngIf="hasTimeframe()"
       [disabled]="
         saving ||
         (tokenCount$ | async) < reservation.cost ||
@@ -83,23 +84,22 @@
         (outOfRange && !overrideDistanceDisable) ||
         isInitializing
       "
-      margin-top
-      align-items-center
+      class="ion-margin-top ion-align-items-center"
     >
-      <ion-row *ngIf="!saving; else isSaving" align-items-center>
-        <span *ngIf="!isEditTime" class="scale">⚡&nbsp;&nbsp;</span>
+      <ion-row *ngIf="!saving; else isSaving" class="ion-align-items-center">
+        <!-- <span *ngIf="!isEditTime" class="scale">⚡&nbsp;&nbsp;</span> -->
+        <span *ngIf="!isEditTime" class="scale"><ion-icon name="flash"></ion-icon>&nbsp;&nbsp;</span>
         <span *ngIf="isEditTime" class="scale">⏱️&nbsp;&nbsp;</span>
-        <span padding-horizontal>
+        <span class="ion-padding-horizontal">
           <span *ngIf="!isEditTime"> Change<br />Channel&nbsp;</span>
           <span *ngIf="isEditTime"> Add Time</span>
         </span>
-        <span flex align-items-center
+        <span class="flex ion-align-items-center"
           ><img
-            class="coin"
+            class="coin ion-padding-start"
             src="./assets/coin.svg"
             width="22"
             height="22"
-            padding-start
           />
           {{ reservation.cost }}</span
         >
@@ -109,9 +109,8 @@
       </ng-template>
     </ion-button>
     <ion-row
-      class="ion-text-center"
+      class="ion-text-center ion-margin-top"
       *ngIf="(tokenCount$ | async) < reservation.cost"
-      margin-top
     >
       <ion-text color="danger">
         Heads up! You have {{ tokenCount$ | async }}
@@ -127,9 +126,8 @@
       </ion-text>
     </ion-row>
     <ion-row
-      class="ion-text-center"
+      class="ion-text-center ion-margin-top"
       *ngIf="outOfRange && !overrideDistanceDisable"
-      margin-top
     >
       <ion-text color="danger" (click)="onClickOverrideDistance()">
         Sorry, you are too far away from
