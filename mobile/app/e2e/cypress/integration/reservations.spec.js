@@ -39,8 +39,7 @@ context("Reservations", () => {
     )
       .contains("Test Wicked Wolf")
       .click();
-
-    cy.get("ion-list[data-atm='programs']:not(.content-loading)").screenshot();
+    cy.screenshot();
     cy.get(
       "ion-list[data-atm='programs']:not(.content-loading) app-program:nth-of-type(2) ion-card-content .title"
     ).click();
