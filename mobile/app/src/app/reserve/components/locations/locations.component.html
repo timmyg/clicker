@@ -48,6 +48,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
   <ng-template #showLocations>
     <ion-list
       lines="none"
+      data-atm="locations"
       [class.content-loading]="
         (isLoading$ | async) || evaluatingGeolocation || waiting
       "
@@ -89,8 +90,8 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
               😢.
             </p>
             <p>
-              Bring Clicker to your neighborhood by clicking <b>Suggest New
-              Location</b> from the menu.
+              Bring Clicker to your neighborhood by clicking
+              <b>Suggest New Location</b> from the menu.
             </p>
           </ion-card-content>
         </ion-card>
