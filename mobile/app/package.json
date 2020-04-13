@@ -20,8 +20,7 @@
     "test": "ng test",
     "e2e": "npx cypress open",
     "e2e:headless": "npx cypress run --headless",
-    "lint": "ng lint",
-    "postinstall": "ngcc"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
