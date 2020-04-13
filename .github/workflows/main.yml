@@ -34,7 +34,7 @@ jobs:
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
-          build: npm run build:env
+          build: npm run build
           start: npm run start:static
           wait-on: "http://localhost:4100"
           browser: chrome
