@@ -1,6 +1,6 @@
 // import { Component, ViewChild } from '@angular/core';
 import { ModalController, ToastController, IonInput } from "@ionic/angular";
-// import { SegmentService } from "ngx-segment-analytics";
+import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
 import { UserService } from "src/app/core/services/user.service";
 import { Store } from "@ngrx/store";
@@ -31,7 +31,7 @@ export class LoginComponent {
   constructor(
     public modalController: ModalController,
     public toastController: ToastController,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private globals: Globals,
     private userService: UserService,
     private store: Store<fromStore.AppState>
@@ -59,7 +59,7 @@ export class LoginComponent {
     // TODO these service should probably be using redux events
     this.userService.loginVerifyStart(`+1${this.phone}`).subscribe(
       (result) => {
-        // this.segment.track(this.globals.events.login.started);
+        this.segment.track(this.globals.events.login.started);
         this.codeSent = true;
         this.waiting = false;
         setTimeout(() => this.codeInput.setFocus(), 1000);
@@ -86,7 +86,7 @@ export class LoginComponent {
       .loginVerify(`+1${this.phone}`, this.code, this.deviceUuid)
       .subscribe(
         (token) => {
-          // this.segment.track(this.globals.events.login.completed);
+          this.segment.track(this.globals.events.login.completed);
           this.waiting = false;
           this.saveTokenAndClose(token);
         },
@@ -113,8 +113,8 @@ export class LoginComponent {
     const newUserId = decode(token).sub;
     this.userId$.pipe(first((val) => !!val)).subscribe(async (oldUserId) => {
       this.store.dispatch(new fromUser.Alias(oldUserId, newUserId));
-      // this.segment.alias(newUserId, oldUserId);
-      // this.segment.track(this.globals.events.login.completed);
+      this.segment.alias(newUserId, oldUserId);
+      this.segment.track(this.globals.events.login.completed);
       this.userService.setToken(token);
       const toast = await this.toastController.create({
         message: `🎊 Successfully logged in. 🎊`,

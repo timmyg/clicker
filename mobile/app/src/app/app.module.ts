@@ -40,9 +40,6 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {
-    console.log({ environment });
-  }
   handleError(error) {
     console.error(error);
     if (environment.stage !== "local") {
@@ -87,11 +84,11 @@ export function initUserStuff(store: Store<AppState>): Function {
     MenuModule,
     AuthModule,
     BrowserModule,
-    // SegmentModule.forRoot({
-    //   apiKey: environment.segment.writeKey,
-    //   debug: !environment.production,
-    //   loadOnInitialization: true
-    // }),
+    SegmentModule.forRoot({
+      apiKey: environment.segment.writeKey,
+      debug: !environment.production,
+      loadOnInitialization: true
+    }),
     IonicModule.forRoot(),
     AppRoutingModule,
     StateModule.forRoot(),

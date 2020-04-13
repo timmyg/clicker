@@ -20,7 +20,7 @@ import { ToastController, ModalController, Platform } from "@ionic/angular";
 import { first, filter } from "rxjs/operators";
 import { isLoggedIn, getUserTokenCount } from "src/app/state/user";
 import { Actions, ofType } from "@ngrx/effects";
-// import { SegmentService } from "ngx-segment-analytics";
+import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
 import { Timeframe } from "src/app/state/app/timeframe.model";
 import { getTimeframes } from "src/app/state/app";
@@ -70,7 +70,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     private router: Router,
     public toastController: ToastController,
     private actions$: Actions,
-    // private segment: SegmentService,
+    private segment: SegmentService,
     private globals: Globals,
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -85,7 +85,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     // TODO this is ugly but gets rid of ExpressionChangedAfterItHasBeenCheckedError issue when opening wallet
     this.isAppLoading$ = this.store.pipe(select(getAppLoading));
     this.sub = this.isAppLoading$.subscribe((x) => {
-      console.log({ x });
       this.isAppLoading = x;
     });
   }
@@ -99,9 +98,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      console.log(this);
-    }, 5000);
     this.reservation$
       .pipe(
         filter((r) => r !== null),
@@ -122,9 +118,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
           )
           .subscribe((timeframes) => {
             if (this.reservation.minutes !== 0) {
-              const timeframe = timeframes[0];
-              this.reservation.cost = timeframe.tokens;
-              this.reservation.minutes = timeframe.minutes;
+              // const timeframe = timeframes[0];
+              // this.reservation.cost = timeframe.tokens;
+              // this.reservation.minutes = timeframe.minutes;
             }
             this.isInitializing = false;
           });
@@ -165,7 +161,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   // }
 
   onConfirm() {
-    console.log("onconfirm");
     const { reservation: r } = this;
     this.saving = true;
     this.isEditMode
@@ -181,28 +176,27 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       )
       .pipe(first())
       .subscribe(() => {
-        console.log("success");
-        // if (this.isEditMode) {
-        //   this.segment.track(this.globals.events.reservation.updated, {
-        //     minutes: r.minutes,
-        //     locationName: r.location.name,
-        //     locationNeighborhood: r.location.neighborhood,
-        //     channelName: r.program.channelTitle,
-        //     channelNumber: r.program.channel,
-        //     programName: r.program.title,
-        //     programDescription: r.program.description
-        //   });
-        // } else {
-        //   this.segment.track(this.globals.events.reservation.created, {
-        //     minutes: r.minutes,
-        //     locationName: r.location.name,
-        //     locationNeighborhood: r.location.neighborhood,
-        //     channelName: r.program.channelTitle,
-        //     channelNumber: r.program.channel,
-        //     programName: r.program.title,
-        //     programDescription: r.program.description
-        //   });
-        // }
+        if (this.isEditMode) {
+          this.segment.track(this.globals.events.reservation.updated, {
+            minutes: r.minutes,
+            locationName: r.location.name,
+            locationNeighborhood: r.location.neighborhood,
+            channelName: r.program.channelTitle,
+            channelNumber: r.program.channel,
+            programName: r.program.title,
+            programDescription: r.program.description
+          });
+        } else {
+          this.segment.track(this.globals.events.reservation.created, {
+            minutes: r.minutes,
+            locationName: r.location.name,
+            locationNeighborhood: r.location.neighborhood,
+            channelName: r.program.channelTitle,
+            channelNumber: r.program.channel,
+            programName: r.program.title,
+            programDescription: r.program.description
+          });
+        }
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(["/tabs/profile"]);
         this.showTunedToast(
@@ -221,7 +215,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       .subscribe(async () => {
         this.showErrorToast();
         this.saving = false;
-        // await this.segment.track(this.globals.events.reservation.failed);
+        await this.segment.track(this.globals.events.reservation.failed);
       });
   }
 
@@ -248,6 +242,10 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     const timeframe = e.detail.value;
     this.reservation.cost = timeframe.tokens;
     this.reservation.minutes = timeframe.minutes;
+  }
+
+  hasTimeframe() {
+    return !!this.reservation.cost;
   }
 
   onClickOverrideDistanceForce() {

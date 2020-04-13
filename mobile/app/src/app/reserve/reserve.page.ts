@@ -127,7 +127,6 @@ export class ReservePage {
   }
 
   async forceUpdate(channel = "Production") {
-    console.log(channel);
     await this.deploy.configure({ channel });
     await this.deploy.sync({ updateMethod: "auto" });
   }

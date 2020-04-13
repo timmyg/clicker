@@ -8,7 +8,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content class="ion-padding">
   <form
     #phoneForm="ngForm"
     (ngSubmit)="onPhoneSubmit()"
@@ -29,7 +29,7 @@
         expand="block"
         type="submit"
         size="large"
-        margin-top
+        class="ion-margin-top"
         [disabled]="!phone || phone.length !== 10 || waiting"
         >Next</ion-button
       >
@@ -59,7 +59,7 @@
         expand="block"
         type="submit"
         size="large"
-        margin-top
+        class="ion-margin-top"
         [disabled]="!isEligibleCode() || waiting"
         >Login</ion-button
       >

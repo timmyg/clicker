@@ -11,7 +11,7 @@
   <ion-item>
     <ion-card (click)="isAvailable() && onLocationClick()" class="ion-activatable">
       <div class="slide-indicator">
-        <ion-icon name="md-more" class="icon" size="large"></ion-icon>
+        <ion-icon name="ellipsis-vertical" class="icon" size="large"></ion-icon>
       </div>
       <ion-card-header>
         <ion-card-subtitle>
@@ -23,7 +23,7 @@
           ></ion-icon>
           <ion-icon *ngIf="isManager()" name="star" class="manage"></ion-icon>
 
-          <span float-right *ngIf="location.distance !== undefined">
+          <span class="ion-float-right" *ngIf="location.distance !== undefined">
             <span *ngIf="location.distance >= 0.2; else near">
               {{ getDistance() }} miles
             </span>
@@ -31,7 +31,7 @@
           </span>
         </ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content no-padding-top>
+      <ion-card-content class="ion-no-padding-top">
         <ion-row>
           <img [src]="location.img" class="logo" alt="location logo" />
           <h1>{{ location.name }}</h1>

@@ -8,19 +8,19 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content padding>
-  <ion-row *ngIf="(isLoading$ | async)" margin-vertical>
-    <ion-spinner name="crescent" class="center"></ion-spinner>
+<ion-content class="ion-padding">
+  <ion-row *ngIf="(isLoading$ | async)" class="ion-margin-vertical">
+    <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
   </ion-row>
   <section [hidden]="addCardMode || (isLoading$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
-        <ion-list-header> Choose an Amount </ion-list-header>
+        <ion-list-header> <ion-label>Choose an Amount</ion-label> </ion-list-header>
         <ion-item *ngFor="let f of (plans$ | async)">
-          <ion-label flex align-items-center>
+          <ion-label class="flex ion-align-items-center">
             <span class="dollars">${{ f.dollars }}</span>
-            <div flex align-items-center>
-              <ion-chip *ngIf="f.best" color="primary" padding-right>
+            <div class="flex ion-align-items-center">
+              <ion-chip *ngIf="f.best" color="primary" class="ion-padding-right">
                 Best Deal
               </ion-chip>
               <img

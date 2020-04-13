@@ -1,27 +1,28 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons *ngIf="!searchMode" slot="start">
       <ion-back-button
         class="show-back-button"
-        *ngIf="showBack() && !searchMode; else menu"
+        *ngIf="showBack(); else menu"
         (click)="goBack()"
       ></ion-back-button>
       <ng-template #menu>
         <ion-menu-button autoHide="false"></ion-menu-button>
       </ng-template>
     </ion-buttons>
-    <ion-buttons *ngIf="!searchMode" slot="end" padding-end>
+    <ion-buttons *ngIf="!searchMode" slot="end" class="ion-padding-end">
       <app-coins></app-coins>
     </ion-buttons>
     <ion-title *ngIf="!searchMode"> {{ title }} </ion-title>
+    <div *ngIf="searchMode" class="ion-padding-top">
     <ion-searchbar
       #searchbar
-      *ngIf="searchMode"
       (ionCancel)="closeSearch()"
       (ionChange)="onSearch($event)"
       showCancelButton
       animated
     ></ion-searchbar>
+    </div>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -34,7 +35,7 @@
     <ion-refresher-content
       pullingIcon="arrow-down"
       pullingText="Pull to refresh"
-      refreshingSpinner="crescent"
+      refreshingSpinner="dots"
     >
     </ion-refresher-content>
   </ion-refresher>
@@ -123,10 +124,8 @@
     ></ion-progress-bar>
   </ion-row>
   <ion-row
-    flex
     *ngIf="updateAvailable"
-    class="ion-justify-content-center"
-    padding-vertical
+    class="flex ion-justify-content-center ion-padding-vertical"
   >
     <ion-button (click)="forceUpdate()">
       <ion-icon slot="start" name="trophy"></ion-icon>
@@ -134,10 +133,8 @@
     </ion-button>
   </ion-row>
   <ion-row
-    flex
     *ngIf="channelsEnabled"
-    class="ion-justify-content-center"
-    padding-vertical
+    class="flex ion-justify-content-center ion-padding-vertical"
   >
     <ion-button color="primary" (click)="forceUpdate()">
       <ion-icon slot="start" name="trophy"></ion-icon>
