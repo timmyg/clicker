@@ -35,22 +35,29 @@ context("Reservations", () => {
       .contains("1");
     cy.get("app-location:nth-of-type(1) ion-card-content h1")
       .contains("Test Wicked Wolf")
+      .screenshot()
       .click({ force: true });
     cy.get(
       "ion-list[data-atm='programs']:not(.content-loading) app-program:nth-of-type(2) ion-card-content .title"
-    ).click({ force: true });
+    )
+      .screenshot()
+      .click({ force: true });
     cy.get("app-tvs ion-button")
       .contains("2")
+      .screenshot()
       .click({ force: true });
     cy.get("ion-radio-group ion-radio")
       .first()
-      .click() 
-    cy.get("ion-button#confirm:not([disabled])").click({ force: true });
+      .click();
+    cy.get("ion-button#confirm:not([disabled])")
+      .screenshot()
+      .click({ force: true });
     cy.get("app-reservation").should($reservations => {
       expect($reservations).to.have.length(1);
     });
     cy.get("app-coins")
       .find(".count")
-      .contains("0");
+      .contains("0")
+      .screenshot();
   });
 });
