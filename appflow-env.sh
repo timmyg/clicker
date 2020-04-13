@@ -16,6 +16,9 @@ then
     then
         echo "3"
         export ENV=develop
+    else
+        echo "4"
+        export ENV=blah
     fi
 else 
     echo "Not an Appflow build"; 
