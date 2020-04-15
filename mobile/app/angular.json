@@ -138,6 +138,9 @@
             "production": {
               "browserTarget": "app:build:production"
             },
+            "release": {
+              "browserTarget": "app:build:release"
+            },
             "ci": {
               "progress": false
             }
