@@ -45,6 +45,7 @@ export class TvsComponent implements OnDestroy, OnInit {
     this.tvs$ = this.store.select(getReservationTvs);
     this.tvs$.pipe(first()).subscribe((tvs) => {
       if (tvs.length === 1) {
+        console.log("skipping...");
         this.onTvClick(tvs[0], true);
       }
     });

@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4100",
+    "start:release": "ng serve --port 4100 --configuration=release",
     "start:host": "ng serve --port 4100 --host local.tryclicker.com",
     "start:wait": "ng serve & wait-on http://localhost:4100",
     "start:static": "npx http-server www --port 4100",

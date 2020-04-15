@@ -33,7 +33,9 @@
         </ion-row>
         <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label class="flex ion-align-items-center">
-            <span data-atm-class="timeframe" class="timeframe">{{ timeframe.minutes }} minutes</span>
+            <span data-atm-class="timeframe" class="timeframe"
+              >{{ timeframe.minutes }} minutes</span
+            >
             <div class="flex ion-align-items-center">
               <img
                 class="coin ion-float-right"
@@ -88,7 +90,9 @@
     >
       <ion-row *ngIf="!saving; else isSaving" class="ion-align-items-center">
         <!-- <span *ngIf="!isEditTime" class="scale">⚡&nbsp;&nbsp;</span> -->
-        <span *ngIf="!isEditTime" class="scale"><ion-icon name="flash"></ion-icon>&nbsp;&nbsp;</span>
+        <span *ngIf="!isEditTime" class="scale"
+          ><ion-icon name="flash"></ion-icon>&nbsp;&nbsp;</span
+        >
         <span *ngIf="isEditTime" class="scale">⏱️&nbsp;&nbsp;</span>
         <span class="ion-padding-horizontal">
           <span *ngIf="!isEditTime"> Change<br />Channel&nbsp;</span>

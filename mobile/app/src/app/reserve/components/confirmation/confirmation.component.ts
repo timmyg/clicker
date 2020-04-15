@@ -184,7 +184,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
             channelName: r.program.channelTitle,
             channelNumber: r.program.channel,
             programName: r.program.title,
-            programDescription: r.program.description
+            programDescription: r.program.description,
           });
         } else {
           this.segment.track(this.globals.events.reservation.created, {
@@ -194,7 +194,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
             channelName: r.program.channelTitle,
             channelNumber: r.program.channel,
             programName: r.program.title,
-            programDescription: r.program.description
+            programDescription: r.program.description,
           });
         }
         this.store.dispatch(new fromReservation.Start());
@@ -245,7 +245,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   hasTimeframe() {
-    return !!this.reservation.cost;
+    return this.reservation.cost !== null;
   }
 
   onClickOverrideDistanceForce() {

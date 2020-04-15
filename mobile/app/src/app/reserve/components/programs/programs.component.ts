@@ -52,7 +52,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
       (searchTerm) => {
         this.searchTerm = searchTerm;
         this.segment.track(this.globals.events.program.search, {
-          term: this.searchTerm
+          term: this.searchTerm,
         });
       }
     );
@@ -120,7 +120,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.store.dispatch(new fromReservation.SetProgram(program));
     // if editing, may already have a tv
     const state = await this.store.pipe(first()).toPromise();
-    const reservation: Partial<Reservation> = state.reservation.reservation;
+    // const reservation: Partial<Reservation> = state.reservation.reservation;
     const updateType: string = state.reservation.updateType;
     // if (reservation.id && reservation.box && reservation.box.label) {
     if (!!updateType) {
