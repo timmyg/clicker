@@ -14,7 +14,7 @@ export const initialState: State = {
   reservation: null,
   updateType: null,
   loading: false,
-  error: ""
+  error: "",
 };
 
 export function reducer(
@@ -25,7 +25,7 @@ export function reducer(
     case fromReservation.START_RESERVATION:
       return {
         ...state,
-        reservation: new Reservation()
+        reservation: new Reservation(),
       };
     case fromReservation.CREATE_RESERVATION:
     case fromReservation.UPDATE_RESERVATION:
@@ -33,46 +33,59 @@ export function reducer(
     case fromReservation.GET_RESERVATIONS:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case fromReservation.GET_RESERVATIONS_SUCCESS:
       return {
         ...state,
         loading: false,
-        reservations: action.payload
+        reservations: action.payload,
       };
     case fromReservation.UPDATE_RESERVATION_SUCCESS:
     case fromReservation.CREATE_RESERVATION_SUCCESS:
     case fromReservation.CANCEL_RESERVATION_SUCCESS:
       return {
         ...state,
-        loading: false
+        loading: false,
         // reservations: [...state.reservations, action.payload],
       };
-    case fromReservation.SET_RESERVATION_FOR_UPDATE:
+    case fromReservation.SET_RESERVATION_FOR_UPDATE_CHANNEL:
       return {
         ...state,
         loading: false,
-        reservation: action.reservation,
-        updateType: action.updateType
+        reservation: {
+          ...action.reservation,
+          minutes: 0,
+        },
+        updateType: "channel",
+      };
+    case fromReservation.SET_RESERVATION_FOR_UPDATE_TIME:
+      return {
+        ...state,
+        loading: false,
+        reservation: {
+          ...action.reservation,
+          program: null,
+        },
+        updateType: "time",
       };
     case fromReservation.SET_RESERVATION_LOCATION_SUCCESS:
       state.reservation.location = action.payload;
       return {
         ...state,
-        loading: false
+        loading: false,
       };
     case fromReservation.SET_RESERVATION_PROGRAM:
       state.reservation.program = action.payload;
       return {
         ...state,
-        loading: false
+        loading: false,
       };
     case fromReservation.SET_RESERVATION_TV:
       state.reservation.box = action.payload;
       return {
         ...state,
-        loading: false
+        loading: false,
       };
     case fromReservation.GET_RESERVATIONS_FAIL:
     case fromReservation.CREATE_RESERVATION_FAIL:
@@ -81,7 +94,7 @@ export function reducer(
       return {
         ...state,
         loading: false,
-        error: action.payload
+        error: action.payload,
       };
     default: {
       return state;

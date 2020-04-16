@@ -161,7 +161,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       (searchTerm) => {
         this.searchTerm = searchTerm;
         this.segment.track(this.globals.events.location.search, {
-          term: this.searchTerm
+          term: this.searchTerm,
         });
       }
     );
@@ -216,7 +216,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
   }
 
   async refresh() {
-    console.log("refresh");
     this.store.dispatch(
       new fromLocation.GetAll(this.userGeolocation, this.milesRadius)
     );
@@ -242,12 +241,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
         whoops.present();
         this.reserveService.emitRefreshed();
       });
-      const permissionStatus = await this.storage.get(permissionGeolocation.name);
-      if (
-        permissionStatus &&
-        (permissionStatus === permissionGeolocation.values.allowed)) {
-        this.evaluateGeolocation();
-      }
+    const permissionStatus = await this.storage.get(permissionGeolocation.name);
+    if (
+      permissionStatus &&
+      permissionStatus === permissionGeolocation.values.allowed
+    ) {
+      this.evaluateGeolocation();
+    }
   }
 
   async allowLocation() {

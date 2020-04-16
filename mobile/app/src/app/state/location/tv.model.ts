@@ -14,6 +14,7 @@ export interface TV {
   live: {
     locked?: boolean;
     lockedUntil?: Date;
+    lockedProgrammingId?: string;
     lockedMessage?: string;
   };
 }

@@ -21,8 +21,10 @@ export const CANCEL_RESERVATION_SUCCESS =
   "[RESERVATION] Cancel Reservation Success";
 export const CANCEL_RESERVATION_FAIL = "[RESERVATION] Cancel Reservation Fail";
 export const START_RESERVATION = "[RESERVATION WIZARD] Start New Reservation";
-export const SET_RESERVATION_FOR_UPDATE =
-  "[RESERVATION WIZARD] Set Existing Reservation for Update";
+export const SET_RESERVATION_FOR_UPDATE_CHANNEL =
+  "[RESERVATION WIZARD] Set Existing Reservation for Update Channel";
+export const SET_RESERVATION_FOR_UPDATE_TIME =
+  "[RESERVATION WIZARD] Set Existing Reservation for Update Time";
 export const SET_RESERVATION_LOCATION =
   "[RESERVATION WIZARD] Set Reservation Location";
 export const SET_RESERVATION_LOCATION_SUCCESS =
@@ -95,9 +97,14 @@ export class CancelFail implements Action {
   constructor(public payload: any) {}
 }
 
-export class SetForUpdate implements Action {
-  readonly type = SET_RESERVATION_FOR_UPDATE;
-  constructor(public reservation: Reservation, public updateType: string) {}
+export class SetForUpdateChannel implements Action {
+  readonly type = SET_RESERVATION_FOR_UPDATE_CHANNEL;
+  constructor(public reservation: Reservation) {}
+}
+
+export class SetForUpdateTime implements Action {
+  readonly type = SET_RESERVATION_FOR_UPDATE_TIME;
+  constructor(public reservation: Reservation) {}
 }
 
 export class SetLocation implements Action {
@@ -143,7 +150,8 @@ export type ReservationActions =
   | Cancel
   | CancelSuccess
   | CancelFail
-  | SetForUpdate
+  | SetForUpdateTime
+  | SetForUpdateChannel
   | SetLocation
   | SetLocationSuccess
   | SetLocationFail

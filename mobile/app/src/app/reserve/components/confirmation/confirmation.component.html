@@ -11,11 +11,13 @@
       </div>
       <div>
         <label> Reserved: </label>
-        <span *ngIf="reservation.minutes || isEditMode; else noReservation"
-          >{{ reservation?.box?.label }} until
+        <span *ngIf="reservation.minutes; else chooseTimeframe"
+          >📺&nbsp;{{ reservation?.box?.label }} until
           {{ getEndTime() | amDateFormat: "h:mma" }}</span
         >
-        <ng-template #noReservation> One-time change </ng-template>
+        <ng-template #chooseTimeframe><b>Choose timeframe</b></ng-template>
+
+        <!-- <ng-template #noReservation> One-time change </ng-template> -->
       </div>
       <div></div>
     </div>
@@ -24,7 +26,7 @@
         <ion-list-header class="ion-no-padding">
           <ion-label>
             <span *ngIf="isEditTime; else normal">Extend</span>
-            <ng-template #normal>Choose</ng-template> Timeframe:
+            <ng-template #normal>Choose</ng-template>&nbsp;Timeframe:
           </ion-label>
         </ion-list-header>
         <!-- hacky - should put as first item in observable somehow? -->
@@ -33,7 +35,9 @@
         </ion-row>
         <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label class="flex ion-align-items-center">
-            <span data-atm-class="timeframe" class="timeframe">{{ timeframe.minutes }} minutes</span>
+            <span data-atm-class="timeframe" class="timeframe"
+              >{{ timeframe.minutes }} minutes</span
+            >
             <div class="flex ion-align-items-center">
               <img
                 class="coin ion-float-right"
@@ -88,8 +92,12 @@
     >
       <ion-row *ngIf="!saving; else isSaving" class="ion-align-items-center">
         <!-- <span *ngIf="!isEditTime" class="scale">⚡&nbsp;&nbsp;</span> -->
-        <span *ngIf="!isEditTime" class="scale"><ion-icon name="flash"></ion-icon>&nbsp;&nbsp;</span>
-        <span *ngIf="isEditTime" class="scale">⏱️&nbsp;&nbsp;</span>
+        <span *ngIf="!isEditTime" class="scale"
+          ><ion-icon name="flash"></ion-icon>&nbsp;&nbsp;</span
+        >
+        <span *ngIf="isEditTime" class="scale"
+          ><ion-icon name="timer-outline"></ion-icon>&nbsp;&nbsp;</span
+        >
         <span class="ion-padding-horizontal">
           <span *ngIf="!isEditTime"> Change<br />Channel&nbsp;</span>
           <span *ngIf="isEditTime"> Add Time</span>
@@ -105,7 +113,9 @@
         >
       </ion-row>
       <ng-template #isSaving>
-        <span class="shake">⚡&nbsp;&nbsp;Tuning...&nbsp;</span>
+        <span class="flex ion-align-items-center shake"
+          ><ion-icon name="flash"></ion-icon>&nbsp;&nbsp;Tuning...&nbsp;</span
+        >
       </ng-template>
     </ion-button>
     <ion-row

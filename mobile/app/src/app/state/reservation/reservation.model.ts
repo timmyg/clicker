@@ -13,7 +13,7 @@ export class Reservation {
   end: Date;
   minutes: Number;
   cost: Number;
-  reserve: boolean;
+  reserve: boolean; // this used?
 
   // get tvTag() {
   //   return this.box.label;
