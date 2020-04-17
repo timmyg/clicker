@@ -11,7 +11,7 @@
       </div>
       <div>
         <label> Reserved: </label>
-        <span *ngIf="reservation.minutes; else chooseTimeframe"
+        <span *ngIf="reservation.minutes || isEditChannel; else chooseTimeframe"
           >📺&nbsp;{{ reservation?.box?.label }} until
           {{ getEndTime() | amDateFormat: "h:mma" }}</span
         >
@@ -80,7 +80,7 @@
       (click)="onConfirm()"
       id="confirm"
       slot="end"
-      *ngIf="hasTimeframe()"
+      *ngIf="hasTimeframe() || isEditChannel"
       [disabled]="
         saving ||
         (tokenCount$ | async) < reservation.cost ||

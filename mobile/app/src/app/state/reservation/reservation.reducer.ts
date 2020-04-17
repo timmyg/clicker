@@ -55,7 +55,7 @@ export function reducer(
         loading: false,
         reservation: {
           ...action.reservation,
-          minutes: 0,
+          program: null,
         },
         updateType: "channel",
       };
@@ -65,7 +65,8 @@ export function reducer(
         loading: false,
         reservation: {
           ...action.reservation,
-          program: null,
+          minutes: 0,
+          cost: null
         },
         updateType: "time",
       };
