@@ -43,11 +43,11 @@ export class TvsComponent implements OnDestroy, OnInit {
     private actions$: Actions
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
-    this.tvs$.pipe(first()).subscribe((tvs) => {
-      if (tvs.length === 1) {
-        this.onTvClick(tvs[0], true);
-      }
-    });
+    // this.tvs$.pipe(first()).subscribe((tvs) => {
+    //   if (tvs.length === 1) {
+    //     this.onTvClick(tvs[0], true);
+    //   }
+    // });
     this.reservation$ = this.store.select(getReservation);
     this.reservation$.subscribe((r) => (this.reservation = r));
     this.reserveService.emitTitle(this.title);

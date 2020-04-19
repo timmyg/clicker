@@ -14,28 +14,4 @@ export class Reservation {
   minutes: Number;
   cost: Number;
   reserve: boolean; // this used?
-
-  // get tvTag() {
-  //   return this.box.label;
-  // }
-
-  // get locationTown() {
-  //   return this.location.neighborhood;
-  // }
-
-  // get programTitle() {
-  //   return this.program.title;
-  // }
-
-  // hasLocation() {
-  //   return this.location && this.location.id;
-  // }
-
-  // hasChannel() {
-  //   return this.program && this.program.channel;
-  // }
-
-  // hasTV() {
-  //   return this.box && this.box.label;
-  // }
 }

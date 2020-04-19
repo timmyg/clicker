@@ -1,9 +1,10 @@
 import * as fromReservation from "./reservation.actions";
 import { Reservation } from "./reservation.model";
+import { ReservationUpdate } from "./reservation-update.model";
 
 export interface State {
   reservations: Reservation[];
-  reservation: Partial<Reservation>;
+  reservation: Partial<Reservation|ReservationUpdate>;
   updateType: string;
   loading: boolean;
   error: string;

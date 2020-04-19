@@ -13,7 +13,7 @@
     <ion-buttons *ngIf="!searchMode" slot="end" class="ion-padding-end">
       <app-coins></app-coins>
     </ion-buttons>
-    <ion-title *ngIf="!searchMode"> {{ title }} </ion-title>
+    <ion-title *ngIf="!searchMode" class="title brand-text light"> {{ title }} </ion-title>
     <div *ngIf="searchMode" class="ion-padding-top">
     <ion-searchbar
       #searchbar
