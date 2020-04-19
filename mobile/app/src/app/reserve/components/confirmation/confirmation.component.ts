@@ -266,6 +266,14 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     }
   }
 
+  getCost(): number {
+    if (this.isEditMode) {
+      return this.reservation.update && this.reservation.update.cost 
+    } else {
+      return this.reservation.cost
+    }
+  }
+
   onClickOverrideDistanceForce() {
     this.overrideDistanceDisable = true;
   }

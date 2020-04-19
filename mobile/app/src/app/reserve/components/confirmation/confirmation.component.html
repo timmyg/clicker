@@ -11,7 +11,7 @@
       </div>
       <div>
         <label> Reserved: </label>
-        <span *ngIf="(!isEditMode && reservation.minutes) || (isEditTime && reservation.update?.minutes) || (isEditProgram); else chooseTimeframe"
+        <span *ngIf="(!isEditMode && reservation.minutes) || (isEditTime && reservation.update?.minutes) || isEditChannel; else chooseTimeframe"
           >📺&nbsp;{{ reservation?.box?.label }} until
           {{ getEndTime() | amDateFormat: "h:mma" }}</span
         >
@@ -83,7 +83,7 @@
       *ngIf="isValid()"
       [disabled]="
         saving ||
-        (tokenCount$ | async) < reservation.cost ||
+        (tokenCount$ | async) < getCost() ||
         (!isEditChannel && isAppLoading) ||
         (outOfRange && !overrideDistanceDisable) ||
         isInitializing
@@ -109,7 +109,7 @@
             width="22"
             height="22"
           />
-          {{ isEditMode ? reservation.update?.cost : reservation.cost }}</span
+          {{ getCost() }}</span
         >
       </ion-row>
       <ng-template #isSaving>
@@ -120,7 +120,7 @@
     </ion-button>
     <ion-row
       class="ion-text-center ion-margin-top"
-      *ngIf="(tokenCount$ | async) < reservation.cost"
+      *ngIf="(tokenCount$ | async) < getCost()"
     >
       <ion-text color="danger">
         Heads up! You have {{ tokenCount$ | async }}

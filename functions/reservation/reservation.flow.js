@@ -274,7 +274,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const { statusCode, data } = await new Invoke()
     .service('user')
     .name('transaction')
-    .body({ tokens: updatedReservation.cost, minutes: updatedReservation.minutes })
+    .body({ tokens: updatedReservation.update.cost, minutes: updatedReservation.update.minutes })
     .headers(event.headers)
     .go();
   console.timeEnd('deduct transaction');
