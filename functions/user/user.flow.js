@@ -328,6 +328,7 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
 
+  console.log({ user, tokens });
   if (user && user.tokens >= tokens) {
     user = await dbUser.update(
       { id: userId },
