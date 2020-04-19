@@ -11,7 +11,7 @@
       </div>
       <div>
         <label> Reserved: </label>
-        <span *ngIf="reservation.minutes || isEditChannel; else chooseTimeframe"
+        <span *ngIf="(!isEditMode && reservation.minutes) || (isEditTime && reservation.update?.minutes) || (isEditProgram); else chooseTimeframe"
           >📺&nbsp;{{ reservation?.box?.label }} until
           {{ getEndTime() | amDateFormat: "h:mma" }}</span
         >
@@ -80,7 +80,7 @@
       (click)="onConfirm()"
       id="confirm"
       slot="end"
-      *ngIf="hasTimeframe() || isEditChannel"
+      *ngIf="isValid()"
       [disabled]="
         saving ||
         (tokenCount$ | async) < reservation.cost ||
@@ -109,7 +109,7 @@
             width="22"
             height="22"
           />
-          {{ reservation.cost }}</span
+          {{ isEditMode ? reservation.update?.cost : reservation.cost }}</span
         >
       </ion-row>
       <ng-template #isSaving>

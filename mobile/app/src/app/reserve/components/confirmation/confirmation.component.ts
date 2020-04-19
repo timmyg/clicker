@@ -154,9 +154,14 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
 
   getEndTime() {
     // if (this.reservation.end) {
-    return moment(this.reservation.end)
+    return this.isEditMode ? 
+      moment(this.reservation.end)
+      .add(this.reservation.update.minutes.valueOf(), "minutes")
+      .toDate()
+      : moment(this.reservation.end)
       .add(this.reservation.minutes.valueOf(), "minutes")
-      .toDate();
+      .toDate() 
+
     // }
   }
 
@@ -243,14 +248,22 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   async onTimeframeChange(e) {
-    const timeframe = e.detail.value;
-    // this.reservation.cost = timeframe.tokens;
-    // this.reservation.minutes = timeframe.minutes;
+    const timeframe: Timeframe = e.detail.value;
     this.store.dispatch(new fromReservation.SetTimeframe(timeframe));
   }
 
-  hasTimeframe() {
-    return !!this.reservation.cost;
+  // hasTimeframe() {
+  //   return !!this.reservation.cost;
+  // }
+
+  isValid() {
+    if (this.isEditChannel) {
+      return true;
+    } else if (this.isEditTime) {
+      return this.reservation.update && this.reservation.update.minutes
+    } else {
+      return this.reservation.minutes
+    }
   }
 
   onClickOverrideDistanceForce() {

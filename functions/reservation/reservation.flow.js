@@ -375,18 +375,18 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 function calculateReservationEndTime(reservation): number {
-  if (!reservation.start) {
+  if (reservation.update && reservation.update.minutes) {
     // new reservation
     // reservation.start = moment().unix() * 1000;
     return (
-      moment()
-        .add(reservation.minutes, 'm')
+      moment(reservation.end)
+        .add(reservation.update.minutes, 'm')
         .unix() * 1000
     );
   } else {
     // updating reservation
     return (
-      moment(reservation.end)
+      moment()
         .add(reservation.minutes, 'm')
         .unix() * 1000
     );
