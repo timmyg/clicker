@@ -242,15 +242,15 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   if (userId !== originalReservation.userId) {
     return respond(403, 'invalid userId');
   }
-  const updatedCost = originalReservation.cost + updatedReservation.cost;
-  const updatedMinutes = originalReservation.minutes + updatedReservation.minutes;
+  const updatedCost = originalReservation.cost + updatedReservation.update.cost;
+  const updatedMinutes = originalReservation.minutes + updatedReservation.update.minutes;
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
-  const { program, end } = updatedReservation;
+  const { program } = updatedReservation.update;
   console.log('update reservation:');
-  console.log({ cost: updatedCost, minutes: updatedMinutes, program, end });
+  console.log({ cost: updatedCost, minutes: updatedMinutes, program, end: updatedReservation.end });
   const reservation: Reservation = await dbReservation.update(
     { id, userId },
-    { cost: updatedCost, minutes: updatedMinutes, program, end },
+    { cost: updatedCost, minutes: updatedMinutes, program, end: updatedReservation.end },
     { returnValues: 'ALL_NEW', updateExpires: true },
   );
 
@@ -375,7 +375,22 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 function calculateReservationEndTime(reservation): number {
-  reservation.start = moment().unix() * 1000;
-  const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
-  return initialEndTimeMoment.add(reservation.minutes, 'm').unix() * 1000;
+  if (!reservation.start) {
+    // new reservation
+    // reservation.start = moment().unix() * 1000;
+    return (
+      moment()
+        .add(reservation.minutes, 'm')
+        .unix() * 1000
+    );
+  } else {
+    // updating reservation
+    return (
+      moment(reservation.end)
+        .add(reservation.minutes, 'm')
+        .unix() * 1000
+    );
+  }
+  // const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
+  // return initialEndTimeMoment.add(reservation.minutes, 'm').unix() * 1000;
 }

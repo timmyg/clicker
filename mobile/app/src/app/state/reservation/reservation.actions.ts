@@ -3,6 +3,7 @@ import { Reservation } from "./reservation.model";
 import { Location } from "../location/location.model";
 import { Program } from "../program/program.model";
 import { TV } from "../location/tv.model";
+import { Timeframe } from '../app/timeframe.model';
 
 export const GET_RESERVATIONS = "[RESERVATION] Get Reservations";
 export const GET_RESERVATIONS_SUCCESS =
@@ -33,6 +34,8 @@ export const SET_RESERVATION_LOCATION_FAIL =
   "[RESERVATION] Set Reservation Location Fail";
 export const SET_RESERVATION_PROGRAM =
   "[RESERVATION WIZARD] Set Reservation Program";
+export const SET_RESERVATION_TIMEFRAME =
+  "[RESERVATION WIZARD] Set Reservation Timeframe";
 export const SET_RESERVATION_TV = "[RESERVATION WIZARD] Set Reservation TV";
 
 export class Start implements Action {
@@ -136,6 +139,11 @@ export class SetTv implements Action {
   constructor(public payload: TV) {}
 }
 
+export class SetTimeframe implements Action {
+  readonly type = SET_RESERVATION_TIMEFRAME;
+  constructor(public payload: Timeframe) {}
+}
+
 export type ReservationActions =
   | Start
   | GetAll
@@ -156,4 +164,5 @@ export type ReservationActions =
   | SetLocationSuccess
   | SetLocationFail
   | SetProgram
-  | SetTv;
+  | SetTv
+  | SetTimeframe;

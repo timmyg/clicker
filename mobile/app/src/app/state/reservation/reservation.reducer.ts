@@ -1,10 +1,13 @@
 import * as fromReservation from "./reservation.actions";
 import { Reservation } from "./reservation.model";
-import { ReservationUpdate } from "./reservation-update.model";
 
 export interface State {
   reservations: Reservation[];
-  reservation: Partial<Reservation|ReservationUpdate>;
+  reservation: Reservation;
+  // reservation: ReservationUpdate;
+  // reservation: Partial<Reservation>|ReservationUpdate;
+  // reservation: Partial<Reservation|ReservationUpdate>;
+  // reservation: Either<Partial<Reservation>, ReservationUpdate>
   updateType: string;
   loading: boolean;
   error: string;
@@ -56,7 +59,7 @@ export function reducer(
         loading: false,
         reservation: {
           ...action.reservation,
-          program: null,
+          // program: null,
         },
         updateType: "channel",
       };
@@ -66,8 +69,8 @@ export function reducer(
         loading: false,
         reservation: {
           ...action.reservation,
-          minutes: 0,
-          cost: null
+          // minutes: 0,
+          // cost: null
         },
         updateType: "time",
       };
@@ -78,11 +81,31 @@ export function reducer(
         loading: false,
       };
     case fromReservation.SET_RESERVATION_PROGRAM:
-      state.reservation.program = action.payload;
+      if (!!state.updateType) {
+        state.reservation.update = {
+          program: action.payload,
+        }
+      } else {
+        state.reservation.program = action.payload;
+      }
       return {
         ...state,
         loading: false,
       };
+    case fromReservation.SET_RESERVATION_TIMEFRAME:
+        if (!!state.updateType) {
+          state.reservation.update = {
+            cost: action.payload.tokens,
+            minutes: action.payload.minutes
+          }
+        } else {
+          state.reservation.cost = action.payload.tokens;
+          state.reservation.minutes = action.payload.minutes;
+        }
+        return {
+          ...state,
+          loading: false,
+        };
     case fromReservation.SET_RESERVATION_TV:
       state.reservation.box = action.payload;
       return {

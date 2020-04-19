@@ -104,6 +104,8 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         first()
       )
       .subscribe((reservation) => {
+        console.log({reservation});
+        console.log(typeof reservation);
         if (reservation.location.distance > this.rangeDistanceMiles) {
           this.outOfRange = true;
         }
@@ -242,8 +244,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
 
   async onTimeframeChange(e) {
     const timeframe = e.detail.value;
-    this.reservation.cost = timeframe.tokens;
-    this.reservation.minutes = timeframe.minutes;
+    // this.reservation.cost = timeframe.tokens;
+    // this.reservation.minutes = timeframe.minutes;
+    this.store.dispatch(new fromReservation.SetTimeframe(timeframe));
   }
 
   hasTimeframe() {
