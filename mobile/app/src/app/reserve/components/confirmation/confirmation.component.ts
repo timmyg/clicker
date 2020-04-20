@@ -105,8 +105,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         first()
       )
       .subscribe((reservation) => {
-        console.log({ reservation });
-        console.log(typeof reservation);
         if (reservation.location.distance > this.rangeDistanceMiles) {
           this.outOfRange = true;
         }

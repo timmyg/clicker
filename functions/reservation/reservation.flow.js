@@ -257,6 +257,21 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     updateExpires: true,
   });
 
+  // deduct from user
+  console.time('deduct transaction');
+  const { statusCode, data } = await new Invoke()
+    .service('user')
+    .name('transaction')
+    .body({ tokens: updatedReservation.update.cost || 0, minutes: updatedReservation.update.minutes || 0 })
+    .headers(event.headers)
+    .go();
+  console.timeEnd('deduct transaction');
+  if (statusCode >= 400) {
+    // TODO mark not reserved
+    const message = data.message;
+    return respond(statusCode, message);
+  }
+
   console.time('mark box reserved');
   // mark box reserved
   await new Invoke()
@@ -271,21 +286,6 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     .async()
     .go();
   console.timeEnd('mark box reserved');
-
-  // deduct from user
-  console.time('deduct transaction');
-  const { statusCode, data } = await new Invoke()
-    .service('user')
-    .name('transaction')
-    .body({ tokens: updatedReservation.update.cost, minutes: updatedReservation.update.minutes })
-    .headers(event.headers)
-    .go();
-  console.timeEnd('deduct transaction');
-  if (statusCode >= 400) {
-    // TODO mark not reserved
-    const message = data.message;
-    return respond(statusCode, message);
-  }
 
   // change the channel if updating program
   if (updatedReservation.update.program) {
