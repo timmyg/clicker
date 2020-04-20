@@ -242,8 +242,8 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   if (userId !== originalReservation.userId) {
     return respond(403, 'invalid userId');
   }
-  const updatedCost = originalReservation.cost + updatedReservation.update.cost;
-  const updatedMinutes = originalReservation.minutes + updatedReservation.update.minutes;
+  const updatedCost = originalReservation.cost + (updatedReservation.update.cost || 0);
+  const updatedMinutes = originalReservation.minutes + (updatedReservation.update.minutes || 0);
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
   console.log('update reservation:');
   let updatedFields: any = { cost: updatedCost, minutes: updatedMinutes, end: updatedReservation.end };

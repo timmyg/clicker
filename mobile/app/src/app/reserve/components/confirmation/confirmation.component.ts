@@ -1,3 +1,4 @@
+import { Program } from "./../../../state/program/program.model";
 import {
   Component,
   OnInit,
@@ -104,7 +105,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         first()
       )
       .subscribe((reservation) => {
-        console.log({reservation});
+        console.log({ reservation });
         console.log(typeof reservation);
         if (reservation.location.distance > this.rangeDistanceMiles) {
           this.outOfRange = true;
@@ -154,13 +155,13 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
 
   getEndTime() {
     // if (this.reservation.end) {
-    return this.isEditMode ? 
-      moment(this.reservation.end)
-      .add(this.reservation.update.minutes.valueOf(), "minutes")
-      .toDate()
+    return this.isEditTime
+      ? moment(this.reservation.end)
+          .add(this.reservation.update.minutes.valueOf(), "minutes")
+          .toDate()
       : moment(this.reservation.end)
-      .add(this.reservation.minutes.valueOf(), "minutes")
-      .toDate() 
+          .add(this.reservation.minutes.valueOf(), "minutes")
+          .toDate();
 
     // }
   }
@@ -260,17 +261,25 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     if (this.isEditChannel) {
       return true;
     } else if (this.isEditTime) {
-      return this.reservation.update && this.reservation.update.minutes
+      return this.reservation.update && this.reservation.update.minutes;
     } else {
-      return this.reservation.minutes
+      return this.reservation.minutes;
     }
   }
 
   getCost(): number {
     if (this.isEditMode) {
-      return this.reservation.update && this.reservation.update.cost 
+      return this.reservation.update && this.reservation.update.cost;
     } else {
-      return this.reservation.cost
+      return this.reservation.cost;
+    }
+  }
+
+  getProgram(): Program {
+    if (this.isEditMode) {
+      return this.reservation.update.program;
+    } else {
+      return this.reservation.program;
     }
   }
 
@@ -293,9 +302,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getChannelDescription() {
-    return `${this.reservation.program.channelTitle} (${
-      this.reservation.program.title
-    })`;
+    return `${this.getProgram().channelTitle} (${this.getProgram().title})`;
   }
 
   async onLogin() {
