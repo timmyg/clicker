@@ -184,32 +184,38 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       )
       .pipe(first())
       .subscribe(() => {
+        const program =
+          r.update && r.update.program ? r.update.program : r.program;
+        const minutes =
+          r.update && r.update.minutes ? r.update.minutes : r.minutes;
+        const cost = r.update && r.update.cost ? r.update.cost : r.cost;
         if (this.isEditMode) {
           this.segment.track(this.globals.events.reservation.updated, {
-            minutes: r.minutes,
+            cost,
+            minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
-            channelName: r.program.channelTitle,
-            channelNumber: r.program.channel,
-            programName: r.program.title,
-            programDescription: r.program.description,
+            channelName: program.channelTitle,
+            channelNumber: program.channel,
+            programName: program.title,
+            programDescription: program.description,
           });
         } else {
           this.segment.track(this.globals.events.reservation.created, {
             minutes: r.minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
-            channelName: r.program.channelTitle,
-            channelNumber: r.program.channel,
-            programName: r.program.title,
-            programDescription: r.program.description,
+            channelName: program.channelTitle,
+            channelNumber: program.channel,
+            programName: program.title,
+            programDescription: program.description,
           });
         }
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(["/tabs/profile"]);
         this.showTunedToast(
           reservation.box.label,
-          reservation.program.channelTitle
+          this.getProgram().channelTitle
         );
       });
     this.actions$
@@ -266,7 +272,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getCost(): number {
-    if (this.isEditMode) {
+    if (this.isEditTime) {
       return this.reservation.update && this.reservation.update.cost;
     } else {
       return this.reservation.cost;
@@ -274,7 +280,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getProgram(): Program {
-    if (this.isEditMode) {
+    if (this.isEditChannel) {
       return this.reservation.update.program;
     } else {
       return this.reservation.program;

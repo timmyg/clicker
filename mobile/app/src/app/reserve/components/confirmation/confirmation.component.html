@@ -11,7 +11,13 @@
       </div>
       <div>
         <label> Reserved: </label>
-        <span *ngIf="(!isEditMode && reservation.minutes) || (isEditTime && reservation.update?.minutes) || isEditChannel; else chooseTimeframe"
+        <span
+          *ngIf="
+            (!isEditMode && reservation.minutes) ||
+              (isEditTime && reservation.update?.minutes) ||
+              isEditChannel;
+            else chooseTimeframe
+          "
           >📺&nbsp;{{ reservation?.box?.label }} until
           {{ getEndTime() | amDateFormat: "h:mma" }}</span
         >
