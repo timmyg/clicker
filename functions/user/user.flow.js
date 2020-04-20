@@ -247,7 +247,7 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
   );
   console.log('3', updatedUserWithCost);
 
-  const text = `$${dollars} Added to Wallet! (${user.phone}, user: ${userId.substr(userId.length - 5)})`;
+  const text = `$${dollars} Added to Wallet! (${user.phone || '?'}, user: ${userId.substr(userId.length - 5)})`;
   await new Invoke()
     .service('notification')
     .name('sendApp')
