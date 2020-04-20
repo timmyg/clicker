@@ -67,7 +67,6 @@ export class ReservePage implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.pageSub = this.platform.backButton.subscribe(() => {
-      console.log("x");
       this.goBack();
     });
   }
@@ -92,7 +91,6 @@ export class ReservePage implements OnDestroy, OnInit {
   }
 
   goBack() {
-    console.log("goBack", this.navCtrl);
     this.navCtrl.back();
   }
 

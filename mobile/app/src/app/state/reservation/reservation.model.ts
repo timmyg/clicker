@@ -4,8 +4,7 @@ import { TV } from "../location/tv.model";
 
 export class Reservation {
   constructor(r?: Reservation) {
-    console.log("r", r);
-    Object.assign(this, r)
+    Object.assign(this, r);
   }
 
   id: String;
@@ -24,5 +23,5 @@ export class Reservation {
     minutes?: number;
     cost?: number;
     program?: Program;
-  }
+  };
 }

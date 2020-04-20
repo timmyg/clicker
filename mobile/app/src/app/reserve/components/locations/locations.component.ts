@@ -196,7 +196,6 @@ export class LocationsComponent implements OnDestroy, OnInit {
     const reservation: Partial<Reservation> = state.reservation.reservation;
     const updateType: string = state.reservation.updateType;
     // check if editing existing reservation
-    console.log("redir!");
     if (reservation && reservation.id) {
       // is editing
       if (updateType === "channel") {
