@@ -287,23 +287,38 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     return respond(statusCode, message);
   }
 
-  // change the channel
-  console.time('remote command');
-  const command = 'tune';
-  const source = zapTypes.app;
-  await new Invoke()
-    .service('remote')
-    .name('command')
-    .body({
-      reservation,
-      command,
-      source,
-      losantProductionOverride: originalReservation.location.losantProductionOverride,
-    })
-    .headers(event.headers)
-    .async()
-    .go();
-  console.timeEnd('remote command');
+  // change the channel if updating program
+  if (reservation.update.program) {
+    console.time('remote command');
+    const command = 'tune';
+    const source = zapTypes.app;
+    await new Invoke()
+      .service('remote')
+      .name('command')
+      .body({
+        reservation,
+        command,
+        source,
+        losantProductionOverride: originalReservation.location.losantProductionOverride,
+      })
+      .headers(event.headers)
+      .async()
+      .go();
+    console.timeEnd('remote command');
+  } else if (reservation.update.minutes) {
+    const { userId } = updatedReservation;
+    // updating time
+    await new Invoke()
+      .service('notification')
+      .name('sendApp')
+      .body({
+        text: `Extend timeframe [${updatedReservation.update.minutes} mins, user: ${userId.substr(
+          userId.length - 5,
+        )} ]`,
+      })
+      .async()
+      .go();
+  }
 
   await new Invoke()
     .service('audit')
