@@ -242,17 +242,35 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   if (userId !== originalReservation.userId) {
     return respond(403, 'invalid userId');
   }
-  const updatedCost = originalReservation.cost + updatedReservation.update.cost;
-  const updatedMinutes = originalReservation.minutes + updatedReservation.update.minutes;
+  const updatedCost = originalReservation.cost + (updatedReservation.update.cost || 0);
+  const updatedMinutes = originalReservation.minutes + (updatedReservation.update.minutes || 0);
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
-  const { program } = updatedReservation.update;
   console.log('update reservation:');
+  let updatedFields: any = { cost: updatedCost, minutes: updatedMinutes, end: updatedReservation.end };
+  const { program } = updatedReservation.update;
+  if (program) {
+    updatedFields.program = program;
+  }
   console.log({ cost: updatedCost, minutes: updatedMinutes, program, end: updatedReservation.end });
-  const reservation: Reservation = await dbReservation.update(
-    { id, userId },
-    { cost: updatedCost, minutes: updatedMinutes, program, end: updatedReservation.end },
-    { returnValues: 'ALL_NEW', updateExpires: true },
-  );
+  const reservation: Reservation = await dbReservation.update({ id, userId }, updatedFields, {
+    returnValues: 'ALL_NEW',
+    updateExpires: true,
+  });
+
+  // deduct from user
+  console.time('deduct transaction');
+  const { statusCode, data } = await new Invoke()
+    .service('user')
+    .name('transaction')
+    .body({ tokens: updatedReservation.update.cost || 0, minutes: updatedReservation.update.minutes || 0 })
+    .headers(event.headers)
+    .go();
+  console.timeEnd('deduct transaction');
+  if (statusCode >= 400) {
+    // TODO mark not reserved
+    const message = data.message;
+    return respond(statusCode, message);
+  }
 
   console.time('mark box reserved');
   // mark box reserved
@@ -269,38 +287,38 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
   console.timeEnd('mark box reserved');
 
-  // deduct from user
-  console.time('deduct transaction');
-  const { statusCode, data } = await new Invoke()
-    .service('user')
-    .name('transaction')
-    .body({ tokens: updatedReservation.update.cost, minutes: updatedReservation.update.minutes })
-    .headers(event.headers)
-    .go();
-  console.timeEnd('deduct transaction');
-  if (statusCode >= 400) {
-    // TODO mark not reserved
-    const message = data.message;
-    return respond(statusCode, message);
+  // change the channel if updating program
+  if (updatedReservation.update.program) {
+    console.time('remote command');
+    const command = 'tune';
+    const source = zapTypes.app;
+    await new Invoke()
+      .service('remote')
+      .name('command')
+      .body({
+        reservation,
+        command,
+        source,
+        losantProductionOverride: originalReservation.location.losantProductionOverride,
+      })
+      .headers(event.headers)
+      .async()
+      .go();
+    console.timeEnd('remote command');
+  } else if (updatedReservation.update.minutes) {
+    const { userId } = updatedReservation;
+    // updating time
+    await new Invoke()
+      .service('notification')
+      .name('sendApp')
+      .body({
+        text: `Extend timeframe [${updatedReservation.update.minutes} mins, user: ${userId.substr(
+          userId.length - 5,
+        )} ]`,
+      })
+      .async()
+      .go();
   }
-
-  // change the channel
-  console.time('remote command');
-  const command = 'tune';
-  const source = zapTypes.app;
-  await new Invoke()
-    .service('remote')
-    .name('command')
-    .body({
-      reservation,
-      command,
-      source,
-      losantProductionOverride: originalReservation.location.losantProductionOverride,
-    })
-    .headers(event.headers)
-    .async()
-    .go();
-  console.timeEnd('remote command');
 
   await new Invoke()
     .service('audit')
@@ -376,15 +394,17 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
 
 function calculateReservationEndTime(reservation): number {
   if (reservation.update && reservation.update.minutes) {
-    // new reservation
-    // reservation.start = moment().unix() * 1000;
+    // updating reservation
     return (
       moment(reservation.end)
         .add(reservation.update.minutes, 'm')
         .unix() * 1000
     );
+  } else if (reservation.update && reservation.update.program) {
+    // keep same time
+    return reservation.end;
   } else {
-    // updating reservation
+    // new reservation
     return (
       moment()
         .add(reservation.minutes, 'm')

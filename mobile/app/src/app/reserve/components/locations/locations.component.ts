@@ -201,11 +201,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
       if (updateType === "channel") {
         this.navCtrl.navigateForward(["../programs"], {
           relativeTo: this.route,
+          skipLocationChange: true,
           // queryParamsHandling: 'merge',
         });
       } else if (updateType === "time") {
         this.navCtrl.navigateForward(["../confirmation"], {
           relativeTo: this.route,
+          skipLocationChange: true,
           // queryParamsHandling: 'merge',
         });
       }

@@ -30,6 +30,7 @@ export function reducer(
       return {
         ...state,
         reservation: new Reservation(),
+        updateType: null,
       };
     case fromReservation.CREATE_RESERVATION:
     case fromReservation.UPDATE_RESERVATION:
@@ -84,7 +85,7 @@ export function reducer(
       if (!!state.updateType) {
         state.reservation.update = {
           program: action.payload,
-        }
+        };
       } else {
         state.reservation.program = action.payload;
       }
@@ -93,19 +94,19 @@ export function reducer(
         loading: false,
       };
     case fromReservation.SET_RESERVATION_TIMEFRAME:
-        if (!!state.updateType) {
-          state.reservation.update = {
-            cost: action.payload.tokens,
-            minutes: action.payload.minutes
-          }
-        } else {
-          state.reservation.cost = action.payload.tokens;
-          state.reservation.minutes = action.payload.minutes;
-        }
-        return {
-          ...state,
-          loading: false,
+      if (!!state.updateType) {
+        state.reservation.update = {
+          cost: action.payload.tokens,
+          minutes: action.payload.minutes,
         };
+      } else {
+        state.reservation.cost = action.payload.tokens;
+        state.reservation.minutes = action.payload.minutes;
+      }
+      return {
+        ...state,
+        loading: false,
+      };
     case fromReservation.SET_RESERVATION_TV:
       state.reservation.box = action.payload;
       return {
