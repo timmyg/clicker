@@ -196,16 +196,19 @@ export class LocationsComponent implements OnDestroy, OnInit {
     const reservation: Partial<Reservation> = state.reservation.reservation;
     const updateType: string = state.reservation.updateType;
     // check if editing existing reservation
+    console.log("redir!");
     if (reservation && reservation.id) {
       // is editing
       if (updateType === "channel") {
         this.navCtrl.navigateForward(["../programs"], {
           relativeTo: this.route,
+          skipLocationChange: true,
           // queryParamsHandling: 'merge',
         });
       } else if (updateType === "time") {
         this.navCtrl.navigateForward(["../confirmation"], {
           relativeTo: this.route,
+          skipLocationChange: true,
           // queryParamsHandling: 'merge',
         });
       }
