@@ -245,14 +245,17 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   const updatedCost = originalReservation.cost + updatedReservation.update.cost;
   const updatedMinutes = originalReservation.minutes + updatedReservation.update.minutes;
   updatedReservation.end = calculateReservationEndTime(updatedReservation);
-  const { program } = updatedReservation.update;
   console.log('update reservation:');
+  let updatedFields: any = { cost: updatedCost, minutes: updatedMinutes, end: updatedReservation.end };
+  const { program } = updatedReservation.update;
+  if (program) {
+    updatedFields.program = program;
+  }
   console.log({ cost: updatedCost, minutes: updatedMinutes, program, end: updatedReservation.end });
-  const reservation: Reservation = await dbReservation.update(
-    { id, userId },
-    { cost: updatedCost, minutes: updatedMinutes, program, end: updatedReservation.end },
-    { returnValues: 'ALL_NEW', updateExpires: true },
-  );
+  const reservation: Reservation = await dbReservation.update({ id, userId }, updatedFields, {
+    returnValues: 'ALL_NEW',
+    updateExpires: true,
+  });
 
   console.time('mark box reserved');
   // mark box reserved
