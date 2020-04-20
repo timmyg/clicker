@@ -288,7 +288,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   // change the channel if updating program
-  if (reservation.update.program) {
+  if (updatedReservation.update.program) {
     console.time('remote command');
     const command = 'tune';
     const source = zapTypes.app;
@@ -305,7 +305,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
       .async()
       .go();
     console.timeEnd('remote command');
-  } else if (reservation.update.minutes) {
+  } else if (updatedReservation.update.minutes) {
     const { userId } = updatedReservation;
     // updating time
     await new Invoke()
