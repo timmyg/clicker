@@ -5,7 +5,7 @@
   <ion-item>
     <ion-card (click)="onProgramClick()" class="ion-activatable" [ngClass]="{ 'non-sports': !program.isSports }">
       <div class="slide-indicator">
-        <ion-icon name="md-more" class="icon" size="large"></ion-icon>
+        <ion-icon name="ellipsis-vertical" class="icon" size="large"></ion-icon>
       </div>
       <ion-card-header>
         <ion-card-subtitle>
@@ -15,17 +15,17 @@
             🔥
           </span>
           
-          <span float-right
+          <span class="ion-float-right"
             >{{ program.start | amDateFormat: "h:mma" }} -
             {{ program.end | amDateFormat: "h:mma" }}</span
           >
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content
-        no-padding-top
+        class="ion-no-padding-top"
       >
-        <ion-grid no-padding>
-          <ion-row align-items-center>
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-align-items-center">
             <ng-container *ngIf="program.start; else noProgram">
               <ion-col size="12">
                   <h1 class="title">
@@ -35,7 +35,7 @@
                     <em>Next: {{ getNextProgramTitle() }} at
                       {{ program.nextProgramStart | amDateFormat: "h:mma" }}</em></span
                   >
-                  <div class="flex align-items-center">
+                  <div class="flex ion-align-items-center">
                     <ion-chip color="secondary" *ngIf="program.game && program.game.summary">
                       <label color="secondary">{{ program.game.summary.description }}</label></ion-chip
                     >

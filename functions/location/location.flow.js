@@ -130,7 +130,6 @@ const dbLocation = dynamoose.model(
     hidden: Boolean,
     connected: Boolean,
     controlCenter: Boolean,
-    controlCenterV2: Boolean, // TODO remove
     announcement: String,
     notes: String,
     // calculated fields
@@ -188,6 +187,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
       locations[i].distance = roundedMiles;
     }
   });
+  console.log({ allLocations });
   if (milesRadius && latitude && longitude) {
     allLocations = allLocations.filter(l => l.distance <= milesRadius);
   }
@@ -349,11 +349,25 @@ function setBoxStatus(box: Box): Box {
   return box;
 }
 
+module.exports.delete = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  const location: Venue = await dbLocation.delete({ id });
+  return respond(202, location);
+});
+
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     const body = getBody(event);
     body._v = 2;
-    console.log(body);
+    if (body.id) {
+      const existingLocation: Venue = await dbLocation
+        .queryOne('id')
+        .eq(body.id)
+        .exec();
+      if (existingLocation) {
+        return respond(200, existingLocation);
+      }
+    }
     const location: Venue = await dbLocation.create(body);
     return respond(201, location);
   } catch (e) {
@@ -880,9 +894,17 @@ class ControlCenterProgram {
 }
 
 module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log(JSON.stringify({ event }));
   let locations: Venue[] = await dbLocation.scan().exec();
   locations = locations.filter(l => l.controlCenter === true);
   console.log(locations.map(l => l.name));
+  const isHttp = !!event.httpMethod;
+  if (isHttp) {
+    await new Invoke()
+      .service('program')
+      .name('syncAirtableUpdates')
+      .go();
+  }
   for (const location of locations) {
     await new Invoke()
       .service('location')
@@ -1466,3 +1488,4 @@ module.exports.findBoxWorseRating = findBoxWorseRating;
 module.exports.filterProgramsByTargeting = filterProgramsByTargeting;
 module.exports.replicatePrograms = replicatePrograms;
 module.exports.setBoxStatus = setBoxStatus;
+

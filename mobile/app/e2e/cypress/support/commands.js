@@ -10,16 +10,18 @@
 //
 //
 
-Cypress.Commands.add('landingPage', callback => {
-  const baseUrl = 'https://release.mobile.tryclicker.com';
-  cy.fixture('location.json').as('fakeLocation');
-  cy.get('@fakeLocation').then(fakeLocation => {
+Cypress.Commands.add("landingPage", (callback) => {
+  const baseUrl = "http://localhost:4100";
+  cy.fixture("geolocation.json").as("fakeLocation");
+  cy.get("@fakeLocation").then((fakeLocation) => {
     cy.visit(baseUrl, {
       onBeforeLoad(win) {
-        cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake(cb => {
-          console.log(fakeLocation);
-          return cb(fakeLocation);
-        });
+        cy.stub(win.navigator.geolocation, "getCurrentPosition").callsFake(
+          (cb) => {
+            console.log(fakeLocation);
+            return cb(fakeLocation);
+          }
+        );
         // todo setTimeout shouldnt be needed here
         setTimeout(() => callback(), 3000);
       },
@@ -27,11 +29,12 @@ Cypress.Commands.add('landingPage', callback => {
   });
 });
 
-
-Cypress.Commands.add('initialSetup', callback => {
-  cy.viewport('iphone-6+');
-  const dbName = '_ionicstorage';
-  const storeName = '_ionickv';
+Cypress.Commands.add("initialSetup", (callback) => {
+  // cy.viewport("iphone-6+");
+  cy.viewport("iphone-x");
+  // cy.viewport("macbook-15");
+  const dbName = "_ionicstorage";
+  const storeName = "_ionickv";
   indexedDB.deleteDatabase(dbName);
   let db;
   let openRequest = indexedDB.open(dbName, 1);
@@ -46,21 +49,21 @@ Cypress.Commands.add('initialSetup', callback => {
     addItem();
   };
   openRequest.onerror = function(e) {
-    console.log('on error!');
+    console.log("on error!");
   };
   function addItem() {
-    let transaction = db.transaction([storeName], 'readwrite');
+    let transaction = db.transaction([storeName], "readwrite");
     let store = transaction.objectStore(storeName);
-    let request = store.add(true, 'onboarded');
-    let request2 = store.add('allowed', 'permission.geolocation');
+    let request = store.add(true, "onboarded");
+    let request2 = store.add("allowed", "permission.geolocation");
     request.onerror = function(e) {
-      console.log('Error', e.target.error.name);
+      console.log("Error", e.target.error.name);
     };
     request.onsuccess = function(e) {
-      console.log('Woot! Did it');
+      console.log("Woot! Did it");
     };
     request2.onsuccess = function(e) {
-      console.log('Woot! Did it');
+      console.log("Woot! Did it");
       callback();
     };
   }

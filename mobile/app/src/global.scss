@@ -10,22 +10,16 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-@import url("https://fonts.googleapis.com/css?family=Saira&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Saira:wght@300;400&&display=swap");
 
 .brand-text {
   font-family: "Saira", sans-serif;
+  &.light {
+    font-weight: 400;
+  }
 }
 
-[no-padding-top] {
-  padding-top: 0;
-}
-
-[no-margin-horizontal] {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-[flex] {
+.flex {
   display: flex;
 }
 
@@ -51,7 +45,16 @@
 }
 
 // never show intercom launcher icon in corner
-.intercom-launcher-frame,
-.intercom-launcher-badge-frame {
-  display: none !important;
+// .intercom-launcher-frame,
+// .intercom-launcher-badge-frame {
+//   display: none !important;
+// }
+
+ion-spinner[name='dots'] {
+  width: 120px !important;
+  height: 120px !important;
+}
+
+ion-title {
+  font-size: 20px;
 }

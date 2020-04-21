@@ -10,4 +10,9 @@ export class Reservation {
   start: number;
   end: number;
   cancelled: boolean;
+  update: {
+    minutes?: number,
+    cost?: number,
+    program?: Program,
+  };
 }

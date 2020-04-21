@@ -7,7 +7,6 @@ import { map, switchMap, catchError } from "rxjs/operators";
 import { Location } from "./location.model";
 import * as LocationActions from "./location.actions";
 import { LocationService } from "../../core/services/location.service";
-import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 
 @Injectable()
 export class LocationsEffects {
@@ -20,7 +19,7 @@ export class LocationsEffects {
           (locations: Location[]) =>
             new LocationActions.GetAllSuccess(locations)
         ),
-        catchError(err => of(new LocationActions.GetAllFail(err)))
+        catchError((err) => of(new LocationActions.GetAllFail(err)))
       )
     )
   );
@@ -30,11 +29,10 @@ export class LocationsEffects {
     ofType(LocationActions.GET_DETAILS_PAGE),
     switchMap((action: LocationActions.GetDetailsPage) =>
       this.locationService.getDetails(action.locationId).pipe(
-        map(
-          (html: string) => {
-            return new LocationActions.GetDetailsPageSuccess(html)
-          }),
-        catchError(err => of(new LocationActions.GetDetailsPageFail(err)))
+        map((html: string) => {
+          return new LocationActions.GetDetailsPageSuccess(html);
+        }),
+        catchError((err) => of(new LocationActions.GetDetailsPageFail(err)))
       )
     )
   );
@@ -45,7 +43,7 @@ export class LocationsEffects {
     switchMap((action: LocationActions.TurnOn) =>
       this.locationService.turnOn(action.location.id, action.autotune).pipe(
         map(() => new LocationActions.TurnOnSuccess()),
-        catchError(err => of(new LocationActions.TurnOnFail(err)))
+        catchError((err) => of(new LocationActions.TurnOnFail(err)))
       )
     )
   );
@@ -56,7 +54,7 @@ export class LocationsEffects {
     switchMap((action: LocationActions.TurnOff) =>
       this.locationService.turnOff(action.location.id).pipe(
         map(() => new LocationActions.TurnOffSuccess()),
-        catchError(err => of(new LocationActions.TurnOffFail(err)))
+        catchError((err) => of(new LocationActions.TurnOffFail(err)))
       )
     )
   );

@@ -1,1 +1,11 @@
-{}
+{
+  "projectId": "rtajpx",
+  "fixturesFolder": "e2e/cypress/fixtures",
+  "integrationFolder": "e2e/cypress/integration",
+  "screenshotsFolder": "e2e/cypress/screenshots",
+  "videosFolder": "e2e/cypress/videos",
+  "supportFile": "e2e/cypress/support/index.js",
+  "env": {
+    "apiBaseUrl": "https://api-develop.tryclicker.com"
+  }
+}

@@ -1,24 +1,44 @@
-name: End-to-end tests
+name: e2e tests
 on:
   push:
     branches:
-      - release
+      - "*"
+      - "!master"
     paths:
       - "functions/**"
       - "mobile/app/**"
 jobs:
-  cypress-run:
+  e2e:
+    name: mobile app
     runs-on: ubuntu-latest
-    on:
-      schedule:
-        - cron: "0 9,21 * * * "
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Set branch environment variables
+        shell: bash
+        run: |
+          branch=${GITHUB_REF##*/}
+          echo $branch
+          if [ branch == "master" ]; then
+            echo "::set-env ENV=production"
+            echo "::set-env cypress_apiBaseUrl=https://api.tryclicker.com"
+          fi
+          if [ branch == "release" ]; then
+            echo "::set-env ENV=release"
+            echo "::set-env cypress_apiBaseUrl=https://api-release.tryclicker.com"
+          fi
+          if [ branch == "develop" ]; then
+            echo "::set-env ENV=develop"
+          fi
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
-          working-directory: e2e/app
+          working-directory: mobile/app
+          build: npm run build
+          start: npm run start:static
+          wait-on: "http://localhost:4100"
+          browser: chrome
           record: true
+          headless: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

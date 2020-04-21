@@ -1,10 +1,10 @@
 <ion-row
   *ngIf="(isLoading$ | async) && !reserveService.isRefreshing"
-  margin-vertical
+  class="ion-margin-vertical"
 >
-  <ion-spinner name="crescent" class="center"></ion-spinner>
+  <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
 </ion-row>
-<ion-list lines="none" [class.content-loading]="isLoading$ | async">
+<ion-list lines="none" [class.content-loading]="isLoading$ | async" data-atm="programs">
   <app-program
     *ngFor="let program of programs$ | async | programsFilter: searchTerm"
     (onSelect)="onProgramSelect($event)"

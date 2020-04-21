@@ -15,7 +15,7 @@ import {
   ActionSheetController,
   ToastController,
   Platform,
-  ModalController
+  ModalController,
 } from "@ionic/angular";
 import { first, take } from "rxjs/operators";
 import { Reservation } from "src/app/state/reservation/reservation.model";
@@ -35,8 +35,8 @@ const permissionGeolocation = {
   values: {
     allowed: "allowed",
     probably: "probably",
-    denied: "denied"
-  }
+    denied: "denied",
+  },
 };
 
 // not working in browser
@@ -49,7 +49,7 @@ const geolocationOptions: GeolocationOptions = {
 // @AutoUnsubscribe()
 @Component({
   templateUrl: "./locations.component.html",
-  styleUrls: ["./locations.component.scss"]
+  styleUrls: ["./locations.component.scss"],
 })
 export class LocationsComponent implements OnDestroy, OnInit {
   locations$: Observable<Location[]>;
@@ -105,7 +105,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
       () => this.refresh()
     );
     this.isLoggedIn$ = this.store.select(isLoggedIn);
-    this.isLoggedIn$.subscribe(isUserLoggedIn => {
+    this.isLoggedIn$.subscribe((isUserLoggedIn) => {
       this.isLoggedIn = isUserLoggedIn;
     });
     this.hiddenLocationsSubscription = this.reserveService.showingHiddenLocationsEmitted$.subscribe(
@@ -128,17 +128,15 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.userGeolocation$ = this.store.select(getUserGeolocation);
     this.geolocationSubscription = this.userGeolocation$
       .pipe()
-      .subscribe(userGeolocation => {
+      .subscribe((userGeolocation) => {
         this.userGeolocation = userGeolocation;
-        console.log("geolocation updated", this.userGeolocation);
       });
-    this.locations$.subscribe(locations => {
-      console.log({ locations });
+    this.locations$.subscribe((locations) => {
       if (locations && locations.length) {
         this.reserveService.emitShowingLocations();
       }
     });
-    this.locations$.pipe(first()).subscribe(locations => {
+    this.locations$.pipe(first()).subscribe((locations) => {
       if (!locations || !locations.length) {
         this.actions$
           .pipe(ofType(fromUser.SET_GEOLOCATION))
@@ -155,44 +153,15 @@ export class LocationsComponent implements OnDestroy, OnInit {
     const geolocationStorage = await this.storage.get(
       permissionGeolocation.name
     );
-    console.log({ geolocationStorage });
     if (geolocationStorage === permissionGeolocation.values.denied) {
       this.askForGeolocation$.next(false);
       this.store.dispatch(new fromLocation.GetAll());
     }
-    // console.log('UL', this.userLocations);
-
-    // this.userLocations$.pipe().subscribe(userLocations => {
-    //   this.userLocations = userLocations;
-    // });
-    // this.isLoading$.pipe().subscribe(isLoading => {
-    //   if (
-    //     !isLoading &&
-    //     !this.evaluatingGeolocation &&
-    //     !this.reserveService.isRefreshing
-    //   ) {
-    //     this.locations$.pipe().subscribe(locations => {
-    //       // console.log({ locations });
-    //       if (this.userGeolocation) {
-    //         const { latitude, longitude } = this.userGeolocation;
-    //         this.segment.track(this.globals.events.location.listedAll, {
-    //           locations: locations.length,
-    //           latitude,
-    //           longitude
-    //         });
-    //       }
-    //     });
-    //   }
-    // });
-    // this.userRoles$ = this.store.select(getUserRoles);
-    // this.userRoles$.pipe().subscribe(userRoles => {
-    //   this.userRoles = userRoles;
-    // });
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
-      searchTerm => {
+      (searchTerm) => {
         this.searchTerm = searchTerm;
         this.segment.track(this.globals.events.location.search, {
-          term: this.searchTerm
+          term: this.searchTerm,
         });
       }
     );
@@ -231,12 +200,14 @@ export class LocationsComponent implements OnDestroy, OnInit {
       // is editing
       if (updateType === "channel") {
         this.navCtrl.navigateForward(["../programs"], {
-          relativeTo: this.route
+          relativeTo: this.route,
+          skipLocationChange: true,
           // queryParamsHandling: 'merge',
         });
       } else if (updateType === "time") {
         this.navCtrl.navigateForward(["../confirmation"], {
-          relativeTo: this.route
+          relativeTo: this.route,
+          skipLocationChange: true,
           // queryParamsHandling: 'merge',
         });
       }
@@ -267,12 +238,18 @@ export class LocationsComponent implements OnDestroy, OnInit {
           message: "Something went wrong. Please try again.",
           color: "danger",
           duration: 4000,
-          cssClass: "ion-text-center"
+          cssClass: "ion-text-center",
         });
         whoops.present();
         this.reserveService.emitRefreshed();
       });
-    this.evaluateGeolocation();
+    const permissionStatus = await this.storage.get(permissionGeolocation.name);
+    if (
+      permissionStatus &&
+      permissionStatus === permissionGeolocation.values.allowed
+    ) {
+      this.evaluateGeolocation();
+    }
   }
 
   async allowLocation() {
@@ -298,7 +275,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   async onLocationDetail(location: Location) {
     this.locationDetailModal = await this.modalController.create({
       component: LocationDetailPage,
-      componentProps: { locationId: location.id }
+      componentProps: { locationId: location.id },
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.locationDetailModal) {
@@ -318,7 +295,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           cssClass: "color-danger",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOff(location));
-          }
+          },
         },
         {
           text: "Turn on all TVs",
@@ -326,7 +303,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           cssClass: "color-success",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOn(location));
-          }
+          },
         },
         {
           text: "Turn on all TVs + autotune",
@@ -334,9 +311,9 @@ export class LocationsComponent implements OnDestroy, OnInit {
           cssClass: "color-success",
           handler: () => {
             this.store.dispatch(new fromLocation.TurnOn(location, true));
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     await actionSheet.present();
   }
@@ -349,9 +326,8 @@ export class LocationsComponent implements OnDestroy, OnInit {
         permissionStatus === permissionGeolocation.values.probably)
     ) {
       await Geolocation.getCurrentPosition(geolocationOptions)
-        .then(response => {
+        .then((response) => {
           const { latitude, longitude } = response.coords;
-          console.log(latitude, longitude);
           this.store.dispatch(new fromUser.SetGeolocation(latitude, longitude));
           this.askForGeolocation$.next(false);
           this.evaluatingGeolocation = false;
@@ -368,7 +344,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
           this.geolocationError = false;
           this.reserveService.emitShowingLocations();
         })
-        .catch(async error => {
+        .catch(async (error) => {
           this.evaluatingGeolocation = false;
           this.askForGeolocation$.next(false);
           // this.store.dispatch(
@@ -419,7 +395,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
         );
         this.router.navigate(["../programs"], {
           relativeTo: this.route,
-          queryParamsHandling: "merge"
+          queryParamsHandling: "merge",
         });
       });
   }

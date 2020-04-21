@@ -58,9 +58,6 @@ parameters:
   packages-antenna:
     type: boolean
     default: false
-  e2e-app:
-    type: boolean
-    default: false
 
 executors:
   node:
@@ -124,30 +121,6 @@ jobs:
       - run:
           name: Upload app zip to s3
           command: pwd && chmod +x .circleci/build-scripts/s3-deploy-antenna.sh  && .circleci/build-scripts/s3-deploy-antenna.sh
-  run-e2e:
-    executor: cypress
-    working_directory: << parameters.package_dir >>
-    parameters:
-      package_dir:
-        type: string
-    steps:
-      - checkout:
-          path: ~/clicker
-      - restore_cache:
-          keys:
-            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-      - run:
-          name: Install dependencies
-          command: npm ci
-      - save_cache:
-          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/.cache
-            - ./node_modules
-      - run:
-          name: Run e2e tests
-          no_output_timeout: 3m
-          command: npm run test:ci
   serverless-build-test-deploy:
     executor: pynode
     working_directory: << parameters.package_dir >>
@@ -277,8 +250,3 @@ workflows:
     jobs:
       - s3-deploy-antenna:
           package_dir: ~/clicker/packages/antenna
-  e2e-app:
-    when: << pipeline.parameters.e2e-app >>
-    jobs:
-      - run-e2e:
-          package_dir: ~/clicker/e2e/app

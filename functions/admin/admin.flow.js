@@ -10,7 +10,6 @@ declare class process {
   static env: {
     airtableKey: string,
     airtableBase: string,
-    circleToken: string,
     stage: string,
   };
 }
@@ -40,29 +39,6 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
       .async()
       .go();
   }
-  return respond(200);
-});
-
-module.exports.runEndToEndTests = RavenLambdaWrapper.handler(Raven, async event => {
-  const { circleToken, stage } = process.env;
-
-  const body = {
-    parameters: {
-      trigger: false,
-      'e2e-app': true,
-    },
-    branch: stage === 'prod' ? 'master' : stage,
-  };
-
-  await fetch(`https://circleci.com/api/v2/project/github/teamclicker/clicker/pipeline`, {
-    body: JSON.stringify(body),
-    headers: {
-      Authorization: `Basic ${Buffer.from(circleToken).toString('base64')}`,
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-  });
-
   return respond(200);
 });
 

@@ -3,7 +3,9 @@ import { Program } from "../program/program.model";
 import { TV } from "../location/tv.model";
 
 export class Reservation {
-  constructor() {}
+  constructor(r?: Reservation) {
+    Object.assign(this, r);
+  }
 
   id: String;
   location: Location;
@@ -11,31 +13,15 @@ export class Reservation {
   box: TV;
   start: Date;
   end: Date;
-  minutes: Number;
-  cost: Number;
-  reserve: boolean;
-
-  // get tvTag() {
-  //   return this.box.label;
-  // }
-
-  // get locationTown() {
-  //   return this.location.neighborhood;
-  // }
-
-  // get programTitle() {
-  //   return this.program.title;
-  // }
-
-  // hasLocation() {
-  //   return this.location && this.location.id;
-  // }
-
-  // hasChannel() {
-  //   return this.program && this.program.channel;
-  // }
-
-  // hasTV() {
-  //   return this.box && this.box.label;
-  // }
+  minutes: number;
+  cost: number;
+  reserve: boolean; // this used?
+  minutesUpdated: number;
+  costUpdated: number;
+  programUpdated: Program;
+  update?: {
+    minutes?: number;
+    cost?: number;
+    program?: Program;
+  };
 }

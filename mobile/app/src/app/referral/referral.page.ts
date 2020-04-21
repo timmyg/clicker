@@ -53,7 +53,6 @@ export class ReferralPage implements OnInit {
     this.actions$
       .pipe(ofType(fromUser.ADD_REFERRAL_FAIL), take(1))
       .subscribe(async (result: any) => {
-        console.log(result);
         let message = "Something went wrong. Please try again.";
         if (result.payload.error.code === "code.invalid") {
           message = "Invalid code. Please try again.";

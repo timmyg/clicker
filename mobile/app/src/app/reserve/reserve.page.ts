@@ -1,11 +1,16 @@
-import { Component, ViewChild, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  ViewEncapsulation,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import {
   NavController,
-  Events,
   IonSearchbar,
   ModalController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { ReserveService } from "./reserve.service";
 import { Router, NavigationEnd } from "@angular/router";
@@ -18,10 +23,10 @@ import { Deploy } from "cordova-plugin-ionic/dist/ngx";
   selector: "app-reserve",
   templateUrl: "./reserve.page.html",
   styleUrls: ["./reserve.page.scss"],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class ReservePage {
-  @ViewChild("searchbar", { static: false }) searchbar: IonSearchbar;
+export class ReservePage implements OnDestroy, OnInit {
+  @ViewChild("searchbar") searchbar: IonSearchbar;
   title: String;
   searchMode: boolean;
   showingLocations: boolean;
@@ -41,13 +46,13 @@ export class ReservePage {
     private navCtrl: NavController,
     private router: Router,
     private platform: Platform,
-    public events: Events,
+    // public events: Events,
     public modalController: ModalController,
     private walletPage: WalletPage,
     public toastController: ToastController,
     private deploy: Deploy
   ) {
-    this.reserveService.titleEmitted$.subscribe(title => {
+    this.reserveService.titleEmitted$.subscribe((title) => {
       this.title = title;
     });
     this.reserveService.closeSearchEmitted$.subscribe(() => {
@@ -77,8 +82,12 @@ export class ReservePage {
   }
 
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
-    if (this.pageSub) this.pageSub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+    if (this.pageSub) {
+      this.pageSub.unsubscribe();
+    }
   }
 
   goBack() {
@@ -86,7 +95,7 @@ export class ReservePage {
   }
 
   showBack() {
-    return this.router.url != "/tabs/reserve/locations";
+    return this.router.url !== "/tabs/reserve/locations";
   }
 
   disableRefresher() {
@@ -94,7 +103,7 @@ export class ReservePage {
   }
 
   initStepListener() {
-    this.routerListerSub = this.router.events.subscribe(e => {
+    this.routerListerSub = this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         switch (e.url.split("?")[0]) {
           case "/":
@@ -113,22 +122,23 @@ export class ReservePage {
             break;
         }
       }
-      this.percentageLeft = this.percentageComplete
+      this.percentageLeft = this.percentageComplete;
     });
   }
 
   async onCoinsClick() {
     this.walletModal = await this.modalController.create({
-      component: WalletPage
+      component: WalletPage,
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      if (this.walletModal) this.walletModal.close();
+      if (this.walletModal) {
+        this.walletModal.close();
+      }
     });
     return await this.walletModal.present();
   }
 
   async forceUpdate(channel = "Production") {
-    console.log(channel);
     await this.deploy.configure({ channel });
     await this.deploy.sync({ updateMethod: "auto" });
   }
@@ -207,7 +217,7 @@ export class ReservePage {
     const toast = await this.toastController.create({
       message,
       cssClass: "ion-text-center",
-      duration: 3000
+      duration: 3000,
     });
     toast.present();
   }

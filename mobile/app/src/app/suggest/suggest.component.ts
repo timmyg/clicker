@@ -10,7 +10,7 @@ import { Store } from "@ngrx/store";
   styleUrls: ["./suggest.component.scss"]
 })
 export class SuggestComponent implements OnInit {
-  @ViewChild("suggestionInput", { static: false }) suggestionInput: IonTextarea;
+  @ViewChild("suggestionInput") suggestionInput: IonTextarea;
   suggestion: string;
 
   constructor(
@@ -28,7 +28,6 @@ export class SuggestComponent implements OnInit {
   }
 
   async onSubmit() {
-    console.log(this.suggestion);
     const text = `New Location Suggestion: ${this.suggestion}`;
     this.store.dispatch(new fromApp.SendMessage(text));
     this.onCloseClick();

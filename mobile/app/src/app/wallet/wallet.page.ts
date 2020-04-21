@@ -3,13 +3,13 @@ import {
   StripeService,
   Elements,
   Element as StripeElement,
-  ElementsOptions
+  ElementsOptions,
 } from "ngx-stripe";
 import { FormGroup } from "@angular/forms";
 import {
   ToastController,
   ModalController,
-  AlertController
+  AlertController,
 } from "@ionic/angular";
 import * as fromApp from "../state/app/app.actions";
 import * as fromUser from "../state/user/user.actions";
@@ -29,7 +29,7 @@ import { Actions, ofType } from "@ngrx/effects";
 @Component({
   selector: "app-wallet",
   templateUrl: "./wallet.page.html",
-  styleUrls: ["./wallet.page.scss"]
+  styleUrls: ["./wallet.page.scss"],
 })
 export class WalletPage {
   elements: Elements;
@@ -41,7 +41,7 @@ export class WalletPage {
   addCardMode = false;
 
   elementsOptions: ElementsOptions = {
-    locale: "en"
+    locale: "en",
   };
 
   selectedPlan: Plan;
@@ -73,16 +73,16 @@ export class WalletPage {
   }
 
   private initStripe() {
-    this.stripeService.elements(this.elementsOptions).subscribe(elements => {
+    this.stripeService.elements(this.elementsOptions).subscribe((elements) => {
       this.elements = elements;
       // Only mount the element the first time
       if (!this.card) {
         this.card = this.elements.create("card", {
           style: {
             base: {
-              fontSize: "18px"
-            }
-          }
+              fontSize: "18px",
+            },
+          },
         });
         this.card.mount("#card-element");
       }
@@ -91,7 +91,7 @@ export class WalletPage {
 
   addCard() {
     this.waiting = true;
-    this.stripeService.createToken(this.card, {}).subscribe(async result => {
+    this.stripeService.createToken(this.card, {}).subscribe(async (result) => {
       if (result.token) {
         // Use the token to create a charge or a customer
         // https://stripe.com/docs/charges
@@ -106,7 +106,7 @@ export class WalletPage {
             const toast = await this.toastController.create({
               message: `💳 Card successfully added. 👐`,
               duration: 3000,
-              cssClass: "ion-text-center"
+              cssClass: "ion-text-center",
             });
             toast.present();
             this.addCardMode = false;
@@ -123,7 +123,7 @@ export class WalletPage {
               message: error.payload.error.message,
               color: "danger",
               duration: 4000,
-              cssClass: "ion-text-center"
+              cssClass: "ion-text-center",
             });
             whoops.present();
             this.waiting = false;
@@ -135,7 +135,7 @@ export class WalletPage {
           message: result.error.message,
           duration: 3000,
           color: "danger",
-          cssClass: "ion-text-center"
+          cssClass: "ion-text-center",
         });
         toast.present();
         this.waiting = false;
@@ -159,7 +159,7 @@ export class WalletPage {
             this.selectedPlan.tokens
           } tokens. 🎉`,
           duration: 3000,
-          cssClass: "ion-text-center"
+          cssClass: "ion-text-center",
         });
         toast.present();
         this.onClose();
@@ -168,8 +168,8 @@ export class WalletPage {
         });
         this.store
           .select(getUserId)
-          .pipe(first(val => !!val))
-          .subscribe(async userId => {
+          .pipe(first((val) => !!val))
+          .subscribe(async (userId) => {
             this.segment.identify(
               userId,
               { paid: true },
@@ -189,7 +189,7 @@ export class WalletPage {
           color: "danger",
           message: err.payload.error.message,
           duration: 3000,
-          cssClass: "ion-text-center"
+          cssClass: "ion-text-center",
         });
         toast.present();
       });
@@ -214,7 +214,7 @@ export class WalletPage {
       buttons: [
         {
           text: "Cancel",
-          role: "cancel"
+          role: "cancel",
         },
         {
           text: "Remove Card",
@@ -227,14 +227,14 @@ export class WalletPage {
               const toast = await this.toastController.create({
                 message: `Card removed. 👍`,
                 duration: 3000,
-                cssClass: "ion-text-center"
+                cssClass: "ion-text-center",
               });
               toast.present();
               this.waiting = false;
             }, 3000);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();

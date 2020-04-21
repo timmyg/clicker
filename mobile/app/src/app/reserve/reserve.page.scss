@@ -23,6 +23,10 @@
   }
 }
 
+// .title {
+//   font-size: 22px;
+// }
+
 ion-item {
   --padding-start: 0;
   --inner-padding-end: 0;
@@ -34,4 +38,14 @@ ion-item {
 
 ion-progress-bar {
   height: 5px;
+}
+
+ion-searchbar {
+  --ion-padding-top: 15px;
+}
+
+ion-spinner {
+  --color: var(--ion-color-primary);
+  width: 120px !important;
+  height: 120px !important;
 }

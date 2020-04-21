@@ -3,7 +3,7 @@ import {
   ModuleWithProviders,
   NgModule,
   Optional,
-  SkipSelf
+  SkipSelf,
 } from "@angular/core";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
@@ -19,24 +19,29 @@ import { AppEffects } from "./app/app.effects";
 @NgModule({
   imports: [
     CommonModule,
-    StoreModule.forRoot(appReducer),
+    StoreModule.forRoot(appReducer, {
+      runtimeChecks: {
+        strictStateImmutability: false,
+        strictActionImmutability: false,
+      },
+    }),
     StoreDevtoolsModule.instrument({
-      maxAge: 25 // Retains last 25 states
+      maxAge: 25, // Retains last 25 states
     }),
     EffectsModule.forRoot([
       LocationsEffects,
       ProgramsEffects,
       ReservationsEffects,
       AppEffects,
-      UserEffects
-    ])
+      UserEffects,
+    ]),
   ],
-  declarations: []
+  declarations: [],
 })
 export class StateModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<StateModule> {
     return {
-      ngModule: StateModule
+      ngModule: StateModule,
     };
   }
 

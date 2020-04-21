@@ -20,7 +20,7 @@ import { AppService } from "./core/services/app.service";
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
-  styleUrls: ["app.component.scss"]
+  styleUrls: ["app.component.scss"],
 })
 export class AppComponent {
   partner$: Observable<string>;
@@ -34,8 +34,6 @@ export class AppComponent {
     public appService: AppService
   ) {
     this.partner$ = this.store.select(getPartner);
-    // console.log("set version", version);
-
     // this.appService.setVersion(version);
     this.initializeApp();
   }
@@ -46,8 +44,8 @@ export class AppComponent {
       try {
         this.store
           .select(getUserId)
-          .pipe(first(val => !!val))
-          .subscribe(async userId => {
+          .pipe(first((val) => !!val))
+          .subscribe(async (userId) => {
             const info = await Device.getInfo();
             const { manufacturer, model, osVersion, platform, uuid } = info;
             await this.segment.identify(

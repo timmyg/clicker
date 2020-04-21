@@ -20,7 +20,7 @@ import { getUserGeolocation } from "src/app/state/user";
 @Component({
   selector: "app-tvs",
   templateUrl: "./tvs.component.html",
-  styleUrls: ["./tvs.component.scss"]
+  styleUrls: ["./tvs.component.scss"],
 })
 export class TvsComponent implements OnDestroy, OnInit {
   tvs$: Observable<TV[]>;
@@ -43,20 +43,19 @@ export class TvsComponent implements OnDestroy, OnInit {
     private actions$: Actions
   ) {
     this.tvs$ = this.store.select(getReservationTvs);
-    this.tvs$.pipe(first()).subscribe(tvs => {
-      if (tvs.length === 1) {
-        this.onTvClick(tvs[0], true);
-      }
-    });
+    // this.tvs$.pipe(first()).subscribe((tvs) => {
+    //   if (tvs.length === 1) {
+    //     this.onTvClick(tvs[0], true);
+    //   }
+    // });
     this.reservation$ = this.store.select(getReservation);
-    this.reservation$.subscribe(r => (this.reservation = r));
+    this.reservation$.subscribe((r) => (this.reservation = r));
     this.reserveService.emitTitle(this.title);
     this.refreshSubscription = this.reserveService.refreshEmitted$.subscribe(
       () => this.refresh()
     );
     this.userGeolocation$ = this.store.select(getUserGeolocation);
-    this.userGeolocation$.subscribe(userGeolocation => {
-      console.log({ userGeolocation });
+    this.userGeolocation$.subscribe((userGeolocation) => {
       this.userGeolocation = userGeolocation;
     });
   }
@@ -71,13 +70,20 @@ export class TvsComponent implements OnDestroy, OnInit {
 
   async onTvClick(tv: TV, removeFromHistory?: boolean) {
     if (tv.live && tv.live.locked) {
+      let message = `📺 ${tv.label} is reserved until `;
+      if (tv.live && tv.live.lockedMessage) {
+        message = tv.live && tv.live.lockedMessage;
+      } else if (tv.live.lockedUntil) {
+        message += `${moment(tv.live.lockedUntil).format("h:mma")}.`;
+      } else if (tv.live.lockedProgrammingId) {
+        message += `current program is over.`;
+      } else {
+        message = `📺 ${tv.label} is currently reserved.`;
+      }
       const toast = await this.toastController.create({
-        // message: `📺 ${tv.label} is reserved until ${moment(
-        //   tv.live.lockedUntil
-        // ).format("h:mma")}.`,
-        message: tv.live && tv.live.lockedMessage,
+        message,
         duration: 2000,
-        cssClass: "ion-text-center"
+        cssClass: "ion-text-center",
       });
       toast.present();
       return await this.segment.track(this.globals.events.tv.reserved);
@@ -86,12 +92,11 @@ export class TvsComponent implements OnDestroy, OnInit {
     await this.segment.track(this.globals.events.reservation.selectedTV, tv);
     this.router.navigate(["../confirmation"], {
       relativeTo: this.route,
-      replaceUrl: removeFromHistory
+      replaceUrl: removeFromHistory,
     });
   }
 
   refresh() {
-    console.log(this.reservation.location);
     this.store.dispatch(
       new fromReservation.SetLocation(
         this.reservation.location,

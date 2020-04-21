@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { Program } from "src/app/state/program/program.model";
 import { Store } from "@ngrx/store";
@@ -23,7 +19,7 @@ import { Globals } from "src/app/globals";
 
 @Component({
   templateUrl: "./programs.component.html",
-  styleUrls: ["./programs.component.scss"]
+  styleUrls: ["./programs.component.scss"],
 })
 export class ProgramsComponent implements OnDestroy, OnInit {
   programs$: Observable<Program[]>;
@@ -53,7 +49,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.reservation$ = this.store.select(getReservation);
     this.reserveService.emitTitle(this.title);
     this.searchSubscription = this.reserveService.searchTermEmitted$.subscribe(
-      searchTerm => {
+      (searchTerm) => {
         this.searchTerm = searchTerm;
         this.segment.track(this.globals.events.program.search, {
           term: this.searchTerm
@@ -74,7 +70,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.isLoading$ = this.store.select(getLoading);
     this.reservation$
       .pipe(first())
-      .subscribe(reservation =>
+      .subscribe((reservation) =>
         this.store.dispatch(
           new fromProgram.GetAllByLocation(reservation.location)
         )
@@ -84,7 +80,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   refresh() {
     this.reservation$
       .pipe(first())
-      .subscribe(reservation =>
+      .subscribe((reservation) =>
         this.store.dispatch(
           new fromProgram.GetAllByLocation(reservation.location)
         )
@@ -103,7 +99,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
           message: "Something went wrong. Please try again.",
           color: "danger",
           duration: 4000,
-          cssClass: "ion-text-center"
+          cssClass: "ion-text-center",
         });
         whoops.present();
         this.reserveService.emitRefreshed();
@@ -124,7 +120,6 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.store.dispatch(new fromReservation.SetProgram(program));
     // if editing, may already have a tv
     const state = await this.store.pipe(first()).toPromise();
-    const reservation: Partial<Reservation> = state.reservation.reservation;
     const updateType: string = state.reservation.updateType;
     // if (reservation.id && reservation.box && reservation.box.label) {
     if (!!updateType) {
@@ -141,7 +136,7 @@ export class ProgramsComponent implements OnDestroy, OnInit {
   async onProgramInfo(program: Program) {
     this.infoModal = await this.modalController.create({
       component: InfoComponent,
-      componentProps: { program }
+      componentProps: { program },
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.infoModal) this.infoModal.close();

@@ -1,7 +1,6 @@
-
 <ion-header>
   <ion-toolbar>
-    <ion-title>My Reservations</ion-title>
+    <ion-title class="title brand-text light">My Reservations</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -13,15 +12,17 @@
         Logout
       </ion-button>
     </ion-buttons> -->
-    <ion-buttons slot="end" padding-end> <app-coins></app-coins> </ion-buttons>
+    <ion-buttons slot="end" class="ion-padding-end">
+      <app-coins></app-coins>
+    </ion-buttons>
     <!-- <ng-template #loggedOut>
       <ion-button (click)="login()">Login</ion-button>
     </ng-template> -->
   </ion-toolbar>
 </ion-header>
 
-<ion-content margin-top>
-  <ion-row class="ion-justify-content-center" margin-top>
+<ion-content class="ion-margin-top">
+  <ion-row class="ion-justify-content-center ion-margin-top">
     <img
       src="https://clicker-brand.s3.amazonaws.com/logo.png"
       alt="Clicker logo"
@@ -38,22 +39,25 @@
     <ion-refresher-content
       pullingIcon="arrow-down"
       pullingText="Pull to refresh"
-      refreshingSpinner="crescent"
+      refreshingSpinner="dots"
       refreshingText=""
     >
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-grid padding-horizontal padding-top size="12">
+  <ion-grid class="ion-padding-horizontal ion-padding-top" size="12">
     <!-- <ion-row margin-bottom> <b>My Reservations</b> </ion-row> -->
     <ion-row
       *ngIf="(isReservationsLoading$ | async); else ready"
-      margin-vertical
+      class="ion-margin-vertical"
     >
-      <ion-spinner name="crescent" class="center"></ion-spinner>
+      <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
     </ion-row>
     <ng-template #ready>
-      <div margin-bottom *ngIf="(reservations$ | async).length > 0; else empty">
+      <div
+        class="ion-margin-bottom"
+        *ngIf="(reservations$ | async).length > 0; else empty"
+      >
         <div *ngFor="let r of (reservations$ | async)">
           <app-reservation
             [reservation]="r"
@@ -62,7 +66,7 @@
         </div>
       </div>
       <ng-template #empty>
-        <div padding-horizontal class="ion-text-center">
+        <div class="ion-padding-horizontal ion-text-center">
           <p>No active reservations</p>
         </div>
       </ng-template>

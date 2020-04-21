@@ -1,8 +1,9 @@
+import { Program } from "./../../../state/program/program.model";
 import {
   Component,
   OnInit,
   OnDestroy,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { Reservation } from "../../../state/reservation/reservation.model";
 import { ReserveService } from "../../reserve.service";
@@ -10,7 +11,7 @@ import { Observable, Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getReservation,
-  getReservationUpdateType
+  getReservationUpdateType,
 } from "src/app/state/reservation";
 import * as fromStore from "../../../state/app.reducer";
 import * as fromReservation from "../../../state/reservation/reservation.actions";
@@ -32,7 +33,7 @@ import { LoginComponent } from "src/app/auth/login/login.component";
   selector: "app-confirmation",
   templateUrl: "./confirmation.component.html",
   styleUrls: ["./confirmation.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush // ExpressionChangedAfterItHasBeenCheckedError when opening wallet if not here
+  changeDetection: ChangeDetectionStrategy.OnPush, // ExpressionChangedAfterItHasBeenCheckedError when opening wallet if not here
 })
 export class ConfirmationComponent implements OnDestroy, OnInit {
   timeframes$: Observable<Timeframe[]>;
@@ -58,7 +59,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   sub: Subscription;
   timeframe0: Timeframe = {
     minutes: 0,
-    tokens: 0
+    tokens: 0,
   };
   overideDistanceClicks = 0;
   overrideDistanceDisable = false;
@@ -84,8 +85,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     // TODO this is ugly but gets rid of ExpressionChangedAfterItHasBeenCheckedError issue when opening wallet
     this.isAppLoading$ = this.store.pipe(select(getAppLoading));
-    this.sub = this.isAppLoading$.subscribe(x => {
-      console.log({ x });
+    this.sub = this.isAppLoading$.subscribe((x) => {
       this.isAppLoading = x;
     });
   }
@@ -99,15 +99,12 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      console.log(this);
-    }, 5000);
     this.reservation$
       .pipe(
-        filter(r => r !== null),
+        filter((r) => r !== null),
         first()
       )
-      .subscribe(reservation => {
+      .subscribe((reservation) => {
         if (reservation.location.distance > this.rangeDistanceMiles) {
           this.outOfRange = true;
         }
@@ -117,14 +114,14 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         this.reservation = reservation;
         this.timeframes$
           .pipe(
-            filter(t => t !== null),
+            filter((t) => t !== null),
             first()
           )
-          .subscribe(timeframes => {
+          .subscribe((timeframes) => {
             if (this.reservation.minutes !== 0) {
-              const timeframe = timeframes[0];
-              this.reservation.cost = timeframe.tokens;
-              this.reservation.minutes = timeframe.minutes;
+              // const timeframe = timeframes[0];
+              // this.reservation.cost = timeframe.tokens;
+              // this.reservation.minutes = timeframe.minutes;
             }
             this.isInitializing = false;
           });
@@ -132,7 +129,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         // const updateType: string = state.reservation.updateType;
         // this.route.queryParams.subscribe(params => {
         // this.reservation.minutes = this.reservation.location.minutes;
-        this.reservationUpdateType$.subscribe(updateType => {
+        this.reservationUpdateType$.subscribe((updateType) => {
           if (updateType) {
             this.isEditMode = true;
             if (updateType === "channel") {
@@ -149,15 +146,22 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     // this.tokenCount$.subscribe(tokens => {
     //   this.tokenCount = tokens;
     // });
-    this.isLoggedIn$.subscribe(isLoggedIn => {
+    this.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
     });
   }
 
   getEndTime() {
-    return moment(this.reservation.end)
-      .add(this.reservation.minutes.valueOf(), "minutes")
-      .toDate();
+    // if (this.reservation.end) {
+    return this.isEditTime
+      ? moment(this.reservation.end)
+          .add(this.reservation.update.minutes.valueOf(), "minutes")
+          .toDate()
+      : moment(this.reservation.end)
+          .add(this.reservation.minutes.valueOf(), "minutes")
+          .toDate();
+
+    // }
   }
 
   // insufficientFunds() {
@@ -165,7 +169,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   // }
 
   onConfirm() {
-    console.log("onconfirm");
     const { reservation: r } = this;
     this.saving = true;
     this.isEditMode
@@ -181,33 +184,38 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       )
       .pipe(first())
       .subscribe(() => {
-        console.log("success");
+        const program =
+          r.update && r.update.program ? r.update.program : r.program;
+        const minutes =
+          r.update && r.update.minutes ? r.update.minutes : r.minutes;
+        const cost = r.update && r.update.cost ? r.update.cost : r.cost;
         if (this.isEditMode) {
           this.segment.track(this.globals.events.reservation.updated, {
-            minutes: r.minutes,
+            cost,
+            minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
-            channelName: r.program.channelTitle,
-            channelNumber: r.program.channel,
-            programName: r.program.title,
-            programDescription: r.program.description
+            channelName: program.channelTitle,
+            channelNumber: program.channel,
+            programName: program.title,
+            programDescription: program.description,
           });
         } else {
           this.segment.track(this.globals.events.reservation.created, {
             minutes: r.minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
-            channelName: r.program.channelTitle,
-            channelNumber: r.program.channel,
-            programName: r.program.title,
-            programDescription: r.program.description
+            channelName: program.channelTitle,
+            channelNumber: program.channel,
+            programName: program.title,
+            programDescription: program.description,
           });
         }
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(["/tabs/profile"]);
         this.showTunedToast(
           reservation.box.label,
-          reservation.program.channelTitle
+          this.getProgram().channelTitle
         );
       });
     this.actions$
@@ -229,7 +237,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     const toast = await this.toastController.create({
       message: `📺 ${label} successfully changed to ${channelName}. ⚡`,
       duration: 2000,
-      cssClass: "ion-text-center"
+      cssClass: "ion-text-center",
     });
     toast.present();
   }
@@ -239,21 +247,50 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       message: `Something went wrong, please try again.`,
       duration: 2000,
       cssClass: "ion-text-center",
-      color: "danger"
+      color: "danger",
     });
     toast.present();
   }
 
   async onTimeframeChange(e) {
-    const timeframe = e.detail.value;
-    this.reservation.cost = timeframe.tokens;
-    this.reservation.minutes = timeframe.minutes;
+    const timeframe: Timeframe = e.detail.value;
+    this.store.dispatch(new fromReservation.SetTimeframe(timeframe));
+  }
+
+  // hasTimeframe() {
+  //   return !!this.reservation.cost;
+  // }
+
+  isValid() {
+    if (this.isEditChannel) {
+      return true;
+    } else if (this.isEditTime) {
+      return this.reservation.update && this.reservation.update.minutes;
+    } else {
+      return this.reservation.minutes;
+    }
+  }
+
+  getCost(): number {
+    if (this.isEditTime) {
+      return this.reservation.update && this.reservation.update.cost;
+    } else {
+      return this.reservation.cost;
+    }
+  }
+
+  getProgram(): Program {
+    if (this.isEditChannel) {
+      return this.reservation.update.program;
+    } else {
+      return this.reservation.program;
+    }
   }
 
   onClickOverrideDistanceForce() {
     this.overrideDistanceDisable = true;
   }
-  
+
   onClickOverrideDistance() {
     this.overideDistanceClicks++;
     if (this.overideDistanceClicks === 7) {
@@ -269,14 +306,12 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getChannelDescription() {
-    return `${this.reservation.program.channelTitle} (${
-      this.reservation.program.title
-    })`;
+    return `${this.getProgram().channelTitle} (${this.getProgram().title})`;
   }
 
   async onLogin() {
     this.loginModal = await this.modalController.create({
-      component: LoginComponent
+      component: LoginComponent,
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.loginModal) {

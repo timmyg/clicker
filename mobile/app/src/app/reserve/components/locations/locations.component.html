@@ -6,28 +6,27 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       !reserveService.isRefreshing;
     let stuffLoading
   "
-  margin-vertical
+  class="ion-margin-vertical"
 >
-  <ion-spinner name="crescent" class="center"></ion-spinner>
+  <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
 </ion-row>
 
 <section>
   <section
-    class="ion-text-center"
-    padding
+    class="ion-text-center ion-padding"
     *ngIf="
       (askForGeolocation$ | async) && !evaluatingGeolocation;
       else showLocations
     "
   >
-    <ion-icon name="pin" class="location"></ion-icon>
+    <ion-icon name="navigate" class="location"></ion-icon>
     <p>
       Clicker TV needs access to your location for more accurate location
       details. This data is not shared or stored.
     </p>
     <div>
       <ion-button
-        margin-top
+        class="ion-margin-top"
         (click)="allowLocation()"
         [disabled]="disableButton"
         color="primary"
@@ -36,7 +35,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
     </div>
     <div>
       <ion-button
-        margin-top
+        class="ion-margin-top"
         (click)="denyGeolocation()"
         fill="clear"
         [disabled]="disableButton"
@@ -49,6 +48,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
   <ng-template #showLocations>
     <ion-list
       lines="none"
+      data-atm="locations"
       [class.content-loading]="
         (isLoading$ | async) || evaluatingGeolocation || waiting
       "
@@ -77,22 +77,28 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       >
         <ion-card>
           <ion-card-content class="ion-text-center">
-            <p *ngIf="searchTerm">
-              <em>Results matching: {{searchTerm}}</em>
+            <!-- <p *ngIf="searchTerm">
+              <em>Results matching: {{ searchTerm }}</em>
+            </p> -->
+            <p>
+              Sorry, no Clicker locations
+              <span *ngIf="searchTerm && searchTerm.length"
+                >matching <b>{{ searchTerm }} </b></span
+              ><span *ngIf="this.userGeolocation"
+                >within {{ milesRadius }} miles
+              </span>
+              😢.
             </p>
             <p>
-              Sorry, no Clicker locations <span *ngIf="searchTerm && searchTerm.length">matching <b>{{searchTerm}} </b></span><span *ngIf="this.userGeolocation">within {{ milesRadius }} miles </span> 😢.
-            </p>
-            <p>
-              Bring Clicker to your neighborhood by clicking "Suggest New Location" from the menu.
+              Bring Clicker to your neighborhood by clicking
+              <b>Suggest New Location</b> from the menu.
             </p>
           </ion-card-content>
         </ion-card>
       </ng-container>
       <p
         *ngIf="geolocationDeclined && !evaluatingGeolocation"
-        class="ion-text-center"
-        padding
+        class="ion-text-center ion-padding"
       >
         Find locations around you <br />by
         <a (click)="forceAllow()">allowing location services</a>

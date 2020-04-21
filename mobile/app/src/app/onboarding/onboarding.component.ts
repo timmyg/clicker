@@ -6,14 +6,14 @@ import { Globals } from "../globals";
 @Component({
   selector: "app-onboarding",
   templateUrl: "./onboarding.component.html",
-  styleUrls: ["./onboarding.component.scss"]
+  styleUrls: ["./onboarding.component.scss"],
 })
 export class OnboardingComponent implements OnInit {
   onboarded: boolean;
   ready: boolean;
 
   options = {
-    effect: "flip"
+    effect: "flip",
   };
 
   constructor(
@@ -28,7 +28,7 @@ export class OnboardingComponent implements OnInit {
 
   checkOnboarded() {
     // TODO this might slow down the apparent opening of the app?
-    this.storage.get("onboarded").then(onboarded => {
+    this.storage.get("onboarded").then((onboarded) => {
       this.onboarded = onboarded;
       this.ready = true;
     });

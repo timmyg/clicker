@@ -5,18 +5,15 @@ import { Store } from "@ngrx/store";
 import * as fromStore from "../state/app.reducer";
 import {
   getAllReservations,
-  getLoading as getReservationLoading
+  getLoading as getReservationLoading,
 } from "../state/reservation";
-import {
-  getUser,
-  getLoading as getWalletLoading,
-} from "../state/user";
+import { getUser, getLoading as getWalletLoading } from "../state/user";
 import {
   ModalController,
   AlertController,
   ToastController,
   Platform,
-  ActionSheetController
+  ActionSheetController,
 } from "@ionic/angular";
 import * as fromReservation from "../state/reservation/reservation.actions";
 import * as fromUser from "../state/user/user.actions";
@@ -36,7 +33,7 @@ import { ICurrentConfig } from "cordova-plugin-ionic/dist/IonicCordova";
 @Component({
   selector: "app-profile",
   templateUrl: "./profile.page.html",
-  styleUrls: ["./profile.page.scss"]
+  styleUrls: ["./profile.page.scss"],
 })
 export class ProfilePage {
   reservations$: Observable<Reservation[]>;
@@ -67,12 +64,10 @@ export class ProfilePage {
     this.user$ = this.store.select(getUser);
     this.isReservationsLoading$ = this.store.select(getReservationLoading);
     this.isWalletLoading$ = this.store.select(getWalletLoading);
-
   }
 
   ngOnInit() {
-    this.reservations$.pipe(first()).subscribe(reservations => {
-      console.log({ reservations });
+    this.reservations$.pipe(first()).subscribe((reservations) => {
       if (!reservations) {
         this.store.dispatch(new fromReservation.GetAll());
       }
@@ -109,7 +104,7 @@ export class ProfilePage {
     const toastOptions: ToastOptions = {
       message: message,
       duration: 4000,
-      cssClass: "ion-text-center"
+      cssClass: "ion-text-center",
     };
     let toast;
     if (showNewReservation) {
@@ -120,8 +115,8 @@ export class ProfilePage {
           handler: () => {
             this.router.navigate(["/tabs/reserve"]);
             toast.dismiss();
-          }
-        }
+          },
+        },
       ];
     }
     toast = await this.toastController.create(toastOptions);
@@ -131,7 +126,7 @@ export class ProfilePage {
   createNewReservation(source: string) {
     this.store.dispatch(new fromReservation.Start());
     this.router.navigate(["/tabs/reserve/locations"], {
-      relativeTo: this.route
+      relativeTo: this.route,
     });
     if (source === "fab") {
       this.segment.track(this.globals.events.reservation.clickedButton);
@@ -159,29 +154,29 @@ export class ProfilePage {
             const reservationToUpdate = Object.assign({}, reservation);
             delete reservationToUpdate.program;
             this.store.dispatch(
-              new fromReservation.SetForUpdate(reservationToUpdate, "channel")
+              new fromReservation.SetForUpdateChannel(reservationToUpdate)
             );
             this.router.navigate(["/tabs/reserve"]);
-          }
+          },
         },
         {
           text: "Add Time",
           handler: () => {
             const reservationToUpdate = Object.assign({}, reservation);
             this.store.dispatch(
-              new fromReservation.SetForUpdate(reservationToUpdate, "time")
+              new fromReservation.SetForUpdateTime(reservationToUpdate)
             );
             this.router.navigate(["/tabs/reserve"]);
-          }
+          },
         },
         {
           text: "Cancel Reservation",
           role: "destructive",
           handler: () => {
             this.onReservationCancel(reservation);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     await actionSheet.present();
   }
@@ -200,9 +195,9 @@ export class ProfilePage {
             this.store.dispatch(new fromReservation.Cancel(reservation));
             this.segment.track(this.globals.events.reservation.cancelled);
             // clearInterval(this.intervalJobId);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
@@ -230,14 +225,12 @@ export class ProfilePage {
       const toast = await this.toastController.create({
         message: `Version: ${version} 😏 (${configuration.channel})`,
         duration: 3000,
-        cssClass: "ion-text-center"
+        cssClass: "ion-text-center",
       });
       await toast.present();
       this.showVersionClicks = 0;
     }
   }
-
-  
 
   getStoreName() {
     let storeName = "app store";
