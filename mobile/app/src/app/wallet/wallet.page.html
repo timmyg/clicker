@@ -15,12 +15,18 @@
   <section [hidden]="addCardMode || (isLoading$ | async)">
     <ion-list id="length">
       <ion-radio-group (ionChange)="onAmountChange($event)">
-        <ion-list-header> <ion-label>Choose an Amount</ion-label> </ion-list-header>
+        <ion-list-header>
+          <ion-label>Choose an Amount</ion-label>
+        </ion-list-header>
         <ion-item *ngFor="let f of (plans$ | async)">
           <ion-label class="flex ion-align-items-center">
             <span class="dollars">${{ f.dollars }}</span>
             <div class="flex ion-align-items-center">
-              <ion-chip *ngIf="f.best" color="primary" class="ion-padding-right">
+              <ion-chip
+                *ngIf="f.best"
+                color="primary"
+                class="ion-padding-right"
+              >
                 Best Deal
               </ion-chip>
               <img
@@ -34,6 +40,7 @@
           </ion-label>
           <ion-radio
             slot="start"
+            mode="md"
             [value]="f"
             [disabled]="waiting"
             checked

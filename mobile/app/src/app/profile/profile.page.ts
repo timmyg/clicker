@@ -154,7 +154,7 @@ export class ProfilePage {
             const reservationToUpdate = Object.assign({}, reservation);
             delete reservationToUpdate.program;
             this.store.dispatch(
-              new fromReservation.SetForUpdate(reservationToUpdate, "channel")
+              new fromReservation.SetForUpdateChannel(reservationToUpdate)
             );
             this.router.navigate(["/tabs/reserve"]);
           },
@@ -164,7 +164,7 @@ export class ProfilePage {
           handler: () => {
             const reservationToUpdate = Object.assign({}, reservation);
             this.store.dispatch(
-              new fromReservation.SetForUpdate(reservationToUpdate, "time")
+              new fromReservation.SetForUpdateTime(reservationToUpdate)
             );
             this.router.navigate(["/tabs/reserve"]);
           },

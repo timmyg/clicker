@@ -1,3 +1,4 @@
+import { Program } from "./../../../state/program/program.model";
 import {
   Component,
   OnInit,
@@ -151,9 +152,16 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getEndTime() {
-    return moment(this.reservation.end)
-      .add(this.reservation.minutes.valueOf(), "minutes")
-      .toDate();
+    // if (this.reservation.end) {
+    return this.isEditTime
+      ? moment(this.reservation.end)
+          .add(this.reservation.update.minutes.valueOf(), "minutes")
+          .toDate()
+      : moment(this.reservation.end)
+          .add(this.reservation.minutes.valueOf(), "minutes")
+          .toDate();
+
+    // }
   }
 
   // insufficientFunds() {
@@ -176,32 +184,52 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       )
       .pipe(first())
       .subscribe(() => {
+        const program =
+          r.update && r.update.program ? r.update.program : r.program;
+        const minutes =
+          r.update && r.update.minutes ? r.update.minutes : r.minutes;
+        const cost = r.update && r.update.cost ? r.update.cost : r.cost;
         if (this.isEditMode) {
           this.segment.track(this.globals.events.reservation.updated, {
-            minutes: r.minutes,
+            cost,
+            minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
+<<<<<<< HEAD
             channelName: r.program.channelTitle,
             channelNumber: r.program.channel,
             programName: r.program.title,
             programDescription: r.program.description,
+=======
+            channelName: program.channelTitle,
+            channelNumber: program.channel,
+            programName: program.title,
+            programDescription: program.description,
+>>>>>>> 2e956eac836dd20366b90c7f48d4348b3380b4eb
           });
         } else {
           this.segment.track(this.globals.events.reservation.created, {
             minutes: r.minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
+<<<<<<< HEAD
             channelName: r.program.channelTitle,
             channelNumber: r.program.channel,
             programName: r.program.title,
             programDescription: r.program.description,
+=======
+            channelName: program.channelTitle,
+            channelNumber: program.channel,
+            programName: program.title,
+            programDescription: program.description,
+>>>>>>> 2e956eac836dd20366b90c7f48d4348b3380b4eb
           });
         }
         this.store.dispatch(new fromReservation.Start());
         this.router.navigate(["/tabs/profile"]);
         this.showTunedToast(
           reservation.box.label,
-          reservation.program.channelTitle
+          this.getProgram().channelTitle
         );
       });
     this.actions$
@@ -239,13 +267,38 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   async onTimeframeChange(e) {
-    const timeframe = e.detail.value;
-    this.reservation.cost = timeframe.tokens;
-    this.reservation.minutes = timeframe.minutes;
+    const timeframe: Timeframe = e.detail.value;
+    this.store.dispatch(new fromReservation.SetTimeframe(timeframe));
   }
 
-  hasTimeframe() {
-    return this.reservation.cost !== null;
+  // hasTimeframe() {
+  //   return !!this.reservation.cost;
+  // }
+
+  isValid() {
+    if (this.isEditChannel) {
+      return true;
+    } else if (this.isEditTime) {
+      return this.reservation.update && this.reservation.update.minutes;
+    } else {
+      return this.reservation.minutes;
+    }
+  }
+
+  getCost(): number {
+    if (this.isEditTime) {
+      return this.reservation.update && this.reservation.update.cost;
+    } else {
+      return this.reservation.cost;
+    }
+  }
+
+  getProgram(): Program {
+    if (this.isEditChannel) {
+      return this.reservation.update.program;
+    } else {
+      return this.reservation.program;
+    }
   }
 
   onClickOverrideDistanceForce() {
@@ -267,9 +320,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getChannelDescription() {
-    return `${this.reservation.program.channelTitle} (${
-      this.reservation.program.title
-    })`;
+    return `${this.getProgram().channelTitle} (${this.getProgram().title})`;
   }
 
   async onLogin() {

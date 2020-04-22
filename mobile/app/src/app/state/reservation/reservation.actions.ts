@@ -3,6 +3,7 @@ import { Reservation } from "./reservation.model";
 import { Location } from "../location/location.model";
 import { Program } from "../program/program.model";
 import { TV } from "../location/tv.model";
+import { Timeframe } from '../app/timeframe.model';
 
 export const GET_RESERVATIONS = "[RESERVATION] Get Reservations";
 export const GET_RESERVATIONS_SUCCESS =
@@ -21,8 +22,10 @@ export const CANCEL_RESERVATION_SUCCESS =
   "[RESERVATION] Cancel Reservation Success";
 export const CANCEL_RESERVATION_FAIL = "[RESERVATION] Cancel Reservation Fail";
 export const START_RESERVATION = "[RESERVATION WIZARD] Start New Reservation";
-export const SET_RESERVATION_FOR_UPDATE =
-  "[RESERVATION WIZARD] Set Existing Reservation for Update";
+export const SET_RESERVATION_FOR_UPDATE_CHANNEL =
+  "[RESERVATION WIZARD] Set Existing Reservation for Update Channel";
+export const SET_RESERVATION_FOR_UPDATE_TIME =
+  "[RESERVATION WIZARD] Set Existing Reservation for Update Time";
 export const SET_RESERVATION_LOCATION =
   "[RESERVATION WIZARD] Set Reservation Location";
 export const SET_RESERVATION_LOCATION_SUCCESS =
@@ -31,6 +34,8 @@ export const SET_RESERVATION_LOCATION_FAIL =
   "[RESERVATION] Set Reservation Location Fail";
 export const SET_RESERVATION_PROGRAM =
   "[RESERVATION WIZARD] Set Reservation Program";
+export const SET_RESERVATION_TIMEFRAME =
+  "[RESERVATION WIZARD] Set Reservation Timeframe";
 export const SET_RESERVATION_TV = "[RESERVATION WIZARD] Set Reservation TV";
 
 export class Start implements Action {
@@ -95,9 +100,14 @@ export class CancelFail implements Action {
   constructor(public payload: any) {}
 }
 
-export class SetForUpdate implements Action {
-  readonly type = SET_RESERVATION_FOR_UPDATE;
-  constructor(public reservation: Reservation, public updateType: string) {}
+export class SetForUpdateChannel implements Action {
+  readonly type = SET_RESERVATION_FOR_UPDATE_CHANNEL;
+  constructor(public reservation: Reservation) {}
+}
+
+export class SetForUpdateTime implements Action {
+  readonly type = SET_RESERVATION_FOR_UPDATE_TIME;
+  constructor(public reservation: Reservation) {}
 }
 
 export class SetLocation implements Action {
@@ -129,6 +139,11 @@ export class SetTv implements Action {
   constructor(public payload: TV) {}
 }
 
+export class SetTimeframe implements Action {
+  readonly type = SET_RESERVATION_TIMEFRAME;
+  constructor(public payload: Timeframe) {}
+}
+
 export type ReservationActions =
   | Start
   | GetAll
@@ -143,9 +158,11 @@ export type ReservationActions =
   | Cancel
   | CancelSuccess
   | CancelFail
-  | SetForUpdate
+  | SetForUpdateTime
+  | SetForUpdateChannel
   | SetLocation
   | SetLocationSuccess
   | SetLocationFail
   | SetProgram
-  | SetTv;
+  | SetTv
+  | SetTimeframe;

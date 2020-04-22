@@ -120,7 +120,6 @@ export class ProgramsComponent implements OnDestroy, OnInit {
     this.store.dispatch(new fromReservation.SetProgram(program));
     // if editing, may already have a tv
     const state = await this.store.pipe(first()).toPromise();
-    // const reservation: Partial<Reservation> = state.reservation.reservation;
     const updateType: string = state.reservation.updateType;
     // if (reservation.id && reservation.box && reservation.box.label) {
     if (!!updateType) {
