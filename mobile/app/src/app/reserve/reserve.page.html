@@ -13,15 +13,17 @@
     <ion-buttons *ngIf="!searchMode" slot="end" class="ion-padding-end">
       <app-coins></app-coins>
     </ion-buttons>
-    <ion-title *ngIf="!searchMode" class="title brand-text light"> {{ title }} </ion-title>
+    <ion-title *ngIf="!searchMode" class="title brand-text light">
+      {{ title }}
+    </ion-title>
     <div *ngIf="searchMode" class="ion-padding-top">
-    <ion-searchbar
-      #searchbar
-      (ionCancel)="closeSearch()"
-      (ionChange)="onSearch($event)"
-      showCancelButton
-      animated
-    ></ion-searchbar>
+      <ion-searchbar
+        #searchbar
+        (ionCancel)="closeSearch()"
+        (ionChange)="onSearch($event)"
+        showCancelButton
+        animated
+      ></ion-searchbar>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -140,6 +142,7 @@
       <ion-icon slot="start" name="trophy"></ion-icon>
       Update to Production channel
     </ion-button>
+    <!-- <br /> -->
     <h6>Developer Options:</h6>
     <ion-button color="light" (click)="forceUpdate('Master')">
       <ion-icon slot="start" name="color-wand"></ion-icon>
