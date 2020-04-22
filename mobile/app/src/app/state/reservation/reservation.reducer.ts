@@ -92,8 +92,6 @@ export function reducer(
       return {
         ...state,
         loading: false,
-<<<<<<< HEAD
-=======
       };
     case fromReservation.SET_RESERVATION_TIMEFRAME:
       if (!!state.updateType) {
@@ -108,7 +106,6 @@ export function reducer(
       return {
         ...state,
         loading: false,
->>>>>>> 2e956eac836dd20366b90c7f48d4348b3380b4eb
       };
     case fromReservation.SET_RESERVATION_TV:
       state.reservation.box = action.payload;
