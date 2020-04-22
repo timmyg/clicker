@@ -61,7 +61,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     minutes: 0,
     tokens: 0,
   };
-  overideDistanceClicks = 0;
+  overrideDistanceClicks = 0;
   overrideDistanceDisable = false;
   loginModal;
 
@@ -146,8 +146,8 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     // this.tokenCount$.subscribe(tokens => {
     //   this.tokenCount = tokens;
     // });
-    this.isLoggedIn$.subscribe((isLoggedIn) => {
-      this.isLoggedIn = isLoggedIn;
+    this.isLoggedIn$.subscribe((isUserLoggedIn) => {
+      this.isLoggedIn = isUserLoggedIn;
     });
   }
 
@@ -195,34 +195,20 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
             minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
-<<<<<<< HEAD
-            channelName: r.program.channelTitle,
-            channelNumber: r.program.channel,
-            programName: r.program.title,
-            programDescription: r.program.description,
-=======
             channelName: program.channelTitle,
             channelNumber: program.channel,
             programName: program.title,
             programDescription: program.description,
->>>>>>> 2e956eac836dd20366b90c7f48d4348b3380b4eb
           });
         } else {
           this.segment.track(this.globals.events.reservation.created, {
             minutes: r.minutes,
             locationName: r.location.name,
             locationNeighborhood: r.location.neighborhood,
-<<<<<<< HEAD
-            channelName: r.program.channelTitle,
-            channelNumber: r.program.channel,
-            programName: r.program.title,
-            programDescription: r.program.description,
-=======
             channelName: program.channelTitle,
             channelNumber: program.channel,
             programName: program.title,
             programDescription: program.description,
->>>>>>> 2e956eac836dd20366b90c7f48d4348b3380b4eb
           });
         }
         this.store.dispatch(new fromReservation.Start());
@@ -306,10 +292,10 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   onClickOverrideDistance() {
-    this.overideDistanceClicks++;
-    if (this.overideDistanceClicks === 7) {
+    this.overrideDistanceClicks++;
+    if (this.overrideDistanceClicks === 7) {
       this.overrideDistanceDisable = true;
-      this.overideDistanceClicks = 0;
+      this.overrideDistanceClicks = 0;
     }
   }
 
