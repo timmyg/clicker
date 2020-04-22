@@ -16,6 +16,7 @@ then
         echo "3"
         export ENV=develop
     fi
+    echo "$ENV"
 else 
     echo "Not an Appflow build"; 
 fi
