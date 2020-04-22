@@ -2,7 +2,6 @@
 echo "running appflow-env.sh . . .";
 if [ "$CI_APP_ID" = "aab910fb" ] # ionic appflow app id
 then
-    echo "Is Appflow!"; 
     echo "branch: $CI_GIT_REF"
     if [ "$CI_GIT_REF" = "master" ]
     then
@@ -16,9 +15,6 @@ then
     then
         echo "3"
         export ENV=develop
-    else
-        echo "4"
-        export ENV=blah
     fi
 else 
     echo "Not an Appflow build"; 
