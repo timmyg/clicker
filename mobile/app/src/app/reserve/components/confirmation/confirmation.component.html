@@ -18,8 +18,8 @@
               isEditChannel;
             else chooseTimeframe
           "
-          >📺&nbsp;{{ reservation?.box?.label }} until
-          {{ getEndTime() | amDateFormat: "h:mma" }}</span
+          >📺&nbsp;<span class="brand-text">{{ reservation?.box?.label }}</span>
+          until {{ getEndTime() | amDateFormat: "h:mma" }}</span
         >
         <ng-template #chooseTimeframe><b>Choose timeframe</b></ng-template>
 
@@ -51,7 +51,7 @@
                 width="22"
                 height="22"
               />
-              <span>{{ timeframe.tokens }}</span>
+              <span class="brand-text bold">{{ timeframe.tokens }}</span>
             </div>
           </ion-label>
           <ion-radio
@@ -109,7 +109,7 @@
           <span *ngIf="!isEditTime"> Change<br />Channel&nbsp;</span>
           <span *ngIf="isEditTime"> Add Time</span>
         </span>
-        <span class="flex ion-align-items-center"
+        <span class="flex ion-align-items-center brand-text bold"
           ><img
             class="coin ion-padding-start"
             src="./assets/coin.svg"

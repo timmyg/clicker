@@ -10,13 +10,28 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-@import url("https://fonts.googleapis.com/css?family=Saira:wght@300;400&&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&Saira:wght@300;400;500&&display=swap");
+
+$brand-font-family: "Saira", sans-serif;
 
 .brand-text {
-  font-family: "Saira", sans-serif;
+  font-family: $brand-font-family;
   &.light {
-    font-weight: 400;
+    font-weight: 300;
   }
+  &.bold {
+    font-weight: 500;
+  }
+}
+
+ion-card-title,
+ion-label,
+ion-title,
+ion-button,
+ion-chip,
+a {
+  font-family: $brand-font-family;
+  font-weight: 500;
 }
 
 .flex {
@@ -50,7 +65,7 @@
 //   display: none !important;
 // }
 
-ion-spinner[name='dots'] {
+ion-spinner[name="dots"] {
   width: 120px !important;
   height: 120px !important;
 }
