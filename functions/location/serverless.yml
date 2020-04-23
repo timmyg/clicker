@@ -244,6 +244,7 @@ functions:
           method: get
   controlCenter:
     handler: location.controlCenter
+    timeout: 30
     events:
       - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
