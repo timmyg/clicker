@@ -249,8 +249,8 @@ functions:
       - http:
           path: control-center
           method: post
-  controlCenterbyLocation:
-    handler: location.controlCenterbyLocation
+  controlCenterByLocation:
+    handler: location.controlCenterByLocation
     events:
       - http:
           path: '{id}/control-center'
@@ -259,7 +259,7 @@ functions:
     handler: location.updateAirtableNowShowing
     timeout: 30
     events:
-      - schedule: cron(*/9 * * * ? *)
+      - schedule: cron(9/10 * * * ? *)
       - http:
           path: airtable/now-showing
           method: post

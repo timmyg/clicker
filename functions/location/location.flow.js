@@ -908,7 +908,7 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   for (const location of locations) {
     await new Invoke()
       .service('location')
-      .name('controlCenterbyLocation')
+      .name('controlCenterByLocation')
       .pathParams({ id: location.id })
       .async()
       .go();
@@ -955,8 +955,8 @@ const priority = {
   gameOver: 'game over', // game over
 };
 
-// npm run invoke:controlCenterbyLocation
-module.exports.controlCenterbyLocation = RavenLambdaWrapper.handler(Raven, async event => {
+// npm run invoke:controlCenterByLocation
+module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
   const location: Venue = await dbLocation
     .queryOne('id')
@@ -1488,4 +1488,3 @@ module.exports.findBoxWorseRating = findBoxWorseRating;
 module.exports.filterProgramsByTargeting = filterProgramsByTargeting;
 module.exports.replicatePrograms = replicatePrograms;
 module.exports.setBoxStatus = setBoxStatus;
-
