@@ -16,7 +16,7 @@ img.logo {
   position: absolute;
   left: -5px;
   .icon {
-    opacity: .3;
+    opacity: 0.3;
     align-self: center;
     // font-size: 40px;
   }
@@ -35,4 +35,8 @@ ion-card {
 
 .w-100 {
   width: 100%;
+}
+
+ion-card-subtitle {
+  text-transform: initial;
 }
