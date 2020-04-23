@@ -1083,8 +1083,8 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .exec();
   console.timeEnd('get location');
   const boxes = location.boxes
-    .filter(box => !!box.configuration.automationActive)
-    .sort((a, b) => a.zone.localeCompare(b.zone));
+    .filter(box => !!box.configuration.automationActive || !!box.configuration.appActive)
+    .sort((a, b) => (a.zone || b.label || '').localeCompare(b.zone || b.label || ''));
 
   console.time('get upcoming programs');
   let { data: upcomingPrograms } = await new Invoke()
