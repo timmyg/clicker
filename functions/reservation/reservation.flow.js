@@ -314,7 +314,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
       .body({
         text: `Extend timeframe [${updatedReservation.update.minutes} mins, user: ${userId.substr(
           userId.length - 5,
-        )} ]`,
+        )}, ${originalReservation.program.channelTitle} ${originalReservation.program.title} ]`,
       })
       .async()
       .go();

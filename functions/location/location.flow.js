@@ -1117,7 +1117,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       <ul> \
       {{#boxes}} \
         <li> \
-          <b>Box {{zone}}</b>: {{live.program.channelTitle}} <em>{{live.program.title}}</em> \
+          <b>Box {{zone || label}}</b>: {{live.program.channelTitle}} <em>{{live.program.title}}</em> \
         </li> \
       {{/boxes}} \
       </ul> \ 
