@@ -18,6 +18,10 @@ const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
 const initialTokens = 1;
 const key = 'clikr';
+const demo = {
+  phone: '+14141414141',
+  code: '4141',
+};
 declare class process {
   static env: {
     stage: string,
@@ -398,7 +402,7 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
 
-  if (phone === '+14141414141') {
+  if (phone === demo.phone) {
     return respond(201);
   }
 
@@ -418,8 +422,8 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
 
   try {
     console.log(twilioAccountSid, twilioAuthToken, twilioServiceSid, phone, code);
-    if (phone === '+14141414141' && code === '4141') {
-      const token = await getToken(phone);
+    if (phone === demo.phone && code === demo.code) {
+      const token = await getTokenDemo(phone);
       return respond(201);
     }
     const result = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
@@ -435,7 +439,11 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-async function getToken(phone) {
+async function getTokenDemo(phone) {
+  return getToken(phone, true);
+}
+
+async function getToken(phone, isDemo) {
   const user = await dbUser
     .queryOne('phone')
     .eq(phone)
@@ -445,7 +453,7 @@ async function getToken(phone) {
     const { id } = user;
     return jwt.sign({ sub: id }, key);
   } else {
-    const user = await dbUser.create({ phone, tokens: 0 });
+    const user = await dbUser.create({ phone, tokens: isDemo ? 10 : 0 });
     return jwt.sign({ sub: user.id }, key);
   }
 }
