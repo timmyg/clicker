@@ -440,7 +440,7 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function getTokenDemo(phone) {
-  return getToken(phone, true);
+  return await getToken(phone, true);
 }
 
 async function getToken(phone, isDemo) {
