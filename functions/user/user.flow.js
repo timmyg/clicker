@@ -398,7 +398,7 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
 
-  if (phone === '4141414141') {
+  if (phone === '+14141414141') {
     return respond(201);
   }
 
