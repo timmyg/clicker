@@ -406,8 +406,8 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
     return respond(201);
   }
 
-  const client = new twilio(twilioAccountSid, twilioAuthToken);
   try {
+    const client = new twilio(twilioAccountSid, twilioAuthToken);
     const response = await client.verify.services(twilioServiceSid).verifications.create({ to: phone, channel: 'sms' });
     return respond(201, response);
   } catch (e) {
@@ -444,14 +444,14 @@ async function getTokenDemo(phone) {
 }
 
 async function getToken(phone, isDemo) {
-  if (isDemo) {
-    return jwt.sign(
-      {
-        sub: uuid(),
-      },
-      key,
-    );
-  }
+  // if (isDemo) {
+  //   return jwt.sign(
+  //     {
+  //       sub: uuid(),
+  //     },
+  //     key,
+  //   );
+  // }
   const user = await dbUser
     .queryOne('phone')
     .eq(phone)
