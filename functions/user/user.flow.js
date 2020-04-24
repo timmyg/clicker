@@ -447,7 +447,7 @@ async function getToken(phone, isDemo) {
   if (isDemo) {
     return jwt.sign(
       {
-        sub: 'demo',
+        sub: uuid(),
       },
       key,
     );
