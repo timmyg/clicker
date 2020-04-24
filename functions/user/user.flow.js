@@ -452,16 +452,20 @@ async function getToken(phone, isDemo) {
   //     key,
   //   );
   // }
-  const user = await dbUser
+  const demoTokens = 10;
+  const user: User = await dbUser
     .queryOne('phone')
     .eq(phone)
     .all()
     .exec();
   if (user) {
+    if (isDemo && user.tokens < demoTokens) {
+      await dbUser.update({ id: user.id }, { tokens: demoTokens });
+    }
     const { id } = user;
     return jwt.sign({ sub: id }, key);
   } else {
-    const user = await dbUser.create({ phone, tokens: isDemo ? 10 : 0 });
+    const user = await dbUser.create({ phone, tokens: isDemo ? demoTokens : 0 });
     return jwt.sign({ sub: user.id }, key);
   }
 }
