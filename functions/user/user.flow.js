@@ -418,7 +418,7 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
 
   try {
     console.log(twilioAccountSid, twilioAuthToken, twilioServiceSid, phone, code);
-    if (phone === '4141414141' && code === '4141') {
+    if (phone === '+14141414141' && code === '4141') {
       const token = await getToken(phone);
       return respond(201);
     }
