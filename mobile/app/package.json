@@ -11,7 +11,7 @@
     "start:wait": "ng serve & wait-on http://localhost:4100",
     "start:static": "npx http-server www --port 4100",
     "build2": "npx ng build --configuration=${ENV:-production}",
-    "build": "if [ \"$CI_GIT_REF\" != \"\" ]; then ENV=$CI_GIT_REF; fi && echo $ENV && npx ng build --configuration=$ENV",
+    "build": "if [\"$CI_GIT_REF\" != \"\" ]; then if [\"$CI_GIT_REF\" != \"master\" ]; then ENV=production; fi; else ENV=$CI_GIT_REF; fi && echo $ENV && npx ng build --configuration=$ENV",
     "build:ios:develop": "ng build --configuration=production && npx cap sync ios && npx cap open ios",
     "build:ios:release": "ng build --configuration=release && npx cap sync ios && npx cap open ios",
     "build:ios:prod": "ng build --configuration=production && npx cap sync ios && npx cap open ios",
