@@ -445,10 +445,13 @@ async function getTokenDemo(phone) {
 
 async function getToken(phone, isDemo) {
   if (isDemo) {
-    return jwt.sign({
-      sub: '3bef0860-a8c5-11e9-ae31-89c14897624e',
-      iat: 1587748179,
-    });
+    return jwt.sign(
+      {
+        sub: '3bef0860-a8c5-11e9-ae31-89c14897624e',
+        iat: 1587748179,
+      },
+      key,
+    );
   }
   const user = await dbUser
     .queryOne('phone')
