@@ -33,6 +33,7 @@ export default {
     Preview
   },
   asyncData({ env }) {
+    console.log("asyncdata");
     return Promise.all([
       client.getEntries({
         content_type: "blogPost",

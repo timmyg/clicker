@@ -3,6 +3,7 @@
     <div class="site-content">
       <Hero />
       <Announcements />
+      <!-- <BlogPreview :posts="posts" /> -->
       <Products />
       <Features />
       <FeaturesCards />
@@ -16,6 +17,7 @@
 
 <script>
 import Announcements from "@/components/landing/Announcements";
+import BlogPreview from "@/components/landing/BlogPreview";
 import Hero from "@/components/landing/Hero";
 import Faq from "@/components/landing/Faq";
 import Features from "@/components/landing/Features";
@@ -28,6 +30,7 @@ import Testimonials from "@/components/landing/Testimonials";
 export default {
   components: {
     Announcements,
+    BlogPreview,
     Faq,
     Features,
     Hero,
@@ -37,7 +40,8 @@ export default {
     Signup,
     FeaturesCards,
     Testimonials
-  }
+  },
+  props: ["posts"]
 };
 </script>
 
