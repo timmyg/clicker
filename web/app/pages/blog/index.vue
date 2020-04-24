@@ -33,7 +33,6 @@ export default {
     Preview
   },
   asyncData({ env }) {
-    console.log("asyncdata");
     return Promise.all([
       client.getEntries({
         content_type: "blogPost",
@@ -41,7 +40,6 @@ export default {
       })
     ])
       .then(([posts]) => {
-        // console.log(JSON.stringify(posts.items[0]));
         return {
           posts: posts.items
         };

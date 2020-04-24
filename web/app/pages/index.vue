@@ -25,7 +25,8 @@ export default {
     return Promise.all([
       client.getEntries({
         content_type: "blogPost",
-        order: "-fields.date"
+        // order: "-fields.date"
+        order: "-sys.createdAt"
       })
     ])
       .then(([posts]) => {

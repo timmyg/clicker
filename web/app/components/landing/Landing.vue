@@ -3,10 +3,10 @@
     <div class="site-content">
       <Hero />
       <Announcements />
-      <!-- <BlogPreview :posts="posts" /> -->
       <Products />
       <Features />
       <FeaturesCards />
+      <BlogPreview :posts="posts" />
       <Pricing />
       <Faq />
       <Testimonials />
