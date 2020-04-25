@@ -1,6 +1,7 @@
 ion-slides {
   height: 100vh;
   background: #7b7b7b;
+  z-index: 99;
   ion-slide {
     align-items: unset;
     ion-chip {
@@ -19,6 +20,7 @@ ion-slides {
     ion-card {
       padding: 20px 0;
       background: white;
+      margin: 40px 16px;
     }
   }
 }
