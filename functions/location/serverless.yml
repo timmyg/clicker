@@ -42,10 +42,6 @@ custom:
   prune:
     automatic: true
     number: 3
-  tableThroughputs:
-    prod: 5
-    default: 1
-  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
@@ -66,6 +62,11 @@ custom:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
     develop: ${env:AIRTABLE_BASE_DEV}
+  provisionedConcurrencies:
+    prod: 1
+    release: 1
+    default: 0
+  provisionedConcurrency: ${self:custom.provisionedConcurrencies.${self:custom.stage}, self:custom.provisionedConcurrencies.default}
 resources:
   Resources:
     LocationsTable:
@@ -119,7 +120,7 @@ functions:
               - content-type
   all:
     handler: location.all
-    provisionedConcurrency: 1
+    # provisionedConcurrency: 1
     events:
       - http:
           path: ''
@@ -134,7 +135,8 @@ functions:
               - content-type
   allByGeolocation:
     handler: location.all
-    provisionedConcurrency: 2
+    # provisionedConcurrency: 2
+    provisionedConcurrency: ${self:custom.provisionedConcurrency}
     events:
       - http:
           path: 'geo/{latitude}/{longitude}'
