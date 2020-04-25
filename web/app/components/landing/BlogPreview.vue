@@ -2,7 +2,7 @@
   <section class="blog-preview section">
     <div class="container">
       <div class="pricing-inner section-inner">
-        <div class="center-content">
+        <div class="center-content mb-16">
           <div class="container-xs">
             <h2 class="m-0" v-scroll-reveal>From the Blog</h2>
           </div>
@@ -14,7 +14,7 @@
             <nuxt-link
               :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }"
               class="title"
-              v-if="[0, 1].includes(index)"
+              v-if="[0, 1, randomPostIndex].includes(index)"
             >{{ post.fields.title }}</nuxt-link>
           </div>
         </div>
