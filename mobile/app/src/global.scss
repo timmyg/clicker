@@ -10,9 +10,76 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-@import url("https://fonts.googleapis.com/css?family=Open+Sans&Saira:wght@300;400;500&&display=swap");
+// @import url("https://fonts.googleapis.com/css?family=Open+Sans&Saira:wght@300;400;500&&display=swap");
 
-$brand-font-family: "Saira", sans-serif;
+// @import url('https://fonts.googleapis.com/css2?family=Saira:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Saira:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+/* open-sans-regular - latin */
+// @font-face {
+//   font-family: 'Open Sans';
+//   font-style: normal;
+//   font-weight: 400;
+//   src: url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.eot'); /* IE9 Compat Modes */
+//   src: local('Open Sans Regular'), local('OpenSans-Regular'),
+//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.woff') format('woff'), /* Modern Browsers */
+//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.svg#OpenSans') format('svg'); /* Legacy iOS */
+// }
+
+
+// /* saira-300 - latin */
+// @font-face {
+//   font-family: 'Saira';
+//   font-style: normal;
+//   font-weight: 300;
+//   src: url('/assets/saira/fonts/saira-v4-latin-300.eot'); /* IE9 Compat Modes */
+//   src: local('Saira Light'), local('Saira-Light'),
+//        url('/assets/saira/fonts/saira-v4-latin-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('/assets/saira/fonts/saira-v4-latin-300.woff2') format('woff2'), /* Super Modern Browsers */
+//        url('/assets/saira/fonts/saira-v4-latin-300.woff') format('woff'), /* Modern Browsers */
+//        url('/assets/saira/fonts/saira-v4-latin-300.ttf') format('truetype'), /* Safari, Android, iOS */
+//        url('/assets/saira/fonts/saira-v4-latin-300.svg#Saira') format('svg'); /* Legacy iOS */
+// }
+// /* saira-regular - latin */
+// @font-face {
+//   font-family: 'Saira';
+//   font-style: normal;
+//   font-weight: 400;
+//   src: url('/assets/saira/fonts/saira-v4-latin-regular.eot'); /* IE9 Compat Modes */
+//   src: local('Saira Regular'), local('Saira-Regular'),
+//        url('/assets/saira/fonts/saira-v4-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('/assets/saira/fonts/saira-v4-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+//        url('/assets/saira/fonts/saira-v4-latin-regular.woff') format('woff'), /* Modern Browsers */
+//        url('/assets/saira/fonts/saira-v4-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+//        url('/assets/saira/fonts/saira-v4-latin-regular.svg#Saira') format('svg'); /* Legacy iOS */
+// }
+// // /* saira-600 - latin */
+// @font-face {
+//   font-family: 'Saira';
+//   font-style: normal;
+//   font-weight: 600;
+//   src: url('/assets/saira/fonts/saira-v4-latin-600.eot'); /* IE9 Compat Modes */
+//   src: local('Saira SemiBold'), local('Saira-SemiBold'),
+//        url('/assets/saira/fonts/saira-v4-latin-600.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('/assets/saira/fonts/saira-v4-latin-600.woff2') format('woff2'), /* Super Modern Browsers */
+//        url('/assets/saira/fonts/saira-v4-latin-600.woff') format('woff'), /* Modern Browsers */
+//        url('/assets/saira/fonts/saira-v4-latin-600.ttf') format('truetype'), /* Safari, Android, iOS */
+//        url('/assets/saira/fonts/saira-v4-latin-600.svg#Saira') format('svg'); /* Legacy iOS */
+// }
+
+
+
+
+$brand-font-family: "Saira", "Open Sans", sans-serif;
+
+// @font-face {
+//   font-family: 'Saira'; /*a name to be used later*/
+//   src: url('http://domain.com/fonts/font.ttf'); /*URL to font*/
+//   }
 
 .brand-text {
   font-family: $brand-font-family;
@@ -20,7 +87,7 @@ $brand-font-family: "Saira", sans-serif;
     font-weight: 300;
   }
   &.bold {
-    font-weight: 500;
+    font-weight: 600;
   }
 }
 
@@ -31,7 +98,7 @@ ion-button,
 ion-chip,
 a {
   font-family: $brand-font-family;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .flex {
