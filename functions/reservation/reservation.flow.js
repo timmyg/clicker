@@ -234,7 +234,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(id, userId);
   const originalReservation: Reservation = await dbReservation.get({
     id,
-    // userId, // todo security flaw... but error when signing in/out while updating reservation
+    userId,
   });
   console.log({ originalReservation });
   console.log({ updatedReservation });
