@@ -20,6 +20,7 @@ import * as fromStore from "../state/app.reducer";
 import * as fromUser from "../state/user/user.actions";
 import { getUser, getLoading as getWalletLoading } from "../state/user";
 import { SuggestComponent } from "../suggest/suggest.component";
+import { UserService } from '../core/services/user.service';
 declare var window: any;
 
 @Component({
@@ -50,7 +51,8 @@ export class MenuComponent {
     private platform: Platform,
     public modalController: ModalController,
     private globals: Globals,
-    private store: Store<fromStore.AppState>
+    private store: Store<fromStore.AppState>,
+    public userService: UserService
   ) {
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     this.isLoggedIn$.subscribe((isLoggedIn) => {
@@ -60,6 +62,7 @@ export class MenuComponent {
   }
 
   ngOnInit() {
+    // this.userService.isDarkMode$.subscribe(y => console.log({y}))
     this.user$.pipe(first()).subscribe((user) => {
       if (!user) {
         this.store.dispatch(new fromUser.Load());
@@ -219,5 +222,23 @@ export class MenuComponent {
     } else {
       this.showRatingLink = true;
     }
+  }
+
+  onThemeToggle(e) {
+    const isDarkMode = e.detail.checked
+    console.log({isDarkMode});
+    this.userService.setDarkMode(isDarkMode);
+        // Use matchMedia to check the user preference
+    
+
+    // toggleDarkTheme(prefersDark.matches);
+
+    // // Listen for changes to the prefers-color-scheme media query
+    // prefersDark.addListener((mediaQuery) => toggleDarkTheme(mediaQuery.matches));
+
+    // // Add or remove the "dark" class based on if the media query matches
+    // function toggleDarkTheme(shouldAdd) {
+    //   document.body.classList.toggle('dark', shouldAdd);
+    // }
   }
 }

@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Observable, from, of } from "rxjs";
+import { Observable, from, of, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 import { mergeMap, map } from "rxjs/operators";
 const storage = {
+  darkMode: "darkMode",
   token: "token",
   originalToken: "originalToken",
   anonymous: "anonymous"
@@ -16,7 +17,10 @@ import { Plan } from "src/app/state/app/plan.model";
 })
 export class UserService {
   private prefix = `users`;
-  constructor(private httpClient: HttpClient, private storage: Storage) {}
+  public isDarkMode$: Subject<boolean> = new Subject<boolean>();
+  constructor(private httpClient: HttpClient, private storage: Storage) {
+    this.initTheme()
+  }
 
   loginVerifyStart(phone: string): Observable<boolean> {
     return this.httpClient.post<any>(`${this.prefix}/verify/start`, { phone });
@@ -28,9 +32,25 @@ export class UserService {
       .pipe(map(result => result.token));
   }
 
+  async setDarkMode(isDarkMode: boolean) {
+    await this.storage.set(storage.darkMode, isDarkMode)
+    this.isDarkMode$.next(isDarkMode);
+    document.body.classList.toggle('dark', isDarkMode);
+  }
+
+  async initTheme() {
+    let isDarkMode = await this.storage.get(storage.darkMode);
+    if (isDarkMode === null) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        isDarkMode = prefersDark;
+    }
+    await this.setDarkMode(isDarkMode)
+  }
+
   get(): Observable<string> {
     return from(this.storage.get(storage.token)).pipe(
       mergeMap(token => {
+        // console.log({token});
         if (token) {
           return of(token);
         } else {

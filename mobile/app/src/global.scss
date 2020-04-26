@@ -16,63 +16,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Saira:wght@300;400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
-/* open-sans-regular - latin */
-// @font-face {
-//   font-family: 'Open Sans';
-//   font-style: normal;
-//   font-weight: 400;
-//   src: url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.eot'); /* IE9 Compat Modes */
-//   src: local('Open Sans Regular'), local('OpenSans-Regular'),
-//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.woff') format('woff'), /* Modern Browsers */
-//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-//        url('/assets/saira/fonts/open-sans/open-sans-v17-latin-regular.svg#OpenSans') format('svg'); /* Legacy iOS */
-// }
-
-
-// /* saira-300 - latin */
-// @font-face {
-//   font-family: 'Saira';
-//   font-style: normal;
-//   font-weight: 300;
-//   src: url('/assets/saira/fonts/saira-v4-latin-300.eot'); /* IE9 Compat Modes */
-//   src: local('Saira Light'), local('Saira-Light'),
-//        url('/assets/saira/fonts/saira-v4-latin-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-//        url('/assets/saira/fonts/saira-v4-latin-300.woff2') format('woff2'), /* Super Modern Browsers */
-//        url('/assets/saira/fonts/saira-v4-latin-300.woff') format('woff'), /* Modern Browsers */
-//        url('/assets/saira/fonts/saira-v4-latin-300.ttf') format('truetype'), /* Safari, Android, iOS */
-//        url('/assets/saira/fonts/saira-v4-latin-300.svg#Saira') format('svg'); /* Legacy iOS */
-// }
-// /* saira-regular - latin */
-// @font-face {
-//   font-family: 'Saira';
-//   font-style: normal;
-//   font-weight: 400;
-//   src: url('/assets/saira/fonts/saira-v4-latin-regular.eot'); /* IE9 Compat Modes */
-//   src: local('Saira Regular'), local('Saira-Regular'),
-//        url('/assets/saira/fonts/saira-v4-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-//        url('/assets/saira/fonts/saira-v4-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-//        url('/assets/saira/fonts/saira-v4-latin-regular.woff') format('woff'), /* Modern Browsers */
-//        url('/assets/saira/fonts/saira-v4-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-//        url('/assets/saira/fonts/saira-v4-latin-regular.svg#Saira') format('svg'); /* Legacy iOS */
-// }
-// // /* saira-600 - latin */
-// @font-face {
-//   font-family: 'Saira';
-//   font-style: normal;
-//   font-weight: 600;
-//   src: url('/assets/saira/fonts/saira-v4-latin-600.eot'); /* IE9 Compat Modes */
-//   src: local('Saira SemiBold'), local('Saira-SemiBold'),
-//        url('/assets/saira/fonts/saira-v4-latin-600.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-//        url('/assets/saira/fonts/saira-v4-latin-600.woff2') format('woff2'), /* Super Modern Browsers */
-//        url('/assets/saira/fonts/saira-v4-latin-600.woff') format('woff'), /* Modern Browsers */
-//        url('/assets/saira/fonts/saira-v4-latin-600.ttf') format('truetype'), /* Safari, Android, iOS */
-//        url('/assets/saira/fonts/saira-v4-latin-600.svg#Saira') format('svg'); /* Legacy iOS */
-// }
-
-
-
+@import "./theme/_dark";
 
 $brand-font-family: "Saira", "Open Sans", sans-serif;
 

@@ -7,7 +7,7 @@
 <ion-row [class.content-loading]="isLoading$ | async">
   <ion-col *ngFor="let tv of (tvs$ | async)" size="4">
     <ion-button
-      color="light"
+      color="medium"
       size="large"
       expand="block"
       (click)="onTvClick(tv)"
