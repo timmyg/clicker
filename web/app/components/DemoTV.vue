@@ -23,15 +23,15 @@ export default {
   watch: {
     channel: function(newVal, oldVal) {
       // watch it
-      console.log("channel changed: ", newVal, " | was: ", oldVal);
+      // console.log("channel changed: ", newVal, " | was: ", oldVal);
       this.isChanging = true;
       setTimeout(() => (this.isChanging = false), 1000);
     }
   },
   methods: {
     getVideo(channel) {
-      console.log({ channel });
-      console.log(this.allPrograms);
+      // console.log({ channel });
+      // console.log(this.allPrograms);
       const program = this.allPrograms.find(p => p.channel === channel);
       return program.link;
     }

@@ -3,7 +3,9 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
-      <div class="sign"><img src="/images/demo/sign.png" /></div>
+      <div class="sign">
+        <img src="/images/demo/sign.png" />
+      </div>
       <div class="flex flex-wrap mb-4">
         <DemoTV
           v-for="tv in tvs"
@@ -16,12 +18,7 @@
       </div>
     </div>
     <div class="hidden">
-      <link
-        v-for="program in allPrograms"
-        :key="program.link"
-        :href="program.link"
-        rel="preload"
-      />
+      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="preload" />
     </div>
   </main>
 </template>
@@ -122,12 +119,12 @@ export default {
     }
     const db = firebase.database();
     const ref = db.ref(zapsRefName);
-    console.log("connecting to", zapsRefName);
+    // console.log("connecting to", zapsRefName);
     db.ref(zapsRefName)
       .orderByChild("timestamp")
       .startAt(Date.now())
       .on("child_added", child_added => {
-        console.log(child_added.val());
+        // console.log(child_added.val());
         const newTv = child_added.val();
         const i = this.tvs.findIndex(tv => tv.boxId == newTv.boxId);
         this.tvs[i].channel = newTv.channel;
