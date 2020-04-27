@@ -37,7 +37,7 @@ module.exports = {
   plugins: [
     "~/plugins/vue-moment.js",
     "~/plugins/filters.js",
-    { src: "~/plugins/scroll-reveal", ssr: true }
+    { src: "~/plugins/scroll-reveal", ssr: false }
   ],
   css: [
     "~assets/scss/style.scss"
