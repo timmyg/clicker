@@ -1,6 +1,6 @@
 .pricing {
   .tiles-wrap {
-    &[class*='illustration-section-']::after {
+    &[class*="illustration-section-"]::after {
       z-index: -1;
     }
   }
@@ -35,7 +35,7 @@ ul.pricing-item-features-list {
     @include divider(before);
 
     &::after {
-      content: '';
+      content: "";
       display: block;
       width: 16px;
       height: 12px;
@@ -53,6 +53,8 @@ ul.pricing-item-features-list {
           '<svg width="16" height="12" xmlns="http://www.w3.org/2000/svg"><path d="M5.6 6.4L1.6 4 0 5.6 5.6 12 16 1.6 14.4 0z" fill="' +
             get-color(alert, success) + '" fill-rule="nonzero"/></svg>'
         );
+        position: fixed;
+        right: 32px;
       }
     }
   }

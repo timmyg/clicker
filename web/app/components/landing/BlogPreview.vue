@@ -4,20 +4,16 @@
       <div class="pricing-inner section-inner">
         <div class="center-content mb-16">
           <div class="container-xs">
-            <!-- <h2 class="m-0" v-scroll-reveal>From the Blog</h2> -->
             <h2 class="brand-font text-3xl pt-4">From the Blog</h2>
           </div>
         </div>
         <div class>
           <div
-            class="w-1/2 lg:w-1/4 inline-block text-center"
+            class="wrapper w-1/2 lg:w-1/5 inline-block text-center"
             v-for="(post, index) in recentPosts"
             v-bind:key="index"
           >
-            <nuxt-link
-              :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }"
-              class="wrapper"
-            >
+            <nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }">
               <img
                 v-if="post.fields.featuredImage"
                 class="primary thumbnail"
@@ -32,15 +28,18 @@
           "
                 sizes="(min-width: 1024px) 400px, 100vw"
               />
-              <div class="title">{{ post.fields.title }}</div>
+              <div class="title brand-font pt-2">{{ post.fields.title | truncate(50) }}</div>
             </nuxt-link>
           </div>
-          <!-- ... -->
-          <!-- <div class="w-1/2 lg:w-1/4 inline-block">9</div> -->
+
+          <div class="wrapper w-1/2 lg:w-1/6 inline-block text-center">
+            <br />
+            <nuxt-link to="/blog" class="text-sm pt-32">See more</nuxt-link>
+          </div>
         </div>
-        <div class="text-center">
-          <a href="/blog">See more</a>
-        </div>
+        <!-- <div class="text-center pt-8">
+          <nuxt-link to="/blog" class="text-sm">See more</nuxt-link>
+        </div>-->
         <!-- <div class="center-content container mb-64">
           <div v-for="(post, index) in posts" v-bind:key="index">
             <nuxt-link
@@ -83,5 +82,14 @@ img {
 
 .title {
   // height: 200px;
+  font-size: 14px;
+  line-height: normal;
+}
+
+.wrapper {
+  // height: 130px;
+  vertical-align: top;
+  // padding: 8px;
 }
 </style>
+ 

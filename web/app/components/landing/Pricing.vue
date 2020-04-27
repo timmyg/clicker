@@ -44,7 +44,10 @@
               </div>
             </div>
           </div>
-          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 200, origin: 'bottom' }">
+          <div
+            class="tiles-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 200, origin: 'bottom' }"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
@@ -61,7 +64,9 @@
                   </div>
                   <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">
-                      <span> <b class="brand-font">Control Center</b> automatically manages your TVs </span>
+                      <span>
+                        <b class="brand-font">Control Center</b> automatically manages your TVs
+                      </span>
                     </li>
                     <li class="is-checked">24 hr/day auto programming</li>
                     <li class="is-checked">Weekly email with upcoming TV sports schedule</li>
@@ -77,7 +82,10 @@
               </div>
             </div>
           </div>
-          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 400, origin: 'bottom' }">
+          <div
+            class="tiles-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 400, origin: 'bottom' }"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
@@ -99,6 +107,12 @@
                         <span class="brand-font">Assistant Coach</span> +
                         <span class="brand-font">Advanced Scout</span>
                         packages
+                      </span>
+                    </li>
+                    <li class="is-checked">
+                      <span>
+                        <b class="brand-font">Control Center</b> and
+                        <b class="brand-font">Clicker TV</b> changes on the same TV depending on current program
                       </span>
                     </li>
                     <li class="is-checked">Email, chat + phone support</li>
