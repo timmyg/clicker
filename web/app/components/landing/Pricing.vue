@@ -112,7 +112,7 @@
                     <li class="is-checked">
                       <span>
                         <b class="brand-font">Control Center</b> and
-                        <b class="brand-font">Clicker TV</b> changes on the same TV depending on current program
+                        <b class="brand-font">Clicker TV</b> changes on the same TV
                       </span>
                     </li>
                     <li class="is-checked">Email, chat + phone support</li>
