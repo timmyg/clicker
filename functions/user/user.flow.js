@@ -18,6 +18,10 @@ const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
 const initialTokens = 1;
 const key = 'clikr';
+const demo = {
+  phone: '+14141414141',
+  code: '4141',
+};
 declare class process {
   static env: {
     stage: string,
@@ -397,8 +401,13 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
-  const client = new twilio(twilioAccountSid, twilioAuthToken);
+
+  if (phone === demo.phone) {
+    return respond(201);
+  }
+
   try {
+    const client = new twilio(twilioAccountSid, twilioAuthToken);
     const response = await client.verify.services(twilioServiceSid).verifications.create({ to: phone, channel: 'sms' });
     return respond(201, response);
   } catch (e) {
@@ -413,6 +422,10 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
 
   try {
     console.log(twilioAccountSid, twilioAuthToken, twilioServiceSid, phone, code);
+    if (phone === demo.phone && code === demo.code) {
+      const token = await getTokenDemo(phone);
+      return respond(201, { token });
+    }
     const result = await client.verify.services(twilioServiceSid).verificationChecks.create({ to: phone, code });
     console.log({ result });
     if (result.status === 'approved') {
@@ -426,17 +439,33 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-async function getToken(phone) {
-  const user = await dbUser
+async function getTokenDemo(phone) {
+  return await getToken(phone, true);
+}
+
+async function getToken(phone, isDemo) {
+  // if (isDemo) {
+  //   return jwt.sign(
+  //     {
+  //       sub: uuid(),
+  //     },
+  //     key,
+  //   );
+  // }
+  const demoTokens = 10;
+  const user: User = await dbUser
     .queryOne('phone')
     .eq(phone)
     .all()
     .exec();
   if (user) {
+    if (isDemo && user.tokens < demoTokens) {
+      await dbUser.update({ id: user.id }, { tokens: demoTokens });
+    }
     const { id } = user;
     return jwt.sign({ sub: id }, key);
   } else {
-    const user = await dbUser.create({ phone, tokens: 0 });
+    const user = await dbUser.create({ phone, tokens: isDemo ? demoTokens : 0 });
     return jwt.sign({ sub: user.id }, key);
   }
 }

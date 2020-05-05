@@ -13,7 +13,7 @@
     <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
   </ion-row>
   <section [hidden]="addCardMode || (isLoading$ | async)">
-    <ion-list id="length">
+    <ion-list id="length" class="ion-padding-horizontal">
       <ion-radio-group (ionChange)="onAmountChange($event)">
         <ion-list-header>
           <ion-label>Choose an Amount</ion-label>
