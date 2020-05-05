@@ -24,4 +24,5 @@ export class Reservation {
     cost?: number;
     program?: Program;
   };
+  userId: string;
 }
