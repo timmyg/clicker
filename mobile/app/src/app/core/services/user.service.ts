@@ -3,7 +3,8 @@ import { Observable, from, of, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 import { mergeMap, map } from "rxjs/operators";
-import { UniqueDeviceID } from "@ionic-native/unique-device-id/ngx";
+// import { UniqueDeviceID } from "@ionic-native/unique-device-id/ngx";
+import { Device } from "@ionic-native/device/ngx";
 const storage = {
   darkMode: "darkMode",
   token: "token",
@@ -22,7 +23,7 @@ export class UserService {
   constructor(
     private httpClient: HttpClient,
     private storage: Storage,
-    private uniqueDeviceID: UniqueDeviceID
+    private device: Device
   ) {
     this.initTheme();
   }
@@ -57,14 +58,15 @@ export class UserService {
     return from(this.storage.get(storage.token)).pipe(
       mergeMap((token) => {
         // console.log({token});
+        console.log('device stuff', {device: this.device, uuid: this.device.uuid});
         if (token) {
           return of(token);
         } else {
           return new Observable((observer) => {
-            this.uniqueDeviceID
-              .get()
-              .then((uuid: any) => console.log({ uuid }))
-              .catch((error: any) => console.log({ error }));
+            // this.uniqueDeviceID
+            //   .get()
+            //   .then((uuid: any) => console.log({ uuid }))
+            //   .catch((error: any) => console.log({ error }));
             this.httpClient.post<any>(this.prefix, {}).subscribe((result) => {
               this.setOriginalToken(result.token);
               this.setToken(result.token);
