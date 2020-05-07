@@ -85,7 +85,7 @@ export default {
     //   return this.submitting ? "Submitting..." : "I'm Interested";
     // },
     onSubmit() {
-      // console.log("onsubmit");
+      console.log("onsubmit", process.env.BRANCH);
       if (!this.email || !this.email.length) {
         return false;
       }
@@ -102,7 +102,8 @@ export default {
         this.$segment.alias(email);
         this.$segment.track("Interested", {
           email,
-          queryParams: this.$route.query
+          queryParams: this.$route.query,
+          variant: process.env.BRANCH
         });
       }
       this.$http

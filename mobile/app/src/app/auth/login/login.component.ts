@@ -43,7 +43,7 @@ export class LoginComponent {
     const info = await Device.getInfo();
     this.deviceUuid = info.uuid;
     //timeout of 100 blows up whole component on ios, also tried in ngAfterViewChecked
-    setTimeout(() => this.phoneInput.setFocus(), 1000);
+    setTimeout(() => this.phoneInput && this.phoneInput.setFocus(), 1000);
   }
 
   // ngAfterViewChecked() {
