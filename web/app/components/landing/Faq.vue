@@ -17,7 +17,7 @@
             <div class="accordion-body">
               <p>
                 It's simple! All you need is an internet connection. We'll install a small device and ensure your
-                DIRECTV boxes are interenet enabled.
+                DIRECTV boxes are internet enabled.
               </p>
             </div>
           </li>
@@ -33,7 +33,11 @@
             <div class="accordion-body">
               <p>
                 Guests can purchase tokens used toward reserving TVs through the
-                <a href="http://onelink.to/thxs9v" class="brand-font" target="_blank">Clicker TV</a> app. When signing
+                <a
+                  href="http://onelink.to/thxs9v"
+                  class="brand-font"
+                  target="_blank"
+                >Clicker TV</a> app. When signing
                 up, they start with a few free tokens, and they can purchase more with a credit card.
               </p>
             </div>
@@ -102,7 +106,9 @@
             <div class="accordion-body">
               <p>
                 No - our system can track the manual change inside your location, and disable our
-                <b class="brand-font">Control Center</b> automation until the game completes.
+                <b
+                  class="brand-font"
+                >Control Center</b> automation until the game completes.
               </p>
             </div>
           </li>
@@ -114,7 +120,7 @@
 
 <script>
 export default {
-  name: 'Faq',
+  name: "Faq",
   methods: {
     questionToggle(value) {
       var i = this.openQuestions.indexOf(value);
@@ -126,12 +132,12 @@ export default {
     },
     isOpen(questionNumber) {
       return this.openQuestions.indexOf(questionNumber) > -1;
-    },
+    }
   },
   data: function() {
     return {
-      openQuestions: [],
+      openQuestions: []
     };
-  },
+  }
 };
 </script>
