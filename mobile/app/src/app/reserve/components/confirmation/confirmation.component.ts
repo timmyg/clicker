@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { Reservation } from "../../../state/reservation/reservation.model";
 import { ReserveService } from "../../reserve.service";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, combineLatest } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getReservation,
@@ -18,8 +18,8 @@ import * as fromReservation from "../../../state/reservation/reservation.actions
 import { Router, ActivatedRoute } from "@angular/router";
 import * as moment from "moment";
 import { ToastController, ModalController, Platform } from "@ionic/angular";
-import { first, filter } from "rxjs/operators";
-import { isLoggedIn, getUserTokenCount } from "src/app/state/user";
+import { first, filter, map } from "rxjs/operators";
+import { isLoggedIn, getUserTokenCount, getUserId } from "src/app/state/user";
 import { Actions, ofType } from "@ngrx/effects";
 import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
@@ -41,10 +41,12 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   reservationUpdateType$: Observable<string>;
   reservationEnd$: Observable<Date>;
   tokenCount$: Observable<number>;
+  userId$: Observable<string>;
   // tokenCount: number;
   isLoggedIn$: Observable<boolean>;
   reservation: Partial<Reservation>;
   title = "Confirmation";
+  isConflictingUser: boolean;
   isLoggedIn: boolean;
   saving: boolean;
   isEditMode: boolean;
@@ -82,6 +84,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.reservationUpdateType$ = this.store.select(getReservationUpdateType);
     this.reserveService.emitTitle(this.title);
     this.tokenCount$ = this.store.select(getUserTokenCount);
+    this.userId$ = this.store.select(getUserId);
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     // TODO this is ugly but gets rid of ExpressionChangedAfterItHasBeenCheckedError issue when opening wallet
     this.isAppLoading$ = this.store.pipe(select(getAppLoading));
@@ -139,6 +142,16 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
             } else if (updateType === "time") {
               this.isEditTime = true;
             }
+            // this.userId$.subscribe(userId=> {
+            //   this.isConflictingUser = userId
+            // })
+            combineLatest([this.userId$, this.reservation$]).pipe(
+              map(([userId, reservation]) => ({userId, reservation}))
+            )
+            .subscribe(pair => {
+              this.isConflictingUser = pair.userId !== pair.reservation.userId
+            });
+            
           }
           this.isInitializing = false;
         });
