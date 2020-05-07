@@ -39,6 +39,9 @@ module.exports = {
     "~/plugins/filters.js",
     { src: "~/plugins/scroll-reveal", ssr: false }
   ],
+  env: {
+    branch: process.env.BRANCH
+  },
   css: [
     "~assets/scss/style.scss"
     // '~assets/css/tailwind.css',

@@ -85,7 +85,13 @@ export default {
     //   return this.submitting ? "Submitting..." : "I'm Interested";
     // },
     onSubmit() {
-      console.log("onsubmit", process.env.BRANCH);
+      console.log(
+        "onsubmit",
+        process.env.BRANCH,
+        process.env.NUXT_ENV_BRANCH,
+        process.env.branch
+      );
+      const variant = process.env.branch;
       if (!this.email || !this.email.length) {
         return false;
       }
@@ -103,7 +109,7 @@ export default {
         this.$segment.track("Interested", {
           email,
           queryParams: this.$route.query,
-          variant: process.env.BRANCH
+          variant
         });
       }
       this.$http
