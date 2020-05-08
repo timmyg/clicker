@@ -3,7 +3,6 @@ import { Observable, from, of, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 import { mergeMap, map } from "rxjs/operators";
-// import { UniqueDeviceID } from "@ionic-native/unique-device-id/ngx";
 import { Device } from "@ionic-native/device/ngx";
 const storage = {
   darkMode: "darkMode",
