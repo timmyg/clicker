@@ -8,6 +8,12 @@
  body.dark {
    ion-card {
     box-shadow: rgba(250, 250, 250, 0.12) 0px 4px 16px 0px;
+    color: white!important;
+  }
+   ion-slide {
+     ion-card {
+      background: #1e1e1e!important;
+     }
    }
   //   --ion-color-primary: #428cff;
   //   --ion-color-primary-rgb: 66,140,255;

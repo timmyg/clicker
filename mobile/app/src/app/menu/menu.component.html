@@ -1,6 +1,6 @@
 <ion-list>
   <ion-menu-toggle class="menu">
-    <ion-item (click)="onLogin()" ngIf="!!(user$ | async)?.guest"><ion-label>Login</ion-label></ion-item>
+    <ion-item (click)="onLogin()" *ngIf="!!(user$ | async)?.guest"><ion-label>Login</ion-label></ion-item>
     <ion-item (click)="onOpenReferral()" menuToggle><ion-label>Get Free Tokens</ion-label></ion-item>
     <ion-item (click)="onRate()" *ngIf="showRatingLink"><ion-label>Rate</ion-label></ion-item>
     <ion-item (click)="onSuggestLocation()"><ion-label>Suggest New Location</ion-label></ion-item>

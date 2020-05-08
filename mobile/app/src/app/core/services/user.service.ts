@@ -4,7 +4,16 @@ import { HttpClient } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 import { mergeMap, map } from "rxjs/operators";
 import { Device } from "@ionic-native/device/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
+import {
+  Platform,
+} from "@ionic/angular";
+import {
+  Plugins,
+  StatusBarStyle,
+} from '@capacitor/core';
+
+const { StatusBar } = Plugins;
+
 const storage = {
   darkMode: "darkMode",
   token: "token",
@@ -24,7 +33,7 @@ export class UserService {
     private httpClient: HttpClient,
     private storage: Storage,
     private device: Device,
-    private statusBar: StatusBar
+    private platform: Platform
   ) {
     this.initTheme();
   }
@@ -43,7 +52,20 @@ export class UserService {
     await this.storage.set(storage.darkMode, isDarkMode);
     this.isDarkMode$.next(isDarkMode);
     document.body.classList.toggle("dark", isDarkMode);
-    isDarkMode ? this.statusBar.styleLightContent() : this.statusBar.styleDarkContent();
+    try {
+      if (this.platform.is("capacitor")) {
+        StatusBar.setStyle({
+          style: isDarkMode ? StatusBarStyle.Dark : StatusBarStyle.Light
+        });
+        
+        // Display content under transparent status bar (Android only)
+        StatusBar.setOverlaysWebView({
+          overlay: true
+        });
+      }
+    } catch (e) {
+      console.error('status bar error', e)
+  }
   }
 
   async initTheme() {
@@ -60,7 +82,6 @@ export class UserService {
     return from(this.storage.get(storage.token)).pipe(
       mergeMap((token) => {
         // console.log({token});
-        console.log('device stuff', {device: this.device, uuid: this.device.uuid});
         if (token) {
           return of(token);
         } else {
