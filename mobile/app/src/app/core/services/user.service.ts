@@ -3,8 +3,8 @@ import { Observable, from, of, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 import { mergeMap, map } from "rxjs/operators";
-// import { UniqueDeviceID } from "@ionic-native/unique-device-id/ngx";
 import { Device } from "@ionic-native/device/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
 const storage = {
   darkMode: "darkMode",
   token: "token",
@@ -23,7 +23,8 @@ export class UserService {
   constructor(
     private httpClient: HttpClient,
     private storage: Storage,
-    private device: Device
+    private device: Device,
+    private statusBar: StatusBar
   ) {
     this.initTheme();
   }
@@ -42,6 +43,7 @@ export class UserService {
     await this.storage.set(storage.darkMode, isDarkMode);
     this.isDarkMode$.next(isDarkMode);
     document.body.classList.toggle("dark", isDarkMode);
+    isDarkMode ? this.statusBar.styleLightContent() : this.statusBar.styleDarkContent();
   }
 
   async initTheme() {
