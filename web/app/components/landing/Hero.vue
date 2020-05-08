@@ -10,10 +10,10 @@
                 You pay a lot for DirecTV.
                 <br />Let's Maximize it.
               </h1>
-              <p class="m-0 mb-24" v-scroll-reveal="{ delay: 200, origin: 'left' }">
-                We guarantee the most compelling local and national sports are always on your TVs, taking that
-                responsibility off your staff.
-              </p>
+              <p
+                class="m-0 mb-24"
+                v-scroll-reveal="{ delay: 200, origin: 'left' }"
+              >Clicker integrates into your existing DirecTV and automagically manages channel changes and provides an app to allow your users to change the channel themselves.</p>
               <div v-scroll-reveal="{ delay: 400 }">
                 <!-- <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a> -->
                 <SignupForm />

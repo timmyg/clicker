@@ -3,23 +3,39 @@ import { Observable, from, of, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 import { mergeMap, map } from "rxjs/operators";
+import { Device } from "@ionic-native/device/ngx";
+import {
+  Platform,
+} from "@ionic/angular";
+import {
+  Plugins,
+  StatusBarStyle,
+} from '@capacitor/core';
+
+const { StatusBar } = Plugins;
+
 const storage = {
   darkMode: "darkMode",
   token: "token",
   originalToken: "originalToken",
-  anonymous: "anonymous"
+  anonymous: "anonymous",
 };
 
 import { Plan } from "src/app/state/app/plan.model";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class UserService {
   private prefix = `users`;
   public isDarkMode$: Subject<boolean> = new Subject<boolean>();
-  constructor(private httpClient: HttpClient, private storage: Storage) {
-    this.initTheme()
+  constructor(
+    private httpClient: HttpClient,
+    private storage: Storage,
+    private device: Device,
+    private platform: Platform
+  ) {
+    this.initTheme();
   }
 
   loginVerifyStart(phone: string): Observable<boolean> {
@@ -29,33 +45,52 @@ export class UserService {
   loginVerify(phone, code: string, uuid: string): Observable<string> {
     return this.httpClient
       .post<any>(`${this.prefix}/verify`, { phone, code, uuid })
-      .pipe(map(result => result.token));
+      .pipe(map((result) => result.token));
   }
 
   async setDarkMode(isDarkMode: boolean) {
-    await this.storage.set(storage.darkMode, isDarkMode)
+    await this.storage.set(storage.darkMode, isDarkMode);
     this.isDarkMode$.next(isDarkMode);
-    document.body.classList.toggle('dark', isDarkMode);
+    document.body.classList.toggle("dark", isDarkMode);
+    try {
+      if (this.platform.is("capacitor")) {
+        StatusBar.setStyle({
+          style: isDarkMode ? StatusBarStyle.Dark : StatusBarStyle.Light
+        });
+        
+        // Display content under transparent status bar (Android only)
+        StatusBar.setOverlaysWebView({
+          overlay: true
+        });
+      }
+    } catch (e) {
+      console.error('status bar error', e)
+  }
   }
 
   async initTheme() {
     let isDarkMode = await this.storage.get(storage.darkMode);
     if (isDarkMode === null) {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        isDarkMode = prefersDark;
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches;
+      isDarkMode = prefersDark;
     }
-    await this.setDarkMode(isDarkMode)
+    await this.setDarkMode(isDarkMode);
   }
 
   get(): Observable<string> {
     return from(this.storage.get(storage.token)).pipe(
-      mergeMap(token => {
+      mergeMap((token) => {
         // console.log({token});
         if (token) {
           return of(token);
         } else {
-          return new Observable(observer => {
-            this.httpClient.post<any>(this.prefix, {}).subscribe(result => {
+          return new Observable((observer) => {
+            // this.uniqueDeviceID
+            //   .get()
+            //   .then((uuid: any) => console.log({ uuid }))
+            //   .catch((error: any) => console.log({ error }));
+            this.httpClient.post<any>(this.prefix, {}).subscribe((result) => {
               this.setOriginalToken(result.token);
               this.setToken(result.token);
               return observer.next(result.token);
