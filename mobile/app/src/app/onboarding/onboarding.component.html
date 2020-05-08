@@ -14,16 +14,16 @@
         >
       </ion-card-header>
       <ion-card-content>
-        <span>
-          <span class="brand-text">Clicker TV</span> puts you in charge of the
-          remote at your favorite bars and restaurants in just a few
-          clicks:</span
+        <p class="announcement">
+          From here on out, you're in charge of the remote at your favorite places</p
         >
-        <ol class="ion-text-left">
-          <li>Select your location</li>
-          <li>Choose game with live channel guide</li>
-          <li>Identify TV by its numbered label</li>
-          <li>Click confirm &amp; watch the TV change!</li>
+        <p class="ion-padding-vertical">🎉 ⚾ 😁 🎈 🏀  🎊 🏈 🍾 ⚽ 🏎 ☀️</p>
+        <p class="ion-text-left">Here's how it works:</p>
+        <ol class="ion-text-left how-to">
+          <li><span class="title">Select your location</span><div class="blurb">Must be Clicker-enabled</div></li>
+          <li><span class="title">Choose game</span><div class="blurb">Use our live channel guide</div></li>
+          <li><span class="title">Identify TV</span><div class="blurb">TVs are labeled</div></li>
+          <li><span class="title">Click the big blue button</span><div class="blurb">Watch the TV change instantly!</div></li>
         </ol>
         <ion-chip color="primary ion-padding">
           <ion-label>
@@ -31,7 +31,7 @@
           </ion-label>
         </ion-chip>
         <div class="ion-margin-top">
-          <ion-button color="primary" (click)="onGetStarted()" size="large"
+          <ion-button color="success" (click)="onGetStarted()" size="large"
             >Get Started</ion-button
           >
         </div>
