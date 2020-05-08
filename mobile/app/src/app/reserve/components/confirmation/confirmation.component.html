@@ -58,7 +58,7 @@
             slot="start"
             mode="md"
             [value]="timeframe"
-            [disabled]="isAppLoading"
+            [disabled]="isAppLoading || saving"
             checked
           ></ion-radio>
         </ion-item>
@@ -93,7 +93,8 @@
         (tokenCount$ | async) < getCost() ||
         (!isEditChannel && isAppLoading) ||
         (outOfRange && !overrideDistanceDisable) ||
-        isInitializing
+        isInitializing ||
+        isConflictingUser
       "
       class="ion-margin-top ion-align-items-center"
     >
@@ -152,5 +153,13 @@
         a mistake, <a (click)="onClickOverrideDistanceForce()">click here</a>.
       </ion-text>
     </ion-row>
+  <ion-row
+    class="ion-text-center ion-margin-top"
+    *ngIf="isConflictingUser"
+  >
+    <ion-text color="danger">
+      Sorry, you cannot update this reservation. Please try again.
+    </ion-text>
+  </ion-row>
   </ion-card-content>
 </ion-card>
