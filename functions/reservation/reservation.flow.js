@@ -287,6 +287,19 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
   console.timeEnd('mark box reserved');
 
+  console.time('ensure location active');
+  const { data: locationBody } = await new Invoke()
+    .service('location')
+    .name('get')
+    .pathParams({ id: reservation.location.id })
+    .headers(event.headers)
+    .go();
+  console.timeEnd('ensure location active');
+  const location: Venue = locationBody;
+  if (!location.active) {
+    return respond(400, 'Sorry, location inactive');
+  }
+
   // change the channel if updating program
   if (updatedReservation.update.program) {
     console.time('remote command');
@@ -299,7 +312,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
         reservation,
         command,
         source,
-        losantProductionOverride: originalReservation.location.losantProductionOverride,
+        losantProductionOverride: location.losantProductionOverride,
       })
       .headers(event.headers)
       .async()

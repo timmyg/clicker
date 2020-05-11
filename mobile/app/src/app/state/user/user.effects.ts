@@ -6,6 +6,7 @@ import { map, switchMap, catchError } from "rxjs/operators";
 import * as decode from "jwt-decode";
 
 import * as UserActions from "./user.actions";
+import * as ReservationActions from "../reservation/reservation.actions";
 import { UserService } from "src/app/core/services/user.service";
 
 @Injectable()
@@ -29,7 +30,8 @@ export class UserEffects {
         switchMap((authToken: string) => [
           new UserActions.SetAuthToken(authToken),
           new UserActions.LoadSuccess(decode(authToken)),
-          new UserActions.LoadWallet()
+          new UserActions.LoadWallet(),
+          new ReservationActions.GetAll()
         ]),
         catchError(err => of(new UserActions.LoadFail(err)))
       )

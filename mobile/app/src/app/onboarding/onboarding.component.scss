@@ -24,3 +24,22 @@ ion-slides {
     }
   }
 }
+
+.how-to {
+  li {
+    font-size: 1.5em;
+    .blurb {
+      padding-top: 4px;
+      font-size: .5em;
+    }
+  }
+}
+  // .announcement {
+  //   border: 4px solid var(--ion-color-primary);
+  //   padding: 8px;
+  //   border-radius: 5px;
+  // }
+
+.title {
+  border-bottom: 2px solid var(--ion-color-primary);
+}
