@@ -162,6 +162,7 @@ workflows:
             - master
             - release
             - develop
+            - variant
   functions-admin:
     when: << pipeline.parameters.functions-admin >>
     jobs:

@@ -7,13 +7,17 @@
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
               <h1 class="mt-0 mb-16" v-scroll-reveal>
-                You pay a lot for DirecTV.
-                <br />Let's Maximize it.
+                The best bars and restaurants put the customer first by
+                integrating Clicker.
               </h1>
               <p
                 class="m-0 mb-24"
                 v-scroll-reveal="{ delay: 200, origin: 'left' }"
-              >Clicker integrates into your existing DirecTV and automagically manages channel changes and provides an app to allow your users to change the channel themselves.</p>
+              >
+                Clicker integrates into your existing DirecTV and automagically
+                manages channel changes and provides an app to allow your users
+                to change the channel themselves.
+              </p>
               <div v-scroll-reveal="{ delay: 400 }">
                 <!-- <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a> -->
                 <SignupForm />
@@ -23,7 +27,10 @@
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
               v-scroll-reveal="{ scale: 0.9 }"
             >
-              <img src="/images/landing/clicker-in-bar.png" alt="Crowded bar with tvs" />
+              <img
+                src="/images/landing/clicker-in-bar.png"
+                alt="Crowded bar with tvs"
+              />
             </div>
           </div>
         </div>
