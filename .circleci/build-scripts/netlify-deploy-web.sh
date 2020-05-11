@@ -9,5 +9,5 @@ if [ "${CIRCLE_BRANCH}" == "develop" ]; then
 curl -X POST -d {} https://api.netlify.com/build_hooks/5c745884ad8fd5e199de18cf
 fi
 if [ "${CIRCLE_BRANCH}" == "variant" ]; then
-https://api.netlify.com/build_hooks/5eb953848f7aa35c9edb9b82
+curl -X POST -d {} https://api.netlify.com/build_hooks/5eb953848f7aa35c9edb9b82
 fi
