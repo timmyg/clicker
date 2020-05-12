@@ -28,10 +28,12 @@
                 After downloading the
                 <b class="brand-font">Clicker TV</b> app, your guests can choose the sports they want to watch and
                 change the channel instantly from their phone.
+                Check it out on
+                <a href="https://apps.apple.com/us/app/clicker-tv/id1471666907" target="_blank">iOS</a> and
                 <a
-                  href="http://onelink.to/thxs9v"
+                  href="https://play.google.com/store/apps/details?id=com.teamclicker.app"
                   target="_blank"
-                >Check it out.</a>
+                >Android</a>.
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-04">

@@ -6,22 +6,21 @@
         <div class="split-wrap">
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
-              <h1 class="mt-0 mb-16" v-scroll-reveal>
+              <h1 class="mt-0 mb-16">
                 You pay a lot for DirecTV.
                 <br />Let's Maximize it.
               </h1>
-              <p class="m-0 mb-24" v-scroll-reveal="{ delay: 200, origin: 'left' }">
+              <p class="m-0 mb-24">
                 We guarantee the most compelling local and national sports are always on your TVs, taking that
                 responsibility off your staff.
               </p>
-              <div v-scroll-reveal="{ delay: 400 }">
+              <div>
                 <!-- <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a> -->
                 <SignupForm />
               </div>
             </div>
             <div
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
-              v-scroll-reveal="{ scale: 0.9 }"
             >
               <img src="/images/landing/clicker-in-bar.png" alt="Crowded bar with tvs" />
             </div>
