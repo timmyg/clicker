@@ -7,9 +7,9 @@
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
               <h1 class="mt-0 mb-16">
-                <span>You pay a lot for DIRECTV.</span>
+                <span>DIRECTV ain't cheap.</span>
                 <br />
-                <span class="reversed">Take Advantage of It.</span>
+                <span class="reversed">Unleash its potential.</span>
               </h1>
               <p class="m-0 mb-24">
                 Clicker integrates into your existing DIRECTV and automagically
