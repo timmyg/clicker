@@ -137,10 +137,10 @@ export default {
 .right {
   float: right;
 }
-.schedule-call {
-  position: absolute;
-  right: 0;
-}
+// .schedule-call {
+//   position: absolute;
+//   right: 0;
+// }
 .promo {
   // text-align: center;
   font-size: 14px;

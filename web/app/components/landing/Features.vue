@@ -28,10 +28,15 @@
                 After downloading the
                 <b class="brand-font">Clicker TV</b> app, your guests can choose the sports they want to watch and
                 change the channel instantly from their phone.
+                Check it out on
                 <a
-                  href="http://onelink.to/thxs9v"
+                  href="https://apps.apple.com/us/app/clicker-tv/id1471666907"
                   target="_blank"
-                >Check it out.</a>
+                >iOS</a> and
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.teamclicker.app"
+                  target="_blank"
+                >Android</a>.
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-04">
@@ -42,8 +47,8 @@
             <div class="split-item-content center-content-mobile">
               <h3 class="mt-0 mb-16">Custom Scheduling</h3>
               <p class="m-0">
-                Soccer bar? Notre Dame bar? Every location is different. We'll work closely with you to ensure your
-                programming aligns with your bar's preferences.
+                Soccer bar? Notre Dame bar? Every venue is different. We'll work closely with you to ensure your
+                programming aligns with your bar's preferences. We'll consider local, national, and live game-flow appeal.
               </p>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-05">

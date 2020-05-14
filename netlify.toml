@@ -18,6 +18,14 @@
   NUXT_ENV_CONTENTFUL_ACCESS_TOKEN = "Ai_IJR4RoCAhqsUk4q0NMXcR1ON42EHL02jD9-gjiGE"
   NUXT_ENV_STAGE = "prod"
   ENV = "production"
+[context.variant.environment]
+  NUXT_ENV_API_BASE = "https://api.tryclicker.com"
+  NUXT_ENV_SEGMENT_KEY = "Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I"
+  NUXT_ENV_STRIPE_PUBLISHABLE_KEY = "pk_live_LUgXVojsYzm2R5BfCvzhYqg800QyIkTHbr"
+  NUXT_ENV_CONTENTFUL_SPACE_ID = "jaxoslda9dxk"
+  NUXT_ENV_CONTENTFUL_ACCESS_TOKEN = "Ai_IJR4RoCAhqsUk4q0NMXcR1ON42EHL02jD9-gjiGE"
+  NUXT_ENV_STAGE = "prod"
+  ENV = "production"
 [context.release.environment]
   NUXT_ENV_API_BASE = "https://api-release.tryclicker.com"
   NUXT_ENV_SEGMENT_KEY="VXD6hWSRSSl5uriNd6QsBWtQEXZaMZnQ"

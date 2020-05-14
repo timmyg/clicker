@@ -26,7 +26,7 @@
                   <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">
                       <span>
-                        Your location added to
+                        Your venue added to
                         <b class="brand-font">Clicker TV</b> app
                       </span>
                     </li>
