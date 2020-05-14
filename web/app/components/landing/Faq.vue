@@ -17,7 +17,7 @@
             <div class="accordion-body">
               <p>
                 It's simple! All you need is an internet connection. We'll install a small device and ensure your
-                DIRECTV boxes are interenet enabled.
+                DIRECTV boxes are internet enabled.
               </p>
             </div>
           </li>
@@ -52,7 +52,7 @@
             <div class="accordion-body">
               <p>
                 The
-                <a href="http://onelink.to/thxs9v" class="brand-font" target="_blank">Clicker TV</a> app allows for
+                <span class="brand-font">Clicker TV</span> app allows for
                 transparent reservations so that your guests will know which TVs are available to be reserved.
               </p>
             </div>

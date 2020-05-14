@@ -85,7 +85,13 @@ export default {
     //   return this.submitting ? "Submitting..." : "I'm Interested";
     // },
     onSubmit() {
-      // console.log("onsubmit");
+      console.log(
+        "onsubmit",
+        process.env.BRANCH,
+        process.env.NUXT_ENV_BRANCH,
+        process.env.branch
+      );
+      const variant = process.env.branch;
       if (!this.email || !this.email.length) {
         return false;
       }
@@ -102,7 +108,8 @@ export default {
         this.$segment.alias(email);
         this.$segment.track("Interested", {
           email,
-          queryParams: this.$route.query
+          queryParams: this.$route.query,
+          variant
         });
       }
       this.$http
@@ -130,10 +137,10 @@ export default {
 .right {
   float: right;
 }
-.schedule-call {
-  position: absolute;
-  right: 0;
-}
+// .schedule-call {
+//   position: absolute;
+//   right: 0;
+// }
 .promo {
   // text-align: center;
   font-size: 14px;

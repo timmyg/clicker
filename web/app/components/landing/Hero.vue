@@ -7,15 +7,16 @@
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
               <h1 class="mt-0 mb-16">
-                You pay a lot for DirecTV.
-                <br />Let's Maximize it.
+                <span>You pay a lot for DIRECTV.</span>
+                <br />
+                <span class="reversed">Take Advantage of It.</span>
               </h1>
               <p class="m-0 mb-24">
-                We guarantee the most compelling local and national sports are always on your TVs, taking that
-                responsibility off your staff.
+                Clicker integrates into your existing DIRECTV and automagically
+                manages channel changes and provides an app to allow patrons
+                to change the channel themselves.
               </p>
               <div>
-                <!-- <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a> -->
                 <SignupForm />
               </div>
             </div>
@@ -48,6 +49,11 @@ export default {
     padding-top: 96px;
   }
 }
+.reversed {
+  background: black;
+  color: white;
+  padding: 4px 8px;
+}
 
 // > large
 @media (min-width: 820px) {
@@ -58,3 +64,4 @@ export default {
   }
 }
 </style>
+

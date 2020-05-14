@@ -1,18 +1,18 @@
 <template>
   <section class="features-tiles section center-content">
     <div class="container">
-      <div class="features-tiles-inner section-inner">
+      <div class="features-tiles-inner">
         <div class="section-header center-content">
           <div class="container-xs" v-scroll-reveal>
             <h2 class="mt-0 mb-16">
               Let staff focus on selling food + beverage
               <span
                 class="muted"
-              >and let us keep your guests in their seats</span>
+              >and let Clicker keep your guests in their seats</span>
             </h2>
             <p>
               <span class="brand-font">Clicker</span> drastically reduces channel change requests and increases customer
-              dwell time. We provide two distinct products:
+              dwell time. We provide two products:
             </p>
           </div>
         </div>
