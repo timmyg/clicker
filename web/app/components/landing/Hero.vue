@@ -13,8 +13,7 @@
               </h1>
               <p class="m-0 mb-24">
                 Clicker integrates into your existing DIRECTV and automagically
-                manages channel changes and provides an app to allow patrons
-                to change the channel themselves.
+                manages channel changes and allow patrons to change the channel themselves with our app.
               </p>
               <div>
                 <SignupForm />
@@ -23,7 +22,25 @@
             <div
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
             >
-              <img src="/images/landing/clicker-in-bar.png" alt="Crowded bar with tvs" />
+              <!-- <img src="/images/landing/clicker-in-bar.png" alt="Crowded bar with tvs" /> -->
+              <video poster="/images/landing/clicker-in-bar.png" preload="auto" controls>
+                <source
+                  src="https://clicker-assets.s3.amazonaws.com/video/clicker-v1.mp4"
+                  type="video/mp4"
+                />
+                <!-- <source src="video.ogg" type="video/ogg"> -->
+                <source
+                  src="https://clicker-assets.s3.amazonaws.com/video/clicker-v1.webm"
+                  type="video/webm"
+                />
+                <object
+                  data="https://clicker-assets.s3.amazonaws.com/video/clicker-v1.mp4"
+                  width="470"
+                  height="255"
+                >
+                  <!-- <embed src="video.swf" width="470" height="255"> -->
+                </object>
+              </video>
             </div>
           </div>
         </div>
@@ -53,6 +70,7 @@ export default {
   background: black;
   color: white;
   padding: 4px 8px;
+  line-height: 1.5em;
 }
 
 // > large

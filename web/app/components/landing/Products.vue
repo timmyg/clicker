@@ -11,7 +11,7 @@
               >and let Clicker keep your guests in their seats</span>
             </h2>
             <p>
-              <span class="brand-font">Clicker</span> drastically reduces channel change requests and increases customer
+              Clicker drastically reduces channel change requests and increases customer
               dwell time. We provide two products:
             </p>
           </div>
@@ -36,10 +36,7 @@
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
-                >
-                  We'll manage your TVs automatically throughout the day - accounting for local preference, matchups,
-                  and live game flow.
-                </p>
+                >We'll manage TVs automatically throughout the day remotely - tailored for your venue.</p>
               </div>
             </div>
           </div>
@@ -63,13 +60,13 @@
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  Allow your guests to download our
+                  Allow your guests to download the
                   <a
                     href="https://apps.apple.com/us/app/clicker-tv/id1471666907"
                     class="brand-font"
                     target="_blank"
-                  >Clicker TV</a> mobile app, choose your location, and change TV
-                  channels right from their phone on select TVs.
+                  >Clicker TV</a> mobile app and change the TV
+                  channels right from their phone.
                 </p>
               </div>
             </div>

@@ -103,7 +103,7 @@
             </div>
             <div class="accordion-body">
               <p>
-                No - our system can track the manual change inside your location, and disable our
+                No - our system can track the manual change inside your venue, and disable our
                 <b
                   class="brand-font"
                 >Control Center</b> automation until the game completes.
