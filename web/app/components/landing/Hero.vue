@@ -23,7 +23,7 @@
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
             >
               <!-- <img src="/images/landing/clicker-in-bar.png" alt="Crowded bar with tvs" /> -->
-              <video poster="/images/landing/clicker-in-bar.png" preload="auto" controls>
+              <video preload="auto" controls>
                 <source
                   src="https://clicker-assets.s3.amazonaws.com/video/clicker-v1.mp4"
                   type="video/mp4"
