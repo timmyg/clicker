@@ -62,6 +62,7 @@ functions:
     handler: lead.health
     apiKeys:
       - myFirstKey
+      
     events:
       - http:
           path: health
