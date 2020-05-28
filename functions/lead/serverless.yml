@@ -66,3 +66,4 @@ functions:
       - http:
           path: health
           method: get
+          private: true
