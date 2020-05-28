@@ -60,6 +60,8 @@ functions:
             origin: '*'
   health:
     handler: lead.health
+    apiKeys:
+      - myFirstKey
     events:
       - http:
           path: health
