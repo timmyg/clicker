@@ -3,7 +3,7 @@ import { Location } from "src/app/state/location/location.model";
 import { ReserveService } from "../../reserve.service";
 import { Observable, Subscription, BehaviorSubject } from "rxjs";
 import { getAllLocations, getLoading } from "src/app/state/location";
-import { isLoggedIn, getUserGeolocation } from "src/app/state/user";
+import { isLoggedIn, getUserGeolocation, getUserRoles } from "src/app/state/user";
 import { Store } from "@ngrx/store";
 import * as fromStore from "../../../state/app.reducer";
 import * as fromLocation from "../../../state/location/location.actions";
@@ -57,6 +57,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
   isLoading$: Observable<boolean>;
   // userGeolocation$: Observable<{latitiude: number, longitude: number}>;
   userGeolocation$: Observable<any>;
+  userRoles$: Observable<any>;
   // userLocations$: Observable<string[]>;
   // userLocations: string[];
   // userRoles$: Observable<string[]>;
@@ -126,6 +127,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
     this.isLoading$ = this.store.select(getLoading);
     // this.userLocations$ = this.store.select(getUserLocations);
     this.userGeolocation$ = this.store.select(getUserGeolocation);
+    this.userRoles$ = this.store.select(getUserRoles);
     this.geolocationSubscription = this.userGeolocation$
       .pipe()
       .subscribe((userGeolocation) => {
@@ -170,6 +172,7 @@ export class LocationsComponent implements OnDestroy, OnInit {
         this.searchTerm = null;
       }
     );
+    // this.userRoles$.subscribe(x => console.log(x))
   }
 
   ngOnDestroy() {

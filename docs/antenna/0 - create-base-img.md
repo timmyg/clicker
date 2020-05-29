@@ -7,7 +7,7 @@
 3. add empty [ssh](image/ssh)
    - add to boot (may have to eject/insert again, use disk utility)
 4. create [wpa_supplicant.conf](image/wpa_supplicant.conf)
-   - add to boot, enter wifi details (see image) and place into boot directory. This will be copied over on launch. This is needed to connect via ssh for customer setup
+   - add to boot, enter wifi details and place into boot directory. This will be copied over on launch. This is needed to connect via ssh for customer setup
 
 ##### on raspberry pi (w/ sd card)
 

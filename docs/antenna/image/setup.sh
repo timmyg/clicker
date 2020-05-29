@@ -5,10 +5,12 @@
 #   - wpa_supplicant.conf (if necessary, customized)
 #   - setup.sh (this file)
 #   - ssh
+#   - .pwd
 #   - copy-env-vars.service
 #   - antenna.service
 
-# run this on the raspberry pi
+# connect to raspberry pi
+#   - `ssh pi@192.168.3.96`
 #   - `sudo sh /boot/setup.sh`
 #   - run pitunnel script, if desired
 
