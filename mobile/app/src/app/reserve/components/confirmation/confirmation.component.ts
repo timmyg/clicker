@@ -19,7 +19,12 @@ import { Router, ActivatedRoute } from "@angular/router";
 import * as moment from "moment";
 import { ToastController, ModalController, Platform } from "@ionic/angular";
 import { first, filter, map } from "rxjs/operators";
-import { isLoggedIn, getUserTokenCount, getUserId } from "src/app/state/user";
+import {
+  isLoggedIn,
+  getUserTokenCount,
+  getUserId,
+  getUserRoles,
+} from "src/app/state/user";
 import { Actions, ofType } from "@ngrx/effects";
 import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "src/app/globals";
@@ -37,11 +42,13 @@ import { LoginComponent } from "src/app/auth/login/login.component";
 })
 export class ConfirmationComponent implements OnDestroy, OnInit {
   timeframes$: Observable<Timeframe[]>;
+  visibleTimeframes$: Observable<Timeframe[]>;
   reservation$: Observable<Partial<Reservation>>;
   reservationUpdateType$: Observable<string>;
   reservationEnd$: Observable<Date>;
   tokenCount$: Observable<number>;
   userId$: Observable<string>;
+  userRoles$: Observable<any>;
   // tokenCount: number;
   isLoggedIn$: Observable<boolean>;
   reservation: Partial<Reservation>;
@@ -66,6 +73,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   overrideDistanceClicks = 0;
   overrideDistanceDisable = false;
   loginModal;
+  isManager: boolean;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -91,6 +99,26 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.sub = this.isAppLoading$.subscribe((x) => {
       this.isAppLoading = x;
     });
+    this.userRoles$ = this.store.select(getUserRoles);
+
+    // const name$ = this._personService.getName(id);
+    // const document$ = this._documentService.getDocument();
+    return Observable.create((observer) => {
+      combineLatest(this.timeframes$, this.userRoles$).subscribe(([a, b]) => {
+        console.log({ a, b });
+        observer.next([1, 2, 3]);
+        observer.complete();
+      });
+    });
+
+    // Observable
+    //     .zip(this.timeframes$, this.userRoles$, (timeframes: Timeframe[], roles: any) => ({timeframes, roles}))
+    //     .subscribe(pair => {
+    //           //  this.name = pair.name;
+    //           //  this.document = pair.document;
+    //           //  this.showForm();
+    //           console.log(timeframes, roles);
+    //        })
   }
 
   ngOnDestroy() {
@@ -145,13 +173,12 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
             // this.userId$.subscribe(userId=> {
             //   this.isConflictingUser = userId
             // })
-            combineLatest([this.userId$, this.reservation$]).pipe(
-              map(([userId, reservation]) => ({userId, reservation}))
-            )
-            .subscribe(pair => {
-              this.isConflictingUser = pair.userId !== pair.reservation.userId
-            });
-            
+            combineLatest([this.userId$, this.reservation$])
+              .pipe(map(([userId, reservation]) => ({ userId, reservation })))
+              .subscribe((pair) => {
+                this.isConflictingUser =
+                  pair.userId !== pair.reservation.userId;
+              });
           }
           this.isInitializing = false;
         });
@@ -162,7 +189,26 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.isLoggedIn$.subscribe((isUserLoggedIn) => {
       this.isLoggedIn = isUserLoggedIn;
     });
+    // this.userRoles$.pipe(filter((roles) => !!roles)).subscribe((roles) => {
+    //   const manageLocations = roles["manageLocations"];
+    //   this.isManager =
+    //     manageLocations &&
+    //     manageLocations.includes(this.reservation.location.id);
+    //   // console.log("isManager", this.isManager);
+    //   // if (this.isManager) {
+
+    //   // }
+    // });
   }
+
+  getManagerFreeTimeframe(): Timeframe {
+    return {
+      tokens: 0,
+      minutes: 0,
+    };
+  }
+
+  getTimegrames() {}
 
   getEndTime() {
     // if (this.reservation.end) {

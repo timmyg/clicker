@@ -39,6 +39,34 @@
         <ion-row *ngIf="isAppLoading" class="ion-margin-vertical">
           <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
         </ion-row>
+
+        <ion-item *ngIf="isManager">
+          <ion-label class="flex ion-align-items-center">
+            <span data-atm-class="timeframe" class="timeframe">
+              Free Change
+              <ion-icon *ngIf="isManager" name="star" class="manage"></ion-icon>
+            </span>
+            <div class="flex ion-align-items-center">
+              <img
+                class="coin ion-float-right"
+                src="./assets/coin.svg"
+                width="22"
+                height="22"
+              />
+              <span class="brand-text bold">{{
+                getManagerFreeTimeframe().tokens
+              }}</span>
+            </div>
+          </ion-label>
+          <ion-radio
+            slot="start"
+            mode="md"
+            [value]="getManagerFreeTimeframe()"
+            [disabled]="isAppLoading || saving"
+            checked
+          ></ion-radio>
+        </ion-item>
+
         <ion-item *ngFor="let timeframe of (timeframes$ | async)">
           <ion-label class="flex ion-align-items-center">
             <span data-atm-class="timeframe" class="timeframe"
@@ -153,13 +181,10 @@
         a mistake, <a (click)="onClickOverrideDistanceForce()">click here</a>.
       </ion-text>
     </ion-row>
-  <ion-row
-    class="ion-text-center ion-margin-top"
-    *ngIf="isConflictingUser"
-  >
-    <ion-text color="danger">
-      Sorry, you cannot update this reservation. Please try again.
-    </ion-text>
-  </ion-row>
+    <ion-row class="ion-text-center ion-margin-top" *ngIf="isConflictingUser">
+      <ion-text color="danger">
+        Sorry, you cannot update this reservation. Please try again.
+      </ion-text>
+    </ion-row>
   </ion-card-content>
 </ion-card>

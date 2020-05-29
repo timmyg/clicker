@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Location } from "src/app/state/location/location.model";
-import { filter } from 'rxjs/operators';
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: "app-location",
   templateUrl: "./location.component.html",
-  styleUrls: ["./location.component.scss"]
+  styleUrls: ["./location.component.scss"],
 })
 export class LocationComponent {
   @Input() location: Location;
@@ -17,12 +17,11 @@ export class LocationComponent {
   isManager = false;
 
   ngOnInit() {
-    this.userRoles.pipe(filter((roles) => !!roles)).subscribe(roles=> {
-      console.log({roles});
-      const manageLocations = roles["manageLocations"]
-      this.isManager = manageLocations && manageLocations.includes(this.location.id)
-      console.log(this.isManager);
-    })
+    this.userRoles.pipe(filter((roles) => !!roles)).subscribe((roles) => {
+      const manageLocations = roles["manageLocations"];
+      this.isManager =
+        manageLocations && manageLocations.includes(this.location.id);
+    });
   }
 
   // isManager() {
