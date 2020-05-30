@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { Reservation } from "../../../state/reservation/reservation.model";
 import { ReserveService } from "../../reserve.service";
-import { Observable, Subscription, combineLatest } from "rxjs";
+import { Observable, Subscription, combineLatest, Subject } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getReservation,
@@ -42,7 +42,8 @@ import { LoginComponent } from "src/app/auth/login/login.component";
 })
 export class ConfirmationComponent implements OnDestroy, OnInit {
   timeframes$: Observable<Timeframe[]>;
-  visibleTimeframes$: Observable<Timeframe[]>;
+  // visibleTimeframes$: Observable<Timeframe[]>;
+  visibleTimeframes$: Subject<Timeframe[]> = new Subject();
   reservation$: Observable<Partial<Reservation>>;
   reservationUpdateType$: Observable<string>;
   reservationEnd$: Observable<Date>;
@@ -73,7 +74,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   overrideDistanceClicks = 0;
   overrideDistanceDisable = false;
   loginModal;
-  isManager: boolean;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -103,12 +103,22 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
 
     // const name$ = this._personService.getName(id);
     // const document$ = this._documentService.getDocument();
-    return Observable.create((observer) => {
-      combineLatest(this.timeframes$, this.userRoles$).subscribe(([a, b]) => {
-        console.log({ a, b });
-        observer.next([1, 2, 3]);
-        observer.complete();
-      });
+    // Observable.create((observer) => {
+    combineLatest(
+      this.timeframes$,
+      this.userRoles$,
+      this.reservation$
+    ).subscribe(([timeframes, roles, reservation]) => {
+      console.log({ timeframes, roles, reservation });
+      if (!!timeframes && !!roles && !!reservation) {
+        const manageLocations = roles["manageLocations"];
+        const isManager =
+          manageLocations && manageLocations.includes(reservation.location.id);
+        if (isManager) {
+          timeframes.unshift(this.getManagerFreeTimeframe());
+        }
+        this.visibleTimeframes$.next(timeframes);
+      }
     });
 
     // Observable
@@ -320,13 +330,13 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   //   return !!this.reservation.cost;
   // }
 
-  isValid() {
+  isValid(): boolean {
     if (this.isEditChannel) {
       return true;
     } else if (this.isEditTime) {
-      return this.reservation.update && this.reservation.update.minutes;
+      return !!this.reservation.update && !!this.reservation.update.minutes;
     } else {
-      return this.reservation.minutes;
+      return this.reservation.minutes != null;
     }
   }
 

@@ -21,7 +21,10 @@
           >📺&nbsp;<span class="brand-text">{{ reservation?.box?.label }}</span>
           until {{ getEndTime() | amDateFormat: "h:mma" }}</span
         >
-        <ng-template #chooseTimeframe><b>Choose timeframe</b></ng-template>
+        <ng-template #chooseTimeframe>
+          <b *ngIf="reservation.minutes === undefined">Choose timeframe</b>
+          <span *ngIf="reservation.minutes === 0">One-time change</span>
+        </ng-template>
 
         <!-- <ng-template #noReservation> One-time change </ng-template> -->
       </div>
@@ -39,39 +42,14 @@
         <ion-row *ngIf="isAppLoading" class="ion-margin-vertical">
           <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
         </ion-row>
-
-        <ion-item *ngIf="isManager">
+        <ion-item *ngFor="let timeframe of (visibleTimeframes$ | async)">
           <ion-label class="flex ion-align-items-center">
             <span data-atm-class="timeframe" class="timeframe">
-              Free Change
-              <ion-icon *ngIf="isManager" name="star" class="manage"></ion-icon>
+              <span *ngIf="timeframe.minutes > 0; else free">
+                {{ timeframe.minutes }} minutes
+              </span>
+              <ng-template #free> Free Manager Change </ng-template>
             </span>
-            <div class="flex ion-align-items-center">
-              <img
-                class="coin ion-float-right"
-                src="./assets/coin.svg"
-                width="22"
-                height="22"
-              />
-              <span class="brand-text bold">{{
-                getManagerFreeTimeframe().tokens
-              }}</span>
-            </div>
-          </ion-label>
-          <ion-radio
-            slot="start"
-            mode="md"
-            [value]="getManagerFreeTimeframe()"
-            [disabled]="isAppLoading || saving"
-            checked
-          ></ion-radio>
-        </ion-item>
-
-        <ion-item *ngFor="let timeframe of (timeframes$ | async)">
-          <ion-label class="flex ion-align-items-center">
-            <span data-atm-class="timeframe" class="timeframe"
-              >{{ timeframe.minutes }} minutes</span
-            >
             <div class="flex ion-align-items-center">
               <img
                 class="coin ion-float-right"
