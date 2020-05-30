@@ -62,6 +62,7 @@ unless pulling to refresh (so we don't show duplicate spinners) -->
       >
         <app-location
           [location]="location"
+          [userRoles]="userRoles$"
           (onClick)="onLocationClick($event)"
           (onManage)="onLocationManage($event)"
           (onLocationDetail)="onLocationDetail($event)"

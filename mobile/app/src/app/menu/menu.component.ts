@@ -226,7 +226,6 @@ export class MenuComponent {
 
   onThemeToggle(e) {
     const isDarkMode = e.detail.checked
-    console.log({isDarkMode});
     this.userService.setDarkMode(isDarkMode);
         // Use matchMedia to check the user preference
     

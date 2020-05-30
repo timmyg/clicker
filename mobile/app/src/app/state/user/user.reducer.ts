@@ -6,6 +6,7 @@ export interface State {
   me: User;
   tokens: number;
   card: Card;
+  roles: any;
   referralCode: string;
   referredByCode: string;
   geo: {
@@ -24,6 +25,7 @@ export const initialState: State = {
   referralCode: null,
   referredByCode: null,
   geo: null,
+  roles: null,
   authToken: null,
   loading: false,
   error: null
@@ -59,10 +61,12 @@ export function reducer(
         me: action.payload
       };
     case fromUser.LOAD_WALLET_SUCCESS:
-      state.tokens = action.payload.tokens;
-      state.card = action.payload.card;
-      state.referralCode = action.payload.referralCode;
-      state.referredByCode = action.payload.referredByCode;
+      const {payload: user} = action
+      // state.tokens = action.payload.tokens;
+      // state.card = action.payload.card;
+      // state.referralCode = action.payload.referralCode;
+      // state.referredByCode = action.payload.referredByCode;
+      state = user
       return {
         ...state,
         loading: false
@@ -107,7 +111,8 @@ export const getUserLocations = (state: State) =>
   state.me["https://mobile.tryclicker.com/app_metadata"] &&
   state.me["https://mobile.tryclicker.com/app_metadata"].locations;
 export const getUserRoles = (state: State) =>
-  state.me && state.me["https://mobile.tryclicker.com/roles"];
+  // state.me && state.me["https://mobile.tryclicker.com/roles"];
+  state.roles
 export const isLoggedIn = (state: State) => state.me && !state.me.guest;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;
