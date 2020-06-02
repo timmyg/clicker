@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { Reservation } from "../../../state/reservation/reservation.model";
 import { ReserveService } from "../../reserve.service";
-import { Observable, Subscription, combineLatest, Subject } from "rxjs";
+import { Observable, Subscription, combineLatest, Subject, pipe } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getReservation,
@@ -67,6 +67,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   isAppLoading: boolean;
   isInitializing = true;
   sub: Subscription;
+  timeframeSub: Subscription;
   timeframe0: Timeframe = {
     minutes: 0,
     tokens: 0,
@@ -104,13 +105,12 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     // const name$ = this._personService.getName(id);
     // const document$ = this._documentService.getDocument();
     // Observable.create((observer) => {
-    combineLatest(
+    this.timeframeSub = combineLatest(
       this.timeframes$,
       this.userRoles$,
       this.reservation$
     ).subscribe(([timeframes, roles, reservation]) => {
-      console.log({ timeframes, roles, reservation });
-      if (!!timeframes && !!roles && !!reservation) {
+      if (!!timeframes && !!roles && !!reservation && !!reservation.location) {
         const manageLocations = roles["manageLocations"];
         const isManager =
           manageLocations && manageLocations.includes(reservation.location.id);
@@ -136,6 +136,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.store.dispatch(new fromApp.ClearTimeframes());
     if (this.sub) {
       this.sub.unsubscribe();
+    }
+    if (this.timeframeSub) {
+      this.timeframeSub.unsubscribe();
     }
   }
 
