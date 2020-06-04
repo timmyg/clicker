@@ -76,12 +76,20 @@ const dbUser = dynamoose.model(
       type: Number,
       required: true,
     },
+    // roles: Map, below
+    // {
+    //   "manager": [
+    //     "920f8dc0-4ce7-11e9-839a-e73aa5a05cbf"
+    //   ]
+    // },
     aliasedTo: {
       type: String,
     },
   },
   {
+    saveUnknown: ['roles'],
     timestamps: true,
+    allowEmptyArray: true,
   },
 );
 

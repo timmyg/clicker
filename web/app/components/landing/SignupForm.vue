@@ -55,7 +55,7 @@
     <div v-if="oneMonthFree" class="promo brand-font">You're getting your first month free!</div>
     <div v-if="!submitted" class="promo brand-font">
       <a
-        href="https://calendly.com/clicker-tim-g/15min"
+        href="https://calendly.com/clicker-tim-g/meet"
         target="_blank"
         class="right schedule-call"
       >or, schedule a call</a>

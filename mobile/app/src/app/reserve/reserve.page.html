@@ -138,21 +138,34 @@
     *ngIf="channelsEnabled"
     class="flex ion-justify-content-center ion-padding-vertical"
   >
-    <ion-button color="primary" (click)="forceUpdate()">
+    <ion-button expand="block" color="primary" (click)="forceUpdate()">
       <ion-icon slot="start" name="trophy"></ion-icon>
-      Update to Production channel
+      Update App
     </ion-button>
-    <br />
-    <h6>Developer Options:</h6>
-    <ion-button color="light" (click)="forceUpdate('Master')">
+    <ion-button
+      fill="outline"
+      expand="block"
+      color="secondary"
+      (click)="forceUpdate('Master')"
+    >
       <ion-icon slot="start" name="color-wand"></ion-icon>
       Update to Master channel
     </ion-button>
-    <ion-button color="medium" (click)="forceUpdate('Release')">
+    <ion-button
+      fill="outline"
+      expand="block"
+      color="secondary"
+      (click)="forceUpdate('Release')"
+    >
       <ion-icon slot="start" name="color-wand"></ion-icon>
       Update to Release channel
     </ion-button>
-    <ion-button color="dark" (click)="forceUpdate('Develop')">
+    <ion-button
+      fill="outline"
+      expand="block"
+      color="secondary"
+      (click)="forceUpdate('Develop')"
+    >
       <ion-icon slot="start" name="color-wand"></ion-icon>
       Update to Develop channel
     </ion-button>
