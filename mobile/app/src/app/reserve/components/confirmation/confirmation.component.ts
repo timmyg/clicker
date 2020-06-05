@@ -110,8 +110,9 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       this.userRoles$,
       this.reservation$
     ).subscribe(([timeframes, roles, reservation]) => {
-      if (!!timeframes && !!roles && !!reservation && !!reservation.location) {
-        const manageLocations = roles["manageLocations"];
+      // roles may be null
+      if (!!timeframes && !!reservation && !!reservation.location) {
+        const manageLocations = roles && roles["manageLocations"];
         const isManager =
           manageLocations && manageLocations.includes(reservation.location.id);
         if (isManager) {
