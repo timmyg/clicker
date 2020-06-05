@@ -6,6 +6,7 @@
 #   - wpa_supplicant.conf (if necessary, customized)
 #   - setup.sh (this file)
 #   - ssh
+#   - .pwd
 #   - copy-env-vars.service
 #   - antenna.service
 

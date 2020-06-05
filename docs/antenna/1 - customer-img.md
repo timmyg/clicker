@@ -15,9 +15,10 @@
      }
      ```
 
+1. follow instructions at top of [setup.sh](image/setup.sh)
 1. add env vars
    - add environment variables to /home/pi/.env [file](image/.env-example)
    - `scp .env pi@raspberrypi.local:`
-2. add pi tunnel for remote ssh access
+1. add pi tunnel for remote ssh access
    - (get from website)
    - `curl https://pitunnel.com/inst/EPumXXXX | sudo python`
