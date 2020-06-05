@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> Suggest a Location </ion-title>
+    <ion-title> {{title}} </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="onCloseClick()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -11,7 +11,7 @@
 <ion-content class="ion-padding">
   <ion-item>
     <ion-textarea
-      placeholder="Shooter's Sports Bar in Charlotte, NC"
+      [placeholder]="placeholder"
       autoGrow="true"
       #suggestionInput
       [(ngModel)]="suggestion"
