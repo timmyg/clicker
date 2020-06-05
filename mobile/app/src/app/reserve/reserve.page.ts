@@ -69,15 +69,13 @@ export class ReservePage implements OnDestroy, OnInit {
     this.pageSub = this.platform.backButton.subscribe(() => {
       this.goBack();
     });
+    this.updateIfAvailable();
   }
 
   async updateIfAvailable() {
     if (this.platform.is("capacitor")) {
       const update = await this.deploy.checkForUpdate();
-      if (update.available) {
-        // We have an update!
-        this.updateAvailable = true;
-      }
+      this.updateAvailable = update.available;
     }
   }
 

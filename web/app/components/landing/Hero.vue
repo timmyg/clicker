@@ -6,30 +6,41 @@
         <div class="split-wrap">
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
-              <h1 class="mt-0 mb-16" v-scroll-reveal>
-                You pay a lot for DirecTV.
-                <br />Let's Maximize it.
+              <h1 class="mt-0 mb-16">
+                <span>You pay a lot for DIRECTV.</span>
+                <br />
+                <span class="reversed">Take Advantage of It.</span>
               </h1>
-              <p
-                class="m-0 mb-24"
-                v-scroll-reveal="{ delay: 200, origin: 'left' }"
-              >
-                We guarantee the most compelling local and national sports are
-                always on your TVs, taking that responsibility off your staff.
+              <p class="m-0 mb-24">
+                Clicker integrates into your existing DIRECTV and automagically
+                manages channel changes and allow patrons to change the channel themselves with our app.
               </p>
-              <div v-scroll-reveal="{ delay: 400 }">
-                <!-- <a class="button button-primary button-wide-mobile" href="#signup-form">Learn More</a> -->
+              <div>
                 <SignupForm />
               </div>
             </div>
             <div
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
-              v-scroll-reveal="{ scale: 0.9 }"
             >
-              <img
-                src="/images/landing/clicker-in-bar.png"
-                alt="Crowded bar with tvs"
-              />
+              <!-- <img src="/images/landing/clicker-in-bar.png" alt="Crowded bar with tvs" /> -->
+              <video preload="auto" controls>
+                <source
+                  src="https://clicker-assets.s3.amazonaws.com/video/clicker-v1.mp4"
+                  type="video/mp4"
+                />
+                <!-- <source src="video.ogg" type="video/ogg"> -->
+                <source
+                  src="https://clicker-assets.s3.amazonaws.com/video/clicker-v1.webm"
+                  type="video/webm"
+                />
+                <object
+                  data="https://clicker-assets.s3.amazonaws.com/video/clicker-v1.mp4"
+                  width="470"
+                  height="255"
+                >
+                  <!-- <embed src="video.swf" width="470" height="255"> -->
+                </object>
+              </video>
             </div>
           </div>
         </div>
@@ -55,6 +66,12 @@ export default {
     padding-top: 96px;
   }
 }
+.reversed {
+  background: black;
+  color: white;
+  padding: 4px 8px;
+  line-height: 1.5em;
+}
 
 // > large
 @media (min-width: 820px) {
@@ -65,3 +82,4 @@ export default {
   }
 }
 </style>
+

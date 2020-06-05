@@ -4,7 +4,7 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpHandler,
-  HttpRequest
+  HttpRequest,
 } from "@angular/common/http";
 import { Observable, of, combineLatest } from "rxjs";
 import { mergeMap, first } from "rxjs/operators";
@@ -36,11 +36,11 @@ export class ApiInterceptor implements HttpInterceptor {
     if (request.url === "users" && request.method === "POST") {
       return of(
         request.clone({
-          url: `${environment.apiBaseUrl}/${request.url}`
+          url: `${environment.apiBaseUrl}/${request.url}`,
         })
       );
     }
-    return Observable.create(observer => {
+    return Observable.create((observer) => {
       const authToken$ = this.store$.pipe(select(getUserAuthToken));
       const partner$ = this.store$.pipe(select(getPartner));
 
@@ -55,7 +55,7 @@ export class ApiInterceptor implements HttpInterceptor {
         }
         request = request.clone({
           url: `${environment.apiBaseUrl}/${request.url}`,
-          headers
+          headers,
         });
         observer.next(request);
         observer.complete();

@@ -116,6 +116,7 @@ const dbLocation = dynamoose.model(
     },
     name: { type: String, required: true },
     neighborhood: { type: String, required: true },
+    city: { type: String },
     // zip: { type: String, required: true },
     geo: {
       latitude: { type: Number, required: true },

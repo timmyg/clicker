@@ -6,6 +6,7 @@ export interface State {
   me: User;
   tokens: number;
   card: Card;
+  roles: any;
   referralCode: string;
   referredByCode: string;
   geo: {
@@ -24,9 +25,10 @@ export const initialState: State = {
   referralCode: null,
   referredByCode: null,
   geo: null,
+  roles: null,
   authToken: null,
   loading: false,
-  error: null
+  error: null,
 };
 
 export function reducer(
@@ -40,7 +42,7 @@ export function reducer(
     case fromUser.ADD_REFERRAL:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case fromUser.SET_GEOLOCATION:
@@ -48,34 +50,41 @@ export function reducer(
         ...state,
         geo: {
           latitude: action.latitude,
-          longitude: action.longitude
-        }
+          longitude: action.longitude,
+        },
       };
 
     case fromUser.LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
-        me: action.payload
+        me: action.payload,
       };
     case fromUser.LOAD_WALLET_SUCCESS:
+      // const {payload: user} = action
+      // state.tokens = action.payload.tokens;
+      // state.card = action.payload.card;
+      // state.referralCode = action.payload.referralCode;
+      // state.referredByCode = action.payload.referredByCode;
+      // state = user
       state.tokens = action.payload.tokens;
       state.card = action.payload.card;
       state.referralCode = action.payload.referralCode;
       state.referredByCode = action.payload.referredByCode;
+      state.roles = action.payload.roles;
       return {
         ...state,
-        loading: false
+        loading: false,
       };
     case fromUser.SET_AUTH_TOKEN:
       state.authToken = action.payload;
       return {
-        ...state
+        ...state,
       };
     case fromUser.ADD_REFERRAL_SUCCESS:
     case fromUser.DELETE_CARD_SUCCESS:
       return {
-        ...state
+        ...state,
       };
 
     case fromUser.LOAD_FAIL:
@@ -85,7 +94,7 @@ export function reducer(
       return {
         ...state,
         loading: false,
-        error: action.payload
+        error: action.payload,
       };
 
     default: {
@@ -107,7 +116,8 @@ export const getUserLocations = (state: State) =>
   state.me["https://mobile.tryclicker.com/app_metadata"] &&
   state.me["https://mobile.tryclicker.com/app_metadata"].locations;
 export const getUserRoles = (state: State) =>
-  state.me && state.me["https://mobile.tryclicker.com/roles"];
+  // state.me && state.me["https://mobile.tryclicker.com/roles"];
+  state.roles;
 export const isLoggedIn = (state: State) => state.me && !state.me.guest;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

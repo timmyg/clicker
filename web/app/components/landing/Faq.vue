@@ -33,11 +33,9 @@
             <div class="accordion-body">
               <p>
                 Guests can purchase tokens used toward reserving TVs through the
-                <a
-                  href="http://onelink.to/thxs9v"
+                <span
                   class="brand-font"
-                  target="_blank"
-                >Clicker TV</a> app. When signing
+                >Clicker TV</span> mobile app. When signing
                 up, they start with a few free tokens, and they can purchase more with a credit card.
               </p>
             </div>
@@ -54,7 +52,7 @@
             <div class="accordion-body">
               <p>
                 The
-                <a href="http://onelink.to/thxs9v" class="brand-font" target="_blank">Clicker TV</a> app allows for
+                <span class="brand-font">Clicker TV</span> app allows for
                 transparent reservations so that your guests will know which TVs are available to be reserved.
               </p>
             </div>
@@ -105,7 +103,7 @@
             </div>
             <div class="accordion-body">
               <p>
-                No - our system can track the manual change inside your location, and disable our
+                No - our system can track the manual change inside your venue, and disable our
                 <b
                   class="brand-font"
                 >Control Center</b> automation until the game completes.

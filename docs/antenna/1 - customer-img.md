@@ -15,6 +15,7 @@
      }
      ```
 
+1. follow instructions at top of [setup.sh](image/setup.sh)
 1. add env vars
    - add environment variables to /home/pi/.env [file](image/.env-example)
    - `scp .env pi@raspberrypi.local:`
