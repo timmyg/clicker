@@ -20,6 +20,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
+    slackManualZapsWebhookUrl: ${env:SLACK_MANUAL_ZAPS_WEBHOOK_URL}
     slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
     slackLandingWebhookUrl: ${env:SLACK_LANDING_WEBHOOK_URL}
     slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
@@ -71,6 +72,8 @@ functions:
               - content-type
   sendControlCenter:
     handler: notification.sendControlCenter
+  sendManual:
+    handler: notification.sendManual
   sendLanding:
     handler: notification.sendLanding
   sendTasks:

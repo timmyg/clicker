@@ -9,6 +9,7 @@ declare class process {
   static env: {
     stage: string,
     slackControlCenterWebhookUrl: string,
+    slackManualZapsWebhookUrl: string,
     slackAntennaWebhookUrl: string,
     slackAppWebhookUrl: string,
     slackTasksWebhookUrl: string,
@@ -26,6 +27,13 @@ module.exports.sendApp = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.sendControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackControlCenterWebhookUrl);
+  const { text } = getBody(event);
+  await sendSlack(webhook, text);
+  return respond(200);
+});
+
+module.exports.sendManual = RavenLambdaWrapper.handler(Raven, async event => {
+  const webhook = new IncomingWebhook(process.env.slackManualZapsWebhookUrl);
   const { text } = getBody(event);
   await sendSlack(webhook, text);
   return respond(200);

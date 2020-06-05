@@ -598,7 +598,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       channelMinor: minor,
     };
 
-    let program;
+    let program: Program = null;
     if (originalChannel !== major) {
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
@@ -652,11 +652,11 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const text = `Manual Zap @ ${location.name} (${
           location.neighborhood
-        }) from *${originalChannel}* to *${major}* (Zone ${location.boxes[i].zone || 'no zone'})`;
+        }) from *${originalChannel}* to *${major}* ${program.title} (Zone ${location.boxes[i].zone || 'no zone'})`;
 
         await new Invoke()
           .service('notification')
-          .name('sendControlCenter')
+          .name('sendManual')
           .body({ text })
           .async()
           .go();
