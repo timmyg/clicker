@@ -1,5 +1,5 @@
 // @flow
-const { respond, getBody, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const { respond, getBody, getUserId, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const { IncomingWebhook } = require('@slack/webhook');
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
@@ -21,6 +21,8 @@ declare class process {
 module.exports.sendApp = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackAppWebhookUrl);
   const { text } = getBody(event);
+  const userId = getUserId(event);
+  console.log({ text, userId });
   await sendSlack(webhook, text);
   return respond(200);
 });
