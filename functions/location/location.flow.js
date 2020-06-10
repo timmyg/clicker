@@ -651,11 +651,11 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       //  - send slack notif
       //  - send to airtable sheet
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
-        const previousProgram =
-          location.boxes[i].live && location.boxes[i].live.program ? location.boxes[i].live.program.title : '';
-        const newProgram = program.title;
+        const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
         const text = `Manual Zap @ ${location.name} (${location.neighborhood} Zone ${location.boxes[i].zone ||
-          'no zone'}) from ~${originalChannel}: ${previousProgram}~ to *${major}: ${newProgram}*`;
+          'no zone'}) ~${previousProgram.channelTitle}: ${previousProgram.title}~ to *${program.channelTitle}: ${
+          program.title
+        }*`;
 
         await new Invoke()
           .service('notification')
