@@ -62,11 +62,11 @@ custom:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
     develop: ${env:AIRTABLE_BASE_DEV}
-  provisionedConcurrencies:
-    prod: 1
-    release: 1
-    default: 0
-  provisionedConcurrency: ${self:custom.provisionedConcurrencies.${self:custom.stage}, self:custom.provisionedConcurrencies.default}
+  # provisionedConcurrencies:
+  #   prod: 1
+  #   release: 1
+  #   default: 0
+  # provisionedConcurrency: ${self:custom.provisionedConcurrencies.${self:custom.stage}, self:custom.provisionedConcurrencies.default}
 resources:
   Resources:
     LocationsTable:
@@ -136,7 +136,7 @@ functions:
   allByGeolocation:
     handler: location.all
     # provisionedConcurrency: 2
-    provisionedConcurrency: ${self:custom.provisionedConcurrency}
+    # provisionedConcurrency: ${self:custom.provisionedConcurrency}
     events:
       - http:
           path: 'geo/{latitude}/{longitude}'

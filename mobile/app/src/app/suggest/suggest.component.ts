@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import { ModalController, IonTextarea, ToastController } from "@ionic/angular";
 import * as fromApp from "src/app/state/app/app.actions";
 import * as fromStore from "src/app/state/app.reducer";
@@ -12,6 +12,10 @@ import { Store } from "@ngrx/store";
 export class SuggestComponent implements OnInit {
   @ViewChild("suggestionInput") suggestionInput: IonTextarea;
   suggestion: string;
+  @Input() title: string;
+  @Input() placeholder: string;
+  @Input() suggestLocationMode: boolean;
+  @Input() managerMode: boolean;
 
   constructor(
     public modalController: ModalController,
@@ -28,7 +32,12 @@ export class SuggestComponent implements OnInit {
   }
 
   async onSubmit() {
-    const text = `New Location Suggestion: ${this.suggestion}`;
+    let text = '';
+    if (this.managerMode) {
+      text = `Manager Mode Request: ${this.suggestion}`;
+    } else if (this.suggestLocationMode) {
+      text = `New Location Suggestion: ${this.suggestion}`;
+    }
     this.store.dispatch(new fromApp.SendMessage(text));
     this.onCloseClick();
     const thanks = await this.toastController.create({

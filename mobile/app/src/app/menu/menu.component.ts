@@ -167,6 +167,11 @@ export class MenuComponent {
   async onSuggestLocation() {
     this.suggestModal = await this.modalController.create({
       component: SuggestComponent,
+      componentProps: { 
+        title: "Suggest Location",
+        placeholder: "Tell us a name and location of a bar you want Clicker at" ,
+        suggestLocationMode: true
+      },
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
       if (this.suggestModal) {
@@ -174,6 +179,50 @@ export class MenuComponent {
       }
     });
     return await this.suggestModal.present();
+  }
+
+  async onRequestManagerMode() {
+    if (this.isLoggedIn) {
+    this.suggestModal = await this.modalController.create({
+      component: SuggestComponent,
+      componentProps: { 
+        title: "Manager Mode", 
+        placeholder: "Give us your full name and location name and we'll confirm with your manager." ,
+        managerMode: true
+      },
+    });
+    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+      if (this.suggestModal) {
+        this.suggestModal.close();
+      }
+    });
+    return await this.suggestModal.present();
+  } else {
+    const toast = await this.toastController.create({
+      message: `✋ Please login.`,
+      duration: 4000,
+      buttons: [
+        {
+          side: "end",
+          text: "Login",
+          handler: async () => {
+            this.loginModal = await this.modalController.create({
+              component: LoginComponent,
+            });
+            this.sub = this.platform.backButton
+              .pipe(first())
+              .subscribe(() => {
+                if (this.loginModal) {
+                  this.loginModal.close();
+                }
+              });
+            return await this.loginModal.present();
+          },
+        },
+      ],
+    });
+    toast.present();
+  }
   }
 
   async onOpenReferral() {
