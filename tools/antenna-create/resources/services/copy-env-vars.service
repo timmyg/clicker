@@ -1,0 +1,13 @@
+[Unit]
+Description=copy environment variables service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi
+ExecStart=/bin/bash -c '[ -f /boot/.env ] && sudo mv /boot/.env /home/pi/.env'
+StandardOutput=inherit
+StandardError=inherit
+User=pi
+
+[Install]
+WantedBy=multi-user.target

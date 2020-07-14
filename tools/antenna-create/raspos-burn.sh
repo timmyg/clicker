@@ -1,0 +1,1 @@
+sudo balena local flash ~/Downloads/2020-05-27-raspios-buster-lite-armhf.img --drive /dev/disk2 --yesdisk

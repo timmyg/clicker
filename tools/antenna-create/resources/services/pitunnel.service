@@ -1,0 +1,17 @@
+[Unit]
+Description=startup service
+Requires=copy-env-vars.service
+# After=network.target
+
+[Service]
+WorkingDirectory=/home/pi
+EnvironmentFile=/home/pi/.env
+ExecStartPre=/bin/bash -c '[ "$PITUNNEL_TOKEN" ] && echo "$PITUNNEL_TOKEN" | sudo tee /usr/local/lib/tunnel_client/tunnel_token || echo "no PITUNNEL_TOKEN";'
+ExecStart=/bin/bash -c 'sudo bash /usr/local/lib/tunnel_client/pitunnel_start.conf &'
+StandardOutput=inherit
+StandardError=inherit
+User=pi
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
