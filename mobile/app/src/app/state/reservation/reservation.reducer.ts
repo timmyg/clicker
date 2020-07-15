@@ -76,7 +76,6 @@ export function reducer(
         updateType: "time",
       };
     case fromReservation.SET_RESERVATION_LOCATION_SUCCESS:
-      console.log({action});
       state.reservation.location = action.location;
       state.reservation.isManager = action.isManager;
       state.reservation.isVip = action.isVip;

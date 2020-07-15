@@ -120,7 +120,6 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
           timeframes.unshift(this.getManagerFreeTimeframe());
         }
         this.visibleTimeframes$.next(timeframes);
-        console.log(reservation, reservation.box?.live?.locked);
         this.isBoxLocked = reservation.box?.live?.locked
       }
     });
