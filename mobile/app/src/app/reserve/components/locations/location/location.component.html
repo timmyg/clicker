@@ -22,7 +22,8 @@
             name="wifi"
             class="disconnected"
           ></ion-icon>
-          <ion-icon *ngIf="isManager" name="star" class="manage"></ion-icon>
+          <!-- <ion-icon *ngIf="isManager" name="star" class="manage"></ion-icon> -->
+          <!-- <ion-icon *ngIf="isManager" name="star" class="manage"></ion-icon> -->
 
           <span
             class="ion-float-right distance"
@@ -53,6 +54,12 @@
           >
           <ion-chip color="danger" *ngIf="!isAvailable()">
             <label color="danger">Inactive</label></ion-chip
+          >
+          <ion-chip color="primary" *ngIf="isManager">
+            <label color="primary">Manager</label></ion-chip
+          >
+          <ion-chip color="primary" *ngIf="isVIP">
+            <label color="primary">VIP</label></ion-chip
           >
         </ion-row>
       </ion-card-content>

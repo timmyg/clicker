@@ -17,4 +17,6 @@ export class Reservation {
     cost?: number,
     program?: Program,
   };
+  createdAt: number;
+  updatedAt: number;
 }

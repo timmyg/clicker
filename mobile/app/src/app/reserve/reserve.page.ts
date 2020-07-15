@@ -40,6 +40,7 @@ export class ReservePage implements OnDestroy, OnInit {
   channelsClick = 0;
   updateAvailable: boolean;
   channelsEnabled: boolean;
+  // isManager$: Observable<boolean>;
 
   constructor(
     public reserveService: ReserveService,
@@ -50,7 +51,8 @@ export class ReservePage implements OnDestroy, OnInit {
     public modalController: ModalController,
     private walletPage: WalletPage,
     public toastController: ToastController,
-    private deploy: Deploy
+    private deploy: Deploy,
+    // private store: Store<fromStore.AppState>,
   ) {
     this.reserveService.titleEmitted$.subscribe((title) => {
       this.title = title;
@@ -62,6 +64,8 @@ export class ReservePage implements OnDestroy, OnInit {
       this.showingLocations = true;
     });
     this.tokenCount$ = this.walletPage.getCoinCount();
+    // this.isManager$ = this.store.select(getReservationIsManager);
+    // this.isManager$.subscribe(console.log)
     this.initStepListener();
   }
 

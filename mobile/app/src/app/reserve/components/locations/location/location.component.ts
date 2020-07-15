@@ -11,10 +11,11 @@ export class LocationComponent {
   @Input() location: Location;
   @Input() userLocations: string[];
   @Input() userRoles: any;
-  @Output() onClick = new EventEmitter<Location>();
+  @Output() onClick = new EventEmitter<{location: Location, isManager: boolean, isVip: boolean}>();
   @Output() onManage = new EventEmitter<Location>();
   @Output() onLocationDetail = new EventEmitter<Location>();
-  isManager = false;
+  isManager: boolean;
+  isVip: boolean;
 
   ngOnInit() {
     this.userRoles.pipe(filter((roles) => !!roles)).subscribe((roles) => {
@@ -40,7 +41,7 @@ export class LocationComponent {
   }
 
   onLocationClick() {
-    this.onClick.emit(this.location);
+    this.onClick.emit({location: this.location, isManager: this.isManager, isVip: this.isVip});
   }
 
   onManageClick(slidingItem) {

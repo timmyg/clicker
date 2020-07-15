@@ -363,7 +363,7 @@ module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
             .subtract(30, 'm')
             .toDate(),
     );
-    const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
+    const sorted = filtered.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
     return respond(200, sorted);
   }
   return respond(200, []);
