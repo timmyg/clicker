@@ -114,14 +114,16 @@ export class SetLocation implements Action {
   readonly type = SET_RESERVATION_LOCATION;
   constructor(
     public location: Location,
+    public isManager: boolean,
+    public isVip: boolean,
     public latitude?: number,
-    public longitude?: number
+    public longitude?: number,
   ) {}
 }
 
 export class SetLocationSuccess implements Action {
   readonly type = SET_RESERVATION_LOCATION_SUCCESS;
-  constructor(public payload: Location) {}
+  constructor(public location: Location, public isManager: boolean, public isVip: boolean) {}
 }
 
 export class SetLocationFail implements Action {

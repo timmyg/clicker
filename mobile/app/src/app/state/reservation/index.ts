@@ -35,3 +35,8 @@ export const getError = createSelector(
   getReservationsState,
   fromReservations.getError
 );
+
+export const getReservationIsManager = createSelector(
+  getReservationsState,
+  fromReservations.getReservationIsManager
+);

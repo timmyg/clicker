@@ -69,7 +69,7 @@ export class TvsComponent implements OnDestroy, OnInit {
   }
 
   async onTvClick(tv: TV, removeFromHistory?: boolean) {
-    if (tv.live && tv.live.locked) {
+    if (tv.live && tv.live.locked && !this.reservation.isManager) {
       let message = `📺 ${tv.label} is reserved until `;
       if (tv.live && tv.live.lockedMessage) {
         message = tv.live && tv.live.lockedMessage;

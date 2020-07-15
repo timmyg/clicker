@@ -74,16 +74,18 @@ export class ReservationsEffects {
   @Effect()
   setLocation$: Observable<Action> = this.actions$.pipe(
     ofType(ReservationActions.SET_RESERVATION_LOCATION),
-    switchMap((action: ReservationActions.SetLocation) =>
-      this.locationService
+    switchMap((action: ReservationActions.SetLocation) => {
+      // console.log({action});
+      return this.locationService
         .get(action.location.id, action.latitude, action.longitude)
         .pipe(
           map(
             (location: Location) =>
-              new ReservationActions.SetLocationSuccess(location)
+              new ReservationActions.SetLocationSuccess(location, action.isManager, action.isVip)
           ),
           catchError(err => of(new ReservationActions.SetLocationFail(err)))
         )
+          }
     )
   );
 

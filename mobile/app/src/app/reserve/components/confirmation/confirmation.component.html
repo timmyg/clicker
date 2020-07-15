@@ -151,8 +151,11 @@
     </ion-row>
     <ion-row
       class="ion-text-center ion-margin-top"
-      *ngIf="outOfRange && !overrideDistanceDisable"
+      *ngIf="isBoxLocked"
     >
+      <ion-text color="danger" >
+        This box is currently reserved by a Clicker user. Please make sure they are no longer watching.
+      </ion-text>
       <ion-text color="danger" (click)="onClickOverrideDistance()">
         Sorry, you are too far away from
         <b>{{ reservation.location.name }}</b> to change the channel. If this is
