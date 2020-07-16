@@ -38,6 +38,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - uses: marceloprado/has-changed-path@master
+        id: changed-app-or-functions
+        with:
+          paths: web/app functions
       - name: Set branch environment variables
         shell: bash
         run: |
