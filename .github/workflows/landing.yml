@@ -6,7 +6,7 @@ on:
       - release
       - master
     paths:
-      - "web/app"
+      - "web/app/**"
 
 jobs:
   web:
@@ -59,4 +59,3 @@ jobs:
       #   env:
       #     NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
       #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-
