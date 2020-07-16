@@ -1,16 +1,16 @@
-name: clicker workflow
+name: mirror to separate repo
 on:
   push:
-    branches:
-      - develop
-      - release
-      - master
+    # branches:
+    #   - develop
+    #   - release
+    #   - master
     paths:
       - "web/app/**"
 
 jobs:
-  web:
-    name: landing page mirror
+  mirror:
+    name: mirror subdirectory to separate repo
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
