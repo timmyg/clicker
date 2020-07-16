@@ -14,10 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: publish:starters
-        uses: johno/actions-push-subdirectories@master
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.GITHUB_API_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: spyoungtech/mirror-action@master
         with:
-          args: web/app teamclicker clicker-landing-mirror
+          REMOTE: "https://github.com/teamclicker/clicker-app-mirror.git"
+          GIT_USERNAME: teamclicker
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
