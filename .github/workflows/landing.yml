@@ -21,5 +21,5 @@ jobs:
           # spyoungtech/mirror-action
           REMOTE: "https://github.com/teamclicker/clicker-landing-mirror.git"
           GIT_USERNAME: teamclicker
-          # GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-          GIT_SSH_PRIVATE_KEY: ${{ secrets.GIT_SSH_KEY }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          # GIT_SSH_PRIVATE_KEY: ${{ secrets.GIT_SSH_KEY }}
