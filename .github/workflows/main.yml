@@ -1,4 +1,4 @@
-name: e2e tests
+name: clicker workflow
 on:
   push:
     branches:
