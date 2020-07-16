@@ -19,6 +19,7 @@ jobs:
         with:
           paths: web/app
       - name: Build
+        if: steps.changed-web-app.outputs.changed == 'true'
         uses: netlify/actions/cli@master
         with:
           args: build
@@ -26,6 +27,7 @@ jobs:
           NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       - name: Deploy
+        if: steps.changed-web-app.outputs.changed == 'true'
         uses: netlify/actions/cli@master
         with:
           args: deploy --dir=dist
@@ -43,6 +45,7 @@ jobs:
         with:
           paths: web/app functions
       - name: Set branch environment variables
+        if: steps.changed-app-or-functions.outputs.changed == 'true'
         shell: bash
         run: |
           branch=${GITHUB_REF##*/}
@@ -59,6 +62,7 @@ jobs:
             echo "::set-env ENV=develop"
           fi
       - name: Cypress run
+        if: steps.changed-app-or-functions.outputs.changed == 'true'
         uses: cypress-io/github-action@v1
         with:
           working-directory: mobile/app
