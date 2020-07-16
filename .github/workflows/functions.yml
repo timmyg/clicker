@@ -1,9 +1,0 @@
-name: functions build & deploy
-on:
-  push:
-    branches:
-      - develop
-      - release
-      - master
-    paths:
-      - "functions/**"

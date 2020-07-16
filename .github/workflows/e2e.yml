@@ -1,4 +1,4 @@
-name: clicker workflow
+name: e2e suite
 on:
   push:
     branches:
