@@ -27,7 +27,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.GITHUB_API_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: web/app teamclicker
+          args: web/app teamclicker landing
       # - name: Checkout
       #   uses: actions/checkout@v1
       # - uses: marceloprado/has-changed-path@master
