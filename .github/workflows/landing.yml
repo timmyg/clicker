@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@master
       - uses: spyoungtech/mirror-action@master
         with:
-          args: "https://github.com/teamclicker/clicker-web-mirror"
+          args: "https://github.com/teamclicker/clicker-landing-mirror"
         env:
           GIT_USERNAME: teamclicker
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
