@@ -24,14 +24,14 @@ jobs:
       - name: Use node.js
         if: steps.changed-web-app.outputs.changed == 'true'
         uses: actions/setup-node@v1
-      - name: Build
-        uses: kappa0923/nuxtjs-generate-action@v0.1.0
-        working-directory: web/app
       # - name: Build
-      #   run: |
-      #     npm i --only=dev
-      #     npm run build
+      #   uses: kappa0923/nuxtjs-generate-action@v0.1.0
       #   working-directory: web/app
+      - name: Build
+        run: |
+          npm i --only=dev
+          npm run build
+        working-directory: web/app
       # if: steps.changed-web-app.outputs.changed == 'true'
       # uses: netlify/actions/cli@master
       # with:
