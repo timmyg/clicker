@@ -8,8 +8,32 @@ on:
       - "functions/**"
       - "mobile/app/**"
 jobs:
+  web:
+    name: landing page
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - uses: marceloprado/has-changed-path@master
+        id: changed-web-app
+        with:
+          paths: web/app
+      - name: Deploy
+        uses: netlify/actions/cli@master
+        with:
+          args: build
+        env:
+          NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      - name: Publish
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=dist
+        env:
+          NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
   e2e:
-    name: mobile app
+    name: mobile app e2e tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
