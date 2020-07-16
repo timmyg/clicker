@@ -2,26 +2,23 @@ name: clicker workflow
 on:
   push:
     branches:
-      # - "*"
-      # - "!master"
       - develop
       - release
       - master
-    # paths:
-    #   - "functions/**"
-    #   - "mobile/app/**"
+    paths:
+      - "web/app"
 jobs:
   web:
     name: landing page mirror
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: marceloprado/has-changed-path@master
-        id: changed-web-app
-        with:
-          paths: web/app
+      # - uses: marceloprado/has-changed-path@master
+      #   id: changed-web-app
+      #   with:
+      #     paths: web/app
       - name: publish:starters
-        if: steps.changed-web-app.outputs.changed == 'true'
+        # if: steps.changed-web-app.outputs.changed == 'true'
         uses: johno/actions-push-subdirectories@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.GITHUB_API_TOKEN }}
@@ -61,43 +58,3 @@ jobs:
       #   env:
       #     NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
       #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-  e2e:
-    name: mobile app e2e tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - uses: marceloprado/has-changed-path@master
-        id: changed-app-or-functions
-        with:
-          paths: mobile/app functions
-      - name: Set branch environment variables
-        if: steps.changed-app-or-functions.outputs.changed == 'true'
-        shell: bash
-        run: |
-          branch=${GITHUB_REF##*/}
-          echo $branch
-          if [ branch == "master" ]; then
-            echo "::set-env ENV=production"
-            echo "::set-env cypress_apiBaseUrl=https://api.tryclicker.com"
-          fi
-          if [ branch == "release" ]; then
-            echo "::set-env ENV=release"
-            echo "::set-env cypress_apiBaseUrl=https://api-release.tryclicker.com"
-          fi
-          if [ branch == "develop" ]; then
-            echo "::set-env ENV=develop"
-          fi
-      - name: Cypress run
-        if: steps.changed-app-or-functions.outputs.changed == 'true'
-        uses: cypress-io/github-action@v1
-        with:
-          working-directory: mobile/app
-          build: npm run build
-          start: npm run start:static
-          wait-on: "http://localhost:4100"
-          browser: chrome
-          record: true
-          headless: true
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
