@@ -2,8 +2,11 @@ name: clicker workflow
 on:
   push:
     branches:
-      - "*"
-      - "!master"
+      # - "*"
+      # - "!master"
+      - develop
+      - release
+      - master
     # paths:
     #   - "functions/**"
     #   - "mobile/app/**"
@@ -30,7 +33,7 @@ jobs:
         if: steps.changed-web-app.outputs.changed == 'true'
         uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=dist --branch=${GITHUB_REF##*/}
+          args: deploy --dir=web/app/dist --alias=${GITHUB_REF##*/}
         env:
           NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -43,7 +46,7 @@ jobs:
       - uses: marceloprado/has-changed-path@master
         id: changed-app-or-functions
         with:
-          paths: web/app functions
+          paths: mobile/app functions
       - name: Set branch environment variables
         if: steps.changed-app-or-functions.outputs.changed == 'true'
         shell: bash
