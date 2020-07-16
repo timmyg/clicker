@@ -14,48 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      # - uses: marceloprado/has-changed-path@master
-      #   id: changed-web-app
-      #   with:
-      #     paths: web/app
       - name: publish:starters
-        # if: steps.changed-web-app.outputs.changed == 'true'
         uses: johno/actions-push-subdirectories@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.GITHUB_API_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: web teamclicker clicker-landing-mirror
-      # - name: Checkout
-      #   uses: actions/checkout@v1
-      # - uses: marceloprado/has-changed-path@master
-      #   id: changed-web-app
-      #   with:
-      #     paths: web/app
-      # - name: Use node.js
-      #   if: steps.changed-web-app.outputs.changed == 'true'
-      #   uses: actions/setup-node@v1
-      # # - name: Build
-      # #   uses: kappa0923/nuxtjs-generate-action@v0.1.0
-      # #   working-directory: web/app
-      # - name: Install Dependencies
-      #   run: npm i
-      #   working-directory: web/app
-      # - name: Build
-      #   run: npm run build
-      #   working-directory: web/app
-      # # if: steps.changed-web-app.outputs.changed == 'true'
-      # # uses: netlify/actions/cli@master
-      # # with:
-      # #   args: build
-      # # env:
-      # #   NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
-      # #   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      # - name: Deploy
-      #   if: steps.changed-web-app.outputs.changed == 'true'
-      #   uses: netlify/actions/cli@master
-      #   with:
-      #     args: deploy --dir=web/app/dist --alias=${GITHUB_REF##*/}
-      #   env:
-      #     NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
-      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          args: web/app teamclicker clicker-landing-mirror
