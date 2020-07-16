@@ -10,7 +10,7 @@ class Widget {
     this.device = new Device({
       id: losantDeviceId,
       key: losantKey,
-      secret: losantSecret
+      secret: losantSecret,
     });
     this.locationId = locationId;
     this.remote = null;
@@ -23,7 +23,7 @@ class Widget {
     logger.info("about to search ips....");
     browser.browser({}, (error, device) => {
       if (device) {
-        logger.info({ device });
+        // logger.info({ device });
         let { ip } = device;
         if (
           !/^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/.test(
@@ -33,7 +33,7 @@ class Widget {
           logger.info(`.......... invalid ip: ${ip}`);
           return;
         }
-        DirecTV.validateIP(ip, error => {
+        DirecTV.validateIP(ip, (error) => {
           if (error) {
             logger.info(`.......... not valid directv ip: ${ip}`);
             return;
@@ -66,8 +66,11 @@ class Widget {
     try {
       const context = this;
       // Listen for commands from Losant
-      this.device.on("command", async command => {
-        console.log({ command });
+      this.device.on("error", (err) => {
+        logger.info("error 2");
+        logger.error(err);
+      });
+      this.device.on("command", async (command) => {
         logger.info({ command });
         const { name, payload } = command;
         const { ip } = payload;
@@ -78,14 +81,14 @@ class Widget {
               payload.channel,
               payload.channelMinor,
               payload.client,
-              err => {
+              (err) => {
                 if (err) return logger.error(err);
                 return logger.info("tuned");
               }
             );
             break;
           case "key":
-            this.remote.processKey(payload.key, payload.client, err => {
+            this.remote.processKey(payload.key, payload.client, (err) => {
               if (err) return logger.error(err);
               return logger.info("keyed");
             });
@@ -112,7 +115,7 @@ class Widget {
             // logger.info('info.current.all!!', payload);
             const { boxes } = payload;
             logger.info("info.current.all!! separated", "boxes", boxes.length);
-            boxes.forEach(box => {
+            boxes.forEach((box) => {
               const boxesInfo = [];
               const { boxId, client, ip } = box;
               const _remote = new DirecTV.Remote(ip);
@@ -225,7 +228,7 @@ class Widget {
   async init() {
     // await this.api.register();
     await this.syncIpsAndBoxes();
-    this.device.connect(error => {
+    this.device.connect((error) => {
       if (error) {
         logger.error(error);
         return;

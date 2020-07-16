@@ -9,6 +9,8 @@ export class Reservation {
 
   id: String;
   location: Location;
+  isManager: boolean;
+  isVip: boolean;
   program: Program;
   box: TV;
   start: Date;

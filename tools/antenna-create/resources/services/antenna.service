@@ -1,0 +1,31 @@
+[Unit]
+Description=antenna service
+Requires=copy-env-vars.service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi
+EnvironmentFile=/home/pi/.env
+# before or after the command in ExecStart=
+ExecStartPre=/bin/bash -c 'rm -rf antenna*'
+ExecStartPre=/bin/bash -c 'wget https://clicker-antenna.s3.amazonaws.com/app/${APP_FILE}'
+ExecStartPre=/bin/bash -c 'mkdir antenna && tar -xzf ${APP_FILE} -C antenna'
+ExecStartPre=/bin/bash -c 'rm -rf ${APP_FILE}*'
+# executed when this service is started
+ExecStart=/bin/bash -c 'node /home/pi/antenna/startup.js'
+StandardOutput=inherit
+StandardError=inherit
+User=pi
+# Configures the time to wait for start-up
+# TimeoutStartSec=
+# time to wait for each ExecStop=, configures the time to wait for the service itself to stop
+# TimeoutStopSec=
+# shorthand for configuring both TimeoutStartSec= and TimeoutStopSec=
+TimeoutSec=600s
+# time to sleep before restarting a service (as configured with Restart=).
+RestartSec=10s
+# whether the service shall be restarted when the service process exits, is killed, or a timeout is reached
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

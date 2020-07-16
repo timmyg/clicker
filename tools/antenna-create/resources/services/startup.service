@@ -1,0 +1,17 @@
+[Unit]
+Description=startup service
+Requires=copy-env-vars.service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi
+EnvironmentFile=/home/pi/.env
+ExecStartPre=/bin/bash -c '[ -f /boot/startup-antenna.sh ] && sudo mv /boot/startup-antenna.sh /home/pi/startup-antenna.sh'
+ExecStart=/bin/bash -c '[ -f /home/pi/startup-antenna.sh ] && sudo sh /home/pi/startup-antenna.sh'
+StandardOutput=inherit
+StandardError=inherit
+User=pi
+Restart=no
+
+[Install]
+WantedBy=multi-user.target

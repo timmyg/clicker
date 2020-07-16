@@ -82,6 +82,8 @@ const dbReservation = dynamoose.model(
     start: Number,
     end: Number,
     cancelled: Boolean,
+    isManager: Boolean,
+    isVip: Boolean,
   },
   {
     timestamps: true,
@@ -165,7 +167,9 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
 
   if (!tv || !tv.configuration || !tv.configuration.appActive || tv.live.locked) {
     console.log(tv);
-    return respond(400, 'Sorry, tv is not available for reservation');
+    if (!reservation.isManager) {
+      return respond(400, 'Sorry, tv is not available for reservation');
+    }
   }
 
   reservation.end = calculateReservationEndTime(reservation);
@@ -359,7 +363,7 @@ module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
             .subtract(30, 'm')
             .toDate(),
     );
-    const sorted = filtered.sort((a, b) => (a.end < b.end ? 1 : -1));
+    const sorted = filtered.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
     return respond(200, sorted);
   }
   return respond(200, []);

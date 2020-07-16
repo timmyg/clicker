@@ -76,7 +76,9 @@ export function reducer(
         updateType: "time",
       };
     case fromReservation.SET_RESERVATION_LOCATION_SUCCESS:
-      state.reservation.location = action.payload;
+      state.reservation.location = action.location;
+      state.reservation.isManager = action.isManager;
+      state.reservation.isVip = action.isVip;
       return {
         ...state,
         loading: false,
@@ -135,3 +137,4 @@ export const getReservationTvs = (state: State) =>
 export const getAllReservations = (state: State) => state.reservations;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;
+export const getReservationIsManager = (state: State) => state.reservation && state.reservation.isManager;

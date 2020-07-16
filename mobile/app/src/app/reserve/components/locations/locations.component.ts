@@ -380,13 +380,13 @@ export class LocationsComponent implements OnDestroy, OnInit {
     location.reload();
   }
 
-  onLocationClick(location: Location) {
+  onLocationClick({location, isManager, isVip}) {
     this.waiting = true;
     this.reserveService.emitCloseSearch();
     const latitude = this.userGeolocation && this.userGeolocation.latitude;
     const longitude = this.userGeolocation && this.userGeolocation.longitude;
     this.store.dispatch(
-      new fromReservation.SetLocation(location, latitude, longitude)
+      new fromReservation.SetLocation(location, isManager, isVip, latitude, longitude)
     );
     this.actions$
       .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))

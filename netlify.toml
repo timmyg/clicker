@@ -10,6 +10,9 @@
 #   # Default build command.
 #   command = "npm run build"
 
+[build]
+  ignore = "git diff --quiet HEAD^ HEAD web/app"
+
 [context.production.environment]
   NUXT_ENV_API_BASE = "https://api.tryclicker.com"
   NUXT_ENV_SEGMENT_KEY = "Ws6003hNu2vjLNWa8t5jmp5m3woAwH3I"

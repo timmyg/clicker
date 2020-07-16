@@ -4,7 +4,7 @@
       <div class="pricing-inner section-inner">
         <div class="section-header center-content invert-color">
           <div class="container-xs">
-            <h2 class="m-0" v-scroll-reveal>Simple pricing packages</h2>
+            <h2 class="m-0" v-scroll-reveal>Simple packages</h2>
           </div>
         </div>
         <div class="tiles-wrap illustration-section-07">
@@ -13,9 +13,9 @@
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
-                    <span class="pricing-item-price-currency h5 text-color-low">$</span>
-                    <span class="pricing-item-price-amount h4">50</span>
-                    <span class="text-color-low text-xs">/month</span>
+                    <span class="pricing-item-price-currency h5 text-color-low">&nbsp;</span>
+                    <span class="pricing-item-price-amount h4">&nbsp;</span>
+                    <span class="text-color-low text-xs">&nbsp;</span>
                     <span class="pricing-item-name brand-font h5">Assistant Coach</span>
                   </div>
                 </div>
@@ -31,11 +31,9 @@
                       </span>
                     </li>
                     <li class="is-checked">Allow customer controlled TVs</li>
-                    <li class="is-checked">Monetize your TVs via revenue sharing</li>
                     <li class="is-checked">TV layout strategy guidance</li>
                     <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">Email + chat support</li>
-                    <li class="is-checked">1-5 DirecTV boxes</li>
                   </ul>
                 </div>
               </div>
@@ -52,9 +50,9 @@
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
-                    <span class="pricing-item-price-currency h5 text-color-low">$</span>
-                    <span class="pricing-item-price-amount h4">50</span>
-                    <span class="text-color-low text-xs">/month</span>
+                    <span class="pricing-item-price-currency h5 text-color-low">&nbsp;</span>
+                    <span class="pricing-item-price-amount h4">&nbsp;</span>
+                    <span class="text-color-low text-xs">&nbsp;</span>
                     <span class="pricing-item-name brand-font h5">Advanced Scout</span>
                   </div>
                 </div>
@@ -73,7 +71,6 @@
                     <li class="is-checked">TV layout strategy guidance</li>
                     <li class="is-checked">DirecTV wiring setup, if necessary</li>
                     <li class="is-checked">Email + chat support</li>
-                    <li class="is-checked">1-5 DirecTV boxes</li>
                   </ul>
                 </div>
               </div>
@@ -90,9 +87,9 @@
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
-                    <span class="pricing-item-price-currency h5 text-color-low">$</span>
-                    <span class="pricing-item-price-amount h4">90</span>
-                    <span class="text-color-low text-xs">/month</span>
+                    <span class="pricing-item-price-currency h5 text-color-low">&nbsp;</span>
+                    <span class="pricing-item-price-amount h4">&nbsp;</span>
+                    <span class="text-color-low text-xs">&nbsp;</span>
                     <span class="pricing-item-name brand-font h5">General Manager</span>
                   </div>
                 </div>

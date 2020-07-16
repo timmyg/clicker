@@ -151,6 +151,15 @@
     </ion-row>
     <ion-row
       class="ion-text-center ion-margin-top"
+      *ngIf="isBoxLocked"
+    >
+      <ion-text color="danger" >
+        <ion-icon name="alert-circle" class="vertical-middle"></ion-icon>
+        This box is currently reserved by a Clicker user. Please make sure they are no longer watching.
+      </ion-text>
+    </ion-row>
+    <ion-row
+      class="ion-text-center ion-margin-top"
       *ngIf="outOfRange && !overrideDistanceDisable"
     >
       <ion-text color="danger" (click)="onClickOverrideDistance()">
@@ -161,6 +170,7 @@
     </ion-row>
     <ion-row class="ion-text-center ion-margin-top" *ngIf="isConflictingUser">
       <ion-text color="danger">
+        <ion-icon name="alert-circle" class="vertical-middle"></ion-icon>
         Sorry, you cannot update this reservation. Please try again.
       </ion-text>
     </ion-row>

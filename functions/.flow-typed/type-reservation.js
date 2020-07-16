@@ -10,9 +10,13 @@ export class Reservation {
   start: number;
   end: number;
   cancelled: boolean;
+  isManager: boolean;
+  isVip: boolean;
   update: {
     minutes?: number,
     cost?: number,
     program?: Program,
   };
+  createdAt: number;
+  updatedAt: number;
 }

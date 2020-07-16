@@ -49,3 +49,14 @@ ion-spinner {
   width: 120px !important;
   height: 120px !important;
 }
+
+.mode {
+  position: fixed;
+  // bottom: -25px;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
+  // z-index: 999;
+  color: var(--ion-color-primary);
+  font-size: .5em;
+  // background: white;
+}
