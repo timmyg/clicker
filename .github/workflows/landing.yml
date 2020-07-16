@@ -16,6 +16,6 @@ jobs:
       - uses: actions/checkout@master
       - uses: spyoungtech/mirror-action@master
         with:
-          REMOTE: "https://github.com/teamclicker/clicker-app-mirror"
+          REMOTE: "https://github.com/teamclicker/clicker-web-mirror"
           GIT_USERNAME: teamclicker
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
