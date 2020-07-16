@@ -49,12 +49,6 @@ parameters:
   functions-widget:
     type: boolean
     default: false
-  web-app:
-    type: boolean
-    default: false
-  mobile-app:
-    type: boolean
-    default: false
   packages-antenna:
     type: boolean
     default: false
@@ -93,20 +87,6 @@ jobs:
       - run:
           name: Determine which projects have changed and trigger the builds
           command: node .circleci/build-scripts/project-diff-trigger.js
-  netlify-build-deploy-web:
-    executor: node
-    steps:
-      - checkout
-      - run:
-          name: Trigger Netlify build + deploy
-          command: chmod +x .circleci/build-scripts/netlify-deploy-web.sh && .circleci/build-scripts/netlify-deploy-web.sh
-  netlify-build-deploy-mobile:
-    executor: node
-    steps:
-      - checkout
-      - run:
-          name: Trigger Netlify build + deploy
-          command: chmod +x .circleci/build-scripts/netlify-deploy-mobile.sh && .circleci/build-scripts/netlify-deploy-mobile.sh
   s3-deploy-antenna:
     executor: aws
     working_directory: << parameters.package_dir >>
@@ -238,14 +218,6 @@ workflows:
     jobs:
       - serverless-build-test-deploy:
           package_dir: ~/clicker/functions/widget
-  web-app:
-    when: << pipeline.parameters.web-app >>
-    jobs:
-      - netlify-build-deploy-web
-  mobile-app:
-    when: << pipeline.parameters.mobile-app >>
-    jobs:
-      - netlify-build-deploy-mobile
   packages-antenna:
     when: << pipeline.parameters.packages-antenna >>
     jobs:
