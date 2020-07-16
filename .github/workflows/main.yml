@@ -4,9 +4,9 @@ on:
     branches:
       - "*"
       - "!master"
-    paths:
-      - "functions/**"
-      - "mobile/app/**"
+    # paths:
+    #   - "functions/**"
+    #   - "mobile/app/**"
 jobs:
   web:
     name: landing page

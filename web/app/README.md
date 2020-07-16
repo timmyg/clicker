@@ -2,7 +2,6 @@
 
 _landing page_
 
-
 ```bash
 # install dependencies
 $ npm i
@@ -17,6 +16,4 @@ $ npm start:prod
 # generate static project
 $ npm run generate
 ```
-
-
 
