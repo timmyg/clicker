@@ -16,7 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: marceloprado/has-changed-path@master
+        id: changed-web-app
+        with:
+          paths: web/app
       - name: publish:starters
+        if: steps.changed-web-app.outputs.changed == 'true'
         uses: johno/actions-push-subdirectories@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.GITHUB_API_TOKEN }}
