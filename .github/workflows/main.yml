@@ -30,7 +30,7 @@ jobs:
         if: steps.changed-web-app.outputs.changed == 'true'
         uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=dist
+          args: deploy --dir=dist --branch=${GITHUB_REF##*/}
         env:
           NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
