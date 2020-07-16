@@ -21,14 +21,20 @@ jobs:
         id: changed-web-app
         with:
           paths: web/app
-      - name: Build
+      - name: Use node.js
         if: steps.changed-web-app.outputs.changed == 'true'
-        uses: netlify/actions/cli@master
-        with:
-          args: build
-        env:
-          NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        uses: actions/setup-node@v1
+      - name: Build
+        run: |
+          npm run build
+        working-directory: web/app
+        # if: steps.changed-web-app.outputs.changed == 'true'
+        # uses: netlify/actions/cli@master
+        # with:
+        #   args: build
+        # env:
+        #   NETLIFY_SITE_ID: 15292ae9-9229-46a4-baea-50e6ea54e90d
+        #   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       - name: Deploy
         if: steps.changed-web-app.outputs.changed == 'true'
         uses: netlify/actions/cli@master
