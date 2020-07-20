@@ -1,7 +1,7 @@
 {
-  "name": "blog",
+  "name": "landing",
   "version": "1.0.0",
-  "description": "clicker blog",
+  "description": "clicker landing page",
   "author": "tim@tryclicker.com",
   "private": true,
   "scripts": {

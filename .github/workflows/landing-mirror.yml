@@ -1,0 +1,24 @@
+name: mirror web/app
+on:
+  push:
+    # branches:
+    #   - develop
+    #   - release
+    #   - master
+    paths:
+      - "web/app/**"
+
+jobs:
+  mirror:
+    name: mirror
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: mirror deploy
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: git@github.com:teamclicker/clicker-landing-mirror.git
+          BRANCH: ${GITHUB_REF##*/}
+          FOLDER: web/app
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY_LANDING }}
+          MESSAGE: "{msg} [{sha}]"

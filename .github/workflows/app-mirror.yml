@@ -1,0 +1,24 @@
+name: mirror mobile/app
+on:
+  push:
+    # branches:
+    #   - develop
+    #   - release
+    #   - master
+    paths:
+      - "mobile/app/**"
+
+jobs:
+  mirror:
+    name: mirror
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: mirror deploy
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: git@github.com:teamclicker/clicker-app-mirror.git
+          BRANCH: ${GITHUB_REF##*/}
+          FOLDER: mobile/app
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY_APP }}
+          MESSAGE: "{msg} [{sha}]"

@@ -12,6 +12,4 @@ active:
   - functions/remote
   - functions/reservation
   - functions/user
-  - mobile/app
-  - web/app
   - packages/antenna
