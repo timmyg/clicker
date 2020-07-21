@@ -1,1 +1,0 @@
-cp resources/ssh resources/wpa_supplicant.conf /Volumes/boot

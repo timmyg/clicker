@@ -1,0 +1,1 @@
+sudo balena local flash ~/Desktop/raspos-antenna-20200720-build1.img --drive /dev/disk2 --yes
