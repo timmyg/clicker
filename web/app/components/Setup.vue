@@ -6,8 +6,8 @@
 
       <p>There are a few things you'll need to do in order to make sure your DIRECTV and internet network setup is ready for Clicker</p>
 
-      <h4>🌐 Hook your DIRECTV boxes into the internet</h4>
-      <p>Each of your DIRECTV boxes will need to be hooked into your internet network with an ethernet cord. After doing this, reset your boxes</p>
+      <h4>🌐 Hook up your DIRECTV boxes to internet</h4>
+      <p>Each of your DIRECTV boxes will need to be hooked into your internet network with an ethernet cable. After doing this, reset your boxes</p>
 
       <h4>🛠️ Allow Clicker access to access and read your channels</h4>
       <p>
@@ -32,9 +32,16 @@
       </ul>
 
       <h4>🚢 Open up ports in network configuration, if necessary</h4>
-      <p>Our device connects to a broker via the MQTT protocol with a service called Losant via the following address: mqtts://broker.losant.com:8883. If your network is higher on the security side, you'll want to check the following:</p>
+      <p>
+        Our device connects to a broker via the
+        <a
+          href="https://docs.losant.com/mqtt/overview/#the-losant-message-broker"
+        >MQTT</a> protocol with a service called
+        <a href="https://losant.com=">Losant</a> via the following address:
+        <em>mqtts://broker.losant.com:8883</em>. If you are on a secure network that might block certain traffic, you'll want to check the following:
+      </p>
       <ul class="styled">
-        <li class="styled">Make sure tcp port 8883 is open</li>
+        <li class="styled">Make sure TLS port 8883 is open</li>
         <li class="styled">Make sure address is reachable from your network</li>
       </ul>
 
