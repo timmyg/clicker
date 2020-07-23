@@ -38,69 +38,69 @@ export default {
       { boxId: 4, label: "4", channel: 208 }
     ],
     allPrograms: [
-      // {
-      //   channel: 206,
-      //   link: "http://localhost:4040/images/demo/programs/gameday.mp4"
-      // },
-      // {
-      //   channel: 220,
-      //   link: "http://localhost:4040/images/demo/programs/premier-league.mp4"
-      // },
-      // {
-      //   channel: 219,
-      //   link: "http://localhost:4040/images/demo/programs/xavier-uc.mp4"
-      // },
-      // {
-      //   channel: 209,
-      //   link: "http://localhost:4040/images/demo/programs/unc-duke.mp4"
-      // },
-      // {
-      //   channel: 19,
-      //   link:
-      //     "http://localhost:4040/images/demo/programs/ohio-state-clemson.mp4"
-      // },
-      // {
-      //   channel: 612,
-      //   link:
-      //     "http://localhost:4040/images/demo/programs/louisville-texas-tech.mp4"
-      // },
-      // {
-      //   channel: 9,
-      //   link: "http://localhost:4040/images/demo/programs/xfl.mp4"
-      // },
-      // {
-      //   channel: 64,
-      //   link: "http://localhost:4040/images/demo/programs/fc-cincinnati.mp4"
-      // },
-      // {
-      //   channel: 208,
-      //   link:
-      //     "http://localhost:4040/images/demo/programs/florida-state-wake.mp4"
-      // },
-      // {
-      //   channel: 618,
-      //   link: "http://localhost:4040/images/demo/programs/kobe.mp4"
-      // },
-      // {
-      //   channel: 5,
-      //   link: "http://localhost:4040/images/demo/programs/notre-dame.mp4"
-      // },
-      // {
-      //   channel: 245,
-      //   link: "http://localhost:4040/images/demo/programs/wwe.mp4"
-      // },
-      // {
-      //   channel: 218,
-      //   link: "http://localhost:4040/images/demo/programs/golf.mp4"
-      // },
-      // {
-      //   channel: 661,
-      //   link: "http://localhost:4040/images/demo/programs/reds.mp4"
-      // },
-      // {
-      //   channel: 612,
-      //   link: "http://localhost:4040/images/demo/programs/mma.mp4"
-      // }
+      {
+        channel: 206,
+        link: "http://localhost:4040/images/demo/programs/gameday.mp4"
+      },
+      {
+        channel: 220,
+        link: "http://localhost:4040/images/demo/programs/premier-league.mp4"
+      },
+      {
+        channel: 219,
+        link: "http://localhost:4040/images/demo/programs/xavier-uc.mp4"
+      },
+      {
+        channel: 209,
+        link: "http://localhost:4040/images/demo/programs/unc-duke.mp4"
+      },
+      {
+        channel: 19,
+        link:
+          "http://localhost:4040/images/demo/programs/ohio-state-clemson.mp4"
+      },
+      {
+        channel: 612,
+        link:
+          "http://localhost:4040/images/demo/programs/louisville-texas-tech.mp4"
+      },
+      {
+        channel: 9,
+        link: "http://localhost:4040/images/demo/programs/xfl.mp4"
+      },
+      {
+        channel: 64,
+        link: "http://localhost:4040/images/demo/programs/fc-cincinnati.mp4"
+      },
+      {
+        channel: 208,
+        link:
+          "http://localhost:4040/images/demo/programs/florida-state-wake.mp4"
+      },
+      {
+        channel: 618,
+        link: "http://localhost:4040/images/demo/programs/kobe.mp4"
+      },
+      {
+        channel: 5,
+        link: "http://localhost:4040/images/demo/programs/notre-dame.mp4"
+      },
+      {
+        channel: 245,
+        link: "http://localhost:4040/images/demo/programs/wwe.mp4"
+      },
+      {
+        channel: 218,
+        link: "http://localhost:4040/images/demo/programs/golf.mp4"
+      },
+      {
+        channel: 661,
+        link: "http://localhost:4040/images/demo/programs/reds.mp4"
+      },
+      {
+        channel: 612,
+        link: "http://localhost:4040/images/demo/programs/mma.mp4"
+      }
     ]
   }),
   components: { DemoTV },
