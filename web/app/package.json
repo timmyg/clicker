@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "nuxt --port 4040",
-    "build": "nuxt build",
+    "build": "nuxt build && nuxt export",
     "start:prod": "npm run build && nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
@@ -21,7 +21,7 @@
     "contentful": "^7.9.1",
     "firebase": "^7.8.2",
     "moment": "^2.24.0",
-    "nuxt": "^2.11.0",
+    "nuxt": "^2.13.3",
     "vue-intercom": "^1.0.14",
     "vue-moment": "^4.0.0",
     "vue-scroll-reveal": "^1.0.11",

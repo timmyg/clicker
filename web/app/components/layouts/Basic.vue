@@ -53,8 +53,8 @@ body {
   font-family: "Raleway", sans-serif;
 }
 
-ul,
-li {
+ul:not(.styled),
+li:not(.styled) {
   position: relative;
   list-style: none;
   margin: 0;

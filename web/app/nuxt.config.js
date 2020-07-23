@@ -23,6 +23,7 @@ let dynamicRoutes = () => {
 module.exports = {
   // mode: "spa",
   mode: "universal",
+  target: "static",
 
   generate: {
     routes: dynamicRoutes

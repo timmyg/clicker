@@ -4,6 +4,7 @@ const { Device } = require("losant-mqtt");
 const logger = require("./logger");
 const Api = require("./api");
 const browser = require("iotdb-arp");
+const exec = require("child_process").exec;
 
 class Widget {
   constructor(losantKey, losantSecret, losantDeviceId, locationId) {
@@ -11,6 +12,7 @@ class Widget {
       id: losantDeviceId,
       key: losantKey,
       secret: losantSecret,
+      transport: "tls", // tcp, tls (default), ws, and wss
     });
     this.locationId = locationId;
     this.remote = null;
@@ -208,6 +210,11 @@ class Widget {
           case "sync.boxes":
             await this.syncIpsAndBoxes();
             return logger.info("sync.boxes");
+          case "reboot":
+            exec("sudo shutdown -r now", function(error, stdout, stderr) {
+              logger.info("shutting down...", response);
+              console.log(error, stdout, stderr);
+            });
           case "health":
             return logger.info("healthy");
           default:
@@ -218,6 +225,10 @@ class Widget {
       logger.error(e);
     }
   }
+
+  // function execute(command, callback){
+  //   exec(command, function(error, stdout, stderr){ callback(stdout); });
+  // }
 
   /*
    * 1. save local ips off to api

@@ -240,7 +240,7 @@ module.exports.debug = RavenLambdaWrapper.handler(Raven, async event => {
     const { command, payload, losantId } = getBody(event);
     const api = new LosantApi();
 
-    await api.sendCommand(command, losantId, payload);
+    await api.sendCommand(command, losantId, payload, true);
     return respond();
   } catch (e) {
     console.error(e);

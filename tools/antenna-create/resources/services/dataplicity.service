@@ -1,0 +1,17 @@
+[Unit]
+Description=dataplicity install service
+Requires=copy-env-vars.service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi
+EnvironmentFile=/home/pi/.env
+ExecStart=/bin/bash -c '[ "$DATAPLICITY_TOKEN" ] && ( echo "installing dataplicity..." && sudo curl -s https://www.dataplicity.com/${DATAPLICITY_TOKEN}.py | sudo python & ) || echo "no DATAPLICITY_TOKEN"'
+StandardOutput=inherit
+StandardError=inherit
+User=pi
+Restart=no
+Type=forking
+
+[Install]
+WantedBy=multi-user.target
