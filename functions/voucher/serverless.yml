@@ -47,6 +47,7 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  tableAudit: vouchers-${self:custom.stage}
   prune:
     automatic: true
     number: 3
