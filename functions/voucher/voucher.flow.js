@@ -29,7 +29,6 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     );
   }
 
-  // Default
   const result = await Voucher.batchWrite(
     vouchers,
     //   , {

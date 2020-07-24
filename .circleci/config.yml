@@ -49,6 +49,9 @@ parameters:
   functions-widget:
     type: boolean
     default: false
+  functions-voucher:
+    type: boolean
+    default: false
   packages-antenna:
     type: boolean
     default: false
@@ -218,6 +221,11 @@ workflows:
     jobs:
       - serverless-build-test-deploy:
           package_dir: ~/clicker/functions/widget
+  functions-voucher:
+    when: << pipeline.parameters.functions-voucher >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/voucher
   packages-antenna:
     when: << pipeline.parameters.packages-antenna >>
     jobs:
