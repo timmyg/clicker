@@ -6,7 +6,7 @@ provider:
   versionFunctions: false
   runtime: nodejs10.x
   # tracing: true
-  region: us-east-1
+  region: 'us-east-1'
   logRetentionInDays: 14
   apiKeys:
     - myFirstKey
