@@ -4,7 +4,7 @@ const { Default, Entity, Table } = require('dynamodb-toolbox');
 const { DocumentClient } = require('aws-sdk/clients/dynamodb');
 // const Entity = require('dynamodb-toolbox/classes/Entity');
 // const DynamoDB = require('aws-sdk/clients/dynamodb');
-// const DocumentClient = new DynamoDB.DocumentClient();
+// const DocumentClient = new DynamoDB.DocumentClient();1
 
 const VoucherTable = new Table({
   name: process.env.tableVoucher,
