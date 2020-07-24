@@ -7,7 +7,7 @@ const { DocumentClient } = require('aws-sdk/clients/dynamodb');
 // const DocumentClient = new DynamoDB.DocumentClient();1
 
 const VoucherTable = new Table({
-  name: process.env.tableVoucher,
+  name: process.env.tableVoucher || 'table',
   partitionKey: 'voucher',
   sortKey: 'locationId',
   DocumentClient,
