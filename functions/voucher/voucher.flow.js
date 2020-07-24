@@ -1,8 +1,8 @@
 // @flow
 const { respond, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const { Model } = require('dynamodb-toolbox');
-const DynamoDB = require('aws-sdk/clients/dynamodb');
-const DocumentClient = new DynamoDB.DocumentClient();
+// const DynamoDB = require('aws-sdk/clients/dynamodb');
+// const DocumentClient = new DynamoDB.DocumentClient();
 
 const Voucher = new Model('Voucher', {
   table: process.env.tableVoucher,
@@ -29,13 +29,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     );
   }
 
-  const result = await Voucher.batchWrite(
-    vouchers,
-    //   , {
-    //   capacity: 'total',
-    //   metrics: 'size',
-    // }
-  );
+  const result = await Voucher.batchWrite(vouchers);
 
   console.log({ result });
   return respond(201, 'vouchers created');
