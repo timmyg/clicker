@@ -1,0 +1,83 @@
+service: voucher
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  memorySize: 128
+  versionFunctions: false
+  runtime: nodejs10.x
+  # tracing: true
+  logRetentionInDays: 14
+  apiKeys:
+    - myFirstKey
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
+resources:
+  Resources:
+    VouchersTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableVoucher}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: voucher
+            AttributeType: S
+          - AttributeName: locationId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: voucher
+            KeyType: HASH
+          - AttributeName: locationId
+            KeyType: RANGE
+plugins:
+  - serverless-domain-manager
+  - serverless-prune-plugin
+  - serverless-sentry
+  - serverless-dotenv-plugin
+  - serverless-plugin-tracing
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: vouchers
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
+functions:
+  create:
+    handler: voucher.create
+    events:
+      - http:
+          path: ''
+          method: post
+          cors:
+            origin: '*'
+  health:
+    handler: voucher.health
+    events:
+      - http:
+          path: health
+          method: get
+          private: true
