@@ -46,6 +46,8 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     );
   }
 
+  console.log(vouchers.length);
+
   const result = await VoucherTable.batchWrite(vouchers);
 
   console.log({ result });
