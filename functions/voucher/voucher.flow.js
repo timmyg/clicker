@@ -12,6 +12,9 @@ const VoucherTable = new Table({
   partitionKey: 'voucher',
   sortKey: 'entityId',
   DocumentClient,
+  indexes: {
+    voucherGlobalIndex: { partitionKey: 'voucher' },
+  },
 });
 const Voucher = new Entity({
   name: 'Voucher',
@@ -21,15 +24,11 @@ const Voucher = new Entity({
     type: { type: 'string' },
     notes: { type: 'string' },
   },
-  indexes: {
-    voucherGlobalIndex: { partitionKey: 'voucher' },
-  },
   table: VoucherTable,
 });
 
 module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
-
 
   let voucher = await Voucher.get({ code });
   return respond(200, voucher);
