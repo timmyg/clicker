@@ -32,15 +32,22 @@ resources:
         TableName: ${self:custom.tableVoucher}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          - AttributeName: voucher
+          - AttributeName: code
             AttributeType: S
           - AttributeName: entityId
             AttributeType: S
         KeySchema:
-          - AttributeName: voucher
+          - AttributeName: code
             KeyType: HASH
           - AttributeName: entityId
             KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: codeGlobalIndex
+            KeySchema:
+              - AttributeName: code
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
@@ -76,6 +83,12 @@ functions:
       - http:
           path: ''
           method: post
+  redeem:
+    handler: voucher.redeem
+    events:
+      - http:
+          path: redeem
+          method: post
           # private: true
           cors:
             origin: '*'
@@ -85,4 +98,3 @@ functions:
       - http:
           path: health
           method: get
-          # private: true

@@ -16,12 +16,23 @@ const VoucherTable = new Table({
 const Voucher = new Entity({
   name: 'Voucher',
   attributes: {
-    voucher: { partitionKey: true },
+    code: { partitionKey: true },
     entityId: { hidden: false, sortKey: true },
     type: { type: 'string' },
     notes: { type: 'string' },
   },
+  indexes: {
+    voucherGlobalIndex: { partitionKey: 'voucher' },
+  },
   table: VoucherTable,
+});
+
+module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
+  const { code } = getBody(event);
+
+
+  let voucher = await Voucher.get({ code });
+  return respond(200, voucher);
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
@@ -48,7 +59,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
         entityId,
         type,
         notes,
-        voucher: createVoucher(),
+        code: createVoucherCode(),
       }),
     );
   }
@@ -61,7 +72,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, `hello`);
 });
 
-function createVoucher(length = 5) {
+function createVoucherCode(length = 5) {
   var str = '';
   var chars = '23456789abcdefghiklmnopqrstuvwxyz'.split('');
   var charsLen = chars.length;
