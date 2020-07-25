@@ -25,7 +25,7 @@ const Voucher = new Entity({
   attributes: {
     voucher: { partitionKey: true }, // flag as partitionKey
     locationId: { hidden: false, sortKey: true }, // flag as sortKey and mark hidden
-    type: { type: 'string' }, // set the attribute type
+    category: { type: 'string' }, // set the attribute type
   },
 
   // Assign it to our table
@@ -33,24 +33,20 @@ const Voucher = new Entity({
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId, type, count = 10 } = getBody(event);
+  const { locationId, category, count = 10 } = getBody(event);
   const vouchers: Voucher[] = [];
   for (let i of Array(count).keys()) {
     const voucher = createVoucher();
     vouchers.push(
       VoucherTable.Voucher.putBatch({
         locationId,
-        type,
+        category,
         voucher,
       }),
     );
   }
-
-  console.log(vouchers.length);
-
   const result = await VoucherTable.batchWrite(vouchers);
-
-  console.log({ result });
+  // console.log({ result });
   return respond(201, 'vouchers created');
 });
 
