@@ -78,12 +78,6 @@ custom:
   dotenv:
     basePath: ../
 functions:
-  create:
-    handler: voucher.create
-    events:
-      - http:
-          path: ''
-          method: post
   redeem:
     handler: voucher.redeem
     events:
@@ -99,3 +93,9 @@ functions:
       - http:
           path: health
           method: get
+  create:
+    handler: voucher.create
+    events:
+      - http:
+          path: ''
+          method: post
