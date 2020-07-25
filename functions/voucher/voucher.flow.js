@@ -16,7 +16,6 @@ const VoucherTable = new Table({
   //   locationId: { type: 'string' },
   //   type: { type: 'string' },
   // },
-  
 });
 const Voucher = new Entity({
   // Specify entity name
@@ -47,7 +46,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     );
   }
 
-  const result = await Default.batchWrite(vouchers);
+  const result = await VoucherTable.batchWrite(vouchers);
 
   console.log({ result });
   return respond(201, 'vouchers created');
