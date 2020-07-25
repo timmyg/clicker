@@ -14,7 +14,7 @@
     "flow-remove-types": "^2.107.0",
     "jest": "^24.1.0",
     "serverless": "^1.36.3",
-    "serverless-domain-manager": "^2.6.13",
+    "serverless-domain-manager": "^4.2.0",
     "serverless-dotenv-plugin": "^2.1.1",
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-prune-plugin": "^1.4.0",
