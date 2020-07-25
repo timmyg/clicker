@@ -9,7 +9,7 @@ const joi = require('joi');
 
 const VoucherTable = new Table({
   name: process.env.tableVoucher || 'table',
-  partitionKey: 'voucher',
+  partitionKey: 'code',
   sortKey: 'entityId',
   DocumentClient,
   indexes: {
