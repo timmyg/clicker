@@ -33,11 +33,11 @@ const Voucher = new Entity({
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId, category, count = 10 } = getBody(event);
+  const { locationId, type, count = 10 } = getBody(event);
   console.log(process.env.tableVoucher);
   for (let i of Array(count).keys()) {
     const voucher = createVoucher();
-    let result = await Voucher.put({ locationId, category, voucher });
+    let result = await Voucher.put({ locationId, type, voucher });
     console.log({ result });
   }
   // const vouchers: Voucher[] = [];
