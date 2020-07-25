@@ -25,7 +25,7 @@ const Voucher = new Entity({
   attributes: {
     voucher: { partitionKey: true }, // flag as partitionKey
     locationId: { hidden: false, sortKey: true }, // flag as sortKey and mark hidden
-    category: { type: 'string' }, // set the attribute type
+    type: { type: 'string' }, // set the attribute type
   },
 
   // Assign it to our table
