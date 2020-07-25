@@ -9,45 +9,31 @@ const DocumentClient = new DynamoDB.DocumentClient();
 const VoucherTable = new Table({
   name: process.env.tableVoucher || 'table',
   partitionKey: 'voucher',
-  sortKey: 'locationId',
+  sortKey: 'entityId',
   DocumentClient,
-  // schema: {
-  //   voucher: { type: 'string', alias: 'id' },
-  //   locationId: { type: 'string' },
-  //   type: { type: 'string' },
-  // },
 });
 const Voucher = new Entity({
-  // Specify entity name
   name: 'Voucher',
-
-  // Define attributes
   attributes: {
-    voucher: { partitionKey: true }, // flag as partitionKey
-    locationId: { hidden: false, sortKey: true }, // flag as sortKey and mark hidden
-    type: { type: 'string' }, // set the attribute type
+    voucher: { partitionKey: true },
+    entityId: { hidden: false, sortKey: true },
+    type: { type: 'string' },
+    notes: { type: 'string' },
   },
-
-  // Assign it to our table
   table: VoucherTable,
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId, type, count = 10 } = getBody(event);
-  console.log(process.env.tableVoucher);
-  // for (let i of Array(count).keys()) {
-  //   const voucher = createVoucher();
-  //   let result = await Voucher.put({ locationId, type, voucher });
-  //   console.log({ result });
-  // }
+  const { entityId, type, count = 10, notes } = getBody(event);
+
   const vouchers: Voucher[] = [];
   for (let i of Array(count).keys()) {
-    const voucher = createVoucher();
     vouchers.push(
       VoucherTable.Voucher.putBatch({
-        locationId,
+        entityId,
         type,
-        voucher,
+        notes,
+        voucher: createVoucher(),
       }),
     );
   }

@@ -34,12 +34,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: voucher
             AttributeType: S
-          - AttributeName: locationId
+          - AttributeName: entityId
             AttributeType: S
         KeySchema:
           - AttributeName: voucher
             KeyType: HASH
-          - AttributeName: locationId
+          - AttributeName: entityId
             KeyType: RANGE
 plugins:
   - serverless-domain-manager
