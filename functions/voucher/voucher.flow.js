@@ -34,18 +34,24 @@ const Voucher = new Entity({
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, category, count = 10 } = getBody(event);
-  const vouchers: Voucher[] = [];
+  console.log(process.env.tableVoucher);
   for (let i of Array(count).keys()) {
     const voucher = createVoucher();
-    vouchers.push(
-      VoucherTable.Voucher.putBatch({
-        locationId,
-        category,
-        voucher,
-      }),
-    );
+    let result = await Voucher.put({ locationId, category, voucher });
+    console.log({ result });
   }
-  const result = await VoucherTable.batchWrite(vouchers);
+  // const vouchers: Voucher[] = [];
+  // for (let i of Array(count).keys()) {
+  //   const voucher = createVoucher();
+  //   vouchers.push(
+  //     VoucherTable.Voucher.putBatch({
+  //       locationId,
+  //       category,
+  //       voucher,
+  //     }),
+  //   );
+  // }
+  // const result = await VoucherTable.batchWrite(vouchers);
   // console.log({ result });
   return respond(201, 'vouchers created');
 });
