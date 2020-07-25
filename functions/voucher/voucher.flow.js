@@ -32,9 +32,10 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
       .valid('vip', 'manager-mode')
       .required(),
     notes: joi.string().required(),
+    count: joi.number().optional(),
   });
   const { entityId, type, notes, count = 10 } = getBody(event);
-  const { error } = await schema.validate({ entityId, type, notes, count });
+  const { error } = await schema.validate({ entityId, type, notes, count }, { abortEarly: false });
   if (error) {
     return respond(400, error.message);
   }
