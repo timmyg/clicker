@@ -57,14 +57,14 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const vouchers: Voucher[] = [];
 
   for (let i of Array(count).keys()) {
-    vouchers.push(
-      VoucherTable.Voucher.putBatch({
-        entityId,
-        type,
-        notes,
-        code: createVoucherCode(),
-      }),
-    );
+    const voucher = {
+      entityId,
+      type,
+      notes,
+      code: createVoucherCode(),
+    };
+    console.log({ voucher });
+    vouchers.push(VoucherTable.Voucher.putBatch(voucher));
   }
   const result = await VoucherTable.batchWrite(vouchers);
   console.log({ result });
