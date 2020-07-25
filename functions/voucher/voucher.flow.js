@@ -16,6 +16,7 @@ const VoucherTable = new Table({
   //   locationId: { type: 'string' },
   //   type: { type: 'string' },
   // },
+  
 });
 const Voucher = new Entity({
   // Specify entity name
