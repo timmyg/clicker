@@ -23,6 +23,7 @@ const Voucher = new Entity({
   table: VoucherTable,
 });
 
+
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const { entityId, type, count = 10, notes } = getBody(event);
 
