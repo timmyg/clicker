@@ -13,7 +13,7 @@ const VoucherTable = new Table({
   sortKey: 'entityId',
   DocumentClient,
   indexes: {
-    voucherGlobalIndex: { partitionKey: 'code' },
+    codeGlobalIndex: { partitionKey: 'code' },
   },
 });
 const Voucher = new Entity({
