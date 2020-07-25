@@ -8,8 +8,8 @@ provider:
   # tracing: true
   region: 'us-east-1'
   logRetentionInDays: 14
-  apiKeys:
-    - myFirstKey
+  # apiKeys:
+  #   - myFirstKey
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
@@ -17,6 +17,7 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
+        - dynamodb:*
         - lambda:InvokeFunction
         - lambda:InvokeAsync
         - xray:PutTraceSegments
@@ -74,7 +75,7 @@ functions:
       - http:
           path: ''
           method: post
-          private: true
+          # private: true
           cors:
             origin: '*'
   health:
@@ -83,4 +84,4 @@ functions:
       - http:
           path: health
           method: get
-          private: true
+          # private: true
