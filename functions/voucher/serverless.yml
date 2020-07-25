@@ -72,7 +72,7 @@ custom:
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
-    autoDomain: true
+    # autoDomain: true
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
