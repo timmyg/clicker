@@ -5,6 +5,7 @@ const { Default, Entity, Table } = require('dynamodb-toolbox');
 // const Entity = require('dynamodb-toolbox/classes/Entity');
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 const DocumentClient = new DynamoDB.DocumentClient();
+const joi = require('joi');
 
 const VoucherTable = new Table({
   name: process.env.tableVoucher || 'table',
@@ -23,11 +24,23 @@ const Voucher = new Entity({
   table: VoucherTable,
 });
 
-
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
-  const { entityId, type, count = 10, notes } = getBody(event);
+  const schema = joi.object().keys({
+    entityId: joi.string().required(),
+    type: joi
+      .string()
+      .valid('vip', 'manager-mode')
+      .required(),
+    notes: joi.string().required(),
+  });
+  const { entityId, type, notes, count = 10 } = getBody(event);
+  const { error } = await schema.validate({ entityId, type, notes, count });
+  if (error) {
+    return respond(400, error.message);
+  }
 
   const vouchers: Voucher[] = [];
+
   for (let i of Array(count).keys()) {
     vouchers.push(
       VoucherTable.Voucher.putBatch({
