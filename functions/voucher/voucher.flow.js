@@ -40,13 +40,13 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   const voucher = await Voucher.query(code, { index: 'codeGlobalIndex' });
   console.log({ voucher });
   if (voucher.Items && !!voucher.Items.length) {
-    const result = await Voucher.delete({ ...voucher.Items[0] });
     const { data } = await new Invoke()
       .service('user')
       .name('addRole')
       .body({ roleType: voucher.type, locationId: voucher.entityId })
       .headers(event.headers)
       .go();
+    const result = await Voucher.delete({ ...voucher.Items[0] });
     console.log({ data });
     return respond(200, 'voucher redeemed');
   }
