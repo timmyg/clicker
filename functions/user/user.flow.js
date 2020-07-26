@@ -22,6 +22,10 @@ const demo = {
   phone: '+14141414141',
   code: '4141',
 };
+const voucherTypes = {
+  vip: 'vip',
+  managerMode: 'manager-mode',
+};
 declare class process {
   static env: {
     stage: string,
@@ -453,8 +457,8 @@ module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
     .queryOne('id')
     .eq(userId)
     .exec();
+  const role = getRole(roleType);
   if (!user.roles) {
-    const role = getRole(roleType);
     user.roles = {};
     user.roles[role] = locationId;
   } else {
