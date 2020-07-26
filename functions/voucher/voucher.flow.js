@@ -34,12 +34,18 @@ const Voucher = new Entity({
 });
 
 module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
-  const { code } = getBody(event);
+  const { code, entityId } = getBody(event);
 
-  console.log(code);
   const voucher = await Voucher.query(code, { index: 'codeGlobalIndex' });
-  console.log({ voucher });
   if (voucher.Items && !!voucher.Items.length) {
+    const { data: venue } = await new Invoke()
+      .service('location')
+      .name('get')
+      .pathParams({ id: entityId })
+      .headers(event.headers)
+      .go();
+    // console.timeEnd('ensure location active');
+    // const location: Venue = locationBody;
     const { data } = await new Invoke()
       .service('user')
       .name('addRole')
@@ -47,11 +53,27 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
       .headers(event.headers)
       .go();
     const result = await Voucher.delete({ ...voucher.Items[0] });
-    console.log({ data });
-    return respond(200, 'voucher redeemed');
+    return respond(200, getRedeemResponse(voucher.type, venue));
   }
   return respond(400, 'voucher not found');
 });
+
+function getRedeemResponse(voucherType: string, venue: Venue): any {
+  switch (voucherType) {
+    case voucherTypes.vip:
+      return {
+        title: `👑 VIP Mode Activated 👑`,
+        message: `You can now freely change channels at ${venue.name}.`,
+      };
+    case voucherTypes.managerMode:
+      return {
+        title: `💼 Manager Mode Activated 💼`,
+        message: `You can now freely change channels at ${venue.name}.`,
+      };
+    default:
+      return {};
+  }
+}
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   const schema = joi.object().keys({
