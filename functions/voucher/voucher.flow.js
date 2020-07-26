@@ -32,10 +32,13 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
 
   const voucher = await Voucher.query(code, { index: 'codeGlobalIndex' });
   console.log({ voucher });
-  // TODO redeem to user service
-  const result = await Voucher.delete({ code });
-  console.log({ result });
-  return respond(200, result);
+  if (voucher.Items && !!voucher.Items.length) {
+    const result = await Voucher.delete({ ...voucher.Items[0] });
+    // TODO redeem to user service
+    console.log({ result });
+    return respond(200, result);
+  }
+  return respond(400, 'voucher not found');
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
