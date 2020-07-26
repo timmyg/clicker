@@ -36,6 +36,7 @@ const Voucher = new Entity({
 module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
 
+  console.log(code);
   const voucher = await Voucher.query(code, { index: 'codeGlobalIndex' });
   console.log({ voucher });
   if (voucher.Items && !!voucher.Items.length) {

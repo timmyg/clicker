@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Redeem Code </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCloseClick()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form
+    #codeForm="ngForm"
+    (ngSubmit)="onCodeSubmit()"
+  >
+    <p class="ion-text-center">Input your code below for additional access with VIP Mode or Manager Mode.</p>
+    <section>
+      <ion-input
+        #codeInput
+        placeholder="Code"
+        type="text"
+        maxlength="10"
+        [(ngModel)]="code"
+        name="code"
+        [disabled]="waiting"
+      ></ion-input>
+      <ion-button
+        expand="block"
+        type="submit"
+        size="large"
+        class="ion-margin-top"
+        [disabled]="!code || code.length < 5 || (isLoading$ | async)"
+        >Submit</ion-button
+      >
+    </section>
+  </form>
+</ion-content>
