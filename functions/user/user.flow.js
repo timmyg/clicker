@@ -458,7 +458,7 @@ module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
   const role = getRole(roleType);
-  const userRoles = user.roles;
+  let userRoles = user.roles;
   console.log({ role });
   if (!userRoles) {
     // doesnt have roles
