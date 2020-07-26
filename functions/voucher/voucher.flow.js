@@ -36,16 +36,15 @@ const Voucher = new Entity({
 module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
 
-  const voucher = await Voucher.query(code, { index: 'codeGlobalIndex' });
-  if (voucher.Items && !!voucher.Items.length) {
+  const voucherResponse = await Voucher.query(code, { index: 'codeGlobalIndex' });
+  if (voucherResponse.Items && !!voucherResponse.Items.length) {
+    const voucher = voucherResponse.Items[0];
     const { data: venue } = await new Invoke()
       .service('location')
       .name('get')
       .pathParams({ id: voucher.entityId })
       .headers(event.headers)
       .go();
-    // console.timeEnd('ensure location active');
-    // const location: Venue = locationBody;
     const { data } = await new Invoke()
       .service('user')
       .name('addRole')
@@ -108,11 +107,9 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
       code: createVoucherCode(),
       expires,
     };
-    console.log({ voucher });
     vouchers.push(VoucherTable.Voucher.putBatch(voucher));
   }
   const result = await VoucherTable.batchWrite(vouchers);
-  console.log({ result });
   return respond(201, 'vouchers created');
 });
 

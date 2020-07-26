@@ -1,4 +1,4 @@
-import { ModalController, IonInput, ToastController } from "@ionic/angular";
+import { ModalController, IonInput, ToastController, AlertController } from "@ionic/angular";
 import { Store } from "@ngrx/store";
 import * as fromStore from "../state/app.reducer";
 import {redeem, redeemSuccess, redeemFailure} from '../state/voucher/voucher.actions';
@@ -24,6 +24,7 @@ export class VoucherComponent {
     public modalController: ModalController,
     private store: Store<fromStore.AppState>,
     public toastController: ToastController,  
+    public alertController: AlertController,  
     private updates$: Actions
   ) {
     this.isLoading$ = this.store.select(getLoading);
@@ -37,16 +38,16 @@ export class VoucherComponent {
       });
       toastInvalid.present();
       }))
-      .pipe(ofType(redeemSuccess), takeUntil(this.destroyed$), tap(async () => {
-        const toastInvalid = await this.toastController.create({
-          message:
-            "nice",
-          color: "danger",
-          duration: 5000,
-          cssClass: "ion-text-center",
+      .pipe(ofType(redeemSuccess), takeUntil(this.destroyed$), tap(async (response) => {
+        console.log({response});
+        const alert = await this.alertController.create({
+          header: "response",
+          message: "response",
+          // subTitle: '10% of battery remaining',
+          buttons: ['Dismiss']
         });
-        toastInvalid.present();
-        }))
+        alert.present();
+    }))
     .subscribe();
   }
 
