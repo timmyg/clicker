@@ -8,8 +8,8 @@ provider:
   # tracing: true
   region: 'us-east-1'
   logRetentionInDays: 14
-  # apiKeys:
-  #   - myFirstKey
+  apiKeys:
+    - mySecondPrivateKey
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
@@ -87,7 +87,6 @@ functions:
       - http:
           path: redeem
           method: post
-          # private: true
           cors:
             origin: '*'
   health:
@@ -102,5 +101,4 @@ functions:
       - http:
           path: ''
           method: post
-
-          
+          private: true

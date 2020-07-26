@@ -76,12 +76,10 @@ const dbUser = dynamoose.model(
       type: Number,
       required: true,
     },
-    // roles: Map, below
-    // {
-    //   "manager": [
-    //     "920f8dc0-4ce7-11e9-839a-e73aa5a05cbf"
-    //   ]
-    // },
+    // roles: {
+    //   manageLocations: locationId[]
+    //   vipLocations: locationId[]
+    // }
     aliasedTo: {
       type: String,
     },
@@ -446,6 +444,22 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
     console.error(e);
     return respond(400, e);
   }
+});
+
+module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
+  const { roleType, locationId } = getBody(event);
+  const userId = getUserId(event);
+  const user = await dbUser
+    .queryOne('id')
+    .eq(userId)
+    .exec();
+  if (!user.roles) {
+    user.roles = {};
+    user.roles[roleType] = locationId;
+  } else {
+    user.roles[roleType] = locationId;
+  }
+  return respond(200, 'role added');
 });
 
 async function getTokenDemo(phone) {

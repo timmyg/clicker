@@ -38,7 +38,7 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
     const result = await Voucher.delete({ ...voucher.Items[0] });
     // TODO redeem to user service
     console.log({ result });
-    return respond(200, result);
+    return respond(200, 'voucher redeemed');
   }
   return respond(400, 'voucher not found');
 });
@@ -90,7 +90,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 function createVoucherCode(length = 5) {
   var str = '';
-  var chars = '23456789abcdefghiklmnopqrstuvwxyz'.split('');
+  var chars = '23456789abcdefghkmnopqrstuvwxyz'.split('');
   var charsLen = chars.length;
   if (!length) {
     length = ~~(Math.random() * charsLen);
