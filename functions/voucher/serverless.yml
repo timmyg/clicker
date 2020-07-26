@@ -89,6 +89,12 @@ functions:
           method: post
           cors:
             origin: '*'
+            headers:
+              - partner
+              - app
+              - clicker
+              - authorization
+              - content-type
   health:
     handler: voucher.health
     events:

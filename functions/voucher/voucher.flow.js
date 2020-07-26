@@ -7,6 +7,10 @@ const DynamoDB = require('aws-sdk/clients/dynamodb');
 const DocumentClient = new DynamoDB.DocumentClient();
 const joi = require('joi');
 const moment = require('moment');
+const voucherTypes = {
+  vip: 'vip',
+  managerMode: 'managerMode',
+};
 
 const VoucherTable = new Table({
   name: process.env.tableVoucher || 'table',
@@ -36,8 +40,13 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ voucher });
   if (voucher.Items && !!voucher.Items.length) {
     const result = await Voucher.delete({ ...voucher.Items[0] });
-    // TODO redeem to user service
-    console.log({ result });
+    const { data } = await new Invoke()
+      .service('user')
+      .name('sendTasks')
+      .body({ roleType: voucher.type, locationId: voucher.entityId })
+      .headers(event.headers)
+      .go();
+    console.log({ data });
     return respond(200, 'voucher redeemed');
   }
   return respond(400, 'voucher not found');
@@ -48,7 +57,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     entityId: joi.string().required(),
     type: joi
       .string()
-      .valid('vip', 'manager-mode')
+      .valid(voucherTypes.vip, voucherTypes.managerMode)
       .required(),
     notes: joi.string().required(),
     count: joi.number().optional(),
