@@ -43,7 +43,7 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
     const result = await Voucher.delete({ ...voucher.Items[0] });
     const { data } = await new Invoke()
       .service('user')
-      .name('sendTasks')
+      .name('addRole')
       .body({ roleType: voucher.type, locationId: voucher.entityId })
       .headers(event.headers)
       .go();
