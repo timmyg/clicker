@@ -6,6 +6,7 @@ const { Default, Entity, Table } = require('dynamodb-toolbox');
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 const DocumentClient = new DynamoDB.DocumentClient();
 const joi = require('joi');
+const moment = require('moment');
 
 const VoucherTable = new Table({
   name: process.env.tableVoucher || 'table',
@@ -50,11 +51,18 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
       .required(),
     notes: joi.string().required(),
     count: joi.number().optional(),
+    expiresDays: joi.number().optional(),
   });
-  const { entityId, type, notes, count = 10 } = getBody(event);
-  const { error } = await schema.validate({ entityId, type, notes, count }, { abortEarly: false });
+  const { entityId, type, notes, count = 10, expiresDays } = getBody(event);
+  const { error } = await schema.validate({ entityId, type, notes, count, expiresDays }, { abortEarly: false });
   if (error) {
     return respond(400, error.message);
+  }
+  let expires;
+  if (!!expiresDays) {
+    expires = moment()
+      .add(expiresDays, 'days')
+      .toDate();
   }
 
   const vouchers: Voucher[] = [];
@@ -65,6 +73,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
       type,
       notes,
       code: createVoucherCode(),
+      expires,
     };
     console.log({ voucher });
     vouchers.push(VoucherTable.Voucher.putBatch(voucher));
