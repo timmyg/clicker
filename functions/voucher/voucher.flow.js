@@ -24,6 +24,7 @@ const Voucher = new Entity({
     entityId: { hidden: false, sortKey: true },
     type: { type: 'string' },
     notes: { type: 'string' },
+    expires: { type: 'string' },
   },
   table: VoucherTable,
 });
@@ -62,7 +63,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   if (!!expiresDays) {
     expires = moment()
       .add(expiresDays, 'days')
-      .toDate();
+      .unix();
   }
 
   const vouchers: Voucher[] = [];
