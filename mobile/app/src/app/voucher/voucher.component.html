@@ -22,7 +22,7 @@
         maxlength="10"
         [(ngModel)]="code"
         name="code"
-        [disabled]="waiting"
+        [disabled]="(isLoading$ | async)"
       ></ion-input>
       <ion-button
         expand="block"

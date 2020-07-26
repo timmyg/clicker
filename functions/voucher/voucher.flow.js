@@ -61,12 +61,12 @@ function getRedeemResponse(voucherType: string, venue: Venue): any {
   switch (voucherType) {
     case voucherTypes.vip:
       return {
-        title: `👑 VIP Mode Activated 👑`,
+        title: `👑 VIP Mode Activated`,
         message: `You can now freely change channels at ${venue.name}.`,
       };
     case voucherTypes.managerMode:
       return {
-        title: `💼 Manager Mode Activated 💼`,
+        title: `💼 Manager Mode Activated`,
         message: `You can now freely change channels at ${venue.name}.`,
       };
     default:
