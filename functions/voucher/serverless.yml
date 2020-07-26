@@ -41,6 +41,9 @@ resources:
             KeyType: HASH
           - AttributeName: entityId
             KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
         GlobalSecondaryIndexes:
           - IndexName: codeGlobalIndex
             KeySchema:
