@@ -51,7 +51,7 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
       .body({ roleType: voucher.type, locationId: voucher.entityId })
       .headers(event.headers)
       .go();
-    const result = await Voucher.delete({ ...voucher.Items[0] });
+    const result = await Voucher.delete({ ...voucher });
     return respond(200, getRedeemResponse(voucher.type, venue));
   }
   return respond(400, 'voucher not found');
