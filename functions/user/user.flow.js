@@ -458,13 +458,17 @@ module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
   const role = getRole(roleType);
+  console.log({ role });
   if (!user.roles) {
     // doesnt have roles
+    console.log('no roles');
     user.roles = {};
     user.roles[role] = locationId;
   } else if (user.roles[role]) {
     // has roles.managerMode (or whatever)
+    console.log('has role');
     if (!user.roles[role]) {
+      console.log('no role');
       user.roles[role] = [];
     }
     user.roles[role].push(locationId);
