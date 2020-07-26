@@ -37,7 +37,7 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   const { code } = getBody(event);
 
   console.log(code);
-  const voucher = await VoucherTable.scan(code, { index: 'codeGlobalIndex' });
+  const voucher = await Voucher.query({ code }, { index: 'codeGlobalIndex' });
   console.log({ voucher });
   if (voucher.Items && !!voucher.Items.length) {
     const result = await Voucher.delete({ ...voucher.Items[0] });
