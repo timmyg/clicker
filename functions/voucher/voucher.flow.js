@@ -9,7 +9,7 @@ const joi = require('joi');
 const moment = require('moment');
 const voucherTypes = {
   vip: 'vip',
-  managerMode: 'managerMode',
+  managerMode: 'manager-mode',
 };
 
 const VoucherTable = new Table({
@@ -58,7 +58,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     entityId: joi.string().required(),
     type: joi
       .string()
-      .valid(voucherTypes.vip, voucherTypes.managerMode)
+      .valid(...Object.values(voucherTypes))
       .required(),
     notes: joi.string().required(),
     count: joi.number().optional(),

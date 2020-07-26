@@ -454,16 +454,25 @@ module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
   if (!user.roles) {
+    const role = getRole(roleType);
     user.roles = {};
-    user.roles[roleType] = locationId;
+    user.roles[role] = locationId;
   } else {
-    user.roles[roleType] = locationId;
+    user.roles[role] = locationId;
   }
   return respond(200, 'role added');
 });
 
 async function getTokenDemo(phone) {
   return await getToken(phone, true);
+}
+
+function getRole(id) {
+  const map = {
+    [voucherTypes.vip]: 'vipLocations',
+    [voucherTypes.managerMode]: 'manageLocations',
+  };
+  return map[id];
 }
 
 async function getToken(phone, isDemo) {
