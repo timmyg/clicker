@@ -42,7 +42,7 @@ resources:
           - AttributeName: entityId
             KeyType: RANGE
         TimeToLiveSpecification:
-          AttributeName: ttl
+          AttributeName: expires
           Enabled: true
         GlobalSecondaryIndexes:
           - IndexName: codeGlobalIndex
