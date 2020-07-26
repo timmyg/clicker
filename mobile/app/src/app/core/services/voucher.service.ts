@@ -9,7 +9,7 @@ export class VoucherService {
   private prefix = `vouchers`;
   constructor(private httpClient: HttpClient) {}
 
-  redeem(code: string): Observable<boolean> {
+  redeem(code: string): Observable<any> {
     return this.httpClient.post<any>(`${this.prefix}/redeem`, { code });
   }
 }

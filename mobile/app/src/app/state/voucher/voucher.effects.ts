@@ -13,7 +13,7 @@ export class VoucherEffects {
       ofType(VoucherActions.redeem),
       mergeMap(({ code }) =>
         this.voucherService.redeem(code).pipe(
-          map((response) => VoucherActions.redeemSuccess({code})),
+          map((alert) => VoucherActions.redeemSuccess({alert})),
           catchError((response) => of(VoucherActions.redeemFailure({error: response.message})))
         )
       )

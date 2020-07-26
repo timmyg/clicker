@@ -5,14 +5,20 @@ export interface State {
   loaded: boolean;
   loading: boolean;
   error: string;
-  redeemed: string;
+  alert:{
+    title: string,
+    message: string,
+  };
 }
 
 const initialState: State = {
   loaded: false,
   loading: false,
   error: null,
-  redeemed: null
+  alert:{
+    title: null,
+    message: null,
+  }
 };
 
 export const reducer = createReducer(
@@ -21,11 +27,11 @@ export const reducer = createReducer(
     ...state,
     loading: true,
   })),
-  on(VoucherActions.redeemSuccess, (state, {code}) => ({
+  on(VoucherActions.redeemSuccess, (state, {alert}) => ({
     ...state,
     loaded: true,
     loading: false,
-    redeemed: code
+    alert
   })),
   on(VoucherActions.redeemFailure, (state, {error}) => ({
     ...state,

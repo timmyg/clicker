@@ -1,7 +1,7 @@
 import { ModalController, IonInput, ToastController } from "@ionic/angular";
 import { Store } from "@ngrx/store";
 import * as fromStore from "../state/app.reducer";
-import {redeem, redeemFailure} from '../state/voucher/voucher.actions';
+import {redeem, redeemSuccess, redeemFailure} from '../state/voucher/voucher.actions';
 import { getLoading } from "src/app/state/voucher";
 import { Component, ViewChild } from "@angular/core";
 import { Observable, Subject } from 'rxjs';
@@ -27,7 +27,6 @@ export class VoucherComponent {
     private updates$: Actions
   ) {
     this.isLoading$ = this.store.select(getLoading);
-    // this.onError$ = this.store.select(getError);
     updates$.pipe(ofType(redeemFailure), takeUntil(this.destroyed$), tap(async () => {
       const toastInvalid = await this.toastController.create({
         message:
@@ -38,6 +37,16 @@ export class VoucherComponent {
       });
       toastInvalid.present();
       }))
+      .pipe(ofType(redeemSuccess), takeUntil(this.destroyed$), tap(async () => {
+        const toastInvalid = await this.toastController.create({
+          message:
+            "nice",
+          color: "danger",
+          duration: 5000,
+          cssClass: "ion-text-center",
+        });
+        toastInvalid.present();
+        }))
     .subscribe();
   }
 

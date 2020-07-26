@@ -7,7 +7,7 @@ export const redeem = createAction(
 
 export const redeemSuccess = createAction(
   '[Voucher] Redeem Success',
-  props<{ code: string }>()
+  props<{ alert: {title: string, message: string} }>()
 );
 
 export const redeemFailure = createAction(

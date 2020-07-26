@@ -34,14 +34,14 @@ const Voucher = new Entity({
 });
 
 module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
-  const { code, entityId } = getBody(event);
+  const { code } = getBody(event);
 
   const voucher = await Voucher.query(code, { index: 'codeGlobalIndex' });
   if (voucher.Items && !!voucher.Items.length) {
     const { data: venue } = await new Invoke()
       .service('location')
       .name('get')
-      .pathParams({ id: entityId })
+      .pathParams({ id: voucher.entityId })
       .headers(event.headers)
       .go();
     // console.timeEnd('ensure location active');
