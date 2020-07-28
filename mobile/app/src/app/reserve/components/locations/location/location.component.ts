@@ -22,6 +22,9 @@ export class LocationComponent {
       const manageLocations = roles["manageLocations"];
       this.isManager =
         manageLocations && manageLocations.includes(this.location.id);
+      const vipLocations = roles["vipLocations"];
+      this.isVip =
+        vipLocations && vipLocations.includes(this.location.id);
     });
   }
 
