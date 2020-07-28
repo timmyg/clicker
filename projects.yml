@@ -12,4 +12,5 @@ active:
   - functions/remote
   - functions/reservation
   - functions/user
+  - functions/voucher
   - packages/antenna

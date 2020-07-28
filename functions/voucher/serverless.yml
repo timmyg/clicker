@@ -1,0 +1,110 @@
+service: voucher
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  memorySize: 128
+  versionFunctions: false
+  runtime: nodejs10.x
+  # tracing: true
+  region: 'us-east-1'
+  logRetentionInDays: 14
+  # apiKeys:
+  #   - mySecondPrivateKey
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    tableVoucher: ${self:custom.tableVoucher}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
+resources:
+  Resources:
+    VouchersTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableVoucher}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: code
+            AttributeType: S
+          - AttributeName: entityId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: code
+            KeyType: HASH
+          - AttributeName: entityId
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: expires
+          Enabled: true
+        GlobalSecondaryIndexes:
+          - IndexName: codeGlobalIndex
+            KeySchema:
+              - AttributeName: code
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+plugins:
+  - serverless-domain-manager
+  - serverless-prune-plugin
+  - serverless-sentry
+  - serverless-dotenv-plugin
+  - serverless-plugin-tracing
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  tableVoucher: vouchers-${self:custom.stage}
+  prune:
+    automatic: true
+    number: 3
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: vouchers
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+    # autoDomain: true
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
+functions:
+  redeem:
+    handler: voucher.redeem
+    events:
+      - http:
+          path: redeem
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - app
+              - clicker
+              - authorization
+              - content-type
+  health:
+    handler: voucher.health
+    events:
+      - http:
+          path: health
+          method: get
+  create:
+    handler: voucher.create
+    events:
+      - http:
+          path: ''
+          method: post
+          # private: true

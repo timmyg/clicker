@@ -13,6 +13,7 @@ import { LoginComponent } from "../auth/login/login.component";
 import { Subscription, Observable } from "rxjs";
 import { first } from "rxjs/operators";
 import { ReferralPage } from "../referral/referral.page";
+import { VoucherComponent } from "../voucher/voucher.component";
 import { isLoggedIn } from "../state/user";
 import { User } from "@sentry/browser";
 import { Store } from "@ngrx/store";
@@ -31,6 +32,7 @@ declare var window: any;
 export class MenuComponent {
   user$: Observable<User>;
   suggestModal;
+  voucherModal;
   referralModal;
   loginModal;
   rating = {
@@ -181,22 +183,17 @@ export class MenuComponent {
     return await this.suggestModal.present();
   }
 
-  async onRequestManagerMode() {
+  async onCodeRedeem() {
     if (this.isLoggedIn) {
-    this.suggestModal = await this.modalController.create({
-      component: SuggestComponent,
-      componentProps: { 
-        title: "Manager Mode", 
-        placeholder: "Give us your full name and location name and we'll confirm with your manager." ,
-        managerMode: true
-      },
-    });
-    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      if (this.suggestModal) {
-        this.suggestModal.close();
-      }
-    });
-    return await this.suggestModal.present();
+      this.voucherModal = await this.modalController.create({
+        component: VoucherComponent,
+      });
+      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+        if (this.voucherModal) {
+          this.voucherModal.close();
+        }
+      });
+      return await this.voucherModal.present();
   } else {
     const toast = await this.toastController.create({
       message: `✋ Please login.`,

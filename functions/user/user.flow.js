@@ -22,6 +22,10 @@ const demo = {
   phone: '+14141414141',
   code: '4141',
 };
+const voucherTypes = {
+  vip: 'vip',
+  managerMode: 'manager-mode',
+};
 declare class process {
   static env: {
     stage: string,
@@ -76,12 +80,10 @@ const dbUser = dynamoose.model(
       type: Number,
       required: true,
     },
-    // roles: Map, below
-    // {
-    //   "manager": [
-    //     "920f8dc0-4ce7-11e9-839a-e73aa5a05cbf"
-    //   ]
-    // },
+    // roles: {
+    //   manageLocations: locationId[]
+    //   vipLocations: locationId[]
+    // }
     aliasedTo: {
       type: String,
     },
@@ -448,8 +450,41 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
+  const { roleType, locationId } = getBody(event);
+  const userId = getUserId(event);
+  const user = await dbUser
+    .queryOne('id')
+    .eq(userId)
+    .exec();
+  const role = getRole(roleType);
+  let userRoles = user.roles;
+  console.log({ role });
+  if (!userRoles) {
+    // doesnt have roles
+    console.log('no roles');
+    userRoles = {};
+    userRoles[role] = [locationId];
+  } else if (userRoles[role]) {
+    console.log('has role');
+    userRoles[role].push(locationId);
+  } else {
+    userRoles[role] = [locationId];
+  }
+  await dbUser.update({ id: userId }, { roles: userRoles });
+  return respond(200, 'role added');
+});
+
 async function getTokenDemo(phone) {
   return await getToken(phone, true);
+}
+
+function getRole(id) {
+  const map = {
+    [voucherTypes.vip]: 'vipLocations',
+    [voucherTypes.managerMode]: 'manageLocations',
+  };
+  return map[id];
 }
 
 async function getToken(phone, isDemo) {

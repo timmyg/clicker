@@ -240,3 +240,9 @@ functions:
               - clicker
               - authorization
               - content-type
+  addRole:
+    handler: user.addRole
+    events:
+      - http:
+          path: roles
+          method: post
