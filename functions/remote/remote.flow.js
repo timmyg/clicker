@@ -178,6 +178,12 @@ async function sendNotification(source: string, reservation: Reservation) {
 
   if (source === zapTypes.app) {
     eventName = 'App Zap';
+    if (reservation.isManager) {
+      eventName += ' (Manager)';
+    }
+    if (reservation.isVip) {
+      eventName += ' (VIP)';
+    }
     userId = reservation.userId;
     const text =
       getCurrentProgramText(eventName, reservation.location, program) +
