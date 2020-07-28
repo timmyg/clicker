@@ -9,6 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { LocationService } from "./services/location.service";
 import { ProgramService } from "./services/program.service";
 import { ReservationService } from "./services/reservation.service";
+import { VoucherService } from "./services/voucher.service";
 import { MessageService } from "./services/message.service";
 import { IonicStorageModule } from "@ionic/storage";
 import { AppService } from "./services/app.service";
@@ -22,7 +23,8 @@ import { AppService } from "./services/app.service";
     LocationService,
     ProgramService,
     ReservationService,
-    MessageService
+    MessageService,
+    VoucherService
   ]
 })
 export class CoreModule {

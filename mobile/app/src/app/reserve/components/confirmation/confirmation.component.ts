@@ -113,10 +113,17 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     ).subscribe(([timeframes, roles, reservation]) => {
       // roles may be null
       if (!!timeframes && !!reservation && !!reservation.location) {
-        const manageLocations = roles && roles["manageLocations"];
-        const isManager =
-          manageLocations && manageLocations.includes(reservation.location.id);
-        if (isManager) {
+        // const manageLocations = roles && roles["manageLocations"];
+        // const isManager =
+        //   manageLocations && manageLocations.includes(reservation.location.id);
+        
+        if (reservation.isVip) {
+          timeframes.map(t => {
+            t.tokens = 0
+            t.isVip = true;
+          })
+        }
+        if (reservation.isManager) {
           timeframes.unshift(this.getManagerFreeTimeframe());
         }
         this.visibleTimeframes$.next(timeframes);
@@ -205,29 +212,17 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.isLoggedIn$.subscribe((isUserLoggedIn) => {
       this.isLoggedIn = isUserLoggedIn;
     });
-    // this.userRoles$.pipe(filter((roles) => !!roles)).subscribe((roles) => {
-    //   const manageLocations = roles["manageLocations"];
-    //   this.isManager =
-    //     manageLocations &&
-    //     manageLocations.includes(this.reservation.location.id);
-    //   // console.log("isManager", this.isManager);
-    //   // if (this.isManager) {
-
-    //   // }
-    // });
   }
 
   getManagerFreeTimeframe(): Timeframe {
     return {
       tokens: 0,
       minutes: 0,
+      isManager: true
     };
   }
 
-  getTimegrames() {}
-
   getEndTime() {
-    // if (this.reservation.end) {
     return this.isEditTime
       ? moment(this.reservation.end)
           .add(this.reservation.update.minutes.valueOf(), "minutes")
@@ -235,13 +230,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       : moment(this.reservation.end)
           .add(this.reservation.minutes.valueOf(), "minutes")
           .toDate();
-
-    // }
   }
-
-  // insufficientFunds() {
-  //   return this.tokenCount < this.reservation.cost;
-  // }
 
   onConfirm() {
     const { reservation: r } = this;

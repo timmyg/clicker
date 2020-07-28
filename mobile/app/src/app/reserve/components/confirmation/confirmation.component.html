@@ -45,12 +45,20 @@
         <ion-item *ngFor="let timeframe of (visibleTimeframes$ | async)">
           <ion-label class="flex ion-align-items-center">
             <span data-atm-class="timeframe" class="timeframe">
-              <span *ngIf="timeframe.minutes > 0; else free">
-                {{ timeframe.minutes }} minutes
-              </span>
-              <ng-template #free> Free Manager Change </ng-template>
+                <span *ngIf="timeframe.minutes > 0 && timeframe.minutes % 60 === 0; else minutes">
+                  <span *ngIf="timeframe.minutes/60 > 1; else hour">{{ timeframe.minutes / 60 }} hours</span>
+                  <ng-template #hour> {{ timeframe.minutes / 60 }} hour </ng-template>
+                </span>
+                <ng-template #minutes> {{ timeframe.minutes }} minutes </ng-template>
+                <!-- <span> {{ timeframe.minutes }} minutes </span> -->
             </span>
             <div class="flex ion-align-items-center">
+              <ion-chip color="primary" *ngIf="timeframe.isVip">
+                <label color="primary">VIP</label></ion-chip
+              >
+              <ion-chip color="primary" *ngIf="timeframe.isManager">
+                <label color="primary">Manager</label></ion-chip
+              >
               <img
                 class="coin ion-float-right"
                 src="./assets/coin.svg"
@@ -79,13 +87,12 @@
           timeframe.</b
         >
       </span>
-      <ng-template #noReservation
-        >⚠️
+      <ng-template #noReservation>
+        <!-- ⚠️
         <b
           >This is a one-time channel change, others will be able to change it
-          at any time.</b
-        ></ng-template
-      >
+          at any time.</b> -->
+      </ng-template>
     </p>
     <ion-button
       size="large"

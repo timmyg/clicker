@@ -42,7 +42,6 @@ export class ProfilePage {
   isWalletLoading$: Observable<boolean>;
   sub: Subscription;
   sub2: Subscription;
-  showVersionClicks = 0;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -190,7 +189,7 @@ export class ProfilePage {
         {
           text: "Cancel Reservation",
           role: "destructive",
-          cssClass: "secondary",
+          cssClass: "danger",
           handler: () => {
             this.store.dispatch(new fromReservation.Cancel(reservation));
             this.segment.track(this.globals.events.reservation.cancelled);
@@ -218,8 +217,8 @@ export class ProfilePage {
   }
 
   async showVersion() {
-    this.showVersionClicks++;
-    if (this.showVersionClicks >= 7) {
+    // this.showVersionClicks++;
+    // if (this.showVersionClicks >= 1) {
       const version = this.appService.getVersion();
       const configuration: ICurrentConfig = await this.deploy.getConfiguration();
       const toast = await this.toastController.create({
@@ -228,8 +227,8 @@ export class ProfilePage {
         cssClass: "ion-text-center",
       });
       await toast.present();
-      this.showVersionClicks = 0;
-    }
+    //   this.showVersionClicks = 0;
+    // }
   }
 
   getStoreName() {
