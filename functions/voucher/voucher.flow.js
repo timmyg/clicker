@@ -39,19 +39,23 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   const voucherResponse = await Voucher.query(code, { index: 'codeGlobalIndex' });
   if (voucherResponse.Items && !!voucherResponse.Items.length) {
     const voucher = voucherResponse.Items[0];
+    console.log('get location', voucher.entityId);
     const { data: venue } = await new Invoke()
       .service('location')
       .name('get')
       .pathParams({ id: voucher.entityId })
       .headers(event.headers)
       .go();
+    console.log({ venue });
     const { data } = await new Invoke()
       .service('user')
       .name('addRole')
       .body({ roleType: voucher.type, locationId: voucher.entityId })
       .headers(event.headers)
       .go();
+    console.log({ data });
     const result = await Voucher.delete({ ...voucher });
+    console.log({ result });
     return respond(200, getRedeemResponse(voucher.type, venue));
   }
   return respond(400, 'voucher not found');
