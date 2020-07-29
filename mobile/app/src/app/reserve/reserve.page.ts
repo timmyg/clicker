@@ -40,6 +40,7 @@ export class ReservePage implements OnDestroy, OnInit {
   channelsClick = 0;
   updateAvailable: boolean;
   channelsEnabled: boolean;
+  updatingApp: boolean;
   // isManager$: Observable<boolean>;
 
   constructor(
@@ -141,6 +142,7 @@ export class ReservePage implements OnDestroy, OnInit {
   }
 
   async forceUpdate(channel = "Production") {
+    this.updatingApp = true
     await this.deploy.configure({ channel });
     await this.deploy.sync({ updateMethod: "auto" });
   }

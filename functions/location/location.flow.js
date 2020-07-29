@@ -131,6 +131,7 @@ const dbLocation = dynamoose.model(
     hidden: Boolean,
     connected: Boolean,
     controlCenter: Boolean,
+    vipOnly: Boolean,
     announcement: String,
     notes: String,
     // calculated fields
@@ -653,9 +654,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
         const text = `Manual Zap @ ${location.name} (${location.neighborhood} Zone ${location.boxes[i].zone ||
-          'no zone'}) ~${previousProgram.channelTitle}: ${previousProgram.title}~ to *${program.channelTitle}: ${
-          program.title
-        }*`;
+          'no zone'}) *${program.channelTitle}: ${program.title} [${major}]* ~${previousProgram.channelTitle}: ${
+          previousProgram.title
+        }~`;
 
         await new Invoke()
           .service('notification')

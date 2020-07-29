@@ -157,6 +157,7 @@ const dbProgram = dynamoose.model(
       },
     },
     channelMinor: Number,
+    channelId: Number,
     channelTitle: String,
     title: String, // "Oklahoma State @ Kansas"
     episodeTitle: String, // "Oklahoma State at Kansas"
@@ -1205,6 +1206,7 @@ function build(dtvSchedule: any, regionId: string) {
       program.programmingId = program.programID;
       if (program.programmingId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
+        program.channelId = channel.chId;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
         // if channel is in minors list, try to add a minor channel to it
@@ -1254,16 +1256,15 @@ function build(dtvSchedule: any, regionId: string) {
 
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
-    // { search: 'sportscenter', rating: 1 },
+    { search: 'sportscenter', rating: 1 },
     // { search: 'around the horn', rating: 1 },
-    // { search: 'nfl live', rating: 1 },
-    // { search: 'will cain show', rating: 1 },
-    // { search: 'nba: the jump', rating: 1 },
+    { search: 'nfl live', rating: 1 },
+    { search: 'nba: the jump', rating: 1 },
     // { search: 'daily wager', rating: 1 },
     // { search: 'the herd', rating: 1 },
-    // { search: 'skip and shannon', rating: 1 },
-    // { search: 'college gameday', rating: 1 },
-    // { search: 'mlb tonight', rating: 1 },
+    { search: 'skip and shannon', rating: 1 },
+    { search: 'college gameday', rating: 5 },
+    { search: 'mlb tonight', rating: 1 },
   ];
 
   // first things first

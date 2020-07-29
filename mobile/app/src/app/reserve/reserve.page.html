@@ -133,7 +133,7 @@
     *ngIf="updateAvailable"
     class="flex ion-justify-content-center ion-padding-vertical"
   >
-    <ion-button (click)="forceUpdate()">
+    <ion-button (click)="forceUpdate()" [disabled]="updatingApp">
       <ion-icon slot="start" name="trophy"></ion-icon>
       Update Available! Click to update.
     </ion-button>
