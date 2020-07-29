@@ -122,6 +122,8 @@ const minorChannels = [
   },
 ];
 
+const blacklistChannelIds = [5660, 2660, 623, 624, 625, 376, 2661];
+
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
     accessKeyId: 'test',
@@ -1207,6 +1209,9 @@ function build(dtvSchedule: any, regionId: string) {
       if (program.programmingId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
         program.channelId = channel.chId;
+        if (blacklistChannelIds.includes(program.channelId)) {
+          return true;
+        }
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
         // if channel is in minors list, try to add a minor channel to it
