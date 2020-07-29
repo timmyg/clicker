@@ -157,6 +157,7 @@ const dbProgram = dynamoose.model(
       },
     },
     channelMinor: Number,
+    channelId: Number,
     channelTitle: String,
     title: String, // "Oklahoma State @ Kansas"
     episodeTitle: String, // "Oklahoma State at Kansas"
@@ -1205,6 +1206,7 @@ function build(dtvSchedule: any, regionId: string) {
       program.programmingId = program.programID;
       if (program.programmingId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
+        program.channelId = channel.chId;
         program.channelTitle = getLocalChannelName(channel.chName) || channel.chCall;
 
         // if channel is in minors list, try to add a minor channel to it
