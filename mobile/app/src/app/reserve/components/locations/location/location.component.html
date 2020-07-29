@@ -58,9 +58,14 @@
           <ion-chip color="primary" *ngIf="isManager">
             <label color="primary">Manager</label></ion-chip
           >
-          <ion-chip color="primary" *ngIf="isVip">
+          <ion-chip color="primary" *ngIf="isVip; else nonVip">
             <label color="primary">VIP</label></ion-chip
           >
+          <ng-template #nonVip>
+            <ion-chip color="primary" *ngIf="location.vipOnly">
+              <label color="primary">VIP Only</label></ion-chip
+            >
+          </ng-template>
         </ion-row>
       </ion-card-content>
       <ion-ripple-effect></ion-ripple-effect>
