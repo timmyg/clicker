@@ -7,6 +7,7 @@ import {
   ModalController,
 } from "@ionic/angular";
 import { Storage } from "@ionic/storage";
+import { LaunchReview } from '@ionic-native/launch-review/ngx';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from "../globals";
 import { LoginComponent } from "../auth/login/login.component";
@@ -54,7 +55,8 @@ export class MenuComponent {
     public modalController: ModalController,
     private globals: Globals,
     private store: Store<fromStore.AppState>,
-    public userService: UserService
+    public userService: UserService,
+    private launchReview: LaunchReview
   ) {
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     this.isLoggedIn$.subscribe((isLoggedIn) => {
@@ -130,14 +132,11 @@ export class MenuComponent {
           text: "Leave rating",
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
-            let link = "https://tryclicker.com";
-            if (this.platform.is("ios")) {
-              link =
-                "itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8";
-            } else if (this.platform.is("android")) {
-              link = "market://details?id=com.teamclicker.app";
+            if(this.launchReview.isRatingSupported()){
+              this.launchReview.rating()
+            } else {
+              this.launchReview.launch()
             }
-            window.open(link);
             return null;
           },
         },
