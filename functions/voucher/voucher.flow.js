@@ -29,6 +29,7 @@ const Voucher = new Entity({
     type: { type: 'string' },
     notes: { type: 'string' },
     expires: { type: 'string' },
+    entityName: { type: 'string' },
   },
   table: VoucherTable,
 });
@@ -39,12 +40,6 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   const voucherResponse = await Voucher.query(code, { index: 'codeGlobalIndex' });
   if (voucherResponse.Items && !!voucherResponse.Items.length) {
     const voucher = voucherResponse.Items[0];
-    const { data: venue } = await new Invoke()
-      .service('location')
-      .name('get')
-      .pathParams({ id: voucher.entityId })
-      .headers(event.headers)
-      .go();
     const { data } = await new Invoke()
       .service('user')
       .name('addRole')
@@ -52,22 +47,22 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
       .headers(event.headers)
       .go();
     const result = await Voucher.delete({ ...voucher });
-    return respond(200, getRedeemResponse(voucher.type, venue));
+    return respond(200, getRedeemResponse(voucher.type, voucher.entityName));
   }
   return respond(400, 'voucher not found');
 });
 
-function getRedeemResponse(voucherType: string, venue: Venue): any {
+function getRedeemResponse(voucherType: string, locationName: string): any {
   switch (voucherType) {
     case voucherTypes.vip:
       return {
         title: `👑 VIP Mode Activated`,
-        message: `You can now freely change channels at ${venue.name}.`,
+        message: `You can now freely change channels at ${locationName}.`,
       };
     case voucherTypes.managerMode:
       return {
         title: `💼 Manager Mode Activated`,
-        message: `You can now freely change channels at ${venue.name}.`,
+        message: `You can now freely change channels at ${locationName}.`,
       };
     default:
       return {};
@@ -96,12 +91,24 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
       .add(expiresDays, 'days')
       .unix();
   }
+  console.log('get location', entityId);
+  const locationData = await new Invoke()
+    .service('location')
+    .name('get')
+    .pathParams({ id: entityId })
+    .headers(event.headers)
+    .go();
+  if (!locationData.data) {
+    return respond(400, `invalid location: ${entityId}`);
+  }
+  const venue = locationData.data;
 
   const vouchers: Voucher[] = [];
 
   for (let i of Array(count).keys()) {
     const voucher = {
       entityId,
+      entityName: venue.name,
       type,
       notes,
       code: createVoucherCode(),

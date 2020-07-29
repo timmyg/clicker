@@ -104,6 +104,7 @@ functions:
           method: get
   create:
     handler: voucher.create
+    timeout: 12
     events:
       - http:
           path: ''
