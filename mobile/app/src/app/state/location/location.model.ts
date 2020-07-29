@@ -15,5 +15,6 @@ export interface Location {
   openTvs?: boolean;
   active?: boolean;
   connected?: boolean;
+  vipOnly?: boolean;
   hidden?: boolean;
 }
