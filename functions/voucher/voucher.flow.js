@@ -40,12 +40,16 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
   if (voucherResponse.Items && !!voucherResponse.Items.length) {
     const voucher = voucherResponse.Items[0];
     console.log('get location', voucher.entityId);
-    const { data: venue } = await new Invoke()
+    const locationData = await new Invoke()
       .service('location')
       .name('get')
       .pathParams({ id: voucher.entityId })
       .headers(event.headers)
       .go();
+    if (!locationData.data) {
+      return respond(400, `invalid location: ${voucher.entityId}`);
+    }
+    const venue = locationData.data;
     console.log({ venue });
     const { data } = await new Invoke()
       .service('user')
