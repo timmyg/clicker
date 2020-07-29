@@ -83,6 +83,7 @@ custom:
 functions:
   redeem:
     handler: voucher.redeem
+    timeout: 12
     events:
       - http:
           path: redeem
