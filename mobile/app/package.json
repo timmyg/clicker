@@ -1,10 +1,6 @@
 {
   "name": "clicker-mobile",
-<<<<<<< HEAD
-  "version": "0.14.0",
-=======
   "version": "0.14.2",
->>>>>>> 548dd55f00ddbe3c57ecf08f6a45600a23e43e99
   "author": "Tim Giblin",
   "homepage": "https://tryclicker.com/",
   "scripts": {
