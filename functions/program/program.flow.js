@@ -1262,11 +1262,8 @@ function build(dtvSchedule: any, regionId: string) {
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
     { search: 'sportscenter', rating: 1 },
-    // { search: 'around the horn', rating: 1 },
     { search: 'nfl live', rating: 1 },
     { search: 'nba: the jump', rating: 1 },
-    // { search: 'daily wager', rating: 1 },
-    // { search: 'the herd', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
     { search: 'college gameday', rating: 5 },
     { search: 'mlb tonight', rating: 1 },
