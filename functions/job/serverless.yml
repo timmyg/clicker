@@ -44,25 +44,16 @@ custom:
   dotenv:
     basePath: ../
 functions:
+  controlCenterRun:
+    handler: job.controlCenterRun
+    events:
+      - schedule: cron(*/10 * * * ? *) # every 10th minute
+      - http:
+          path: control-center
+          method: post
   health:
     handler: job.health
     events:
       - http:
           path: health
           method: get
-  controlCenterDailyInit:
-    handler: job.controlCenterDailyInit
-    timeout: 30
-    events:
-      - schedule: cron(59 9 * * ? *) # every day @ 5:59am eastern
-      - http:
-          path: control-center/daily
-          method: post
-  syncLocationsBoxes:
-    handler: job.syncLocationsBoxes
-    timeout: 30
-    events:
-      - schedule: cron(00 11 * * ? *) # every day @ 7:00am eastern
-      - http:
-          path: boxes/sync
-          method: post
