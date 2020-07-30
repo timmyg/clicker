@@ -364,7 +364,7 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event => {
-  const { stripeCustomerId, minutes } = getBody(event);
+  const { stripeCustomerId } = getBody(event);
 
   var session = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,

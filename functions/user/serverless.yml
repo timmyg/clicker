@@ -246,3 +246,9 @@ functions:
       - http:
           path: roles
           method: post
+  customerPortal:
+    handler: user.customerPortal
+    events:
+      - http:
+          path: portal
+          method: post
