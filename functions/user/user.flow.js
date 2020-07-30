@@ -363,6 +363,17 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event => {
+  const { stripeCustomerId, minutes } = getBody(event);
+
+  var session = await stripe.billingPortal.sessions.create({
+    customer: stripeCustomerId,
+    return_url: 'https://tryclicker.com',
+  });
+
+  return respond(200, session);
+});
+
 module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
   const { fromId, toId } = getPathParameters(event);
 
