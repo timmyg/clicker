@@ -3,7 +3,7 @@ frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
   memorySize: 128
-  region: eu-central-1 # Germany
+  region: ap-northeast-1 # tokoyo
   versionFunctions: false
   runtime: nodejs12.x
   # tracing: true
