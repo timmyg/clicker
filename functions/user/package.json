@@ -20,7 +20,7 @@
     "dynamoose": "^1.7.2",
     "jsonwebtoken": "^8.5.1",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.13",
-    "stripe": "^6.31.1",
+    "stripe": "^8.80.0",
     "twilio": "^3.37.0",
     "uuid": "^3.3.2"
   },
