@@ -112,7 +112,28 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond(200);
+  const webhookEvent = getBody(event);
+  console.log({ webhookEvent });
+  switch (webhookEvent.type) {
+    case 'invoice.paid':
+      const invoice = webhookEvent.data.object;
+      const { customer_email: customerEmail, amount_paid: amountPaid } = invoice;
+      const text = `Invoice Paid: ${customerEmail} ${amountPaid / 100}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendControlCenter')
+        .body({ text })
+        .async()
+        .go();
+    // case 'payment_intent.succeeded':
+    //   const paymentIntent = webhookEvent.data.object;
+    //   break;
+    // case 'payment_method.attached':
+    //   const paymentMethod = webhookEvent.data.object;
+    //   break;
+    default:
+      return respond(400, `webhook ${webhookEvent.type} not supported by Clicker API`);
+  }
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
