@@ -79,6 +79,8 @@ functions:
     handler: notification.sendLanding
   sendTasks:
     handler: notification.sendTasks
+  sendMoney:
+    handler: notification.sendMoney
   health:
     handler: notification.health
     events:
