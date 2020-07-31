@@ -248,7 +248,15 @@ functions:
           method: post
   customerPortal:
     handler: user.customerPortal
+    description: clicker customers can manage their billing - currently unused
     events:
       - http:
           path: portal
+          method: post
+  stripeWebhook:
+    handler: user.stripeWebhook
+    description: receive stripe webhooks
+    events:
+      - http:
+          path: stripe/webhook
           method: post

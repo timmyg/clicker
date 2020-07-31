@@ -96,7 +96,23 @@ const dbUser = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond();
+  // Handle the event
+  const webhookEvent = getBody(event);
+  console.log({ webhookEvent });
+  switch (webhookEvent.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntent = webhookEvent.data.object;
+      break;
+    case 'payment_method.attached':
+      const paymentMethod = webhookEvent.data.object;
+      break;
+    default:
+      return respond(400);
+  }
+});
+
+module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200);
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
