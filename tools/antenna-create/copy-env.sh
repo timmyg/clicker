@@ -1,1 +1,1 @@
-sudo cp ./resources/.env /Volumes/boot
+sudo cp ./resources/.env '/Volumes/NO NAME'
