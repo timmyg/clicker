@@ -118,13 +118,14 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
     case 'invoice.paid':
       const invoice = webhookEvent.data.object;
       const { customer_email: customerEmail, amount_paid: amountPaid } = invoice;
-      const text = `Invoice Paid: ${customerEmail} ${amountPaid / 100}`;
+      const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100}`;
       await new Invoke()
         .service('notification')
-        .name('sendControlCenter')
+        .name('sendMoney')
         .body({ text })
         .async()
         .go();
+      return respond(200);
     // case 'payment_intent.succeeded':
     //   const paymentIntent = webhookEvent.data.object;
     //   break;
