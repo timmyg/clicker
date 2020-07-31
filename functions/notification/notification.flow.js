@@ -15,6 +15,7 @@ declare class process {
     slackTasksWebhookUrl: string,
     slackLandingWebhookUrl: string,
     slackSandboxWebhookUrl: string,
+    slackMoneyWebhookUrl: string,
   };
 }
 
@@ -60,6 +61,13 @@ module.exports.sendTasks = RavenLambdaWrapper.handler(Raven, async event => {
   const webhook = new IncomingWebhook(process.env.slackTasksWebhookUrl);
   const { text, importance } = getBody(event);
   await sendSlack(webhook, text, importance);
+  return respond(200);
+});
+
+module.exports.sendMoney = RavenLambdaWrapper.handler(Raven, async event => {
+  const webhook = new IncomingWebhook(process.env.slackMoneyWebhookUrl);
+  const { text } = getBody(event);
+  await sendSlack(webhook, text);
   return respond(200);
 });
 
