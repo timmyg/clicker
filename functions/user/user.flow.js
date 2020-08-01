@@ -96,7 +96,45 @@ const dbUser = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond();
+  // Handle the event
+  const webhookEvent = getBody(event);
+  console.log({ webhookEvent });
+  switch (webhookEvent.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntent = webhookEvent.data.object;
+      break;
+    case 'payment_method.attached':
+      const paymentMethod = webhookEvent.data.object;
+      break;
+    default:
+      return respond(400);
+  }
+});
+
+module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => {
+  const webhookEvent = getBody(event);
+  console.log({ webhookEvent });
+  switch (webhookEvent.type) {
+    case 'invoice.paid':
+      const invoice = webhookEvent.data.object;
+      const { customer_email: customerEmail, amount_paid: amountPaid } = invoice;
+      const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendMoney')
+        .body({ text })
+        .async()
+        .go();
+      return respond(200);
+    // case 'payment_intent.succeeded':
+    //   const paymentIntent = webhookEvent.data.object;
+    //   break;
+    // case 'payment_method.attached':
+    //   const paymentMethod = webhookEvent.data.object;
+    //   break;
+    default:
+      return respond(400, `webhook ${webhookEvent.type} not supported by Clicker API`);
+  }
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
@@ -361,6 +399,17 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
     console.error('Insufficient Funds');
     return respond(400, 'Insufficient Funds');
   }
+});
+
+module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event => {
+  const { stripeCustomerId } = getBody(event);
+
+  var session = await stripe.billingPortal.sessions.create({
+    customer: stripeCustomerId,
+    return_url: 'https://tryclicker.com',
+  });
+
+  return respond(200, session);
 });
 
 module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {

@@ -1212,6 +1212,39 @@ module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
 });
 
+module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  const { data: allRegions } = await new Invoke()
+    .service('program')
+    .name('regions')
+    .go();
+  const allRegionIds = allRegions.map(r => r.id);
+
+  const { data: locations }: { data: Venue[] } = await new Invoke()
+    .service('location')
+    .name('controlCenterLocationsByRegion')
+    .pathParams({ regions: allRegionIds })
+    .headers(event.headers)
+    .go();
+  for (location of locations) {
+    const { losantId } = location;
+    console.log(`sync box (${location.name}):`, { losantId });
+    await new Invoke()
+      .service('remote')
+      .name('syncWidgetBoxes')
+      .body({ losantId })
+      .async()
+      .go();
+    const text = `Boxes Synced @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
+  return respond(200);
+});
+
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {

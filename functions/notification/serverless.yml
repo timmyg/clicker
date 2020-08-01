@@ -26,6 +26,7 @@ provider:
     slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
     slackTasksWebhookUrl: ${env:SLACK_TASKS_WEBHOOK_URL}
     slackSandboxWebhookUrl: ${env:SLACK_SANDBOX_WEBHOOK_URL}
+    slackMoneyWebhookUrl: ${env:SLACK_MONEY_WEBHOOK_URL}
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
@@ -78,10 +79,11 @@ functions:
     handler: notification.sendLanding
   sendTasks:
     handler: notification.sendTasks
+  sendMoney:
+    handler: notification.sendMoney
   health:
     handler: notification.health
     events:
       - http:
           path: health
           method: get
-

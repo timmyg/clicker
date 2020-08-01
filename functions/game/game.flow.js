@@ -529,8 +529,9 @@ async function pullFromActionNetwork(dates: Date[]) {
   actionSports.push({ sport: 'nhl' });
   actionSports.push({ sport: 'soccer' });
   actionSports.push({ sport: 'xfl' });
-  // actionSports.push({ sport: 'pga' });
-  // actionSports.push({ sport: 'boxing' });
+  actionSports.push({ sport: 'pga' });
+  actionSports.push({ sport: 'boxing' });
+  actionSports.push({ sport: 'ufc' });
   const method = 'get';
   const options = { method, url: apiUrl, timeout: 2000 };
   const requests = [];
@@ -549,10 +550,10 @@ async function pullFromActionNetwork(dates: Date[]) {
   console.log('requests:');
   console.log(require('util').inspect(requests));
   const responses = await Promise.all(requests);
-  console.log('responses[0]', responses[0].config.params);
-  console.log('responses[1]', responses[1].config.params);
-  console.log('responses[2]', responses[2].config.params);
-  console.log('responses[3]', responses[3].config.params);
+  // console.log('responses[0]', responses[0].config.params);
+  // console.log('responses[1]', responses[1].config.params);
+  // console.log('responses[2]', responses[2].config.params);
+  // console.log('responses[3]', responses[3].config.params);
   const all = [];
   responses.forEach(response => {
     let responseEvents = response.data.games ? response.data.games : response.data.competitions;
@@ -586,7 +587,8 @@ async function syncGamesDatabase(events: any[], deduplicate: boolean = false): P
     console.log('new events', events.length);
   }
   events.forEach((part, index, eventsArray) => {
-    eventsArray[index] = transformGame(eventsArray[index]);
+    const game = eventsArray[index];
+    eventsArray[index] = game.teams ? transformGame(game) : transformNonGame(game);
   });
   // copy so we can splice array but return entire array
   const eventsCopy = JSON.parse(JSON.stringify(events));
@@ -599,6 +601,7 @@ async function syncGamesDatabase(events: any[], deduplicate: boolean = false): P
       const dbEvents = events.splice(0, 25);
       console.log('batch putting:', dbEvents.length);
       console.log('remaining:', events.length);
+      console.log({ dbEvents });
       const result = await dbGame.batchPut(dbEvents);
       console.log({ result });
     } catch (e) {
@@ -608,6 +611,22 @@ async function syncGamesDatabase(events: any[], deduplicate: boolean = false): P
   return eventsCopy;
   // await publishNewGames(eventsCopy);
   // return eventsCopy;
+}
+
+function transformNonGame(game: any): Game {
+  const map = {
+    id: 'id',
+    start_time: 'start',
+    status_display: 'scoreboard.display',
+    league_name: 'leagueName',
+    status: 'status',
+    'boxscore.clock': 'scoreboard.clock',
+    'boxscore.period': 'scoreboard.period',
+    'broadcast.network': 'broadcast.network',
+  };
+  const transformedGame = objectMapper(game, map);
+  transformedGame.summary = buildStatus(transformedGame);
+  return transformedGame;
 }
 
 function transformGame(game: any): Game {

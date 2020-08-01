@@ -3,13 +3,13 @@ frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
   memorySize: 128
-  region: eu-central-1 # Germany
+  region: ap-northeast-1 # tokyo
   versionFunctions: false
   runtime: nodejs12.x
   # tracing: true
   logRetentionInDays: 14
   deploymentBucket:
-    name: serverless-deploys-clicker-eu-central-1
+    name: serverless-deploys-clicker-ap-northeast-1
   environment:
     stage: ${self:custom.stage}
     airtableKey: ${env:AIRTABLE_KEY}
@@ -44,25 +44,18 @@ custom:
   dotenv:
     basePath: ../
 functions:
+  controlCenterRun:
+    handler: job.controlCenterRun
+    events:
+      - schedule: cron(*/10 * * * ? *) # every 10th minute
+      - http:
+          path: control-center
+          method: post
   health:
     handler: job.health
     events:
       - http:
           path: health
           method: get
-  controlCenterDailyInit:
-    handler: job.controlCenterDailyInit
-    timeout: 30
-    events:
-      - schedule: cron(59 9 * * ? *) # every day @ 5:59am eastern
-      - http:
-          path: control-center/daily
-          method: post
-  syncLocationsBoxes:
-    handler: job.syncLocationsBoxes
-    timeout: 30
-    events:
-      - schedule: cron(00 11 * * ? *) # every day @ 7:00am eastern
-      - http:
-          path: boxes/sync
-          method: post
+
+          
