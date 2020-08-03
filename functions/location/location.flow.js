@@ -695,15 +695,16 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ location });
   if (!!location) {
     await dbLocation.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
-
-    const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendAntenna')
-      .body({ text })
-      .async()
-      .go();
   }
+  const text = `Antenna Connected @ ${location ? location.name : 'unknown losantId'} (${
+    location ? location.neighborhood : ''
+  })`;
+  await new Invoke()
+    .service('notification')
+    .name('sendAntenna')
+    .body({ text })
+    .async()
+    .go();
 
   return respond(200, 'ok');
 });
@@ -719,15 +720,17 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ location });
   if (!!location) {
     await dbLocation.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
-
-    const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendAntenna')
-      .body({ text })
-      .async()
-      .go();
   }
+
+  const text = `Antenna Disconnected @ ${location ? location.name : 'unknown losantId'} (${
+    location ? location.neighborhood : ''
+  })`;
+  await new Invoke()
+    .service('notification')
+    .name('sendAntenna')
+    .body({ text })
+    .async()
+    .go();
 
   return respond(200, 'ok');
 });

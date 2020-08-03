@@ -328,7 +328,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('not existing in airtable events', allEvents.length);
   console.time('create');
   let transformedGames: Game[] = [];
-  allEvents.forEach(g => transformedGames.push(transformGame(g)));
+  allEvents.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGames = buildAirtableGames(transformedGames);
   const promises = [];
   while (!!airtableGames.length) {
@@ -470,8 +470,8 @@ function buildAirtableGames(games: Game[]) {
   games.forEach(game => {
     // console.log({ game });
     const { id, leagueName, start } = game;
-    const { full: homeTeam } = game.home.name;
-    const { full: awayTeam } = game.away.name;
+    const homeTeam = game.home ? game.home.name.full : '';
+    const awayTeam = game.away ? game.away.name.full : '';
     console.log({ id });
     transformed.push({
       fields: {
