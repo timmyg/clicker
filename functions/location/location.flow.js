@@ -654,9 +654,8 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
         const text = `Manual Zap @ ${location.name} (${location.neighborhood} Zone ${location.boxes[i].zone ||
-          'no zone'}) *${program.channelTitle}: ${program.title} [${major}]* ~${previousProgram.channelTitle}: ${
-          previousProgram.title
-        }~`;
+          'no zone'}) *${program && program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
+          previousProgram.channelTitle}: ${previousProgram && previousProgram.title}~`;
 
         await new Invoke()
           .service('notification')
