@@ -307,7 +307,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGamesName = 'Games';
   const allExistingGames = await base(airtableGamesName)
-    .select({ fields: ['id'] })
+    .select({ fields: ['id', 'start'] })
     .all();
   const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
   console.log('allExistingGamesIds', allExistingGamesIds.length);
@@ -348,7 +348,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   let eventsUpdated = allEvents.filter(e => {
     const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
     console.log('isUpdated?', airtableGame, e);
-    if (!!airtableGame && airtableGame.start !== e.start) {
+    if (!!airtableGame && airtableGame.get('start') !== e.start_time) {
       return true;
     }
     return false;
