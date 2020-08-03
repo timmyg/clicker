@@ -334,8 +334,8 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   while (!!airtableGames.length) {
     try {
       const gamesSlice = airtableGames.splice(0, 10);
-      console.log('batch putting:', gamesSlice.length);
-      console.log('remaining:', airtableGames.length);
+      console.log('batch putting1:', gamesSlice.length);
+      console.log('remaining1:', airtableGames.length);
       promises.push(base(airtableGamesName).create(gamesSlice));
     } catch (e) {
       console.error(e);
@@ -361,8 +361,8 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   while (!!airtableGamesUpdated.length) {
     try {
       const gamesSliceUpdated = airtableGamesUpdated.splice(0, 10);
-      console.log('batch putting:', gamesSliceUpdated.length);
-      console.log('remaining:', airtableGamesUpdated.length);
+      console.log('batch putting2:', gamesSliceUpdated.length);
+      console.log('remaining2:', airtableGamesUpdated.length);
       promisesUpdated.push(base(airtableGamesName).update(gamesSliceUpdated));
     } catch (e) {
       console.error(e);
