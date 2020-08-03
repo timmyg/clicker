@@ -354,7 +354,6 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     }
     return false;
   });
-  console.timeEnd('update');
   transformedGames = [];
   eventsUpdated.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGamesUpdated = buildAirtableGames(transformedGames);
@@ -370,6 +369,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     }
   }
   const result2 = await Promise.all(promisesUpdated);
+  console.timeEnd('update');
 
   return respond(200);
 });
@@ -475,6 +475,7 @@ function buildAirtableGames(games: Game[]) {
     const awayTeam = game.away ? game.away.name.full : '';
     console.log({ id });
     transformed.push({
+      id,
       fields: {
         id,
         leagueName,
