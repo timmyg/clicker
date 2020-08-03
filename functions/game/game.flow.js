@@ -323,12 +323,12 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const allEvents: any = await pullFromActionNetwork(datesToPull);
   console.log('allEvents', allEvents.length);
   let eventsNew = uniqBy(allEvents, 'id');
-  console.log('unique events', events.length);
-  events = events.filter(e => !allExistingGamesIds.includes(e.id));
-  console.log('not existing in airtable events', events.length);
+  console.log('unique events', eventsNew.length);
+  eventsNew = eventsNew.filter(e => !allExistingGamesIds.includes(e.id));
+  console.log('not existing in airtable events', eventsNew.length);
   console.time('create');
   let transformedGames: Game[] = [];
-  events.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
+  eventsNew.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGames = buildAirtableGames(transformedGames);
   const promises = [];
   while (!!airtableGames.length) {
@@ -345,7 +345,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('create');
 
   console.time('update');
-  events = allEvents.filter(e => {
+  let eventsUpdated = allEvents.filter(e => {
     const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
     console.log('isUpdated?', airtableGame, e);
     if (!!airtableGame && airtableGame.start !== e.start) {
@@ -355,7 +355,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.timeEnd('update');
   transformedGames = [];
-  allEvents.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
+  eventsUpdated.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGamesUpdated = buildAirtableGames(transformedGames);
   const promisesUpdated = [];
   while (!!airtableGamesUpdated.length) {
