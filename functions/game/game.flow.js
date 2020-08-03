@@ -343,6 +343,32 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   }
   const result = await Promise.all(promises);
   console.timeEnd('create');
+
+  console.time('update');
+  allEvents = allEvents.filter(e => {
+    const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
+    if (!!airtableGame && airtableGame.start !== e.start) {
+      return true;
+    }
+    return false;
+  });
+  console.timeEnd('update');
+  transformedGames = [];
+  allEvents.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
+  const airtableGamesUpdated = buildAirtableGames(transformedGames);
+  const promisesUpdated = [];
+  while (!!airtableGamesUpdated.length) {
+    try {
+      const gamesSliceUpdated = airtableGamesUpdated.splice(0, 10);
+      console.log('batch putting:', gamesSliceUpdated.length);
+      console.log('remaining:', airtableGamesUpdated.length);
+      promisesUpdated.push(base(airtableGamesName).update(gamesSliceUpdated));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  const result2 = await Promise.all(promisesUpdated);
+
   return respond(200);
 });
 
