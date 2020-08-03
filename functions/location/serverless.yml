@@ -248,11 +248,11 @@ functions:
     handler: location.controlCenter
     timeout: 30
     # called by job
-    # events:
-    # - schedule: cron(*/10 * * * ? *) # every 10th minute
-    # - http:
-    #     path: control-center
-    #     method: post
+    events:
+      # - schedule: cron(*/10 * * * ? *) # every 10th minute
+      - http:
+          path: control-center
+          method: post
   controlCenterByLocation:
     handler: location.controlCenterByLocation
     events:
