@@ -469,13 +469,14 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
 function buildAirtableGames(games: Game[]) {
   const transformed = [];
   games.forEach(game => {
+    console.log({ game });
     // console.log({ game });
     const { id, leagueName, start } = game;
     const homeTeam = game.home ? game.home.name.full : '';
     const awayTeam = game.away ? game.away.name.full : '';
     console.log({ id });
     transformed.push({
-      id,
+      // id,
       fields: {
         id,
         leagueName,
