@@ -348,7 +348,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('allEvents', allEvents.length);
   let eventsUpdated = allEvents.filter(e => {
     const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
-    console.log('isUpdated?', airtableGame, e);
+    // console.log('isUpdated?', airtableGame, e);
     if (!!airtableGame && airtableGame.get('start') !== e.start_time) {
       return true;
     }
@@ -357,6 +357,15 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   transformedGames = [];
   eventsUpdated.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGamesUpdated = buildAirtableGames(transformedGames);
+  console.log('iiiiiiiiiiiiiiiiiiiiiii');
+  console.log(airtableGamesUpdated[0]);
+  console.log('oooooooooooooooo');
+  console.log(allExistingGames[0]);
+  airtableGamesUpdated.map(atg => {
+    atg['id'] = allExistingGames.find(eg => eg.fields.id === atg.fields.id).id;
+  });
+  console.log('aaaaaaaaaaaaaaa');
+  console.log(airtableGamesUpdated[0]);
   const promisesUpdated = [];
   while (!!airtableGamesUpdated.length) {
     try {
