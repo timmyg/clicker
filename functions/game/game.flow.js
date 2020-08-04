@@ -307,7 +307,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGamesName = 'Games';
   const allExistingGames = await base(airtableGamesName)
-    .select({ fields: ['id'] })
+    .select({ fields: ['id', 'start'] })
     .all();
   const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
   console.log('allExistingGamesIds', allExistingGamesIds.length);
@@ -320,22 +320,22 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       .toDate();
     datesToPull.push(dateToSync);
   });
-  let allEvents: any = await pullFromActionNetwork(datesToPull);
+  const allEvents: any = await pullFromActionNetwork(datesToPull);
   console.log('allEvents', allEvents.length);
-  allEvents = uniqBy(allEvents, 'id');
-  console.log('unique events', allEvents.length);
-  allEvents = allEvents.filter(e => !allExistingGamesIds.includes(e.id));
-  console.log('not existing in airtable events', allEvents.length);
+  let eventsNew = uniqBy(allEvents, 'id');
+  console.log('unique events', eventsNew.length);
+  eventsNew = eventsNew.filter(e => !allExistingGamesIds.includes(e.id));
+  console.log('not existing in airtable events', eventsNew.length);
   console.time('create');
   let transformedGames: Game[] = [];
-  allEvents.forEach(g => transformedGames.push(transformGame(g)));
+  eventsNew.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGames = buildAirtableGames(transformedGames);
   const promises = [];
   while (!!airtableGames.length) {
     try {
       const gamesSlice = airtableGames.splice(0, 10);
-      console.log('batch putting:', gamesSlice.length);
-      console.log('remaining:', airtableGames.length);
+      console.log('batch putting1:', gamesSlice.length);
+      console.log('remaining1:', airtableGames.length);
       promises.push(base(airtableGamesName).create(gamesSlice));
     } catch (e) {
       console.error(e);
@@ -343,6 +343,43 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   }
   const result = await Promise.all(promises);
   console.timeEnd('create');
+
+  console.time('update');
+  console.log('allEvents', allEvents.length);
+  let eventsUpdated = allEvents.filter(e => {
+    const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
+    // console.log('isUpdated?', airtableGame, e);
+    if (!!airtableGame && airtableGame.get('start') !== e.start_time) {
+      return true;
+    }
+    return false;
+  });
+  transformedGames = [];
+  eventsUpdated.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
+  const airtableGamesUpdated = buildAirtableGames(transformedGames);
+  console.log('iiiiiiiiiiiiiiiiiiiiiii');
+  console.log(airtableGamesUpdated[0]);
+  console.log('oooooooooooooooo');
+  console.log(allExistingGames[0]);
+  airtableGamesUpdated.map(atg => {
+    atg['id'] = allExistingGames.find(eg => eg.fields.id === atg.fields.id).id;
+  });
+  console.log('aaaaaaaaaaaaaaa');
+  console.log(airtableGamesUpdated[0]);
+  const promisesUpdated = [];
+  while (!!airtableGamesUpdated.length) {
+    try {
+      const gamesSliceUpdated = airtableGamesUpdated.splice(0, 10);
+      console.log('batch putting2:', gamesSliceUpdated.length);
+      console.log('remaining2:', airtableGamesUpdated.length);
+      promisesUpdated.push(base(airtableGamesName).update(gamesSliceUpdated));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  const result2 = await Promise.all(promisesUpdated);
+  console.timeEnd('update');
+
   return respond(200);
 });
 
@@ -441,12 +478,14 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
 function buildAirtableGames(games: Game[]) {
   const transformed = [];
   games.forEach(game => {
+    console.log({ game });
     // console.log({ game });
     const { id, leagueName, start } = game;
-    const { full: homeTeam } = game.home.name;
-    const { full: awayTeam } = game.away.name;
+    const homeTeam = game.home ? game.home.name.full : '';
+    const awayTeam = game.away ? game.away.name.full : '';
     console.log({ id });
     transformed.push({
+      // id,
       fields: {
         id,
         leagueName,
