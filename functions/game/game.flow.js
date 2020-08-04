@@ -442,7 +442,7 @@ function buildAirtableGames(games: Game[]) {
   const transformed = [];
   games.forEach(game => {
     // console.log({ game });
-    const { id, leagueName, start } = game;
+    const { id, leagueName, start, broadcast } = game;
     const { full: homeTeam } = game.home.name;
     const { full: awayTeam } = game.away.name;
     console.log({ id });
@@ -453,6 +453,7 @@ function buildAirtableGames(games: Game[]) {
         homeTeam,
         awayTeam,
         start,
+        channelTitle: broadcast ? broadcast.network : null,
       },
     });
   });
