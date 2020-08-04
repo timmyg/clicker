@@ -1,4 +1,4 @@
-service: notification
+service: voucher
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
@@ -6,27 +6,51 @@ provider:
   versionFunctions: false
   runtime: nodejs10.x
   # tracing: true
+  region: 'us-east-1'
   logRetentionInDays: 14
+  # apiKeys:
+  #   - mySecondPrivateKey
   deploymentBucket:
     name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    tableVoucher: ${self:custom.tableVoucher}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
+        - dynamodb:*
         - lambda:InvokeFunction
         - lambda:InvokeAsync
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
-  environment:
-    stage: ${self:custom.stage}
-    slackAntennaWebhookUrl: ${env:SLACK_ANTENNA_WEBHOOK_URL}
-    slackManualZapsWebhookUrl: ${env:SLACK_MANUAL_ZAPS_WEBHOOK_URL}
-    slackAppWebhookUrl: ${env:SLACK_APP_WEBHOOK_URL}
-    slackLandingWebhookUrl: ${env:SLACK_LANDING_WEBHOOK_URL}
-    slackControlCenterWebhookUrl: ${env:SLACK_CONTROL_CENTER_WEBHOOK_URL}
-    slackTasksWebhookUrl: ${env:SLACK_TASKS_WEBHOOK_URL}
-    slackSandboxWebhookUrl: ${env:SLACK_SANDBOX_WEBHOOK_URL}
-    slackMoneyWebhookUrl: ${env:SLACK_MONEY_WEBHOOK_URL}
+resources:
+  Resources:
+    VouchersTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tableVoucher}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: code
+            AttributeType: S
+          - AttributeName: entityId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: code
+            KeyType: HASH
+          - AttributeName: entityId
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: expires
+          Enabled: true
+        GlobalSecondaryIndexes:
+          - IndexName: codeGlobalIndex
+            KeySchema:
+              - AttributeName: code
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
@@ -36,6 +60,7 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  tableVoucher: vouchers-${self:custom.stage}
   prune:
     automatic: true
     number: 3
@@ -45,23 +70,23 @@ custom:
     develop: api-develop.tryclicker.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: notifications
+    basePath: vouchers
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true
     endpointType: 'edge'
+    # autoDomain: true
   sentry:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
 functions:
-  sendAntenna:
-    handler: notification.sendAntenna
-  sendApp:
-    handler: notification.sendApp
+  redeem:
+    handler: voucher.redeem
+    timeout: 12
     events:
       - http:
-          path: app
+          path: redeem
           method: post
           cors:
             origin: '*'
@@ -71,19 +96,17 @@ functions:
               - clicker
               - authorization
               - content-type
-  sendControlCenter:
-    handler: notification.sendControlCenter
-  sendManual:
-    handler: notification.sendManual
-  sendLanding:
-    handler: notification.sendLanding
-  sendTasks:
-    handler: notification.sendTasks
-  sendMoney:
-    handler: notification.sendMoney
   health:
-    handler: notification.health
+    handler: voucher.health
     events:
       - http:
           path: health
           method: get
+  create:
+    handler: voucher.create
+    timeout: 12
+    events:
+      - http:
+          path: ''
+          method: post
+          # private: true

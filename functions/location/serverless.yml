@@ -247,8 +247,9 @@ functions:
   controlCenter:
     handler: location.controlCenter
     timeout: 30
+    # called by job
     events:
-      - schedule: cron(*/10 * * * ? *) # every 10th minute
+      # - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
           path: control-center
           method: post
@@ -314,3 +315,11 @@ functions:
     handler: location.migration
     description: database migration scripts
     timeout: 90
+  syncLocationsBoxes:
+    handler: job.syncLocationsBoxes
+    timeout: 30
+    events:
+      - schedule: cron(00 11 * * ? *) # every day @ 7:00am eastern
+      - http:
+          path: boxes/sync
+          method: post

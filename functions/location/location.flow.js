@@ -131,6 +131,7 @@ const dbLocation = dynamoose.model(
     hidden: Boolean,
     connected: Boolean,
     controlCenter: Boolean,
+    vipOnly: Boolean,
     announcement: String,
     notes: String,
     // calculated fields
@@ -147,9 +148,9 @@ const dbLocation = dynamoose.model(
 module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
-  const { partner, clicker, app } = event.headers;
-  console.log({ partner, clicker, app });
-  console.time('entire');
+  // const { partner, clicker, app } = event.headers;
+  // console.log({ partner, clicker, app });
+  // console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
   console.log({ milesRadius });
@@ -653,9 +654,8 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
         const text = `Manual Zap @ ${location.name} (${location.neighborhood} Zone ${location.boxes[i].zone ||
-          'no zone'}) ~${previousProgram.channelTitle}: ${previousProgram.title}~ to *${program.channelTitle}: ${
-          program.title
-        }*`;
+          'no zone'}) *${program && program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
+          previousProgram.channelTitle}: ${previousProgram && previousProgram.title}~`;
 
         await new Invoke()
           .service('notification')
@@ -694,15 +694,16 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ location });
   if (!!location) {
     await dbLocation.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
-
-    const text = `Antenna Connected @ ${location.name} (${location.neighborhood})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendAntenna')
-      .body({ text })
-      .async()
-      .go();
   }
+  const text = `Antenna Connected @ ${location ? location.name : 'unknown losantId'} (${
+    location ? location.neighborhood : ''
+  })`;
+  await new Invoke()
+    .service('notification')
+    .name('sendAntenna')
+    .body({ text })
+    .async()
+    .go();
 
   return respond(200, 'ok');
 });
@@ -718,15 +719,17 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ location });
   if (!!location) {
     await dbLocation.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
-
-    const text = `Antenna Disconnected @ ${location.name} (${location.neighborhood})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendAntenna')
-      .body({ text })
-      .async()
-      .go();
   }
+
+  const text = `Antenna Disconnected @ ${location ? location.name : 'unknown losantId'} (${
+    location ? location.neighborhood : ''
+  })`;
+  await new Invoke()
+    .service('notification')
+    .name('sendAntenna')
+    .body({ text })
+    .async()
+    .go();
 
   return respond(200, 'ok');
 });
@@ -1209,6 +1212,39 @@ module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
   await migrateLocationsToVersion2();
 
   return respond();
+});
+
+module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  const { data: allRegions } = await new Invoke()
+    .service('program')
+    .name('regions')
+    .go();
+  const allRegionIds = allRegions.map(r => r.id);
+
+  const { data: locations }: { data: Venue[] } = await new Invoke()
+    .service('location')
+    .name('controlCenterLocationsByRegion')
+    .pathParams({ regions: allRegionIds })
+    .headers(event.headers)
+    .go();
+  for (location of locations) {
+    const { losantId } = location;
+    console.log(`sync box (${location.name}):`, { losantId });
+    await new Invoke()
+      .service('remote')
+      .name('syncWidgetBoxes')
+      .body({ losantId })
+      .async()
+      .go();
+    const text = `Boxes Synced @ ${location.name} (${location.neighborhood})`;
+    await new Invoke()
+      .service('notification')
+      .name('sendAntenna')
+      .body({ text })
+      .async()
+      .go();
+  }
+  return respond(200);
 });
 
 function buildAirtableNowShowing(location: Venue) {

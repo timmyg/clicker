@@ -6,6 +6,7 @@ audit.js
 game.js
 job.js
 lead.js
+voucher.js
 location.js
 message.js
 program.js

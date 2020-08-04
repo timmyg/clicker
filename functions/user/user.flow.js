@@ -22,6 +22,10 @@ const demo = {
   phone: '+14141414141',
   code: '4141',
 };
+const voucherTypes = {
+  vip: 'vip',
+  managerMode: 'manager-mode',
+};
 declare class process {
   static env: {
     stage: string,
@@ -76,12 +80,10 @@ const dbUser = dynamoose.model(
       type: Number,
       required: true,
     },
-    // roles: Map, below
-    // {
-    //   "manager": [
-    //     "920f8dc0-4ce7-11e9-839a-e73aa5a05cbf"
-    //   ]
-    // },
+    // roles: {
+    //   manageLocations: locationId[]
+    //   vipLocations: locationId[]
+    // }
     aliasedTo: {
       type: String,
     },
@@ -94,7 +96,45 @@ const dbUser = dynamoose.model(
 );
 
 module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond();
+  // Handle the event
+  const webhookEvent = getBody(event);
+  console.log({ webhookEvent });
+  switch (webhookEvent.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntent = webhookEvent.data.object;
+      break;
+    case 'payment_method.attached':
+      const paymentMethod = webhookEvent.data.object;
+      break;
+    default:
+      return respond(400);
+  }
+});
+
+module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => {
+  const webhookEvent = getBody(event);
+  console.log({ webhookEvent });
+  switch (webhookEvent.type) {
+    case 'invoice.paid':
+      const invoice = webhookEvent.data.object;
+      const { customer_email: customerEmail, amount_paid: amountPaid } = invoice;
+      const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendMoney')
+        .body({ text })
+        .async()
+        .go();
+      return respond(200);
+    // case 'payment_intent.succeeded':
+    //   const paymentIntent = webhookEvent.data.object;
+    //   break;
+    // case 'payment_method.attached':
+    //   const paymentMethod = webhookEvent.data.object;
+    //   break;
+    default:
+      return respond(400, `webhook ${webhookEvent.type} not supported by Clicker API`);
+  }
 });
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
@@ -361,6 +401,17 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event => {
+  const { stripeCustomerId } = getBody(event);
+
+  var session = await stripe.billingPortal.sessions.create({
+    customer: stripeCustomerId,
+    return_url: 'https://tryclicker.com',
+  });
+
+  return respond(200, session);
+});
+
 module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
   const { fromId, toId } = getPathParameters(event);
 
@@ -448,8 +499,41 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
+  const { roleType, locationId } = getBody(event);
+  const userId = getUserId(event);
+  const user = await dbUser
+    .queryOne('id')
+    .eq(userId)
+    .exec();
+  const role = getRole(roleType);
+  let userRoles = user.roles;
+  console.log({ role });
+  if (!userRoles) {
+    // doesnt have roles
+    console.log('no roles');
+    userRoles = {};
+    userRoles[role] = [locationId];
+  } else if (userRoles[role]) {
+    console.log('has role');
+    userRoles[role].push(locationId);
+  } else {
+    userRoles[role] = [locationId];
+  }
+  await dbUser.update({ id: userId }, { roles: userRoles });
+  return respond(200, 'role added');
+});
+
 async function getTokenDemo(phone) {
   return await getToken(phone, true);
+}
+
+function getRole(id) {
+  const map = {
+    [voucherTypes.vip]: 'vipLocations',
+    [voucherTypes.managerMode]: 'manageLocations',
+  };
+  return map[id];
 }
 
 async function getToken(phone, isDemo) {

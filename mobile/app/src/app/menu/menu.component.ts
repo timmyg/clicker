@@ -7,12 +7,14 @@ import {
   ModalController,
 } from "@ionic/angular";
 import { Storage } from "@ionic/storage";
+import { LaunchReview } from '@ionic-native/launch-review/ngx';
 import { SegmentService } from 'ngx-segment-analytics';
 import { Globals } from "../globals";
 import { LoginComponent } from "../auth/login/login.component";
 import { Subscription, Observable } from "rxjs";
 import { first } from "rxjs/operators";
 import { ReferralPage } from "../referral/referral.page";
+import { VoucherComponent } from "../voucher/voucher.component";
 import { isLoggedIn } from "../state/user";
 import { User } from "@sentry/browser";
 import { Store } from "@ngrx/store";
@@ -31,6 +33,7 @@ declare var window: any;
 export class MenuComponent {
   user$: Observable<User>;
   suggestModal;
+  voucherModal;
   referralModal;
   loginModal;
   rating = {
@@ -52,7 +55,8 @@ export class MenuComponent {
     public modalController: ModalController,
     private globals: Globals,
     private store: Store<fromStore.AppState>,
-    public userService: UserService
+    public userService: UserService,
+    private launchReview: LaunchReview
   ) {
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     this.isLoggedIn$.subscribe((isLoggedIn) => {
@@ -128,14 +132,11 @@ export class MenuComponent {
           text: "Leave rating",
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
-            let link = "https://tryclicker.com";
-            if (this.platform.is("ios")) {
-              link =
-                "itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8";
-            } else if (this.platform.is("android")) {
-              link = "market://details?id=com.teamclicker.app";
+            if(this.launchReview.isRatingSupported()){
+              this.launchReview.rating()
+            } else {
+              this.launchReview.launch()
             }
-            window.open(link);
             return null;
           },
         },
@@ -181,22 +182,17 @@ export class MenuComponent {
     return await this.suggestModal.present();
   }
 
-  async onRequestManagerMode() {
+  async onCodeRedeem() {
     if (this.isLoggedIn) {
-    this.suggestModal = await this.modalController.create({
-      component: SuggestComponent,
-      componentProps: { 
-        title: "Manager Mode", 
-        placeholder: "Give us your full name and location name and we'll confirm with your manager." ,
-        managerMode: true
-      },
-    });
-    this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
-      if (this.suggestModal) {
-        this.suggestModal.close();
-      }
-    });
-    return await this.suggestModal.present();
+      this.voucherModal = await this.modalController.create({
+        component: VoucherComponent,
+      });
+      this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
+        if (this.voucherModal) {
+          this.voucherModal.close();
+        }
+      });
+      return await this.voucherModal.present();
   } else {
     const toast = await this.toastController.create({
       message: `✋ Please login.`,

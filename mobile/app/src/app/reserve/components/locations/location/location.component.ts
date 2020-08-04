@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Location } from "src/app/state/location/location.model";
 import { filter } from "rxjs/operators";
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: "app-location",
@@ -17,31 +18,41 @@ export class LocationComponent {
   isManager: boolean;
   isVip: boolean;
 
+  constructor(private toastController: ToastController) {
+    this.toastController = toastController;
+  }
+
   ngOnInit() {
     this.userRoles.pipe(filter((roles) => !!roles)).subscribe((roles) => {
       const manageLocations = roles["manageLocations"];
       this.isManager =
         manageLocations && manageLocations.includes(this.location.id);
+      const vipLocations = roles["vipLocations"];
+      this.isVip =
+        vipLocations && vipLocations.includes(this.location.id);
     });
   }
-
-  // isManager() {
-  //   // const {  userRoles } = this;
-  //   // console.log(userRoles);
-  //   // if (userLocations && userRoles) {
-  //   //   return (
-  //   //     userLocations.indexOf(this.location.id) > -1 ||
-  //   //     userRoles.indexOf("superman") > -1
-  //   //   );
-  //   // }
-  // }
 
   isAvailable() {
     return this.location.active && this.location.connected;
   }
 
   onLocationClick() {
+    console.log(this.location.vipOnly,!this.isVip);
+    if (this.location.vipOnly && !this.isVip && !this.isManager) {
+      return this.showVipOnlyToast();
+    }
     this.onClick.emit({location: this.location, isManager: this.isManager, isVip: this.isVip});
+  }
+
+  private async showVipOnlyToast() {
+    const success = await this.toastController.create({
+      message: `${this.location.name} is VIP Only. Ask the staff about becoming a VIP so you can change the channel!`,
+      duration: 8000,
+      cssClass: "ion-text-center",
+      // color: "warning"
+    });
+    success.present();
   }
 
   onManageClick(slidingItem) {
@@ -55,10 +66,10 @@ export class LocationComponent {
   }
 
   getDistance() {
-    const { distance } = this.location;
-    if (distance <= 10) {
-      return distance;
-    } else if (distance > 10 && distance <= 500) {
+  const { distance } = this.location;
+  if (distance <= 10) {
+    return distance;
+  } else if (distance > 10 && distance <= 500) {
       return Math.round(distance);
     } else {
       return "500+";

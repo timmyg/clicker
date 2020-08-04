@@ -28,15 +28,15 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     .async()
     .go();
   console.timeEnd('notification');
-  if (stage === 'prod') {
-    console.time('hubspot:create');
-    const hubspotContact = await createHubspotContact(email, promo);
-    console.timeEnd('hubspot:create');
-    // console.time('trello:create');
-    // const trelloContact = await createTrelloCard(email);
-    // console.timeEnd('trello:create');
-    return respond(201, { hubspotContact });
-  }
+  // if (stage === 'prod') {
+  //   console.time('hubspot:create');
+  //   const hubspotContact = await createHubspotContact(email, promo);
+  //   console.timeEnd('hubspot:create');
+  //   // console.time('trello:create');
+  //   // const trelloContact = await createTrelloCard(email);
+  //   // console.timeEnd('trello:create');
+  //   return respond(201, { hubspotContact });
+  // }
   return respond(201, "not prod so didn't actually create anything");
 });
 

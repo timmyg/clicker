@@ -12,6 +12,7 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { appReducer } from "./app.reducer";
 import { LocationsEffects } from "./location/location.effects";
 import { UserEffects } from "./user/user.effects";
+import { VoucherEffects } from "./voucher/voucher.effects";
 import { ProgramsEffects } from "./program/program.effects";
 import { ReservationsEffects } from "./reservation/reservation.effects";
 import { AppEffects } from "./app/app.effects";
@@ -34,6 +35,7 @@ import { AppEffects } from "./app/app.effects";
       ReservationsEffects,
       AppEffects,
       UserEffects,
+      VoucherEffects,
     ]),
   ],
   declarations: [],
