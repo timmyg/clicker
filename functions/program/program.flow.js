@@ -122,7 +122,8 @@ const minorChannels = [
   },
 ];
 
-const blacklistChannelIds = [5660, 2660, 623, 624, 625, 376, 2661];
+// const blacklistChannelIds = [5660, 2660, 623, 624, 625, 376, 2661];
+const blacklistChannelIds = [];
 
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
