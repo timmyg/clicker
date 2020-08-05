@@ -273,7 +273,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .query('channel')
       .eq(channel)
       .and()
-      .query('channelMinor')
+      .filter('channelMinor')
       .eq(channelMinor)
       .and()
       .filter('region')
