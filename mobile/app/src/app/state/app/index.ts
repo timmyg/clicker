@@ -4,10 +4,27 @@ import { State as AppState } from "./app.reducer";
 
 export const getAppState = createFeatureSelector<AppState>("app");
 
-export const getPartner = createSelector(getAppState, fromApp.getPartner);
+export const getPartner = createSelector(
+  getAppState,
+  fromApp.getPartner
+);
 
-export const getPlans = createSelector(getAppState, fromApp.getPlans);
+export const getPlans = createSelector(
+  getAppState,
+  fromApp.getPlans
+);
 
-export const getLoading = createSelector(getAppState, fromApp.getLoading);
+export const getLoading = createSelector(
+  getAppState,
+  fromApp.getLoading
+);
 
-export const getTimeframes = createSelector(getAppState, fromApp.getTimeframes);
+export const getTimeframes = createSelector(
+  getAppState,
+  fromApp.getTimeframes
+);
+
+export const getIsDarkMode = createSelector(
+  getAppState,
+  fromApp.getIsDarkMode
+);

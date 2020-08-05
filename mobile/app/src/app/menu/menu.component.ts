@@ -7,8 +7,7 @@ import {
   ModalController,
 } from "@ionic/angular";
 import { Storage } from "@ionic/storage";
-import { LaunchReview } from '@ionic-native/launch-review/ngx';
-import { SegmentService } from 'ngx-segment-analytics';
+import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "../globals";
 import { LoginComponent } from "../auth/login/login.component";
 import { Subscription, Observable } from "rxjs";
@@ -22,7 +21,7 @@ import * as fromStore from "../state/app.reducer";
 import * as fromUser from "../state/user/user.actions";
 import { getUser, getLoading as getWalletLoading } from "../state/user";
 import { SuggestComponent } from "../suggest/suggest.component";
-import { UserService } from '../core/services/user.service';
+import { UserService } from "../core/services/user.service";
 declare var window: any;
 
 @Component({
@@ -55,8 +54,7 @@ export class MenuComponent {
     public modalController: ModalController,
     private globals: Globals,
     private store: Store<fromStore.AppState>,
-    public userService: UserService,
-    private launchReview: LaunchReview
+    public userService: UserService
   ) {
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     this.isLoggedIn$.subscribe((isLoggedIn) => {
@@ -132,11 +130,14 @@ export class MenuComponent {
           text: "Leave rating",
           handler: async () => {
             await this.storage.set(this.rating.cookieName, this.rating.given);
-            if(this.launchReview.isRatingSupported()){
-              this.launchReview.rating()
-            } else {
-              this.launchReview.launch()
+            let link = "https://tryclicker.com";
+            if (this.platform.is("ios")) {
+              link =
+                "itms-apps://itunes.apple.com/app/apple-store/id1471666907?mt=8";
+            } else if (this.platform.is("android")) {
+              link = "market://details?id=com.teamclicker.app";
             }
+            window.open(link, "_system");
             return null;
           },
         },
@@ -168,10 +169,10 @@ export class MenuComponent {
   async onSuggestLocation() {
     this.suggestModal = await this.modalController.create({
       component: SuggestComponent,
-      componentProps: { 
+      componentProps: {
         title: "Suggest Location",
-        placeholder: "Tell us a name and location of a bar you want Clicker at" ,
-        suggestLocationMode: true
+        placeholder: "Tell us a name and location of a bar you want Clicker at",
+        suggestLocationMode: true,
       },
     });
     this.sub = this.platform.backButton.pipe(first()).subscribe(() => {
@@ -193,32 +194,32 @@ export class MenuComponent {
         }
       });
       return await this.voucherModal.present();
-  } else {
-    const toast = await this.toastController.create({
-      message: `✋ Please login.`,
-      duration: 4000,
-      buttons: [
-        {
-          side: "end",
-          text: "Login",
-          handler: async () => {
-            this.loginModal = await this.modalController.create({
-              component: LoginComponent,
-            });
-            this.sub = this.platform.backButton
-              .pipe(first())
-              .subscribe(() => {
-                if (this.loginModal) {
-                  this.loginModal.close();
-                }
+    } else {
+      const toast = await this.toastController.create({
+        message: `✋ Please login.`,
+        duration: 4000,
+        buttons: [
+          {
+            side: "end",
+            text: "Login",
+            handler: async () => {
+              this.loginModal = await this.modalController.create({
+                component: LoginComponent,
               });
-            return await this.loginModal.present();
+              this.sub = this.platform.backButton
+                .pipe(first())
+                .subscribe(() => {
+                  if (this.loginModal) {
+                    this.loginModal.close();
+                  }
+                });
+              return await this.loginModal.present();
+            },
           },
-        },
-      ],
-    });
-    toast.present();
-  }
+        ],
+      });
+      toast.present();
+    }
   }
 
   async onOpenReferral() {
@@ -270,10 +271,9 @@ export class MenuComponent {
   }
 
   onThemeToggle(e) {
-    const isDarkMode = e.detail.checked
+    const isDarkMode = e.detail.checked;
     this.userService.setDarkMode(isDarkMode);
-        // Use matchMedia to check the user preference
-    
+    // Use matchMedia to check the user preference
 
     // toggleDarkTheme(prefersDark.matches);
 

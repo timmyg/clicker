@@ -10,7 +10,6 @@ import { RouteReuseStrategy } from "@angular/router";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { Device } from "@ionic-native/device/ngx";
-import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 // import { IntercomModule } from 'ng-intercom';
 
@@ -116,7 +115,6 @@ export function initUserStuff(store: Store<AppState>): Function {
     },
     StatusBar,
     SplashScreen,
-    LaunchReview,
     Device,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {

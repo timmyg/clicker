@@ -17,6 +17,7 @@ export const CLEAR_PLANS = "[APP] Clear Plans";
 export const SEND_MESSAGE = "[APP] Send Message";
 export const SEND_MESSAGE_SUCCESS = "[APP] Send Message Success";
 export const SEND_MESSAGE_FAIL = "[APP] Send Message Fail";
+export const SET_IS_DARK_MODE = "[APP] Set Is Dark Mode";
 
 export class SetPartner implements Action {
   readonly type = SET_PARTNER;
@@ -88,6 +89,11 @@ export class SendMessageFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class SetIsDarkMode implements Action {
+  readonly type = SET_IS_DARK_MODE;
+  constructor(public payload: boolean) {}
+}
+
 export type AppActions =
   | SetPartner
   | SetPartnerSuccess
@@ -103,4 +109,5 @@ export type AppActions =
   | ClearPlans
   | SendMessage
   | SendMessageSuccess
-  | SendMessageFail;
+  | SendMessageFail
+  | SetIsDarkMode;
