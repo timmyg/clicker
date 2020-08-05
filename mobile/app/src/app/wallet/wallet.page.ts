@@ -1,11 +1,11 @@
 import { UserService } from "src/app/core/services/user.service";
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import {StripeService} from "ngx-stripe"
 import {
-  StripeService,
-  Elements,
-  Element as StripeElement,
-  ElementsOptions,
-} from "ngx-stripe";
+  StripeElements,
+  StripeCardElement,
+  StripeElementsOptions,
+} from "@stripe/stripe-js";
 import { FormGroup } from "@angular/forms";
 import {
   ToastController,
@@ -33,15 +33,15 @@ import { Actions, ofType } from "@ngrx/effects";
   styleUrls: ["./wallet.page.scss"],
 })
 export class WalletPage implements OnInit, OnDestroy {
-  elements: Elements;
-  card: StripeElement;
+  elements: StripeElements;
+  card: StripeCardElement;
   userCard$: Observable<Card>;
   plans$: Observable<Plan[]>;
   isLoading$: Observable<boolean>;
   waiting: boolean;
   addCardMode = false;
 
-  elementsOptions: ElementsOptions = {
+  elementsOptions: StripeElementsOptions = {
     locale: "en",
   };
 
@@ -78,7 +78,7 @@ export class WalletPage implements OnInit, OnDestroy {
     // this.elements.forEach((element) => {
     //   element.destroy();
     // });
-    this.card.destroy("#card-element");
+    this.card.destroy();
   }
 
   private initStripe() {
