@@ -148,9 +148,9 @@ const dbLocation = dynamoose.model(
 module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
-  const { partner, clicker, app } = event.headers;
-  console.log({ partner, clicker, app });
-  console.time('entire');
+  // const { partner, clicker, app } = event.headers;
+  // console.log({ partner, clicker, app });
+  // console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
   console.log({ milesRadius });
@@ -653,10 +653,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       //  - send to airtable sheet
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
+        const previousChannel = location.boxes[i].live && location.boxes[i].live.channel;
         const text = `Manual Zap @ ${location.name} (${location.neighborhood} Zone ${location.boxes[i].zone ||
-          'no zone'}) *${program.channelTitle}: ${program.title} [${major}]* ~${previousProgram.channelTitle}: ${
-          previousProgram.title
-        }~`;
+          'no zone'}) *${program && program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
+          previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
 
         await new Invoke()
           .service('notification')
