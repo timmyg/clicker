@@ -4,13 +4,10 @@ import { HttpClient } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 import { mergeMap, map } from "rxjs/operators";
 import { Device } from "@ionic-native/device/ngx";
-import {
-  Platform,
-} from "@ionic/angular";
-import {
-  Plugins,
-  StatusBarStyle,
-} from '@capacitor/core';
+import * as fromApp from "src/app/state/app/app.actions";
+import * as fromStore from "src/app/state/app.reducer";
+import { Platform } from "@ionic/angular";
+import { Plugins, StatusBarStyle } from "@capacitor/core";
 
 const { StatusBar } = Plugins;
 
@@ -22,6 +19,7 @@ const storage = {
 };
 
 import { Plan } from "src/app/state/app/plan.model";
+import { Store } from "@ngrx/store";
 
 @Injectable({
   providedIn: "root",
@@ -33,7 +31,8 @@ export class UserService {
     private httpClient: HttpClient,
     private storage: Storage,
     private device: Device,
-    private platform: Platform
+    private platform: Platform,
+    private store: Store<fromStore.AppState>
   ) {
     this.initTheme();
   }
@@ -51,21 +50,22 @@ export class UserService {
   async setDarkMode(isDarkMode: boolean) {
     await this.storage.set(storage.darkMode, isDarkMode);
     this.isDarkMode$.next(isDarkMode);
+    this.store.dispatch(new fromApp.SetIsDarkMode(isDarkMode));
     document.body.classList.toggle("dark", isDarkMode);
     try {
       if (this.platform.is("capacitor")) {
         StatusBar.setStyle({
-          style: isDarkMode ? StatusBarStyle.Dark : StatusBarStyle.Light
+          style: isDarkMode ? StatusBarStyle.Dark : StatusBarStyle.Light,
         });
-        
+
         // Display content under transparent status bar (Android only)
         StatusBar.setOverlaysWebView({
-          overlay: true
+          overlay: true,
         });
       }
     } catch (e) {
-      console.error('status bar error', e)
-  }
+      console.error("status bar error", e);
+    }
   }
 
   async initTheme() {

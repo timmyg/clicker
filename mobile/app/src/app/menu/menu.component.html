@@ -1,11 +1,20 @@
 <ion-list>
   <ion-menu-toggle class="menu">
-    <ion-item (click)="onLogin()" *ngIf="!!(user$ | async)?.guest"><ion-label>Login</ion-label></ion-item>
-    <ion-item (click)="onOpenReferral()" menuToggle><ion-label>Get Free Tokens</ion-label></ion-item>
-    <!-- rating link isnt working -->
-    <!-- <ion-item (click)="onRate()" *ngIf="showRatingLink"><ion-label>Rate</ion-label></ion-item> -->
-    <ion-item (click)="onSuggestLocation()"><ion-label>Suggest New Location</ion-label></ion-item>
-    <ion-item (click)="onCodeRedeem()"><ion-label>Redeem Code</ion-label></ion-item>
+    <ion-item (click)="onLogin()" *ngIf="!!(user$ | async)?.guest"
+      ><ion-label>Login</ion-label></ion-item
+    >
+    <ion-item (click)="onOpenReferral()" menuToggle
+      ><ion-label>Get Free Tokens</ion-label></ion-item
+    >
+    <ion-item (click)="onRate()" *ngIf="showRatingLink"
+      ><ion-label>Rate</ion-label></ion-item
+    >
+    <ion-item (click)="onSuggestLocation()"
+      ><ion-label>Suggest New Location</ion-label></ion-item
+    >
+    <ion-item (click)="onCodeRedeem()"
+      ><ion-label>Redeem Code</ion-label></ion-item
+    >
     <ion-item (click)="onContact()"><ion-label>Contact Us</ion-label></ion-item>
     <ion-item (click)="onLogout()" *ngIf="(user$ | async)?.guest !== true">
       <ion-label>Logout</ion-label>
@@ -14,11 +23,20 @@
   <div class="menu">
     <ion-item>
       <ion-label>
-        <ion-icon size="large" name="moon-outline" *ngIf="(userService.isDarkMode$ | async); else lightMode"></ion-icon>
+        <ion-icon
+          size="large"
+          name="moon-outline"
+          *ngIf="(userService.isDarkMode$ | async); else lightMode"
+        ></ion-icon>
         <ng-template #lightMode>
           <ion-icon size="large" name="sunny-outline"></ion-icon>
         </ng-template>
-        <ion-toggle color="dark" [checked]="(userService.isDarkMode$ | async)" (ionChange)="onThemeToggle($event)" class="ion-float-right"></ion-toggle>
+        <ion-toggle
+          color="dark"
+          [checked]="userService.isDarkMode$ | async"
+          (ionChange)="onThemeToggle($event)"
+          class="ion-float-right"
+        ></ion-toggle>
       </ion-label>
     </ion-item>
   </div>
