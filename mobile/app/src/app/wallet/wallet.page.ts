@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { UserService } from "src/app/core/services/user.service";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
   StripeService,
   Elements,
@@ -18,7 +19,7 @@ import * as fromStore from "../state/app.reducer";
 import { Observable } from "rxjs";
 import { Card } from "src/app/state/user/card.model";
 import { getUserCard, getUserId } from "src/app/state/user";
-import { getLoading, getPlans } from "src/app/state/app";
+import { getLoading, getPlans, getIsDarkMode } from "src/app/state/app";
 import { getUserTokenCount } from "../state/user";
 import { SegmentService } from "ngx-segment-analytics";
 import { Globals } from "../globals";
@@ -31,7 +32,7 @@ import { Actions, ofType } from "@ngrx/effects";
   templateUrl: "./wallet.page.html",
   styleUrls: ["./wallet.page.scss"],
 })
-export class WalletPage {
+export class WalletPage implements OnInit, OnDestroy {
   elements: Elements;
   card: StripeElement;
   userCard$: Observable<Card>;
@@ -46,6 +47,7 @@ export class WalletPage {
 
   selectedPlan: Plan;
   stripeFormGroup: FormGroup;
+  isDarkMode$: Observable<boolean>;
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -55,11 +57,13 @@ export class WalletPage {
     public alertController: AlertController,
     private segment: SegmentService,
     private globals: Globals,
-    private actions$: Actions
+    private actions$: Actions,
+    public userService: UserService
   ) {
     this.userCard$ = this.store.select(getUserCard);
     this.plans$ = this.store.select(getPlans);
     this.isLoading$ = this.store.select(getLoading);
+    this.isDarkMode$ = this.store.select(getIsDarkMode);
   }
 
   ngOnInit() {
@@ -70,21 +74,32 @@ export class WalletPage {
   ngOnDestroy() {
     // clear timeframes because it messes up the radio buttons when reloading
     this.store.dispatch(new fromApp.ClearPlans());
+    console.log("destroy");
+    // this.elements.forEach((element) => {
+    //   element.destroy();
+    // });
+    this.card.destroy("#card-element");
   }
 
   private initStripe() {
+    console.log("initstripe");
     this.stripeService.elements(this.elementsOptions).subscribe((elements) => {
       this.elements = elements;
       // Only mount the element the first time
+
       if (!this.card) {
-        this.card = this.elements.create("card", {
-          style: {
+        this.isDarkMode$.subscribe((isDarkMode) => {
+          const style = {
             base: {
               fontSize: "18px",
             },
-          },
+          };
+          if (isDarkMode) {
+            style.base["color"] = "white";
+          }
+          this.card = this.elements.create("card", { style });
+          this.card.mount("#card-element");
         });
-        this.card.mount("#card-element");
       }
     });
   }
@@ -112,7 +127,7 @@ export class WalletPage {
             this.addCardMode = false;
             this.waiting = false;
             this.segment.track(this.globals.events.payment.sourceAdded, {
-              type: "Credit Card"
+              type: "Credit Card",
             });
           });
         this.actions$
@@ -164,7 +179,7 @@ export class WalletPage {
         toast.present();
         this.onClose();
         this.segment.track(this.globals.events.payment.fundsAdded, {
-          amount: this.selectedPlan.dollars
+          amount: this.selectedPlan.dollars,
         });
         this.store
           .select(getUserId)

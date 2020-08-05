@@ -7,6 +7,7 @@ export interface State {
   plans: Plan[];
   timeframes: Timeframe[];
   version: string;
+  isDarkMode: boolean;
   loading: boolean;
   error: string;
 }
@@ -16,8 +17,9 @@ export const initialState: State = {
   plans: null,
   timeframes: null,
   version: null,
+  isDarkMode: null,
   loading: false,
-  error: ""
+  error: "",
 };
 
 export function reducer(
@@ -29,7 +31,7 @@ export function reducer(
     case fromApp.LOAD_TIMEFRAMES:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case fromApp.SET_PARTNER: {
@@ -44,27 +46,31 @@ export function reducer(
       state.partner = action.payload;
       return state;
     }
+    case fromApp.SET_IS_DARK_MODE: {
+      state.isDarkMode = action.payload;
+      return state;
+    }
     case fromApp.CLEAR_TIMEFRAMES:
       return {
         ...state,
-        timeframes: null
+        timeframes: null,
       };
     case fromApp.CLEAR_PLANS:
       return {
         ...state,
-        plans: null
+        plans: null,
       };
     case fromApp.LOAD_PLANS_SUCCESS:
       return {
         ...state,
         loading: false,
-        plans: action.plans
+        plans: action.plans,
       };
     case fromApp.LOAD_TIMEFRAMES_SUCCESS:
       return {
         ...state,
         loading: false,
-        timeframes: action.timeframes
+        timeframes: action.timeframes,
       };
 
     case fromApp.LOAD_PLANS_FAIL:
@@ -72,7 +78,7 @@ export function reducer(
       return {
         ...state,
         loading: false,
-        error: action.payload
+        error: action.payload,
       };
 
     default: {
@@ -87,3 +93,4 @@ export const getPlans = (state: State) => state.plans;
 export const getTimeframes = (state: State) => state.timeframes;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;
+export const getIsDarkMode = (state: State) => state.isDarkMode;
