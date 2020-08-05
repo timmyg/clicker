@@ -233,7 +233,7 @@ module.exports.checkBoxesInfo = RavenLambdaWrapper.handler(Raven, async event =>
     const payload = { boxes, losantProductionOverride };
 
     const command = 'info.current.all';
-    await api.sendCommand(command, losantId, payload);
+    await api.sendCommand(command, losantId, payload, losantProductionOverride);
     return respond();
   } catch (e) {
     console.error(e);

@@ -213,7 +213,7 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
   updateBoxInfo:
-    description: called by saveBoxesInfo for manual and remote for other changes
+    description: called by location.saveBoxesInfo for manual and remote for other changes
     handler: location.updateBoxInfo
     timeout: 12
     memorySize: 512
