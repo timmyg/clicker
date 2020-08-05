@@ -217,21 +217,9 @@ functions:
     handler: location.updateBoxInfo
     timeout: 12
     memorySize: 512
-  # allOff:
-  #   handler: location.allOff
-  #   events:
-  #     - http:
-  #         path: '{id}/boxes/off'
-  #         method: post
-  # allOn:
-  #   handler: location.allOn
-  #   events:
-  #     - http:
-  #         path: '{id}/boxes/on'
-  #         method: post
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
-    description: check what is on each location boxes
+    description: check what is on all locations boxes (to detect manual changes)
     timeout: 30
     events:
       - schedule: cron(8/10 * * * ? *) # Every 8th minute
@@ -248,11 +236,11 @@ functions:
     handler: location.controlCenter
     timeout: 30
     # called by job
-    # events:
-    # - schedule: cron(*/10 * * * ? *) # every 10th minute
-    # - http:
-    #     path: control-center
-    #     method: post
+    events:
+      # - schedule: cron(*/10 * * * ? *) # every 10th minute
+      - http:
+          path: control-center
+          method: post
   controlCenterByLocation:
     handler: location.controlCenterByLocation
     events:
