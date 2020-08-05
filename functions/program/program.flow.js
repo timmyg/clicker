@@ -206,9 +206,9 @@ const dbProgram = dynamoose.model(
       attribute: 'expires',
       returnExpiredItems: false,
       defaultExpires: x => {
-        // expire 2 hours after end
+        // expire 6 hours after end
         return moment(x.end)
-          .add(2, 'hours')
+          .add(6, 'hours')
           .toDate();
       },
     },
