@@ -272,36 +272,22 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     let programsQuery = dbProgram
       .query('channel')
       .eq(channel)
-      // .and()
-      // .filter('channelMinor')
-      // .eq(channelMinor)
-      .and()
-      .filter('channelMinor')
-      .eq(channelMinor)
       .and()
       .filter('region')
       .eq(region)
       .and()
       .filter('start')
-      // .gt(timeToSearch) // now
-      // .gt(timeToSearchPreviousProgram) // 90 minutes ago
       .lt(timeToSearch) // now
       .and()
       .filter('end')
-      // .lt(timeToSearchPreviousProgram) // 90 minutes ago
-      // .lt(timeToSearch) // now
-      .gt(timeToSearchPreviousProgram); // 90 minutes ago
+      .gt(timeToSearchPreviousProgram) // 90 minutes ago
+      .and()
+      .filter('channelMinor');
 
     if (channelMinor) {
-      programsQuery = programsQuery
-        .and()
-        .filter('channelMinor')
-        .eq(channelMinor);
+      programsQuery = programsQuery.eq(channelMinor);
     } else {
-      programsQuery = programsQuery
-        .and()
-        .filter('channelMinor')
-        .null();
+      programsQuery = programsQuery.null();
     }
 
     const programs: Program[] = await programsQuery.exec();
