@@ -380,6 +380,9 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .headers(event.headers)
     .go();
   console.timeEnd('get location');
+  if (!location) {
+    return respond(400, 'location doesnt exist');
+  }
 
   if (location.demo) {
     const demoPrograms: any[] = [
