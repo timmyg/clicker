@@ -222,6 +222,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(id)
     .exec();
   console.timeEnd('get from db');
+  if (!location) {
+    return respond(400, 'location doesnt exist');
+  }
 
   // demo stuff
   if (location.demo) {
