@@ -213,25 +213,13 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
   updateBoxInfo:
-    description: called by saveBoxesInfo for manual and remote for other changes
+    description: called by location.saveBoxesInfo for manual and remote for other changes
     handler: location.updateBoxInfo
     timeout: 12
     memorySize: 512
-  # allOff:
-  #   handler: location.allOff
-  #   events:
-  #     - http:
-  #         path: '{id}/boxes/off'
-  #         method: post
-  # allOn:
-  #   handler: location.allOn
-  #   events:
-  #     - http:
-  #         path: '{id}/boxes/on'
-  #         method: post
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
-    description: check what is on each location boxes
+    description: check what is on all locations boxes (to detect manual changes)
     timeout: 30
     events:
       - schedule: cron(8/10 * * * ? *) # Every 8th minute

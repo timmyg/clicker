@@ -613,7 +613,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       const programResult = await new Invoke()
         .service('program')
         .name('get')
-        .queryParams({ channel: major, region: location.region })
+        .queryParams({ channel: major, channelMinor: minor <= 2 ? minor : null, region: location.region })
         .go();
       program = programResult && programResult.data;
       console.log({ program });
