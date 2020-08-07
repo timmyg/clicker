@@ -348,9 +348,9 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   let eventsUpdated = allEvents.filter(e => {
     const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
     // console.log('isUpdated?', airtableGame, e);
-    if (airtableGame.get('id') === 85704) {
-      console.log(airtableGame.get('id'), airtableGame.get('start'), e.start_time);
-    }
+    // if (airtableGame.get('id') === 85704) {
+    //   console.log(airtableGame.get('id'), airtableGame.get('start'), e.start_time);
+    // }
     if (!!airtableGame && airtableGame.get('start') !== e.start_time) {
       return true;
     }
