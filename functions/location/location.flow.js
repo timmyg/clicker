@@ -1522,7 +1522,7 @@ async function updateLocationBox(
     ExpressionAttributeValues: expressionAttributeValues,
   };
   // console.log('calling...');
-  // console.log({ params });
+  console.log('params', JSON.stringify(params));
   // console.log('returned');
   try {
     const x = await docClient.update(params).promise();
