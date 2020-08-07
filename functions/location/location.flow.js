@@ -833,6 +833,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
       }
     }
   }
+  return respond(200);
 });
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
