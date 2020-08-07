@@ -79,6 +79,6 @@
 
 <style lang="scss" scoped>
 .features-tiles {
-  padding-bottom: 16px;
+  padding-bottom: 32px;
 }
 </style>
