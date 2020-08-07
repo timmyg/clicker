@@ -862,7 +862,8 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .service('program')
     .name('get')
     .queryParams({
-      channel: channel,
+      channel,
+      channelMinor,
       region: location.region,
       time: inTwoMinutesUnix,
     })
