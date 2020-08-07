@@ -613,11 +613,20 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .unix() * 1000;
 
       console.log({ channel: major, region: location.region });
+      const queryParams = { channel: major, channelMinor: minor <= 2 ? minor : null, region: location.region };
       const programResult = await new Invoke()
         .service('program')
         .name('get')
-        .queryParams({ channel: major, channelMinor: minor <= 2 ? minor : null, region: location.region })
+        .queryParams(queryParams)
         .go();
+      if (!programResult || !programResult.data) {
+        await new Invoke()
+          .service('notification')
+          .name('sendManual')
+          .body({ text: JSON.stringify(queryParams) })
+          .async()
+          .go();
+      }
       program = programResult && programResult.data;
       console.log({ program });
       updateBoxInfoBody.lockedProgrammingId = program && program.programmingId;
