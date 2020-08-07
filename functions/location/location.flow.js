@@ -630,15 +630,24 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       program = programResult && programResult.data;
       console.log({ program });
       updateBoxInfoBody.lockedProgrammingId = program && program.programmingId;
+
+      await new Invoke()
+        .service('location')
+        .name('updateBoxInfo')
+        .body(updateBoxInfoBody)
+        .pathParams({ id: location.id, boxId })
+        .async()
+        .go();
     }
 
-    await new Invoke()
-      .service('location')
-      .name('updateBoxInfo')
-      .body(updateBoxInfoBody)
-      .pathParams({ id: location.id, boxId })
-      .async()
-      .go();
+    // tg moved this to inside manual change block
+    // await new Invoke()
+    //   .service('location')
+    //   .name('updateBoxInfo')
+    //   .body(updateBoxInfoBody)
+    //   .pathParams({ id: location.id, boxId })
+    //   .async()
+    //   .go();
 
     // if channel is different and is a control center box
     //  - track via analytics
