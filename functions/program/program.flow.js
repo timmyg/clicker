@@ -248,8 +248,18 @@ module.exports.regions = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
-  const { channel, channelMinor, time, region, programmingId, programmingIds: programmingIdsString } = event.queryStringParameters;
-  const programmingIds = programmingIdsString.split(',');
+  const {
+    channel,
+    channelMinor,
+    time,
+    region,
+    programmingId,
+    programmingIds: programmingIdsString,
+  } = event.queryStringParameters;
+  let programmingIds;
+  if (programmingIdsString) {
+    programmingIds = programmingIdsString.split(',');
+  }
   if (!region) {
     return respond(400, `need region: ${region}`);
   }
