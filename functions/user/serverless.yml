@@ -253,6 +253,13 @@ functions:
   #     - http:
   #         path: portal
   #         method: post
+  checkout:
+    handler: user.checkout
+    description: clicker customers can sign up for a subscription via stripe hosted checkout
+    events:
+      - http:
+          path: checkout
+          method: post
   stripeWebhook:
     handler: user.stripeWebhook
     description: receive stripe webhooks
