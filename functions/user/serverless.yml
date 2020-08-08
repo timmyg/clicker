@@ -267,3 +267,11 @@ functions:
       - http:
           path: stripe/webhook
           method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - app
+              - clicker
+              - authorization
+              - content-type
