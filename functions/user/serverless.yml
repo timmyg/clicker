@@ -260,13 +260,6 @@ functions:
       - http:
           path: checkout
           method: post
-  stripeWebhook:
-    handler: user.stripeWebhook
-    description: receive stripe webhooks
-    events:
-      - http:
-          path: stripe/webhook
-          method: post
           cors:
             origin: '*'
             headers:
@@ -275,3 +268,10 @@ functions:
               - clicker
               - authorization
               - content-type
+  stripeWebhook:
+    handler: user.stripeWebhook
+    description: receive stripe webhooks
+    events:
+      - http:
+          path: stripe/webhook
+          method: post
