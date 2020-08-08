@@ -38,6 +38,7 @@
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
+                <!-- <a class="button button-primary button-block" href="#signup-form">Learn More</a> -->
                 <a class="button button-primary button-block" href="#signup-form">Learn More</a>
               </div>
             </div>
@@ -63,7 +64,8 @@
                   <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">
                       <span>
-                        <b class="brand-font">Control Center</b> automatically manages your TVs
+                        <b class="brand-font">Control Center</b> automatically
+                        manages your TVs
                       </span>
                     </li>
                     <li class="is-checked">24 hr/day auto programming</li>
@@ -102,14 +104,14 @@
                       <span>
                         Everything in
                         <span class="brand-font">Assistant Coach</span> +
-                        <span class="brand-font">Advanced Scout</span>
-                        packages
+                        <span class="brand-font">Advanced Scout</span> packages
                       </span>
                     </li>
                     <li class="is-checked">
                       <span>
                         <b class="brand-font">Control Center</b> and
-                        <b class="brand-font">Clicker TV</b> changes on the same TV
+                        <b class="brand-font">Clicker TV</b> changes on the same
+                        TV
                       </span>
                     </li>
                     <li class="is-checked">Email, chat + phone support</li>
@@ -124,8 +126,21 @@
         </div>
       </div>
     </div>
+    <div>
+      <Checkout />
+    </div>
   </section>
 </template>
+
+<script>
+import Checkout from "@/components/landing/Checkout";
+
+export default {
+  components: {
+    Checkout
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 .pricing-item-name {
