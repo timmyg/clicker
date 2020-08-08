@@ -597,14 +597,14 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
-    // $FlowFixMe
-    let updateBoxInfoBody: BoxInfoRequest = {
-      channel: major,
-      channelMinor: minor,
-    };
-
-    let program: Program = null;
     if (originalChannel !== major) {
+      let program: Program = null;
+
+      // $FlowFixMe
+      let updateBoxInfoBody: BoxInfoRequest = {
+        channel: major,
+        channelMinor: minor,
+      };
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
       updateBoxInfoBody.lockedUntil =
@@ -638,21 +638,21 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .pathParams({ id: location.id, boxId })
         .async()
         .go();
-    }
+      // }
 
-    // tg moved this to inside manual change block
-    // await new Invoke()
-    //   .service('location')
-    //   .name('updateBoxInfo')
-    //   .body(updateBoxInfoBody)
-    //   .pathParams({ id: location.id, boxId })
-    //   .async()
-    //   .go();
+      // tg moved this to inside manual change block
+      // await new Invoke()
+      //   .service('location')
+      //   .name('updateBoxInfo')
+      //   .body(updateBoxInfoBody)
+      //   .pathParams({ id: location.id, boxId })
+      //   .async()
+      //   .go();
 
-    // if channel is different and is a control center box
-    //  - track via analytics
+      // if channel is different and is a control center box
+      //  - track via analytics
 
-    if (originalChannel !== major) {
+      // if (originalChannel !== major) {
       const userId = 'system';
       const name = 'Manual Zap';
       const data = {
@@ -1017,7 +1017,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
   // get programs from db from cc programs
   const { region } = location;
   // const { programmingId } = program.fields;
-  const programmingIds = ccPrograms.map(p => p.fields.programmingId);
+  const programmingIds = ccPrograms.map(p => p.fields.programmingId).join(',');
   console.log({ region, programmingIds });
   const programsResult = await new Invoke()
     .service('program')
