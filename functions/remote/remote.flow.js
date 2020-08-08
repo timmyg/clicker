@@ -89,6 +89,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   // $FlowFixMe
   let updateBoxInfoBody: BoxInfoRequest = {
     channel,
+    channelMinor,
     source,
     channelChangeAt: moment().unix() * 1000,
   };
