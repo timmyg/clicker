@@ -222,6 +222,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(id)
     .exec();
   console.timeEnd('get from db');
+  if (!location) {
+    return respond(400, 'location doesnt exist');
+  }
 
   // demo stuff
   if (location.demo) {
@@ -594,14 +597,14 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
-    // $FlowFixMe
-    let updateBoxInfoBody: BoxInfoRequest = {
-      channel: major,
-      channelMinor: minor,
-    };
-
-    let program: Program = null;
     if (originalChannel !== major) {
+      let program: Program = null;
+
+      // $FlowFixMe
+      let updateBoxInfoBody: BoxInfoRequest = {
+        channel: major,
+        channelMinor: minor,
+      };
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
       updateBoxInfoBody.lockedUntil =
@@ -610,28 +613,46 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .unix() * 1000;
 
       console.log({ channel: major, region: location.region });
+      const queryParams = { channel: major, channelMinor: minor <= 2 ? minor : null, region: location.region };
       const programResult = await new Invoke()
         .service('program')
         .name('get')
-        .queryParams({ channel: major, region: location.region })
+        .queryParams(queryParams)
         .go();
+      if (!programResult || !programResult.data) {
+        await new Invoke()
+          .service('notification')
+          .name('sendManual')
+          .body({ text: JSON.stringify(queryParams) })
+          .async()
+          .go();
+      }
       program = programResult && programResult.data;
       console.log({ program });
       updateBoxInfoBody.lockedProgrammingId = program && program.programmingId;
-    }
 
-    await new Invoke()
-      .service('location')
-      .name('updateBoxInfo')
-      .body(updateBoxInfoBody)
-      .pathParams({ id: location.id, boxId })
-      .async()
-      .go();
+      await new Invoke()
+        .service('location')
+        .name('updateBoxInfo')
+        .body(updateBoxInfoBody)
+        .pathParams({ id: location.id, boxId })
+        .async()
+        .go();
+      // }
 
-    // if channel is different and is a control center box
-    //  - track via analytics
+      // tg moved this to inside manual change block
+      // await new Invoke()
+      //   .service('location')
+      //   .name('updateBoxInfo')
+      //   .body(updateBoxInfoBody)
+      //   .pathParams({ id: location.id, boxId })
+      //   .async()
+      //   .go();
 
-    if (originalChannel !== major) {
+      // if channel is different and is a control center box
+      //  - track via analytics
+
+      // if (originalChannel !== major) {
       const userId = 'system';
       const name = 'Manual Zap';
       const data = {
@@ -653,10 +674,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       //  - send to airtable sheet
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
+        const previousChannel = location.boxes[i].live && location.boxes[i].live.channel;
         const text = `Manual Zap @ ${location.name} (${location.neighborhood} Zone ${location.boxes[i].zone ||
-          'no zone'}) *${program.channelTitle}: ${program.title} [${major}]* ~${previousProgram.channelTitle}: ${
-          previousProgram.title
-        }~`;
+          'no zone'}) *${program && program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
+          previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
 
         await new Invoke()
           .service('notification')
@@ -821,6 +842,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
       }
     }
   }
+  return respond(200);
 });
 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
@@ -850,7 +872,8 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     .service('program')
     .name('get')
     .queryParams({
-      channel: channel,
+      channel,
+      channelMinor,
       region: location.region,
       time: inTwoMinutesUnix,
     })
@@ -994,7 +1017,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
   // get programs from db from cc programs
   const { region } = location;
   // const { programmingId } = program.fields;
-  const programmingIds = ccPrograms.map(p => p.fields.programmingId);
+  const programmingIds = ccPrograms.map(p => p.fields.programmingId).join(',');
   console.log({ region, programmingIds });
   const programsResult = await new Invoke()
     .service('program')
@@ -1124,7 +1147,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       <ul> \
       {{#boxes}} \
         <li> \
-          <b>Box {{#zone}}{{zone}}{{/zone}}{{#label}}{{label}}{{/label}}</b>: {{live.program.channelTitle}} <em>{{live.program.title}}</em> \
+          {{live.program.channelTitle}} <em>{{live.program.title}}</em> \
         </li> \
       {{/boxes}} \
       </ul> \ 
@@ -1509,7 +1532,7 @@ async function updateLocationBox(
     ExpressionAttributeValues: expressionAttributeValues,
   };
   // console.log('calling...');
-  // console.log({ params });
+  console.log('params', JSON.stringify(params));
   // console.log('returned');
   try {
     const x = await docClient.update(params).promise();

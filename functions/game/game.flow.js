@@ -331,11 +331,10 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   eventsNew.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGames = buildAirtableGames(transformedGames);
   const promises = [];
+  console.log('creating games:', airtableGames.length);
   while (!!airtableGames.length) {
     try {
       const gamesSlice = airtableGames.splice(0, 10);
-      console.log('batch putting1:', gamesSlice.length);
-      console.log('remaining1:', airtableGames.length);
       promises.push(base(airtableGamesName).create(gamesSlice));
     } catch (e) {
       console.error(e);
@@ -349,29 +348,26 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   let eventsUpdated = allEvents.filter(e => {
     const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
     // console.log('isUpdated?', airtableGame, e);
+    // if (airtableGame.get('id') === 85704) {
+    //   console.log(airtableGame.get('id'), airtableGame.get('start'), e.start_time);
+    // }
     if (!!airtableGame && airtableGame.get('start') !== e.start_time) {
       return true;
     }
     return false;
   });
+  console.log('events to update', eventsUpdated.length);
   transformedGames = [];
   eventsUpdated.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGamesUpdated = buildAirtableGames(transformedGames);
-  console.log('iiiiiiiiiiiiiiiiiiiiiii');
-  console.log(airtableGamesUpdated[0]);
-  console.log('oooooooooooooooo');
-  console.log(allExistingGames[0]);
   airtableGamesUpdated.map(atg => {
     atg['id'] = allExistingGames.find(eg => eg.fields.id === atg.fields.id).id;
   });
-  console.log('aaaaaaaaaaaaaaa');
-  console.log(airtableGamesUpdated[0]);
   const promisesUpdated = [];
+  console.log('updating games:', airtableGamesUpdated.length);
   while (!!airtableGamesUpdated.length) {
     try {
       const gamesSliceUpdated = airtableGamesUpdated.splice(0, 10);
-      console.log('batch putting2:', gamesSliceUpdated.length);
-      console.log('remaining2:', airtableGamesUpdated.length);
       promisesUpdated.push(base(airtableGamesName).update(gamesSliceUpdated));
     } catch (e) {
       console.error(e);
@@ -480,7 +476,7 @@ function buildAirtableGames(games: Game[]) {
   games.forEach(game => {
     console.log({ game });
     // console.log({ game });
-    const { id, leagueName, start } = game;
+    const { id, leagueName, start, broadcast } = game;
     const homeTeam = game.home ? game.home.name.full : '';
     const awayTeam = game.away ? game.away.name.full : '';
     console.log({ id });
@@ -492,6 +488,7 @@ function buildAirtableGames(games: Game[]) {
         homeTeam,
         awayTeam,
         start,
+        channelTitle: broadcast ? broadcast.network : '',
       },
     });
   });

@@ -122,7 +122,8 @@ const minorChannels = [
   },
 ];
 
-const blacklistChannelIds = [5660, 2660, 623, 624, 625, 376, 2661];
+// const blacklistChannelIds = [5660, 2660, 623, 624, 625, 376, 2661];
+const blacklistChannelIds = [];
 
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
@@ -206,9 +207,9 @@ const dbProgram = dynamoose.model(
       attribute: 'expires',
       returnExpiredItems: false,
       defaultExpires: x => {
-        // expire 2 hours after end
+        // expire 6 hours after end
         return moment(x.end)
-          .add(2, 'hours')
+          .add(6, 'hours')
           .toDate();
       },
     },
@@ -247,7 +248,8 @@ module.exports.regions = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
-  const { channel, time, region, programmingId, programmingIds } = event.queryStringParameters;
+  const { channel, channelMinor, time, region, programmingId, programmingIds: programmingIdsString } = event.queryStringParameters;
+  const programmingIds = programmingIdsString.split(',');
   if (!region) {
     return respond(400, `need region: ${region}`);
   }
@@ -268,7 +270,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
         .subtract(previousProgramMinutesAgo, 'm')
         .unix() * 1000;
     // get programs that are on now or ended within last 30 mins
-    const programs: Program[] = await dbProgram
+    let programsQuery = dbProgram
       .query('channel')
       .eq(channel)
       .and()
@@ -276,15 +278,21 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(region)
       .and()
       .filter('start')
-      // .gt(timeToSearch) // now
-      // .gt(timeToSearchPreviousProgram) // 90 minutes ago
       .lt(timeToSearch) // now
       .and()
       .filter('end')
-      // .lt(timeToSearchPreviousProgram) // 90 minutes ago
-      // .lt(timeToSearch) // now
       .gt(timeToSearchPreviousProgram) // 90 minutes ago
-      .exec();
+      .and()
+      .filter('channelMinor');
+
+    if (channelMinor) {
+      programsQuery = programsQuery.eq(channelMinor);
+    } else {
+      programsQuery = programsQuery.null();
+    }
+
+    const programs: Program[] = await programsQuery.exec();
+    console.log({ programs });
 
     console.log({ timeToSearch, timeToSearchPreviousProgram });
 
@@ -373,6 +381,9 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .headers(event.headers)
     .go();
   console.timeEnd('get location');
+  if (!location) {
+    return respond(400, 'location doesnt exist');
+  }
 
   if (location.demo) {
     const demoPrograms: any[] = [
