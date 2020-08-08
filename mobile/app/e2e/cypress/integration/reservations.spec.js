@@ -17,13 +17,13 @@ context("Reservations", () => {
     cy.request("DELETE", `${apiBaseUrl}/locations/${id}`);
   });
 
-  beforeEach("login + set geolocation", done => {
+  beforeEach("login + set geolocation", (done) => {
     cy.initialSetup(() => {
       return done();
     });
   });
 
-  beforeEach("go to root page", done => {
+  beforeEach("go to root page", (done) => {
     cy.landingPage(() => {
       return done();
     });
@@ -35,7 +35,9 @@ context("Reservations", () => {
       .contains("1");
     cy.screenshot();
     cy.get(
-      "ion-list[data-atm='locations']:not(.content-loading) app-location:nth-of-type(1) ion-card-content h1"
+      // "ion-list[data-atm='locations']:not(.content-loading) app-location:nth-of-type(1) ion-card-content h1"
+      // "ion-list[data-atm='locations']:not(.content-loading) app-location:nth-of-type(1) ion-card-content [data-atm='location-name']"
+      "[data-atm='location-name']"
     )
       .contains("Test Wicked Wolf")
       .click();
@@ -52,7 +54,7 @@ context("Reservations", () => {
       .click();
     cy.get("ion-button#confirm:not([disabled])").click();
     cy.screenshot();
-    cy.get("app-reservation").should($reservations => {
+    cy.get("app-reservation").should(($reservations) => {
       expect($reservations).to.have.length(1);
     });
     cy.screenshot();
