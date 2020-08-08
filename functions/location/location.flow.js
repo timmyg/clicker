@@ -933,12 +933,15 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   console.log(locations.map(l => l.name));
   const isHttp = !!event.httpMethod;
   if (isHttp) {
+    console.log('1');
     await new Invoke()
       .service('program')
       .name('syncAirtableUpdates')
       .go();
   }
+  console.log('2');
   for (const location of locations) {
+    console.log('3');
     await new Invoke()
       .service('location')
       .name('controlCenterByLocation')
