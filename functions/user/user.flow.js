@@ -401,12 +401,34 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+// not in use
 module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event => {
   const { stripeCustomerId } = getBody(event);
 
   var session = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,
     return_url: 'https://tryclicker.com',
+  });
+
+  return respond(200, session);
+});
+
+module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
+  const { stripeCustomerId } = getBody(event);
+
+  var session = await stripe.checkout.sessions.create({
+    // customer: stripeCustomerId,
+    // return_url: 'https://tryclicker.com',
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: 'price_1HAQPBIkuoCxKwvy8zUKNxxx',
+        quantity: 1,
+      },
+    ],
+    mode: 'subscription',
+    success_url: 'https://tryclicker.com/success?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url: 'https://tryclicker.com/cancel',
   });
 
   return respond(200, session);
