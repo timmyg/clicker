@@ -428,7 +428,7 @@ module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
     ],
     mode: 'subscription',
     success_url: 'https://tryclicker.com/success?session_id={CHECKOUT_SESSION_ID}',
-    cancel_url: 'https://tryclicker.com/cancel',
+    cancel_url: 'https://tryclicker.com',
   });
 
   return respond(200, session);

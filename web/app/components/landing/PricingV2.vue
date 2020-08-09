@@ -87,11 +87,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="pricing-item-cta mb-8">
-                <c-button tag="a" color="primary" wide href="#"
-                  >Start free trial</c-button
-                >
-              </div>
+              <div class="pricing-item-cta mb-8"><Checkout /></div>
             </div>
           </div>
 
@@ -131,11 +127,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="pricing-item-cta mb-8">
-                <c-button tag="a" color="primary" wide href="#"
-                  >Start free trial</c-button
-                >
-              </div>
+              <div class="pricing-item-cta mb-8"><Checkout /></div>
             </div>
           </div>
 
@@ -175,17 +167,12 @@
                   </ul>
                 </div>
               </div>
-              <div class="pricing-item-cta mb-8">
-                <c-button tag="a" color="primary" wide href="#"
-                  >Start free trial</c-button
-                >
-              </div>
+              <div class="pricing-item-cta mb-8"><Checkout /></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Checkout />
   </section>
 </template>
 
