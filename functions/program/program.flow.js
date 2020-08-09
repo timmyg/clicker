@@ -1282,7 +1282,7 @@ function build(dtvSchedule: any, regionId: string) {
 
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
-    { search: 'sportscenter', rating: 1 },
+    { search: 'sportscenter', rating: 2 },
     { search: 'nfl live', rating: 1 },
     { search: 'nba: the jump', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
@@ -1293,6 +1293,8 @@ function getDefaultRating(program: Program): ?number {
     { search: 'quick pitch', rating: 1 },
   ];
 
+  const ratingsIgnore = ['the best of this is sportscenter'];
+
   // first things first
   // speak for yourself
   // high noon
@@ -1301,10 +1303,8 @@ function getDefaultRating(program: Program): ?number {
   // get up
   // the dan le batard show
 
-  // console.log(program.title, defaultRatings[0].search);
   const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
-  // console.log({ match });
-  if (match) {
+  if (match && !ratingsIgnore.includes(program.title.toLowerCase())) {
     return match.rating;
   }
 }
