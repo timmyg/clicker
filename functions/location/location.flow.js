@@ -829,7 +829,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
         const programResult = await new Invoke()
           .service('program')
           .name('get')
-          .queryParams({ channel: box.live.channel, region: location.region })
+          .queryParams({ channel: box.live.channel, channelMinor: box.live.channelMinor, region: location.region })
           .go();
         const program = programResult && programResult.data;
         console.timeEnd('get program');
