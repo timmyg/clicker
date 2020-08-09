@@ -295,7 +295,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .and()
       .filter('channelMinor');
 
-    if (channelMinor) {
+    if (channelMinor && channelMinor <= 2) {
       programsQuery = programsQuery.eq(channelMinor);
     } else {
       programsQuery = programsQuery.null();
