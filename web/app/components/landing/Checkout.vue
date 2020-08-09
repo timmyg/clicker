@@ -13,20 +13,22 @@ import {
 } from "vue-stripe-elements-plus";
 
 export default {
-  data: () => ({
-    // loading: false,
-  }),
+  props: ["priceId"],
+  // data: () => ({
+  //   // loading: false,
+  // }),
   methods: {
     async checkout() {
       const stripe = await stripePromise;
-      this.$http
-        .post(`${process.env.NUXT_ENV_API_BASE}/users/checkout`, {})
-        .then(response => response.json())
-        .then(({ id: sessionId }) => {
-          stripe.redirectToCheckout({ sessionId }).then(function(result) {
-            alert(result.error.message);
-          });
-        });
+      console.log("priceId", this.priceId);
+      // this.$http
+      //   .post(`${process.env.NUXT_ENV_API_BASE}/users/checkout`, {priceId: this.priceId})
+      //   .then(response => response.json())
+      //   .then(({ id: sessionId }) => {
+      //     stripe.redirectToCheckout({ sessionId }).then(function(result) {
+      //       alert(result.error.message);
+      //     });
+      //   });
     }
   }
 };
