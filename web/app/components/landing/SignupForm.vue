@@ -145,6 +145,8 @@ export default {
   // text-align: center;
   font-size: 14px;
   color: #0091ea;
+  position: absolute;
+  right: 0;
 }
 .get-outta-here-bot {
   opacity: 0;

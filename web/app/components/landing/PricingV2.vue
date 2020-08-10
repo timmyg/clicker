@@ -152,7 +152,7 @@
           </div>
         </div>
         <div class="center-content text-xs text-color-low">
-          No risk. Cancel anytime.
+          Risk free. Cancel anytime.
         </div>
       </div>
     </div>
@@ -251,7 +251,7 @@ export default {
         window
           .getComputedStyle(this.$refs.sliderValue)
           .getPropertyValue("--thumb-size"),
-        10
+        20
       );
       this.handleSliderValuePosition(this.$refs.slider);
       this.handlePriceId(1);
@@ -259,3 +259,76 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+$range-thumb-size: 36px; // .form-slider, thumb size
+.form-slider {
+  > span {
+    display: block;
+  }
+
+  input[type="range"] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: color-bg(range-track);
+    border-radius: 3px;
+    height: 6px;
+    width: 100%;
+    margin-top: ($range-thumb-size - 6px) / 2;
+    margin-bottom: ($range-thumb-size - 6px) / 2;
+    outline: none;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: color-bg(range-thumb);
+      background-image: inline-svg(
+        '<svg width="12" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M8 .5v7L12 4zM0 4l4 3.5v-7z" fill="' +
+          color-icon(range) + '" fill-rule="nonzero"/></svg>'
+      );
+      background-position: center;
+      background-repeat: no-repeat;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      height: $range-thumb-size;
+      width: $range-thumb-size;
+    }
+
+    &::-moz-range-thumb {
+      background-color: color-bg(range-thumb);
+      background-image: inline-svg(
+        '<svg width="12" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M8 .5v7L12 4zM0 4l4 3.5v-7z" fill="' +
+          color-icon(range) + '" fill-rule="nonzero"/></svg>'
+      );
+      background-position: center;
+      background-repeat: no-repeat;
+      border: 0;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      height: $range-thumb-size;
+      width: $range-thumb-size;
+    }
+
+    &::-ms-thumb {
+      background-color: color-bg(range-thumb);
+      background-image: inline-svg(
+        '<svg width="12" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M8 .5v7L12 4zM0 4l4 3.5v-7z" fill="' +
+          color-icon(range) + '" fill-rule="nonzero"/></svg>'
+      );
+      background-position: center;
+      background-repeat: no-repeat;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      height: $range-thumb-size;
+      width: $range-thumb-size;
+    }
+
+    &::-moz-focus-outer {
+      border: 0;
+    }
+  }
+}
+</style>
