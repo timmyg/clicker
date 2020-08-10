@@ -1,9 +1,10 @@
 <template>
   <layout-basic>
     <Header v-bind:subtitle="'Control Center'"></Header>
-    <section class="main container">control center stuff here</section>
-    <Features />
-    <FeaturesCards />
+    <section class="main">
+      <Features />
+      <FeaturesCards />
+    </section>
   </layout-basic>
 </template>
 

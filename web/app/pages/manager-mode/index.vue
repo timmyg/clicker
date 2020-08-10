@@ -1,17 +1,24 @@
 <template>
   <layout-basic>
     <Header v-bind:subtitle="'Manager Mode'"></Header>
-    manager mode stuff here
+    <section class="main">
+      <Features />
+      <FeaturesCards />
+    </section>
   </layout-basic>
 </template>
 
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
+import Features from "@/components/landing/Features";
+import FeaturesCards from "@/components/landing/FeaturesCards";
 
 export default {
   components: {
-    Header
+    Header,
+    Features,
+    FeaturesCards
   }
 };
 </script>

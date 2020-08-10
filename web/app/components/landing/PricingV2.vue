@@ -54,7 +54,7 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h1"
+                      <span class="pricing-item-price-amount h2"
                         >Let's Talk!</span
                       >
                     </div>
@@ -108,7 +108,7 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h1"
+                      <span class="pricing-item-price-amount h2"
                         >Let's Talk!</span
                       >
                     </div>
@@ -264,7 +264,6 @@ export default {
 .form-slider {
   input[type="range"] {
     background: color-bg(range-track-inverse);
-
     &::-webkit-slider-thumb {
       background-color: color-bg(range-thumb-inverse);
       background-image: inline-svg(
