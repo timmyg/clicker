@@ -87,9 +87,12 @@ test('getMajorChannels', () => {
   expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
 });
 
-describe.skip('getDefaultRating', () => {
+describe('getDefaultRating', () => {
   test('rated', () => {
     expect(getDefaultRating({ title: 'SportsCenter With Scott Van Pelt' })).toEqual(2);
+  });
+  test('rated ignore', () => {
+    expect(getDefaultRating({ title: 'The Best of This is SportsCenter' })).toEqual(undefined);
   });
   test('unrated', () => {
     expect(getDefaultRating({ title: 'Winter X Games' })).toEqual(undefined);

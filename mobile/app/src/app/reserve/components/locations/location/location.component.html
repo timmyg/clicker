@@ -41,7 +41,9 @@
           <ion-avatar>
             <img [src]="location.img" class="logo" alt="location logo" />
           </ion-avatar>
-          <h1 class="brand-text">{{ location.name }}</h1>
+          <h1 class="brand-text" data-atm="location-name">
+            {{ location.name }}
+          </h1>
         </ion-row>
         <ion-row>
           <ion-chip color="primary" *ngIf="location.announcement">
