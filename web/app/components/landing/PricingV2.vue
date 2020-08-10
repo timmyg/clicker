@@ -23,7 +23,8 @@
             true-value="1"
             false-value="0"
             right-label="Billed Annually"
-          >Billed Monthly</c-switch>
+            >Billed Monthly</c-switch
+          >
         </div>
         <div v-if="pricingSlider" class="pricing-slider center-content">
           <label class="form-slider">
@@ -37,7 +38,9 @@
               />
             </div>
           </label>
-          <div ref="sliderValue" class="pricing-slider-value">{{ getPricingData(boxesInput) }}</div>
+          <div ref="sliderValue" class="pricing-slider-value">
+            {{ getPricingData(boxesInput) }}
+          </div>
         </div>
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
           <div class="tiles-item reveal-from-bottom">
@@ -51,33 +54,35 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h1">Let's Talk!</span>
+                      <span class="pricing-item-price-amount h1"
+                        >Let's Talk!</span
+                      >
                     </div>
                     <div v-else>
                       <span class="pricing-item-price-currency h3">
-                        {{
-                        getPricingData(this.priceOutput.plan1, 0)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan1, 0) }}
                       </span>
                       <span class="pricing-item-price-amount h1">
-                        {{
-                        getPricingData(this.priceOutput.plan1, 1)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan1, 1) }}
                       </span>
                       <span class="pricing-item-price-amount text-sm">
-                        {{
-                        getPricingData(this.priceOutput.plan1, 2)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan1, 2) }}
                       </span>
                     </div>
                   </div>
-                  <div class="text-xs text-color-low">Allow staff to manage TVs from their phone</div>
+                  <div class="text-xs text-color-low">
+                    Allow staff to manage TVs from their phone
+                  </div>
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
                     class="pricing-item-features-title h6 text-xs text-color-high mb-24"
-                  >What’s included</div>
-                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                  >
+                    What’s included
+                  </div>
+                  <ul
+                    class="pricing-item-features-list list-reset text-xs mb-32"
+                  >
                     <li class="is-checked">Excepteur sint occaecat velit</li>
                     <li class="is-checked">Excepteur sint occaecat velit</li>
                     <li class="is-checked">Excepteur sint occaecat velit</li>
@@ -103,33 +108,35 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h1">Let's Talk!</span>
+                      <span class="pricing-item-price-amount h1"
+                        >Let's Talk!</span
+                      >
                     </div>
                     <div v-else>
                       <span class="pricing-item-price-currency h3">
-                        {{
-                        getPricingData(this.priceOutput.plan2, 0)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan2, 0) }}
                       </span>
                       <span class="pricing-item-price-amount h1">
-                        {{
-                        getPricingData(this.priceOutput.plan2, 1)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan2, 1) }}
                       </span>
                       <span class="pricing-item-price-amount text-sm">
-                        {{
-                        getPricingData(this.priceOutput.plan2, 2)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan2, 2) }}
                       </span>
                     </div>
                   </div>
-                  <div class="text-xs text-color-low">Clicker TV and Control Center, fully loaded</div>
+                  <div class="text-xs text-color-low">
+                    Clicker TV and Control Center, fully loaded
+                  </div>
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
                     class="pricing-item-features-title h6 text-xs text-color-high mb-24"
-                  >What’s included</div>
-                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                  >
+                    What’s included
+                  </div>
+                  <ul
+                    class="pricing-item-features-list list-reset text-xs mb-32"
+                  >
                     <li class="is-checked">Excepteur sint occaecat velit</li>
                     <li class="is-checked">Excepteur sint occaecat velit</li>
                     <li class="is-checked">Excepteur sint occaecat velit</li>
@@ -144,7 +151,9 @@
             </div>
           </div>
         </div>
-        <div class="center-content text-xs text-color-low">No risk. Cancel anytime.</div>
+        <div class="center-content text-xs text-color-low">
+          No risk. Cancel anytime.
+        </div>
       </div>
     </div>
   </section>
@@ -176,11 +185,6 @@ export default {
       default: false
     }
   },
-  // computed() {
-  //   return {
-  //     plan1PriceId: 'p1.1',
-  //   }
-  // },
   data() {
     return {
       plan1PriceId: null,
@@ -221,8 +225,6 @@ export default {
     handlePriceId(planIndex) {
       this.plan1PriceId = this.priceOutput.plan1[planIndex][3];
       this.plan2PriceId = this.priceOutput.plan2[planIndex][3];
-      console.log(this.plan1PriceId);
-      console.log(this.plan2PriceId);
     },
     handleSliderValuePosition(input) {
       const multiplier = input.value / input.max;
@@ -251,9 +253,8 @@ export default {
           .getPropertyValue("--thumb-size"),
         10
       );
-      console.log(this.thumbSize);
       this.handleSliderValuePosition(this.$refs.slider);
-      this.handlePriceId(0)
+      this.handlePriceId(1);
     }
   }
 };
