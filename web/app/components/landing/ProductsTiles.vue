@@ -23,7 +23,7 @@
               <div class="features-tiles-item-header">
                 <div class="features-tiles-item-image mb-16 bg-1">
                   <img
-                    src="/images/landing/feature-tile-icon-01.svg"
+                    src="/images/landing/feature-tile-icon-001.svg"
                     alt="Feature tile icon 01"
                     width="64"
                     height="64"
@@ -58,7 +58,7 @@
               <div class="features-tiles-item-header">
                 <div class="features-tiles-item-image mb-16 bg-2">
                   <img
-                    src="/images/landing/feature-tile-icon-02.svg"
+                    src="/images/landing/feature-tile-icon-002.svg"
                     alt="Feature tile icon 02"
                     width="64"
                     height="64"
@@ -93,7 +93,7 @@
               <div class="features-tiles-item-header">
                 <div class="features-tiles-item-image mb-16 bg-3">
                   <img
-                    src="/images/landing/feature-tile-icon-04.svg"
+                    src="/images/landing/feature-tile-icon-004.svg"
                     alt="Feature tile icon 03"
                     width="64"
                     height="64"
@@ -133,8 +133,9 @@ export default {
   data() {
     return {
       sectionHeader: {
-        title: "",
-        paragraph: ""
+        title: "Clicker offers three products"
+        // paragraph:
+        //   "Vitae aliquet nec ullamcorper sit amet risus nullam eget felis semper quis lectus nulla at volutpat diam ut venenatis tellus—in ornare."
       }
     };
   }

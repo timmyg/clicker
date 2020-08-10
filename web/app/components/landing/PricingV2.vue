@@ -38,9 +38,9 @@
               />
             </div>
           </label>
-          <div ref="sliderValue" class="pricing-slider-value">
+          <p ref="sliderValue" class="pricing-slider-value">
             {{ getPricingData(boxesInput) }}
-          </div>
+          </p>
         </div>
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
           <div class="tiles-item reveal-from-bottom">
