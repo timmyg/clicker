@@ -144,6 +144,7 @@
             </div>
           </div>
         </div>
+        <div class="center-content text-xs text-color-low">No risk. Cancel anytime.</div>
       </div>
     </div>
   </section>
@@ -198,37 +199,30 @@ export default {
       },
       priceOutput: {
         plan1: {
-          0: ["$", "35", "/m", "price_1HELZmIkuoCxKwvyONlgxuAo"],
-          1: ["$", "35", "/m", "price_1HELZmIkuoCxKwvyONlgxuAo"],
-          2: ["$", "35", "/m", "price_1HELZmIkuoCxKwvyONlgxuAo"],
-          3: ["$", "contact-us", "/m"]
+          0: ["$", "35", "/month", "price_1HELZmIkuoCxKwvyONlgxuAo"],
+          1: ["$", "35", "/month", "price_1HELZmIkuoCxKwvyONlgxuAo"],
+          2: ["$", "35", "/month", "price_1HELZmIkuoCxKwvyONlgxuAo"],
+          3: ["$", "contact-us", "/month"]
         },
         plan2: {
-          0: ["$", "75", "/m", "price_1HELbkIkuoCxKwvy5ME8KBNg"],
-          1: ["$", "90", "/m", "price_1HELbkIkuoCxKwvyQesZrogA"],
-          2: ["$", "120", "/m", "price_1HELbkIkuoCxKwvyTAn5dJwL"],
-          3: ["$", "contact-us", "/m"]
+          0: ["$", "75", "/month", "price_1HELbkIkuoCxKwvy5ME8KBNg"],
+          1: ["$", "90", "/month", "price_1HELbkIkuoCxKwvyQesZrogA"],
+          2: ["$", "120", "/month", "price_1HELbkIkuoCxKwvyTAn5dJwL"],
+          3: ["$", "contact-us", "/month"]
         }
       }
     };
   },
   methods: {
-  //     data: {
-  //   priceId: 'p556'
-  // },
-    // getPriceId() {
-    //   return "price_1HELbkIkuoCxKwvyQesZrogA"
-    // },
     handlePricingSlide(e) {
-      console.log(e.target.value);
       this.handleSliderValuePosition(e.target);
       this.handlePriceId(e.target.value);
     },
     handlePriceId(planIndex) {
-      this.priceOutput.plan1[planIndex][3];
-      this.priceOutput.plan2[planIndex][3];
-      console.log(this.priceOutput.plan1[planIndex][3]);
-      console.log(this.priceOutput.plan2[planIndex][3]);
+      this.plan1PriceId = this.priceOutput.plan1[planIndex][3];
+      this.plan2PriceId = this.priceOutput.plan2[planIndex][3];
+      console.log(this.plan1PriceId);
+      console.log(this.plan2PriceId);
     },
     handleSliderValuePosition(input) {
       const multiplier = input.value / input.max;
@@ -239,11 +233,9 @@ export default {
         input.clientWidth * multiplier - thumbOffset + boxesInputOffset + "px";
     },
     getPricingData(values, set) {
-      // console.log({values, set});
-      const val = set !== undefined
+      return set !== undefined
         ? values[this.priceChangerValue][set]
         : values[this.priceChangerValue];
-      return val
     }
   },
   mounted() {
@@ -259,7 +251,9 @@ export default {
           .getPropertyValue("--thumb-size"),
         10
       );
+      console.log(this.thumbSize);
       this.handleSliderValuePosition(this.$refs.slider);
+      this.handlePriceId(0)
     }
   }
 };
