@@ -417,6 +417,7 @@ module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
   const { priceId } = getBody(event);
   console.log(JSON.stringify(event));
 
+  const host = event.headers.origin || 'http://tryclicker.com';
   var session = await stripe.checkout.sessions.create({
     // customer: stripeCustomerId,
     // return_url: 'https://tryclicker.com',
@@ -428,8 +429,9 @@ module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
       },
     ],
     mode: 'subscription',
-    success_url: 'https://tryclicker.com/success?session_id={CHECKOUT_SESSION_ID}',
-    cancel_url: 'https://tryclicker.com',
+    // success_url: '/success?session_id={CHECKOUT_SESSION_ID}',
+    success_url: host,
+    cancel_url: host,
     shipping_address_collection: {
       allowed_countries: ['US'],
     },
