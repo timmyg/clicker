@@ -432,6 +432,9 @@ module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
     shipping_address_collection: {
       allowed_countries: ['US'],
     },
+    subscription_data: {
+      trial_period_days: 30,
+    },
   });
 
   return respond(200, session);
