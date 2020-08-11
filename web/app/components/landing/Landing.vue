@@ -4,9 +4,9 @@
       <Hero />
       <Announcements />
       <Products />
-      <PricingV2 pricingSlider />
+      <Pricing pricingSlider />
       <Testimonials />
-      <News :posts="posts" />
+      <Blogs :posts="posts" />
       <Signup />
     </div>
   </layout-basic>
@@ -16,11 +16,11 @@
 import Announcements from "@/components/landing/Announcements";
 import Hero from "@/components/landing/Hero";
 import LayoutBasic from "@/components/layouts/Basic";
-import PricingV2 from "@/components/landing/PricingV2";
+import Pricing from "@/components/landing/Pricing";
 import Signup from "@/components/landing/Signup";
 import Testimonials from "@/components/landing/Testimonials";
 import Products from "@/components/landing/Products";
-import News from "@/components/landing/News";
+import Blogs from "@/components/landing/Blogs";
 
 export default {
   components: {
@@ -28,10 +28,10 @@ export default {
     Hero,
     LayoutBasic,
     Products,
-    PricingV2,
+    Pricing,
     Signup,
     Testimonials,
-    News
+    Blogs
   },
   props: ["posts"]
 };

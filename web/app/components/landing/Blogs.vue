@@ -18,7 +18,7 @@
       >
         <c-section-header
           :data="sectionHeader"
-          class="center-content reveal-from-bottom"
+          class="center-content reveal-from-bottom pb-16"
         />
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
           <div
@@ -106,3 +106,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.tiles-item-inner {
+  padding: 14px;
+  text-align: center;
+}
+</style>
