@@ -21,89 +21,54 @@
           class="center-content reveal-from-bottom"
         />
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
-          <div class="tiles-item reveal-from-bottom">
+          <div
+            class="tiles-item reveal-from-bottom"
+            data-reveal-delay="200"
+            v-for="(post, index) in recentPosts"
+            v-bind:key="index"
+          >
             <div class="tiles-item-inner has-shadow">
               <figure class="news-item-image m-0">
                 <img
-                  src="/images/landing/news-image-01.jpg"
-                  alt="News 01"
-                  width="344"
-                  height="194"
+                  :src="
+                    post.fields.featuredImage.fields.file.url +
+                      '?fit=scale&w=350&h=196&r=16'
+                  "
+                  :srcset="
+                    `${
+                      post.fields.featuredImage.fields.file.url
+                    }?w=350&h=196&fit=fill 350w`
+                  "
+                  :alt="post.fields.featuredImage.fields.title"
                 />
               </figure>
               <div class="news-item-content">
                 <div class="news-item-body">
-                  <h3 class="news-item-title h4 mt-0 mb-8">
-                    <a href="#">How to build anything</a>
-                  </h3>
-                  <p class="mb-16 text-sm">
+                  <div class="news-item-title  text-md mt-8 mb-8">
+                    <nuxt-link
+                      :to="{
+                        name: 'blog-slug',
+                        params: { slug: post.fields.slug }
+                      }"
+                      >{{ post.fields.title | truncate(50) }} →</nuxt-link
+                    >
+                  </div>
+                  <!-- <p class="mb-16 text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut et dolore magna aliqua. Ut
                     enim ad minim veniam, quis nostrud exercitation ullamco
                     laboris nisi ut aliquip ex.
-                  </p>
+                  </p> -->
                 </div>
-                <div class="news-item-more text-xs mb-8">
-                  <a href="#">Read more</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tiles-item reveal-from-bottom" data-reveal-delay="200">
-            <div class="tiles-item-inner has-shadow">
-              <figure class="news-item-image m-0">
-                <img
-                  src="/images/landing/news-image-02.jpg"
-                  alt="News 01"
-                  width="344"
-                  height="194"
-                />
-              </figure>
-              <div class="news-item-content">
-                <div class="news-item-body">
-                  <h3 class="news-item-title h4 mt-0 mb-8">
-                    <a href="#">How to build anything</a>
-                  </h3>
-                  <p class="mb-16 text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut et dolore magna aliqua. Ut
-                    enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex.
-                  </p>
-                </div>
-                <div class="news-item-more text-xs mb-8">
-                  <a href="#">Read more</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tiles-item reveal-from-bottom" data-reveal-delay="400">
-            <div class="tiles-item-inner has-shadow">
-              <figure class="news-item-image m-0">
-                <img
-                  src="/images/landing/news-image-03.jpg"
-                  alt="News 01"
-                  width="344"
-                  height="194"
-                />
-              </figure>
-              <div class="news-item-content">
-                <div class="news-item-body">
-                  <h3 class="news-item-title h4 mt-0 mb-8">
-                    <a href="#">How to build anything</a>
-                  </h3>
-                  <p class="mb-16 text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut et dolore magna aliqua. Ut
-                    enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex.
-                  </p>
-                </div>
-                <div class="news-item-more text-xs mb-8">
-                  <a href="#">Read more</a>
-                </div>
+                <!-- <div class="news-item-more text-xs TEXT-M mb-8 center-content">
+                  <nuxt-link
+                    :to="{
+                      name: 'blog-slug',
+                      params: { slug: post.fields.slug }
+                    }"
+                    >Read More</nuxt-link
+                  >
+                </div> -->
               </div>
             </div>
           </div>
@@ -124,15 +89,20 @@ export default {
     CSectionHeader,
     CImage
   },
+  props: ["posts"],
+
   mixins: [SectionTilesProps],
   data() {
     return {
       sectionHeader: {
         title: "From the Blog"
-        // paragraph:
-        //   "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consequat."
       }
     };
+  },
+  computed: {
+    recentPosts: function() {
+      return this.posts.slice(0, 3);
+    }
   }
 };
 </script>

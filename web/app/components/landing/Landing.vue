@@ -6,8 +6,8 @@
       <Products />
       <PricingV2 pricingSlider />
       <Testimonials />
-      <Signup />
       <News :posts="posts" />
+      <Signup />
     </div>
   </layout-basic>
 </template>

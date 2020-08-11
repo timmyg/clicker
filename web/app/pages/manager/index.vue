@@ -6,8 +6,7 @@
         :data="sectionHeader"
         class="center-content reveal-from-bottom brand-font"
       />
-      <Features />
-      <ProductsTiles :skip="'clicker-tv'" />
+      <ProductsTiles :skip="'manager'" />
     </section>
   </layout-basic>
 </template>
@@ -15,7 +14,6 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-import Features from "@/components/landing/FeaturesClickerTv";
 import FeaturesCards from "@/components/landing/FeaturesCards";
 import ProductsTiles from "@/components/landing/ProductsTiles";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
@@ -23,7 +21,6 @@ import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 export default {
   components: {
     Header,
-    Features,
     FeaturesCards,
     ProductsTiles,
     CSectionHeader
@@ -31,8 +28,8 @@ export default {
   data() {
     return {
       sectionHeader: {
-        title: "Clicker TV",
-        paragraph: "Brief description of clicker tv here"
+        title: "Manager",
+        paragraph: "Brief description of manager here"
       }
     };
   }

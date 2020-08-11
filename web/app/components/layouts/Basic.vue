@@ -38,6 +38,9 @@ export default {
 .brand-font {
   font-family: "Saira", sans-serif !important;
 }
+.brand-font * {
+  font-family: "Saira", sans-serif !important;
+}
 
 #app {
   color: #373737;

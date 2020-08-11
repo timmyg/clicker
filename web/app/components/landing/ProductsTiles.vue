@@ -18,7 +18,10 @@
       >
         <c-section-header :data="sectionHeader" class="center-content" />
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
-          <div class="tiles-item reveal-from-bottom center-content">
+          <div
+            v-if="skip !== 'manager'"
+            class="tiles-item reveal-from-bottom center-content"
+          >
             <div class="tiles-item-inner">
               <div class="features-tiles-item-header">
                 <div class="features-tiles-item-image mb-16 bg-1">
@@ -31,7 +34,7 @@
                 </div>
               </div>
               <div class="features-tiles-item-content">
-                <h4 class="mt-0 mb-8">Manager Mode</h4>
+                <h4 class="mt-0 mb-8">Manager</h4>
                 <p class="m-0 text-sm">
                   Allow your guests to download the
                   <a
@@ -42,7 +45,7 @@
                   >
                   mobile app and change the TV channels right from their phone.
                   <br />
-                  <nuxt-link to="/manager-mode" class="text-sm"
+                  <nuxt-link to="/manager" class="text-sm"
                     >See more →</nuxt-link
                   >
                 </p>
@@ -51,6 +54,7 @@
           </div>
 
           <div
+            v-if="skip !== 'clicker-tv'"
             class="tiles-item reveal-from-bottom center-content"
             data-reveal-delay="200"
           >
@@ -86,6 +90,7 @@
           </div>
 
           <div
+            v-if="skip !== 'control-center'"
             class="tiles-item reveal-from-bottom center-content"
             data-reveal-delay="400"
           >
@@ -124,16 +129,17 @@ import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 import CImage from "@/components/elements/Image.vue";
 
 export default {
-  name: "CFeaturesTiles",
+  // name: "CFeaturesTiles",
   components: {
     CSectionHeader,
     CImage
   },
+  props: ["skip"],
   mixins: [SectionTilesProps],
   data() {
     return {
       sectionHeader: {
-        title: "Clicker offers three products"
+        title: "Explore other Clicker products"
         // paragraph:
         //   "Vitae aliquet nec ullamcorper sit amet risus nullam eget felis semper quis lectus nulla at volutpat diam ut venenatis tellus—in ornare."
       }

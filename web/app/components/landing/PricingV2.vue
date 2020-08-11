@@ -40,7 +40,7 @@
             </div>
           </label>
           <p ref="sliderValue" class="pricing-slider-value">
-            {{ getPricingData(boxesInput) }}
+            {{ getPricingData(boxesInput) }} boxes
           </p>
         </div>
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
@@ -48,6 +48,9 @@
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-24 mb-24">
+                  <div class="pricing-item-name">
+                    <span class="name manager-mode">Manager Only</span>
+                  </div>
                   <div class="pricing-item-price mb-8">
                     <div
                       v-if="
@@ -77,23 +80,25 @@
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
-                    class="pricing-item-features-title h6 text-xs text-color-high mb-24"
+                    class="pricing-item-features-title h6 text-xs text-color-high mb-0"
                   >
                     What’s included
                   </div>
                   <ul
                     class="pricing-item-features-list list-reset text-xs mb-32"
                   >
-                    <li class="is-checked">Excepteur sint occaecat velit</li>
-                    <li class="is-checked">Excepteur sint occaecat velit</li>
-                    <li class="is-checked">Excepteur sint occaecat velit</li>
-                    <li>Excepteur sint occaecat velit</li>
-                    <li>Excepteur sint occaecat velit</li>
+                    <li class="is-checked">30 days free</li>
+                    <li class="is-checked">
+                      Staff can change TV channel from their phone
+                    </li>
+                    <li class="is-checked">
+                      Integrates with all your DIRECTV Boxes
+                    </li>
                   </ul>
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <Checkout :priceId="plan1PriceId" />
+                <div class="pt-16"><Checkout :priceId="plan1PriceId" /></div>
               </div>
             </div>
           </div>
@@ -102,6 +107,9 @@
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-24 mb-24">
+                  <div class="pricing-item-name">
+                    <span class="name all-star">All-Star</span>
+                  </div>
                   <div class="pricing-item-price mb-8">
                     <div
                       v-if="
@@ -131,23 +139,36 @@
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
-                    class="pricing-item-features-title h6 text-xs text-color-high mb-24"
+                    class="pricing-item-features-title h6 text-xs text-color-high mb-0"
                   >
                     What’s included
                   </div>
                   <ul
                     class="pricing-item-features-list list-reset text-xs mb-32"
                   >
-                    <li class="is-checked">Excepteur sint occaecat velit</li>
-                    <li class="is-checked">Excepteur sint occaecat velit</li>
-                    <li class="is-checked">Excepteur sint occaecat velit</li>
-                    <li class="is-checked">Excepteur sint occaecat velit</li>
-                    <li>Excepteur sint occaecat velit</li>
+                    <li class="is-checked">30 days free</li>
+                    <li class="is-checked">Everything in Manager Package</li>
+                    <li class="is-checked">
+                      Control Center - automated channel changes
+                    </li>
+                    <li class="is-checked">
+                      Custom channel changes based on venue preferences
+                    </li>
+                    <li class="is-checked">
+                      Clicker TV to allow guests to change channels
+                    </li>
+                    <li class="is-checked">
+                      VIP Mode allowing only certain guests to change channels
+                    </li>
+                    <li class="is-checked">
+                      Integrates with {{ getPricingData(boxesInput) }} DIRECTV
+                      Boxes
+                    </li>
                   </ul>
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <Checkout :priceId="plan2PriceId" />
+                <div class="pt-16"><Checkout :priceId="plan2PriceId" /></div>
               </div>
             </div>
           </div>
@@ -192,27 +213,40 @@ export default {
       plan2PriceId: null,
       sectionHeader: {
         title: "Simple pricing"
-        // paragraph:
-        //   "Vitae aliquet nec ullamcorper sit amet risus nullam eget felis semper quis lectus nulla at volutpat diam ut venenatis tellus—in ornare."
       },
       priceChangerValue: "0",
       boxesInput: {
-        0: "1 to 4 boxes",
-        1: "5 to 9 boxes",
-        2: "10 to 14 boxes",
-        3: "15+ boxes"
+        0: "1 to 4",
+        1: "5 to 9",
+        2: "10 to 14",
+        3: "15+"
       },
       priceOutput: {
         plan1: {
-          0: ["$", "35", "/month", "price_1HELZmIkuoCxKwvyONlgxuAo"],
-          1: ["$", "35", "/month", "price_1HELZmIkuoCxKwvyONlgxuAo"],
-          2: ["$", "35", "/month", "price_1HELZmIkuoCxKwvyONlgxuAo"],
+          0: ["$", "35", "/month", process.env.NUXT_ENV_STRIPE_PRICE_MANAGER],
+          1: ["$", "35", "/month", process.env.NUXT_ENV_STRIPE_PRICE_MANAGER],
+          2: ["$", "35", "/month", process.env.NUXT_ENV_STRIPE_PRICE_MANAGER],
           3: ["$", "contact-us", "/month"]
         },
         plan2: {
-          0: ["$", "75", "/month", "price_1HELbkIkuoCxKwvy5ME8KBNg"],
-          1: ["$", "90", "/month", "price_1HELbkIkuoCxKwvyQesZrogA"],
-          2: ["$", "120", "/month", "price_1HELbkIkuoCxKwvyTAn5dJwL"],
+          0: [
+            "$",
+            "75",
+            "/month",
+            process.env.NUXT_ENV_STRIPE_PRICE_ALLSTAR_TIER_1
+          ],
+          1: [
+            "$",
+            "90",
+            "/month",
+            process.env.NUXT_ENV_STRIPE_PRICE_ALLSTAR_TIER_2
+          ],
+          2: [
+            "$",
+            "120",
+            "/month",
+            process.env.NUXT_ENV_STRIPE_PRICE_ALLSTAR_TIER_3
+          ],
           3: ["$", "contact-us", "/month"]
         }
       }
@@ -255,13 +289,32 @@ export default {
         10
       );
       this.handleSliderValuePosition(this.$refs.slider);
-      this.handlePriceId(1);
+      this.handlePriceId(0);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.pricing-item-name {
+  position: absolute;
+  right: -10px;
+  top: -20px;
+  .name {
+    text-transform: uppercase;
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: #fff;
+    font-weight: bold;
+    &.manager-mode {
+      background: #55c3f5;
+    }
+    &.all-star {
+      background: #0091ea;
+    }
+  }
+}
 .pricing-header {
   margin-bottom: 8px;
 }
