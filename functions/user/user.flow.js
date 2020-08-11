@@ -430,7 +430,7 @@ module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
     ],
     mode: 'subscription',
     // success_url: '/success?session_id={CHECKOUT_SESSION_ID}',
-    success_url: host,
+    success_url: `${host}/checkout/confirmation`,
     cancel_url: host,
     shipping_address_collection: {
       allowed_countries: ['US'],

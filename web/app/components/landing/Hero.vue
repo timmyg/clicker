@@ -6,18 +6,16 @@
         <div class="split-wrap">
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
-              <h1 class="mt-0 mb-16">
-                <span>You pay a lot for DIRECTV.</span>
-                <br />
+              <h2 class="mt-0 mb-16">
+                <span>You pay a lot for DIRECTV.</span> <br />
                 <span class="reversed">Take Advantage of It.</span>
-              </h1>
+              </h2>
               <p class="m-0 mb-24">
                 Clicker integrates into your existing DIRECTV and automagically
-                manages channel changes and allow patrons to change the channel themselves with our app.
+                manages channel changes and allow patrons to change the channel
+                themselves with our app.
               </p>
-              <div>
-                <SignupForm />
-              </div>
+              <div><SignupForm /></div>
             </div>
             <div
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
@@ -82,4 +80,3 @@ export default {
   }
 }
 </style>
-
