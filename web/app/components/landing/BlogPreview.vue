@@ -9,33 +9,38 @@
         </div>
         <div class>
           <div
-            class="wrapper w-1/2 lg:w-1/5 inline-block text-center"
+            class="wrapper w-1/2 lg:w-1/4
+             inline-block text-center"
             v-for="(post, index) in recentPosts"
             v-bind:key="index"
           >
-            <nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }">
+            <nuxt-link
+              :to="{ name: 'blog-slug', params: { slug: post.fields.slug } }"
+            >
               <img
                 v-if="post.fields.featuredImage"
                 class="primary thumbnail"
                 :src="
-            post.fields.featuredImage.fields.file.url +
-              '?fit=scale&w=350&h=196&r=16'
-          "
+                  post.fields.featuredImage.fields.file.url +
+                    '?fit=scale&w=350&h=196&r=16'
+                "
                 :srcset="
-            `${
-              post.fields.featuredImage.fields.file.url
-            }?w=350&h=196&fit=fill 350w`
-          "
+                  `${
+                    post.fields.featuredImage.fields.file.url
+                  }?w=350&h=196&fit=fill 350w`
+                "
                 sizes="(min-width: 1024px) 400px, 100vw"
               />
-              <div class="title brand-font pt-2">{{ post.fields.title | truncate(50) }}</div>
+              <div class="title brand-font pt-2">
+                {{ post.fields.title | truncate(50) }}
+              </div>
             </nuxt-link>
           </div>
 
-          <div class="wrapper w-1/2 lg:w-1/6 inline-block text-center">
+          <!-- <div class="wrapper w-1/2 lg:w-1/6 inline-block text-center">
             <br />
             <nuxt-link to="/blog" class="text-sm pt-32">See more</nuxt-link>
-          </div>
+          </div> -->
         </div>
         <!-- <div class="text-center pt-8">
           <nuxt-link to="/blog" class="text-sm">See more</nuxt-link>
@@ -92,4 +97,3 @@ img {
   // padding: 8px;
 }
 </style>
- 

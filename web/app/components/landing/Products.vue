@@ -1,74 +1,69 @@
 <template>
-  <section class="features-tiles section center-content">
+  <section class="features-split section illustration-section-05">
     <div class="container">
-      <div class="features-tiles-inner">
-        <div class="section-header center-content">
-          <div class="container-xs" v-scroll-reveal>
-            <h2 class="mt-0 mb-16">
-              Let staff focus on selling food + beverage
-              <span
-                class="muted"
-              >and let Clicker keep your guests in their seats</span>
-            </h2>
-            <p>
-              Clicker drastically reduces channel change requests and increases customer
-              dwell time. We provide two products:
-            </p>
-          </div>
-        </div>
-        <div class="tiles-wrap">
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-b-icon-03.svg" alt="Feature tile icon 01" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom brand-font"
-                  data-reveal-container=".tiles-item"
-                >Control Center</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >We'll manage TVs automatically throughout the day remotely - tailored for your venue.</p>
-              </div>
+      <div class="features-split-inner section-inner">
+        <div class="split-wrap invert-mobile">
+          <div
+            class="split-item reveal-scale-up is-revealed"
+            v-scroll-reveal="{ delay: 200, origin: 'left' }"
+          >
+            <div class="split-item-content center-content-mobile">
+              <h3 class="mt-0 mb-16">Manager Mode description here</h3>
+              <p class="m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex.
+              </p>
+            </div>
+            <div
+              class="split-item-image split-item-image-fill is-3d illustration-element-03"
+            >
+              <img src="/images/landing/tv-zones.png" alt="TV zones schedule" />
             </div>
           </div>
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-b-icon-02.svg" alt="Feature tile icon 03" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom brand-font"
-                  data-reveal-container=".tiles-item"
-                >Clicker TV</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >
-                  Allow your guests to download the
-                  <a
-                    href="https://apps.apple.com/us/app/clicker-tv/id1471666907"
-                    class="brand-font"
-                    target="_blank"
-                  >Clicker TV</a> mobile app and change the TV
-                  channels right from their phone.
-                </p>
-              </div>
+          <div
+            class="split-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 200, origin: 'right' }"
+          >
+            <div class="split-item-content center-content-mobile">
+              <h3 class="mt-0 mb-16">Clicker TV description here</h3>
+              <p class="m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex.
+              </p>
+            </div>
+            <div
+              class="split-item-image split-item-image-fill is-3d illustration-element-04"
+            >
+              <img
+                src="/images/landing/wall-tv-zap.png"
+                alt="Wall TV with app"
+              />
+            </div>
+          </div>
+          <div
+            class="split-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 200, origin: 'left' }"
+          >
+            <div class="split-item-content center-content-mobile">
+              <h3 class="mt-0 mb-16">Control Center here</h3>
+              <p class="m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex.
+              </p>
+            </div>
+            <div
+              class="split-item-image split-item-image-fill is-3d illustration-element-05"
+            >
+              <img
+                src="/images/landing/wall-tvs-more.png"
+                alt="Wall with six tvs"
+              />
             </div>
           </div>
         </div>
@@ -78,7 +73,7 @@
 </template>
 
 <style lang="scss" scoped>
-.features-tiles {
-  padding-bottom: 32px;
-}
+// html.sr section.features-split {
+//   visibility: hidden;
+// }
 </style>

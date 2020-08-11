@@ -4,42 +4,34 @@
       <Hero />
       <Announcements />
       <Products />
-      <Features />
-      <FeaturesCards />
-      <BlogPreview :posts="posts" />
-      <Pricing />
-      <Faq />
+      <PricingV2 pricingSlider />
       <Testimonials />
-      <Signup :dividers="true" />
+      <Signup />
+      <News :posts="posts" />
     </div>
   </layout-basic>
 </template>
 
 <script>
 import Announcements from "@/components/landing/Announcements";
-import BlogPreview from "@/components/landing/BlogPreview";
 import Hero from "@/components/landing/Hero";
-import Faq from "@/components/landing/Faq";
-import Features from "@/components/landing/Features";
 import LayoutBasic from "@/components/layouts/Basic";
-import Products from "@/components/landing/Products";
-import Pricing from "@/components/landing/Pricing";
+import PricingV2 from "@/components/landing/PricingV2";
 import Signup from "@/components/landing/Signup";
-import FeaturesCards from "@/components/landing/FeaturesCards";
 import Testimonials from "@/components/landing/Testimonials";
+import Products from "@/components/landing/Products";
+import News from "@/components/landing/News";
+
 export default {
   components: {
     Announcements,
-    BlogPreview,
-    Faq,
-    Features,
     Hero,
     LayoutBasic,
     Products,
-    Pricing,
+    PricingV2,
     Signup,
-    FeaturesCards,
-    Testimonials
+    Testimonials,
+    News
   },
   props: ["posts"]
 };

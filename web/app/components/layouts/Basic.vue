@@ -1,9 +1,7 @@
 <template>
   <div class="body-wrap">
     <div class="basic-layout">
-      <section>
-        <slot />
-      </section>
+      <section><slot /></section>
       <Footer />
     </div>
   </div>
@@ -62,6 +60,10 @@ li:not(.styled) {
 }
 
 main {
+  padding-top: 100px;
+}
+
+section.main {
   padding-top: 100px;
 }
 </style>
