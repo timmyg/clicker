@@ -415,6 +415,7 @@ module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event =>
 
 module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
   const { priceId } = getBody(event);
+  console.log(event);
 
   var session = await stripe.checkout.sessions.create({
     // customer: stripeCustomerId,
