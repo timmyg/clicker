@@ -31,8 +31,8 @@ export default {
   },
   methods: {
     placeholderSrc(w, h) {
-      // return `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"%3E%3C/svg%3E`
-      return ``;
+      return `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"%3E%3C/svg%3E`;
+      // return ``;
     },
     handlePlaceholder(img, placeholder) {
       img.style.display = "none";

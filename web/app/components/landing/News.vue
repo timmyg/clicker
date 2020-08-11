@@ -24,11 +24,12 @@
           <div class="tiles-item reveal-from-bottom">
             <div class="tiles-item-inner has-shadow">
               <figure class="news-item-image m-0">
-                <!-- <c-image
-                                    :src="require('@/assets/images/news-image-01.jpg')"
-                                    alt="News 01"
-                                    :width="344"
-                                    :height="194" /> -->
+                <img
+                  src="/images/landing/news-image-01.jpg"
+                  alt="News 01"
+                  width="344"
+                  height="194"
+                />
               </figure>
               <div class="news-item-content">
                 <div class="news-item-body">
@@ -52,11 +53,12 @@
           <div class="tiles-item reveal-from-bottom" data-reveal-delay="200">
             <div class="tiles-item-inner has-shadow">
               <figure class="news-item-image m-0">
-                <!-- <c-image
-                                    :src="require('@/assets/images/news-image-02.jpg')"
-                                    alt="News 02"
-                                    :width="344"
-                                    :height="194" /> -->
+                <img
+                  src="/images/landing/news-image-02.jpg"
+                  alt="News 01"
+                  width="344"
+                  height="194"
+                />
               </figure>
               <div class="news-item-content">
                 <div class="news-item-body">
@@ -80,11 +82,12 @@
           <div class="tiles-item reveal-from-bottom" data-reveal-delay="400">
             <div class="tiles-item-inner has-shadow">
               <figure class="news-item-image m-0">
-                <!-- <c-image
-                                    :src="require('@/assets/images/news-image-03.jpg')"
-                                    alt="News 03"
-                                    :width="344"
-                                    :height="194" /> -->
+                <img
+                  src="/images/landing/news-image-03.jpg"
+                  alt="News 01"
+                  width="344"
+                  height="194"
+                />
               </figure>
               <div class="news-item-content">
                 <div class="news-item-body">
@@ -125,9 +128,9 @@ export default {
   data() {
     return {
       sectionHeader: {
-        title: "Product news and updates",
-        paragraph:
-          "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consequat."
+        title: "From the Blog"
+        // paragraph:
+        //   "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consequat."
       }
     };
   }

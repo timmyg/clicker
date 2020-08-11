@@ -16,7 +16,8 @@
           bottomDivider && 'has-bottom-divider'
         ]"
       >
-        <c-section-header :data="sectionHeader" class="center-content" />
+        <!-- <c-section-header :data="sectionHeader" class="center-content" /> -->
+        <h2 class="center-content pricing-header">Simple Pricing</h2>
         <div v-if="pricingSwitcher" class="pricing-switcher center-content">
           <c-switch
             v-model="priceChangerValue"
@@ -190,9 +191,9 @@ export default {
       plan1PriceId: null,
       plan2PriceId: null,
       sectionHeader: {
-        title: "Simple, transparent pricing",
-        paragraph:
-          "Vitae aliquet nec ullamcorper sit amet risus nullam eget felis semper quis lectus nulla at volutpat diam ut venenatis tellus—in ornare."
+        title: "Simple pricing"
+        // paragraph:
+        //   "Vitae aliquet nec ullamcorper sit amet risus nullam eget felis semper quis lectus nulla at volutpat diam ut venenatis tellus—in ornare."
       },
       priceChangerValue: "0",
       boxesInput: {
@@ -261,32 +262,103 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form-slider {
-  input[type="range"] {
-    background: color-bg(range-track-inverse);
-    &::-webkit-slider-thumb {
-      background-color: color-bg(range-thumb-inverse);
-      background-image: inline-svg(
-        '<svg width="12" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M8 .5v7L12 4zM0 4l4 3.5v-7z" fill="' +
-          color-icon(range-inverse) + '" fill-rule="nonzero"/></svg>'
-      );
-    }
+.pricing-header {
+  margin-bottom: 8px;
+}
+.pricing-slider-value {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 14px;
+  margin-top: -10px;
+}
 
-    &::-moz-range-thumb {
-      background-color: color-bg(range-thumb-inverse);
-      background-image: inline-svg(
-        '<svg width="12" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M8 .5v7L12 4zM0 4l4 3.5v-7z" fill="' +
-          color-icon(range-inverse) + '" fill-rule="nonzero"/></svg>'
-      );
-    }
-
-    &::-ms-thumb {
-      background-color: color-bg(range-thumb-inverse);
-      background-image: inline-svg(
-        '<svg width="12" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M8 .5v7L12 4zM0 4l4 3.5v-7z" fill="' +
-          color-icon(range-inverse) + '" fill-rule="nonzero"/></svg>'
-      );
-    }
-  }
+input[type="range"] {
+  height: 25px;
+  -webkit-appearance: none;
+  margin: 10px 0;
+  width: 100px;
+}
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100px;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #0091ea;
+  border-radius: 1px;
+  border: 0px solid #000000;
+}
+input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #0091ea;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #fff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -7px;
+}
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #0091ea;
+}
+input[type="range"]::-moz-range-track {
+  width: 100px;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #0091ea;
+  border-radius: 1px;
+  border: 0px solid #000000;
+}
+input[type="range"]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #0091ea;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #fff;
+  cursor: pointer;
+}
+input[type="range"]::-ms-track {
+  width: 100px;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type="range"]::-ms-fill-lower {
+  background: #0091ea;
+  border: 0px solid #000000;
+  border-radius: 2px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type="range"]::-ms-fill-upper {
+  background: #0091ea;
+  border: 0px solid #000000;
+  border-radius: 2px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type="range"]::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #0091ea;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #fff;
+  cursor: pointer;
+}
+input[type="range"]:focus::-ms-fill-lower {
+  background: #0091ea;
+}
+input[type="range"]:focus::-ms-fill-upper {
+  background: #0091ea;
 }
 </style>

@@ -3,36 +3,35 @@
     <div class="site-content">
       <Hero />
       <Announcements />
-      <BlogPreview :posts="posts" />
-      <!-- <BlogPreviewV2 :posts="posts" /> -->
+      <Products />
       <PricingV2 pricingSlider />
-      <Faq />
       <Testimonials />
-      <Signup :dividers="true" />
+      <Signup />
+      <News :posts="posts" />
     </div>
   </layout-basic>
 </template>
 
 <script>
 import Announcements from "@/components/landing/Announcements";
-import BlogPreview from "@/components/landing/BlogPreview";
-// import BlogPreviewV2 from "@/components/landing/BlogPreviewV2";
 import Hero from "@/components/landing/Hero";
 import LayoutBasic from "@/components/layouts/Basic";
 import PricingV2 from "@/components/landing/PricingV2";
 import Signup from "@/components/landing/Signup";
 import Testimonials from "@/components/landing/Testimonials";
+import Products from "@/components/landing/Products";
+import News from "@/components/landing/News";
 
 export default {
   components: {
     Announcements,
-    BlogPreview,
-    // BlogPreviewV2,
     Hero,
     LayoutBasic,
+    Products,
     PricingV2,
     Signup,
-    Testimonials
+    Testimonials,
+    News
   },
   props: ["posts"]
 };

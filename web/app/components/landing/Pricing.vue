@@ -8,22 +8,33 @@
           </div>
         </div>
         <div class="tiles-wrap illustration-section-07">
-          <div class="tiles-item reveal-scale-up" v-scroll-reveal="{ delay: 0, origin: 'bottom' }">
+          <div
+            class="tiles-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 0, origin: 'bottom' }"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
-                    <span class="pricing-item-price-currency h5 text-color-low">&nbsp;</span>
+                    <span class="pricing-item-price-currency h5 text-color-low"
+                      >&nbsp;</span
+                    >
                     <span class="pricing-item-price-amount h4">&nbsp;</span>
                     <span class="text-color-low text-xs">&nbsp;</span>
-                    <span class="pricing-item-name brand-font h5">Assistant Coach</span>
+                    <span class="pricing-item-name brand-font h5"
+                      >Assistant Coach</span
+                    >
                   </div>
                 </div>
                 <div class="pricing-item-features mb-40">
-                  <div class="pricing-item-features-title fw-500 text-xs text-color-high">
+                  <div
+                    class="pricing-item-features-title fw-500 text-xs text-color-high"
+                  >
                     <b>What's included</b>
                   </div>
-                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                  <ul
+                    class="pricing-item-features-list list-reset text-xs mb-32"
+                  >
                     <li class="is-checked">
                       <span>
                         Your venue added to
@@ -32,14 +43,20 @@
                     </li>
                     <li class="is-checked">Allow customer controlled TVs</li>
                     <li class="is-checked">TV layout strategy guidance</li>
-                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
+                    <li class="is-checked">
+                      DirecTV wiring setup, if necessary
+                    </li>
                     <li class="is-checked">Email + chat support</li>
                   </ul>
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
                 <!-- <a class="button button-primary button-block" href="#signup-form">Learn More</a> -->
-                <a class="button button-primary button-block" href="#signup-form">Learn More</a>
+                <a
+                  class="button button-primary button-block"
+                  href="#signup-form"
+                  >Learn More</a
+                >
               </div>
             </div>
           </div>
@@ -51,17 +68,25 @@
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
-                    <span class="pricing-item-price-currency h5 text-color-low">&nbsp;</span>
+                    <span class="pricing-item-price-currency h5 text-color-low"
+                      >&nbsp;</span
+                    >
                     <span class="pricing-item-price-amount h4">&nbsp;</span>
                     <span class="text-color-low text-xs">&nbsp;</span>
-                    <span class="pricing-item-name brand-font h5">Advanced Scout</span>
+                    <span class="pricing-item-name brand-font h5"
+                      >Advanced Scout</span
+                    >
                   </div>
                 </div>
                 <div class="pricing-item-features mb-40">
-                  <div class="pricing-item-features-title fw-500 text-xs text-color-high">
+                  <div
+                    class="pricing-item-features-title fw-500 text-xs text-color-high"
+                  >
                     <b>What's included</b>
                   </div>
-                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                  <ul
+                    class="pricing-item-features-list list-reset text-xs mb-32"
+                  >
                     <li class="is-checked">
                       <span>
                         <b class="brand-font">Control Center</b> automatically
@@ -69,15 +94,23 @@
                       </span>
                     </li>
                     <li class="is-checked">24 hr/day auto programming</li>
-                    <li class="is-checked">Weekly email with upcoming TV sports schedule</li>
+                    <li class="is-checked">
+                      Weekly email with upcoming TV sports schedule
+                    </li>
                     <li class="is-checked">TV layout strategy guidance</li>
-                    <li class="is-checked">DirecTV wiring setup, if necessary</li>
+                    <li class="is-checked">
+                      DirecTV wiring setup, if necessary
+                    </li>
                     <li class="is-checked">Email + chat support</li>
                   </ul>
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <a class="button button-primary button-block" href="#signup-form">Learn More</a>
+                <a
+                  class="button button-primary button-block"
+                  href="#signup-form"
+                  >Learn More</a
+                >
               </div>
             </div>
           </div>
@@ -89,17 +122,25 @@
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-16 mb-24">
                   <div class="pricing-item-price mb-4">
-                    <span class="pricing-item-price-currency h5 text-color-low">&nbsp;</span>
+                    <span class="pricing-item-price-currency h5 text-color-low"
+                      >&nbsp;</span
+                    >
                     <span class="pricing-item-price-amount h4">&nbsp;</span>
                     <span class="text-color-low text-xs">&nbsp;</span>
-                    <span class="pricing-item-name brand-font h5">General Manager</span>
+                    <span class="pricing-item-name brand-font h5"
+                      >General Manager</span
+                    >
                   </div>
                 </div>
                 <div class="pricing-item-features mb-40">
-                  <div class="pricing-item-features-title fw-500 text-xs text-color-high">
+                  <div
+                    class="pricing-item-features-title fw-500 text-xs text-color-high"
+                  >
                     <b>What's included</b>
                   </div>
-                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                  <ul
+                    class="pricing-item-features-list list-reset text-xs mb-32"
+                  >
                     <li class="is-checked">
                       <span>
                         Everything in
@@ -119,16 +160,18 @@
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <a class="button button-primary button-block" href="#signup-form">Learn More</a>
+                <a
+                  class="button button-primary button-block"
+                  href="#signup-form"
+                  >Learn More</a
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <Checkout />
-    </div>
+    <div><Checkout /></div>
   </section>
 </template>
 
@@ -143,6 +186,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pricing-slider-value {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 14px;
+  margin-top: -10px;
+}
 .pricing-item-name {
   float: right;
   margin: 0;
