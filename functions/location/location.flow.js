@@ -1323,18 +1323,22 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
     locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
   }
   console.time('create message');
-  let responseText = '';
+  let responseText = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
   locations.forEach(location => {
-    responseText += location.name + '\n';
-    location.boxes.forEach(box => {
-      const { channel, channelMinor } = box.live && box.live;
-      const program = box.live && box.live.program;
-      responseText += `\tzone ${box.zone}: ${channel}${channelMinor ? channelMinor : ''}`;
-      if (program) {
-        responseText += ` ${program.channelTitle}: ${program.title}`;
-      }
-      responseText += '\n';
-    });
+    responseText += `${location.name} (${location.neighborhood}) ${location.id}\n`;
+    location.boxes = location.boxes.map(b => setBoxStatus(b));
+    location.boxes
+      .filter(b => b.configuration.automationActive || b.configuration.appActive)
+      .sort((a, b) => a.zone.localeCompare(b.zone))
+      .forEach(box => {
+        const { channel, channelMinor } = box.live && box.live;
+        const program = box.live && box.live.program;
+        responseText += `\tzone ${box.zone}: ${channel}${channelMinor ? channelMinor : ''}`;
+        if (program) {
+          responseText += ` ${program.channelTitle}: ${program.title}`;
+        }
+        responseText += `${box.live && box.live.locked ? '[locked]' : ''}\n`;
+      });
     responseText += '\n\n';
   });
   console.timeEnd('create message');
