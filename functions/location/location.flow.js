@@ -1316,9 +1316,20 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   if (!!searchTerm) {
     locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
   }
-  let responseText = 'test 123';
+  let responseText = '';
+  locations.forEach(location => {
+    responseText += location.name + '\n';
+    location.boxes.forEach(b => {
+      const { channel, channelMinor } = box.live && box.live;
+      const program = box.live && box.live.program;
+      responseText += `\t$zone ${box.zone}: ${channel}${channelMinor ? channelMinor : ''}`;
+      if (program) {
+        responseText += ` ${program.channelTitle}: ${program.title}`;
+      }
+    });
+  });
   const response = respond(200);
-  respond.body = JSON.stringify(responseText);
+  respond.body = responseText;
   return response;
 });
 
