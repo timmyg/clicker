@@ -1312,7 +1312,9 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   console.log({ event });
   const queryData = url.parse('?' + body, true).query;
   const [searchTerm] = queryData.text.split(' ');
+  console.log({ searchTerm });
   let locations: Venue[] = await dbLocation.scan().exec();
+  console.log({ locations });
 
   if (!!searchTerm) {
     locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
@@ -1329,6 +1331,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
       }
     });
   });
+  console.log(responseText);
   const response = respond(200);
   respond.body = responseText;
   return response;
