@@ -1271,6 +1271,18 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
   return respond(200);
 });
 
+module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
+  const body = getBody(event);
+  console.log({ body });
+  return respond(200);
+  // await new Invoke()
+  //   .service('remote')
+  //   .name('command')
+  //   .body({ reservation, command, source, losantProductionOverride: location.losantProductionOverride })
+  //   .async()
+  //   .go();
+});
+
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
