@@ -332,7 +332,11 @@ function setBoxStatus(box: Box): Box {
     box.live.lockedProgrammingId === box.live.program.programmingId &&
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
   console.log('hiiiiiiii', box.live);
-  if (box.configuration.automationActive && (!box.live.program || Object.keys(box.live.program).length === 0)) {
+  if (
+    box.configuration &&
+    box.configuration.automationActive &&
+    (!box.live.program || Object.keys(box.live.program).length === 0)
+  ) {
     console.log('no program****');
     box.live.locked = true;
     box.live.lockedMessage = 'Sorry, TV is locked';

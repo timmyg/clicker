@@ -796,6 +796,9 @@ describe('setBoxStatus', () => {
       };
       const box = {
         live,
+        configuration: {
+          automationActive: true,
+        },
       };
       const result = setBoxStatus(box);
       expect(result.live.locked).toBeTruthy();
