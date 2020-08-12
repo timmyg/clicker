@@ -6,6 +6,7 @@ const moment = require('moment-timezone');
 // const momentHelper = require('helper-moment');
 const mustache = require('mustache');
 const uuid = require('uuid/v1');
+const url = require('url');
 const Airtable = require('airtable');
 const { Model } = require('dynamodb-toolbox');
 
@@ -1273,15 +1274,12 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
-  console.log({ body });
-  console.log({ event });
+  const queryData = url.parse(body, true).query;
+  console.log({ queryData });
+  // tuneSlackZap(location: Venue, box: Box, channel: number, channelMinor: number, program: Program)
+  // console.log({ body });
+  // console.log({ event });
   return respond(200);
-  // await new Invoke()
-  //   .service('remote')
-  //   .name('command')
-  //   .body({ reservation, command, source, losantProductionOverride: location.losantProductionOverride })
-  //   .async()
-  //   .go();
 });
 
 function buildAirtableNowShowing(location: Venue) {
@@ -1324,6 +1322,26 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
   // return if automation locked as we still want to evaluate those
   boxes = boxes.filter(b => !b.live.locked || (b.live.locked && b.live.channelChangeSource === zapTypes.automation));
   return boxes;
+}
+
+async function tuneSlackZap(location: Venue, box: Box, channel: number, channelMinor: number, program: Program) {
+  const command = 'tune';
+  const reservation = {
+    location,
+    box,
+    program: {
+      channel,
+      channelMinor,
+    },
+  };
+  const source = zapTypes.controlCenter;
+  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box.label);
+  await new Invoke()
+    .service('remote')
+    .name('command')
+    .body({ reservation, command, source, losantProductionOverride: location.losantProductionOverride })
+    .async()
+    .go();
 }
 
 async function tuneAutomation(location: Venue, box: Box, channel: number, channelMinor: number, program: Program) {
