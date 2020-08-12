@@ -1331,7 +1331,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
       }
     });
   });
-  // console.log(responseText);
+  console.log(responseText);
   return respond(200, responseText);
   // const response = respond(200, { text: responseText });
   // // respond.body = responseText;
