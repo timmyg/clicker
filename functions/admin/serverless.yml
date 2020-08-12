@@ -63,9 +63,9 @@ functions:
   checkControlCenterEvents:
     handler: admin.checkControlCenterEvents
     events:
-      # - schedule: cron(0 20 ? * MON-FRI *) # weekdays ~ 4pm eastern
-      # - schedule: cron(0 12 ? * SAT *) # weekends ~ 8am eastern
-      # - schedule: cron(0 12 ? * SUN *) # weekends ~ 8am eastern
+      - schedule: cron(0 20 ? * MON-FRI *) # weekdays ~ 4pm eastern
+      - schedule: cron(0 12 ? * SAT *) # weekends ~ 8am eastern
+      - schedule: cron(0 12 ? * SUN *) # weekends ~ 8am eastern
       - http:
           path: check/control-center
           method: post

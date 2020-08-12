@@ -89,7 +89,12 @@
                   >
                     <li class="is-checked">30 days free</li>
                     <li class="is-checked">
-                      Staff can change TV channel from their phone
+                      Staff can change TV channel with
+                      <a
+                        href="/blog/manage-tvs-from-your-phone-with-manager-mode"
+                      >
+                        Manager Mode</a
+                      >
                     </li>
                     <li class="is-checked">
                       Integrates with all your DIRECTV Boxes

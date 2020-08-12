@@ -22,7 +22,7 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let games = await base(airtableControlCenter)
     .select({
-      filterByFormula: `AND( {rating} != BLANK(), {startHoursFromNow} >= 0, {startHoursFromNow} <= 10 )`,
+      filterByFormula: `AND( {rating} != BLANK(), {rating} 	>= 2, {startHoursFromNow} >= 0, {startHoursFromNow} <= 10 )`,
     })
     .all();
   console.log(`found ${games.length} games`);
