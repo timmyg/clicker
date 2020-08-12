@@ -1316,7 +1316,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   const body = getBody(event);
   console.log({ event });
   const queryData = url.parse('?' + body, true).query;
-  const [searchTerm] = queryData.text.split(' ');
+  const [searchTerm] = queryData.text;
   console.log({ searchTerm });
   console.time('query');
   let locations: Venue[] = await dbLocation.scan().exec();
@@ -1338,18 +1338,18 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
       .forEach(box => {
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
+        responseText += `\t`;
+        if (program) {
+          responseText += `*${program.channelTitle}*: ${program.title.substring(0, 8)}`;
+        }
+        responseText += `\t${channel}.${channelMinor}`;
+        responseText += `\t${box.live && box.live.locked ? '[locked]' : ''}\n`;
         if (box.configuration.automationActive) {
           responseText += `\tzone ${box.zone}`;
         }
         if (box.configuration.appActive) {
-          responseText += `/label ${box.label}`;
+          responseText += `\tlabel ${box.label}`;
         }
-        responseText += `\t`;
-        if (program) {
-          responseText += `*${program.channelTitle}*: ${program.title}`;
-        }
-        responseText += ` ${channel}.${channelMinor}`;
-        responseText += `${box.live && box.live.locked ? '[locked]' : ''}\n`;
       });
     responseText += '\n\n';
   });
