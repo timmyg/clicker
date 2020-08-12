@@ -1334,16 +1334,17 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
       .forEach(box => {
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
-        responseText += `\tzone ${box.zone}`;
-        if (box.configuration.appActive) {
-          responseText += ` label ${box.label}`;
+        if (box.configuration.automationActive) {
+          responseText += `\tzone ${box.zone}`;
         }
-        responseText += `\tzone ${box.zone}`;
-        responseText += `: `;
+        if (box.configuration.appActive) {
+          responseText += `/label ${box.label}`;
+        }
+        responseText += `\t`;
         if (program) {
           responseText += `*${program.channelTitle}*: ${program.title}`;
         }
-        responseText += `${channel}.${channelMinor}`;
+        responseText += ` ${channel}.${channelMinor}`;
         responseText += `${box.live && box.live.locked ? '[locked]' : ''}\n`;
       });
     responseText += '\n\n';
