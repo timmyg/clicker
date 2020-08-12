@@ -1335,7 +1335,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
         responseText += `\tzone ${box.zone}`;
-        if (box.box.configuration.appActive) {
+        if (box.configuration.appActive) {
           responseText += ` label ${box.label}`;
         }
         responseText += `\tzone ${box.zone}`;
