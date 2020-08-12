@@ -1309,6 +1309,7 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
 
 module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
+  console.log({ event });
   const queryData = url.parse('?' + body, true).query;
   const [searchTerm] = queryData.text.split(' ');
   let locations: Venue[] = await dbLocation.scan().exec();
