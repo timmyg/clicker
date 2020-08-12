@@ -77,6 +77,7 @@ const nationalChannels: number[] = [
   221, //CBSSN // premium
   245, //TNT
   247, //TBS
+  // 671, //TBS
   // 701, //NFLMX // 4 game mix
   // 702, //NFLMX // 8 game mix
   // 703, //NFLRZ // Redzone (premium)
@@ -96,6 +97,7 @@ const nationalChannels: number[] = [
   // 717, //NFL
   // 718, //NFL
   // 719, //NFL
+  // 671 // FSMW, turned on at tin roof once
 ];
 
 // 2661

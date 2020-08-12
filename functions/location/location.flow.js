@@ -609,7 +609,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
       updateBoxInfoBody.lockedUntil =
         moment()
-          .add(1, 'h')
+          .add(2, 'h')
           .unix() * 1000;
 
       console.log({ channel: major, region: location.region });
