@@ -1293,6 +1293,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   console.log({ body });
+  console.log({ event });
   return respond(200);
   // await new Invoke()
   //   .service('remote')
