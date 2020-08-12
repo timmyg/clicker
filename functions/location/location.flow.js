@@ -1274,11 +1274,17 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
-  const queryData = url.parse(body, true).query;
-  console.log({ queryData });
-  // tuneSlackZap(location: Venue, box: Box, channel: number, channelMinor: number, program: Program)
-  // console.log({ body });
-  // console.log({ event });
+  const queryData = url.parse('?' + body, true).query;
+  const [locationId, zone, channel, channelMinor] = queryData.text.split(' ');
+  console.log({ locationId, zone, channel, channelMinor });
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(locationId)
+    .exec();
+  const box = location.boxes.find(b => b.zone === zone);
+
+  console.log(location, box, channel, channelMinor);
+  await tuneSlackZap(location, box, channel, channelMinor);
   return respond(200);
 });
 
@@ -1324,7 +1330,7 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
   return boxes;
 }
 
-async function tuneSlackZap(location: Venue, box: Box, channel: number, channelMinor: number, program: Program) {
+async function tuneSlackZap(location: Venue, box: Box, channel: number, channelMinor: number) {
   const command = 'tune';
   const reservation = {
     location,
@@ -1334,7 +1340,7 @@ async function tuneSlackZap(location: Venue, box: Box, channel: number, channelM
       channelMinor,
     },
   };
-  const source = zapTypes.controlCenter;
+  const source = zapTypes.automation;
   console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box.label);
   await new Invoke()
     .service('remote')
