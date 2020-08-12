@@ -7,7 +7,8 @@
         class="center-content reveal-from-bottom brand-font"
       />
       <Features />
-      <ProductsTiles :skip="'clicker-tv'" />
+      <FeaturesCards />
+      <TilesProducts :skip="'clicker-tv'" />
     </section>
   </layout-basic>
 </template>
@@ -15,9 +16,9 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-import Features from "@/components/landing/FeaturesClickerTv";
-import FeaturesCards from "@/components/landing/FeaturesCards";
-import ProductsTiles from "@/components/landing/ProductsTiles";
+import Features from "@/components/landing/app/Features";
+import FeaturesCards from "@/components/landing/app/FeaturesCards";
+import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 
 export default {
@@ -25,8 +26,9 @@ export default {
     Header,
     Features,
     FeaturesCards,
-    ProductsTiles,
-    CSectionHeader
+    TilesProducts,
+    CSectionHeader,
+    LayoutBasic
   },
   data() {
     return {

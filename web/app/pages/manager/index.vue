@@ -6,7 +6,9 @@
         :data="sectionHeader"
         class="center-content reveal-from-bottom brand-font"
       />
-      <ProductsTiles :skip="'manager'" />
+      <Features />
+      <FeaturesCards />
+      <TilesProducts :skip="'manager'" />
     </section>
   </layout-basic>
 </template>
@@ -14,16 +16,19 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-import FeaturesCards from "@/components/landing/FeaturesCards";
-import ProductsTiles from "@/components/landing/ProductsTiles";
+import Features from "@/components/landing/manager/Features";
+import FeaturesCards from "@/components/landing/manager/FeaturesCards";
+import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 
 export default {
   components: {
     Header,
+    Features,
     FeaturesCards,
-    ProductsTiles,
-    CSectionHeader
+    TilesProducts,
+    CSectionHeader,
+    LayoutBasic
   },
   data() {
     return {

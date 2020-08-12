@@ -23,18 +23,18 @@
             class="tiles-item reveal-from-bottom center-content"
           >
             <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div class="features-tiles-item-image mb-16 bg-1">
-                  <img
-                    src="/images/landing/feature-tile-icon-001.svg"
-                    alt="Feature tile icon 01"
-                    width="64"
-                    height="64"
-                  />
-                </div>
-              </div>
               <div class="features-tiles-item-content">
-                <h4 class="mt-0 mb-8">Manager</h4>
+                <h4 class="mt-0 mb-8 header">
+                  <span class="name">
+                    Manager
+                    <img
+                      src="/images/landing/feature-tile-icon-001.svg"
+                      alt="Feature tile icon 01"
+                      width="64"
+                      height="64"
+                    />
+                  </span>
+                </h4>
                 <p class="m-0 text-sm">
                   Allow your guests to download the
                   <a
@@ -46,7 +46,7 @@
                   mobile app and change the TV channels right from their phone.
                   <br />
                   <nuxt-link to="/manager" class="text-sm"
-                    >See more →</nuxt-link
+                    >Learn More →</nuxt-link
                   >
                 </p>
               </div>
@@ -59,18 +59,18 @@
             data-reveal-delay="200"
           >
             <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div class="features-tiles-item-image mb-16 bg-2">
-                  <img
-                    src="/images/landing/feature-tile-icon-002.svg"
-                    alt="Feature tile icon 02"
-                    width="64"
-                    height="64"
-                  />
-                </div>
-              </div>
               <div class="features-tiles-item-content">
-                <h4 class="mt-0 mb-8">Clicker TV</h4>
+                <h4 class="mt-0 mb-8 header">
+                  <span class="name">
+                    Clicker TV
+                    <img
+                      src="/images/landing/feature-tile-icon-002.svg"
+                      alt="Feature tile icon 02"
+                      width="64"
+                      height="64"
+                    />
+                  </span>
+                </h4>
                 <p class="m-0 text-sm">
                   Allow your guests to download the
                   <a
@@ -82,7 +82,7 @@
                   mobile app and change the TV channels right from their phone.
                   <br />
                   <nuxt-link to="/clicker-tv" class="text-sm"
-                    >See more →</nuxt-link
+                    >Learn More →</nuxt-link
                   >
                 </p>
               </div>
@@ -95,23 +95,23 @@
             data-reveal-delay="400"
           >
             <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div class="features-tiles-item-image mb-16 bg-3">
-                  <img
-                    src="/images/landing/feature-tile-icon-004.svg"
-                    alt="Feature tile icon 03"
-                    width="64"
-                    height="64"
-                  />
-                </div>
-              </div>
               <div class="features-tiles-item-content">
-                <h4 class="mt-0 mb-8">Control Center</h4>
+                <h4 class="mt-0 mb-8 header">
+                  <span class="name">
+                    Control Center
+                    <img
+                      src="/images/landing/feature-tile-icon-004.svg"
+                      alt="Feature tile icon 03"
+                      width="64"
+                      height="64"
+                    />
+                  </span>
+                </h4>
                 <p class="m-0 text-sm">
                   We'll manage TVs automatically throughout the day remotely -
                   tailored for your venue. <br />
                   <nuxt-link to="/control-center" class="text-sm"
-                    >See more →</nuxt-link
+                    >Learn More →</nuxt-link
                   >
                 </p>
               </div>
@@ -149,6 +149,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+section.features-tiles {
+  background: #efefef;
+}
+.features-tiles-item-content {
+  .name {
+    position: relative;
+    img {
+      display: inline;
+      position: absolute;
+      left: -60px;
+      top: -20px;
+    }
+  }
+}
 .bg-1 {
   background-color: #0091ea;
 }

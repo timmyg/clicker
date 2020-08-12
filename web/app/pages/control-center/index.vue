@@ -8,7 +8,7 @@
       />
       <Features />
       <FeaturesCards />
-      <ProductsTiles :skip="'control-center'" />
+      <TilesProducts :skip="'control-center'" />
     </section>
   </layout-basic>
 </template>
@@ -16,9 +16,9 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-import Features from "@/components/landing/FeaturesControlCenter";
-import FeaturesCards from "@/components/landing/FeaturesCards";
-import ProductsTiles from "@/components/landing/ProductsTiles";
+import Features from "@/components/landing/control-center/Features";
+import FeaturesCards from "@/components/landing/control-center/FeaturesCards";
+import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 
 export default {
@@ -27,7 +27,8 @@ export default {
     Header,
     Features,
     FeaturesCards,
-    ProductsTiles
+    TilesProducts,
+    LayoutBasic
   },
   data() {
     return {
@@ -39,3 +40,5 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped></style>

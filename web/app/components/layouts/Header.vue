@@ -42,14 +42,27 @@
           <div class="header-nav-inner">
             <ul class="list-reset text-xxs header-nav-right">
               <li>
-                <nuxt-link
-                  class="brand-font"
-                  to="/"
-                  v-if="currentRouteName.includes('blog')"
-                  >Home</nuxt-link
+                <nuxt-link class="brand-font" to="/">Home</nuxt-link>
+                <nuxt-link class="brand-font" :to="{ name: 'manager' }"
+                  >Manager</nuxt-link
                 >
-                <nuxt-link class="brand-font" :to="{ name: 'blog' }" v-else
+                <nuxt-link class="brand-font" :to="{ name: 'control-center' }"
+                  >Control Center</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'clicker-tv' }"
+                  >Clicker TV</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'blog' }"
                   >Blog</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'faq' }"
+                  >FAQ</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'setup' }"
+                  >Setup</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'setup' }"
+                  >Support</nuxt-link
                 >
               </li>
             </ul>
