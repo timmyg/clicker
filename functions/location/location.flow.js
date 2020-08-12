@@ -1323,9 +1323,10 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
     locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
   }
   console.time('create message');
-  let responseText = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+  let responseText = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n';
   locations.forEach(location => {
-    responseText += `${location.name} (${location.neighborhood}) ${location.id}\n`;
+    responseText += `${location.name} (${location.neighborhood})\n`;
+    responseText += `${location.id}\n`;
     location.boxes = location.boxes.map(b => setBoxStatus(b));
     location.boxes
       .filter(b => b.configuration.automationActive || b.configuration.appActive)
