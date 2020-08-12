@@ -7,6 +7,7 @@ const {
   getChannelsWithMinor,
   transformSIUrl,
   getDefaultRating,
+  getProgramTiebreaker,
 } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
@@ -96,5 +97,26 @@ describe('getDefaultRating', () => {
   });
   test('unrated', () => {
     expect(getDefaultRating({ title: 'Winter X Games' })).toEqual(undefined);
+  });
+});
+
+describe('getProgramTiebreaker', () => {
+  const programFSN = { live: { channel: 661 } };
+  const programLocal = { live: { channel: 9 } };
+  const programMLB = { live: { channel: 213 } };
+  const programNFLTicket = { live: { channel: 703 } };
+  const programNFLNetwork = { live: { channel: 212 } };
+
+  test('choose FSN over MLB (local market game)', () => {
+    expect(getProgramTiebreaker([programMLB, programFSN]).live.channel).toEqual(programFSN.live.channel);
+  });
+  test('choose local over NFL Ticket (local market game)', () => {
+    expect(getProgramTiebreaker([programLocal, programNFLTicket]).live.channel).toEqual(programLocal.live.channel);
+  });
+  test('choose local over NFLN (thursday night football)', () => {
+    expect(getProgramTiebreaker([programLocal, programNFLNetwork]).live.channel).toEqual(programLocal.live.channel);
+  });
+  test('choose local over FSN (opening day)', () => {
+    expect(getProgramTiebreaker([programFSN, programLocal]).live.channel).toEqual(programLocal.live.channel);
   });
 });
