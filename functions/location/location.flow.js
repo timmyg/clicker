@@ -1334,7 +1334,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
     location.boxes = location.boxes.map(b => setBoxStatus(b));
     location.boxes
       .filter(box => box.configuration.automationActive || box.configuration.appActive)
-      .sort((a, b) => a.zone.localeCompare(b.zone))
+      .sort((a, b) => (a.zone || a.label).localeCompare(b.zone || b.label))
       .forEach(box => {
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
