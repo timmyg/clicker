@@ -1307,6 +1307,19 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
   return respond(200, `[${location.name}] channel zapped to ${channel} ${channelMinor ? channelMinor : ''}`);
 });
 
+module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, async event => {
+  const body = getBody(event);
+  const queryData = url.parse('?' + body, true).query;
+  const [searchTerm] = queryData.text.split(' ');
+  let locations: Venue[] = await dbLocation.scan().exec();
+
+  if (!!searchTerm) {
+    locations =  locations.filter(l => l.name.toLowerCase().includes(searchTerm))
+  }
+  return respond(200, {locations})
+});
+
+
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
