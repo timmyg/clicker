@@ -1329,13 +1329,13 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
     responseText += `${location.id}\n`;
     location.boxes = location.boxes.map(b => setBoxStatus(b));
     location.boxes
-      .filter(b => b.configuration.automationActive || b.configuration.appActive)
+      .filter(box => box.configuration.automationActive || box.configuration.appActive)
       .sort((a, b) => a.zone.localeCompare(b.zone))
       .forEach(box => {
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
         responseText += `\tzone ${box.zone}`;
-        if (b.box.configuration.appActive) {
+        if (box.box.configuration.appActive) {
           responseText += ` label ${box.label}`;
         }
         responseText += `\tzone ${box.zone}`;
