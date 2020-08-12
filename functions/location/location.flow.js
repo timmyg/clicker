@@ -1339,10 +1339,6 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
         responseText += `\t`;
-        if (program && program.title) {
-          responseText += `*${program.channelTitle}*: ${program.title.substring(0, 8)}`;
-        }
-        responseText += `\t${channel}.${channelMinor}`;
         responseText += `\t${box.live && box.live.locked ? '[locked]' : ''}\n`;
         if (box.configuration.automationActive) {
           responseText += `\tzone ${box.zone}`;
@@ -1350,6 +1346,10 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
         if (box.configuration.appActive) {
           responseText += `\tlabel ${box.label}`;
         }
+        if (program && program.title) {
+          responseText += `*${program.channelTitle}*: ${program.title.substring(0, 8)}`;
+        }
+        responseText += `\t${channel}.${channelMinor || ''}`;
       });
     responseText += '\n\n';
   });
