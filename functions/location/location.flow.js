@@ -1314,11 +1314,13 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   let locations: Venue[] = await dbLocation.scan().exec();
 
   if (!!searchTerm) {
-    locations =  locations.filter(l => l.name.toLowerCase().includes(searchTerm))
+    locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
   }
-  return respond(200, {locations})
+  let responseText = 'test 123';
+  const response = respond(200);
+  respond.body = JSON.stringify(responseText);
+  return response;
 });
-
 
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
