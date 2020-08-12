@@ -1337,11 +1337,10 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   });
   console.timeEnd('create message');
   console.log(responseText);
+  const response = respond(200);
+  response.body = responseText;
   console.timeEnd('function');
-  return respond(200, responseText);
-  // const response = respond(200, { text: responseText });
-  // // respond.body = responseText;
-  // return response;
+  return response;
 });
 
 function buildAirtableNowShowing(location: Venue) {
