@@ -1304,7 +1304,7 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
 
   console.log(location, box, channel, channelMinor);
   await tuneSlackZap(location, box, channel, channelMinor);
-  return respond(200);
+  return respond(200, `[${location.name}] channel zapped to ${channel} ${channelMinor ? channelMinor : ''}`);
 });
 
 function buildAirtableNowShowing(location: Venue) {
