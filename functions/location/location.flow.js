@@ -1333,7 +1333,9 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
       if (program) {
         responseText += ` ${program.channelTitle}: ${program.title}`;
       }
+      responseText += '\n';
     });
+    responseText += '\n\n';
   });
   console.timeEnd('create message');
   console.log(responseText);
