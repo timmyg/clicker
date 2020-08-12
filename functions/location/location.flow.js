@@ -1339,7 +1339,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
         responseText += `\t`;
-        if (program) {
+        if (program && program.title) {
           responseText += `*${program.channelTitle}*: ${program.title.substring(0, 8)}`;
         }
         responseText += `\t${channel}.${channelMinor}`;
