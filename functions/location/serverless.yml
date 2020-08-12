@@ -322,5 +322,5 @@ functions:
     description: get locations data with optional search term
     events:
       - http:
-          path: slack/locations
+          path: slack/search
           method: post
