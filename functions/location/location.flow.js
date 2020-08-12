@@ -1308,30 +1308,36 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
 });
 
 module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, async event => {
+  console.time('function');
   const body = getBody(event);
   console.log({ event });
   const queryData = url.parse('?' + body, true).query;
   const [searchTerm] = queryData.text.split(' ');
   console.log({ searchTerm });
+  console.time('query');
   let locations: Venue[] = await dbLocation.scan().exec();
+  console.timeEnd('query');
   console.log({ locations });
 
   if (!!searchTerm) {
     locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
   }
+  console.time('create message');
   let responseText = '';
   locations.forEach(location => {
     responseText += location.name + '\n';
     location.boxes.forEach(box => {
       const { channel, channelMinor } = box.live && box.live;
       const program = box.live && box.live.program;
-      responseText += `\t$zone ${box.zone}: ${channel}${channelMinor ? channelMinor : ''}`;
+      responseText += `\tzone ${box.zone}: ${channel}${channelMinor ? channelMinor : ''}`;
       if (program) {
         responseText += ` ${program.channelTitle}: ${program.title}`;
       }
     });
   });
+  console.timeEnd('create message');
   console.log(responseText);
+  console.timeEnd('function');
   return respond(200, responseText);
   // const response = respond(200, { text: responseText });
   // // respond.body = responseText;
