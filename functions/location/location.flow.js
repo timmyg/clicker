@@ -1347,9 +1347,11 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
           responseText += `\tlabel ${box.label}`;
         }
         if (program && program.title) {
-          responseText += `*${program.channelTitle}*: ${program.title.substring(0, 8)}`;
+          responseText += ` *${program.channelTitle}*: ${program.title.substring(0, 8)}`;
+        } else {
+          responseText += '\t\t';
         }
-        responseText += `\t${channel}.${channelMinor || ''}`;
+        responseText += `\t${channel}[${channelMinor || ''}]`;
       });
     responseText += '\n\n';
   });
