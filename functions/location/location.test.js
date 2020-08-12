@@ -18,6 +18,14 @@ test('smoke test', () => {
   expect(response).toBeTruthy;
 });
 
+const program = {
+  programmingId: 'A',
+  end:
+    moment()
+      .subtract(0.2, 'h')
+      .unix() * 1000,
+};
+
 test('ControlCenterProgram model', () => {
   const objects = [
     {
@@ -241,8 +249,8 @@ const automationInactive = {
   },
 };
 describe('get boxes', () => {
-  const openGoodBox = { ...automationActive, id: 1, zone: '4' };
-  const openGoodBox2 = { ...automationActive, id: 2, zone: '3' };
+  const openGoodBox = { ...automationActive, id: 1, zone: '4', live: { program } };
+  const openGoodBox2 = { ...automationActive, id: 2, zone: '3', live: { program } };
   const reservedManuallyChangedRecently = {
     ...automationActive,
     id: 3,
@@ -776,6 +784,22 @@ describe('setBoxStatus', () => {
       const result = setBoxStatus(box);
       expect(result.live.locked).toBeTruthy();
     });
+    test('locked when program unknown', () => {
+      const live = {
+        ...automationBox,
+        channelChangeAt:
+          moment()
+            .subtract(0.1, 'h')
+            .unix() * 1000,
+        lockedProgrammingId: 'A',
+        program: {},
+      };
+      const box = {
+        live,
+      };
+      const result = setBoxStatus(box);
+      expect(result.live.locked).toBeTruthy();
+    });
   });
   describe('app zap changes', () => {
     const appBox = { channelChangeSource: 'app' };
@@ -796,6 +820,7 @@ describe('setBoxStatus', () => {
       const box = {
         live: {
           ...appBox,
+          program,
           lockedUntil:
             moment()
               .subtract(3, 'm')
