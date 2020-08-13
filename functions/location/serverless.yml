@@ -317,3 +317,10 @@ functions:
       - http:
           path: slack/zap
           method: post
+  slackSlashLocationsSearch:
+    handler: location.slackSlashLocationsSearch
+    description: get locations data with optional search term
+    events:
+      - http:
+          path: slack/search
+          method: post

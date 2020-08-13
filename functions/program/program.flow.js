@@ -297,7 +297,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .and()
       .filter('channelMinor');
 
-    if (channelMinor) {
+    if (channelMinor && channelMinor <= 2 && [660, 661].includes(channel)) {
       programsQuery = programsQuery.eq(channelMinor);
     } else {
       programsQuery = programsQuery.null();
@@ -350,8 +350,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(programmingId)
       .exec();
     // TODO what if program on multiple channels? choose local?
-    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
-    return respond(200, sortedPrograms[0]);
+    // const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    let chosenProgram = programs.length > 1 ? getProgramTiebreaker(programs) : programs[0];
+    return respond(200, chosenProgram);
   } else if (programmingIds) {
     const programs: Program[] = await dbProgram
       .query('region')
@@ -1337,8 +1338,25 @@ function getChannels(channels: number[]): number[] {
   return channels.map(c => Math.floor(c));
 }
 
+function getProgramTiebreaker(programs: Program[]): Program {
+  console.log(programs[0]);
+  const localChannel = programs.find(({ live: { channel } }) => channel > 0 && channel < 100);
+  const regionalChannel = programs.find(({ live: { channel } }) => channel >= 600 && channel < 700);
+  const nationalChannel = programs.find(({ live: { channel } }) => channel > 200 && channel < 300);
+  const premiumChannels = programs.find(({ live: { channel } }) => channel >= 700);
+  // choose local
+  if (localChannel) return localChannel;
+  if (regionalChannel) return regionalChannel;
+  if (nationalChannel) return nationalChannel;
+  if (premiumChannels) return premiumChannels;
+
+  // stumped
+  return programs[0];
+}
+
 module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
 module.exports.getDefaultRating = getDefaultRating;
+module.exports.getProgramTiebreaker = getProgramTiebreaker;
