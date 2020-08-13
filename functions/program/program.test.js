@@ -141,7 +141,12 @@ describe('getProgramTiebreaker', () => {
     expect(result[1].channel).toEqual(otherProgram.channel);
   });
   test('leaves alone when not duplicate progammingIds', () => {
-    const result = getProgramListTiebreaker([programNFLNetworkDifferent, programMLBDifferent, programNFLNetwork]);
+    const result = getProgramListTiebreaker([
+      programNFLNetworkDifferent,
+      programMLBDifferent,
+      programNFLNetwork,
+      programNFLNetwork,
+    ]);
     expect(result.length).toEqual(3);
     expect(result[0].channel).toEqual(programNFLNetworkDifferent.channel);
     expect(result[1].channel).toEqual(programMLBDifferent.channel);
