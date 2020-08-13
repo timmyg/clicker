@@ -324,3 +324,10 @@ functions:
       - http:
           path: slack/search
           method: post
+  slackSlashControlCenter:
+    handler: location.slackSlashControlCenter
+    description: control center
+    events:
+      - http:
+          path: slack/control-center
+          method: post
