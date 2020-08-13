@@ -1378,7 +1378,7 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
       );
       return respond(200, `control center enabled at ${location.name}`);
     case 'disable':
-      await dbLocation.update(
+      const location = await dbLocation.update(
         { id: locationId },
         { controlCenter: false },
         {
