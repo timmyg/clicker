@@ -1363,6 +1363,34 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   return response;
 });
 
+module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
+  const body = getBody(event);
+  const queryData = url.parse('?' + body, true).query;
+  const [action, locationId] = queryData.text.split(' ');
+  switch (action) {
+    case 'enable':
+      const location = await dbLocation.update(
+        { id: locationId },
+        { controlCenter: true },
+        {
+          returnValues: 'ALL_NEW',
+        },
+      );
+      return respond(200, `control center enabled at ${location.name}`);
+    case 'disable':
+      await dbLocation.update(
+        { id: locationId },
+        { controlCenter: false },
+        {
+          returnValues: 'ALL_NEW',
+        },
+      );
+      return respond(200, `control center disabled at ${location.name}`);
+    default:
+      return respond(400, 'unknown action');
+  }
+});
+
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
