@@ -349,8 +349,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .exec();
     // TODO what if program on multiple channels? choose local?
     // const sortedPrograms = programs.sort((a, b) => a.start - b.start);
-    let chosenProgram = programs.length > 1 ? getProgramTiebreaker(programs) : programs[0];
-    return respond(200, chosenProgram);
+    const chosenPrograms = programs.length > 1 ? getProgramListTiebreaker(programs) : programs;
+    return respond(200, chosenPrograms[0]);
   } else if (programmingIds) {
     const programs: Program[] = await dbProgram
       .query('region')
@@ -374,6 +374,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       console.error({ channel, time, region, programmingId, programmingIds });
       Raven.captureException(new Error(errorText));
     }
+    const chosenPrograms2 = sortedPrograms.length > 1 ? getProgramListTiebreaker(sortedPrograms) : sortedPrograms;
     return respond(200, sortedPrograms);
   }
 });
@@ -1336,20 +1337,33 @@ function getChannels(channels: number[]): number[] {
   return channels.map(c => Math.floor(c));
 }
 
-function getProgramTiebreaker(programs: Program[]): Program {
-  console.log(programs[0]);
-  const localChannel = programs.find(({ live: { channel } }) => channel > 0 && channel < 100);
-  const regionalChannel = programs.find(({ live: { channel } }) => channel >= 600 && channel < 700);
-  const nationalChannel = programs.find(({ live: { channel } }) => channel > 200 && channel < 300);
-  const premiumChannels = programs.find(({ live: { channel } }) => channel >= 700);
-  // choose local
-  if (localChannel) return localChannel;
-  if (regionalChannel) return regionalChannel;
-  if (nationalChannel) return nationalChannel;
-  if (premiumChannels) return premiumChannels;
+function getProgramListTiebreaker(programs: Program[]): Program[] {
+  // get unique set of programmingIds
+  const programmingIds = programs.map(p => p.programmingId);
+  const uniqueProgrammingIds = [...new Set(programmingIds)];
 
-  // stumped
-  return programs[0];
+  const deduplicatedPrograms = [];
+  uniqueProgrammingIds.forEach(pId => {
+    const duplicatedPrograms = programs.filter(p => p.programmingId === pId);
+    if (duplicatedPrograms.length > 1) {
+      const localChannel = duplicatedPrograms.find(({ channel }) => channel > 0 && channel < 100);
+      const regionalChannel = duplicatedPrograms.find(({ channel }) => channel >= 600 && channel < 700);
+      const nationalChannel = duplicatedPrograms.find(({ channel }) => channel > 200 && channel < 300);
+      const premiumChannels = duplicatedPrograms.find(({ channel }) => channel >= 700);
+
+      if (localChannel) return deduplicatedPrograms.push(localChannel);
+      if (regionalChannel) return deduplicatedPrograms.push(regionalChannel);
+      if (nationalChannel) return deduplicatedPrograms.push(nationalChannel);
+      if (premiumChannels) return deduplicatedPrograms.push(premiumChannels);
+
+      // stumped
+      return deduplicatedPrograms.push(duplicatedPrograms[0]);
+    } else {
+      return deduplicatedPrograms.push(duplicatedPrograms[0]);
+    }
+  });
+
+  return deduplicatedPrograms;
 }
 
 module.exports.build = build;
@@ -1357,4 +1371,4 @@ module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
 module.exports.getDefaultRating = getDefaultRating;
-module.exports.getProgramTiebreaker = getProgramTiebreaker;
+module.exports.getProgramListTiebreaker = getProgramListTiebreaker;
