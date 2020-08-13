@@ -377,7 +377,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       Raven.captureException(new Error(errorText));
     }
     const chosenPrograms2 = sortedPrograms.length > 1 ? getProgramListTiebreaker(sortedPrograms) : sortedPrograms;
-    return respond(200, sortedPrograms);
+    return respond(200, chosenPrograms2);
   }
 });
 
@@ -1340,10 +1340,11 @@ function getChannels(channels: number[]): number[] {
 }
 
 function getProgramListTiebreaker(programs: Program[]): Program[] {
+  console.log('! ! ! ! ! ! programs', programs.length);
   // get unique set of programmingIds
   const programmingIds = programs.map(p => p.programmingId);
   const uniqueProgrammingIds = [...new Set(programmingIds)];
-
+  console.log({ uniqueProgrammingIds });
   const deduplicatedPrograms = [];
   uniqueProgrammingIds.forEach(pId => {
     const duplicatedPrograms = programs.filter(p => p.programmingId === pId);
@@ -1365,6 +1366,7 @@ function getProgramListTiebreaker(programs: Program[]): Program[] {
     }
   });
 
+  console.log('dd', deduplicatedPrograms.length);
   return deduplicatedPrograms;
 }
 
