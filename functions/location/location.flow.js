@@ -1369,23 +1369,23 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
   const [action, locationId] = queryData.text.split(' ');
   switch (action) {
     case 'enable':
-      let location = await dbLocation.update(
+      const locationEnabled = await dbLocation.update(
         { id: locationId },
         { controlCenter: true },
         {
           returnValues: 'ALL_NEW',
         },
       );
-      return respond(200, `control center enabled at ${location.name}`);
+      return respond(200, `control center enabled at ${locationEnabled.name}`);
     case 'disable':
-      let location = await dbLocation.update(
+      const locationDisabled = await dbLocation.update(
         { id: locationId },
         { controlCenter: false },
         {
           returnValues: 'ALL_NEW',
         },
       );
-      return respond(200, `control center disabled at ${location.name}`);
+      return respond(200, `control center disabled at ${locationDisabled.name}`);
     default:
       return respond(400, 'unknown action');
   }
