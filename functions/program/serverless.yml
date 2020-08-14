@@ -401,6 +401,7 @@ functions:
     handler: program.clearDatabaseAirtable
     runtime: nodejs12.x
     timeout: 120
+    memorySize: 512
     events:
       - http:
           path: clear
