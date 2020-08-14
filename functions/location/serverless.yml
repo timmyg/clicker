@@ -81,6 +81,8 @@ resources:
             AttributeType: S
           - AttributeName: _v
             AttributeType: N
+          - AttributeName: shortId
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -94,6 +96,12 @@ resources:
           - IndexName: _vGlobalIndex
             KeySchema:
               - AttributeName: _v
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+          - IndexName: shortIdGlobalIndex
+            KeySchema:
+              - AttributeName: shortId
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY

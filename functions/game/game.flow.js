@@ -311,7 +311,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
     .all();
   const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
   console.log('allExistingGamesIds', allExistingGamesIds.length);
-  const daysToPull = 12; // TODO change to 12
+  const daysToPull = 2;
   const datesToPull = [];
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()

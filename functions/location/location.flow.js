@@ -65,6 +65,13 @@ const dbLocation = dynamoose.model(
         project: false, // ProjectionType: KEYS_ONLY
       },
     },
+    shortId: {
+      type: String,
+      index: {
+        global: true,
+        project: false, // ProjectionType: KEYS_ONLY
+      },
+    },
     boxes: [
       {
         id: String,
@@ -1302,13 +1309,28 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
-  const [locationId, zone, channel, channelMinor] = queryData.text.split(' ');
-  console.log({ locationId, zone, channel, channelMinor });
+  const [locationShortId, tvString, channel, channelMinor] = queryData.text.split(' ');
+  console.log({ locationShortId, tvString, channel, channelMinor });
+  const locationPartial: Venue = await dbLocation
+    .queryOne('shortId')
+    .eq(locationShortId)
+    .exec();
+  if (!locationPartial) {
+    return respond(200, 'location not found');
+  }
   const location: Venue = await dbLocation
     .queryOne('id')
-    .eq(locationId)
+    .eq(locationPartial.id)
     .exec();
-  const box = location.boxes.find(b => b.zone === zone);
+  // const zone = .substring(1,3)
+  const zone = tvString.charAt(0) === 'q' && tvString.substring(1, tvString.length);
+  const label = tvString.charAt(0) === 'l' && tvString.substring(1, tvString.length);
+  let box;
+  if (zone) {
+    box = location.boxes.find(b => b.zone === zone);
+  } else if (label) {
+    box = location.boxes.find(b => b.label === label);
+  }
 
   console.log(location, box, channel, channelMinor);
   await tuneSlackZap(location, box, channel, channelMinor);
@@ -1334,7 +1356,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   let responseText = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n';
   locations.forEach(location => {
     responseText += `${location.name} (${location.neighborhood})\n`;
-    responseText += `${location.id}\n`;
+    responseText += `${location.shortId}\n`;
     location.boxes = location.boxes.map(b => setBoxStatus(b));
     location.boxes
       .filter(box => box.configuration.automationActive || box.configuration.appActive)
@@ -1370,11 +1392,19 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
 module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
-  const [action, locationId] = queryData.text.split(' ');
+  const [action, locationShortId] = queryData.text.split(' ');
+  const location: Venue = await dbLocation
+    .queryOne('shortId')
+    .eq(locationShortId)
+    .exec();
+  if (!location) {
+    return respond(200, 'location not found');
+  }
+
   switch (action) {
     case 'enable':
       const locationEnabled = await dbLocation.update(
-        { id: locationId },
+        { id: location.id },
         { controlCenter: true },
         {
           returnValues: 'ALL_NEW',
@@ -1383,7 +1413,7 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
       return respond(200, `control center enabled at ${locationEnabled.name}`);
     case 'disable':
       const locationDisabled = await dbLocation.update(
-        { id: locationId },
+        { id: location.id },
         { controlCenter: false },
         {
           returnValues: 'ALL_NEW',
