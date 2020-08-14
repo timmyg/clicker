@@ -1306,7 +1306,7 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
   const [locationShortId, tvString, channel, channelMinor] = queryData.text.split(' ');
-  console.log({ locationShortId, tv, channel, channelMinor });
+  console.log({ locationShortId, tvString, channel, channelMinor });
   const locationPartial: Venue = await dbLocation
     .queryOne('shortId')
     .eq(locationShortId)
