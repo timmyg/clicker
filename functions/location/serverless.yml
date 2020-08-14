@@ -81,6 +81,8 @@ resources:
             AttributeType: S
           - AttributeName: _v
             AttributeType: N
+          - AttributeName: shortId
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
