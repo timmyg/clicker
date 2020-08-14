@@ -282,6 +282,7 @@ functions:
               - content-type
   syncRegions:
     handler: program.syncRegions
+    description: pull in directv data from their api into programs table for all regions
     runtime: nodejs12.x
     # timeout: 60
     events:
@@ -399,6 +400,7 @@ functions:
   clearDatabaseAirtable:
     handler: program.clearDatabaseAirtable
     runtime: nodejs12.x
+    timeout: 120
     events:
       - http:
           path: clear
