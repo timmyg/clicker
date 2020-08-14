@@ -806,28 +806,30 @@ module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.clearDatabaseAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   // clear control center records
-  const airtableProgramsTableName = 'Control Center';
+  const airtablesToClear = ['Control Center', 'Games'];
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const allRecords = await base(airtableProgramsTableName)
-    .select()
-    .all();
-  const allRecordsIds = allRecords.map(g => g.id);
-  console.log('allRecordsIds.length', allRecordsIds.length);
-  const promises = [];
-  let count = 0;
-  while (!!allRecordsIds.length) {
-    try {
-      const allRecordsSlice = allRecordsIds.splice(0, 10);
-      count += allRecordsSlice.length;
-      promises.push(base(airtableProgramsTableName).destroy(allRecordsSlice));
-    } catch (e) {
-      console.error(e);
+  for (const table of airtablesToClear) {
+    const allRecords = await base(table)
+      .select()
+      .all();
+    const allRecordsIds = allRecords.map(g => g.id);
+    console.log('allRecordsIds.length', allRecordsIds.length);
+    const promises = [];
+    let count = 0;
+    while (!!allRecordsIds.length) {
+      try {
+        const allRecordsSlice = allRecordsIds.splice(0, 10);
+        count += allRecordsSlice.length;
+        promises.push(base(table).destroy(allRecordsSlice));
+      } catch (e) {
+        console.error(e);
+      }
     }
+    console.log('promises', promises.length);
+    console.time(`deleteAirtable:${table}`);
+    await Promise.all(promises);
+    console.timeEnd(`deleteAirtable:${table}`);
   }
-  console.log('promises', promises.length);
-  console.time('deleteAirtable');
-  await Promise.all(promises);
-  console.timeEnd('deleteAirtable');
 
   // clear programs table
   const deleteDbPromises = [];
