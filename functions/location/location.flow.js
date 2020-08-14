@@ -1305,8 +1305,8 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
-  const [locationShortId, zone, channel, channelMinor] = queryData.text.split(' ');
-  console.log({ locationShortId, zone, channel, channelMinor });
+  const [locationShortId, tvString, channel, channelMinor] = queryData.text.split(' ');
+  console.log({ locationShortId, tv, channel, channelMinor });
   const locationPartial: Venue = await dbLocation
     .queryOne('shortId')
     .eq(locationShortId)
@@ -1318,7 +1318,15 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
     .queryOne('id')
     .eq(locationPartial.id)
     .exec();
-  const box = location.boxes.find(b => b.zone === zone);
+  // const zone = .substring(1,3)
+  const zone = tvString.charAt(0) === 'q' && tvString.substring(1, tvString.length);
+  const label = tvString.charAt(0) === 'l' && tvString.substring(1, tvString.length);
+  let box;
+  if (zone) {
+    box = location.boxes.find(b => b.zone === zone);
+  } else if (label) {
+    box = location.boxes.find(b => b.label === label);
+  }
 
   console.log(location, box, channel, channelMinor);
   await tuneSlackZap(location, box, channel, channelMinor);
