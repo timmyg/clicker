@@ -825,9 +825,9 @@ module.exports.clearDatabaseAirtable = RavenLambdaWrapper.handler(Raven, async e
     }
   }
   console.log('promises', promises.length);
-  console.time('deleteAitable');
+  console.time('deleteAirtable');
   await Promise.all(promises);
-  console.timeEnd('deleteAitable');
+  console.timeEnd('deleteAirtable');
 
   // clear programs table
   const deleteDbPromises = [];
@@ -857,7 +857,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  const daysToPull = 4;
+  const daysToPull = 2;
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
@@ -1300,10 +1300,10 @@ function build(dtvSchedule: any, regionId: string) {
           // console.log({ minorChannelMatch });
           const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
           // console.log({ channelMinor });
-          // if (!!channelMinor) {
-          program.channelMinor = channelMinor.minor;
-          // console.log('minor set');
-          // }
+          if (!!channelMinor) {
+            program.channelMinor = channelMinor.minor;
+            // console.log('minor set');
+          }
         }
 
         program.title = program.title !== 'Programming information not available' ? program.title : null;
