@@ -1307,17 +1307,17 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
   const queryData = url.parse('?' + body, true).query;
   const [locationShortId, zone, channel, channelMinor] = queryData.text.split(' ');
   console.log({ locationShortId, zone, channel, channelMinor });
-  // const location: Venue = await dbLocation
-  //   .queryOne('id')
-  //   .eq(locationId)
-  //   .exec();
-  const location: Venue = await dbLocation
+  const locationPartial: Venue = await dbLocation
     .queryOne('shortId')
     .eq(locationShortId)
     .exec();
-  if (!location) {
+  if (!locationPartial) {
     return respond(200, 'location not found');
   }
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(locationPartial.id)
+    .exec();
   const box = location.boxes.find(b => b.zone === zone);
 
   console.log(location, box, channel, channelMinor);
