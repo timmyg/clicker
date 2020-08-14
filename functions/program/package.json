@@ -19,7 +19,8 @@
     "invoke:get": "serverless invoke local --function get --path ../.resources/data/program.json --stage develop",
     "invoke:get:programmingId": "serverless invoke local --function get --path ../.resources/data/program-programmingId.json --stage develop",
     "invoke:get:programmingIds": "serverless invoke local --function get --path ../.resources/data/program-programmingIds.json --stage develop",
-    "invoke:upcoming": "serverless invoke local --function upcoming --path ../.resources/data/location-query.json --stage develop"
+    "invoke:upcoming": "serverless invoke local --function upcoming --path ../.resources/data/location-query.json --stage develop",
+    "invoke:resync": "serverless invoke local --function resyncAll --stage develop"
   },
   "author": "",
   "license": "ISC",

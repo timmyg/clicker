@@ -282,6 +282,7 @@ functions:
               - content-type
   syncRegions:
     handler: program.syncRegions
+    description: pull in directv data from their api into programs table for all regions
     runtime: nodejs12.x
     # timeout: 60
     events:
@@ -304,6 +305,7 @@ functions:
   syncAirtable:
     handler: program.syncAirtable
     runtime: nodejs12.x
+    description: sync programs in db to airtable
     memorySize: 1024
     timeout: 120
     environment:
@@ -316,7 +318,7 @@ functions:
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
     runtime: nodejs12.x
-    description: sync program game id/rating from airtable to programs db
+    description: sync user program game id/rating from airtable to programs db
     timeout: 15
     events:
       - schedule: cron(9/10 * * * ? *) # every minute ending in 9
@@ -390,8 +392,17 @@ functions:
   upcoming:
     handler: program.upcoming
     runtime: nodejs12.x
-    reservedConcurrency: 1
+    # reservedConcurrency: 1
     events:
       - http:
           path: '{locationId}/upcoming'
           method: get
+  clearDatabaseAirtable:
+    handler: program.clearDatabaseAirtable
+    runtime: nodejs12.x
+    timeout: 120
+    memorySize: 512
+    events:
+      - http:
+          path: clear
+          method: post
