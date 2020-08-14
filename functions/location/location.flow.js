@@ -1344,7 +1344,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   let responseText = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n';
   locations.forEach(location => {
     responseText += `${location.name} (${location.neighborhood})\n`;
-    responseText += `${location.id}\n`;
+    responseText += `${location.shortId}\n`;
     location.boxes = location.boxes.map(b => setBoxStatus(b));
     location.boxes
       .filter(box => box.configuration.automationActive || box.configuration.appActive)
