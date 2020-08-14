@@ -22,12 +22,12 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let games = await base(airtableControlCenter)
     .select({
-      filterByFormula: `AND( {rating} != BLANK(), {rating} 	>= 2, {startHoursFromNow} >= 0, {startHoursFromNow} <= 10 )`,
+      filterByFormula: `AND( {rating} >= 3, {startHoursFromNow} >= 0, {startHoursFromNow} <= 16 )`,
     })
     .all();
   console.log(`found ${games.length} games`);
   console.log(games);
-  if (games.length >= 4) {
+  if (games.length >= 2) {
     await sendControlCenterSlack(`${games.length} games scheduled for next 12 hours`);
   } else {
     const text = `*${games.length}* games scheduled for next 12 hours!`;

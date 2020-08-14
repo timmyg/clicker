@@ -45,6 +45,7 @@ class Base {
 }
 export class Venue extends Base {
   id: string;
+  shortId: string;
   losantId: string;
   boxes: Box[];
   channels: {
