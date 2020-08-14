@@ -610,7 +610,11 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
     console.log(boxId, info);
 
-    const { major, minor } = info;
+    const { major } = info;
+    let { minor } = info;
+    if (minor >= 10) {
+      minor = null;
+    }
 
     const i: number = location.boxes.findIndex(b => b.id === boxId);
     console.log('box', location.boxes[i], major, minor);
