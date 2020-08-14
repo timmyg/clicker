@@ -65,6 +65,13 @@ const dbLocation = dynamoose.model(
         project: false, // ProjectionType: KEYS_ONLY
       },
     },
+    shortId: {
+      type: String,
+      index: {
+        global: true,
+        project: false, // ProjectionType: KEYS_ONLY
+      },
+    },
     boxes: [
       {
         id: String,
@@ -1298,12 +1305,19 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
-  const [locationId, zone, channel, channelMinor] = queryData.text.split(' ');
-  console.log({ locationId, zone, channel, channelMinor });
+  const [locationShortId, zone, channel, channelMinor] = queryData.text.split(' ');
+  console.log({ locationShortId, zone, channel, channelMinor });
+  // const location: Venue = await dbLocation
+  //   .queryOne('id')
+  //   .eq(locationId)
+  //   .exec();
   const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(locationId)
+    .queryOne('shortId')
+    .eq(locationShortId)
     .exec();
+  if (!location) {
+    return respond(200, 'location not found');
+  }
   const box = location.boxes.find(b => b.zone === zone);
 
   console.log(location, box, channel, channelMinor);
@@ -1366,11 +1380,19 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
 module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
-  const [action, locationId] = queryData.text.split(' ');
+  const [action, locationShortId] = queryData.text.split(' ');
+  const location: Venue = await dbLocation
+    .queryOne('shortId')
+    .eq(locationShortId)
+    .exec();
+  if (!location) {
+    return respond(200, 'location not found');
+  }
+
   switch (action) {
     case 'enable':
       const locationEnabled = await dbLocation.update(
-        { id: locationId },
+        { id: location.id },
         { controlCenter: true },
         {
           returnValues: 'ALL_NEW',
@@ -1379,7 +1401,7 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
       return respond(200, `control center enabled at ${locationEnabled.name}`);
     case 'disable':
       const locationDisabled = await dbLocation.update(
-        { id: locationId },
+        { id: location.id },
         { controlCenter: false },
         {
           returnValues: 'ALL_NEW',

@@ -97,6 +97,12 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
+          - IndexName: shortIdGlobalIndex
+            KeySchema:
+              - AttributeName: shortId
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
 functions:
   health:
     handler: location.health
