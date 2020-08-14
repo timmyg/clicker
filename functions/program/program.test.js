@@ -7,6 +7,7 @@ const {
   getChannelsWithMinor,
   transformSIUrl,
   getDefaultRating,
+  getProgramListTiebreaker,
 } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
@@ -87,11 +88,68 @@ test('getMajorChannels', () => {
   expect(getChannels(channels)).toEqual([5, 9, 12, 19, 661]);
 });
 
-describe.skip('getDefaultRating', () => {
+describe('getDefaultRating', () => {
   test('rated', () => {
     expect(getDefaultRating({ title: 'SportsCenter With Scott Van Pelt' })).toEqual(2);
   });
+  test('rated ignore', () => {
+    expect(getDefaultRating({ title: 'The Best of This is SportsCenter' })).toEqual(undefined);
+  });
   test('unrated', () => {
     expect(getDefaultRating({ title: 'Winter X Games' })).toEqual(undefined);
+  });
+});
+
+describe('getProgramTiebreaker', () => {
+  const programmingId = 'EP830475';
+  const programFSN = { channel: 661, programmingId };
+  const programLocal = { channel: 9, programmingId };
+  const programMLB = { channel: 213, programmingId };
+  const programFS1 = { channel: 213, programmingId };
+  const programNFLTicket = { channel: 703, programmingId };
+  const programNFLNetwork = { channel: 212, programmingId };
+  const programNFLNetworkDifferent = { channel: 212, programmingId: 'EP09384' };
+  const programMLBDifferent = { channel: 212, programmingId: 'EP87453' };
+
+  test('choose FSN over MLB (local market game)', () => {
+    const result = getProgramListTiebreaker([programMLB, programFSN]);
+    console.log({ result });
+    expect(result[0].channel).toEqual(programFSN.channel);
+  });
+  test('choose local over NFL Ticket (local market game)', () => {
+    const result = getProgramListTiebreaker([programNFLTicket, programLocal]);
+    expect(result[0].channel).toEqual(programLocal.channel);
+  });
+  test('choose local over NFLN (thursday night football)', () => {
+    const result = getProgramListTiebreaker([programNFLNetwork, programLocal]);
+    expect(result[0].channel).toEqual(programLocal.channel);
+  });
+  test('choose local over FSN (opening day)', () => {
+    const result = getProgramListTiebreaker([programFSN, programLocal]);
+    expect(result[0].channel).toEqual(programLocal.channel);
+  });
+  test('choose FSN over FS1 (reds sometimes)', () => {
+    const result = getProgramListTiebreaker([programFS1, programFSN]);
+    expect(result[0].channel).toEqual(programFSN.channel);
+  });
+  test('removes duplicates by programmingId', () => {
+    const otherProgram = programLocal;
+    otherProgram.programmingId = 'EP888';
+    const result = getProgramListTiebreaker([programFS1, programFSN, otherProgram]);
+    expect(result.length).toEqual(2);
+    expect(result[0].channel).toEqual(programFSN.channel);
+    expect(result[1].channel).toEqual(otherProgram.channel);
+  });
+  test('leaves alone when not duplicate progammingIds', () => {
+    const result = getProgramListTiebreaker([
+      programNFLNetworkDifferent,
+      programMLBDifferent,
+      programNFLNetwork,
+      programNFLNetwork,
+    ]);
+    expect(result.length).toEqual(3);
+    expect(result[0].channel).toEqual(programNFLNetworkDifferent.channel);
+    expect(result[1].channel).toEqual(programMLBDifferent.channel);
+    expect(result[2].channel).toEqual(programNFLNetwork.channel);
   });
 });

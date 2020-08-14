@@ -246,13 +246,28 @@ functions:
       - http:
           path: roles
           method: post
-  customerPortal:
-    handler: user.customerPortal
-    description: clicker customers can manage their billing - currently unused
+  # customerPortal:
+  #   handler: user.customerPortal
+  #   description: clicker customers can manage their billing - currently unused
+  #   events:
+  #     - http:
+  #         path: portal
+  #         method: post
+  checkout:
+    handler: user.checkout
+    description: clicker customers can sign up for a subscription via stripe hosted checkout
     events:
       - http:
-          path: portal
+          path: checkout
           method: post
+          cors:
+            origin: '*'
+            headers:
+              - partner
+              - app
+              - clicker
+              - authorization
+              - content-type
   stripeWebhook:
     handler: user.stripeWebhook
     description: receive stripe webhooks

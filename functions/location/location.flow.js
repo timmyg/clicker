@@ -6,6 +6,7 @@ const moment = require('moment-timezone');
 // const momentHelper = require('helper-moment');
 const mustache = require('mustache');
 const uuid = require('uuid/v1');
+const url = require('url');
 const Airtable = require('airtable');
 const { Model } = require('dynamodb-toolbox');
 
@@ -330,7 +331,27 @@ function setBoxStatus(box: Box): Box {
     box.live.program &&
     box.live.lockedProgrammingId === box.live.program.programmingId &&
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
-  if (zapTypes.manual === box.live.channelChangeSource) {
+  console.log('hiiiiiiii', box.live);
+  if (
+    box.configuration &&
+    box.configuration.automationActive &&
+    (!box.live.program || Object.keys(box.live.program).length === 0)
+  ) {
+    console.log('no program****');
+    box.live.locked = true;
+    box.live.lockedMessage = 'Sorry, TV is locked';
+    const text = `Box is Locked: Program not found ${box.live.channel} (boxId: ${box.id})`;
+
+    // not sure if this will work but yolo
+    (async () => {
+      await new Invoke()
+        .service('notification')
+        .name('sendControlCenter')
+        .body({ text })
+        .async()
+        .go();
+    })();
+  } else if (zapTypes.manual === box.live.channelChangeSource) {
     box.live.locked = isBeforeLockedTime || isZappedProgramStillOn;
     // TODO isBeforeLockedTime is sometimes true
     if (box.live.locked) {
@@ -613,7 +634,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .unix() * 1000;
 
       console.log({ channel: major, region: location.region });
-      const queryParams = { channel: major, channelMinor: minor <= 2 ? minor : null, region: location.region };
+      const queryParams = { channel: major, channelMinor: minor, region: location.region };
       const programResult = await new Invoke()
         .service('program')
         .name('get')
@@ -829,7 +850,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
         const programResult = await new Invoke()
           .service('program')
           .name('get')
-          .queryParams({ channel: box.live.channel, region: location.region })
+          .queryParams({ channel: box.live.channel, channelMinor: box.live.channelMinor, region: location.region })
           .go();
         const program = programResult && programResult.data;
         console.timeEnd('get program');
@@ -837,7 +858,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
         console.time('update location box');
         const boxIndex = location.boxes.findIndex(b => b.id === box.id);
         console.log(location.id, boxIndex, box.live.channel, program.title);
-        await updateLocationBox(location.id, boxIndex, box.live.channel, undefined, undefined, program);
+        await updateLocationBox(location.id, boxIndex, box.live.channel, box.live.channelMinor, undefined, program);
         console.timeEnd('update location box');
       }
     }
@@ -933,12 +954,15 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   console.log(locations.map(l => l.name));
   const isHttp = !!event.httpMethod;
   if (isHttp) {
+    console.log('1');
     await new Invoke()
       .service('program')
       .name('syncAirtableUpdates')
       .go();
   }
+  console.log('2');
   for (const location of locations) {
+    console.log('3');
     await new Invoke()
       .service('location')
       .name('controlCenterByLocation')
@@ -1271,6 +1295,102 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
   return respond(200);
 });
 
+module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
+  const body = getBody(event);
+  const queryData = url.parse('?' + body, true).query;
+  const [locationId, zone, channel, channelMinor] = queryData.text.split(' ');
+  console.log({ locationId, zone, channel, channelMinor });
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(locationId)
+    .exec();
+  const box = location.boxes.find(b => b.zone === zone);
+
+  console.log(location, box, channel, channelMinor);
+  await tuneSlackZap(location, box, channel, channelMinor);
+  return respond(200, `[${location.name}] channel zapped to ${channel} ${channelMinor ? channelMinor : ''}`);
+});
+
+module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, async event => {
+  console.time('function');
+  const body = getBody(event);
+  console.log({ event });
+  const queryData = url.parse('?' + body, true).query;
+  const searchTerm = queryData.text;
+  console.log({ searchTerm });
+  console.time('query');
+  let locations: Venue[] = await dbLocation.scan().exec();
+  console.timeEnd('query');
+  console.log({ locations });
+
+  if (!!searchTerm) {
+    locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
+  }
+  console.time('create message');
+  let responseText = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n';
+  locations.forEach(location => {
+    responseText += `${location.name} (${location.neighborhood})\n`;
+    responseText += `${location.id}\n`;
+    location.boxes = location.boxes.map(b => setBoxStatus(b));
+    location.boxes
+      .filter(box => box.configuration.automationActive || box.configuration.appActive)
+      .sort((a, b) => (a.zone || a.label).localeCompare(b.zone || b.label))
+      .forEach(box => {
+        const { channel, channelMinor } = box.live && box.live;
+        const program = box.live && box.live.program;
+        responseText += `\t`;
+        responseText += `\t${box.live && box.live.locked ? '[locked]' : ''}\n`;
+        if (box.configuration.automationActive) {
+          responseText += `\tzone ${box.zone}`;
+        }
+        if (box.configuration.appActive) {
+          responseText += `\tlabel ${box.label}`;
+        }
+        if (program && program.title) {
+          responseText += ` *${program.channelTitle}*: ${program.title.substring(0, 8)}`;
+        } else {
+          responseText += '\t\t';
+        }
+        responseText += `\t${channel}[${channelMinor || ''}]`;
+      });
+    responseText += '\n\n';
+  });
+  console.timeEnd('create message');
+  console.log(responseText);
+  const response = respond(200);
+  response.body = responseText;
+  console.timeEnd('function');
+  return response;
+});
+
+module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
+  const body = getBody(event);
+  const queryData = url.parse('?' + body, true).query;
+  const [action, locationId] = queryData.text.split(' ');
+  switch (action) {
+    case 'enable':
+      const locationEnabled = await dbLocation.update(
+        { id: locationId },
+        { controlCenter: true },
+        {
+          returnValues: 'ALL_NEW',
+        },
+      );
+      return respond(200, `control center enabled at ${locationEnabled.name}`);
+    case 'disable':
+      const locationDisabled = await dbLocation.update(
+        { id: locationId },
+        { controlCenter: false },
+        {
+          returnValues: 'ALL_NEW',
+        },
+      );
+      return respond(200, `control center disabled at ${locationDisabled.name}`);
+    default:
+      return respond(400, 'unknown action');
+  }
+});
+
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
   location.boxes.forEach(box => {
@@ -1311,6 +1431,26 @@ function getAvailableBoxes(boxes: Box[]): Box[] {
   // return if automation locked as we still want to evaluate those
   boxes = boxes.filter(b => !b.live.locked || (b.live.locked && b.live.channelChangeSource === zapTypes.automation));
   return boxes;
+}
+
+async function tuneSlackZap(location: Venue, box: Box, channel: number, channelMinor: number) {
+  const command = 'tune';
+  const reservation = {
+    location,
+    box,
+    program: {
+      channel,
+      channelMinor,
+    },
+  };
+  const source = zapTypes.automation;
+  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box.label);
+  await new Invoke()
+    .service('remote')
+    .name('command')
+    .body({ reservation, command, source, losantProductionOverride: location.losantProductionOverride })
+    .async()
+    .go();
 }
 
 async function tuneAutomation(location: Venue, box: Box, channel: number, channelMinor: number, program: Program) {
@@ -1497,6 +1637,10 @@ async function updateLocationBox(
   if (channel) {
     updateExpression += `${prefix}.channel = :channel,`;
     expressionAttributeValues[':channel'] = parseInt(channel);
+  }
+  if (channelMinor) {
+    updateExpression += `${prefix}.channelMinor = :channelMinor,`;
+    expressionAttributeValues[':channelMinor'] = parseInt(channelMinor);
   }
   if (channelChangeAt) {
     updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;

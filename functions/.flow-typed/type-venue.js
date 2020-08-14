@@ -15,6 +15,7 @@ class Box {
   };
   live: {
     channel: number,
+    channelMinor: number,
     channelChangeAt: number,
     channelChangeSource: string,
     locked: boolean,

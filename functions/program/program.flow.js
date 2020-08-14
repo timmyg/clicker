@@ -295,7 +295,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .and()
       .filter('channelMinor');
 
-    if (channelMinor) {
+    if (channelMinor && channelMinor <= 2 && [660, 661].includes(channel)) {
       programsQuery = programsQuery.eq(channelMinor);
     } else {
       programsQuery = programsQuery.null();
@@ -348,8 +348,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(programmingId)
       .exec();
     // TODO what if program on multiple channels? choose local?
-    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
-    return respond(200, sortedPrograms[0]);
+    // const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    const chosenPrograms = programs.length > 1 ? getProgramListTiebreaker(programs) : programs;
+    return respond(200, chosenPrograms[0]);
   } else if (programmingIds) {
     const programs: Program[] = await dbProgram
       .query('region')
@@ -373,7 +374,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       console.error({ channel, time, region, programmingId, programmingIds });
       Raven.captureException(new Error(errorText));
     }
-    return respond(200, sortedPrograms);
+    const chosenPrograms2 = sortedPrograms.length > 1 ? getProgramListTiebreaker(sortedPrograms) : sortedPrograms;
+    return respond(200, chosenPrograms2);
   }
 });
 
@@ -1282,7 +1284,7 @@ function build(dtvSchedule: any, regionId: string) {
 
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
-    { search: 'sportscenter', rating: 1 },
+    { search: 'sportscenter', rating: 2 },
     { search: 'nfl live', rating: 1 },
     { search: 'nba: the jump', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
@@ -1293,6 +1295,8 @@ function getDefaultRating(program: Program): ?number {
     { search: 'quick pitch', rating: 1 },
   ];
 
+  const ratingsIgnore = ['the best of this is sportscenter'];
+
   // first things first
   // speak for yourself
   // high noon
@@ -1301,10 +1305,8 @@ function getDefaultRating(program: Program): ?number {
   // get up
   // the dan le batard show
 
-  // console.log(program.title, defaultRatings[0].search);
   const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
-  // console.log({ match });
-  if (match) {
+  if (match && !ratingsIgnore.includes(program.title.toLowerCase())) {
     return match.rating;
   }
 }
@@ -1335,8 +1337,40 @@ function getChannels(channels: number[]): number[] {
   return channels.map(c => Math.floor(c));
 }
 
+function getProgramListTiebreaker(programs: Program[]): Program[] {
+  console.log('! ! ! ! ! ! programs', programs.length);
+  // get unique set of programmingIds
+  const programmingIds = programs.map(p => p.programmingId);
+  const uniqueProgrammingIds = [...new Set(programmingIds)];
+  console.log({ uniqueProgrammingIds });
+  const deduplicatedPrograms = [];
+  uniqueProgrammingIds.forEach(pId => {
+    const duplicatedPrograms = programs.filter(p => p.programmingId === pId);
+    if (duplicatedPrograms.length > 1) {
+      const localChannel = duplicatedPrograms.find(({ channel }) => channel > 0 && channel < 100);
+      const regionalChannel = duplicatedPrograms.find(({ channel }) => channel >= 600 && channel < 700);
+      const nationalChannel = duplicatedPrograms.find(({ channel }) => channel > 200 && channel < 300);
+      const premiumChannels = duplicatedPrograms.find(({ channel }) => channel >= 700);
+
+      if (localChannel) return deduplicatedPrograms.push(localChannel);
+      if (regionalChannel) return deduplicatedPrograms.push(regionalChannel);
+      if (nationalChannel) return deduplicatedPrograms.push(nationalChannel);
+      if (premiumChannels) return deduplicatedPrograms.push(premiumChannels);
+
+      // stumped
+      return deduplicatedPrograms.push(duplicatedPrograms[0]);
+    } else {
+      return deduplicatedPrograms.push(duplicatedPrograms[0]);
+    }
+  });
+
+  console.log('dd', deduplicatedPrograms.length);
+  return deduplicatedPrograms;
+}
+
 module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
 module.exports.getDefaultRating = getDefaultRating;
+module.exports.getProgramListTiebreaker = getProgramListTiebreaker;
