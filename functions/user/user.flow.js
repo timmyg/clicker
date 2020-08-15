@@ -118,7 +118,8 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
     case 'invoice.paid':
       const invoice = webhookEvent.data.object;
       const { customer_email: customerEmail, amount_paid: amountPaid } = invoice;
-      const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100}`;
+      const description = invoice.lines.data[0].description;
+      const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100} (${description})`;
       await new Invoke()
         .service('notification')
         .name('sendMoney')
@@ -126,18 +127,18 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
         .async()
         .go();
       return respond(200);
-    case 'customer.subscription.created':
-      const subscription = webhookEvent.data.object;
-      const { customer } = subscription;
-      const amountPaid = subscription.items.data[0].price.unit_amount;
-      const text = `Subscription Created: ${customer} $${amountPaid / 100}`;
-      await new Invoke()
-        .service('notification')
-        .name('sendMoney')
-        .body({ text })
-        .async()
-        .go();
-      return respond(200);
+    // case 'customer.subscription.created':
+    //   const subscription = webhookEvent.data.object;
+    //   const { customer } = subscription;
+    //   const amountPaid = subscription.items.data[0].price.unit_amount;
+    //   const text = `Subscription Created: ${customer} $${amountPaid / 100}`;
+    //   await new Invoke()
+    //     .service('notification')
+    //     .name('sendMoney')
+    //     .body({ text })
+    //     .async()
+    //     .go();
+    //   return respond(200);
     default:
       return respond(400, `webhook ${webhookEvent.type} not supported by Clicker API`);
   }
