@@ -17,17 +17,23 @@
         ]"
       >
         <!-- <c-section-header :data="sectionHeader" class="center-content" /> -->
-        <h2 class="center-content pricing-header">Simple Pricing</h2>
+        <h2
+          class="center-content pricing-header"
+          v-scroll-reveal="{ delay: 50, origin: 'bottom', distance: '10px' }"
+        >Simple Pricing</h2>
         <div v-if="pricingSwitcher" class="pricing-switcher center-content">
           <c-switch
             v-model="priceChangerValue"
             true-value="1"
             false-value="0"
             right-label="Billed Annually"
-            >Billed Monthly</c-switch
-          >
+          >Billed Monthly</c-switch>
         </div>
-        <div v-if="pricingSlider" class="pricing-slider center-content">
+        <div
+          v-if="pricingSlider"
+          class="pricing-slider center-content"
+          v-scroll-reveal="{ delay: 600, origin: 'bottom' }"
+        >
           <label class="form-slider">
             <span class="mb-16">How many DIRECTV boxes do you have?</span>
             <div>
@@ -39,12 +45,13 @@
               />
             </div>
           </label>
-          <p ref="sliderValue" class="pricing-slider-value">
-            {{ getPricingData(boxesInput) }} boxes
-          </p>
+          <p ref="sliderValue" class="pricing-slider-value">{{ getPricingData(boxesInput) }} boxes</p>
         </div>
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
-          <div class="tiles-item reveal-from-bottom">
+          <div
+            class="tiles-item reveal-from-bottom split-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 200, origin: 'left' }"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-24 mb-24">
@@ -58,57 +65,52 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h2"
-                        >Let's Talk!</span
-                      >
+                      <span class="pricing-item-price-amount h2">Let's Talk!</span>
                     </div>
                     <div v-else>
-                      <span class="pricing-item-price-currency h3">
-                        {{ getPricingData(this.priceOutput.plan1, 0) }}
-                      </span>
-                      <span class="pricing-item-price-amount h1">
-                        {{ getPricingData(this.priceOutput.plan1, 1) }}
-                      </span>
-                      <span class="pricing-item-price-amount text-sm">
-                        {{ getPricingData(this.priceOutput.plan1, 2) }}
-                      </span>
+                      <span
+                        class="pricing-item-price-currency h3"
+                      >{{ getPricingData(this.priceOutput.plan1, 0) }}</span>
+                      <span
+                        class="pricing-item-price-amount h1"
+                      >{{ getPricingData(this.priceOutput.plan1, 1) }}</span>
+                      <span
+                        class="pricing-item-price-amount text-sm"
+                      >{{ getPricingData(this.priceOutput.plan1, 2) }}</span>
                     </div>
                   </div>
-                  <div class="text-xs text-color-low">
-                    Allow staff to manage TVs from their phone
-                  </div>
+                  <div class="text-xs text-color-low">Allow staff to manage TVs from their phone</div>
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
                     class="pricing-item-features-title h6 text-xs text-color-high mb-0"
-                  >
-                    What’s included
-                  </div>
-                  <ul
-                    class="pricing-item-features-list list-reset text-xs mb-32"
-                  >
+                  >What’s included</div>
+                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">30 days free</li>
                     <li class="is-checked">
-                      Staff can change TV channel with
-                      <a
-                        href="/blog/manage-tvs-from-your-phone-with-manager-mode"
-                      >
-                        Manager Mode</a
-                      >
+                      <span>
+                        Staff can change channels with&nbsp;
+                        <a
+                          href="/blog/manage-tvs-from-your-phone-with-manager-mode"
+                        >Manager Mode</a>
+                      </span>
                     </li>
-                    <li class="is-checked">
-                      Integrates with all your DIRECTV Boxes
-                    </li>
+                    <li class="is-checked">Integrates with all your DIRECTV Boxes</li>
                   </ul>
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <div class="pt-16"><Checkout :priceId="plan1PriceId" /></div>
+                <div class="pt-16">
+                  <Checkout :priceId="plan1PriceId" />
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="tiles-item reveal-from-bottom" data-reveal-delay="200">
+          <div
+            class="tiles-item reveal-from-bottom split-item reveal-scale-up"
+            v-scroll-reveal="{ delay: 400, origin: 'right' }"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-24 mb-24">
@@ -122,49 +124,33 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h2"
-                        >Let's Talk!</span
-                      >
+                      <span class="pricing-item-price-amount h2">Let's Talk!</span>
                     </div>
                     <div v-else>
-                      <span class="pricing-item-price-currency h3">
-                        {{ getPricingData(this.priceOutput.plan2, 0) }}
-                      </span>
-                      <span class="pricing-item-price-amount h1">
-                        {{ getPricingData(this.priceOutput.plan2, 1) }}
-                      </span>
-                      <span class="pricing-item-price-amount text-sm">
-                        {{ getPricingData(this.priceOutput.plan2, 2) }}
-                      </span>
+                      <span
+                        class="pricing-item-price-currency h3"
+                      >{{ getPricingData(this.priceOutput.plan2, 0) }}</span>
+                      <span
+                        class="pricing-item-price-amount h1"
+                      >{{ getPricingData(this.priceOutput.plan2, 1) }}</span>
+                      <span
+                        class="pricing-item-price-amount text-sm"
+                      >{{ getPricingData(this.priceOutput.plan2, 2) }}</span>
                     </div>
                   </div>
-                  <div class="text-xs text-color-low">
-                    Clicker TV and Control Center, fully loaded
-                  </div>
+                  <div class="text-xs text-color-low">Clicker TV and Control Center, fully loaded</div>
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
                     class="pricing-item-features-title h6 text-xs text-color-high mb-0"
-                  >
-                    What’s included
-                  </div>
-                  <ul
-                    class="pricing-item-features-list list-reset text-xs mb-32"
-                  >
+                  >What’s included</div>
+                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
                     <li class="is-checked">30 days free</li>
                     <li class="is-checked">Everything in Manager Package</li>
-                    <li class="is-checked">
-                      Control Center - automated channel changes
-                    </li>
-                    <li class="is-checked">
-                      Custom channel changes based on venue preferences
-                    </li>
-                    <li class="is-checked">
-                      Clicker TV to allow guests to change channels
-                    </li>
-                    <li class="is-checked">
-                      VIP Mode allowing only certain guests to change channels
-                    </li>
+                    <li class="is-checked">Control Center - automated channel changes</li>
+                    <li class="is-checked">Custom channel changes based on venue preferences</li>
+                    <li class="is-checked">Clicker TV to allow guests to change channels</li>
+                    <li class="is-checked">VIP Mode allowing only certain guests to change channels</li>
                     <li class="is-checked">
                       Integrates with {{ getPricingData(boxesInput) }} DIRECTV
                       Boxes
@@ -173,14 +159,17 @@
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <div class="pt-16"><Checkout :priceId="plan2PriceId" /></div>
+                <div class="pt-16">
+                  <Checkout :priceId="plan2PriceId" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="center-content text-xs text-color-low">
-          Risk free. Cancel anytime.
-        </div>
+        <div
+          class="center-content text-xs text-color-low"
+          v-scroll-reveal="{ delay: 1000, origin: 'top', distance: '10px' }"
+        >Risk free. Cancel anytime.</div>
       </div>
     </div>
   </section>

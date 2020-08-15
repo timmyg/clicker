@@ -6,9 +6,12 @@
           <div class="container-xs">
             <h2 class="m-0">Customer testimonials</h2>
           </div>
-        </div> -->
+        </div>-->
         <div class="tiles-wrap illustration-section-04 reveal-from-top">
-          <div class="tiles-item reveal-from-top" data-reveal-delay="300">
+          <div
+            class="tiles-item reveal-from-top"
+            v-scroll-reveal="{ delay: 90, origin: 'top', distance: '30px' }"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="testimonial-item-content">
                 <p class="text-sm mb-24">
@@ -24,14 +27,16 @@
                     height="56"
                   />
                   &nbsp;
-                  <div class="h6 text-xs">Will</div>
-                  &nbsp;
+                  <div class="h6 text-xs">Will</div>&nbsp;
                   <div class="muted h6 text-xs">Tin Roof Regional Manager</div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="tiles-item reveal-from-top">
+          <div
+            class="tiles-item reveal-from-top"
+            v-scroll-reveal="{ delay: 50, origin: 'top', distance: '20px' }"
+          >
             <div class="tiles-item-inner has-shadow">
               <div class="testimonial-item-content">
                 <p class="text-sm mb-24">
@@ -47,11 +52,8 @@
                     height="56"
                   />
                   &nbsp;
-                  <div class="h6 text-xs">Patrick</div>
-                  &nbsp;
-                  <div class="muted h6 text-xs">
-                    Queen City Exchange Partner
-                  </div>
+                  <div class="h6 text-xs">Patrick</div>&nbsp;
+                  <div class="muted h6 text-xs">Queen City Exchange Partner</div>
                 </div>
               </div>
             </div>
