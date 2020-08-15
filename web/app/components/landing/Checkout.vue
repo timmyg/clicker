@@ -51,6 +51,7 @@ export default {
         .then(({ id: sessionId }) => {
           stripe.redirectToCheckout({ sessionId }).then(function(result) {
             alert(result.error.message);
+            this.generating = false
           });
         });
     }
