@@ -1474,7 +1474,7 @@ async function tuneSlackZap(location: Venue, box: Box, channel: number, channelM
     },
   };
   const source = zapTypes.automation;
-  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box.label);
+  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box);
   await new Invoke()
     .service('remote')
     .name('command')
