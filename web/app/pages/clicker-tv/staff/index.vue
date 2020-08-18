@@ -8,7 +8,8 @@
       />
       <Features />
       <FeaturesCards />
-      <TilesProducts :skip="'clicker-tv'" />
+      <Buy />
+      <TilesProducts :skip="'manager'" />
     </section>
   </layout-basic>
 </template>
@@ -16,13 +17,16 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-import Features from "@/components/landing/app/Features";
-import FeaturesCards from "@/components/landing/app/FeaturesCards";
+import Buy from "@/components/landing/Buy";
+import Features from "@/components/landing/clicker-tv/staff/Features";
+import FeaturesCards from "@/components/landing/clicker-tv/staff/FeaturesCards";
 import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 
 export default {
+  name: "clicker-tv-staff",
   components: {
+    Buy,
     Header,
     Features,
     FeaturesCards,
@@ -33,8 +37,9 @@ export default {
   data() {
     return {
       sectionHeader: {
-        title: "Clicker TV",
-        paragraph: "Brief description of clicker tv here"
+        title: "Clicker TV for Staff",
+        paragraph:
+          "Eliminate the stress of tracking down remotes to change one box while not interfering with others. Allow your staff to change TVs to sports programs right from their own smartphone."
       }
     };
   }

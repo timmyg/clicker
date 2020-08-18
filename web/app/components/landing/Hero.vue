@@ -11,9 +11,9 @@
                 <span class="reversed">Take Advantage of It.</span>
               </h2>
               <p class="m-0 mb-24">
-                Clicker integrates into your existing DIRECTV and automagically
-                manages channel changes and allow patrons to change the channel
-                themselves with our app.
+                Clicker integrates into your existing DIRECTV to automagically
+                manage channel changes + provides an app for your staff and
+                guests.
               </p>
               <div><SignupForm /></div>
             </div>
@@ -75,7 +75,7 @@ export default {
 @media (min-width: 820px) {
   .container .split-wrap .split-item {
     .split-item-content {
-      width: 588px;
+      width: 598px;
     }
   }
 }

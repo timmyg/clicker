@@ -8,6 +8,7 @@
       />
       <Features />
       <FeaturesCards />
+      <Buy />
       <TilesProducts :skip="'control-center'" />
     </section>
   </layout-basic>
@@ -20,9 +21,12 @@ import Features from "@/components/landing/control-center/Features";
 import FeaturesCards from "@/components/landing/control-center/FeaturesCards";
 import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
+import Buy from "@/components/landing/Buy";
 
 export default {
+  name: "control-center",
   components: {
+    Buy,
     CSectionHeader,
     Header,
     Features,
@@ -34,7 +38,8 @@ export default {
     return {
       sectionHeader: {
         title: "Control Center",
-        paragraph: "Brief description of control center here"
+        paragraph:
+          "Our intelligence learns your location's sports preferences and automates programming throughout the day to create the most relevant mix of sports across your TVs."
       }
     };
   }

@@ -21,17 +21,15 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Game Flow AI
+                  Designate the TVs
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  With <span class="brand-font">Game Flow AI</span>, we read
-                  live scoreboard data to make sure a close, intriguing game is
-                  never turned off just because another game is about to kick
-                  off.
+                  You pick the areas and/or specific TVs that are enabled for
+                  guest control via the Clicker TV app.
                 </p>
               </div>
             </div>
@@ -54,16 +52,16 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Manual Change Override
+                  Limit the Control
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We can't predict what every guest wants to watch. If you put
-                  on a game with the traditional remote, we'll turn off our
-                  automation to prevent changing over their game.
+                  How your guests use it is dictated by you. Either enable
+                  guests to buy and redeem tokens for use, or give your VIPs a
+                  personalized passcode.
                 </p>
               </div>
             </div>
@@ -76,7 +74,7 @@
                   data-reveal-container=".tiles-item"
                 >
                   <img
-                    src="/images/landing/feature-tile-icon-01.svg"
+                    src="/images/theme/feature-tile-icon-04.svg"
                     alt="Feature tile icon 03"
                   />
                 </div>
@@ -86,16 +84,16 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Custom Scheduling
+                  Living Room Experience
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We'll work closely with you to ensure you stay on brand by
-                  understanding your venue's sports preferences and the
-                  atmosphere you want to cultivate and preserve.
+                  Guests will be able to freely change channels while under
+                  control of a TV, creating an unprecedented level of engagement
+                  for this diehard sports fan.
                 </p>
               </div>
             </div>

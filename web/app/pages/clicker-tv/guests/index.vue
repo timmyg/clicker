@@ -8,7 +8,8 @@
       />
       <Features />
       <FeaturesCards />
-      <TilesProducts :skip="'manager'" />
+      <Buy />
+      <TilesProducts :skip="'clicker-tv'" />
     </section>
   </layout-basic>
 </template>
@@ -16,13 +17,16 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-import Features from "@/components/landing/manager/Features";
-import FeaturesCards from "@/components/landing/manager/FeaturesCards";
+import Features from "@/components/landing/clicker-tv/guests/Features";
+import FeaturesCards from "@/components/landing/clicker-tv/guests/FeaturesCards";
 import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
+import Buy from "@/components/landing/Buy";
 
 export default {
+  name: "clicker-tv-guests",
   components: {
+    Buy,
     Header,
     Features,
     FeaturesCards,
@@ -33,8 +37,9 @@ export default {
   data() {
     return {
       sectionHeader: {
-        title: "Manager",
-        paragraph: "Brief description of manager here"
+        title: "Clicker TV for Guests",
+        paragraph:
+          "The ultimate personalized VIP guest experience. Enable your guests to control a TV themselves from their own smartphone. This guest is a sports enthusiast that will stay longer and keep coming back knowing they can always watch their games."
       }
     };
   }

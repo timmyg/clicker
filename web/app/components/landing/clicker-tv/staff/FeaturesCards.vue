@@ -11,7 +11,7 @@
                   data-reveal-container=".tiles-item"
                 >
                   <img
-                    src="/images/landing/feature-tile-icon-02.svg"
+                    src="/images/theme/feature-tile-icon-01.svg"
                     alt="Feature tile icon 01"
                   />
                 </div>
@@ -21,17 +21,15 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Game Flow AI
+                  Eliminate Touch Points
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  With <span class="brand-font">Game Flow AI</span>, we read
-                  live scoreboard data to make sure a close, intriguing game is
-                  never turned off just because another game is about to kick
-                  off.
+                  With employees using their own smartphones to change the
+                  channels, we limit the amount of touches to a common remote.
                 </p>
               </div>
             </div>
@@ -54,16 +52,15 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Manual Change Override
+                  Find Games Easier
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We can't predict what every guest wants to watch. If you put
-                  on a game with the traditional remote, we'll turn off our
-                  automation to prevent changing over their game.
+                  We display all sports channels and programs to make finding
+                  the right game easy.
                 </p>
               </div>
             </div>
@@ -86,16 +83,16 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Custom Scheduling
+                  Manual Override
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We'll work closely with you to ensure you stay on brand by
-                  understanding your venue's sports preferences and the
-                  atmosphere you want to cultivate and preserve.
+                  We can't predict what every guest wants to watch - override
+                  the Control Center automation and lock that game on TV through
+                  it's conclusion.
                 </p>
               </div>
             </div>

@@ -20,7 +20,9 @@
             <div
               class="subtitle brand-font"
               v-scroll-reveal.reset="{ origin: 'right', delay: 500 }"
-            >{{ subtitle }}</div>
+            >
+              {{ subtitle }}
+            </div>
           </a>
         </div>
         <button
@@ -30,9 +32,7 @@
           aria-expanded="false"
         >
           <span class="screen-reader">Menu</span>
-          <span class="hamburger">
-            <span class="hamburger-inner"></span>
-          </span>
+          <span class="hamburger"> <span class="hamburger-inner"></span> </span>
         </button>
         <nav
           id="header-nav"
@@ -43,13 +43,30 @@
             <ul class="list-reset text-xxs header-nav-right">
               <li>
                 <nuxt-link class="brand-font" to="/">Home</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'manager' }">Manager</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'control-center' }">Control Center</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'clicker-tv' }">Clicker TV</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'blog' }">Blog</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'faq' }">FAQ</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'setup' }">Setup</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'setup' }">Support</nuxt-link>
+                <nuxt-link class="brand-font" :to="{ name: 'control-center' }"
+                  >Control Center</nuxt-link
+                ><nuxt-link
+                  class="brand-font"
+                  :to="{ name: 'clicker-tv-staff' }"
+                  >Clicker TV for Staff</nuxt-link
+                >
+                <nuxt-link
+                  class="brand-font"
+                  :to="{ name: 'clicker-tv-guests' }"
+                  >Clicker TV for Guests</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'blog' }"
+                  >Blog</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'faq' }"
+                  >FAQ</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'setup' }"
+                  >Setup</nuxt-link
+                >
+                <nuxt-link class="brand-font" :to="{ name: 'setup' }"
+                  >Support</nuxt-link
+                >
               </li>
             </ul>
           </div>
@@ -83,9 +100,9 @@ export default {
           // mainNav.style.maxHeight = mainNav.scrollHeight + "px";
           // mainNav.style.maxHeight = mainNav.scrollHeight + 200 + "px";
           // mainNav.style.height = "100%"
-          mainNav.style.maxHeight = "500px"
-          mainNav.style.minHeight = "500px"
-          mainNav.style.height = "500px"
+          mainNav.style.maxHeight = "500px";
+          mainNav.style.minHeight = "500px";
+          mainNav.style.height = "500px";
         }
         this.getAttribute("aria-expanded") === "true"
           ? this.setAttribute("aria-expanded", "false")

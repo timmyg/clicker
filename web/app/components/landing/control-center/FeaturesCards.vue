@@ -21,17 +21,16 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Game Flow AI
+                  Learns your Location
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  With <span class="brand-font">Game Flow AI</span>, we read
-                  live scoreboard data to make sure a close, intriguing game is
-                  never turned off just because another game is about to kick
-                  off.
+                  Ensures the right national and local games are always covered
+                  on TVs. Adapts to the thematic of your location to know if you
+                  are a Notre Dame bar in California.
                 </p>
               </div>
             </div>
@@ -54,16 +53,15 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Manual Change Override
+                  Minimize Manual Changes
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We can't predict what every guest wants to watch. If you put
-                  on a game with the traditional remote, we'll turn off our
-                  automation to prevent changing over their game.
+                  Proven to reduce employee changes by 70% allowing staff to
+                  sell more food and beverage.
                 </p>
               </div>
             </div>
@@ -86,16 +84,15 @@
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                 >
-                  Custom Scheduling
+                  Game Flow AI
                 </h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We'll work closely with you to ensure you stay on brand by
-                  understanding your venue's sports preferences and the
-                  atmosphere you want to cultivate and preserve.
+                  Considers a real time scoreboard of games to ensure a game in
+                  progress never gets turned off.
                 </p>
               </div>
             </div>

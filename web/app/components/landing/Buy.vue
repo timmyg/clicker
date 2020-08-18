@@ -10,28 +10,33 @@
   >
     <div class="container">
       <div
-        class="cta-inner section-inner cta-split "
+        class="cta-inner section-inner center-content"
         v-bind:class="[dividers ? 'has-top-divider has-bottom-divider' : '']"
       >
         <div class="cta-slogan reveal-from-left is-revealed">
           <h4 class="m-0">
-            {{ text || "Unleash the future of sports programming." }}
+            {{ text || "Sign up for your free trial of Clicker today." }}
           </h4>
         </div>
-        <SignupForm />
+        <c-button
+          tag="a"
+          class="button button-primary button-shadow"
+          href="/#pricing"
+        >
+          Get Started
+        </c-button>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import SignupForm from "~/components/landing/SignupForm";
-
+import CButton from "@/components/elements/Button.vue";
 export default {
-  name: "Signup",
+  name: "Buy",
   props: ["dividers", "text"],
   components: {
-    SignupForm
+    CButton
   }
 };
 </script>

@@ -13,33 +13,33 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@dansmaculotte/nuxt-segment": "^0.2.10",
-    "@nuxt/http": "^0.3.4",
-    "@nuxtjs/dotenv": "^1.4.0",
-    "@nuxtjs/markdownit": "^1.2.6",
-    "@stripe/stripe-js": "^1.8.0",
-    "axios": "^0.19.0",
-    "contentful": "^7.9.1",
-    "firebase": "^7.8.2",
-    "moment": "^2.24.0",
-    "nuxt": "^2.13.3",
+    "@dansmaculotte/nuxt-segment": "^0.2.11",
+    "@nuxt/http": "^0.3.9",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/markdownit": "^1.2.10",
+    "@stripe/stripe-js": "^1.9.0",
+    "axios": "^0.19.2",
+    "contentful": "^7.14.6",
+    "firebase": "^7.18.0",
+    "moment": "^2.27.0",
+    "nuxt": "^2.14.3",
     "vue-intercom": "^1.0.14",
-    "vue-moment": "^4.0.0",
+    "vue-moment": "^4.1.0",
     "vue-scroll-reveal": "^1.0.11",
     "vue-stripe-checkout": "^3.5.7",
     "vue-stripe-elements-plus": "^0.3.2",
-    "vuefire": "^2.2.1"
+    "vuefire": "^2.2.4"
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.0.0",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.1.0",
     "eslint": "^4.19.1",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-vue": "^4.0.0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
-    "sass-resources-loader": "^2.0.1",
-    "tailwindcss": "^1.1.4"
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2",
+    "sass-resources-loader": "^2.1.0",
+    "tailwindcss": "^1.6.2"
   }
 }

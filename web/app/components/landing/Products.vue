@@ -11,13 +11,14 @@
             v-scroll-reveal="{ delay: 200, origin: 'left' }"
           >
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">Manager description here</h3>
+              <h3 class="mt-0 mb-16">Empower Your Staff</h3>
               <p class="m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut et dolore magna aliqua. Ut enim ad
-                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                aliquip ex. <br />
-                <nuxt-link to="/manager">Learn more</nuxt-link>
+                <b>Clicker TV for Staff</b> lets your staff download an app to
+                manage the TVs to enhance the guest experience and reduce
+                friction.<br />
+                <nuxt-link to="/clicker-tv/staff"
+                  >Learn more about Clicker TV for Staff →</nuxt-link
+                >
               </p>
             </div>
             <div
@@ -34,15 +35,16 @@
             v-scroll-reveal="{ delay: 200, origin: 'right' }"
           >
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">Clicker TV description here</h3>
+              <h3 class="mt-0 mb-16">Blow your Guests Minds</h3>
               <p class="m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut et dolore magna aliqua. Ut enim ad
-                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                aliquip ex.
+                <b>Clicker TV for Guests</b> allows guests to reserve TVs and
+                change channels from an app, giving them a unique experience
+                they will never forget.
               </p>
               <br />
-              <nuxt-link to="/clicker-tv">Learn more</nuxt-link>
+              <nuxt-link to="/clicker-tv/guests"
+                >Learn more about Clicker TV for Guests →</nuxt-link
+              >
             </div>
             <div
               class="split-item-image split-item-image-fill is-3d illustration-element-04"
@@ -58,15 +60,15 @@
             v-scroll-reveal="{ delay: 200, origin: 'left' }"
           >
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">Control Center here</h3>
+              <h3 class="mt-0 mb-16">Sports TV Nirvana</h3>
               <p class="m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut et dolore magna aliqua. Ut enim ad
-                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                aliquip ex.
+                <b>Control Center</b> manages all your TVs behing the scenes, so
+                you staff can focus on the guest experience.
               </p>
               <br />
-              <nuxt-link to="/control-center">Learn more</nuxt-link>
+              <nuxt-link to="/control-center"
+                >Learn more about Control Center →</nuxt-link
+              >
             </div>
             <div
               class="split-item-image split-item-image-fill is-3d illustration-element-05"

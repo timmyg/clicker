@@ -7,7 +7,7 @@
       <Pricing pricingSlider />
       <Testimonials />
       <Blogs :posts="posts" />
-      <Signup />
+      <Signup :text="'Multiple Locations? We have a package for that.'" />
     </div>
   </layout-basic>
 </template>

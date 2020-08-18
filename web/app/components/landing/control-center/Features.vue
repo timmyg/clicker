@@ -3,7 +3,7 @@
     <div class="container">
       <div class="features-split-inner section-inner">
         <div class="split-wrap invert-mobile">
-          <div
+          <!-- <div
             class="split-item reveal-scale-up is-revealed"
             v-scroll-reveal="{ delay: 200, origin: 'left' }"
           >
@@ -22,18 +22,17 @@
             >
               <img src="/images/landing/tv-zones.png" alt="TV zones schedule" />
             </div>
-          </div>
+          </div> -->
           <div
             class="split-item reveal-scale-up"
             v-scroll-reveal="{ delay: 200, origin: 'left' }"
           >
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">Custom Scheduling</h3>
+              <h3 class="mt-0 mb-16">Let Us Handle It</h3>
               <p class="m-0">
-                Soccer bar? Notre Dame bar? Every venue is different. We'll work
-                closely with you to ensure your programming aligns with your
-                bar's preferences. We'll consider local, national, and live
-                game-flow appeal.
+                Imagine if someone had a full time job to make sure the best,
+                most electric sports was always showing on your TVs. That is
+                Control Center.
               </p>
             </div>
             <div

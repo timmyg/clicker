@@ -26,7 +26,7 @@
               <div class="features-tiles-item-content">
                 <h4 class="mt-0 mb-8 header">
                   <span class="name">
-                    Manager
+                    Clicker TV for Staff
                     <img
                       src="/images/landing/feature-tile-icon-001.svg"
                       alt="Feature tile icon 01"
@@ -36,16 +36,9 @@
                   </span>
                 </h4>
                 <p class="m-0 text-sm">
-                  Allow your guests to download the
-                  <a
-                    href="https://apps.apple.com/us/app/clicker-tv/id1471666907"
-                    class="brand-font"
-                    target="_blank"
-                    >Clicker TV</a
-                  >
-                  mobile app and change the TV channels right from their phone.
-                  <br />
-                  <nuxt-link to="/manager" class="text-sm"
+                  Give your staff the tool they need to field guest channel
+                  requests easily and quickly. <br />
+                  <nuxt-link to="/clicker-tv/staff" class="text-sm"
                     >Learn More →</nuxt-link
                   >
                 </p>
@@ -62,7 +55,7 @@
               <div class="features-tiles-item-content">
                 <h4 class="mt-0 mb-8 header">
                   <span class="name">
-                    Clicker TV
+                    Clicker TV for Guests
                     <img
                       src="/images/landing/feature-tile-icon-002.svg"
                       alt="Feature tile icon 02"
@@ -72,16 +65,9 @@
                   </span>
                 </h4>
                 <p class="m-0 text-sm">
-                  Allow your guests to download the
-                  <a
-                    href="https://apps.apple.com/us/app/clicker-tv/id1471666907"
-                    class="brand-font"
-                    target="_blank"
-                    >Clicker TV</a
-                  >
-                  mobile app and change the TV channels right from their phone.
-                  <br />
-                  <nuxt-link to="/clicker-tv" class="text-sm"
+                  Give your guests an unforgettable experience by giving them
+                  control of a TV, just like their living room.<br />
+                  <nuxt-link to="/clicker-tv/guests" class="text-sm"
                     >Learn More →</nuxt-link
                   >
                 </p>
@@ -109,7 +95,7 @@
                 </h4>
                 <p class="m-0 text-sm">
                   We'll manage TVs automatically throughout the day remotely -
-                  tailored for your venue. <br />
+                  tailored for your venue's concept. <br />
                   <nuxt-link to="/control-center" class="text-sm"
                     >Learn More →</nuxt-link
                   >
