@@ -20,22 +20,9 @@
             <div
               class="subtitle brand-font"
               v-scroll-reveal.reset="{ origin: 'right', delay: 500 }"
-            >
-              {{ subtitle }}
-            </div>
+            >{{ subtitle }}</div>
           </a>
         </div>
-        <SlideMenu right noOverlay>
-          <a href="/"> <span>Home</span> </a>
-          <a href="/#pricing"> <span>Pricing</span> </a>
-          <a href="/control-center"> <span>Control Center</span> </a>
-          <a href="/clicker-tv/staff"> <span>Clicker TV for Staff</span> </a>
-          <a href="/clicker-tv/guests"> <span>Clicker TV for Guests</span> </a>
-          <a href="/blog"> <span>Blog</span> </a>
-          <a href="/faq"> <span>FAQ</span> </a>
-          <a href="/setup"> <span>Setup</span> </a>
-          <a href="/support"> <span>Support</span> </a>
-        </SlideMenu>
       </div>
     </div>
   </header>
@@ -49,14 +36,6 @@ export default {
       return this.$route.name;
     }
   },
-  data() {
-    return {
-      isOpen: false
-    };
-  },
-  methods: {
-    toggleMenu() {}
-  }
 };
 </script>
 
@@ -72,11 +51,5 @@ header {
     text-decoration: none !important;
     display: block !important;
   }
-}
-</style>
-
-<style lang="scss">
-.bm-menu {
-  transition: 0.01s !important;
 }
 </style>

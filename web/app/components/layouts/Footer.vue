@@ -73,18 +73,30 @@
         <div class="footer-bottom space-between text-xxs invert-order-desktop">
           <nav class="footer-nav">
             <ul class="list-reset">
-              <li><a href="/faq">FAQ</a></li>
-              <li><a href="/setup">Setup</a></li>
-              <li><a href="/support">Support</a></li>
-              <li><a href="/blog">Blog</a></li>
-              <li><a href="/brand">Brand</a></li>
-              <!-- <li><a href="/scoreboard">Scoreboard</a></li> -->
-              <li><a href="/privacy">Privacy</a></li>
+              <li>
+                <a href="/#products">Products</a>
+              </li>
+              <li>
+                <a href="/setup">Setup</a>
+              </li>
+              <li>
+                <a href="/blog">Blog</a>
+              </li>
+              <li>
+                <a href="/faq">FAQ</a>
+              </li>
+              <li>
+                <a href="/support">Support</a>
+              </li>
+              <li>
+                <a href="/brand">Brand</a>
+              </li>
+              <li>
+                <a href="/privacy">Privacy</a>
+              </li>
             </ul>
           </nav>
-          <div class="footer-copyright">
-            Made with ❤️+ 😅 + 😹 in Cincinnati, OH
-          </div>
+          <div class="footer-copyright">Made with ❤️+ 😅 + 😹 in Cincinnati, OH</div>
         </div>
       </div>
     </div>

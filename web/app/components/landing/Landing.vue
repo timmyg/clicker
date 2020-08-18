@@ -3,7 +3,7 @@
     <div class="site-content">
       <Hero />
       <Announcements />
-      <Products />
+      <Products id="products" />
       <Pricing pricingSlider />
       <Testimonials />
       <Blogs :posts="posts" />

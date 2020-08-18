@@ -38,8 +38,8 @@ module.exports = {
   plugins: [
     "~/plugins/vue-moment.js",
     "~/plugins/filters.js",
-    { src: "~/plugins/scroll-reveal", ssr: false },
-    { src: "~/plugins/slide-menu", ssr: false }
+    { src: "~/plugins/scroll-reveal", ssr: false }
+    // { src: "~/plugins/menu", ssr: false }
   ],
   env: {
     branch: process.env.BRANCH
