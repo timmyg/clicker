@@ -25,52 +25,17 @@
             </div>
           </a>
         </div>
-        <button
-          id="header-nav-toggle"
-          class="header-nav-toggle"
-          aria-controls="primary-menu"
-          aria-expanded="false"
-        >
-          <span class="screen-reader">Menu</span>
-          <span class="hamburger"> <span class="hamburger-inner"></span> </span>
-        </button>
-        <nav
-          id="header-nav"
-          class="header-nav"
-          v-scroll-reveal.reset="{ delay: 200, origin: 'right' }"
-        >
-          <div class="header-nav-inner">
-            <ul class="list-reset text-xxs header-nav-right">
-              <li>
-                <nuxt-link class="brand-font" to="/">Home</nuxt-link>
-                <nuxt-link class="brand-font" :to="{ name: 'control-center' }"
-                  >Control Center</nuxt-link
-                ><nuxt-link
-                  class="brand-font"
-                  :to="{ name: 'clicker-tv-staff' }"
-                  >Clicker TV for Staff</nuxt-link
-                >
-                <nuxt-link
-                  class="brand-font"
-                  :to="{ name: 'clicker-tv-guests' }"
-                  >Clicker TV for Guests</nuxt-link
-                >
-                <nuxt-link class="brand-font" :to="{ name: 'blog' }"
-                  >Blog</nuxt-link
-                >
-                <nuxt-link class="brand-font" :to="{ name: 'faq' }"
-                  >FAQ</nuxt-link
-                >
-                <nuxt-link class="brand-font" :to="{ name: 'setup' }"
-                  >Setup</nuxt-link
-                >
-                <nuxt-link class="brand-font" :to="{ name: 'setup' }"
-                  >Support</nuxt-link
-                >
-              </li>
-            </ul>
-          </div>
-        </nav>
+        <SlideMenu right noOverlay>
+          <a href="/"> <span>Home</span> </a>
+          <a href="/#pricing"> <span>Pricing</span> </a>
+          <a href="/control-center"> <span>Control Center</span> </a>
+          <a href="/clicker-tv/staff"> <span>Clicker TV for Staff</span> </a>
+          <a href="/clicker-tv/guests"> <span>Clicker TV for Guests</span> </a>
+          <a href="/blog"> <span>Blog</span> </a>
+          <a href="/faq"> <span>FAQ</span> </a>
+          <a href="/setup"> <span>Setup</span> </a>
+          <a href="/support"> <span>Support</span> </a>
+        </SlideMenu>
       </div>
     </div>
   </header>
@@ -84,44 +49,13 @@ export default {
       return this.$route.name;
     }
   },
-  mounted() {
-    // 'use strict';
-    const navToggle = document.getElementById("header-nav-toggle");
-    const mainNav = document.getElementById("header-nav");
-
-    if (navToggle) {
-      // Open menu
-      navToggle.addEventListener("click", function() {
-        document.body.classList.toggle("off-nav-is-active");
-        mainNav.classList.toggle("is-active");
-        if (mainNav.style.maxHeight) {
-          mainNav.style.maxHeight = null;
-        } else {
-          // mainNav.style.maxHeight = mainNav.scrollHeight + "px";
-          // mainNav.style.maxHeight = mainNav.scrollHeight + 200 + "px";
-          // mainNav.style.height = "100%"
-          mainNav.style.maxHeight = "500px";
-          mainNav.style.minHeight = "500px";
-          mainNav.style.height = "500px";
-        }
-        this.getAttribute("aria-expanded") === "true"
-          ? this.setAttribute("aria-expanded", "false")
-          : this.setAttribute("aria-expanded", "true");
-      });
-      // Close menu
-      document.addEventListener("click", function(e) {
-        if (
-          e.target !== mainNav &&
-          e.target !== navToggle &&
-          !mainNav.contains(e.target)
-        ) {
-          document.body.classList.remove("off-nav-is-active");
-          mainNav.classList.remove("is-active");
-          mainNav.style.maxHeight = null;
-          navToggle.setAttribute("aria-expanded", "false");
-        }
-      });
-    }
+  data() {
+    return {
+      isOpen: false
+    };
+  },
+  methods: {
+    toggleMenu() {}
   }
 };
 </script>
@@ -138,5 +72,11 @@ header {
     text-decoration: none !important;
     display: block !important;
   }
+}
+</style>
+
+<style lang="scss">
+.bm-menu {
+  transition: 0.01s !important;
 }
 </style>

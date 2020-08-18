@@ -10,9 +10,8 @@
             <div class="split-item-content center-content-mobile">
               <h3 class="mt-0 mb-16">Consistent Guest Experience</h3>
               <p class="m-0">
-                Guests will remember the venues that field their TV requests
-                immediately, and will come back time and time again knowing
-                their game will be put on without issue.
+                Guests will continually come back to your location because they
+                know they can always get their game on quickly.
               </p>
             </div>
             <div

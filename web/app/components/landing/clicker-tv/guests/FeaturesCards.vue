@@ -61,7 +61,9 @@
                 >
                   How your guests use it is dictated by you. Either enable
                   guests to buy and redeem tokens for use, or give your VIPs a
-                  personalized passcode.
+                  <a href="/blog/give-your-vip-customers-the-remote"
+                    >personalized passcode.</a
+                  >
                 </p>
               </div>
             </div>
