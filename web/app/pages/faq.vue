@@ -15,6 +15,16 @@ export default {
     Faq,
     Header,
     LayoutBasic
+  },
+  head: {
+    title: "FAQ",
+    meta: [
+      {
+        hid: "faq",
+        name: "description",
+        content: "frequently asked questions about Clicker"
+      }
+    ]
   }
 };
 </script>

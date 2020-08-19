@@ -67,7 +67,19 @@ module.exports = {
         content:
           "TV sports programming platform and app ensuring the best, most relevant games are on at all times"
       },
-      { name: "fragment", content: "!" }
+      { name: "fragment", content: "!" },
+      {
+        property: "og:title",
+        content: `Clicker: Sports Programming Management Platform`
+      },
+      {
+        property: "og:description",
+        content: `TV sports programming platform and app ensuring the best, most relevant games are on at all times`
+      },
+      {
+        property: "og:image",
+        content: `https://clicker-brand.s3.amazonaws.com/logo-bg.png`
+      }
     ],
     link: [
       {
