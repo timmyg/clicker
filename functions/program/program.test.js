@@ -71,7 +71,7 @@ test('build programs', () => {
   expect(response[0]).toHaveProperty('region');
   expect(response[0]).toHaveProperty('start');
   expect(response[0]).toHaveProperty('end');
-  expect(response.length).toBe(190);
+  expect(response.length).toBe(210);
 });
 
 test('convert local channel names', () => {
