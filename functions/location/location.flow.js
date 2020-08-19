@@ -617,7 +617,11 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
     console.log(boxId, info);
 
-    const { major, minor } = info;
+    const { major } = info;
+    let { minor } = info;
+    if (minor >= 10) {
+      minor = null;
+    }
 
     const i: number = location.boxes.findIndex(b => b.id === boxId);
     console.log('box', location.boxes[i], major, minor);
@@ -990,25 +994,47 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
     .map(b => b.live.channel);
-  ccPrograms = ccPrograms.filter(ccp => {
+  let ccProgramsFiltered = [];
+  // ccProgramsFiltered = ccPrograms.filter(ccp => {
+  //   const program: Program = ccp.db;
+  //   if (ccp.fields.rating >= 9) {
+  //     return true;
+  //   }
+  //   return !currentlyShowingChannels.includes(program.channel);
+  // });
+  ccPrograms.forEach(ccp => {
+    console.log(ccp);
+    console.log(currentlyShowingChannels);
     const program: Program = ccp.db;
-    if (ccp.fields.rating >= 9) {
-      return true;
+    // if (ccp.fields.rating >= 9) {
+    //   return ccProgramsFiltered.push(ccp);
+    // }
+    if (!currentlyShowingChannels.includes(program.channel)) {
+      return ccProgramsFiltered.push(ccp);
+    } else {
+      // remove from array, in case of replication
+      const index = currentlyShowingChannels.indexOf(program.channel);
+      if (index > -1) {
+        // console.log({ index });
+        // console.log({ currentlyShowingChannels });
+        currentlyShowingChannels.splice(index, 1);
+        // console.log({ currentlyShowingChannels });
+      }
     }
-    return !currentlyShowingChannels.includes(program.channel);
   });
-  console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
+
+  console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered.length}`);
 
   // remove channels that location doesn't have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
 
   if (excludedChannels && excludedChannels.length) {
-    ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
+    ccProgramsFiltered = ccProgramsFiltered.filter(ccp => !excludedChannels.includes(ccp.db.channel));
   }
-  console.info(`filtered programs after looking at excluded: ${ccPrograms.length}`);
+  console.info(`filtered programs after looking at excluded: ${ccProgramsFiltered.length}`);
   // sort by rating descending
-  return ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
+  return ccProgramsFiltered.sort((a, b) => b.fields.rating - a.fields.rating);
 }
 
 const priority = {
@@ -1064,7 +1090,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     ccp.db = program;
   });
 
-  // filter out currently showing programs, excluded programs, and sort by rating
+  // filter out currently showing programs (unles >=9), excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
   // get boxes that are CC active, and not manually locked
@@ -1474,7 +1500,7 @@ async function tuneSlackZap(location: Venue, box: Box, channel: number, channelM
     },
   };
   const source = zapTypes.automation;
-  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box);
+  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box.label);
   await new Invoke()
     .service('remote')
     .name('command')

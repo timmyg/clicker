@@ -195,6 +195,41 @@ describe('filterPrograms', () => {
     expect(result[0].db.channel).toBe(219);
     expect(result[1].db.channel).toBe(12);
   });
+  test.only('highly rated already showing on 1 (replicated to 2)', () => {
+    const ccPrograms = [
+      { fields: { rating: 9 }, db: { channel: 245 } }, // showing
+      { fields: { rating: 9 }, db: { channel: 245 } }, // showing, replicated
+    ];
+
+    const location = {
+      boxes: [
+        { configuration, zone: '1', live: { channel: 245 } },
+        { configuration, zone: '2', live: { channel: 9 } },
+        { configuration, zone: '3', live: { channel: 19 } },
+      ],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(1);
+    expect(result[0].db.channel).toBe(245);
+  });
+});
+test('highly rated not showing (replicated to 2)', () => {
+  const ccPrograms = [
+    { fields: { rating: 9 }, db: { channel: 245 } }, // showing
+    { fields: { rating: 9 }, db: { channel: 245 } }, // showing, replicated
+  ];
+
+  const location = {
+    boxes: [
+      { configuration, zone: '1', live: { channel: 212 } },
+      { configuration, zone: '2', live: { channel: 9 } },
+      { configuration, zone: '3', live: { channel: 19 } },
+    ],
+  };
+  const result = filterPrograms(ccPrograms, location);
+  expect(result.length).toBe(2);
+  expect(result[0].db.channel).toBe(245);
+  expect(result[1].db.channel).toBe(245);
 });
 test("don't remove if 9 or 10 since they'll be replicated", () => {
   const ccPrograms = [
