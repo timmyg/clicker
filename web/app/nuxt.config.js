@@ -57,7 +57,7 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: "Clicker: Sports Programming Management Platform",
+    title: "Clicker: Sports Programming Reimagined",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -70,7 +70,7 @@ module.exports = {
       { name: "fragment", content: "!" },
       {
         property: "og:title",
-        content: `Clicker: Sports Programming Management Platform`
+        content: `Clicker: Sports Programming Reimagined`
       },
       {
         property: "og:description",
