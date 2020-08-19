@@ -21,7 +21,9 @@
           class="center-content pricing-header"
           v-scroll-reveal="{ delay: 50, origin: 'bottom', distance: '10px' }"
           id="pricing"
-        >Simple Pricing</h2>
+        >
+          Simple Pricing
+        </h2>
         <!-- <div class="pricing-switcher center-content">
           <c-switch
             v-model="priceChangerValue"
@@ -46,7 +48,9 @@
               />
             </div>
           </label>
-          <p ref="sliderValue" class="pricing-slider-value">{{ getPricingData(boxesInput) }} boxes</p>
+          <p ref="sliderValue" class="pricing-slider-value">
+            {{ getPricingData(boxesInput) }} boxes
+          </p>
         </div>
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
           <div
@@ -66,50 +70,53 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h2">Let's Talk!</span>
+                      <span class="pricing-item-price-amount h2"
+                        >Let's Talk!</span
+                      >
                     </div>
                     <div v-else>
                       <span class="pricing-item-price-currency h3">
-                        {{
-                        getPricingData(this.priceOutput.plan1, 0)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan1, 0) }}
                       </span>
                       <span class="pricing-item-price-amount h1">
-                        {{
-                        getPricingData(this.priceOutput.plan1, 1)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan1, 1) }}
                       </span>
                       <span class="pricing-item-price-amount text-sm">
-                        {{
-                        getPricingData(this.priceOutput.plan1, 2)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan1, 2) }}
                       </span>
                     </div>
                   </div>
-                  <div class="text-xs text-color-low">Allow staff to manage TVs from their phone</div>
+                  <div class="text-xs text-color-low">
+                    Allow staff to manage TVs from their phone
+                  </div>
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
                     class="pricing-item-features-title h6 text-xs text-color-high mb-0"
-                  >What’s included</div>
-                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                  >
+                    What’s included
+                  </div>
+                  <ul
+                    class="pricing-item-features-list list-reset text-xs mb-32"
+                  >
                     <li class="is-checked">30 days 🆓</li>
                     <li class="is-checked">
                       <span>
                         Staff can change channels with
                         <a
-                          href="/blog/manage-tvs-from-your-phone-with-manager-mode"
-                        >Clicker TV for Staff</a>
+                          href="/blog/manage-tvs-from-your-phone-with-clicker-tv-for-staff"
+                          >Clicker TV for Staff</a
+                        >
                       </span>
                     </li>
-                    <li class="is-checked">Integrates with all your DIRECTV Boxes</li>
+                    <li class="is-checked">
+                      Integrates with all your DIRECTV Boxes
+                    </li>
                   </ul>
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <div class="pt-16">
-                  <Checkout :priceId="plan1PriceId" />
-                </div>
+                <div class="pt-16"><Checkout :priceId="plan1PriceId" /></div>
               </div>
             </div>
           </div>
@@ -131,54 +138,58 @@
                           'contact-us'
                       "
                     >
-                      <span class="pricing-item-price-amount h2">Let's Talk!</span>
+                      <span class="pricing-item-price-amount h2"
+                        >Let's Talk!</span
+                      >
                     </div>
                     <div v-else>
                       <span class="pricing-item-price-currency h3">
-                        {{
-                        getPricingData(this.priceOutput.plan2, 0)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan2, 0) }}
                       </span>
                       <span class="pricing-item-price-amount h1">
-                        {{
-                        getPricingData(this.priceOutput.plan2, 1)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan2, 1) }}
                       </span>
                       <span class="pricing-item-price-amount text-sm">
-                        {{
-                        getPricingData(this.priceOutput.plan2, 2)
-                        }}
+                        {{ getPricingData(this.priceOutput.plan2, 2) }}
                       </span>
                     </div>
                   </div>
-                  <div class="text-xs text-color-low">Clicker TV and Control Center, fully loaded</div>
+                  <div class="text-xs text-color-low">
+                    Clicker TV and Control Center, fully loaded
+                  </div>
                 </div>
                 <div class="pricing-item-features mb-40">
                   <div
                     class="pricing-item-features-title h6 text-xs text-color-high mb-0"
-                  >What’s included</div>
-                  <ul class="pricing-item-features-list list-reset text-xs mb-32">
+                  >
+                    What’s included
+                  </div>
+                  <ul
+                    class="pricing-item-features-list list-reset text-xs mb-32"
+                  >
                     <li class="is-checked">30 days 🆓</li>
                     <li class="is-checked">
-                      <span>
-                        Everything in
-                        <em>Staff Only</em> Package
-                      </span>
+                      <span> Everything in <em>Staff Only</em> Package </span>
                     </li>
                     <li class="is-checked">
                       <span>
-                        <a href="/control-center">Control Center</a> automated channel changes
+                        <a href="/control-center">Control Center</a> automated
+                        channel changes
                       </span>
                     </li>
-                    <li class="is-checked">Customized channel changes based on concept</li>
+                    <li class="is-checked">
+                      Customized channel changes based on concept
+                    </li>
                     <li class="is-checked">
                       <span>
-                        <a href="/clicker-tv/guests">Clicker TV for Guests</a> to enable guests to change channels
+                        <a href="/clicker-tv/guests">Clicker TV for Guests</a>
+                        to enable guests to change channels
                       </span>
                     </li>
-                    <li
-                      class="is-checked"
-                    >Option for VIP Mode allowing only certain guests to change channels</li>
+                    <li class="is-checked">
+                      Option for VIP Mode allowing only certain guests to change
+                      channels
+                    </li>
                     <li class="is-checked">
                       Integrates with {{ getPricingData(boxesInput) }} DIRECTV
                       Boxes
@@ -187,9 +198,7 @@
                 </div>
               </div>
               <div class="pricing-item-cta mb-8">
-                <div class="pt-16">
-                  <Checkout :priceId="plan2PriceId" />
-                </div>
+                <div class="pt-16"><Checkout :priceId="plan2PriceId" /></div>
               </div>
             </div>
           </div>
@@ -197,7 +206,9 @@
         <div
           class="center-content text-xs text-color-low"
           v-scroll-reveal="{ delay: 1000, origin: 'top', distance: '10px' }"
-        >Risk free. Cancel anytime.</div>
+        >
+          Risk free. Cancel anytime.
+        </div>
       </div>
     </div>
   </section>
