@@ -1370,7 +1370,7 @@ function getDefaultRating(program: Program): ?number {
 
 function generateId(program: Program) {
   const { programmingId, channelId, start, region } = program;
-  let id = programmingId + channel + start;
+  let id = programmingId + channelId + start;
   if (region) {
     id += region;
   }
