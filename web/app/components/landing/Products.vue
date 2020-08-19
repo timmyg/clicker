@@ -31,9 +31,7 @@
             <div class="split-item-content center-content-mobile">
               <h3 class="mt-0 mb-16">🤯 Blow your Guests Minds</h3>
               <p class="m-0">
-                <b>Clicker TV for Guests</b> allows guests to reserve TVs and
-                change channels from an app, giving them a unique experience
-                they will never forget.
+                <b>Clicker TV for Guests</b> allows guests to reserve TVs and change channels from an app, giving them an unforgettable experience.
               </p>
               <br />
               <nuxt-link to="/clicker-tv/guests">Learn more about Clicker TV for Guests →</nuxt-link>
