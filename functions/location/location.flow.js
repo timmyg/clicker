@@ -1329,6 +1329,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 });
 
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log({ event });
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
   const [locationShortId, tvString, channel, channelMinor] = queryData.text.split(' ');
