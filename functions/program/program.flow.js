@@ -801,10 +801,35 @@ module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async 
   console.log(JSON.stringify(event));
   const { id: regionId, defaultZip, localChannels } = getBody(event);
   await syncRegionChannels(regionId, localChannels, defaultZip);
-  respond(200);
+  return respond(200);
 });
 
-module.exports.clearDatabaseAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
+  // clear programs table
+  const deleteDbPromises = [];
+  for (const region of allRegions) {
+    const regionId = region.id;
+    const regionPrograms = await dbProgram
+      .query('region')
+      .using('startLocalIndex')
+      .eq(regionId)
+      .where('start')
+      .descending()
+      .exec();
+    const keys = regionPrograms.map(rp => {
+      return { region: regionId, id: rp.id };
+    });
+    deleteDbPromises.push(dbProgram.batchDelete(keys));
+  }
+
+  console.time('deleteDb');
+  await Promise.all(deleteDbPromises);
+  console.timeEnd('deleteDb');
+
+  return respond(200, 'ok');
+});
+
+module.exports.clearAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   // clear control center records
   const airtablesToClear = ['Control Center', 'Games'];
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -830,27 +855,6 @@ module.exports.clearDatabaseAirtable = RavenLambdaWrapper.handler(Raven, async e
     await Promise.all(promises);
     console.timeEnd(`deleteAirtable:${table}`);
   }
-
-  // clear programs table
-  const deleteDbPromises = [];
-  for (const region of allRegions) {
-    const regionId = region.id;
-    const regionPrograms = await dbProgram
-      .query('region')
-      .using('startLocalIndex')
-      .eq(regionId)
-      .where('start')
-      .descending()
-      .exec();
-    const keys = regionPrograms.map(rp => {
-      return { region: regionId, id: rp.id };
-    });
-    deleteDbPromises.push(dbProgram.batchDelete(keys));
-  }
-
-  console.time('deleteDb');
-  await Promise.all(deleteDbPromises);
-  console.timeEnd('deleteDb');
 
   return respond(200, 'ok');
 });
