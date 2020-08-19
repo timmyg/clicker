@@ -1345,7 +1345,7 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
     .eq(locationPartial.id)
     .exec();
   // const zone = .substring(1,3)
-  const zone = tvString.charAt(0) === 'q' && tvString.substring(1, tvString.length);
+  const zone = tvString.charAt(0) === 'z' && tvString.substring(1, tvString.length);
   const label = tvString.charAt(0) === 'l' && tvString.substring(1, tvString.length);
   let box;
   console.log({ zone, label });
