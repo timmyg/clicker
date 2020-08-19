@@ -1348,6 +1348,7 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
   const zone = tvString.charAt(0) === 'q' && tvString.substring(1, tvString.length);
   const label = tvString.charAt(0) === 'l' && tvString.substring(1, tvString.length);
   let box;
+  console.log({ zone, label });
   if (zone) {
     box = location.boxes.find(b => b.zone === zone);
   } else if (label) {
@@ -1500,6 +1501,7 @@ async function tuneSlackZap(location: Venue, box: Box, channel: number, channelM
     },
   };
   const source = zapTypes.automation;
+  console.log('box', reservation.box);
   console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`);
   await new Invoke()
     .service('remote')
