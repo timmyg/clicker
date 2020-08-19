@@ -20,7 +20,7 @@ test('smoke test', () => {
 test('generateId generates the same id when same program', () => {
   const region1 = 'cincinnati';
   const program = {
-    channel: 206,
+    channelId: 206,
     start: moment().toDate(),
     programmingId: 'ep1',
   };
@@ -31,12 +31,12 @@ test('generateId generates the same id when same program', () => {
 
 test('generateId generates different ids when different times', () => {
   const program1 = {
-    channel: 206,
+    channelId: 206,
     start: 20000000,
     programmingId: 'ep1',
   };
   const program2 = {
-    channel: 206,
+    channelId: 206,
     start: 20000001,
     programmingId: 'ep1',
   };
@@ -47,12 +47,12 @@ test('generateId generates different ids when different times', () => {
 
 test('generateId generates different ids when different channels', () => {
   const program1 = {
-    channel: 206,
+    channelId: 206,
     start: 20000000,
     programmingId: 'ep1',
   };
   const program2 = {
-    channel: 12,
+    channelId: 12,
     start: 20000000,
     programmingId: 'ep1',
   };
