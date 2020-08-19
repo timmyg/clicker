@@ -47,8 +47,7 @@
                 <em>Nirvana</em>
               </h3>
               <p class="m-0">
-                <b>Control Center</b> manages all your TVs behing the scenes, so
-                you staff can focus on the guest experience.
+                <b>Control Center</b> manages all your TVs behind the scenes, so your staff can focus on the guest experience.
               </p>
               <br />
               <nuxt-link to="/control-center">Learn more about Control Center →</nuxt-link>

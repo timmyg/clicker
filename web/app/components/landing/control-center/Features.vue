@@ -22,26 +22,18 @@
             >
               <img src="/images/landing/tv-zones.png" alt="TV zones schedule" />
             </div>
-          </div> -->
-          <div
-            class="split-item reveal-scale-up"
-            v-scroll-reveal="{ delay: 200, origin: 'left' }"
-          >
+          </div>-->
+          <div class="split-item reveal-scale-up" v-scroll-reveal="{ delay: 200, origin: 'left' }">
             <div class="split-item-content center-content-mobile">
               <h3 class="mt-0 mb-16">Let Us Handle It</h3>
               <p class="m-0">
-                Imagine if someone had a full time job to make sure the best,
+                Imagine if someone had a full-time job to make sure the best,
                 most electric sports was always showing on your TVs. That is
                 Control Center.
               </p>
             </div>
-            <div
-              class="split-item-image split-item-image-fill is-3d illustration-element-05"
-            >
-              <img
-                src="/images/landing/wall-tvs-more.png"
-                alt="Wall with six tvs"
-              />
+            <div class="split-item-image split-item-image-fill is-3d illustration-element-05">
+              <img src="/images/landing/wall-tvs-more.png" alt="Wall with six tvs" />
             </div>
           </div>
         </div>

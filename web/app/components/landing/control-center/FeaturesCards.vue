@@ -10,19 +10,14 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/landing/feature-tile-icon-02.svg"
-                    alt="Feature tile icon 01"
-                  />
+                  <img src="/images/landing/feature-tile-icon-02.svg" alt="Feature tile icon 01" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Learns your Location
-                </h4>
+                >Learns your Location</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
@@ -42,19 +37,14 @@
                   class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/landing/feature-tile-icon-05.svg"
-                    alt="Feature tile icon 02"
-                  />
+                  <img src="/images/landing/feature-tile-icon-05.svg" alt="Feature tile icon 02" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Minimize Manual Changes
-                </h4>
+                >Minimize Manual Changes</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
@@ -73,25 +63,20 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/landing/feature-tile-icon-01.svg"
-                    alt="Feature tile icon 03"
-                  />
+                  <img src="/images/landing/feature-tile-icon-01.svg" alt="Feature tile icon 03" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Game Flow AI
-                </h4>
+                >Game Flow AI</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  Considers a real time scoreboard of games to ensure a game in
+                  Considers a real-time scoreboard of games to ensure a game in
                   progress never gets turned off.
                 </p>
               </div>

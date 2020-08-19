@@ -10,19 +10,14 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/theme/feature-tile-icon-01.svg"
-                    alt="Feature tile icon 01"
-                  />
+                  <img src="/images/theme/feature-tile-icon-01.svg" alt="Feature tile icon 01" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Eliminate Touch Points
-                </h4>
+                >Eliminate Touch Points</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
@@ -41,19 +36,14 @@
                   class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/landing/feature-tile-icon-05.svg"
-                    alt="Feature tile icon 02"
-                  />
+                  <img src="/images/landing/feature-tile-icon-05.svg" alt="Feature tile icon 02" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Find Games Easier
-                </h4>
+                >Find Games Easier</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
@@ -72,19 +62,14 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/landing/feature-tile-icon-01.svg"
-                    alt="Feature tile icon 03"
-                  />
+                  <img src="/images/landing/feature-tile-icon-01.svg" alt="Feature tile icon 03" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Manual Override
-                </h4>
+                >Manual Override</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
@@ -92,7 +77,7 @@
                 >
                   We can't predict what every guest wants to watch - override
                   the Control Center automation and lock that game on TV through
-                  it's conclusion.
+                  its conclusion.
                 </p>
               </div>
             </div>
