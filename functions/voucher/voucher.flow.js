@@ -81,7 +81,7 @@ function getRedeemResponse(voucherType: string, locationName: string): any {
       };
     case voucherTypes.managerMode:
       return {
-        title: `💼 Manager Mode Activated`,
+        title: `💼 Staff Mode Activated`,
         message: `You can now freely change channels at ${locationName}.`,
       };
     default:
