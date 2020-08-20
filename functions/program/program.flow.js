@@ -89,6 +89,7 @@ const nationalChannels: any[] = [
   // 717, //NFL
   // 718, //NFL
   // 719, //NFL
+  // 671 // FSMW, turned on at tin roof once
   //   701, //NFLMX // 4 game mix
   // 702, //NFLMX // 8 game mix
   // 703, //NFLRZ // Redzone (premium)
@@ -301,7 +302,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .and()
       .filter('channelMinor');
 
-    if (channelMinor && channelMinor <= 2 && [660, 661].includes(channel)) {
+    if (channelMinor && channelMinor <= 10 && [660, 661].includes(channel)) {
       programsQuery = programsQuery.eq(channelMinor);
     } else {
       programsQuery = programsQuery.null();

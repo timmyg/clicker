@@ -14,7 +14,9 @@
         v-bind:class="[dividers ? 'has-top-divider has-bottom-divider' : '']"
       >
         <div class="cta-slogan reveal-from-left is-revealed">
-          <h4 class="m-0">Unleash the future of sports programming.</h4>
+          <h4 class="m-0">
+            {{ text || "Unleash the future of sports programming." }}
+          </h4>
         </div>
         <SignupForm />
       </div>
@@ -27,7 +29,7 @@ import SignupForm from "~/components/landing/SignupForm";
 
 export default {
   name: "Signup",
-  props: ["dividers"],
+  props: ["dividers", "text"],
   components: {
     SignupForm
   }

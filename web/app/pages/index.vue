@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <Landing :posts="allPosts" />
-  </div>
+  <div id="app"><Landing :posts="allPosts" /></div>
 </template>
 
 <script>
@@ -15,6 +13,17 @@ const client = contentful.createClient({
 export default {
   components: {
     Landing
+  },
+  head: {
+    title: "Clicker: Sports Programming Reimagined",
+    meta: [
+      {
+        hid: "home",
+        name: "description",
+        content:
+          "TV sports programming platform and app ensuring the best, most relevant games are on at all times"
+      }
+    ]
   },
   mounted() {
     if (this.$segment) {

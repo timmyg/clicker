@@ -3,9 +3,7 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
-      <div class="sign">
-        <img src="/images/demo/sign.png" />
-      </div>
+      <div class="sign"><img src="/images/demo/sign.png" /></div>
       <div class="flex flex-wrap mb-4">
         <DemoTV
           v-for="tv in tvs"
@@ -18,7 +16,12 @@
       </div>
     </div>
     <div class="hidden">
-      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="preload" />
+      <link
+        v-for="program in allPrograms"
+        :key="program.link"
+        :href="program.link"
+        rel="preload"
+      />
     </div>
   </main>
 </template>
@@ -30,6 +33,16 @@ const zapsRefName = `zaps-${process.env.NUXT_ENV_STAGE}`;
 import DemoTV from "@/components/DemoTV";
 
 export default {
+  head: {
+    title: "Clicker Demo",
+    meta: [
+      {
+        hid: "description",
+        name: "description",
+        content: "A demo of Clicker Control Center"
+      }
+    ]
+  },
   data: () => ({
     tvs: [
       { boxId: 1, label: "1", channel: 618 },
@@ -56,13 +69,11 @@ export default {
       },
       {
         channel: 19,
-        link:
-          "/images/demo/programs/ohio-state-clemson.mp4"
+        link: "/images/demo/programs/ohio-state-clemson.mp4"
       },
       {
         channel: 612,
-        link:
-          "/images/demo/programs/louisville-texas-tech.mp4"
+        link: "/images/demo/programs/louisville-texas-tech.mp4"
       },
       {
         channel: 9,
@@ -74,8 +85,7 @@ export default {
       },
       {
         channel: 208,
-        link:
-          "/images/demo/programs/florida-state-wake.mp4"
+        link: "/images/demo/programs/florida-state-wake.mp4"
       },
       {
         channel: 618,

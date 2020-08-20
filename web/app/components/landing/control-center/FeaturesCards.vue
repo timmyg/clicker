@@ -17,15 +17,15 @@
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >Game Flow AI</h4>
+                >Learns your Location</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  With
-                  <span class="brand-font">Game Flow AI</span>, we read live scoreboard data to make sure a close,
-                  intriguing game is never turned off just because another game is about to kick off.
+                  Ensures the right national and local games are always covered
+                  on TVs. Adapts to the thematic of your location to know if you
+                  are a Notre Dame bar in California.
                 </p>
               </div>
             </div>
@@ -44,14 +44,14 @@
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >Manual Change Override</h4>
+                >Minimize Manual Changes</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We can't predict what every guest wants to watch. If you put on a game with the traditional remote,
-                  we'll turn off our automation to prevent changing over their game.
+                  Proven to reduce employee changes by 70% allowing staff to
+                  sell more food and beverage.
                 </p>
               </div>
             </div>
@@ -70,14 +70,14 @@
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >Custom Scheduling</h4>
+                >Game Flow AI</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  We'll work closely with you to ensure you stay on brand by understanding your venue's sports
-                  preferences and the atmosphere you want to cultivate and preserve.
+                  Considers a real-time scoreboard of games to ensure a game in
+                  progress never gets turned off.
                 </p>
               </div>
             </div>
@@ -88,4 +88,30 @@
   </section>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.tiles-item .features-tiles-item-header img {
+  border-radius: 100px;
+  background: rgb(0, 145, 234);
+}
+.tiles-item:nth-child(1) .features-tiles-item-header img {
+  background: radial-gradient(
+    circle,
+    rgba(0, 145, 234, 1) 49%,
+    rgba(85, 195, 245, 1) 78%
+  );
+}
+.tiles-item:nth-child(2) .features-tiles-item-header img {
+  background: radial-gradient(
+    circle,
+    rgba(0, 145, 234, 1) 0%,
+    rgba(85, 195, 245, 1) 35%
+  );
+}
+.tiles-item:nth-child(3) .features-tiles-item-header img {
+  background: radial-gradient(
+    circle,
+    rgba(73, 188, 243, 1) 23%,
+    rgba(0, 145, 234, 1) 75%
+  );
+}
+</style>
