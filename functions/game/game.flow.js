@@ -477,7 +477,9 @@ module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async 
     .eq('scheduled')
     .exec();
 
+  console.time('games');
   let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
+  console.timeEnd('games');
 
   inProgressGames = inProgressGames.filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'));
   upcomingGames = upcomingGames.filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'));
