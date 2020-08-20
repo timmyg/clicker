@@ -443,32 +443,53 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 // });
 
 module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
-  try {
-    console.log('get games');
-    console.time('all scores!');
-    // const allGames: Game[] = await dbGame.scan().exec();
-    let games: Game[] = await dbGame.scan().exec();
-    console.log('allGames', games.length);
-    games = [
-      ...games.filter(g => g.status === 'inprogress'),
-      ...games.filter(g => g.status === 'complete'),
-      ...games.filter(g => g.status === 'scheduled'),
-      ...games.filter(g => g.status === 'time-tbd'),
-    ];
-    console.log('sortedGames', games.length);
-    games = [
-      ...games.filter(g => g.leagueName === 'ncaaf'),
-      ...games.filter(g => g.leagueName === 'ncaab'),
-      ...games.filter(g => g.leagueName === 'nfl'),
-      ...games.filter(g => g.leagueName === 'nba'),
-      ...games.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
-    ];
-    console.log('sortedGames', games.length);
-    return respond(200, games);
-  } catch (e) {
-    console.error(e);
-    respond(400, e);
+  console.log('get games');
+  console.time('all scores!');
+  // const allGames: Game[] = await dbGame.scan().exec();
+  let games: Game[] = await dbGame.scan().exec();
+  console.log('allGames', games.length);
+  games = [
+    ...games.filter(g => g.status === 'inprogress'),
+    ...games.filter(g => g.status === 'complete'),
+    ...games.filter(g => g.status === 'scheduled'),
+    ...games.filter(g => g.status === 'time-tbd'),
+  ];
+  console.log('sortedGames', games.length);
+  games = [
+    ...games.filter(g => g.leagueName === 'ncaaf'),
+    ...games.filter(g => g.leagueName === 'ncaab'),
+    ...games.filter(g => g.leagueName === 'nfl'),
+    ...games.filter(g => g.leagueName === 'nba'),
+    ...games.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
+  ];
+  console.log('sortedGames', games.length);
+  return respond(200, games);
+});
+
+module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
+  const inProgressGamesPromise: Game[] = dbGame
+    .query('status')
+    .eq('inprogress')
+    .exec();
+
+  const upcomingGamesPromise: Game[] = dbGame
+    .query('status')
+    .eq('scheduled')
+    .exec();
+
+  let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
+
+  inProgressGames = inProgressGames.filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'));
+  upcomingGames = upcomingGames.filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'));
+
+  let games = upcomingGames;
+  if (inProgressGames && inProgressGames[0]) {
+    games = [inProgressGames[0], ...games];
   }
+
+  const gamesCount = 3;
+  games = games.slice(0, gamesCount);
+  return respond(200, games);
 });
 
 function buildAirtableGames(games: Game[]) {
