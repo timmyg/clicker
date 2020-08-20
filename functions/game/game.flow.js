@@ -482,11 +482,13 @@ module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async 
   console.timeEnd('games');
 
   inProgressGames = inProgressGames
-    .filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'))
-    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName));
+    .filter(g => moment(g.start) < moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+    .sort((a, b) => new Date(a.start) - new Date(b.start));
   upcomingGames = upcomingGames
-    .filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'))
-    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName));
+    .filter(g => moment(g.start) < moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+    .sort((a, b) => new Date(a.start) - new Date(b.start));
 
   let games = upcomingGames;
   if (inProgressGames && inProgressGames[0]) {

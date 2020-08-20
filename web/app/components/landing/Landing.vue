@@ -33,7 +33,8 @@ export default {
     Pricing,
     Signup,
     Testimonials,
-    Blogs
+    Blogs,
+    ScoreboardMini
   },
   props: ["posts"]
 };
