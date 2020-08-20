@@ -126,7 +126,7 @@ functions:
           method: post
   syncAirtable:
     handler: game.syncAirtable
-    description: sync games from db to airtable Games table
+    description: sync games from AN api to airtable Games table
     timeout: 30
     memorySize: 1024
     events:

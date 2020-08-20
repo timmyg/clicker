@@ -807,7 +807,7 @@ module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async 
 
 module.exports.clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
   // clear programs table
-  const deleteDbPromises = [];
+  const promises = [];
   for (const region of allRegions) {
     const regionId = region.id;
     const regionPrograms = await dbProgram
@@ -820,11 +820,11 @@ module.exports.clearDatabase = RavenLambdaWrapper.handler(Raven, async event => 
     const keys = regionPrograms.map(rp => {
       return { region: regionId, id: rp.id };
     });
-    deleteDbPromises.push(dbProgram.batchDelete(keys));
+    promises.push(dbProgram.batchDelete(keys));
   }
 
   console.time('deleteDb');
-  await Promise.all(deleteDbPromises);
+  await Promise.all(promises);
   console.timeEnd('deleteDb');
 
   return respond(200, 'ok');
@@ -1373,8 +1373,8 @@ function getDefaultRating(program: Program): ?number {
 }
 
 function generateId(program: Program) {
-  const { programmingId, channelId, start, region } = program;
-  let id = programmingId + channelId + start;
+  const { programmingId, channel, start, region } = program;
+  let id = programmingId + channel + start;
   if (region) {
     id += region;
   }

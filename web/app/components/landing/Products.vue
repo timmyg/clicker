@@ -37,7 +37,7 @@
               <nuxt-link to="/clicker-tv/guests">Learn more about Clicker TV for Guests →</nuxt-link>
             </div>
             <div class="split-item-image split-item-image-fill is-3d illustration-element-04">
-              <img src="/images/landing/illustrations/undraw-app.svg" alt="Mobile phone drawing" />
+              <img src="/images/landing/illustrations/undraw-app-2.svg" alt="Mobile phone drawing" />
             </div>
           </div>
           <div class="split-item reveal-scale-up" v-scroll-reveal="{ delay: 200, origin: 'left' }">
