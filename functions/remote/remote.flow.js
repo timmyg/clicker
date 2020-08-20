@@ -89,6 +89,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   // $FlowFixMe
   let updateBoxInfoBody: BoxInfoRequest = {
     channel,
+    channelMinor,
     source,
     channelChangeAt: moment().unix() * 1000,
   };
@@ -230,10 +231,11 @@ module.exports.checkBoxesInfo = RavenLambdaWrapper.handler(Raven, async event =>
     const { losantId, boxes, losantProductionOverride } = body;
     console.log({ losantId, boxes });
     const api = new LosantApi();
-    const payload = { boxes, losantProductionOverride };
+    const payload = { boxes };
 
     const command = 'info.current.all';
-    await api.sendCommand(command, losantId, payload);
+    console.log({ command, losantId, payload, losantProductionOverride });
+    await api.sendCommand(command, losantId, payload, losantProductionOverride);
     return respond();
   } catch (e) {
     console.error(e);

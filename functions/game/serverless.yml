@@ -24,25 +24,6 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
-    # - Effect: Allow
-    #   Action:
-    #     - SNS:Publish
-    #   Resource:
-    #     {
-    #       'Fn::Join':
-    #         ['', ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.newGameTopic}']],
-    #     }
-    # - Effect: Allow
-    #   Action:
-    #     - SNS:Publish
-    #   Resource:
-    #     {
-    #       'Fn::Join':
-    #         [
-    #           '',
-    #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
-    #         ],
-    #     }
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
@@ -75,16 +56,6 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-  # updatedGameTopic: '${self:service}-${self:custom.stage}-updated-game-topic'
-  # updatedGameTopicArn:
-  #   deployed:
-  #     {
-  #       'Fn::Join':
-  #         [
-  #           '',
-  #           ['arn:aws:sns:${self:provider.region}:', { 'Ref': 'AWS::AccountId' }, ':${self:custom.updatedGameTopic}'],
-  #         ],
-  #     }
 resources:
   Resources:
     GamesTable:
@@ -117,51 +88,6 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-    # updated game stuff (score update)
-    # updatedGameTopic:
-    #   Type: AWS::SNS::Topic
-    #   Properties:
-    #     TopicName: ${self:service}-${self:custom.stage}-updated-game-topic
-    # updatedGameQueue:
-    #   Type: AWS::SQS::Queue
-    #   Properties:
-    #     QueueName: ${self:service}-${self:custom.stage}-updated-game-queue
-    #     RedrivePolicy:
-    #       deadLetterTargetArn: !GetAtt
-    #         - updatedGameDLQ
-    #         - Arn
-    #       maxReceiveCount: 3
-    # updatedGameDLQ:
-    #   Type: AWS::SQS::Queue
-    #   Properties:
-    #     QueueName: ${self:service}-${self:custom.stage}-updated-game-queue-dlq
-    # snsToUpdatedGameQueueSqsPolicy:
-    #   Type: AWS::SQS::QueuePolicy
-    #   Properties:
-    #     PolicyDocument:
-    #       Version: '2012-10-17'
-    #       Statement:
-    #         - Sid: 'allow-sns-messages'
-    #           Effect: Allow
-    #           Principal: '*'
-    #           Resource: !GetAtt
-    #             - updatedGameQueue
-    #             - Arn
-    #           Action: 'SQS:SendMessage'
-    #           Condition:
-    #             ArnEquals:
-    #               'aws:SourceArn': !Ref updatedGameTopic
-    #     Queues:
-    #       - Ref: updatedGameQueue
-    # updatedGameQueueSubscription:
-    #   Type: 'AWS::SNS::Subscription'
-    #   Properties:
-    #     TopicArn: !Ref updatedGameTopic
-    #     Endpoint: !GetAtt
-    #       - updatedGameQueue
-    #       - Arn
-    #     Protocol: sqs
-    #     RawMessageDelivery: 'true'
 functions:
   health:
     handler: game.health
@@ -176,6 +102,7 @@ functions:
               - authorization
   syncNextFewDays:
     handler: game.syncNextFewDays
+    description: sync action network api to database for next few days
     memorySize: 1024
     timeout: 30
     # environment:
@@ -187,11 +114,9 @@ functions:
           method: post
   syncActive:
     handler: game.syncActive
+    description: pull active from action network api, sync to db,
     memorySize: 1024
     timeout: 12
-    # environment:
-    # newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
-    # updatedGameTopicArn: ${self:custom.updatedGameTopicArn.deployed}
     events:
       # - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
       # - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
@@ -201,35 +126,24 @@ functions:
           method: post
   syncAirtable:
     handler: game.syncAirtable
+    description: sync games from db to airtable Games table
     timeout: 30
     memorySize: 1024
-    # environment:
-    #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
     events:
-      - schedule: cron(00 10 * * ? *) # every day @ 6:00am eastern
+      - schedule: cron(02 11 * * ? *) # every day @ 6:02/7:02am eastern
       - http:
           path: sync/airtable
           method: post
   get:
     handler: game.get
+    description: get game by id
     events:
       - http:
           path: '{id}'
           method: get
-  # getByStartTimeAndNetwork:
-  #   handler: game.getByStartTimeAndNetwork
-  #   events:
-  #     - http:
-  #         path: search
-  #         method: get
-  #         cors:
-  #           origin: '*'
-  #           headers:
-  #             - partner
-  #             - authorization
-  #             - content-type
   scoreboard:
     handler: game.scoreboard
+    description: get all games scores, used by webapp /scoreboard
     memorySize: 1024
     events:
       - http:
@@ -245,6 +159,7 @@ functions:
           method: get
   updateAirtableGamesStatus:
     handler: game.updateAirtableGamesStatus
+    description: update active games in airtable from db
     timeout: 30
     events:
       # - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC

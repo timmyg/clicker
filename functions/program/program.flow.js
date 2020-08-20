@@ -50,37 +50,30 @@ const allRegions: region[] = [
   { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
   { id: 'cripple-creek-co', name: 'Cripple Creek', defaultZip: '80813', localChannels: [5, 11, 13, 21] },
 ];
-// const minorChannels: number[] = [661];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
-const nationalChannels: number[] = [
-  206, //ESPN
-  209, //ESPN2
-  208, //ESPNU
-  207, //ESPNN
-  // 614, //ESPNC
-  213, //MLB
-  219, //FS1
-  220, //NBCSN
-  212, //NFL
-  217, //TNNSHD
-  215, //NHLHD
-  216, //NBAHD
-  218, //GOLF
-  602, //TVG
-  612, //ACCN
-  618, //FS2
-  // 620, //beIn Sports
-  610, //BTN
-  611, //SECHD
-  605, //SPMN
-  606, //OTDR
-  221, //CBSSN // premium
-  245, //TNT
-  247, //TBS
-  // 701, //NFLMX // 4 game mix
-  // 702, //NFLMX // 8 game mix
-  // 703, //NFLRZ // Redzone (premium)
-  // 704, //NFLFAN // Fantasy Zone (premium)
+const nationalChannels: any[] = [
+  { channel: 206, channelTitle: 'ESPN' },
+  { channel: 209, channelTitle: 'ESPN2' },
+  { channel: 208, channelTitle: 'ESPNU' },
+  { channel: 207, channelTitle: 'ESPNN' },
+  { channel: 213, channelTitle: 'MLB' },
+  { channel: 219, channelTitle: 'FS1' },
+  { channel: 220, channelTitle: 'NBCSN' },
+  { channel: 212, channelTitle: 'NFL' },
+  { channel: 217, channelTitle: 'TNNSHD' },
+  { channel: 215, channelTitle: 'NHLHD' },
+  { channel: 216, channelTitle: 'NBAHD' },
+  { channel: 218, channelTitle: 'GOLF' },
+  { channel: 602, channelTitle: 'TVG' },
+  { channel: 612, channelTitle: 'ACCN' },
+  { channel: 618, channelTitle: 'FS2' },
+  { channel: 610, channelTitle: 'BTN' },
+  { channel: 611, channelTitle: 'SECHD' },
+  { channel: 605, channelTitle: 'SPMN' },
+  { channel: 606, channelTitle: 'OTDR' },
+  { channel: 221, channelTitle: 'CBSSN' },
+  { channel: 245, channelTitle: 'TNT' },
+  { channel: 247, channelTitle: 'TBS' },
   // 705, //NFL
   // 706, //NFL
   // 707, //NFL
@@ -96,33 +89,47 @@ const nationalChannels: number[] = [
   // 717, //NFL
   // 718, //NFL
   // 719, //NFL
+  // 671 // FSMW, turned on at tin roof once
+  //   701, //NFLMX // 4 game mix
+  // 702, //NFLMX // 8 game mix
+  // 703, //NFLRZ // Redzone (premium)
+  // 704, //NFLFAN // Fantasy Zone (premium)
 ];
 
 // 2661
-const minorChannels = [
+const complexChannels = [
   {
     channel: 660,
     subChannels: [
       {
-        minor: 1,
-        channelIds: [5660, 2660],
+        minor: null,
+        channelIds: [2660],
       },
-      { minor: 2, channelIds: [623, 624] },
+      {
+        minor: 1,
+        channelIds: [5660],
+      },
+      { minor: 2, channelIds: [624] }, // 623?
     ],
   },
   {
     channel: 661,
     subChannels: [
       {
-        minor: 1,
-        channelIds: [5661, 626],
+        minor: null,
+        channelIds: [2661],
       },
-      { minor: 2, channelIds: [625, 376, 2661] },
+      {
+        minor: 1,
+        channelIds: [5661], // 2661?
+      },
+      { minor: 2, channelIds: [625] }, //  626
     ],
   },
 ];
 
-const blacklistChannelIds = [5660, 2660, 623, 624, 625, 376, 2661];
+// const blacklistChannelIds = [5660, 2660, 623, 624, 625, 376, 2661];
+const blacklistChannelIds = [];
 
 if (process.env.NODE_ENV === 'test') {
   dynamoose.AWS.config.update({
@@ -178,6 +185,7 @@ const dbProgram = dynamoose.model(
     live: Boolean,
     repeat: Boolean,
     sports: Boolean,
+    hd: Boolean,
     programmingId: {
       type: String,
       index: {
@@ -206,9 +214,9 @@ const dbProgram = dynamoose.model(
       attribute: 'expires',
       returnExpiredItems: false,
       defaultExpires: x => {
-        // expire 2 hours after end
+        // expire 6 hours after end
         return moment(x.end)
-          .add(2, 'hours')
+          .add(6, 'hours')
           .toDate();
       },
     },
@@ -247,7 +255,18 @@ module.exports.regions = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
-  const { channel, time, region, programmingId, programmingIds } = event.queryStringParameters;
+  const {
+    channel,
+    channelMinor,
+    time,
+    region,
+    programmingId,
+    programmingIds: programmingIdsString,
+  } = event.queryStringParameters;
+  let programmingIds;
+  if (programmingIdsString) {
+    programmingIds = programmingIdsString.split(',');
+  }
   if (!region) {
     return respond(400, `need region: ${region}`);
   }
@@ -268,7 +287,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
         .subtract(previousProgramMinutesAgo, 'm')
         .unix() * 1000;
     // get programs that are on now or ended within last 30 mins
-    const programs: Program[] = await dbProgram
+    let programsQuery = dbProgram
       .query('channel')
       .eq(channel)
       .and()
@@ -276,15 +295,21 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(region)
       .and()
       .filter('start')
-      // .gt(timeToSearch) // now
-      // .gt(timeToSearchPreviousProgram) // 90 minutes ago
       .lt(timeToSearch) // now
       .and()
       .filter('end')
-      // .lt(timeToSearchPreviousProgram) // 90 minutes ago
-      // .lt(timeToSearch) // now
       .gt(timeToSearchPreviousProgram) // 90 minutes ago
-      .exec();
+      .and()
+      .filter('channelMinor');
+
+    if (channelMinor && channelMinor <= 10 && [660, 661].includes(channel)) {
+      programsQuery = programsQuery.eq(channelMinor);
+    } else {
+      programsQuery = programsQuery.null();
+    }
+
+    const programs: Program[] = await programsQuery.exec();
+    console.log({ programs });
 
     console.log({ timeToSearch, timeToSearchPreviousProgram });
 
@@ -330,8 +355,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .eq(programmingId)
       .exec();
     // TODO what if program on multiple channels? choose local?
-    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
-    return respond(200, sortedPrograms[0]);
+    // const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    const chosenPrograms = programs.length > 1 ? getProgramListTiebreaker(programs) : programs;
+    return respond(200, chosenPrograms[0]);
   } else if (programmingIds) {
     const programs: Program[] = await dbProgram
       .query('region')
@@ -355,7 +381,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       console.error({ channel, time, region, programmingId, programmingIds });
       Raven.captureException(new Error(errorText));
     }
-    return respond(200, sortedPrograms);
+    const chosenPrograms2 = sortedPrograms.length > 1 ? getProgramListTiebreaker(sortedPrograms) : sortedPrograms;
+    return respond(200, chosenPrograms2);
   }
 });
 
@@ -373,6 +400,9 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .headers(event.headers)
     .go();
   console.timeEnd('get location');
+  if (!location) {
+    return respond(400, 'location doesnt exist');
+  }
 
   if (location.demo) {
     const demoPrograms: any[] = [
@@ -775,12 +805,62 @@ module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async 
   respond(200);
 });
 
-// npm run invoke:syncAirtable
+module.exports.clearDatabaseAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  // clear control center records
+  const airtablesToClear = ['Control Center', 'Games'];
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  for (const table of airtablesToClear) {
+    const allRecords = await base(table)
+      .select()
+      .all();
+    const allRecordsIds = allRecords.map(g => g.id);
+    console.log('allRecordsIds.length', allRecordsIds.length);
+    const promises = [];
+    let count = 0;
+    while (!!allRecordsIds.length) {
+      try {
+        const allRecordsSlice = allRecordsIds.splice(0, 10);
+        count += allRecordsSlice.length;
+        promises.push(base(table).destroy(allRecordsSlice));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    console.log('promises', promises.length);
+    console.time(`deleteAirtable:${table}`);
+    await Promise.all(promises);
+    console.timeEnd(`deleteAirtable:${table}`);
+  }
+
+  // clear programs table
+  const deleteDbPromises = [];
+  for (const region of allRegions) {
+    const regionId = region.id;
+    const regionPrograms = await dbProgram
+      .query('region')
+      .using('startLocalIndex')
+      .eq(regionId)
+      .where('start')
+      .descending()
+      .exec();
+    const keys = regionPrograms.map(rp => {
+      return { region: regionId, id: rp.id };
+    });
+    deleteDbPromises.push(dbProgram.batchDelete(keys));
+  }
+
+  console.time('deleteDb');
+  await Promise.all(deleteDbPromises);
+  console.timeEnd('deleteDb');
+
+  return respond(200, 'ok');
+});
+
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  const daysToPull = 4;
+  const daysToPull = 2;
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
@@ -951,9 +1031,6 @@ function buildAirtablePrograms(programs: Program[]) {
 }
 
 async function syncRegionChannels(regionName: string, regionChannels: number[], zip: string) {
-  // channels may have minor channel, so get main channel number
-  // const channels = [...regionChannels, ...nationalChannels];
-
   // get latest program
   console.log('querying region:', regionName);
   // const regionPrograms = await dbProgram.query('region').eq(regionName).exec();
@@ -1037,7 +1114,8 @@ async function pullFromDirecTV(
 ): Promise<any> {
   const promises = [];
   startTimes.forEach(startTime => {
-    const channelsString = getChannels([...regionChannels, ...nationalChannels]).join(',');
+    const nationalChannelNumbers = nationalChannels.map(nc => nc.channel);
+    const channelsString = getChannels([...regionChannels, ...nationalChannelNumbers]).join(',');
     promises.push(
       new Invoke()
         .service('program')
@@ -1209,6 +1287,8 @@ function build(dtvSchedule: any, regionId: string) {
       if (program.programmingId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
         program.channelId = channel.chId;
+        program.hd = channel.chHd;
+        program.blackout = channel.blackOut;
         if (blacklistChannelIds.includes(program.channelId)) {
           return true;
         }
@@ -1216,10 +1296,10 @@ function build(dtvSchedule: any, regionId: string) {
 
         // if channel is in minors list, try to add a minor channel to it
         // console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
-        if (minorChannels.map(c => c.channel).includes(program.channel)) {
+        if (complexChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
           // console.log('minor!');
-          const minorChannelMatch: any = minorChannels.find(c => c.channel === program.channel);
+          const minorChannelMatch: any = complexChannels.find(c => c.channel === program.channel);
           // console.log({ minorChannelMatch });
           const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
           // console.log({ channelMinor });
@@ -1261,7 +1341,7 @@ function build(dtvSchedule: any, regionId: string) {
 
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
-    { search: 'sportscenter', rating: 1 },
+    { search: 'sportscenter', rating: 2 },
     { search: 'nfl live', rating: 1 },
     { search: 'nba: the jump', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
@@ -1272,6 +1352,8 @@ function getDefaultRating(program: Program): ?number {
     { search: 'quick pitch', rating: 1 },
   ];
 
+  const ratingsIgnore = ['the best of this is sportscenter'];
+
   // first things first
   // speak for yourself
   // high noon
@@ -1280,17 +1362,15 @@ function getDefaultRating(program: Program): ?number {
   // get up
   // the dan le batard show
 
-  // console.log(program.title, defaultRatings[0].search);
   const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
-  // console.log({ match });
-  if (match) {
+  if (match && !ratingsIgnore.includes(program.title.toLowerCase())) {
     return match.rating;
   }
 }
 
 function generateId(program: Program) {
-  const { programmingId, channel, start, region } = program;
-  let id = programmingId + channel + start;
+  const { programmingId, channelId, start, region } = program;
+  let id = programmingId + channelId + start;
   if (region) {
     id += region;
   }
@@ -1314,8 +1394,40 @@ function getChannels(channels: number[]): number[] {
   return channels.map(c => Math.floor(c));
 }
 
+function getProgramListTiebreaker(programs: Program[]): Program[] {
+  console.log('! ! ! ! ! ! programs', programs.length);
+  // get unique set of programmingIds
+  const programmingIds = programs.map(p => p.programmingId);
+  const uniqueProgrammingIds = [...new Set(programmingIds)];
+  console.log({ uniqueProgrammingIds });
+  const deduplicatedPrograms = [];
+  uniqueProgrammingIds.forEach(pId => {
+    const duplicatedPrograms = programs.filter(p => p.programmingId === pId);
+    if (duplicatedPrograms.length > 1) {
+      const localChannel = duplicatedPrograms.find(({ channel }) => channel > 0 && channel < 100);
+      const regionalChannel = duplicatedPrograms.find(({ channel }) => channel >= 600 && channel < 700);
+      const nationalChannel = duplicatedPrograms.find(({ channel }) => channel > 200 && channel < 300);
+      const premiumChannels = duplicatedPrograms.find(({ channel }) => channel >= 700);
+
+      if (localChannel) return deduplicatedPrograms.push(localChannel);
+      if (regionalChannel) return deduplicatedPrograms.push(regionalChannel);
+      if (nationalChannel) return deduplicatedPrograms.push(nationalChannel);
+      if (premiumChannels) return deduplicatedPrograms.push(premiumChannels);
+
+      // stumped
+      return deduplicatedPrograms.push(duplicatedPrograms[0]);
+    } else {
+      return deduplicatedPrograms.push(duplicatedPrograms[0]);
+    }
+  });
+
+  console.log('dd', deduplicatedPrograms.length);
+  return deduplicatedPrograms;
+}
+
 module.exports.build = build;
 module.exports.generateId = generateId;
 module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
 module.exports.getDefaultRating = getDefaultRating;
+module.exports.getProgramListTiebreaker = getProgramListTiebreaker;

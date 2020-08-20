@@ -81,6 +81,8 @@ resources:
             AttributeType: S
           - AttributeName: _v
             AttributeType: N
+          - AttributeName: shortId
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -94,6 +96,12 @@ resources:
           - IndexName: _vGlobalIndex
             KeySchema:
               - AttributeName: _v
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
+          - IndexName: shortIdGlobalIndex
+            KeySchema:
+              - AttributeName: shortId
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
@@ -213,25 +221,13 @@ functions:
           path: '{id}/boxes/{boxId}/free'
           method: post
   updateBoxInfo:
-    description: called by saveBoxesInfo for manual and remote for other changes
+    description: called by location.saveBoxesInfo for manual and remote for other changes
     handler: location.updateBoxInfo
     timeout: 12
     memorySize: 512
-  # allOff:
-  #   handler: location.allOff
-  #   events:
-  #     - http:
-  #         path: '{id}/boxes/off'
-  #         method: post
-  # allOn:
-  #   handler: location.allOn
-  #   events:
-  #     - http:
-  #         path: '{id}/boxes/on'
-  #         method: post
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
-    description: check what is on each location boxes
+    description: check what is on all locations boxes (to detect manual changes)
     timeout: 30
     events:
       - schedule: cron(8/10 * * * ? *) # Every 8th minute
@@ -248,11 +244,11 @@ functions:
     handler: location.controlCenter
     timeout: 30
     # called by job
-    # events:
-    # - schedule: cron(*/10 * * * ? *) # every 10th minute
-    # - http:
-    #     path: control-center
-    #     method: post
+    events:
+      # - schedule: cron(*/10 * * * ? *) # every 10th minute
+      - http:
+          path: control-center
+          method: post
   controlCenterByLocation:
     handler: location.controlCenterByLocation
     events:
@@ -316,10 +312,30 @@ functions:
     description: database migration scripts
     timeout: 90
   syncLocationsBoxes:
-    handler: job.syncLocationsBoxes
-    timeout: 30
+    handler: location.syncLocationsBoxes
     events:
       - schedule: cron(00 11 * * ? *) # every day @ 7:00am eastern
       - http:
           path: boxes/sync
+          method: post
+  slackSlashChangeChannel:
+    handler: location.slackSlashChangeChannel
+    description: change channel from slack slash command
+    events:
+      - http:
+          path: slack/zap
+          method: post
+  slackSlashLocationsSearch:
+    handler: location.slackSlashLocationsSearch
+    description: get locations data with optional search term
+    events:
+      - http:
+          path: slack/search
+          method: post
+  slackSlashControlCenter:
+    handler: location.slackSlashControlCenter
+    description: control center
+    events:
+      - http:
+          path: slack/control-center
           method: post

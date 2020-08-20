@@ -64,6 +64,7 @@ functions:
           path: command
           method: post
   checkBoxesInfo:
+    description: send command to multiple boxes to report back box info
     handler: remote.checkBoxesInfo
     timeout: 12
     events:

@@ -3,23 +3,21 @@
     <Header v-bind:subtitle="'Scoreboard'"></Header>
     <section class="main text-center">
       <p>
-        For
-        <b>general support</b>, use the chat widget below, or
-        email us at
-        <a
-          href="mailto:hello@tryclicker.com"
-          class="font-bold text-blue-400"
-        >hello@tryclicker.com</a>.
+        For <b>general support</b>, use the chat widget below, or email us at
+        <a href="mailto:hello@tryclicker.com" class="font-bold text-blue-400"
+          >hello@tryclicker.com</a
+        >.
       </p>
       <br />
       <p>
-        To finish
-        <b>setting up</b> your Clicker device, send us a chat or set up an appointment
+        To finish <b>setting up</b> your Clicker device, send us a chat or set
+        up an appointment
         <a
           href="https://calendly.com/clicker-tim-g/meet"
           target="_blank"
           class="font-bold right schedule-call text-blue-400"
-        >here</a>
+          >here</a
+        >
       </p>
     </section>
   </layout-basic>
@@ -38,6 +36,16 @@ export default {
   components: {
     Header,
     LayoutBasic
+  },
+  head: {
+    title: "Clicker Support",
+    meta: [
+      {
+        hid: "support",
+        name: "description",
+        content: "Get support from Clicker"
+      }
+    ]
   }
 };
 </script>

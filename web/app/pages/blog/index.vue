@@ -32,6 +32,16 @@ export default {
     LayoutBasic,
     Preview
   },
+  head: {
+    title: "Clicker Blog",
+    meta: [
+      {
+        hid: "blog",
+        name: "description",
+        content: "Learn about Clicker products and industry news"
+      }
+    ]
+  },
   asyncData({ env }) {
     return Promise.all([
       client.getEntries({

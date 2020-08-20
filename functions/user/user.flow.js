@@ -118,7 +118,8 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
     case 'invoice.paid':
       const invoice = webhookEvent.data.object;
       const { customer_email: customerEmail, amount_paid: amountPaid } = invoice;
-      const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100}`;
+      const description = invoice.lines.data[0].description;
+      const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100} (${description})`;
       await new Invoke()
         .service('notification')
         .name('sendMoney')
@@ -126,12 +127,18 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
         .async()
         .go();
       return respond(200);
-    // case 'payment_intent.succeeded':
-    //   const paymentIntent = webhookEvent.data.object;
-    //   break;
-    // case 'payment_method.attached':
-    //   const paymentMethod = webhookEvent.data.object;
-    //   break;
+    // case 'customer.subscription.created':
+    //   const subscription = webhookEvent.data.object;
+    //   const { customer } = subscription;
+    //   const amountPaid = subscription.items.data[0].price.unit_amount;
+    //   const text = `Subscription Created: ${customer} $${amountPaid / 100}`;
+    //   await new Invoke()
+    //     .service('notification')
+    //     .name('sendMoney')
+    //     .body({ text })
+    //     .async()
+    //     .go();
+    //   return respond(200);
     default:
       return respond(400, `webhook ${webhookEvent.type} not supported by Clicker API`);
   }
@@ -401,12 +408,41 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
+// not in use
 module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event => {
   const { stripeCustomerId } = getBody(event);
 
   var session = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,
     return_url: 'https://tryclicker.com',
+  });
+
+  return respond(200, session);
+});
+
+module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
+  const { priceId } = getBody(event);
+
+  const host = event.headers.origin || 'http://tryclicker.com';
+  var session = await stripe.checkout.sessions.create({
+    // customer: stripeCustomerId,
+    // return_url: 'https://tryclicker.com',
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    mode: 'subscription',
+    success_url: `${host}/checkout/confirmation`,
+    cancel_url: host,
+    shipping_address_collection: {
+      allowed_countries: ['US'],
+    },
+    subscription_data: {
+      trial_period_days: 30,
+    },
   });
 
   return respond(200, session);

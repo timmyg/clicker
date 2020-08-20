@@ -39,6 +39,7 @@ module.exports = {
     "~/plugins/vue-moment.js",
     "~/plugins/filters.js",
     { src: "~/plugins/scroll-reveal", ssr: false }
+    // { src: "~/plugins/menu", ssr: false }
   ],
   env: {
     branch: process.env.BRANCH
@@ -56,7 +57,7 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: "Clicker: Sports Programming Management Platform",
+    title: "Clicker: Sports Programming Reimagined",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -66,7 +67,19 @@ module.exports = {
         content:
           "TV sports programming platform and app ensuring the best, most relevant games are on at all times"
       },
-      { name: "fragment", content: "!" }
+      { name: "fragment", content: "!" },
+      {
+        property: "og:title",
+        content: `Clicker: Sports Programming Reimagined`
+      },
+      {
+        property: "og:description",
+        content: `TV sports programming platform and app ensuring the best, most relevant games are on at all times`
+      },
+      {
+        property: "og:image",
+        content: `https://clicker-brand.s3.amazonaws.com/logo-bg.png`
+      }
     ],
     link: [
       {

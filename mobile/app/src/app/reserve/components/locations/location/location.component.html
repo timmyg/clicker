@@ -41,7 +41,9 @@
           <ion-avatar>
             <img [src]="location.img" class="logo" alt="location logo" />
           </ion-avatar>
-          <h1 class="brand-text">{{ location.name }}</h1>
+          <h1 class="brand-text" data-atm="location-name">
+            {{ location.name }}
+          </h1>
         </ion-row>
         <ion-row>
           <ion-chip color="primary" *ngIf="location.announcement">
@@ -56,7 +58,7 @@
             <label color="danger">Inactive</label></ion-chip
           >
           <ion-chip color="primary" *ngIf="isManager">
-            <label color="primary">Manager</label></ion-chip
+            <label color="primary">Staff</label></ion-chip
           >
           <ion-chip color="primary" *ngIf="isVip; else nonVip">
             <label color="primary">VIP</label></ion-chip

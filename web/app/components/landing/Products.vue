@@ -1,74 +1,62 @@
 <template>
-  <section class="features-tiles section center-content">
+  <section class="features-split section illustration-section-05">
     <div class="container">
-      <div class="features-tiles-inner">
-        <div class="section-header center-content">
-          <div class="container-xs" v-scroll-reveal>
-            <h2 class="mt-0 mb-16">
-              Let staff focus on selling food + beverage
-              <span
-                class="muted"
-              >and let Clicker keep your guests in their seats</span>
-            </h2>
-            <p>
-              Clicker drastically reduces channel change requests and increases customer
-              dwell time. We provide two products:
-            </p>
-          </div>
-        </div>
-        <div class="tiles-wrap">
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-b-icon-03.svg" alt="Feature tile icon 01" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom brand-font"
-                  data-reveal-container=".tiles-item"
-                >Control Center</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >We'll manage TVs automatically throughout the day remotely - tailored for your venue.</p>
-              </div>
+      <!-- <h2 class="center-content products-header pt-32 mb-0">
+        Clicker Offers three distinct products
+      </h2>-->
+      <div class="features-split-inner section-inner">
+        <div class="split-wrap invert-mobile">
+          <div
+            class="split-item reveal-scale-up is-revealed"
+            v-scroll-reveal="{ delay: 200, origin: 'left' }"
+          >
+            <div class="split-item-content center-content-mobile">
+              <h3 class="mt-0 mb-16">🔧 Empower Your Staff</h3>
+              <p class="m-0">
+                <b>Clicker TV for Staff</b> lets your staff download an app to
+                manage the TVs to enhance the guest experience and reduce
+                friction.
+                <br />
+                <nuxt-link to="/clicker-tv/staff">Learn more about Clicker TV for Staff →</nuxt-link>
+              </p>
+            </div>
+            <div class="split-item-image split-item-image-fill is-3d illustration-element-03">
+              <img
+                src="/images/landing/illustrations/undraw-manager-mode.svg"
+                alt="TVs on wall drawing"
+              />
             </div>
           </div>
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-b-icon-02.svg" alt="Feature tile icon 03" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom brand-font"
-                  data-reveal-container=".tiles-item"
-                >Clicker TV</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >
-                  Allow your guests to download the
-                  <a
-                    href="https://apps.apple.com/us/app/clicker-tv/id1471666907"
-                    class="brand-font"
-                    target="_blank"
-                  >Clicker TV</a> mobile app and change the TV
-                  channels right from their phone.
-                </p>
-              </div>
+          <div class="split-item reveal-scale-up" v-scroll-reveal="{ delay: 200, origin: 'right' }">
+            <div class="split-item-content center-content-mobile">
+              <h3 class="mt-0 mb-16">🤯 Blow your Guests Minds</h3>
+              <p class="m-0">
+                <b>Clicker TV for Guests</b> allows guests to reserve TVs and change channels from an app, giving them an unforgettable experience.
+              </p>
+              <br />
+              <nuxt-link to="/clicker-tv/guests">Learn more about Clicker TV for Guests →</nuxt-link>
+            </div>
+            <div class="split-item-image split-item-image-fill is-3d illustration-element-04">
+              <img src="/images/landing/illustrations/undraw-app.svg" alt="Mobile phone drawing" />
+            </div>
+          </div>
+          <div class="split-item reveal-scale-up" v-scroll-reveal="{ delay: 200, origin: 'left' }">
+            <div class="split-item-content center-content-mobile">
+              <h3 class="mt-0 mb-16">
+                😌 Sports TV
+                <em>Nirvana</em>
+              </h3>
+              <p class="m-0">
+                <b>Control Center</b> manages all your TVs behind the scenes, so your staff can focus on the guest experience.
+              </p>
+              <br />
+              <nuxt-link to="/control-center">Learn more about Control Center →</nuxt-link>
+            </div>
+            <div class="split-item-image split-item-image-fill is-3d illustration-element-05">
+              <img
+                src="/images/landing/illustrations/undraw-control-center.svg"
+                alt="Wall with tvs drawing"
+              />
             </div>
           </div>
         </div>
@@ -76,5 +64,3 @@
     </div>
   </section>
 </template>
-
-<style lang="scss" scoped></style>

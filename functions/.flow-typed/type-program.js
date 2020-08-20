@@ -5,6 +5,7 @@ export class Program {
   start: number;
   end: number;
   channel: number;
+  channelId: number;
   channelMinor: number;
   channelTitle: string;
   title: string;

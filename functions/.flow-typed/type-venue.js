@@ -15,6 +15,7 @@ class Box {
   };
   live: {
     channel: number,
+    channelMinor: number,
     channelChangeAt: number,
     channelChangeSource: string,
     locked: boolean,
@@ -44,6 +45,7 @@ class Base {
 }
 export class Venue extends Base {
   id: string;
+  shortId: string;
   losantId: string;
   boxes: Box[];
   channels: {

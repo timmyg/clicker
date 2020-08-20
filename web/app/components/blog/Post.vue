@@ -11,7 +11,8 @@
         :key="tag"
         :to="{ name: 'tags-tag', params: { tag: tag } }"
         class="text-sm text-gray-500"
-      >{{ tag }}</span>
+        >{{ tag }}</span
+      >
     </div>
     <img
       v-if="post.fields.featuredImage"
@@ -22,7 +23,10 @@
       "
     />
     <div class="xl:px-16">
-      <div v-html="$md.render(post.fields.content)" class="leading-relaxed"></div>
+      <div
+        v-html="$md.render(post.fields.content)"
+        class="leading-relaxed"
+      ></div>
     </div>
     <hr />
     <Signup />
@@ -34,8 +38,34 @@ import Signup from "@/components/landing/Signup";
 export default {
   props: ["post"],
   components: { Signup },
+  head() {
+    return {
+      title: this.post.fields.title,
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        {
+          hid: this.post.sys.id,
+          name: "description",
+          content: this.post.fields.summary
+        },
+        {
+          property: "og:title",
+          content: `${this.post.fields.title}`
+        },
+        {
+          property: "og:description",
+          content: `${this.post.fields.summary}`.replace(/<\/?[^>]+(>|$)/g, "")
+        },
+        {
+          property: "og:image",
+          content: `${this.post.fields.featuredImage.fields.file.url}`
+        }
+      ]
+    };
+  },
   methods: {
     getTags() {
+      console.log(this.post);
       return this.post.fields.tags
         .split(",")
         .map(tag => tag.toLowerCase().trim());

@@ -17,12 +17,11 @@ import * as moment from "moment";
 export default {
   data: () => ({
     allAnnouncements: [
-      {
-        text:
-          "Come Say Hi at the <b>Mid-America Restaurant Expo</b> in Columbus, OH on 2/23 and 2/24! (Innovation Alley, Table 2)",
-        start: moment("2020-2-21", "YYYY/M/D"),
-        end: moment("2020-2-25", "YYYY/M/D")
-      }
+      // {
+      //   text: "8/18/20: Clicker just launched to the public!",
+      //   start: moment("2020-8-10", "YYYY-M-D"),
+      //   end: moment("2020-9-28", "YYYY-M-D")
+      // }
     ]
   }),
   computed: {

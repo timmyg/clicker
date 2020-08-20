@@ -29,6 +29,7 @@ const Voucher = new Entity({
     type: { type: 'string' },
     notes: { type: 'string' },
     expires: { type: 'string' },
+    entityName: { type: 'string' },
   },
   table: VoucherTable,
 });
@@ -60,22 +61,28 @@ module.exports.redeem = RavenLambdaWrapper.handler(Raven, async event => {
     console.log({ data });
     const result = await Voucher.delete({ ...voucher });
     console.log({ result });
-    return respond(200, getRedeemResponse(voucher.type, venue));
+    await new Invoke()
+      .service('notification')
+      .name('sendApp')
+      .body({ text: `${voucher.type} Voucher Redeemed at ${voucher.entityName}` })
+      .async()
+      .go();
+    return respond(200, getRedeemResponse(voucher.type, voucher.entityName));
   }
   return respond(400, 'voucher not found');
 });
 
-function getRedeemResponse(voucherType: string, venue: Venue): any {
+function getRedeemResponse(voucherType: string, locationName: string): any {
   switch (voucherType) {
     case voucherTypes.vip:
       return {
         title: `👑 VIP Mode Activated`,
-        message: `You can now freely change channels at ${venue.name}.`,
+        message: `You can now freely change channels at ${locationName}.`,
       };
     case voucherTypes.managerMode:
       return {
-        title: `💼 Manager Mode Activated`,
-        message: `You can now freely change channels at ${venue.name}.`,
+        title: `💼 Staff Mode Activated`,
+        message: `You can now freely change channels at ${locationName}.`,
       };
     default:
       return {};
@@ -105,8 +112,18 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
       .unix();
   }
 
-  const vouchers: Voucher[] = [];
+  const locationData = await new Invoke()
+    .service('location')
+    .name('get')
+    .pathParams({ id: entityId })
+    .headers(event.headers)
+    .go();
+  if (!locationData || !locationData.data) {
+    return respond(400, `invalid location: ${entityId}`);
+  }
+  const venue = locationData.data;
 
+  const vouchers: Voucher[] = [];
   for (let i of Array(count).keys()) {
     const voucher = {
       entityId,
@@ -114,6 +131,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
       notes,
       code: createVoucherCode(),
       expires,
+      entityName: venue.name,
     };
     vouchers.push(VoucherTable.Voucher.putBatch(voucher));
   }
