@@ -482,18 +482,22 @@ module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async 
   console.timeEnd('games');
 
   inProgressGames = inProgressGames
-    .filter(g => moment(g.start) < moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .sort((a, b) => new Date(a.start) - new Date(b.start));
+    .filter(g => !!g.broadcast);
   upcomingGames = upcomingGames
-    .filter(g => moment(g.start) < moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .sort((a, b) => new Date(a.start) - new Date(b.start));
+    .filter(g => !!g.broadcast);
 
   let games = upcomingGames;
+
+  console.log('yo', inProgressGames.length, upcomingGames.length);
+
   if (inProgressGames && inProgressGames[0]) {
     games = [inProgressGames[0], ...games];
   }
+  console.log('yo2', games.length);
 
   const gamesCount = 3;
   games = games.slice(0, gamesCount);
