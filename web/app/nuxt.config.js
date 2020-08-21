@@ -78,6 +78,10 @@ module.exports = {
       },
       {
         property: "og:image",
+        content: `http://clicker-brand.s3.amazonaws.com/logo-bg.png`
+      },
+      {
+        property: "og:image:secure",
         content: `https://clicker-brand.s3.amazonaws.com/logo-bg.png`
       }
     ],
