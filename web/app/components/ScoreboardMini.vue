@@ -26,7 +26,8 @@ export default {
     return {
       loading: false,
       error: null,
-      games: [{}, {}, {}, {}, {}, {}]
+      games: null,
+      gamesRaw: null
     };
   },
   mounted() {
@@ -53,6 +54,7 @@ export default {
           };
           gamesResponse.splice(0, 0, sportscenter);
           this.games = gamesResponse;
+          console.log(this.games);
           this.loading = false;
         });
     }

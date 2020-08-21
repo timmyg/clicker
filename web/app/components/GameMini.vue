@@ -1,46 +1,42 @@
 <template>
-  <div class="p-2 game-container">
+  <div class="p-2">
     <div class="game-wrapper px-1">
-      <template v-if="game.broadcast">
-        <div class="text-center text-xs">
-          <div class="status">
-            <span class="tag" v-if="isInPast()"
-              >Now Showing on {{ getChannel() }}</span
-            >
-            <span class="tag" v-else
-              >Autotuning to
-              <span class="brand-font">{{ getChannel() }}</span> in
-              <span class="brand-font">{{ timeRemaining }}</span></span
-            >
+      <div class="text-center text-xs">
+        <div class="status">
+          <span class="tag" v-if="isInPast()"
+            >Now Showing on {{ getChannel() }}</span
+          >
+          <span class="tag" v-else
+            >Autotuning to <span class="brand-font">{{ getChannel() }}</span> in
+            <span class="brand-font">{{ timeRemaining }}</span></span
+          >
+        </div>
+      </div>
+      <div class="flex teams-wrapper">
+        <div class="w-full">
+          <div class="team flex flex-row mb-2">
+            <template v-if="!!game.away">
+              <div class="w-1/4"></div>
+              <div
+                v-for="team in getTeams()"
+                class="w-1/4 flex flex-wrap justify-center"
+                v-bind:key="team.id"
+              >
+                <div class="flex justify-center">
+                  <img :src="team.logo" class="logo" />
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="w-full flex flex-wrap justify-center">
+                <div class="flex justify-center">
+                  <img :src="game.img" class="logo" />
+                </div>
+              </div>
+            </template>
           </div>
         </div>
-        <div class="flex teams-wrapper">
-          <div class="w-full">
-            <div class="team flex flex-row mb-2">
-              <template v-if="!!game.away">
-                <div class="w-1/4"></div>
-                <div
-                  v-for="team in getTeams()"
-                  class="w-1/4 flex flex-wrap justify-center"
-                  v-bind:key="team.id"
-                >
-                  <div class="flex justify-center">
-                    <img :src="team.logo" class="logo" />
-                  </div>
-                </div>
-              </template>
-              <template v-else>
-                <div class="w-full flex flex-wrap justify-center">
-                  <div class="flex justify-center">
-                    <img :src="game.img" class="logo" />
-                  </div>
-                </div>
-              </template>
-            </div>
-          </div>
-        </div>
-      </template>
-      <template v-else> </template>
+      </div>
     </div>
   </div>
 </template>
@@ -55,9 +51,9 @@ export default {
   created() {
     this.job = setInterval(() => this.calculateTimeUntil(), 1000);
   },
-  // destroyed() {
-  //   clearInterval(this.job);
-  // },
+  destroyed() {
+    clearInterval(this.job);
+  },
   data() {
     return {
       timeRemaining: null,
@@ -109,8 +105,5 @@ img.logo {
   border: 2px solid lightgrey;
   border-radius: 6px;
   background: white;
-}
-.game-container {
-  min-height: 96px;
 }
 </style>
