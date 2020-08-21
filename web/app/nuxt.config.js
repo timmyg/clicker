@@ -21,7 +21,7 @@ let dynamicRoutes = () => {
     .catch(e => console.error("dynamic routes errpor :(", e));
 };
 module.exports = {
-  mode: "spa",
+  // mode: "spa",
   // mode: "universal",
   target: "static",
 
