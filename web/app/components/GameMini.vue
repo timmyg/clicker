@@ -47,12 +47,17 @@ import * as moment from "moment";
 
 export default {
   props: ["game"],
+  destroyed() {},
   created() {
-    const interval = setInterval(() => this.calculateTimeUntil(), 1000);
+    this.job = setInterval(() => this.calculateTimeUntil(), 1000);
+  },
+  destroyed() {
+    clearInterval(this.job);
   },
   data() {
     return {
-      timeRemaining: null
+      timeRemaining: null,
+      job: null
     };
   },
   methods: {
@@ -63,7 +68,7 @@ export default {
       return moment().diff(moment(this.game.start)) > 0;
     },
     calculateTimeUntil() {
-      console.log(this.game);
+      console.log(".");
       let seconds = Math.floor(
         moment.duration(moment(this.game.start).diff(moment())).asSeconds()
       );

@@ -2,10 +2,10 @@
   <layout-basic>
     <Header></Header>
     <section class="main">
-      <c-section-header
+      <!-- <c-section-header
         :data="sectionHeader"
         class="center-content reveal-from-bottom brand-font"
-      />
+      /> -->
       <Features />
       <FeaturesCards />
       <Buy />
@@ -34,16 +34,16 @@ export default {
     TilesProducts,
     LayoutBasic
   },
-  head: {
-    title: "Clicker Products: " + this.title,
-    meta: [
-      {
-        hid: this.title,
-        name: "description",
-        content: this.sectionHeader.paragraph
-      }
-    ]
-  },
+  // head: {
+  //   title: "Clicker Products: " + this.sectionHeader.title,
+  //   meta: [
+  //     {
+  //       hid: this.title,
+  //       name: "description",
+  //       content: this.sectionHeader.paragraph
+  //     }
+  //   ]
+  // },
   data() {
     return {
       sectionHeader: {

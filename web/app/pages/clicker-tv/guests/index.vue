@@ -34,16 +34,16 @@ export default {
     CSectionHeader,
     LayoutBasic
   },
-  head: {
-    title: "Clicker Products: " + this.title,
-    meta: [
-      {
-        hid: this.title,
-        name: "description",
-        content: this.sectionHeader.paragraph
-      }
-    ]
-  },
+  // head: {
+  //   title: "Clicker Products: " + this.sectionHeader.title,
+  //   meta: [
+  //     {
+  //       hid: this.sectionHeader.title,
+  //       name: "description",
+  //       content: this.sectionHeader.paragraph
+  //     }
+  //   ]
+  // },
   data() {
     return {
       sectionHeader: {
