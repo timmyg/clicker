@@ -1,11 +1,7 @@
 <template>
-  <div class="flex flex-wrap mb-4">
-    <div
-      v-for="game in games"
-      v-bind:key="game.id"
-      class="game w-1/2 lg:w-1/4 mb-4"
-    >
-      <Game v-bind:game="game" />
+  <div class="flex flex-wrap mb-4 justify-center">
+    <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 lg:w-1/6 mb-4">
+      <GameMini v-bind:game="game" />
     </div>
   </div>
 </template>
@@ -13,11 +9,11 @@
 <script lang="ts">
 import Vue from "vue";
 import axios from "axios";
-import Game from "./Game";
+import GameMini from "./GameMini";
 
 export default Vue.extend({
   components: {
-    Game
+    GameMini
   },
   data() {
     return {
@@ -52,8 +48,4 @@ export default Vue.extend({
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
-section.main {
-  padding-top: 100px;
-}
 </style>
