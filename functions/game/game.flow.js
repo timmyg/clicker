@@ -484,11 +484,13 @@ module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async 
   inProgressGames = inProgressGames
     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .filter(g => !!g.broadcast);
+    .filter(g => !!g.broadcast)
+    .sort((a, b) => a.start.localeCompare(b.start));
   upcomingGames = upcomingGames
     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .filter(g => !!g.broadcast);
+    .filter(g => !!g.broadcast)
+    .sort((a, b) => a.start.localeCompare(b.start));
 
   let games = upcomingGames;
 
