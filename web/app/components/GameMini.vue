@@ -3,17 +3,22 @@
     <div class="game-wrapper px-1">
       <div class="text-center text-xs">
         <div class="status">
-          <span class="tag" v-if="isInPast()">Now Showing on {{getChannel()}}</span>
-          <span class="tag" v-else>Autotuning to {{getChannel()}} in {{timeRemaining}}</span>
+          <span class="tag" v-if="isInPast()"
+            >Now Showing on {{ getChannel() }}</span
+          >
+          <span class="tag" v-else
+            >Autotuning to {{ getChannel() }} in {{ timeRemaining }}</span
+          >
         </div>
       </div>
       <div class="flex teams-wrapper">
         <div class="w-full">
           <div class="team flex flex-row mb-2">
             <template v-if="!!game.away">
+              <div class="w-1/4"></div>
               <div
                 v-for="team in getTeams()"
-                class="w-1/2 flex flex-wrap justify-center"
+                class="w-1/4 flex flex-wrap justify-center"
                 v-bind:key="team.id"
               >
                 <div class="flex justify-center">
@@ -88,7 +93,7 @@ export default {
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 img.logo {
-  height: 40px;
+  max-height: 60px;
 }
 .game-wrapper {
   border: 2px solid lightgrey;
