@@ -33,12 +33,8 @@ export default {
     Pricing,
     Signup,
     Testimonials,
-<<<<<<< HEAD
-    Blogs
-=======
     Blogs,
     ScoreboardMini
->>>>>>> 0ba83f2de7d4df1120484f5a5bc8044bc12dfefb
   },
   props: ["posts"]
 };
