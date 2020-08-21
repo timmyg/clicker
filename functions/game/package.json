@@ -14,7 +14,8 @@
     "invoke:scoreboard": "serverless invoke local --function scoreboard --stage develop",
     "invoke:health": "serverless invoke local --function health --stage develop",
     "invoke:getGame": "serverless invoke local --function get --path ../.resources/data/game.json --stage develop",
-    "invoke:updateAirtableGamesStatus": "serverless invoke local --function updateAirtableGamesStatus --stage develop"
+    "invoke:updateAirtableGamesStatus": "serverless invoke local --function updateAirtableGamesStatus --stage develop",
+    "invoke:scoreboardLiveUpcoming": "serverless invoke local --function scoreboardLiveUpcoming --stage develop"
   },
   "author": "",
   "license": "ISC",

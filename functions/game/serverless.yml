@@ -149,6 +149,15 @@ functions:
       - http:
           path: scoreboard
           method: get
+  scoreboardLiveUpcoming:
+    handler: game.scoreboardLiveUpcoming
+    description: get 3 upcoming games scores
+    memorySize: 1024
+    timeout: 10
+    events:
+      - http:
+          path: scoreboard/upcoming
+          method: get
   updateAirtableGamesStatus:
     handler: game.updateAirtableGamesStatus
     description: update active games in airtable from db
