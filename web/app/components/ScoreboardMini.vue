@@ -4,7 +4,7 @@
       <div
         v-for="game in games"
         v-bind:key="game.id"
-        class="game w-1/2 lg:w-1/3 mb-4"
+        class="game w-full md:w-1/2 lg:w-1/3 mb-4"
       >
         <GameMini v-bind:game="game" />
       </div>

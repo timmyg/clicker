@@ -7,7 +7,8 @@
             >Now Showing on {{ getChannel() }}</span
           >
           <span class="tag" v-else
-            >Autotuning to {{ getChannel() }} in {{ timeRemaining }}</span
+            >Autotuning to <span class="brand-font">{{ getChannel() }}</span> in
+            <span class="brand-font">{{ timeRemaining }}</span></span
           >
         </div>
       </div>
