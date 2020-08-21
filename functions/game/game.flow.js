@@ -467,6 +467,8 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
+  const gamesCount = 5;
+
   const inProgressGamesPromise: Game[] = dbGame
     .query('status')
     .eq('inprogress')
@@ -494,14 +496,10 @@ module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async 
 
   let games = upcomingGames;
 
-  console.log('yo', inProgressGames.length, upcomingGames.length);
-
   if (inProgressGames && inProgressGames[0]) {
     games = [inProgressGames[0], ...games];
   }
-  console.log('yo2', games.length);
 
-  const gamesCount = 3;
   games = games.slice(0, gamesCount);
   return respond(200, games);
 });
