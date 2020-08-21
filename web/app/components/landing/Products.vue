@@ -35,7 +35,7 @@
             v-scroll-reveal="{ delay: 200, origin: 'right' }"
           >
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">🤯 Blow your Guests Minds</h3>
+              <h3 class="mt-0 mb-16">🤯 Blow your Guests' Minds</h3>
               <p class="m-0">
                 <b>Clicker TV for Guests</b> allows guests to reserve TVs and
                 change channels from an app, giving them an unforgettable
