@@ -4,18 +4,20 @@
       <template v-if="game.broadcast">
         <div class="text-center text-xs">
           <div class="status">
-            <span class="tag" v-if="isInPast()">Now Showing on {{ getChannel() }}</span>
-            <span class="tag" v-else>
-              Autotuning to
+            <span class="tag" v-if="isInPast()"
+              >Now Showing on {{ getChannel() }}</span
+            >
+            <span class="tag" v-else
+              >Autotuning to
               <span class="brand-font">{{ getChannel() }}</span> in
-              <span class="brand-font">{{ timeRemaining }}</span>
-            </span>
+              <span class="brand-font">{{ timeRemaining }}</span></span
+            >
           </div>
         </div>
         <div class="flex teams-wrapper">
           <div class="w-full">
             <div class="team flex flex-row mb-2">
-              <div v-if="!!game.away">
+              <template v-if="!!game.away">
                 <div class="w-1/4"></div>
                 <div
                   v-for="team in getTeams()"
@@ -26,18 +28,19 @@
                     <img :src="team.logo" class="logo" />
                   </div>
                 </div>
-              </div>
+              </template>
+              <template v-else>
+                <div class="w-full flex flex-wrap justify-center">
+                  <div class="flex justify-center">
+                    <img :src="game.img" class="logo" />
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
         </div>
       </template>
-      <template v-else>
-        <div class="w-full flex flex-wrap justify-center">
-          <div class="flex justify-center">
-            <img :src="game.img" class="logo" />
-          </div>
-        </div>
-      </template>
+      <template v-else> </template>
     </div>
   </div>
 </template>
