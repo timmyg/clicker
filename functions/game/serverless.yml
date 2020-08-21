@@ -126,11 +126,11 @@ functions:
           method: post
   syncAirtable:
     handler: game.syncAirtable
-    description: sync games from db to airtable Games table
+    description: sync games from AN api to airtable Games table
     timeout: 30
     memorySize: 1024
     events:
-      - schedule: cron(02 11 * * ? *) # every day @ 6:02/7:02am eastern
+      - schedule: cron(59 10 * * ? *) # every day @ 5:59/6:59am eastern
       - http:
           path: sync/airtable
           method: post

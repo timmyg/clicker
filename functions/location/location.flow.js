@@ -994,25 +994,47 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
     .map(b => b.live.channel);
-  ccPrograms = ccPrograms.filter(ccp => {
+  let ccProgramsFiltered = [];
+  // ccProgramsFiltered = ccPrograms.filter(ccp => {
+  //   const program: Program = ccp.db;
+  //   if (ccp.fields.rating >= 9) {
+  //     return true;
+  //   }
+  //   return !currentlyShowingChannels.includes(program.channel);
+  // });
+  ccPrograms.forEach(ccp => {
+    console.log(ccp);
+    console.log(currentlyShowingChannels);
     const program: Program = ccp.db;
-    if (ccp.fields.rating >= 9) {
-      return true;
+    // if (ccp.fields.rating >= 9) {
+    //   return ccProgramsFiltered.push(ccp);
+    // }
+    if (!currentlyShowingChannels.includes(program.channel)) {
+      return ccProgramsFiltered.push(ccp);
+    } else {
+      // remove from array, in case of replication
+      const index = currentlyShowingChannels.indexOf(program.channel);
+      if (index > -1) {
+        // console.log({ index });
+        // console.log({ currentlyShowingChannels });
+        currentlyShowingChannels.splice(index, 1);
+        // console.log({ currentlyShowingChannels });
+      }
     }
-    return !currentlyShowingChannels.includes(program.channel);
   });
-  console.info(`filtered programs after looking at currently showing: ${ccPrograms.length}`);
+
+  console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered.length}`);
 
   // remove channels that location doesn't have
   const excludedChannels =
     location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
 
   if (excludedChannels && excludedChannels.length) {
-    ccPrograms = ccPrograms.filter(ccp => !excludedChannels.includes(ccp.db.channel));
+    ccProgramsFiltered = ccProgramsFiltered.filter(ccp => !excludedChannels.includes(ccp.db.channel));
   }
-  console.info(`filtered programs after looking at excluded: ${ccPrograms.length}`);
+  console.info(`filtered programs after looking at excluded: ${ccProgramsFiltered.length}`);
   // sort by rating descending
-  return ccPrograms.sort((a, b) => b.fields.rating - a.fields.rating);
+  return ccProgramsFiltered.sort((a, b) => b.fields.rating - a.fields.rating);
 }
 
 const priority = {
@@ -1068,7 +1090,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     ccp.db = program;
   });
 
-  // filter out currently showing programs, excluded programs, and sort by rating
+  // filter out currently showing programs (unles >=9), excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
   // get boxes that are CC active, and not manually locked
@@ -1307,6 +1329,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
 });
 
 module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log({ event });
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
   const [locationShortId, tvString, channel, channelMinor] = queryData.text.split(' ');
@@ -1323,9 +1346,10 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
     .eq(locationPartial.id)
     .exec();
   // const zone = .substring(1,3)
-  const zone = tvString.charAt(0) === 'q' && tvString.substring(1, tvString.length);
+  const zone = tvString.charAt(0) === 'z' && tvString.substring(1, tvString.length);
   const label = tvString.charAt(0) === 'l' && tvString.substring(1, tvString.length);
   let box;
+  console.log({ zone, label });
   if (zone) {
     box = location.boxes.find(b => b.zone === zone);
   } else if (label) {
@@ -1478,7 +1502,8 @@ async function tuneSlackZap(location: Venue, box: Box, channel: number, channelM
     },
   };
   const source = zapTypes.automation;
-  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`, box.label);
+  console.log('box', reservation.box);
+  console.log(`-_-_-_-_-_-_-_-_-_ tune to ${channel} [slack zap]`);
   await new Invoke()
     .service('remote')
     .name('command')

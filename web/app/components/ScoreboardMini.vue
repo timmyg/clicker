@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="flex flex-wrap mb-4 justify-center">
-      <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 lg:w-1/3 mb-4">
+      <div v-for="game in games" v-bind:key="game.id" class="game w-full md:w-1/2 lg:w-1/3 mb-4">
         <GameMini v-bind:game="game" />
       </div>
     </div>
@@ -22,8 +22,7 @@ export default {
     return {
       loading: false,
       error: null,
-      games: null,
-      gamesRaw: null
+      games: [{},{},{},{},{},{}]
     };
   },
   mounted() {
@@ -47,8 +46,8 @@ export default {
               .toDate(),
             broadcast: { network: "ESPN" },
             img: "https://clicker-demo.s3.amazonaws.com/sportscenter.png"
-          }
-          gamesResponse.splice(5, 0, sportscenter);
+          };
+          gamesResponse.splice(0, 0, sportscenter);
           this.games = gamesResponse;
           console.log(this.games);
           this.loading = false;

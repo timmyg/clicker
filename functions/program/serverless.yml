@@ -291,7 +291,7 @@ functions:
       # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
       # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
       # - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
-      - schedule: cron(01 11 * * ? *) # every day @ 6:01/7:01am eastern
+      - schedule: cron(58 10 * * ? *) # every day @ 5:58/6:58am eastern
       - http:
           path: sync
           method: post
@@ -312,7 +312,7 @@ functions:
     environment:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
     events:
-      - schedule: cron(02 11 * * ? *) # every day @ 6:02/7:02am eastern
+      - schedule: cron(59 10 * * ? *) # every day @ 5:59/6:59am eastern
       - http:
           path: sync/airtable
           method: post
@@ -398,14 +398,25 @@ functions:
       - http:
           path: '{locationId}/upcoming'
           method: get
-  clearDatabaseAirtable:
-    handler: program.clearDatabaseAirtable
-    description: clear out games and control center airtables, and programs database table
+  clearDatabase:
+    handler: program.clearDatabase
+    description: clear out programs database table
     runtime: nodejs12.x
     timeout: 120
     memorySize: 512
     events:
-      - schedule: cron(00 11 * * ? *) # every day @ 6:00/7:00am eastern
+      - schedule: cron(57 10 * * ? *) # every day @ 5:57/6:57am eastern
       - http:
-          path: clear
+          path: clear/database
+          method: post
+  clearAirtable:
+    handler: program.clearAirtable
+    description: clear out games and control center airtables
+    runtime: nodejs12.x
+    timeout: 120
+    memorySize: 512
+    events:
+      - schedule: cron(57 10 * * ? *) # every day @ 5:57/6:57am eastern
+      - http:
+          path: clear/airtable
           method: post
