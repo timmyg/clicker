@@ -1,17 +1,20 @@
 <template>
-  <div class="flex flex-wrap mb-4 justify-center">
-    <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 lg:w-1/6 mb-4">
-      <GameMini v-bind:game="game" />
+  <div class="container">
+    <div class="flex flex-wrap mb-4 justify-center">
+      <div v-for="game in games" v-bind:key="game.id" class="game w-1/2 lg:w-1/3 mb-4">
+        <GameMini v-bind:game="game" />
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import axios from "axios";
 import GameMini from "./GameMini";
+import * as moment from "moment";
 
-export default Vue.extend({
+export default {
   components: {
     GameMini
   },
@@ -19,7 +22,8 @@ export default Vue.extend({
     return {
       loading: false,
       error: null,
-      games: null
+      games: null,
+      gamesRaw: null
     };
   },
   mounted() {
@@ -36,12 +40,22 @@ export default Vue.extend({
       axios
         .get(`${process.env.NUXT_ENV_API_BASE}/games/scoreboard/upcoming`)
         .then(response => {
-          this.games = response.data;
+          const gamesResponse = response.data;
+          const sportscenter = {
+            start: moment()
+              .add(20, "s")
+              .toDate(),
+            broadcast: { network: "ESPN" },
+            img: "https://clicker-demo.s3.amazonaws.com/sportscenter.png"
+          }
+          gamesResponse.splice(5, 0, sportscenter);
+          this.games = gamesResponse;
+          console.log(this.games);
           this.loading = false;
         });
     }
   }
-});
+};
 </script>
 
 <style lang="scss" scoped>
