@@ -20,7 +20,7 @@ test('smoke test', () => {
 test('generateId generates the same id when same program', () => {
   const region1 = 'cincinnati';
   const program = {
-    channelId: 206,
+    channel: 206,
     start: moment().toDate(),
     programmingId: 'ep1',
   };
@@ -31,12 +31,12 @@ test('generateId generates the same id when same program', () => {
 
 test('generateId generates different ids when different times', () => {
   const program1 = {
-    channelId: 206,
+    channel: 206,
     start: 20000000,
     programmingId: 'ep1',
   };
   const program2 = {
-    channelId: 206,
+    channel: 206,
     start: 20000001,
     programmingId: 'ep1',
   };
@@ -47,12 +47,12 @@ test('generateId generates different ids when different times', () => {
 
 test('generateId generates different ids when different channels', () => {
   const program1 = {
-    channelId: 206,
+    channel: 206,
     start: 20000000,
     programmingId: 'ep1',
   };
   const program2 = {
-    channelId: 12,
+    channel: 12,
     start: 20000000,
     programmingId: 'ep1',
   };
@@ -71,7 +71,7 @@ test('build programs', () => {
   expect(response[0]).toHaveProperty('region');
   expect(response[0]).toHaveProperty('start');
   expect(response[0]).toHaveProperty('end');
-  expect(response.length).toBe(210);
+  expect(response.length).toBe(190);
 });
 
 test('convert local channel names', () => {
