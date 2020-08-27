@@ -44,7 +44,7 @@ def getPrograms(event, context):
     while (exception):
         randomString = str(random.randint(100000000000, 999999999999))
         print(randomString)
-        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.' + \
+        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone_datacenter-country-us-session-0.' + \
             randomString + ':1gjgp252qy4b@165.227.199.200:22225'
         proxies = {'http': proxy_raw, 'https': proxy_raw}
 
@@ -105,7 +105,7 @@ def getProgramDetail(event, context):
     while (exception):
 
         randomString = str(random.randint(100000000000, 999999999999))
-        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone-country-us-session-0.' + \
+        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone_datacenter-country-us-session-0.' + \
             randomString + ':1gjgp252qy4b@165.227.199.200:22225'
         proxies = {'http': proxy_raw, 'https': proxy_raw}
 
