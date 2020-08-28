@@ -44,11 +44,11 @@ def getPrograms(event, context):
     while (exception):
         randomString = str(random.randint(100000000000, 999999999999))
         print(randomString)
-        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone_datacenter-country-us-session-0.' + \
-            randomString + ':1gjgp252qy4b@165.227.199.200:22225'
+        proxy_raw = 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225'
         proxies = {'http': proxy_raw, 'https': proxy_raw}
 
         print('calling...')
+        print(proxy_raw)
 
         s = requests.Session()
         retries = Retry(total=5, backoff_factor=1,
@@ -63,9 +63,10 @@ def getPrograms(event, context):
                              proxies=proxies,
                              timeout=3
                              )
-            print('response code:', response.status_code)
+            print('response code :', response.status_code)
             print('response item length:', len(response.json().get('schedule')))
             print('response:', json.dumps(response.json()))
+            exception = False;
             
             return {
                 'statusCode': 200,
@@ -105,8 +106,7 @@ def getProgramDetail(event, context):
     while (exception):
 
         randomString = str(random.randint(100000000000, 999999999999))
-        proxy_raw = 'http://lum-customer-greatviewseats-zone-tim_zone_datacenter-country-us-session-0.' + \
-            randomString + ':1gjgp252qy4b@165.227.199.200:22225'
+        proxy_raw = 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225'
         proxies = {'http': proxy_raw, 'https': proxy_raw}
 
         print('calling...')
