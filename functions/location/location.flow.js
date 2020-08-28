@@ -754,8 +754,8 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   })`;
   await new Invoke()
     .service('notification')
-    .name('sendAntenna')
-    .body({ text })
+    .name('sendTasks')
+    .body({ text, importance: 1 })
     .async()
     .go();
 
@@ -780,8 +780,8 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   })`;
   await new Invoke()
     .service('notification')
-    .name('sendAntenna')
-    .body({ text })
+    .name('sendTasks')
+    .body({ text, importance: 1 })
     .async()
     .go();
 
@@ -1317,13 +1317,13 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
       .body({ losantId })
       .async()
       .go();
-    const text = `Boxes Synced @ ${location.name} (${location.neighborhood})`;
-    await new Invoke()
-      .service('notification')
-      .name('sendAntenna')
-      .body({ text })
-      .async()
-      .go();
+    // const text = `Boxes Synced @ ${location.name} (${location.neighborhood})`;
+    // await new Invoke()
+    //   .service('notification')
+    //   .name('sendAntenna')
+    //   .body({ text })
+    //   .async()
+    //   .go();
   }
   return respond(200);
 });
