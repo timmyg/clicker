@@ -882,13 +882,14 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
   const body: BoxInfoRequest = getBody(event);
   const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingId } = body;
 
+  console.log({ body });
   console.time('get location');
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(locationId)
     .exec();
   console.timeEnd('get location');
-  console.log(location.name);
+  // console.log(location.name);
 
   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
   console.log({ boxId, boxIndex });
