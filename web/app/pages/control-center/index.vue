@@ -8,6 +8,7 @@
       />-->
       <Features />
       <FeaturesCards />
+      <ScoreboardMini />
       <Buy />
       <TilesProducts :skip="'control-center'" />
     </section>
@@ -22,6 +23,7 @@ import FeaturesCards from "@/components/landing/control-center/FeaturesCards";
 import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 import Buy from "@/components/landing/Buy";
+import ScoreboardMini from "@/components/ScoreboardMini";
 
 export default {
   name: "control-center",
@@ -32,7 +34,8 @@ export default {
     Features,
     FeaturesCards,
     TilesProducts,
-    LayoutBasic
+    LayoutBasic,
+    ScoreboardMini
   },
   head() {
     return {

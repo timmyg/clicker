@@ -18,10 +18,7 @@
       >
         <c-section-header :data="sectionHeader" class="center-content" />
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
-          <div
-            v-if="skip !== 'manager'"
-            class="tiles-item reveal-from-bottom center-content"
-          >
+          <div v-if="skip !== 'manager'" class="tiles-item reveal-from-bottom center-content">
             <div class="tiles-item-inner">
               <div class="features-tiles-item-content">
                 <h4 class="mt-0 mb-8 header">
@@ -36,11 +33,9 @@
                   </span>
                 </h4>
                 <p class="m-0 text-sm">
-                  Give your staff the tool they need to field guest channel
-                  requests easily and quickly. <br />
-                  <nuxt-link to="/clicker-tv/staff" class="text-sm"
-                    >Learn More →</nuxt-link
-                  >
+                  Provide your staff an contactless app to change channels quickly.
+                  <br />
+                  <nuxt-link to="/clicker-tv/staff" class="text-sm">Learn More →</nuxt-link>
                 </p>
               </div>
             </div>
@@ -66,10 +61,9 @@
                 </h4>
                 <p class="m-0 text-sm">
                   Give your guests an unforgettable experience by giving them
-                  control of a TV, just like their living room.<br />
-                  <nuxt-link to="/clicker-tv/guests" class="text-sm"
-                    >Learn More →</nuxt-link
-                  >
+                  control of a TV, just like their living room.
+                  <br />
+                  <nuxt-link to="/clicker-tv/guests" class="text-sm">Learn More →</nuxt-link>
                 </p>
               </div>
             </div>
@@ -95,10 +89,9 @@
                 </h4>
                 <p class="m-0 text-sm">
                   We'll manage TVs automatically throughout the day remotely -
-                  tailored for your venue's concept. <br />
-                  <nuxt-link to="/control-center" class="text-sm"
-                    >Learn More →</nuxt-link
-                  >
+                  tailored for your venue's concept.
+                  <br />
+                  <nuxt-link to="/control-center" class="text-sm">Learn More →</nuxt-link>
                 </p>
               </div>
             </div>

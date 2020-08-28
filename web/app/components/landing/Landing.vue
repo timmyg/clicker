@@ -3,7 +3,6 @@
     <div class="site-content">
       <Hero />
       <Announcements />
-      <ScoreboardMini />
       <Products id="products" />
       <Pricing pricingSlider />
       <Testimonials />
@@ -22,7 +21,6 @@ import Signup from "@/components/landing/Signup";
 import Testimonials from "@/components/landing/Testimonials";
 import Products from "@/components/landing/Products";
 import Blogs from "@/components/landing/Blogs";
-import ScoreboardMini from "@/components/ScoreboardMini";
 
 export default {
   components: {
@@ -34,7 +32,6 @@ export default {
     Signup,
     Testimonials,
     Blogs,
-    ScoreboardMini
   },
   props: ["posts"]
 };

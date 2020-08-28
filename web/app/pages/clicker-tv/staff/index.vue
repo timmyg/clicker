@@ -2,11 +2,8 @@
   <layout-basic>
     <Header></Header>
     <section class="main">
-      <c-section-header
-        :data="sectionHeader"
-        class="center-content reveal-from-bottom brand-font"
-      />
-      <Features />
+      <c-section-header :data="sectionHeader" class="center-content reveal-from-bottom brand-font" />
+      <!-- <Features /> -->
       <FeaturesCards />
       <Buy />
       <TilesProducts :skip="'manager'" />
@@ -49,7 +46,7 @@ export default {
       sectionHeader: {
         title: "Clicker TV for Staff",
         paragraph:
-          "Eliminate the stress of tracking down remotes to change one box while not interfering with others. Allow your staff to change TVs to sports programs right from their own smartphone."
+          "Limit the spread of Covid-19 amongst your staff. Shared remotes and tables are common touchpoints - eliminate them and let your staff use their own phones."
       }
     };
   }
