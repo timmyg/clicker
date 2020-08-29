@@ -17,14 +17,16 @@
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >Eliminate Touch Points</h4>
+                >Streamline Channel Changes</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
-                  With employees using their own smartphones to change the
-                  channels, we limit the amount of touches to a common remote.
+                  Allow staff to change channel on the spot with our
+                  <a
+                    href="https://apps.apple.com/us/app/clicker-tv/id1471666907"
+                  >app</a>.
                 </p>
               </div>
             </div>

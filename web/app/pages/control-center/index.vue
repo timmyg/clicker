@@ -2,10 +2,7 @@
   <layout-basic>
     <Header></Header>
     <section class="main">
-      <!-- <c-section-header
-        :data="sectionHeader"
-        class="center-content reveal-from-bottom brand-font"
-      />-->
+      <c-section-header :data="sectionHeader" class="center-content reveal-from-bottom brand-font" />
       <Features />
       <FeaturesCards />
       <ScoreboardMini />

@@ -11,7 +11,7 @@
             v-scroll-reveal="{ delay: 200, origin: 'left' }"
           >
             <div class="split-item-content center-content-mobile">
-              <h3 class="mt-0 mb-16">☁️ Contactless Remote Control</h3>
+              <h3 class="mt-0 mb-16">📱 Contactless Remote Control</h3>
               <p class="m-0">
                 <b class="brand-font">Clicker TV for Staff</b> reduces the spread of germs through the elimination of a shared remote.
                 <br />

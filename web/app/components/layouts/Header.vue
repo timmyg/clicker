@@ -20,9 +20,12 @@
             <div
               class="subtitle brand-font"
               v-scroll-reveal.reset="{ origin: 'right', delay: 500 }"
-            >{{ subtitle }}</div>
+            >
+              {{ subtitle }}
+            </div>
           </a>
         </div>
+        <div><!-- Test --></div>
       </div>
     </div>
   </header>
@@ -35,7 +38,7 @@ export default {
     currentRouteName() {
       return this.$route.name;
     }
-  },
+  }
 };
 </script>
 

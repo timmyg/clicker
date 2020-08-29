@@ -13,7 +13,7 @@
               </h2>
               <p
                 class="m-0 mb-24"
-              >Clicker is a sports-centric DIRECTV add-on that drives improved ROI from TV and sports packages.</p>
+              >Clicker is a sports-centric DIRECTV add-on that drives improved ROI from your existing TV and sports packages.</p>
               <div>
                 <SignupForm />
               </div>
@@ -58,7 +58,7 @@ export default {
 @media (min-width: 820px) {
   .container .split-wrap .split-item {
     .split-item-content {
-      width: 598px;
+      width: 528px;
     }
   }
 }

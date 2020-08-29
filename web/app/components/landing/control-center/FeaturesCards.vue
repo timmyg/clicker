@@ -7,6 +7,32 @@
             <div class="tiles-item-inner">
               <div class="features-tiles-item-header">
                 <div
+                  class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
+                  data-reveal-container=".tiles-item"
+                >
+                  <img src="/images/landing/feature-tile-icon-05.svg" alt="Feature tile icon 02" />
+                </div>
+              </div>
+              <div class="features-tiles-item-content">
+                <h4
+                  class="mt-0 mb-8 reveal-from-bottom"
+                  data-reveal-container=".tiles-item"
+                >Minimize Manual Changes</h4>
+                <p
+                  class="m-0 text-sm reveal-from-bottom"
+                  data-reveal-container=".tiles-item"
+                  data-reveal-delay="150"
+                >
+                  Proven to reduce employee changes by 70% allowing staff to
+                  sell more food and beverage.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="tiles-item">
+            <div class="tiles-item-inner">
+              <div class="features-tiles-item-header">
+                <div
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
@@ -26,32 +52,6 @@
                   Ensures the right national and local games are always covered
                   on TVs. Adapts to the thematic of your location to know if you
                   are a Notre Dame bar in California.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="tiles-item">
-            <div class="tiles-item-inner">
-              <div class="features-tiles-item-header">
-                <div
-                  class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
-                  data-reveal-container=".tiles-item"
-                >
-                  <img src="/images/landing/feature-tile-icon-05.svg" alt="Feature tile icon 02" />
-                </div>
-              </div>
-              <div class="features-tiles-item-content">
-                <h4
-                  class="mt-0 mb-8 reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                >Minimize Manual Changes</h4>
-                <p
-                  class="m-0 text-sm reveal-from-bottom"
-                  data-reveal-container=".tiles-item"
-                  data-reveal-delay="150"
-                >
-                  Proven to reduce employee changes by 70% allowing staff to
-                  sell more food and beverage.
                 </p>
               </div>
             </div>

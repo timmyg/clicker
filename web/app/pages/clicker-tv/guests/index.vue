@@ -2,10 +2,7 @@
   <layout-basic>
     <Header></Header>
     <section class="main">
-      <c-section-header
-        :data="sectionHeader"
-        class="center-content reveal-from-bottom brand-font"
-      />
+      <c-section-header :data="sectionHeader" class="center-content reveal-from-bottom brand-font" />
       <Features />
       <FeaturesCards />
       <Buy />
@@ -49,7 +46,7 @@ export default {
       sectionHeader: {
         title: "Clicker TV for Guests",
         paragraph:
-          "The ultimate personalized VIP guest experience. Enable your guests to control a TV themselves from their own smartphone. This guest is a sports enthusiast that will stay longer and keep coming back knowing they can always watch their games."
+          "Breakthrough app giving guests remote control access to your TVs and sports packages. This ultimate vip experience drives increased traffic andn repeat visits."
       }
     };
   }
