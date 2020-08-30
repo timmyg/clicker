@@ -20,24 +20,22 @@
             <div
               class="subtitle brand-font"
               v-scroll-reveal.reset="{ origin: 'right', delay: 500 }"
-            >
-              {{ subtitle }}
-            </div>
+            >{{ subtitle }}</div>
           </a>
         </div>
-        <div><!-- Test --></div>
+        <div>
+          <Dropdown />
+        </div>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import Dropdown from "../landing/Dropdown";
 export default {
-  props: ["subtitle", "link"],
-  computed: {
-    currentRouteName() {
-      return this.$route.name;
-    }
+  components: {
+    Dropdown
   }
 };
 </script>
