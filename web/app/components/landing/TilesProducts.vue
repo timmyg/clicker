@@ -35,7 +35,7 @@
                 <p class="m-0 text-sm">
                   <!-- Contactless remote to change channels quickly.
                   <br />-->
-                  <nuxt-link to="/clicker-tv/staff" class="text-sm">Learn More →</nuxt-link>
+                  <nuxt-link to="/products/clicker-tv/staff" class="text-sm">Learn More →</nuxt-link>
                 </p>
               </div>
             </div>
@@ -63,7 +63,7 @@
                   <!-- Give your guests an unforgettable experience by giving them
                   control of a TV, just like their living room.
                   <br />-->
-                  <nuxt-link to="/clicker-tv/guests" class="text-sm">Learn More →</nuxt-link>
+                  <nuxt-link to="/products/clicker-tv/guests" class="text-sm">Learn More →</nuxt-link>
                 </p>
               </div>
             </div>
@@ -91,7 +91,7 @@
                   <!-- We'll manage TVs automatically throughout the day remotely -
                   tailored for your venue's concept.
                   <br />-->
-                  <nuxt-link to="/control-center" class="text-sm">Learn More →</nuxt-link>
+                  <nuxt-link to="/products/control-center" class="text-sm">Learn More →</nuxt-link>
                 </p>
               </div>
             </div>

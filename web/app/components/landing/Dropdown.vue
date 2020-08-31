@@ -47,15 +47,15 @@ export default {
           name: "Products",
           children: [
             {
-              url: "/clicker-tv/staff",
+              url: "/products/clicker-tv/staff",
               name: "Clicker TV for Staff",
             },
             {
-              url: "/clicker-tv/guests",
+              url: "/products/clicker-tv/guests",
               name: "Clicker TV for Guests",
             },
             {
-              url: "/control-center",
+              url: "/products/control-center",
               name: "Control Center",
             }
           ]
@@ -98,16 +98,15 @@ ul {
     position: relative;
     margin: 0.25em;
     text-align: center;
-
     a {
       display: block;
-      padding: 0.55em 1em;
+      padding: 1em 0;
       text-decoration: none;
       color: $primary;
       text-align: left;
 
       &:hover {
-        font-weight: bold;
+        // font-weight: bold;
         cursor: pointer;
       }
     }
@@ -116,6 +115,7 @@ ul {
   &#navigation {
     @include flex($ai: flex-start);
     // margin-top: 16px;
+    padding-top: 10px;
   }
 }
 
@@ -130,12 +130,16 @@ ul {
   visibility: hidden;
   opacity: 0;
   transition: all 200ms linear;
-  width: 240px;
+  width: 220px;
   left: 0px;
   background: white;
   border: 1px solid $primary;
   font-size: 18px;
   text-align: left;
+
+  li {
+    padding: 0 0.6em;
+  }
 
   &.isOpen {
     transform: translatex(-50%);

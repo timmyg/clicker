@@ -167,14 +167,14 @@
                     </li>
                     <li class="is-checked">
                       <span>
-                        <a href="/control-center">Control Center</a> automated
+                        <a href="/products/control-center">Control Center</a> automated
                         channel changes
                       </span>
                     </li>
                     <li class="is-checked">Onboarding conversation to learn your venue's preferences</li>
                     <li class="is-checked">
                       <span>
-                        <a href="/clicker-tv/guests">Clicker TV for Guests</a>
+                        <a href="/products/clicker-tv/guests">Clicker TV for Guests</a>
                         to enable fans to change channels
                       </span>
                     </li>

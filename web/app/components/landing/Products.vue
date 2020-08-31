@@ -15,7 +15,7 @@
               <p class="m-0">
                 <b class="brand-font">Clicker TV for Staff</b> reduces the spread of germs through the elimination of a shared remote.
                 <br />
-                <nuxt-link to="/clicker-tv/staff">
+                <nuxt-link to="/products/clicker-tv/staff">
                   Learn more about
                   <span class="brand-font">Clicker TV for Staff</span> →
                 </nuxt-link>
@@ -36,7 +36,7 @@
                 change channels from an app, giving them an unforgettable
                 experience.
                 <br />
-                <nuxt-link to="/clicker-tv/guests">
+                <nuxt-link to="/products/clicker-tv/guests">
                   Learn more about
                   <span class="brand-font">Clicker TV for Guests</span> →
                 </nuxt-link>
@@ -56,7 +56,7 @@
                 <b class="brand-font">Control Center</b> manages all your TVs behind the scenes, so
                 your staff can focus on the guest experience.
                 <br />
-                <nuxt-link to="/control-center">
+                <nuxt-link to="/products/control-center">
                   Learn more about
                   <span class="brand-font">Control Center</span> →
                 </nuxt-link>
