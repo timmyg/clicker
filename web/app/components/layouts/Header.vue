@@ -34,6 +34,7 @@
 <script>
 import Dropdown from "../landing/Dropdown";
 export default {
+  props: ['link', 'subtitle'],
   components: {
     Dropdown
   }
@@ -47,10 +48,13 @@ header {
     text-align: center;
     color: black;
     font-size: 16px;
+    position: absolute;
+    left: 50%;
   }
   a {
     text-decoration: none !important;
     display: block !important;
+    position: relative;
   }
 }
 </style>
