@@ -90,6 +90,11 @@ module.exports = {
         rel: "icon",
         type: "image/x-icon",
         href: "https://clicker-brand.s3.amazonaws.com/favicon.ico"
+      },
+      {
+        rel: "stylesheet",
+        href:
+          "https://fonts.googleapis.com/css?family=Roboto|Saira&display=swap"
       }
     ]
   },
