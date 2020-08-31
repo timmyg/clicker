@@ -467,6 +467,8 @@ module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
+  const gamesCount = 5;
+
   const inProgressGamesPromise: Game[] = dbGame
     .query('status')
     .eq('inprogress')
@@ -477,17 +479,27 @@ module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async 
     .eq('scheduled')
     .exec();
 
+  console.time('games');
   let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
+  console.timeEnd('games');
 
-  inProgressGames = inProgressGames.filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'));
-  upcomingGames = upcomingGames.filter(g => moment(g.start) < moment() && moment(g.start) < moment().add(1, 'd'));
+  inProgressGames = inProgressGames
+    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+    .filter(g => !!g.broadcast)
+    .sort((a, b) => a.start.localeCompare(b.start));
+  upcomingGames = upcomingGames
+    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+    .filter(g => !!g.broadcast)
+    .sort((a, b) => a.start.localeCompare(b.start));
 
   let games = upcomingGames;
+
   if (inProgressGames && inProgressGames[0]) {
     games = [inProgressGames[0], ...games];
   }
 
-  const gamesCount = 3;
   games = games.slice(0, gamesCount);
   return respond(200, games);
 });

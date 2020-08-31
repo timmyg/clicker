@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "nuxt --port 4040",
-    "build": "nuxt build && nuxt export",
+    "build": "nuxt generate",
     "start:prod": "npm run build && nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",

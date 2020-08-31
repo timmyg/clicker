@@ -10,26 +10,21 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/landing/feature-tile-icon-02.svg"
-                    alt="Feature tile icon 01"
-                  />
+                  <img src="/images/landing/feature-tile-icon-02.svg" alt="Feature tile icon 01" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Designate the TVs
-                </h4>
+                >Designate the TVs</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
                   data-reveal-delay="150"
                 >
                   You pick the areas and/or specific TVs that are enabled for
-                  guest control via the Clicker TV app.
+                  guest control via the contactless Clicker TV app.
                 </p>
               </div>
             </div>
@@ -41,19 +36,14 @@
                   class="features-tiles-item-image secondary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/landing/feature-tile-icon-05.svg"
-                    alt="Feature tile icon 02"
-                  />
+                  <img src="/images/landing/feature-tile-icon-05.svg" alt="Feature tile icon 02" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Limit the Control
-                </h4>
+                >Limit the Control</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"
@@ -61,9 +51,9 @@
                 >
                   How your guests use it is dictated by you. Either enable
                   guests to buy and redeem tokens for use, or give your VIPs a
-                  <a href="/blog/give-your-vip-customers-the-remote"
-                    >personalized passcode.</a
-                  >
+                  <a
+                    href="/blog/give-your-vip-customers-the-remote"
+                  >personalized passcode.</a>
                 </p>
               </div>
             </div>
@@ -75,19 +65,14 @@
                   class="features-tiles-item-image tertiary-color mb-16 reveal-scale-up"
                   data-reveal-container=".tiles-item"
                 >
-                  <img
-                    src="/images/theme/feature-tile-icon-04.svg"
-                    alt="Feature tile icon 03"
-                  />
+                  <img src="/images/theme/feature-tile-icon-04.svg" alt="Feature tile icon 03" />
                 </div>
               </div>
               <div class="features-tiles-item-content">
                 <h4
                   class="mt-0 mb-8 reveal-from-bottom"
                   data-reveal-container=".tiles-item"
-                >
-                  Living Room Experience
-                </h4>
+                >Living Room Experience</h4>
                 <p
                   class="m-0 text-sm reveal-from-bottom"
                   data-reveal-container=".tiles-item"

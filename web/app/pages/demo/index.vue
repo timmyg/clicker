@@ -3,7 +3,9 @@
   <!-- <Header v-bind:subtitle="'Demo'" v-bind:link="'/blog'"></Header> -->
   <main>
     <div class="container">
-      <div class="sign"><img src="/images/demo/sign.png" /></div>
+      <div class="sign">
+        <img src="/images/demo/sign.png" />
+      </div>
       <div class="flex flex-wrap mb-4">
         <DemoTV
           v-for="tv in tvs"
@@ -16,12 +18,7 @@
       </div>
     </div>
     <div class="hidden">
-      <link
-        v-for="program in allPrograms"
-        :key="program.link"
-        :href="program.link"
-        rel="preload"
-      />
+      <link v-for="program in allPrograms" :key="program.link" :href="program.link" rel="preload" />
     </div>
   </main>
 </template>
@@ -29,7 +26,7 @@
 <script>
 import firebase from "firebase/app";
 import "firebase/database";
-const zapsRefName = `zaps-${process.env.NUXT_ENV_STAGE}`;
+const zapsRefName = `zaps-demo-${process.env.NUXT_ENV_STAGE}`;
 import DemoTV from "@/components/DemoTV";
 
 export default {

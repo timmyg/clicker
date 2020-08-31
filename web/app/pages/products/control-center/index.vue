@@ -2,12 +2,10 @@
   <layout-basic>
     <Header></Header>
     <section class="main">
-      <c-section-header
-        :data="sectionHeader"
-        class="center-content reveal-from-bottom brand-font"
-      />
+      <c-section-header :data="sectionHeader" class="center-content reveal-from-bottom brand-font" />
       <Features />
       <FeaturesCards />
+      <ScoreboardMini />
       <Buy />
       <TilesProducts :skip="'control-center'" />
     </section>
@@ -22,6 +20,7 @@ import FeaturesCards from "@/components/landing/control-center/FeaturesCards";
 import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 import Buy from "@/components/landing/Buy";
+import ScoreboardMini from "@/components/ScoreboardMini";
 
 export default {
   name: "control-center",
@@ -32,17 +31,20 @@ export default {
     Features,
     FeaturesCards,
     TilesProducts,
-    LayoutBasic
+    LayoutBasic,
+    ScoreboardMini
   },
-  head: {
-    title: "Clicker Products: " + this.title,
-    meta: [
-      {
-        hid: this.title,
-        name: "description",
-        content: this.sectionHeader.paragraph
-      }
-    ]
+  head() {
+    return {
+      title: "Clicker Products: " + this.sectionHeader.title,
+      meta: [
+        {
+          hid: "2435345",
+          name: "description",
+          content: this.sectionHeader.paragraph
+        }
+      ]
+    }
   },
   data() {
     return {

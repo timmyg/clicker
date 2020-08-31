@@ -21,7 +21,6 @@ test('generateId generates the same id when same program', () => {
   const region1 = 'cincinnati';
   const program = {
     channel: 206,
-    channelId: 5453,
     start: moment().toDate(),
     programmingId: 'ep1',
   };
@@ -33,13 +32,11 @@ test('generateId generates the same id when same program', () => {
 test('generateId generates different ids when different times', () => {
   const program1 = {
     channel: 206,
-    channelId: 5453,
     start: 20000000,
     programmingId: 'ep1',
   };
   const program2 = {
     channel: 206,
-    channelId: 5453,
     start: 20000001,
     programmingId: 'ep1',
   };
@@ -51,13 +48,11 @@ test('generateId generates different ids when different times', () => {
 test('generateId generates different ids when different channels', () => {
   const program1 = {
     channel: 206,
-    channelId: 5453,
     start: 20000000,
     programmingId: 'ep1',
   };
   const program2 = {
     channel: 12,
-    channelId: 5453,
     start: 20000000,
     programmingId: 'ep1',
   };
@@ -137,6 +132,14 @@ describe('getProgramTiebreaker', () => {
     const result = getProgramListTiebreaker([programFS1, programFSN]);
     expect(result[0].channel).toEqual(programFSN.channel);
   });
+  // test('choose program in progress over program out of time slot', () => { // fixed with query
+  //   programFS1.start = moment.subtract(40, 'm').unix();
+  //   programFS1.end = moment.add(20, 'm').unix();
+  //   programFSN.start = moment.subtract(2, 'h').unix();
+  //   programFSN.end = moment.subtract(1, 'h').unix();
+  //   const result = getProgramListTiebreaker([programFS1, programFSN]);
+  //   expect(result[0].channel).toEqual(programFS1.channel);
+  // });
   test('removes duplicates by programmingId', () => {
     const otherProgram = programLocal;
     otherProgram.programmingId = 'EP888';

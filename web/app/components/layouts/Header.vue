@@ -23,19 +23,21 @@
             >{{ subtitle }}</div>
           </a>
         </div>
+        <div>
+          <Dropdown />
+        </div>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import Dropdown from "../landing/Dropdown";
 export default {
-  props: ["subtitle", "link"],
-  computed: {
-    currentRouteName() {
-      return this.$route.name;
-    }
-  },
+  props: ['link', 'subtitle'],
+  components: {
+    Dropdown
+  }
 };
 </script>
 
@@ -46,10 +48,13 @@ header {
     text-align: center;
     color: black;
     font-size: 16px;
+    position: absolute;
+    left: 50%;
   }
   a {
     text-decoration: none !important;
     display: block !important;
+    position: relative;
   }
 }
 </style>

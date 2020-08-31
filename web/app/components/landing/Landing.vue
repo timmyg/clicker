@@ -31,7 +31,7 @@ export default {
     Pricing,
     Signup,
     Testimonials,
-    Blogs
+    Blogs,
   },
   props: ["posts"]
 };

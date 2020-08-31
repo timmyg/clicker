@@ -1,7 +1,9 @@
 <template>
   <div class="body-wrap">
     <div class="basic-layout">
-      <section><slot /></section>
+      <section>
+        <slot />
+      </section>
       <Footer />
     </div>
   </div>
@@ -29,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css?family=Roboto|Saira");
+// @import url("https://fonts.googleapis.com/css?family=Roboto|Saira");
 
 * {
   font-family: "Roboto", sans-serif;

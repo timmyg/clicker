@@ -45,9 +45,9 @@ const allRegions: region[] = [
     defaultZip: '45202',
     localChannels: [5, 9, 12, 19, 661, 660],
   },
-  { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
-  { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
-  { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
+  // { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
+  // { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
+  // { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
   { id: 'cripple-creek-co', name: 'Cripple Creek', defaultZip: '80813', localChannels: [5, 11, 13, 21] },
 ];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
@@ -318,7 +318,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     programs.forEach(p => {
       // $FlowFixMe
       delete p.subcategories;
-      // $FlowFixMe
+      // $FloplwFixMe
       delete p.channelCategories;
       p.startFromNow = moment(p.start).fromNow();
       p.endFromNow = moment(p.end).fromNow();
@@ -359,12 +359,19 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     const chosenPrograms = programs.length > 1 ? getProgramListTiebreaker(programs) : programs;
     return respond(200, chosenPrograms[0]);
   } else if (programmingIds) {
+    const now = moment().unix() * 1000;
     const programs: Program[] = await dbProgram
       .query('region')
       .eq(region)
       .and()
       .filter('programmingId')
       .in(programmingIds)
+      .and()
+      .filter('start')
+      .lt(now)
+      .and()
+      .filter('end')
+      .gt(now)
       .exec();
     const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     console.log('querying for', region, { programmingIds });

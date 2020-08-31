@@ -11,8 +11,7 @@
         :key="tag"
         :to="{ name: 'tags-tag', params: { tag: tag } }"
         class="text-sm text-gray-500"
-        >{{ tag }}</span
-      >
+      >{{ tag }}</span>
     </div>
     <img
       v-if="post.fields.featuredImage"
@@ -23,10 +22,7 @@
       "
     />
     <div class="xl:px-16">
-      <div
-        v-html="$md.render(post.fields.content)"
-        class="leading-relaxed"
-      ></div>
+      <div v-html="$md.render(post.fields.content)" class="leading-relaxed"></div>
     </div>
     <hr />
     <Signup />
@@ -65,7 +61,7 @@ export default {
   },
   methods: {
     getTags() {
-      console.log(this.post);
+      // console.log(this.post);
       return this.post.fields.tags
         .split(",")
         .map(tag => tag.toLowerCase().trim());

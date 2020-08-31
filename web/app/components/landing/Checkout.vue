@@ -42,7 +42,7 @@ export default {
     async checkout() {
       this.generating = true;
       const stripe = await stripePromise;
-      console.log("priceId", this.priceId, $nuxt.$route);
+      // console.log("priceId", this.priceId, $nuxt.$route);
       this.$http
         .post(`${process.env.NUXT_ENV_API_BASE}/users/checkout`, {
           priceId: this.priceId

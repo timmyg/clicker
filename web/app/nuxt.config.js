@@ -22,7 +22,7 @@ let dynamicRoutes = () => {
 };
 module.exports = {
   // mode: "spa",
-  mode: "universal",
+  // mode: "universal",
   target: "static",
 
   generate: {
@@ -78,6 +78,10 @@ module.exports = {
       },
       {
         property: "og:image",
+        content: `http://clicker-brand.s3.amazonaws.com/logo-bg.png`
+      },
+      {
+        property: "og:image:secure",
         content: `https://clicker-brand.s3.amazonaws.com/logo-bg.png`
       }
     ],
@@ -86,6 +90,11 @@ module.exports = {
         rel: "icon",
         type: "image/x-icon",
         href: "https://clicker-brand.s3.amazonaws.com/favicon.ico"
+      },
+      {
+        rel: "stylesheet",
+        href:
+          "https://fonts.googleapis.com/css?family=Roboto|Saira&display=swap"
       }
     ]
   },

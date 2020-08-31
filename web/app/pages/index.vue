@@ -1,5 +1,7 @@
 <template>
-  <div id="app"><Landing :posts="allPosts" /></div>
+  <div id="app">
+    <Landing :posts="allPosts" />
+  </div>
 </template>
 
 <script>
@@ -17,11 +19,30 @@ export default {
   head: {
     title: "Clicker: Sports Programming Reimagined",
     meta: [
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        hid: "home",
+        hid: "description",
         name: "description",
         content:
           "TV sports programming platform and app ensuring the best, most relevant games are on at all times"
+      },
+      { name: "fragment", content: "!" },
+      {
+        property: "og:title",
+        content: `Clicker: Sports Programming Reimagined`
+      },
+      {
+        property: "og:description",
+        content: `TV sports programming platform and app ensuring the best, most relevant games are on at all times`
+      },
+      {
+        property: "og:image",
+        content: `http://clicker-brand.s3.amazonaws.com/logo-bg.png`
+      },
+      {
+        property: "og:image:secure",
+        content: `https://clicker-brand.s3.amazonaws.com/logo-bg.png`
       }
     ]
   },
