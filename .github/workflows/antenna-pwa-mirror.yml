@@ -16,5 +16,5 @@ jobs:
           REPO: git@github.com:teamclicker/clicker-antenna-pwa-mirror.git
           BRANCH: ${GITHUB_REF##*/}
           FOLDER: web/antenna-pwa
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY_APP }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY_PWA }}
           MESSAGE: "{msg} [{sha}]"
