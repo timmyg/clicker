@@ -1325,6 +1325,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
     //   .body({ text })
     //   .async()
     //   .go();
+    
   }
   return respond(200);
 });
