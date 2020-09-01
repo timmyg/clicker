@@ -94,7 +94,7 @@ module.exports = {
       {
         rel: "stylesheet",
         href:
-          "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Saira:wght@400;600&display=swap"
+          "https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Saira:wght@400;600&display=swap"
       }
     ]
   },
