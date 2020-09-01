@@ -1,8 +1,8 @@
-name: mirror mobile/app
+name: mirror web/antenna-pwa
 on:
   push:
     paths:
-      - "mobile/app/**"
+      - "web/antenna-pwa/**"
 
 jobs:
   mirror:
@@ -13,8 +13,8 @@ jobs:
       - name: mirror deploy
         uses: s0/git-publish-subdir-action@develop
         env:
-          REPO: git@github.com:teamclicker/clicker-app-mirror.git
+          REPO: git@github.com:teamclicker/clicker-antenna-pwa-mirror.git
           BRANCH: ${GITHUB_REF##*/}
-          FOLDER: mobile/app
+          FOLDER: web/antenna-pwa
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY_APP }}
           MESSAGE: "{msg} [{sha}]"
