@@ -1,4 +1,4 @@
-const DirecTV = require("directv-remote");
+const DirecTV = require("@timclicker/directv-remote");
 const async = require("async");
 const { Device } = require("losant-mqtt");
 const logger = require("./logger");

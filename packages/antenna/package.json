@@ -8,8 +8,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@timclicker/directv-remote": "^0.1.0",
     "axios": "^0.18.0",
-    "directv-remote": "git+https://github.com/timmyg/directv-remote.git#v0.1.0",
     "dotenv": "^6.1.0",
     "iotdb-arp": "0.0.6",
     "losant-mqtt": "^3.1.0",
