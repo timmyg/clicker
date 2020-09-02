@@ -206,10 +206,11 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('remote command');
   const command = 'tune';
   const source = zapTypes.app;
+  const { losantProductionOverride } = reservation.location;
   await new Invoke()
     .service('remote')
     .name('command')
-    .body({ reservation, command, source, losantProductionOverride: reservation.location.losantProductionOverride })
+    .body({ reservation, command, source, losantProductionOverride })
     .headers(event.headers)
     .async()
     .go();
