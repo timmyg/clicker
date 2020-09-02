@@ -12,16 +12,19 @@
                 <span class="reversed">Guaranteed.</span>
               </h2>
               <p class="m-0 mb-24">
-                <span class="brand-font">Clicker</span> is a sports-centric DIRECTV add-on that drives improved ROI from your existing TV and sports packages.
+                <span class="brand-font">Clicker</span> is a sports-centric
+                DIRECTV add-on that drives improved ROI from your existing TV
+                and sports packages.
               </p>
-              <div>
-                <SignupForm />
-              </div>
+              <div><SignupForm /></div>
             </div>
             <div
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
             >
-              <img src="/images/landing/hero/watch-sports.jpg" alt="Crowded bar with tvs" />
+              <img
+                src="/images/landing/hero/fans-bar.jpg"
+                alt="Crowded bar with tvs"
+              />
             </div>
           </div>
         </div>

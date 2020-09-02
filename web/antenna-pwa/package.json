@@ -1,0 +1,14 @@
+{
+  "name": "antenna-pwa",
+  "version": "0.1.0",
+  "description": "Cliener client PWA",
+  "main": "sw.js",
+  "scripts": {
+    "start": "http-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  }
+}

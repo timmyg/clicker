@@ -1,36 +1,38 @@
-console.log("load")
+console.log("load");
 // we'll version our cache (and learn how to delete caches in
 // some other post)
-const cacheName = 'v1::static';
+const cacheName = "v1::static";
 
-self.addEventListener('install', e => {
+self.addEventListener("install", (e) => {
   // once the SW is installed, go ahead and fetch the resources
   // to make this work offline
   console.log("install");
   e.waitUntil(
-    caches.open(cacheName).then(cache => {
-      return cache.addAll([
-        '/',
-        /*
+    caches.open(cacheName).then((cache) => {
+      return cache
+        .addAll([
+          "/",
+          /*
           DEAR READER,
           ADD A LIST OF YOUR ASSETS THAT
           YOU WANT TO WORK WHEN OFFLINE
           TO THIS ARRAY OF URLS
         */
-      ]).then(() => self.skipWaiting());
+        ])
+        .then(() => self.skipWaiting());
     })
   );
 });
 
 // when the browser fetches a url, either response with
 // the cached object or go ahead and fetch the actual url
-self.addEventListener('fetch', event => {
-    console.log("fetch");
+self.addEventListener("fetch", (event) => {
+  console.log("fetch");
   event.respondWith(
     // ensure we check the *right* cache to match against
-    caches.open(cacheName).then(cache => {
-      return cache.match(event.request).then(res => {
-        return res || fetch(event.request)
+    caches.open(cacheName).then((cache) => {
+      return cache.match(event.request).then((res) => {
+        return res || fetch(event.request);
       });
     })
   );
@@ -38,46 +40,47 @@ self.addEventListener('fetch', event => {
 
 console.log("10");
 var config = {
-    messagingSenderId: "114978862752",
-    apiKey: "AIzaSyAPdo-yLm5jCzCwI8A0eJsifXofZHANnpo",
-    projectId: "clicker-1577130258869",
-    appId: "1:114978862752:web:f8805f2a9d47a8312d7bc5",
-    databaseURL: "https://clicker-1577130258869.firebaseio.com",
+  messagingSenderId: "114978862752",
+  apiKey: "AIzaSyAPdo-yLm5jCzCwI8A0eJsifXofZHANnpo",
+  projectId: "clicker-1577130258869",
+  appId: "1:114978862752:web:f8805f2a9d47a8312d7bc5",
+  databaseURL: "https://clicker-1577130258869.firebaseio.com",
 };
 
-importScripts('https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js');
-importScripts('https://unpkg.com/directv-remote@0.0.3/index.js');
+importScripts("https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js");
+importScripts("https://unpkg.com/directv-remote@0.0.3/index.js");
 firebase.initializeApp(config);
 const db = firebase.database();
 console.log("remote");
 console.log(Remote);
-self.addEventListener('activate', function(event) {
-    // console.log("activate", Remote);
-    const zapsRefName = `zaps-develop`;
-    // const ref = db.ref(zapsRefName);
-    db.ref(zapsRefName)
+self.addEventListener("activate", function(event) {
+  // console.log("activate", Remote);
+  const zapsRefName = `zaps-develop`;
+  // const ref = db.ref(zapsRefName);
+  db.ref(zapsRefName)
     // .orderByChild("timestamp")
     // .startAt(Date.now())
-    .on("child_added", child_added => {
-        const newTv = child_added.val();
-        console.log({newTv});
+    .on("child_added", (child_added) => {
+      const newTv = child_added.val();
+      console.log({ newTv });
 
-        
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNjA3MDIyMC1hMzc3LTExZTktOTIwZi05YjRjOGE0ZTBiZWMiLCJndWVzdCI6dHJ1ZSwiaWF0IjoxNTYyODA2Nzc0fQ.AxJKvVKbUT3ebtZZ_cEoHa1L4H4mtLpQ6-iDtYWszcs");
-        
-        var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow'
-        };
-        
-        fetch("https://api-develop.tryclicker.com/admin/health", requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append(
+        "Authorization",
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNjA3MDIyMC1hMzc3LTExZTktOTIwZi05YjRjOGE0ZTBiZWMiLCJndWVzdCI6dHJ1ZSwiaWF0IjoxNTYyODA2Nzc0fQ.AxJKvVKbUT3ebtZZ_cEoHa1L4H4mtLpQ6-iDtYWszcs"
+      );
 
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      fetch("https://api-develop.tryclicker.com/admin/health", requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
     });
 });
