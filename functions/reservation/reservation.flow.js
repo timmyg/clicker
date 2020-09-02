@@ -173,6 +173,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   reservation.end = calculateReservationEndTime(reservation);
+  console.log({ reservation });
   await dbReservation.create(reservation);
 
   console.time('mark box reserved');
