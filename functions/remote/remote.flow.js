@@ -72,7 +72,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('change channel');
 
   if (client === 'antenna.pwa') {
-    zapViaFirebase(box.id, channel, channelMinor);
+    await zapViaFirebase(box.id, channel, channelMinor, box.info.ip, box.info.clientAddress);
   } else {
     await api.sendCommand(
       command,
@@ -165,7 +165,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
 });
 
-async function zapViaFirebase(boxId: string, channel: number, channelMinor: number) {
+async function zapViaFirebase(boxId: string, channel: number, channelMinor: number, ip: string, clientAddress: string) {
   if (!firebase.apps.length) {
     firebase.initializeApp({
       credential: firebase.credential.cert(JSON.parse(process.env.firebase)),
@@ -175,7 +175,7 @@ async function zapViaFirebase(boxId: string, channel: number, channelMinor: numb
   const db = firebase.database();
   const refName = `zaps-${process.env.stage}`;
   const zapsRef = db.ref(refName);
-  let payload = { boxId, channel, timestamp: Date.now() };
+  let payload: Object = { boxId, channel, timestamp: Date.now(), ip, clientAddress };
   if (!!channelMinor) {
     payload.channelMinor = channelMinor;
   }
