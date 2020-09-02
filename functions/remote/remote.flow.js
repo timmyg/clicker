@@ -175,7 +175,11 @@ async function zapViaFirebase(boxId: string, channel: number, channelMinor: numb
   const db = firebase.database();
   const refName = `zaps-${process.env.stage}`;
   const zapsRef = db.ref(refName);
-  const result = await zapsRef.push({ boxId, channel, channelMinor, timestamp: Date.now() });
+  let payload = { boxId, channel, timestamp: Date.now() };
+  if (!!channelMinor) {
+    payload.channelMinor = channelMinor;
+  }
+  const result = await zapsRef.push(payload);
   console.log({ result });
 }
 
