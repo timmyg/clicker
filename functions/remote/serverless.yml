@@ -13,6 +13,7 @@ provider:
     stage: ${self:custom.stage}
     losantAppId: ${env:LOSANT_APP_ID}
     losantAccessToken: ${env:LOSANT_ACCESS_TOKEN}
+    firebase: ${env:FIREBASE}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

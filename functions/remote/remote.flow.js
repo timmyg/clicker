@@ -4,12 +4,14 @@ const { respond, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverl
 const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const moment = require('moment');
+const firebase = require('firebase-admin');
 
 declare class process {
   static env: {
     stage: string,
     losantAccessToken: string,
     losantAppId: string,
+    firebase: string,
   };
 }
 
@@ -58,29 +60,33 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   // try {
-  const { command, key, reservation, source, losantProductionOverride } = getBody(event);
+  const { command, key, reservation, source, losantProductionOverride, client } = getBody(event);
   const { losantId, id: locationId } = reservation.location;
   const box: Box = reservation.box;
   const { id: boxId, info } = box;
-  const { ip, clientAddress: client } = info;
+  const { ip, clientAddress } = info;
   const { channel, channelMinor } = reservation.program;
   const api = new LosantApi();
 
-  console.log({ command, losantId, client, channel, channelMinor, ip, key, source, losantProductionOverride });
+  console.log({ command, losantId, clientAddress, channel, channelMinor, ip, key, source, losantProductionOverride });
   console.time('change channel');
 
-  await api.sendCommand(
-    command,
-    losantId,
-    {
-      client,
-      channel,
-      channelMinor,
-      ip,
-      key,
-    },
-    losantProductionOverride,
-  );
+  if (client === 'antenna.pwa') {
+    zapViaFirebase(box.id, channel, channelMinor);
+  } else {
+    await api.sendCommand(
+      command,
+      losantId,
+      {
+        client: clientAddress,
+        channel,
+        channelMinor,
+        ip,
+        key,
+      },
+      losantProductionOverride,
+    );
+  }
 
   console.timeEnd('change channel');
 
@@ -158,6 +164,20 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
 
   return respond();
 });
+
+async function zapViaFirebase(boxId: string, channel: number, channelMinor: number) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      credential: firebase.credential.cert(JSON.parse(process.env.firebase)),
+      databaseURL: 'https://clicker-1577130258869.firebaseio.com',
+    });
+  }
+  const db = firebase.database();
+  const refName = `zaps-${process.env.stage}`;
+  const zapsRef = db.ref(refName);
+  const result = await zapsRef.push({ boxId, channel, channelMinor, timestamp: Date.now() });
+  console.log({ result });
+}
 
 function getCurrentProgramText(eventName, location, program) {
   return `*${eventName}* @ ${location.name} to ${program.title} {${program.clickerRating || 'NR'}}  [${
