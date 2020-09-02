@@ -82,8 +82,8 @@ const dbReservation = dynamoose.model(
     start: Number,
     end: Number,
     cancelled: Boolean,
-    isManager: Boolean,
-    isVip: Boolean,
+    isManager: { type: Boolean, default: false },
+    isVip: { type: Boolean, default: false },
   },
   {
     timestamps: true,
