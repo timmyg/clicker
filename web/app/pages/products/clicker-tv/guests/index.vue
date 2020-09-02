@@ -46,7 +46,7 @@ export default {
       sectionHeader: {
         title: "Clicker TV for Guests",
         paragraph:
-          "Breakthrough app giving guests remote control access to your TVs and sports packages. This ultimate vip experience drives increased traffic andn repeat visits."
+          "Breakthrough app giving guests remote control access to your TVs and sports packages. This ultimate vip experience drives increased traffic and repeat visits."
       }
     };
   }
