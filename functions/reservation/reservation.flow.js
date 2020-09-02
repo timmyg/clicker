@@ -131,6 +131,7 @@ async function demoZapViaFirebase(boxId: string, channel: number) {
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   let reservation: Reservation = getBody(event);
+  console.log({ reservation });
   const { cost } = reservation;
   reservation.userId = getUserId(event);
 
