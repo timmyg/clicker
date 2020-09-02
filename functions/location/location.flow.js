@@ -134,6 +134,7 @@ const dbLocation = dynamoose.model(
     free: Boolean,
     losantProductionOverride: Boolean,
     img: String,
+    client: String,
     region: String,
     active: Boolean,
     hidden: Boolean,
@@ -1325,7 +1326,6 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
     //   .body({ text })
     //   .async()
     //   .go();
-    
   }
   return respond(200);
 });
