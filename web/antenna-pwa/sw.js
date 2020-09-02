@@ -51,15 +51,22 @@ const db = firebase.database();
 
 const DirecTV = self.directvRemoteMinor;
 
+console.log("activating...", self)
+const clientLocationId = (new URLSearchParams(self.location.search)).get('locationId');
+console.log({clientLocationId});
 self.addEventListener('activate', function(event) {
+  console.log("activated")
     const zapsRefName = `zaps-develop`;
     db.ref(zapsRefName)
-    // .orderByChild("timestamp")
-    // .startAt(Date.now())
+    .orderByChild("timestamp")
+    .startAt(Date.now())
     .on("child_added", childAdded => {
         const request = childAdded.val();
         console.log({request});
-        const {boxId, channel, channelMinor, ip, clientAddress} = request;
+        const {boxId, locationId, channel, channelMinor, ip, clientAddress} = request;
+        if(locationId !== clientLocationId) {
+          return console.log("not current location, skipping");
+        }
 
         // const ip = "192.168.86.34"
         const remote = new DirecTV.Remote(ip);
@@ -78,7 +85,7 @@ self.addEventListener('activate', function(event) {
             function (err, response) {
               console.log("returned");
               if (err) return console.log(err);
-              return console.log("tuned", response);
+              return console.log("successfully tuned", response);
             }
           );
 
