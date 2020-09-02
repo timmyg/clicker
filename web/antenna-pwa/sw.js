@@ -50,51 +50,52 @@ firebase.initializeApp(config);
 const db = firebase.database();
 
 const DirecTV = self.directvRemoteMinor;
-const ip = "192.168.86.34"
-const r = new DirecTV.Remote(ip);
-
-DirecTV.validateIP(ip, (error) => {
-    if (error) {
-      console.log(`.......... not valid directv ip: ${ip}`);
-      return;
-    }
-    console.log(`*#$&%~%*$& valid directv ip: ${ip}`);
-    // return context.saveBoxes(ip);
-    // return context.api.updateIp(ip);
-  });
-r.tune(
-    208,
-    // null,
-    "E237BFBB81C5",
-    function (err, response) {
-      console.log("returned");
-      if (err) return console.log(err);
-      return console.log("tuned");
-    }
-  );
 
 self.addEventListener('activate', function(event) {
     const zapsRefName = `zaps-develop`;
     db.ref(zapsRefName)
     // .orderByChild("timestamp")
     // .startAt(Date.now())
-    .on("child_added", child_added => {
-        const newTv = child_added.val();
-        console.log({newTv});
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNjA3MDIyMC1hMzc3LTExZTktOTIwZi05YjRjOGE0ZTBiZWMiLCJndWVzdCI6dHJ1ZSwiaWF0IjoxNTYyODA2Nzc0fQ.AxJKvVKbUT3ebtZZ_cEoHa1L4H4mtLpQ6-iDtYWszcs");
+    .on("child_added", childAdded => {
+        const request = childAdded.val();
+        console.log({request});
+        const {boxId, channel, channelMinor, ip, clientAddress} = request;
+
+        // const ip = "192.168.86.34"
+        const remote = new DirecTV.Remote(ip);
         
-        var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow'
-        };
+        DirecTV.validateIP(ip, (error) => {
+            if (error) {
+              console.log(`.......... not valid directv ip: ${ip}`);
+              return;
+            }
+            console.log(`*#$&%~%*$& valid directv ip: ${ip}`);
+          });
+          remote.tune(
+            channel,
+            channelMinor,
+            clientAddress,
+            function (err, response) {
+              console.log("returned");
+              if (err) return console.log(err);
+              return console.log("tuned", response);
+            }
+          );
+
+        // var myHeaders = new Headers();
+        // myHeaders.append("Content-Type", "application/json");
+        // myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNjA3MDIyMC1hMzc3LTExZTktOTIwZi05YjRjOGE0ZTBiZWMiLCJndWVzdCI6dHJ1ZSwiaWF0IjoxNTYyODA2Nzc0fQ.AxJKvVKbUT3ebtZZ_cEoHa1L4H4mtLpQ6-iDtYWszcs");
         
-        fetch("https://api-develop.tryclicker.com/admin/health", requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
+        // var requestOptions = {
+        //   method: 'GET',
+        //   headers: myHeaders,
+        //   redirect: 'follow'
+        // };
+        
+        // fetch("https://api-develop.tryclicker.com/admin/health", requestOptions)
+        //   .then(response => response.text())
+        //   .then(result => console.log(result))
+        //   .catch(error => console.log('error', error));
 
     });
 });
