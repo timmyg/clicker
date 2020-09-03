@@ -57,7 +57,7 @@
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-24 mb-24">
                   <div class="pricing-item-name">
-                    <span class="name manager-mode">Staff Only</span>
+                    <span class="tag name manager-mode brand-font">Staff Only</span>
                   </div>
                   <div class="pricing-item-price mb-8">
                     <div
@@ -100,6 +100,7 @@
                         Employees can change channels with
                         <a
                           href="/blog/manage-tvs-from-your-phone-with-clicker-tv-for-staff"
+                          class="brand-font"
                         >Clicker TV for Staff</a>
                       </span>
                     </li>
@@ -123,7 +124,7 @@
               <div class="pricing-item-content">
                 <div class="pricing-item-header pb-24 mb-24">
                   <div class="pricing-item-name">
-                    <span class="name all-star">All-Star</span>
+                    <span class="tag name all-star brand-font">All-Star</span>
                   </div>
                   <div class="pricing-item-price mb-8">
                     <div
@@ -162,26 +163,32 @@
                     <li class="is-checked">
                       <span>
                         Everything in
-                        <em>Staff Only</em> Package
+                        <span class="tag name manager-mode brand-font">Staff Only</span> Package
                       </span>
                     </li>
                     <li class="is-checked">
                       <span>
-                        <a href="/products/control-center">Control Center</a> automated
+                        <a href="/products/control-center" class="brand-font">Control Center</a> automated
                         channel changes
                       </span>
                     </li>
                     <li class="is-checked">Onboarding conversation to learn your venue's preferences</li>
                     <li class="is-checked">
                       <span>
-                        <a href="/products/clicker-tv/guests">Clicker TV for Guests</a>
+                        <a
+                          href="/products/clicker-tv/guests"
+                          class="brand-font"
+                        >Clicker TV for Guests</a>
                         to enable fans to change channels
                       </span>
                     </li>
                     <li class="is-checked">
                       <span>
                         Option for
-                        <a href="/blog/give-your-vip-customers-the-remote">VIP Mode</a> or revenue share mode
+                        <a
+                          href="/blog/give-your-vip-customers-the-remote"
+                          class="brand-font"
+                        >VIP Mode</a> or revenue share mode
                       </span>
                     </li>
                     <li class="is-checked">
@@ -330,19 +337,19 @@ export default {
   position: absolute;
   right: -10px;
   top: -20px;
-  .name {
-    text-transform: uppercase;
-    font-size: 12px;
-    border-radius: 4px;
-    padding: 4px 8px;
-    color: #fff;
-    font-weight: bold;
-    &.manager-mode {
-      background: #55c3f5;
-    }
-    &.all-star {
-      background: #0091ea;
-    }
+}
+.tag.name {
+  text-transform: uppercase;
+  font-size: 12px;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #fff;
+  font-weight: bold;
+  &.manager-mode {
+    background: #55c3f5;
+  }
+  &.all-star {
+    background: #0091ea;
   }
 }
 .pricing-header {
