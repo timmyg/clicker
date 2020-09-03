@@ -6,7 +6,7 @@
         <div class="split-wrap">
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
-              <h2 class="mt-0 mb-16">
+              <h2 class="mt-0 mb-16 header">
                 <span>The Biggest Sports Moments on Your TVs.</span>
                 <!-- <br /> -->
                 <span class="reversed">Guaranteed.</span>
@@ -16,15 +16,14 @@
                 DIRECTV add-on that drives improved ROI from your existing TV
                 and sports packages.
               </p>
-              <div><SignupForm /></div>
+              <div>
+                <SignupForm />
+              </div>
             </div>
             <div
               class="hero-figure is-3d split-item-image split-item-image-fill illustration-element-01"
             >
-              <img
-                src="/images/landing/hero/fans-bar.jpg"
-                alt="Crowded bar with tvs"
-              />
+              <img src="/images/landing/hero/fans-bar.jpg" alt="Crowded bar with tvs" />
             </div>
           </div>
         </div>
@@ -64,5 +63,8 @@ export default {
       width: 528px;
     }
   }
+}
+.header {
+  font-weight: 400;
 }
 </style>

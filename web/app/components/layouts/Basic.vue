@@ -33,7 +33,13 @@ export default {
 <style lang="scss">
 // @import url("https://fonts.googleapis.com/css?family=Roboto|Saira");
 
-* {
+*,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Roboto", sans-serif;
 }
 
