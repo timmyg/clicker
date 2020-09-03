@@ -7,9 +7,14 @@
           <div class="split-item">
             <div class="hero-content split-item-content center-content-mobile">
               <h2 class="mt-0 mb-16 header">
-                <span>The Biggest Sports Moments on Your TVs.</span>
-                <!-- <br /> -->
-                <span class="reversed">Guaranteed.</span>
+                <span>
+                  The Biggest Sports Moments.
+                  <br />
+                </span>
+                <span>
+                  On Your TVs.
+                  <span class="reversed">Guaranteed.</span>
+                </span>
               </h2>
               <p class="m-0 mb-24">
                 <span class="brand-font">Clicker</span> is a sports-centric
