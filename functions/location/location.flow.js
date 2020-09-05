@@ -708,9 +708,26 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
         const previousChannel = location.boxes[i].live && location.boxes[i].live.channel;
-        const text = `Manual Zap @ ${location.name} (${location.neighborhood} Zone ${location.boxes[i].zone ||
-          'no zone'}) *${program && program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
+        const zoneName = `z${location.boxes[i].zone}` || 'z-';
+        const labelName = `l${location.boxes[i].label}` || 'l-';
+        let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName}|${labelName}) *${program &&
+          program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
+
+        const isRecentAutomationChange =
+          location.boxes[i].live &&
+          location.boxes[i].live.channelChangeSource === 'automation' &&
+          moment().diff(moment(location.boxes[i].live.channelChangeAt), 'minutes') < 10;
+        if (isRecentAutomationChange) {
+          text = `!!! recent automation change !!! ${text}`;
+        }
+        //   await new Invoke()
+        //     .service('notification')
+        //     .name('sendManual')
+        //     .body({ text: "" })
+        //     .async()
+        //     .go();
+        // }
 
         await new Invoke()
           .service('notification')
