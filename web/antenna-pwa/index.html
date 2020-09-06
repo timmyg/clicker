@@ -28,6 +28,12 @@
         /* bring your own prefixes */
         transform: translate(-50%, -50%);
       }
+      #query-error {
+        color: #e53935;
+      }
+      .hide {
+        display: none;
+      }
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@300;400&family=Saira:wght@300;400&display=swap"
@@ -47,6 +53,9 @@
         alt="Clicker logo"
       />
       <h4>Welcome to <span class="brand-font">Clicker</span></h4>
+      <p id="query-error" class="hide">
+        To activate this location, include Clicker locationId as query param
+      </p>
     </section>
     <script>
       if ("serviceWorker" in navigator) {
@@ -54,7 +63,8 @@
           "locationId"
         );
         if (!locationId) {
-          alert("Please include locationId as query param");
+          const element = document.getElementById("query-error");
+          element.classList.remove("hide");
         } else {
           // Register a service worker hosted at the root of the
           // site using the default scope.
