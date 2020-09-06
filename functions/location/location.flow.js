@@ -708,9 +708,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
         const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
         const previousChannel = location.boxes[i].live && location.boxes[i].live.channel;
-        const zoneName = `z${location.boxes[i].zone}` || 'z-';
-        const labelName = `l${location.boxes[i].label}` || 'l-';
-        let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName}|${labelName}) *${program &&
+        const zoneName = `Z${location.boxes[i].zone || ''}` || 'Z-';
+        const labelName = `L${location.boxes[i].label || ''}` || 'L-';
+        let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName},${labelName}) *${program &&
           program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
 
