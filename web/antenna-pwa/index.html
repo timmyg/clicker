@@ -1,39 +1,80 @@
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-        <meta name="description" content="Description">
-        <meta name="keywords" content="Keywords">
-        <link
-            rel="icon"
-            type="image/png"
-            href="https://clicker-brand.s3.amazonaws.com/favicon.ico"
-        />
-        <title>Clicker</title>
-        <!-- <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script> -->
-        <!-- <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-messaging.js"></script> -->
-        <!-- <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script> -->
-    </head>
-    <body>
-        <p>hello</p>
-        <script>
-            if ('serviceWorker' in navigator) {
-                const locationId = (new URLSearchParams(window.location.search)).get('locationId');
-                if (!locationId) {
-                     alert("Please include locationId as query param");
-                } else {
-                    // Register a service worker hosted at the root of the
-                    // site using the default scope.
-                    navigator.serviceWorker.register('/sw.js?locationId=' + locationId).then(function(registration) {
-                        console.log('Service worker registration succeeded:', registration);
-                    }, /*catch*/ function(error) {
-                        console.log('Service worker registration failed:', error);
-                    });
-                }
-            } else {
-                console.log('Service workers are not supported.');
-            }
-        </script>
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <meta name="description" content="Description" />
+    <meta name="keywords" content="Keywords" />
+    <style>
+      * {
+        font-family: "Kumbh Sans", sans-serif;
+      }
+      .brand-font {
+        font-family: "Saira", sans-serif;
+      }
+      section {
+        text-align: center;
+      }
+      img {
+        height: 80px;
+      }
+      .centered {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@300;400&family=Saira:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://clicker-brand.s3.amazonaws.com/favicon.ico"
+    />
+    <title>Clicker Antenna Client</title>
+  </head>
+  <body>
+    <section class="centered">
+      <img
+        src="https://clicker-brand.s3.amazonaws.com/logo.png"
+        alt="Clicker logo"
+      />
+      <h4>Welcome to <span class="brand-font">Clicker</span></h4>
+    </section>
+    <script>
+      if ("serviceWorker" in navigator) {
+        const locationId = new URLSearchParams(window.location.search).get(
+          "locationId"
+        );
+        if (!locationId) {
+          alert("Please include locationId as query param");
+        } else {
+          // Register a service worker hosted at the root of the
+          // site using the default scope.
+          navigator.serviceWorker
+            .register("/sw.js?locationId=" + locationId)
+            .then(
+              function(registration) {
+                console.log(
+                  "Service worker registration succeeded:",
+                  registration
+                );
+              },
+              /*catch*/ function(error) {
+                console.log("Service worker registration failed:", error);
+              }
+            );
+        }
+      } else {
+        console.log("Service workers are not supported.");
+      }
+    </script>
+  </body>
 </html>
