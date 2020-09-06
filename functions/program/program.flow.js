@@ -967,7 +967,7 @@ module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
-  const updatedAirtablePrograms = await getAirtableProgramsInWindow(2, 1);
+  const updatedAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
