@@ -195,7 +195,7 @@ describe('filterPrograms', () => {
     expect(result[0].db.channel).toBe(219);
     expect(result[1].db.channel).toBe(12);
   });
-  test.only('highly rated already showing on 1 (replicated to 2)', () => {
+  test('highly rated already showing on 1 (replicated to 2)', () => {
     const ccPrograms = [
       { fields: { rating: 9 }, db: { channel: 245 } }, // showing
       { fields: { rating: 9 }, db: { channel: 245 } }, // showing, replicated
@@ -211,6 +211,24 @@ describe('filterPrograms', () => {
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(1);
     expect(result[0].db.channel).toBe(245);
+  });
+  test('highly rated already showing on 1 (replicated to 2), minor channel', () => {
+    const ccPrograms = [
+      { fields: { rating: 9 }, db: { channel: 245, channelMinor: 1 } }, // showing
+      { fields: { rating: 9 }, db: { channel: 245, channelMinor: 1 } }, // showing, replicated
+    ];
+
+    const location = {
+      boxes: [
+        { configuration, zone: '1', live: { channel: 245, channelMinor: 1 } },
+        { configuration, zone: '2', live: { channel: 9 } },
+        { configuration, zone: '3', live: { channel: 19 } },
+      ],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(1);
+    expect(result[0].db.channel).toBe(245);
+    expect(result[0].db.channelMinor).toBe(1);
   });
 });
 test('highly rated not showing (replicated to 2)', () => {
@@ -233,24 +251,26 @@ test('highly rated not showing (replicated to 2)', () => {
 });
 test("don't remove if 9 or 10 since they'll be replicated", () => {
   const ccPrograms = [
-    { fields: { rating: 10 }, db: { channel: 9 } },
-    { fields: { rating: 8 }, db: { channel: 206 } },
+    { fields: { rating: 9 }, db: { channel: 19 } },
+    { fields: { rating: 9 }, db: { channel: 19 } },
+    { fields: { rating: 9 }, db: { channel: 19 } },
+    // { fields: { rating: 8 }, db: { channel: 206 } },
     { fields: { rating: 4 }, db: { channel: 220 } },
-    { fields: { rating: 9 }, db: { channel: 703 } },
+    { fields: { rating: 8 }, db: { channel: 703 } },
   ];
   const location = {
     boxes: [
       { configuration, zone: '1', live: { channel: 5 } },
-      { configuration, zone: '2', live: { channel: 9 } },
+      { configuration, zone: '2', live: { channel: 19 } },
       { configuration, zone: '3', live: { channel: 703 } },
       { configuration, zone: '4', live: { channel: 220 } },
     ],
   };
   const result = filterPrograms(ccPrograms, location);
-  expect(result.length).toBe(3);
-  expect(result[0].db.channel).toBe(9);
-  expect(result[1].db.channel).toBe(703);
-  expect(result[2].db.channel).toBe(206);
+  console.log({ result: JSON.stringify(result) });
+  expect(result.length).toBe(2);
+  expect(result[0].db.channel).toBe(19);
+  expect(result[1].db.channel).toBe(19);
 });
 test('include clicker tv app boxes', () => {
   const ccPrograms = [
