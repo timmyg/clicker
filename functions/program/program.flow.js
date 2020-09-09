@@ -74,26 +74,26 @@ const nationalChannels: any[] = [
   { channel: 221, channelTitle: 'CBSSN' },
   { channel: 245, channelTitle: 'TNT' },
   { channel: 247, channelTitle: 'TBS' },
-  // 705, //NFL
-  // 706, //NFL
-  // 707, //NFL
-  // 708, //NFL
-  // 709, //NFL
-  // 710, //NFL
-  // 711, //NFL
-  // 712, //NFL
-  // 713, //NFL
-  // 714, //NFL
-  // 715, //NFL
-  // 716, //NFL
-  // 717, //NFL
-  // 718, //NFL
-  // 719, //NFL
+  { channel: 705, channelTitle: 'NFLT' }, //NFL
+  { channel: 706, channelTitle: 'NFLT' }, //NFL
+  { channel: 707, channelTitle: 'NFLT' }, //NFL
+  { channel: 708, channelTitle: 'NFLT' }, //NFL
+  { channel: 709, channelTitle: 'NFLT' }, //NFL
+  { channel: 710, channelTitle: 'NFLT' }, //NFL
+  { channel: 711, channelTitle: 'NFLT' }, //NFL
+  { channel: 712, channelTitle: 'NFLT' }, //NFL
+  { channel: 713, channelTitle: 'NFLT' }, //NFL
+  { channel: 714, channelTitle: 'NFLT' }, //NFL
+  { channel: 715, channelTitle: 'NFLT' }, //NFL
+  { channel: 716, channelTitle: 'NFLT' }, //NFL
+  { channel: 717, channelTitle: 'NFLT' }, //NFL
+  { channel: 718, channelTitle: 'NFLT' }, //NFL
+  { channel: 719, channelTitle: 'NFLT' }, //NFL
   // 671 // FSMW, turned on at tin roof once
   //   701, //NFLMX // 4 game mix
   // 702, //NFLMX // 8 game mix
-  // 703, //NFLRZ // Redzone (premium)
-  // 704, //NFLFAN // Fantasy Zone (premium)
+  { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
+  { channel: 704, channelTitle: 'NFLFAN' }, // Fantasy Zone (premium)
 ];
 
 // 2661
@@ -967,7 +967,7 @@ module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
-  const updatedAirtablePrograms = await getAirtableProgramsInWindow(2, 1);
+  const updatedAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
@@ -1354,7 +1354,10 @@ function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
     { search: 'sportscenter', rating: 2 },
     { search: 'nfl live', rating: 1 },
-    { search: 'nba: the jump', rating: 1 },
+    { search: 'nfl now', rating: 1 },
+    { search: 'nfl total access', rating: 1 },
+    { search: 'good morning football', rating: 1 },
+    // { search: 'nba: the jump', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
     { search: 'college gameday', rating: 5 },
     { search: 'mlb tonight', rating: 1 },
