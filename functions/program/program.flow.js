@@ -868,10 +868,14 @@ module.exports.clearAirtable = RavenLambdaWrapper.handler(Raven, async event => 
 });
 
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const { stage } = process.env;
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  const daysToPull = 2;
+  let daysToPull = 2;
+  if (stage === 'develop') {
+    daysToPull = 7;
+  }
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
