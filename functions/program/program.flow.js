@@ -74,6 +74,8 @@ const nationalChannels: any[] = [
   { channel: 221, channelTitle: 'CBSSN' },
   { channel: 245, channelTitle: 'TNT' },
   { channel: 247, channelTitle: 'TBS' },
+  { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
+  { channel: 704, channelTitle: 'NFLFY' }, // Fantasy Zone (premium)
   { channel: 705, channelTitle: 'NFLT' }, //NFL
   { channel: 706, channelTitle: 'NFLT' }, //NFL
   { channel: 707, channelTitle: 'NFLT' }, //NFL
@@ -92,8 +94,6 @@ const nationalChannels: any[] = [
   // 671 // FSMW, turned on at tin roof once
   //   701, //NFLMX // 4 game mix
   // 702, //NFLMX // 8 game mix
-  { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
-  { channel: 704, channelTitle: 'NFLFAN' }, // Fantasy Zone (premium)
 ];
 
 // 2661

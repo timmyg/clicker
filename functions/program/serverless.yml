@@ -291,7 +291,7 @@ functions:
       # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
       # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
       # - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
-      - schedule: cron(58 10 * * ? *) # every day @ 5:58/6:58am eastern
+      - schedule: cron(58 8 * * ? *) # every day @ 3:58/4:58am eastern
       - http:
           path: sync
           method: post
@@ -312,7 +312,7 @@ functions:
     environment:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
     events:
-      - schedule: cron(59 10 * * ? *) # every day @ 5:59/6:59am eastern
+      - schedule: cron(59 8 * * ? *) # every day @ 3:59/4:59am eastern
       - http:
           path: sync/airtable
           method: post
@@ -405,7 +405,7 @@ functions:
     timeout: 120
     memorySize: 512
     events:
-      - schedule: cron(57 10 * * ? *) # every day @ 5:57/6:57am eastern
+      - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern
       - http:
           path: clear/database
           method: post
@@ -416,7 +416,7 @@ functions:
     timeout: 120
     memorySize: 512
     events:
-      - schedule: cron(57 10 * * ? *) # every day @ 5:57/6:57am eastern
+      - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern
       - http:
           path: clear/airtable
           method: post
