@@ -339,7 +339,7 @@ function setBoxStatus(box: Box): Box {
     box.live.program &&
     box.live.lockedProgrammingId === box.live.program.programmingId &&
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
-  console.log('hiiiiiiii', box.live);
+  // console.log('hiiiiiiii', box.live);
   if (
     box.configuration &&
     box.configuration.automationActive &&
@@ -1082,13 +1082,14 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live)
     .map(b => b.live.program && b.live.program.programmingId);
+  console.info(`all programs before replication: ${ccPrograms.length}`);
   ccPrograms = replicatePrograms(
     ccPrograms,
     location.boxes.filter(b => b.configuration && b.configuration.automationActive).length,
     currentlyShowingProgrammingIds,
   );
-  console.info(`all programs: ${ccPrograms.map(p => p.fields.channel)}`);
-  console.info(`all boxes: ${location.boxes}`);
+  console.info(`all programs after replication: ${ccPrograms.length}`);
+  console.info(`all boxes: ${location.boxes.length}`);
   if (!ccPrograms.length) {
     return respond(200, 'no programs');
   }
@@ -1620,6 +1621,7 @@ function replicatePrograms(
       programsWithReplication.push(ccp);
     }
   });
+  console.log(JSON.stringify({ programsWithReplication }));
   return programsWithReplication;
 }
 
