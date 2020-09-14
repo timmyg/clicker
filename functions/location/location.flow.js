@@ -1008,27 +1008,16 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  // remove programs currently showing, unless 9 or 10 as we are replicating those
   const currentlyShowingChannels: number[] = boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
     .map(b => b.live.channel);
   console.log({ currentlyShowingChannels });
   let ccProgramsFiltered = [];
-  // ccProgramsFiltered = ccPrograms.filter(ccp => {
-  //   const program: Program = ccp.db;
-  //   if (ccp.fields.rating >= 9) {
-  //     return true;
-  //   }
-  //   return !currentlyShowingChannels.includes(program.channel);
-  // });
   ccPrograms.forEach(ccp => {
     console.log(ccp);
     console.log(currentlyShowingChannels);
     const program: Program = ccp.db;
-    // if (ccp.fields.rating >= 9) {
-    //   return ccProgramsFiltered.push(ccp);
-    // }
     if (!currentlyShowingChannels.includes(program.channel)) {
       console.log('pushing');
       return ccProgramsFiltered.push(ccp);
@@ -1082,14 +1071,11 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live)
     .map(b => b.live.program && b.live.program.programmingId);
-  console.info(`all programs before replication: ${ccPrograms.length}`);
-  ccPrograms = replicatePrograms(
-    ccPrograms,
-    location.boxes.filter(b => b.configuration && b.configuration.automationActive).length,
-    currentlyShowingProgrammingIds,
-  );
-  console.info(`all programs after replication: ${ccPrograms.length}`);
-  console.info(`all boxes: ${location.boxes.length}`);
+  const locationBoxesCount = location.boxes.filter(b => b.configuration && b.configuration.automationActive).length;
+  console.info(`location boxes: ${locationBoxesCount}`);
+  console.info(`all cc programs before replication: ${ccPrograms.length}`);
+  ccPrograms = replicatePrograms(ccPrograms, locationBoxesCount);
+  console.info(`all cc programs after replication: ${ccPrograms.length}`);
   if (!ccPrograms.length) {
     return respond(200, 'no programs');
   }
@@ -1113,10 +1099,10 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     ccp.db = program;
   });
 
-  // filter out currently showing programs (unles >=9), excluded programs, and sort by rating
+  // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
-  // get boxes that are CC active, and not manually locked
+  // get boxes that are CC active, and not locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
   console.log('availableBoxes', availableBoxes.length);
   console.log(JSON.stringify({ availableBoxes }));
@@ -1597,7 +1583,7 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
 function replicatePrograms(
   ccPrograms: ControlCenterProgram[],
   boxesCount: number,
-  currentlyShowingProgrammingIds: string[] = [],
+  // currentlyShowingProgrammingIds: string[] = [],
 ): ControlCenterProgram[] {
   let programsWithReplication = [];
   ccPrograms.forEach(ccp => {
@@ -1608,11 +1594,14 @@ function replicatePrograms(
       } else if (ccp.fields.rating === 9) {
         replicationCount = Math.floor(boxesCount * 0.4);
       }
+      console.log({ replicationCount });
       // subtract another if channel already on
-      if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
-        const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
-        replicationCount = replicationCount - existingCount;
-      }
+      // if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
+      //   const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
+      //   console.log({ existingCount });
+      //   replicationCount = replicationCount - existingCount;
+      //   console.log({ replicationCount });
+      // }
       // subtract one because its already in there once
       for (let i = 0; i < replicationCount; i++) {
         programsWithReplication.push(ccp);

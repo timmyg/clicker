@@ -195,7 +195,7 @@ describe('filterPrograms', () => {
     expect(result[0].db.channel).toBe(219);
     expect(result[1].db.channel).toBe(12);
   });
-  test.only('highly rated already showing on 1 (replicated to 2)', () => {
+  test('highly rated already showing on 1 (replicated to 2)', () => {
     const ccPrograms = [
       { fields: { rating: 9 }, db: { channel: 245 } }, // showing
       { fields: { rating: 9 }, db: { channel: 245 } }, // showing, replicated
@@ -230,27 +230,6 @@ test('highly rated not showing (replicated to 2)', () => {
   expect(result.length).toBe(2);
   expect(result[0].db.channel).toBe(245);
   expect(result[1].db.channel).toBe(245);
-});
-test("don't remove if 9 or 10 since they'll be replicated", () => {
-  const ccPrograms = [
-    { fields: { rating: 10 }, db: { channel: 9 } },
-    { fields: { rating: 8 }, db: { channel: 206 } },
-    { fields: { rating: 4 }, db: { channel: 220 } },
-    { fields: { rating: 9 }, db: { channel: 703 } },
-  ];
-  const location = {
-    boxes: [
-      { configuration, zone: '1', live: { channel: 5 } },
-      { configuration, zone: '2', live: { channel: 9 } },
-      { configuration, zone: '3', live: { channel: 703 } },
-      { configuration, zone: '4', live: { channel: 220 } },
-    ],
-  };
-  const result = filterPrograms(ccPrograms, location);
-  expect(result.length).toBe(3);
-  expect(result[0].db.channel).toBe(9);
-  expect(result[1].db.channel).toBe(703);
-  expect(result[2].db.channel).toBe(206);
 });
 test('include clicker tv app boxes', () => {
   const ccPrograms = [
@@ -513,75 +492,80 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
     const result = filterProgramsByTargeting([ccProgram], location);
     expect(result.length).toBe(1);
   });
-  describe('replicatePrograms for highly rated games', () => {
-    const ten = {
-      fields: {
-        rating: 10,
-      },
-    };
-    const nine = {
-      fields: {
-        rating: 9,
-        programmingId: 'uljre2',
-      },
-    };
-    const eight = {
-      fields: {
-        rating: 8,
-        programmingId: 'abccf',
-      },
-    };
-    const other = {
-      fields: {
-        rating: 4,
-        programmingId: 'klsdjf',
-      },
-    };
-    const other2 = {
-      fields: {
-        rating: 6,
-      },
-    };
-    const other3 = {
-      fields: {
-        rating: 1,
-      },
-    };
-    test('10 shows on all boxes', () => {
-      const result = replicatePrograms([other, ten, other, other], 6);
-      expect(result.filter(ccp => ccp.fields.rating === 10).length).toBe(6);
-      expect(result.length).toBe(9);
-    });
-    test('9 shows on ~40% of 6 boxes', () => {
-      const result = replicatePrograms([nine, other, other], 6);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
-      expect(result.length).toBe(4);
-    });
-    test('9 shows on ~40% of 5 boxes', () => {
-      const result = replicatePrograms([nine], 5);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
-      expect(result.length).toBe(2);
-    });
-    test('9 shows on ~40% of 8 boxes', () => {
-      const result = replicatePrograms([other, nine], 8);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
-      expect(result.length).toBe(4);
-    });
-    test('9 shows on ~40% of 8 boxes, removes if already on two', () => {
-      const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, nine.fields.programmingId]);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(1);
-      expect(result.length).toBe(2);
-    });
-    test('9 shows on ~40% of 8 boxes, removes if already on one', () => {
-      const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, eight.fields.programmingId]);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
-      expect(result.length).toBe(3);
-    });
-    test('8 shows on same amount of boxes', () => {
-      const result = replicatePrograms([eight, other, other2, other3], 12);
-      expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(1);
-      expect(result.length).toBe(4);
-    });
+});
+describe('replicatePrograms for highly rated games', () => {
+  const ten = {
+    fields: {
+      rating: 10,
+    },
+  };
+  const nine = {
+    fields: {
+      rating: 9,
+      programmingId: 'uljre2',
+    },
+  };
+  const eight = {
+    fields: {
+      rating: 8,
+      programmingId: 'abccf',
+    },
+  };
+  const other = {
+    fields: {
+      rating: 4,
+      programmingId: 'klsdjf',
+    },
+  };
+  const other2 = {
+    fields: {
+      rating: 6,
+    },
+  };
+  const other3 = {
+    fields: {
+      rating: 1,
+    },
+  };
+  test('10 shows on all boxes', () => {
+    const result = replicatePrograms([other, ten, other, other], 6);
+    expect(result.filter(ccp => ccp.fields.rating === 10).length).toBe(6);
+    expect(result.length).toBe(9);
+  });
+  test('9 shows on ~40% of 6 boxes', () => {
+    const result = replicatePrograms([nine, other, other], 6);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
+    expect(result.length).toBe(4);
+  });
+  test('9 shows on ~40% of 5 boxes', () => {
+    const result = replicatePrograms([nine], 5);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
+    expect(result.length).toBe(2);
+  });
+  test('9 shows on ~40% of 8 boxes', () => {
+    const result = replicatePrograms([other, nine], 8);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
+    expect(result.length).toBe(4);
+  });
+  test('9 shows on ~40% of 8 boxes, removes if already on two', () => {
+    const result = replicatePrograms([other, nine], 8);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
+    expect(result.length).toBe(4);
+  });
+  test('9 shows on ~40% of 8 boxes, removes if already on one', () => {
+    const result = replicatePrograms([other, nine], 8);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
+    expect(result.length).toBe(4);
+  });
+  test('9 shows on ~40% of 6 boxes, removes if already on one', () => {
+    const result = replicatePrograms([other, nine], 6);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
+    expect(result.length).toBe(3);
+  });
+  test('8 shows on same amount of boxes', () => {
+    const result = replicatePrograms([eight, other, other2, other3], 12);
+    expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(1);
+    expect(result.length).toBe(4);
   });
   describe('targeting ids', () => {
     test('chooses most relevant already in order', () => {
