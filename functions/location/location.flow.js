@@ -1029,10 +1029,12 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     //   return ccProgramsFiltered.push(ccp);
     // }
     if (!currentlyShowingChannels.includes(program.channel)) {
+      console.log('pushing');
       return ccProgramsFiltered.push(ccp);
     } else {
       // remove from array, in case of replication
       const index = currentlyShowingChannels.indexOf(program.channel);
+      console.log({ index });
       if (index > -1) {
         // console.log({ index });
         // console.log({ currentlyShowingChannels });
@@ -1042,7 +1044,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     }
   });
 
-  console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered.length}`);
+  console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered}`);
 
   // remove channels that location doesn't have
   const excludedChannels =
