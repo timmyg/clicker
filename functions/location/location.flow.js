@@ -1013,6 +1013,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
     .map(b => b.live.channel);
+  console.log({ currentlyShowingChannels });
   let ccProgramsFiltered = [];
   // ccProgramsFiltered = ccPrograms.filter(ccp => {
   //   const program: Program = ccp.db;
