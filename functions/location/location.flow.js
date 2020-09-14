@@ -1087,8 +1087,8 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     location.boxes.filter(b => b.configuration && b.configuration.automationActive).length,
     currentlyShowingProgrammingIds,
   );
-  console.info(`all programs: ${ccPrograms.length}`);
-  console.info(`all boxes: ${location.boxes.length}`);
+  console.info(`all programs: ${ccPrograms.map(p => p.fields.channel)}`);
+  console.info(`all boxes: ${location.boxes}`);
   if (!ccPrograms.length) {
     return respond(200, 'no programs');
   }
