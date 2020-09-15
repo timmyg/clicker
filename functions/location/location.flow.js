@@ -719,7 +719,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           location.boxes[i].live.channelChangeSource === 'automation' &&
           moment().diff(moment(location.boxes[i].live.channelChangeAt), 'minutes') < 10;
         if (isRecentAutomationChange) {
-          text = `!!! recent automation change !!! ${text}`;
+          text = `*Recent Automation Change!* ${text}`;
         }
         //   await new Invoke()
         //     .service('notification')
