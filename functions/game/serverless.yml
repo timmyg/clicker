@@ -114,7 +114,7 @@ functions:
           method: post
   syncActive:
     handler: game.syncActive
-    description: pull active from action network api, sync to db,
+    description: pull active from action network api, sync to db
     memorySize: 1024
     timeout: 12
     events:

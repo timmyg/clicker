@@ -1235,7 +1235,8 @@ module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async event => {
     promises.push(updateProgramGame(program.id, program.region, game));
   }
   console.log('promises:', promises.length);
-  await Promise.all(promises);
+  const updateGamesResult = await Promise.all(promises);
+  console.log({ updateGamesResult });
   return respond(200);
 });
 
@@ -1272,6 +1273,7 @@ function updateProgramGame(programId, region, game) {
     ExpressionAttributeValues: {
       ':game': game,
     },
+    ReturnValues: 'UPDATED_NEW',
   };
   try {
     return docClient.update(params).promise();
