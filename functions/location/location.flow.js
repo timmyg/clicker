@@ -1707,6 +1707,7 @@ async function updateLocationBox(
   let updateExpression = `set `;
   let expressionAttributeValues = {};
   const prefix = `boxes[${boxIndex}].live`;
+  console.log({ channel, channelMinor });
   if (channel) {
     updateExpression += `${prefix}.channel = :channel,`;
     expressionAttributeValues[':channel'] = parseInt(channel);
