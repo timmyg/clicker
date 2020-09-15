@@ -1,4 +1,18 @@
 // @flow
+
+class BoxLive {
+  channel: number;
+  channelMinor: number;
+  channelChangeAt: number;
+  channelChangeSource: string;
+  locked: boolean;
+  appLocked: boolean;
+  lockedUntil: number;
+  lockedProgrammingId: string;
+  lockedMessage: string;
+  program: Program;
+}
+
 class Box {
   id: string;
   label: string;
@@ -13,18 +27,7 @@ class Box {
     ip: string,
     notes: string,
   };
-  live: {
-    channel: number,
-    channelMinor: number,
-    channelChangeAt: number,
-    channelChangeSource: string,
-    locked: boolean,
-    appLocked: boolean,
-    lockedUntil: number,
-    lockedProgrammingId: string,
-    lockedMessage: string,
-    program: Program,
-  };
+  live: BoxLive;
   updatedAt: number;
 }
 

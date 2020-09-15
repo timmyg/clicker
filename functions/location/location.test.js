@@ -212,7 +212,45 @@ describe('filterPrograms', () => {
     expect(result.length).toBe(1);
     expect(result[0].db.channel).toBe(245);
   });
+
+  test('highly rated already showing on 1 (replicated to 2) w/ minor channel', () => {
+    const ccPrograms = [
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 1 } }, // showing
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 1 } }, // showing, replicated
+    ];
+
+    const location = {
+      boxes: [
+        { configuration, zone: '1', live: { channel: 661, channelMinor: 1 } },
+        { configuration, zone: '2', live: { channel: 9 } },
+        { configuration, zone: '3', live: { channel: 19 } },
+      ],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(1);
+    expect(result[0].db.channel).toBe(661);
+    expect(result[0].db.channelMinor).toBe(1);
+  });
+  test('highly rated already showing on 1 (replicated to 2) w/ different minor channels', () => {
+    const ccPrograms = [
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 2 } }, // not showing
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 1 } }, // showing
+    ];
+
+    const location = {
+      boxes: [
+        { configuration, zone: '1', live: { channel: 661, channelMinor: 1 } },
+        { configuration, zone: '2', live: { channel: 9 } },
+        { configuration, zone: '3', live: { channel: 19 } },
+      ],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(1);
+    expect(result[0].db.channel).toBe(661);
+    expect(result[0].db.channelMinor).toBe(2);
+  });
 });
+
 test('highly rated not showing (replicated to 2)', () => {
   const ccPrograms = [
     { fields: { rating: 9 }, db: { channel: 245 } }, // showing

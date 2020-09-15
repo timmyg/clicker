@@ -1008,22 +1008,23 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  const currentlyShowingChannels: number[] = boxes
+  const currentlyShowingChannels: BoxLive[] = boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
-    .map(b => b.live.channel);
+    .map(b => b.live);
   console.log({ currentlyShowingChannels });
   let ccProgramsFiltered = [];
   ccPrograms.forEach(ccp => {
-    console.log(ccp);
-    console.log(currentlyShowingChannels);
+    // console.log(currentlyShowingChannels);
     const program: Program = ccp.db;
-    if (!currentlyShowingChannels.includes(program.channel)) {
+    if (!currentlyShowingChannels.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
       console.log('pushing');
       return ccProgramsFiltered.push(ccp);
     } else {
       // remove from array, in case of replication
-      const index = currentlyShowingChannels.indexOf(program.channel);
+      const index = currentlyShowingChannels.findIndex(
+        p => p.channel == program.channel && p.channelMinor == program.channelMinor,
+      );
       console.log({ index });
       if (index > -1) {
         // console.log({ index });
@@ -1034,7 +1035,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     }
   });
 
-  console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered}`);
+  console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered.length}`);
 
   // remove channels that location doesn't have
   const excludedChannels =
