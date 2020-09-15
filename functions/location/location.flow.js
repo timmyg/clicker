@@ -1707,6 +1707,7 @@ async function updateLocationBox(
   const docClient = new AWS.DynamoDB.DocumentClient();
   const now = moment().unix() * 1000;
   let updateExpression = `set `;
+  let removeExpression = '';
   let expressionAttributeValues = {};
   const prefix = `boxes[${boxIndex}].live`;
   console.log({ channel, channelMinor });
@@ -1718,7 +1719,7 @@ async function updateLocationBox(
     updateExpression += `${prefix}.channelMinor = :channelMinor,`;
     expressionAttributeValues[':channelMinor'] = parseInt(channelMinor);
   } else {
-    updateExpression += `REMOVE ${prefix}.channelMinor,`;
+    removeExpression += `REMOVE ${prefix}.channelMinor,`;
   }
   if (channelChangeAt) {
     updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;
@@ -1751,7 +1752,7 @@ async function updateLocationBox(
     TableName: process.env.tableLocation,
     Key: { id: locationId },
     ReturnValues: 'ALL_NEW',
-    UpdateExpression: updateExpression,
+    UpdateExpression: updateExpression + ' ' + removeExpression,
     ExpressionAttributeValues: expressionAttributeValues,
   };
   // console.log('calling...');
