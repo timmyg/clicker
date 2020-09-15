@@ -1008,10 +1008,10 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  const currentlyShowingPrograms: Program[] = boxes
+  const currentlyShowingPrograms: BoxLive[] = boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
-    .map(b => b.live.program);
+    .map(b => b.live);
   console.log({ currentlyShowingPrograms });
   let ccProgramsFiltered = [];
   ccPrograms.forEach(ccp => {
