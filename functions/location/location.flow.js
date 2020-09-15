@@ -340,26 +340,28 @@ function setBoxStatus(box: Box): Box {
     box.live.lockedProgrammingId === box.live.program.programmingId &&
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
   // console.log('hiiiiiiii', box.live);
-  if (
-    box.configuration &&
-    box.configuration.automationActive &&
-    (!box.live.program || Object.keys(box.live.program).length === 0)
-  ) {
-    console.log('no program****');
-    box.live.locked = true;
-    box.live.lockedMessage = 'Sorry, TV is locked';
-    const text = `Box is Locked: Program not found ${box.live.channel} (boxId: ${box.id})`;
+  // lock box if we cant find a program
+  // if (
+  //   box.configuration &&
+  //   box.configuration.automationActive &&
+  //   (!box.live.program || Object.keys(box.live.program).length === 0)
+  // ) {
+  //   console.log('no program****');
+  //   box.live.locked = true;
+  //   box.live.lockedMessage = 'Sorry, TV is locked';
+  //   const text = `Box is Locked: Program not found ${box.live.channel} (boxId: ${box.id})`;
 
-    // not sure if this will work but yolo
-    (async () => {
-      await new Invoke()
-        .service('notification')
-        .name('sendControlCenter')
-        .body({ text })
-        .async()
-        .go();
-    })();
-  } else if (zapTypes.manual === box.live.channelChangeSource) {
+  //   // not sure if this will work but yolo
+  //   (async () => {
+  //     await new Invoke()
+  //       .service('notification')
+  //       .name('sendControlCenter')
+  //       .body({ text })
+  //       .async()
+  //       .go();
+  //   })();
+  // } else
+  if (zapTypes.manual === box.live.channelChangeSource) {
     box.live.locked = isBeforeLockedTime || isZappedProgramStillOn;
     // TODO isBeforeLockedTime is sometimes true
     if (box.live.locked) {
