@@ -1008,29 +1008,29 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  const currentlyShowingChannels: BoxLive[] = boxes
+  const currentlyShowingPrograms: Program[] = boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
-    .map(b => b.live);
-  console.log({ currentlyShowingChannels });
+    .map(b => b.live.program);
+  console.log({ currentlyShowingPrograms });
   let ccProgramsFiltered = [];
   ccPrograms.forEach(ccp => {
-    // console.log(currentlyShowingChannels);
+    // console.log(currentlyShowingPrograms);
     const program: Program = ccp.db;
-    if (!currentlyShowingChannels.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
+    if (!currentlyShowingPrograms.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
       console.log('pushing');
       return ccProgramsFiltered.push(ccp);
     } else {
       // remove from array, in case of replication
-      const index = currentlyShowingChannels.findIndex(
+      const index = currentlyShowingPrograms.findIndex(
         p => p.channel == program.channel && p.channelMinor == program.channelMinor,
       );
       console.log({ index });
       if (index > -1) {
         // console.log({ index });
-        // console.log({ currentlyShowingChannels });
-        currentlyShowingChannels.splice(index, 1);
-        // console.log({ currentlyShowingChannels });
+        // console.log({ currentlyShowingPrograms });
+        currentlyShowingPrograms.splice(index, 1);
+        // console.log({ currentlyShowingPrograms });
       }
     }
   });
