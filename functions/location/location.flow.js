@@ -1712,7 +1712,7 @@ async function updateLocationBox(
     updateExpression += `${prefix}.channel = :channel,`;
     expressionAttributeValues[':channel'] = parseInt(channel);
   }
-  if (channelMinor) {
+  if (Number.isInteger(channelMinor)) {
     updateExpression += `${prefix}.channelMinor = :channelMinor,`;
     expressionAttributeValues[':channelMinor'] = parseInt(channelMinor);
   } else {
