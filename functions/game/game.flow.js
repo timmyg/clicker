@@ -575,7 +575,8 @@ module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async event =
 // }
 
 function getInProgressAndCompletedGames(response: any): Game[] {
-  return response.filter(e => !['time-tbd', 'scheduled'].includes(e.status));
+  // return response.filter(e => !['time-tbd', 'scheduled', 'postponed', 'delayed', 'cancelled'].includes(e.status));
+  return response.filter(e => ['inprogress', 'complete'].includes(e.status));
 }
 
 async function getCompleteGameIds(): Promise<number[]> {
