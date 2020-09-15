@@ -841,7 +841,7 @@ describe('setBoxStatus', () => {
       const result = setBoxStatus(box);
       expect(result.live.locked).toBeTruthy();
     });
-    test('locked when program unknown', () => {
+    test.skip('locked when program unknown', () => {
       const live = {
         ...automationBox,
         channelChangeAt:
