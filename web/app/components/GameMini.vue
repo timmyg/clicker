@@ -8,7 +8,7 @@
             <span class="tag" v-else>
               Autotuning to
               <span class="brand-font">{{ getChannel() }}</span> in
-              <span class="brand-font">{{ timeRemaining }}</span>
+              <b class="brand-font">{{ timeRemaining }}</b>
             </span>
           </div>
         </div>

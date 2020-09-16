@@ -51,8 +51,8 @@ export default {
               name: "Clicker TV for Staff",
             },
             {
-              url: "/products/clicker-tv/guests",
-              name: "Clicker TV for Guests",
+              url: "/products/clicker-tv/fans",
+              name: "Clicker TV for Fans",
             },
             {
               url: "/products/control-center",

@@ -50,7 +50,7 @@
               <div class="features-tiles-item-content">
                 <h4 class="mt-0 mb-8 header">
                   <span class="name brand-font">
-                    Clicker TV for Guests
+                    Clicker TV for Fans
                     <img
                       src="/images/landing/feature-tile-icon-002.svg"
                       alt="Feature tile icon 02"
@@ -63,7 +63,7 @@
                   <!-- Give your guests an unforgettable experience by giving them
                   control of a TV, just like their living room.
                   <br />-->
-                  <nuxt-link to="/products/clicker-tv/guests" class="text-sm">Learn More →</nuxt-link>
+                  <nuxt-link to="/products/clicker-tv/fans" class="text-sm">Learn More →</nuxt-link>
                 </p>
               </div>
             </div>

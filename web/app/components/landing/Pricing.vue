@@ -175,10 +175,7 @@
                     <li class="is-checked">Onboarding conversation to learn your venue's preferences</li>
                     <li class="is-checked">
                       <span>
-                        <a
-                          href="/products/clicker-tv/guests"
-                          class="brand-font"
-                        >Clicker TV for Guests</a>
+                        <a href="/products/clicker-tv/fans" class="brand-font">Clicker TV for Fans</a>
                         to enable fans to change channels
                       </span>
                     </li>

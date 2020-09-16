@@ -642,9 +642,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       };
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
+      const manualLockDurationHours = 1;
       updateBoxInfoBody.lockedUntil =
         moment()
-          .add(1, 'h')
+          .add(manualLockDurationHours, 'h')
           .unix() * 1000;
 
       console.log({ channel: major, region: location.region });
@@ -1590,12 +1591,14 @@ function replicatePrograms(
 ): ControlCenterProgram[] {
   let programsWithReplication = [];
   ccPrograms.forEach(ccp => {
-    if ([10, 9].includes(ccp.fields.rating)) {
+    if ([10, 9, 8].includes(ccp.fields.rating)) {
       let replicationCount = 0;
       if (ccp.fields.rating === 10) {
         replicationCount = boxesCount;
       } else if (ccp.fields.rating === 9) {
-        replicationCount = Math.floor(boxesCount * 0.4);
+        replicationCount = Math.floor(boxesCount * 0.67);
+      } else if (ccp.fields.rating === 8) {
+        replicationCount = Math.floor(boxesCount * 0.34);
       }
       console.log({ replicationCount });
       // subtract another if channel already on
