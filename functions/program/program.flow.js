@@ -1236,7 +1236,7 @@ module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async event => {
   }
   console.log('promises:', promises.length);
   const updateGamesResult = await Promise.all(promises);
-  console.log({ updateGamesResult });
+  console.log({ updateGamesResult: JSON.stringify(updateGamesResult) });
   return respond(200);
 });
 
