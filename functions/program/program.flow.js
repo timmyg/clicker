@@ -1355,18 +1355,25 @@ function build(dtvSchedule: any, regionId: string) {
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
     { search: 'sportscenter', rating: 2 },
-    { search: 'nfl live', rating: 1 },
-    { search: 'nfl now', rating: 1 },
-    { search: 'nfl total access', rating: 1 },
     { search: 'good morning football', rating: 1 },
-    // { search: 'nba: the jump', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
     { search: 'college gameday', rating: 5 },
     { search: 'mlb tonight', rating: 1 },
     { search: 'inside the nba', rating: 1 },
-    { search: 'nfl total access', rating: 1 },
     { search: 'quick pitch', rating: 1 },
   ];
+  // jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec
+  const currentMonth = moment().format('MMM');
+  const seasonCfb = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
+  if (seasonCfb.includes(currentMonth)) {
+    defaultRatings.push({ search: 'all acc', rating: 1 });
+    defaultRatings.push({ search: 'sec now', rating: 1 });
+    defaultRatings.push({ search: 'college football live', rating: 1 });
+    defaultRatings.push({ search: 'college football countdown', rating: 1 });
+    defaultRatings.push({ search: 'nfl live', rating: 1 });
+    defaultRatings.push({ search: 'nfl now', rating: 1 });
+    defaultRatings.push({ search: 'nfl total access', rating: 1 });
+  }
 
   const ratingsIgnore = ['the best of this is sportscenter'];
 

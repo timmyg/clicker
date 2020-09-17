@@ -16,10 +16,10 @@
           bottomDivider && 'has-bottom-divider'
         ]"
       >
-        <c-section-header
-          :data="sectionHeader"
-          class="center-content reveal-from-bottom pb-16"
-        />
+        <c-section-header :data="sectionHeader" class="center-content reveal-from-bottom pb-16" />
+        <p class="center">
+          <nuxt-link to="/blog" class="text-sm pt-32">See more →</nuxt-link>
+        </p>
         <div class="tiles-wrap" :class="[pushLeft && 'push-left']">
           <div
             class="tiles-item reveal-from-bottom"
@@ -44,21 +44,20 @@
               </figure>
               <div class="news-item-content">
                 <div class="news-item-body">
-                  <div class="news-item-title  text-md mt-8 mb-8">
+                  <div class="news-item-title text-md mt-8 mb-8">
                     <nuxt-link
                       :to="{
                         name: 'blog-slug',
                         params: { slug: post.fields.slug }
                       }"
-                      >{{ post.fields.title | truncate(50) }} →</nuxt-link
-                    >
+                    >{{ post.fields.title | truncate(50) }} →</nuxt-link>
                   </div>
                   <!-- <p class="mb-16 text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut et dolore magna aliqua. Ut
                     enim ad minim veniam, quis nostrud exercitation ullamco
                     laboris nisi ut aliquip ex.
-                  </p> -->
+                  </p>-->
                 </div>
                 <!-- <div class="news-item-more text-xs TEXT-M mb-8 center-content">
                   <nuxt-link
@@ -68,7 +67,7 @@
                     }"
                     >Read More</nuxt-link
                   >
-                </div> -->
+                </div>-->
               </div>
             </div>
           </div>
@@ -110,6 +109,9 @@ export default {
 <style lang="scss" scoped>
 .tiles-item-inner {
   padding: 14px;
+  text-align: center;
+}
+.center {
   text-align: center;
 }
 </style>
