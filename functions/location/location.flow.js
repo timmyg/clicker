@@ -90,7 +90,15 @@ const dbLocation = dynamoose.model(
         live: {
           locked: Boolean, // new, dynamic
           lockedUntil: Number, // date
-          lockedProgrammingId: String,
+          // lockedProgrammingId: String,
+          lockedProgrammingIds: {
+            type: 'list',
+            list: [
+              {
+                type: 'string',
+              },
+            ],
+          },
           lockedMessage: String,
           channelChangeSource: {
             type: String,
@@ -337,7 +345,8 @@ function setBoxStatus(box: Box): Box {
   const isAfterLockedTime = !isBeforeLockedTime;
   const isZappedProgramStillOn =
     box.live.program &&
-    box.live.lockedProgrammingId === box.live.program.programmingId &&
+    // box.live.lockedProgrammingId === box.live.program.programmingId &&
+    box.live.lockedProgrammingIds.includes(box.live.program.programmingId) &&
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
   // console.log('hiiiiiiii', box.live);
   // lock box if we cant find a program
@@ -665,7 +674,25 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       }
       program = programResult && programResult.data;
       console.log({ program });
-      updateBoxInfoBody.lockedProgrammingId = program && program.programmingId;
+      if (program && program.programmingId) {
+        updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
+      }
+
+      // also, lets check what's on in 30 mins and lock that
+      queryParams.time =
+        moment()
+          .add(30, 'm')
+          .unix() * 1000;
+      const programResult2 = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams(queryParams)
+        .go();
+      const program2 = programResult2 && programResult2.data;
+      console.log({ program2 });
+      if (program2 && program2.programmingId) {
+        updateBoxInfoBody.lockedProgrammingIds.push(program2.programmingId);
+      }
 
       await new Invoke()
         .service('location')
@@ -901,7 +928,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const body: BoxInfoRequest = getBody(event);
-  const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingId } = body;
+  const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingIds } = body;
 
   console.log({ body });
   console.time('get location');
@@ -956,7 +983,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     program,
     channelChangeAt,
     lockedUntil,
-    lockedProgrammingId,
+    lockedProgrammingIds,
   );
   console.timeEnd('update location box');
 
@@ -1703,7 +1730,7 @@ async function updateLocationBox(
   program: Program,
   channelChangeAt?: number,
   lockedUntil?: number,
-  lockedProgrammingId?: string,
+  lockedProgrammingIds?: string[],
   removeLockedUntil?: boolean,
 ) {
   const AWS = require('aws-sdk');
@@ -1740,9 +1767,9 @@ async function updateLocationBox(
     updateExpression += `${prefix}.lockedUntil = :lockedUntil,`;
     expressionAttributeValues[':lockedUntil'] = lockedUntil;
   }
-  if (lockedProgrammingId) {
-    updateExpression += `${prefix}.lockedProgrammingId = :lockedProgrammingId,`;
-    expressionAttributeValues[':lockedProgrammingId'] = lockedProgrammingId;
+  if (lockedProgrammingIds) {
+    updateExpression += `${prefix}.lockedProgrammingIds = :lockedProgrammingIds,`;
+    expressionAttributeValues[':lockedProgrammingIds'] = lockedProgrammingIds;
   }
   if (removeLockedUntil) {
     updateExpression += `${prefix}.lockedUntil = :lockedUntilRemove,`;

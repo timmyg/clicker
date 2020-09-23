@@ -8,7 +8,7 @@ class BoxLive {
   locked: boolean;
   appLocked: boolean;
   lockedUntil: number;
-  lockedProgrammingId: string;
+  lockedProgrammingIds: string[];
   lockedMessage: string;
   program: Program;
 }
