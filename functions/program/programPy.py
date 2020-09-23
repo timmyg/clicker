@@ -80,6 +80,7 @@ def getPrograms(event, context):
                 'body': json.dumps(response.json().get('schedule'))
             }
         except:
+            print('failed')
             time.sleep(1)
             exception = True
 
@@ -89,28 +90,8 @@ def getProgramDetail(event, context):
     data = event['queryStringParameters']
     programmingId = data['programmingId']
     print(programmingId)
-    # print(data['zip'])
-    # print(data['hours'])
-    # print(data['channels'])
-    # cookies = {
-    #     'dtve-prospect-zip': data['zip']
-    # }
-
-    headers = {
-        'Sec-Fetch-Site': 'same-origin',
-        'DNT': '1',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
-        'Sec-Fetch-Mode': 'cors',
-        'Accept': '*/*',
-        'Cache-Control': 'no-cache',
-        'Referer': 'https://www.directv.com/assets/js/dtve/apps/guide/programDataServiceProcessor.js',
-        'Connection': 'keep-alive',
-    }
     exception = True
     while (exception):
-
         randomString = str(random.randint(100000000000, 999999999999))
         proxy_raw = 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225'
         proxies = {'http': proxy_raw, 'https': proxy_raw}
@@ -135,5 +116,6 @@ def getProgramDetail(event, context):
                 'body': json.dumps(response.json().get('programDetail'))
             }
         except:
+            print('failed')
             time.sleep(1)
             exception = True
