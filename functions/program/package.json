@@ -16,6 +16,7 @@
     "invoke:consumeNewProgramUpdateDetails": "serverless invoke local --function consumeNewProgramUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
     "invoke:syncRatings": "serverless invoke local --function syncRatings  --stage develop",
     "invoke:getSchedulePy": "serverless invoke local --function getSchedulePy --path ../.resources/data/program-schedules.json",
+    "invoke:getProgramDetailPy": "serverless invoke local --function getProgramDetailPy --path ../.resources/data/program-detail.json",
     "invoke:get": "serverless invoke local --function get --path ../.resources/data/program.json --stage develop",
     "invoke:get:programmingId": "serverless invoke local --function get --path ../.resources/data/program-programmingId.json --stage develop",
     "invoke:get:programmingIds": "serverless invoke local --function get --path ../.resources/data/program-programmingIds.json --stage develop",
