@@ -363,7 +363,7 @@ functions:
   getProgramDetailPy:
     handler: programPy.getProgramDetail
     runtime: python3.6
-    timeout: 40
+    timeout: 60
     events:
       - http:
           path: py/program/detail

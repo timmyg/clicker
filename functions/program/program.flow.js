@@ -1213,7 +1213,7 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
   const { id, programmingId, region } = program;
   if (!programmingId.includes('GDM')) {
     console.time('getProgramDetails');
-    console.log('calling getProgramDetails');
+    console.log('calling getProgramDetails', program);
     const programDetails = await getProgramDetails(program);
     console.timeEnd('getProgramDetails');
     if (!!programDetails) {
