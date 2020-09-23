@@ -300,7 +300,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 function setBoxStatus(box: Box): Box {
-  console.log({ box });
+  console.log({ box: JSON.stringify(box) });
   // locked: Boolean, // new
   // lockedUntil: Date,
   // lockedProgrammingId: String,
@@ -346,8 +346,9 @@ function setBoxStatus(box: Box): Box {
   const isZappedProgramStillOn =
     box.live.program &&
     // box.live.lockedProgrammingId === box.live.program.programmingId &&
-    box.live.lockedProgrammingIds.includes(box.live.program.programmingId) &&
-    moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
+    (!!box.live.lockedProgrammingIds && box.live.lockedProgrammingIds.includes(box.live.program.programmingId)) &&
+    moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start, so might be a repeat
+  console.log({ isZappedProgramStillOn });
   // console.log('hiiiiiiii', box.live);
   // lock box if we cant find a program
   // if (
@@ -394,6 +395,7 @@ function setBoxStatus(box: Box): Box {
       box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> is over`;
     }
   }
+  console.log({ box });
   return box;
 }
 

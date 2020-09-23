@@ -212,25 +212,45 @@ describe('filterPrograms', () => {
     expect(result.length).toBe(1);
     expect(result[0].db.channel).toBe(245);
   });
-  test('highly rated already showing on 1 (replicated to 2), minor channel', () => {
+
+  test('highly rated already showing on 1 (replicated to 2) w/ minor channel', () => {
     const ccPrograms = [
-      { fields: { rating: 9 }, db: { channel: 245, channelMinor: 1 } }, // showing
-      { fields: { rating: 9 }, db: { channel: 245, channelMinor: 1 } }, // showing, replicated
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 1 } }, // showing
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 1 } }, // showing, replicated
     ];
 
     const location = {
       boxes: [
-        { configuration, zone: '1', live: { channel: 245, channelMinor: 1 } },
+        { configuration, zone: '1', live: { channel: 661, channelMinor: 1 } },
         { configuration, zone: '2', live: { channel: 9 } },
         { configuration, zone: '3', live: { channel: 19 } },
       ],
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(1);
-    expect(result[0].db.channel).toBe(245);
+    expect(result[0].db.channel).toBe(661);
     expect(result[0].db.channelMinor).toBe(1);
   });
+  test('highly rated already showing on 1 (replicated to 2) w/ different minor channels', () => {
+    const ccPrograms = [
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 2 } }, // not showing
+      { fields: { rating: 9 }, db: { channel: 661, channelMinor: 1 } }, // showing
+    ];
+
+    const location = {
+      boxes: [
+        { configuration, zone: '1', live: { channel: 661, channelMinor: 1 } },
+        { configuration, zone: '2', live: { channel: 9 } },
+        { configuration, zone: '3', live: { channel: 19 } },
+      ],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(1);
+    expect(result[0].db.channel).toBe(661);
+    expect(result[0].db.channelMinor).toBe(2);
+  });
 });
+
 test('highly rated not showing (replicated to 2)', () => {
   const ccPrograms = [
     { fields: { rating: 9 }, db: { channel: 245 } }, // showing
@@ -248,29 +268,6 @@ test('highly rated not showing (replicated to 2)', () => {
   expect(result.length).toBe(2);
   expect(result[0].db.channel).toBe(245);
   expect(result[1].db.channel).toBe(245);
-});
-test("don't remove if 9 or 10 since they'll be replicated", () => {
-  const ccPrograms = [
-    { fields: { rating: 9 }, db: { channel: 19 } },
-    { fields: { rating: 9 }, db: { channel: 19 } },
-    { fields: { rating: 9 }, db: { channel: 19 } },
-    // { fields: { rating: 8 }, db: { channel: 206 } },
-    { fields: { rating: 4 }, db: { channel: 220 } },
-    { fields: { rating: 8 }, db: { channel: 703 } },
-  ];
-  const location = {
-    boxes: [
-      { configuration, zone: '1', live: { channel: 5 } },
-      { configuration, zone: '2', live: { channel: 19 } },
-      { configuration, zone: '3', live: { channel: 703 } },
-      { configuration, zone: '4', live: { channel: 220 } },
-    ],
-  };
-  const result = filterPrograms(ccPrograms, location);
-  console.log({ result: JSON.stringify(result) });
-  expect(result.length).toBe(2);
-  expect(result[0].db.channel).toBe(19);
-  expect(result[1].db.channel).toBe(19);
 });
 test('include clicker tv app boxes', () => {
   const ccPrograms = [
@@ -311,6 +308,10 @@ describe('get boxes', () => {
     id: 3,
     zone: 'A',
     live: {
+      lockedUntil:
+        moment()
+          .add(27, 'm')
+          .unix() * 1000,
       channelChangeSource: 'manual',
       channelChangeAt:
         moment()
@@ -327,11 +328,13 @@ describe('get boxes', () => {
     zone: '15',
     live: {
       channelChangeSource: 'manual',
+      lockedProgrammingIds: ['22', '33'],
       channelChangeAt:
         moment()
           .subtract(50, 'm')
           .unix() * 1000,
       program: {
+        programmingId: '33',
         start:
           moment()
             .subtract(40, 'm')
@@ -350,7 +353,7 @@ describe('get boxes', () => {
     zone: '15',
     live: {
       channelChangeSource: 'manual',
-      lockedProgrammingId: 'ABC',
+      lockedProgrammingIds: ['ABC'],
       lockedUntil:
         moment()
           .subtract(1, 'm')
@@ -373,17 +376,22 @@ describe('get boxes', () => {
       },
     },
   };
-  const reservedManuallyChangedProgramOver = {
+  const reservedManuallyChangedProgramOverButLocked = {
     ...automationActive,
     id: 6,
     zone: '15',
     live: {
       channelChangeSource: 'manual',
+      lockedUntil:
+        moment()
+          .add(3, 'm')
+          .unix() * 1000,
       channelChangeAt:
         moment()
           .subtract(40, 'm')
           .unix() * 1000,
       program: {
+        programmingId: '55',
         start:
           moment()
             .subtract(2, 'h')
@@ -409,8 +417,8 @@ describe('get boxes', () => {
       const result = getAvailableBoxes([openManuallyChangedDifferentProgram]);
       expect(result.length).toBe(1);
     });
-    test('reservedManuallyChangedProgramOver', () => {
-      const result = getAvailableBoxes([reservedManuallyChangedProgramOver]);
+    test('reservedManuallyChangedProgramOverButLocked', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedProgramOverButLocked]);
       expect(result.length).toBe(0);
     });
     test('reservedManuallyChangedRecently', () => {
@@ -430,7 +438,7 @@ describe('get boxes', () => {
         openGoodBox,
         openGoodBox2,
         openManuallyChangedDifferentProgram,
-        reservedManuallyChangedProgramOver,
+        reservedManuallyChangedProgramOverButLocked,
         reservedManuallyChangedRecently,
         reservedManuallyChangedGameOn,
         reservedZonelessBox,
@@ -533,75 +541,96 @@ describe("filterProgramsByTargeting: remove programs that aren't targeted", () =
     const result = filterProgramsByTargeting([ccProgram], location);
     expect(result.length).toBe(1);
   });
-  describe('replicatePrograms for highly rated games', () => {
-    const ten = {
-      fields: {
-        rating: 10,
-      },
-    };
-    const nine = {
-      fields: {
-        rating: 9,
-        programmingId: 'uljre2',
-      },
-    };
-    const eight = {
-      fields: {
-        rating: 8,
-        programmingId: 'abccf',
-      },
-    };
-    const other = {
-      fields: {
-        rating: 4,
-        programmingId: 'klsdjf',
-      },
-    };
-    const other2 = {
-      fields: {
-        rating: 6,
-      },
-    };
-    const other3 = {
-      fields: {
-        rating: 1,
-      },
-    };
-    test('10 shows on all boxes', () => {
-      const result = replicatePrograms([other, ten, other, other], 6);
-      expect(result.filter(ccp => ccp.fields.rating === 10).length).toBe(6);
-      expect(result.length).toBe(9);
-    });
-    test('9 shows on ~40% of 6 boxes', () => {
-      const result = replicatePrograms([nine, other, other], 6);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
-      expect(result.length).toBe(4);
-    });
-    test('9 shows on ~40% of 5 boxes', () => {
-      const result = replicatePrograms([nine], 5);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
-      expect(result.length).toBe(2);
-    });
-    test('9 shows on ~40% of 8 boxes', () => {
-      const result = replicatePrograms([other, nine], 8);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
-      expect(result.length).toBe(4);
-    });
-    test('9 shows on ~40% of 8 boxes, removes if already on two', () => {
-      const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, nine.fields.programmingId]);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(1);
-      expect(result.length).toBe(2);
-    });
-    test('9 shows on ~40% of 8 boxes, removes if already on one', () => {
-      const result = replicatePrograms([other, nine], 8, [nine.fields.programmingId, eight.fields.programmingId]);
-      expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(2);
-      expect(result.length).toBe(3);
-    });
-    test('8 shows on same amount of boxes', () => {
-      const result = replicatePrograms([eight, other, other2, other3], 12);
-      expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(1);
-      expect(result.length).toBe(4);
-    });
+});
+describe('replicatePrograms for highly rated games', () => {
+  const ten = {
+    fields: {
+      rating: 10,
+    },
+  };
+  const nine = {
+    fields: {
+      rating: 9,
+      programmingId: 'uljre2',
+    },
+  };
+  const eight = {
+    fields: {
+      rating: 8,
+      programmingId: 'abccf',
+    },
+  };
+  const seven = {
+    fields: {
+      rating: 7,
+      programmingId: 'oi23j',
+    },
+  };
+  const other = {
+    fields: {
+      rating: 4,
+      programmingId: 'klsdjf',
+    },
+  };
+  const other2 = {
+    fields: {
+      rating: 6,
+    },
+  };
+  const other3 = {
+    fields: {
+      rating: 1,
+    },
+  };
+  test('10 shows on all boxes', () => {
+    const result = replicatePrograms([other, ten, other, other], 6);
+    expect(result.filter(ccp => ccp.fields.rating === 10).length).toBe(6);
+    expect(result.length).toBe(9);
+  });
+  test('9 shows on ~66% of 6 boxes', () => {
+    const result = replicatePrograms([nine, other, other], 6);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(4);
+    expect(result.length).toBe(6);
+  });
+  test('9 shows on ~66% of 5 boxes', () => {
+    const result = replicatePrograms([nine], 5);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(3);
+    expect(result.length).toBe(3);
+  });
+  test('9 shows on ~66% of 8 boxes', () => {
+    const result = replicatePrograms([other, nine], 8);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(5);
+    expect(result.length).toBe(6);
+  });
+  test('9 shows on ~66% of 8 boxes, removes if already on two', () => {
+    const result = replicatePrograms([other, nine], 8);
+    expect(result.filter(ccp => ccp.fields.rating === 9).length).toBe(5);
+    expect(result.length).toBe(6);
+  });
+  test('8 shows on ~33% of 12 boxes', () => {
+    const result = replicatePrograms([eight, other, other2, other3], 12);
+    expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(4);
+    expect(result.length).toBe(7);
+  });
+  test('8 shows on ~33% of 10 boxes', () => {
+    const result = replicatePrograms([eight, other, seven, other3], 10);
+    expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(3);
+    expect(result.length).toBe(6);
+  });
+  test('8 shows on ~33% of 9 boxes', () => {
+    const result = replicatePrograms([eight, other, other2, other3], 9);
+    expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(3);
+    expect(result.length).toBe(6);
+  });
+  test('8 shows on ~33% of 6 boxes', () => {
+    const result = replicatePrograms([eight, other2, other3], 6);
+    expect(result.filter(ccp => ccp.fields.rating === 8).length).toBe(2);
+    expect(result.length).toBe(4);
+  });
+  test('7 shows on same amount of boxes', () => {
+    const result = replicatePrograms([seven, other, other2, other3], 12);
+    expect(result.filter(ccp => ccp.fields.rating === 7).length).toBe(1);
+    expect(result.length).toBe(4);
   });
   describe('targeting ids', () => {
     test('chooses most relevant already in order', () => {
@@ -702,7 +731,7 @@ describe('setBoxStatus', () => {
     test('locked when different program and before lock time', () => {
       const live = {
         ...manualBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['B', 'A', 'C'],
         lockedUntil:
           moment()
             .add(1, 'm')
@@ -718,7 +747,7 @@ describe('setBoxStatus', () => {
     test('unlocked when different program on', () => {
       const live = {
         ...manualBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         lockedUntil:
           moment()
             .subtract(1.5, 'h')
@@ -737,7 +766,7 @@ describe('setBoxStatus', () => {
     test('unlocked when changed a while ago with same program on, but way later (repeat program)', () => {
       const live = {
         ...manualBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         channelChangeAt:
           moment()
             .subtract(6.1, 'h')
@@ -762,7 +791,7 @@ describe('setBoxStatus', () => {
     test('unlocked with different program on', () => {
       const live = {
         ...automationBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'B',
         },
@@ -780,7 +809,7 @@ describe('setBoxStatus', () => {
           moment()
             .subtract(6.1, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'A',
           start:
@@ -802,7 +831,7 @@ describe('setBoxStatus', () => {
           moment()
             .subtract(0.2, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'A',
           start:
@@ -824,7 +853,7 @@ describe('setBoxStatus', () => {
           moment()
             .subtract(0.1, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'A',
           end:
@@ -839,14 +868,14 @@ describe('setBoxStatus', () => {
       const result = setBoxStatus(box);
       expect(result.live.locked).toBeTruthy();
     });
-    test('locked when program unknown', () => {
+    test.skip('locked when program unknown', () => {
       const live = {
         ...automationBox,
         channelChangeAt:
           moment()
             .subtract(0.1, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {},
       };
       const box = {
