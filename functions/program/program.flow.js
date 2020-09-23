@@ -74,6 +74,9 @@ const nationalChannels: any[] = [
   { channel: 221, channelTitle: 'CBSSN' },
   { channel: 245, channelTitle: 'TNT' },
   { channel: 247, channelTitle: 'TBS' },
+  { channel: 242, channelTitle: 'USA' },
+  { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
+  { channel: 704, channelTitle: 'NFLFY' }, // Fantasy Zone (premium)
   { channel: 705, channelTitle: 'NFLT' }, //NFL
   { channel: 706, channelTitle: 'NFLT' }, //NFL
   { channel: 707, channelTitle: 'NFLT' }, //NFL
@@ -92,8 +95,6 @@ const nationalChannels: any[] = [
   // 671 // FSMW, turned on at tin roof once
   //   701, //NFLMX // 4 game mix
   // 702, //NFLMX // 8 game mix
-  { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
-  { channel: 704, channelTitle: 'NFLFAN' }, // Fantasy Zone (premium)
 ];
 
 // 2661
@@ -1239,7 +1240,8 @@ module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async event => {
     promises.push(updateProgramGame(program.id, program.region, game));
   }
   console.log('promises:', promises.length);
-  await Promise.all(promises);
+  const updateGamesResult = await Promise.all(promises);
+  console.log({ updateGamesResult: JSON.stringify(updateGamesResult) });
   return respond(200);
 });
 
@@ -1276,6 +1278,7 @@ function updateProgramGame(programId, region, game) {
     ExpressionAttributeValues: {
       ':game': game,
     },
+    ReturnValues: 'UPDATED_NEW',
   };
   try {
     return docClient.update(params).promise();
@@ -1357,18 +1360,25 @@ function build(dtvSchedule: any, regionId: string) {
 function getDefaultRating(program: Program): ?number {
   const defaultRatings = [
     { search: 'sportscenter', rating: 2 },
-    { search: 'nfl live', rating: 1 },
-    { search: 'nfl now', rating: 1 },
-    { search: 'nfl total access', rating: 1 },
     { search: 'good morning football', rating: 1 },
-    // { search: 'nba: the jump', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
     { search: 'college gameday', rating: 5 },
     { search: 'mlb tonight', rating: 1 },
     { search: 'inside the nba', rating: 1 },
-    { search: 'nfl total access', rating: 1 },
     { search: 'quick pitch', rating: 1 },
   ];
+  // jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec
+  const currentMonth = moment().format('MMM');
+  const seasonCfb = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
+  if (seasonCfb.includes(currentMonth)) {
+    defaultRatings.push({ search: 'all acc', rating: 1 });
+    defaultRatings.push({ search: 'sec now', rating: 1 });
+    defaultRatings.push({ search: 'college football live', rating: 1 });
+    defaultRatings.push({ search: 'college football countdown', rating: 1 });
+    defaultRatings.push({ search: 'nfl live', rating: 1 });
+    defaultRatings.push({ search: 'nfl now', rating: 1 });
+    defaultRatings.push({ search: 'nfl total access', rating: 1 });
+  }
 
   const ratingsIgnore = ['the best of this is sportscenter'];
 

@@ -14,14 +14,14 @@
 <script>
 import Header from "@/components/layouts/Header";
 import LayoutBasic from "@/components/layouts/Basic";
-import Features from "@/components/landing/clicker-tv/guests/Features";
-import FeaturesCards from "@/components/landing/clicker-tv/guests/FeaturesCards";
+import Features from "@/components/landing/clicker-tv/fans/Features";
+import FeaturesCards from "@/components/landing/clicker-tv/fans/FeaturesCards";
 import TilesProducts from "@/components/landing/TilesProducts";
 import CSectionHeader from "@/components/sections/partials/SectionHeader.vue";
 import Buy from "@/components/landing/Buy";
 
 export default {
-  name: "clicker-tv-guests",
+  name: "clicker-tv-fans",
   components: {
     Buy,
     Header,
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       sectionHeader: {
-        title: "Clicker TV for Guests",
+        title: "Clicker TV for Fans",
         paragraph:
           "Breakthrough app giving guests remote control access to your TVs and sports packages. This ultimate vip experience drives increased traffic and repeat visits."
       }

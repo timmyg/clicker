@@ -34,7 +34,9 @@
             <div class="accordion-body">
               <p>
                 Guests can purchase tokens used toward reserving TVs through the
-                <span class="brand-font">Clicker TV</span> mobile app. When
+                <b
+                  class="brand-font"
+                >Clicker TV</b> mobile app. When
                 signing up, they start with a few free tokens, and they can
                 purchase more with a credit card.
               </p>
@@ -46,15 +48,16 @@
             v-scroll-reveal="{ origin: 'right', delay: 120, distance: '10px' }"
           >
             <div class="accordion-title">
-              <span
-                >What if two people want to watch different channels on the same
-                TV?</span
-              >
+              <span>
+                What if two people want to watch different channels on the same
+                TV?
+              </span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
               <p>
-                The <span class="brand-font">Clicker TV</span> app allows for
+                The
+                <span class="brand-font">Clicker TV</span> app allows for
                 transparent reservations so that your guests will know which TVs
                 are available to be reserved.
               </p>
@@ -90,8 +93,9 @@
             <div class="accordion-body">
               <p>
                 We recommend having 50-75% of your TVs on
-                <span class="brand-font">Control Center</span>, and around 25%
-                enabled with the <span class="brand-font">Clicker TV</span> app.
+                <b class="brand-font">Control Center</b>, and around 25%
+                enabled with the
+                <b class="brand-font">Clicker TV</b> app.
                 Staff will still be able to manually change any TV at any time.
               </p>
             </div>
@@ -102,17 +106,19 @@
             v-scroll-reveal="{ origin: 'right', delay: 240, distance: '10px' }"
           >
             <div class="accordion-title">
-              <span
-                >Will the TV potentially change at a certain time if a guest is
-                watching a specific game?</span
-              >
+              <span>
+                Will the TV potentially change at a certain time if a guest is
+                watching a specific game?
+              </span>
               <div class="accordion-icon"></div>
             </div>
             <div class="accordion-body">
               <p>
                 No - our system can track the manual change inside your venue,
                 and disable our
-                <b class="brand-font">Control Center</b> automation until the
+                <b
+                  class="brand-font"
+                >Control Center</b> automation until the
                 game completes.
               </p>
             </div>

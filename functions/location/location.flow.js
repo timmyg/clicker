@@ -339,27 +339,29 @@ function setBoxStatus(box: Box): Box {
     box.live.program &&
     box.live.lockedProgrammingId === box.live.program.programmingId &&
     moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
-  console.log('hiiiiiiii', box.live);
-  if (
-    box.configuration &&
-    box.configuration.automationActive &&
-    (!box.live.program || Object.keys(box.live.program).length === 0)
-  ) {
-    console.log('no program****');
-    box.live.locked = true;
-    box.live.lockedMessage = 'Sorry, TV is locked';
-    const text = `Box is Locked: Program not found ${box.live.channel} (boxId: ${box.id})`;
+  // console.log('hiiiiiiii', box.live);
+  // lock box if we cant find a program
+  // if (
+  //   box.configuration &&
+  //   box.configuration.automationActive &&
+  //   (!box.live.program || Object.keys(box.live.program).length === 0)
+  // ) {
+  //   console.log('no program****');
+  //   box.live.locked = true;
+  //   box.live.lockedMessage = 'Sorry, TV is locked';
+  //   const text = `Box is Locked: Program not found ${box.live.channel} (boxId: ${box.id})`;
 
-    // not sure if this will work but yolo
-    (async () => {
-      await new Invoke()
-        .service('notification')
-        .name('sendControlCenter')
-        .body({ text })
-        .async()
-        .go();
-    })();
-  } else if (zapTypes.manual === box.live.channelChangeSource) {
+  //   // not sure if this will work but yolo
+  //   (async () => {
+  //     await new Invoke()
+  //       .service('notification')
+  //       .name('sendControlCenter')
+  //       .body({ text })
+  //       .async()
+  //       .go();
+  //   })();
+  // } else
+  if (zapTypes.manual === box.live.channelChangeSource) {
     box.live.locked = isBeforeLockedTime || isZappedProgramStillOn;
     // TODO isBeforeLockedTime is sometimes true
     if (box.live.locked) {
@@ -640,9 +642,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       };
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
+      const manualLockDurationHours = 1;
       updateBoxInfoBody.lockedUntil =
         moment()
-          .add(1, 'h')
+          .add(manualLockDurationHours, 'h')
           .unix() * 1000;
 
       console.log({ channel: major, region: location.region });
@@ -719,7 +722,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           location.boxes[i].live.channelChangeSource === 'automation' &&
           moment().diff(moment(location.boxes[i].live.channelChangeAt), 'minutes') < 10;
         if (isRecentAutomationChange) {
-          text = `!!! recent automation change !!! ${text}`;
+          text = `*Recent Automation Change!* ${text}`;
         }
         //   await new Invoke()
         //     .service('notification')
@@ -1008,36 +1011,29 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  // remove programs currently showing, unless 9 or 10 as we are replicating those
-  const currentlyShowingChannels: number[] = boxes
+  const currentlyShowingPrograms: BoxLive[] = boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
-    .map(b => b.live.channel);
+    .map(b => b.live);
+  console.log({ currentlyShowingPrograms });
   let ccProgramsFiltered = [];
-  // ccProgramsFiltered = ccPrograms.filter(ccp => {
-  //   const program: Program = ccp.db;
-  //   if (ccp.fields.rating >= 9) {
-  //     return true;
-  //   }
-  //   return !currentlyShowingChannels.includes(program.channel);
-  // });
   ccPrograms.forEach(ccp => {
-    console.log(ccp);
-    console.log(currentlyShowingChannels);
+    // console.log(currentlyShowingPrograms);
     const program: Program = ccp.db;
-    // if (ccp.fields.rating >= 9) {
-    //   return ccProgramsFiltered.push(ccp);
-    // }
-    if (!currentlyShowingChannels.includes(program.channel)) {
+    if (!currentlyShowingPrograms.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
+      console.log('pushing');
       return ccProgramsFiltered.push(ccp);
     } else {
       // remove from array, in case of replication
-      const index = currentlyShowingChannels.indexOf(program.channel);
+      const index = currentlyShowingPrograms.findIndex(
+        p => p.channel == program.channel && p.channelMinor == program.channelMinor,
+      );
+      console.log({ index });
       if (index > -1) {
         // console.log({ index });
-        // console.log({ currentlyShowingChannels });
-        currentlyShowingChannels.splice(index, 1);
-        // console.log({ currentlyShowingChannels });
+        // console.log({ currentlyShowingPrograms });
+        currentlyShowingPrograms.splice(index, 1);
+        // console.log({ currentlyShowingPrograms });
       }
     }
   });
@@ -1079,13 +1075,11 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live)
     .map(b => b.live.program && b.live.program.programmingId);
-  ccPrograms = replicatePrograms(
-    ccPrograms,
-    location.boxes.filter(b => b.configuration && b.configuration.automationActive).length,
-    currentlyShowingProgrammingIds,
-  );
-  console.info(`all programs: ${ccPrograms.length}`);
-  console.info(`all boxes: ${location.boxes.length}`);
+  const locationBoxesCount = location.boxes.filter(b => b.configuration && b.configuration.automationActive).length;
+  console.info(`location boxes: ${locationBoxesCount}`);
+  console.info(`all cc programs before replication: ${ccPrograms.length}`);
+  ccPrograms = replicatePrograms(ccPrograms, locationBoxesCount);
+  console.info(`all cc programs after replication: ${ccPrograms.length}`);
   if (!ccPrograms.length) {
     return respond(200, 'no programs');
   }
@@ -1109,10 +1103,10 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     ccp.db = program;
   });
 
-  // filter out currently showing programs (unles >=9), excluded programs, and sort by rating
+  // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
-  // get boxes that are CC active, and not manually locked
+  // get boxes that are CC active, and not locked
   let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
   console.log('availableBoxes', availableBoxes.length);
   console.log(JSON.stringify({ availableBoxes }));
@@ -1593,22 +1587,27 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): ?Box {
 function replicatePrograms(
   ccPrograms: ControlCenterProgram[],
   boxesCount: number,
-  currentlyShowingProgrammingIds: string[] = [],
+  // currentlyShowingProgrammingIds: string[] = [],
 ): ControlCenterProgram[] {
   let programsWithReplication = [];
   ccPrograms.forEach(ccp => {
-    if ([10, 9].includes(ccp.fields.rating)) {
+    if ([10, 9, 8].includes(ccp.fields.rating)) {
       let replicationCount = 0;
       if (ccp.fields.rating === 10) {
         replicationCount = boxesCount;
       } else if (ccp.fields.rating === 9) {
-        replicationCount = Math.floor(boxesCount * 0.4);
+        replicationCount = Math.floor(boxesCount * 0.67);
+      } else if (ccp.fields.rating === 8) {
+        replicationCount = Math.floor(boxesCount * 0.34);
       }
+      console.log({ replicationCount });
       // subtract another if channel already on
-      if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
-        const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
-        replicationCount = replicationCount - existingCount;
-      }
+      // if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
+      //   const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
+      //   console.log({ existingCount });
+      //   replicationCount = replicationCount - existingCount;
+      //   console.log({ replicationCount });
+      // }
       // subtract one because its already in there once
       for (let i = 0; i < replicationCount; i++) {
         programsWithReplication.push(ccp);
@@ -1617,6 +1616,7 @@ function replicatePrograms(
       programsWithReplication.push(ccp);
     }
   });
+  console.log(JSON.stringify({ programsWithReplication }));
   return programsWithReplication;
 }
 
@@ -1710,15 +1710,19 @@ async function updateLocationBox(
   const docClient = new AWS.DynamoDB.DocumentClient();
   const now = moment().unix() * 1000;
   let updateExpression = `set `;
+  let removeExpression = '';
   let expressionAttributeValues = {};
   const prefix = `boxes[${boxIndex}].live`;
+  console.log({ channel, channelMinor });
   if (channel) {
     updateExpression += `${prefix}.channel = :channel,`;
     expressionAttributeValues[':channel'] = parseInt(channel);
   }
-  if (channelMinor) {
+  if (Number.isInteger(channelMinor)) {
     updateExpression += `${prefix}.channelMinor = :channelMinor,`;
     expressionAttributeValues[':channelMinor'] = parseInt(channelMinor);
+  } else {
+    removeExpression += `REMOVE ${prefix}.channelMinor`;
   }
   if (channelChangeAt) {
     updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;
@@ -1751,7 +1755,7 @@ async function updateLocationBox(
     TableName: process.env.tableLocation,
     Key: { id: locationId },
     ReturnValues: 'ALL_NEW',
-    UpdateExpression: updateExpression,
+    UpdateExpression: updateExpression + ' ' + removeExpression,
     ExpressionAttributeValues: expressionAttributeValues,
   };
   // console.log('calling...');

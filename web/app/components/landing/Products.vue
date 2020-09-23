@@ -17,7 +17,7 @@
                 <br />
                 <nuxt-link to="/products/clicker-tv/staff">
                   Learn more about
-                  <span class="brand-font">Clicker TV for Staff</span> →
+                  <b class="brand-font">Clicker TV for Staff</b> →
                 </nuxt-link>
               </p>
             </div>
@@ -32,13 +32,13 @@
             <div class="split-item-content center-content-mobile">
               <h3 class="mt-0 mb-16">🤯 Blow your Guests' Minds</h3>
               <p class="m-0">
-                <b class="brand-font">Clicker TV for Guests</b> allows guests to reserve TVs and
+                <b class="brand-font">Clicker TV for Fans</b> allows guests to reserve TVs and
                 change channels from an app, giving them an unforgettable
                 experience.
                 <br />
-                <nuxt-link to="/products/clicker-tv/guests">
+                <nuxt-link to="/products/clicker-tv/fans">
                   Learn more about
-                  <span class="brand-font">Clicker TV for Guests</span> →
+                  <b class="brand-font">Clicker TV for Fans</b> →
                 </nuxt-link>
               </p>
             </div>
@@ -58,7 +58,7 @@
                 <br />
                 <nuxt-link to="/products/control-center">
                   Learn more about
-                  <span class="brand-font">Control Center</span> →
+                  <b class="brand-font">Control Center</b> →
                 </nuxt-link>
               </p>
             </div>
