@@ -680,10 +680,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
       }
 
-      // also, lets check what's on in 30 mins and lock that
+      // also, lets check what's on in 65 mins and lock that if it's a game
       queryParams.time =
         moment()
-          .add(30, 'm')
+          .add(65, 'm')
           .unix() * 1000;
       const programResult2 = await new Invoke()
         .service('program')
@@ -692,7 +692,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       const program2 = programResult2 && programResult2.data;
       console.log({ program2 });
-      if (program2 && program2.programmingId) {
+      if (program2 && program2.programmingId && program.gameId) {
         updateBoxInfoBody.lockedProgrammingIds.push(program2.programmingId);
       }
 
