@@ -42,6 +42,14 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
+
+const allPackages: any = [
+  {
+    name: 'NFL Sunday Ticket',
+    channels: [703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719],
+  },
+];
+
 const dbLocation = dynamoose.model(
   process.env.tableLocation,
   {
@@ -1047,7 +1055,27 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   console.log({ currentlyShowingPrograms });
   let ccProgramsFiltered = [];
   ccPrograms.forEach(ccp => {
-    // console.log(currentlyShowingPrograms);
+    // if (cc)
+    // if premium channel, check if has package
+    let skip = false;
+    allPackages.map(pkg => {
+      // check if premium channel
+      console.log('check');
+      if (pkg.channels.includes(ccp.db.channel)) {
+        // check if location has package
+        console.log('is premium', location.packages, pkg.name);
+        const locationPackages = location.packages || [];
+        if (!locationPackages.includes(pkg.name)) {
+          console.log('skip');
+          skip = true;
+          return;
+        }
+      }
+    });
+    console.log('1');
+    if (skip) return;
+    console.log('2');
+
     const program: Program = ccp.db;
     if (!currentlyShowingPrograms.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
       console.log('pushing');
@@ -1070,12 +1098,16 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered.length}`);
 
   // remove channels that location doesn't have
-  const excludedChannels =
-    location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
+  // const excludedChannels = [];
+  // if (location.packages && location.packages.length) {
+  //   location.packages.map(packageName => {
+  //     excludedChannels.push(...allPackages.find(p => p.name === packageName).channels);
+  //   });
+  // }
 
-  if (excludedChannels && excludedChannels.length) {
-    ccProgramsFiltered = ccProgramsFiltered.filter(ccp => !excludedChannels.includes(ccp.db.channel));
-  }
+  // if (excludedChannels && excludedChannels.length) {
+  //   ccProgramsFiltered = ccProgramsFiltered.filter(ccp => !excludedChannels.includes(ccp.db.channel));
+  // }
   console.info(`filtered programs after looking at excluded: ${ccProgramsFiltered.length}`);
   // sort by rating descending
   return ccProgramsFiltered.sort((a, b) => b.fields.rating - a.fields.rating);

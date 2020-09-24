@@ -38,6 +38,14 @@ type region = {
   localChannels: number[],
 };
 
+// duplicated!
+const allPackages: any = [
+  {
+    name: 'NFL Sunday Ticket',
+    channels: [703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719],
+  },
+];
+
 const allRegions: region[] = [
   {
     name: 'Cincinnati',
@@ -765,14 +773,32 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('current + next programming combine');
 
   // console.log('exclude', location.channels);
-  console.time('remove excluded');
-  if (location.channels && location.channels.exclude) {
-    const excludedChannels = location.channels.exclude.map(function(item) {
-      return parseInt(item, 10);
+  console.time('remove premium unless have package');
+
+  currentPrograms = currentPrograms.filter(p => {
+    // retallPackages
+    allPackages.map(pkg => {
+      // check if premium channel
+      console.log('check');
+      if (pkg.channels.includes(p.channel)) {
+        // check if location has package
+        console.log('is premium', location.packages, pkg.name);
+        const locationPackages = location.packages || [];
+        if (!locationPackages.includes(pkg.name)) {
+          return false;
+        }
+      }
+      return true;
     });
-    currentPrograms = currentPrograms.filter(p => !excludedChannels.includes(p.channel));
-  }
-  console.timeEnd('remove excluded');
+  });
+
+  // if (location.packages && location.packages.length) {
+  //   // const excludedChannels = location.channels.exclude.map(function(item) {
+  //   //   return parseInt(item, 10);
+  //   // });
+  //   currentPrograms = currentPrograms.filter(p => !excludedChannels.includes(p.channel));
+  // }
+  console.timeEnd('remove premium unless have package');
 
   console.time('sort');
   // sort

@@ -172,18 +172,19 @@ describe('filterPrograms', () => {
     expect(result[1].db.channel).toBe(221);
     expect(result[2].db.channel).toBe(209);
   });
-  test('already showing and excluded', () => {
+  test('already showing and location packages', () => {
     const ccPrograms = [
       { fields: { rating: 4 }, db: { channel: 9 } }, // showing
-      { fields: { rating: 4 }, db: { channel: 703 } }, // excluded
-      { fields: { rating: 4 }, db: { channel: 219 } },
+      { fields: { rating: 4 }, db: { channel: 703 } }, // new, premium included
+      { fields: { rating: 4 }, db: { channel: 219 } }, // new
       { fields: { rating: 4 }, db: { channel: 5 } }, //showing
-      { fields: { rating: 4 }, db: { channel: 709 } }, //excluded
-      { fields: { rating: 4 }, db: { channel: 12 } },
+      { fields: { rating: 4 }, db: { channel: 709 } }, // new, premium included
+      { fields: { rating: 4 }, db: { channel: 12 } }, // new
     ];
 
     const location = {
-      channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
+      // channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
+      packages: ['NFL Sunday Ticket'],
       boxes: [
         { configuration, zone: '1', live: { channel: 5 } },
         { configuration, zone: '2', live: { channel: 9 } },
@@ -191,9 +192,23 @@ describe('filterPrograms', () => {
       ],
     };
     const result = filterPrograms(ccPrograms, location);
-    expect(result.length).toBe(2);
-    expect(result[0].db.channel).toBe(219);
-    expect(result[1].db.channel).toBe(12);
+    expect(result.length).toBe(4);
+    expect(result[0].db.channel).toBe(703);
+    expect(result[1].db.channel).toBe(219);
+    expect(result[2].db.channel).toBe(709);
+    expect(result[3].db.channel).toBe(12);
+  });
+  test('doesnt have package', () => {
+    const ccPrograms = [
+      { fields: { rating: 4 }, db: { channel: 705 } }, // new, doesnt have package
+    ];
+
+    const location = {
+      // packages: [],
+      boxes: [{ configuration, zone: '1', live: { channel: 5 } }],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(0);
   });
   test('highly rated already showing on 1 (replicated to 2)', () => {
     const ccPrograms = [
