@@ -777,6 +777,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   currentPrograms = currentPrograms.filter(p => {
     // retallPackages
+    let skip = false;
     allPackages.map(pkg => {
       // check if premium channel
       console.log('check');
@@ -785,11 +786,11 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         console.log('is premium', location.packages, pkg.name);
         const locationPackages = location.packages || [];
         if (!locationPackages.includes(pkg.name)) {
-          return false;
+          skip = true;
         }
       }
-      return true;
     });
+    return !skip;
   });
 
   // if (location.packages && location.packages.length) {

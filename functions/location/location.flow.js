@@ -43,6 +43,7 @@ if (process.env.NODE_ENV === 'test') {
   });
 }
 
+// duplicated!
 const allPackages: any = [
   {
     name: 'NFL Sunday Ticket',
