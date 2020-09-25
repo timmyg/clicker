@@ -960,6 +960,21 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+async function getRecentlyUpdatedAirtablePrograms() {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableProgramsName = 'Control Center';
+
+  console.time('airtable call');
+  const updatedAirtablePrograms = await base(airtableProgramsName)
+    .select({
+      filterByFormula: `{ratingUpdatedAtMinutesAgo} <= 10`,
+      sort: [{ field: 'start', direction: 'asc' }],
+    })
+    .all();
+  console.timeEnd('airtable call');
+  return updatedAirtablePrograms;
+}
+
 async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Control Center';
@@ -999,7 +1014,7 @@ module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
-  const updatedAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
+  const updatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
   const promises = [];
   for (const airtableProgram of updatedAirtablePrograms) {
     const programmingId = airtableProgram.get('programmingId');
