@@ -42,6 +42,15 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
+
+// duplicated!
+const allPackages: any = [
+  {
+    name: 'NFL Sunday Ticket',
+    channels: [703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719],
+  },
+];
+
 const dbLocation = dynamoose.model(
   process.env.tableLocation,
   {
@@ -90,7 +99,15 @@ const dbLocation = dynamoose.model(
         live: {
           locked: Boolean, // new, dynamic
           lockedUntil: Number, // date
-          lockedProgrammingId: String,
+          // lockedProgrammingId: String,
+          lockedProgrammingIds: {
+            type: 'list',
+            list: [
+              {
+                type: 'string',
+              },
+            ],
+          },
           lockedMessage: String,
           channelChangeSource: {
             type: String,
@@ -292,7 +309,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 function setBoxStatus(box: Box): Box {
-  console.log({ box });
+  console.log({ box: JSON.stringify(box) });
   // locked: Boolean, // new
   // lockedUntil: Date,
   // lockedProgrammingId: String,
@@ -337,8 +354,10 @@ function setBoxStatus(box: Box): Box {
   const isAfterLockedTime = !isBeforeLockedTime;
   const isZappedProgramStillOn =
     box.live.program &&
-    box.live.lockedProgrammingId === box.live.program.programmingId &&
-    moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start
+    // box.live.lockedProgrammingId === box.live.program.programmingId &&
+    (!!box.live.lockedProgrammingIds && box.live.lockedProgrammingIds.includes(box.live.program.programmingId)) &&
+    moment.duration(moment(box.live.channelChangeAt).diff(moment(box.live.program.start))).asHours() >= -2; // channel change was more than 2 hours before start, so might be a repeat
+  console.log({ isZappedProgramStillOn });
   // console.log('hiiiiiiii', box.live);
   // lock box if we cant find a program
   // if (
@@ -385,6 +404,7 @@ function setBoxStatus(box: Box): Box {
       box.live.lockedMessage = `Sorry, TV is locked until <b>${box.live.program.title}</b> is over`;
     }
   }
+  console.log({ box });
   return box;
 }
 
@@ -534,36 +554,36 @@ module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async eve
   return respond(200, { count });
 });
 
-module.exports.syncAirtableLocations = RavenLambdaWrapper.handler(Raven, async event => {
-  const dbLocations: Venue[] = await dbLocation.scan().exec();
-  const airtableDataTable = 'Data';
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableLocations = await base(airtableDataTable)
-    .select({
-      filterByFormula: `{type} = 'location'`,
-    })
-    .all();
-  const airtableLocationIds: string[] = airtableLocations.map(l => l.fields.id);
-  const newLocations = dbLocations.filter(dbLocation => {
-    return !airtableLocationIds.includes(dbLocation.id);
-  });
-  let count = 0;
-  if (newLocations && newLocations.length) {
-    const promises = [];
-    newLocations.forEach(newLocation => {
-      count++;
-      promises.push(
-        base(airtableDataTable).create({
-          id: newLocation.id,
-          type: 'location',
-          name: `${newLocation.name}: ${newLocation.neighborhood}`,
-        }),
-      );
-    });
-    await Promise.all(promises);
-  }
-  return respond(200, { count });
-});
+// module.exports.syncAirtableLocations = RavenLambdaWrapper.handler(Raven, async event => {
+//   const dbLocations: Venue[] = await dbLocation.scan().exec();
+//   const airtableDataTable = 'Data';
+//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+//   const airtableLocations = await base(airtableDataTable)
+//     .select({
+//       filterByFormula: `{type} = 'location'`,
+//     })
+//     .all();
+//   const airtableLocationIds: string[] = airtableLocations.map(l => l.fields.id);
+//   const newLocations = dbLocations.filter(dbLocation => {
+//     return !airtableLocationIds.includes(dbLocation.id);
+//   });
+//   let count = 0;
+//   if (newLocations && newLocations.length) {
+//     const promises = [];
+//     newLocations.forEach(newLocation => {
+//       count++;
+//       promises.push(
+//         base(airtableDataTable).create({
+//           id: newLocation.id,
+//           type: 'location',
+//           name: `${newLocation.name}: ${newLocation.neighborhood}`,
+//         }),
+//       );
+//     });
+//     await Promise.all(promises);
+//   }
+//   return respond(200, { count });
+// });
 
 module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
@@ -665,7 +685,25 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       }
       program = programResult && programResult.data;
       console.log({ program });
-      updateBoxInfoBody.lockedProgrammingId = program && program.programmingId;
+      if (program && program.programmingId) {
+        updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
+      }
+
+      // also, lets check what's on in 65 mins and lock that if it's a game
+      queryParams.time =
+        moment()
+          .add(65, 'm')
+          .unix() * 1000;
+      const programResult2 = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams(queryParams)
+        .go();
+      const program2 = programResult2 && programResult2.data;
+      console.log({ program2 });
+      if (program2 && program2.programmingId && program.gameId) {
+        updateBoxInfoBody.lockedProgrammingIds.push(program2.programmingId);
+      }
 
       await new Invoke()
         .service('location')
@@ -901,7 +939,7 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
 module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const body: BoxInfoRequest = getBody(event);
-  const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingId } = body;
+  const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingIds } = body;
 
   console.log({ body });
   console.time('get location');
@@ -956,7 +994,7 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     program,
     channelChangeAt,
     lockedUntil,
-    lockedProgrammingId,
+    lockedProgrammingIds,
   );
   console.timeEnd('update location box');
 
@@ -1018,7 +1056,27 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   console.log({ currentlyShowingPrograms });
   let ccProgramsFiltered = [];
   ccPrograms.forEach(ccp => {
-    // console.log(currentlyShowingPrograms);
+    // if (cc)
+    // if premium channel, check if has package
+    let skip = false;
+    allPackages.map(pkg => {
+      // check if premium channel
+      console.log('check');
+      if (pkg.channels.includes(ccp.db.channel)) {
+        // check if location has package
+        console.log('is premium', location.packages, pkg.name);
+        const locationPackages = location.packages || [];
+        if (!locationPackages.includes(pkg.name)) {
+          console.log('skip');
+          skip = true;
+          return;
+        }
+      }
+    });
+    console.log('1');
+    if (skip) return;
+    console.log('2');
+
     const program: Program = ccp.db;
     if (!currentlyShowingPrograms.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
       console.log('pushing');
@@ -1041,12 +1099,16 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   console.info(`filtered programs after looking at currently showing: ${ccProgramsFiltered.length}`);
 
   // remove channels that location doesn't have
-  const excludedChannels =
-    location.channels && location.channels.exclude && location.channels.exclude.map(channel => parseInt(channel, 10));
+  // const excludedChannels = [];
+  // if (location.packages && location.packages.length) {
+  //   location.packages.map(packageName => {
+  //     excludedChannels.push(...allPackages.find(p => p.name === packageName).channels);
+  //   });
+  // }
 
-  if (excludedChannels && excludedChannels.length) {
-    ccProgramsFiltered = ccProgramsFiltered.filter(ccp => !excludedChannels.includes(ccp.db.channel));
-  }
+  // if (excludedChannels && excludedChannels.length) {
+  //   ccProgramsFiltered = ccProgramsFiltered.filter(ccp => !excludedChannels.includes(ccp.db.channel));
+  // }
   console.info(`filtered programs after looking at excluded: ${ccProgramsFiltered.length}`);
   // sort by rating descending
   return ccProgramsFiltered.sort((a, b) => b.fields.rating - a.fields.rating);
@@ -1703,7 +1765,7 @@ async function updateLocationBox(
   program: Program,
   channelChangeAt?: number,
   lockedUntil?: number,
-  lockedProgrammingId?: string,
+  lockedProgrammingIds?: string[],
   removeLockedUntil?: boolean,
 ) {
   const AWS = require('aws-sdk');
@@ -1740,9 +1802,9 @@ async function updateLocationBox(
     updateExpression += `${prefix}.lockedUntil = :lockedUntil,`;
     expressionAttributeValues[':lockedUntil'] = lockedUntil;
   }
-  if (lockedProgrammingId) {
-    updateExpression += `${prefix}.lockedProgrammingId = :lockedProgrammingId,`;
-    expressionAttributeValues[':lockedProgrammingId'] = lockedProgrammingId;
+  if (lockedProgrammingIds) {
+    updateExpression += `${prefix}.lockedProgrammingIds = :lockedProgrammingIds,`;
+    expressionAttributeValues[':lockedProgrammingIds'] = lockedProgrammingIds;
   }
   if (removeLockedUntil) {
     updateExpression += `${prefix}.lockedUntil = :lockedUntilRemove,`;

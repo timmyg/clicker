@@ -106,7 +106,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   const isHighlyRated =
     reservation.program && reservation.program.clickerRating && highRatings.includes(reservation.program.clickerRating);
   if (source === zapTypes.automation && isHighlyRated) {
-    updateBoxInfoBody.lockedProgrammingId = reservation.program.programmingId;
+    updateBoxInfoBody.lockedProgrammingIds = [reservation.program.programmingId];
     updateBoxInfoBody.removeLockedUntil = true;
     updateBoxInfoBody.program = reservation.program;
   }

@@ -172,18 +172,19 @@ describe('filterPrograms', () => {
     expect(result[1].db.channel).toBe(221);
     expect(result[2].db.channel).toBe(209);
   });
-  test('already showing and excluded', () => {
+  test('already showing and location packages', () => {
     const ccPrograms = [
       { fields: { rating: 4 }, db: { channel: 9 } }, // showing
-      { fields: { rating: 4 }, db: { channel: 703 } }, // excluded
-      { fields: { rating: 4 }, db: { channel: 219 } },
+      { fields: { rating: 4 }, db: { channel: 703 } }, // new, premium included
+      { fields: { rating: 4 }, db: { channel: 219 } }, // new
       { fields: { rating: 4 }, db: { channel: 5 } }, //showing
-      { fields: { rating: 4 }, db: { channel: 709 } }, //excluded
-      { fields: { rating: 4 }, db: { channel: 12 } },
+      { fields: { rating: 4 }, db: { channel: 709 } }, // new, premium included
+      { fields: { rating: 4 }, db: { channel: 12 } }, // new
     ];
 
     const location = {
-      channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
+      // channels: { exclude: [703, 704, 705, 706, 707, 709, 709] },
+      packages: ['NFL Sunday Ticket'],
       boxes: [
         { configuration, zone: '1', live: { channel: 5 } },
         { configuration, zone: '2', live: { channel: 9 } },
@@ -191,9 +192,23 @@ describe('filterPrograms', () => {
       ],
     };
     const result = filterPrograms(ccPrograms, location);
-    expect(result.length).toBe(2);
-    expect(result[0].db.channel).toBe(219);
-    expect(result[1].db.channel).toBe(12);
+    expect(result.length).toBe(4);
+    expect(result[0].db.channel).toBe(703);
+    expect(result[1].db.channel).toBe(219);
+    expect(result[2].db.channel).toBe(709);
+    expect(result[3].db.channel).toBe(12);
+  });
+  test('doesnt have package', () => {
+    const ccPrograms = [
+      { fields: { rating: 4 }, db: { channel: 705 } }, // new, doesnt have package
+    ];
+
+    const location = {
+      // packages: [],
+      boxes: [{ configuration, zone: '1', live: { channel: 5 } }],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(0);
   });
   test('highly rated already showing on 1 (replicated to 2)', () => {
     const ccPrograms = [
@@ -308,6 +323,10 @@ describe('get boxes', () => {
     id: 3,
     zone: 'A',
     live: {
+      lockedUntil:
+        moment()
+          .add(27, 'm')
+          .unix() * 1000,
       channelChangeSource: 'manual',
       channelChangeAt:
         moment()
@@ -324,11 +343,13 @@ describe('get boxes', () => {
     zone: '15',
     live: {
       channelChangeSource: 'manual',
+      lockedProgrammingIds: ['22', '33'],
       channelChangeAt:
         moment()
           .subtract(50, 'm')
           .unix() * 1000,
       program: {
+        programmingId: '33',
         start:
           moment()
             .subtract(40, 'm')
@@ -347,7 +368,7 @@ describe('get boxes', () => {
     zone: '15',
     live: {
       channelChangeSource: 'manual',
-      lockedProgrammingId: 'ABC',
+      lockedProgrammingIds: ['ABC'],
       lockedUntil:
         moment()
           .subtract(1, 'm')
@@ -370,17 +391,22 @@ describe('get boxes', () => {
       },
     },
   };
-  const reservedManuallyChangedProgramOver = {
+  const reservedManuallyChangedProgramOverButLocked = {
     ...automationActive,
     id: 6,
     zone: '15',
     live: {
       channelChangeSource: 'manual',
+      lockedUntil:
+        moment()
+          .add(3, 'm')
+          .unix() * 1000,
       channelChangeAt:
         moment()
           .subtract(40, 'm')
           .unix() * 1000,
       program: {
+        programmingId: '55',
         start:
           moment()
             .subtract(2, 'h')
@@ -406,8 +432,8 @@ describe('get boxes', () => {
       const result = getAvailableBoxes([openManuallyChangedDifferentProgram]);
       expect(result.length).toBe(1);
     });
-    test('reservedManuallyChangedProgramOver', () => {
-      const result = getAvailableBoxes([reservedManuallyChangedProgramOver]);
+    test('reservedManuallyChangedProgramOverButLocked', () => {
+      const result = getAvailableBoxes([reservedManuallyChangedProgramOverButLocked]);
       expect(result.length).toBe(0);
     });
     test('reservedManuallyChangedRecently', () => {
@@ -427,7 +453,7 @@ describe('get boxes', () => {
         openGoodBox,
         openGoodBox2,
         openManuallyChangedDifferentProgram,
-        reservedManuallyChangedProgramOver,
+        reservedManuallyChangedProgramOverButLocked,
         reservedManuallyChangedRecently,
         reservedManuallyChangedGameOn,
         reservedZonelessBox,
@@ -720,7 +746,7 @@ describe('setBoxStatus', () => {
     test('locked when different program and before lock time', () => {
       const live = {
         ...manualBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['B', 'A', 'C'],
         lockedUntil:
           moment()
             .add(1, 'm')
@@ -736,7 +762,7 @@ describe('setBoxStatus', () => {
     test('unlocked when different program on', () => {
       const live = {
         ...manualBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         lockedUntil:
           moment()
             .subtract(1.5, 'h')
@@ -755,7 +781,7 @@ describe('setBoxStatus', () => {
     test('unlocked when changed a while ago with same program on, but way later (repeat program)', () => {
       const live = {
         ...manualBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         channelChangeAt:
           moment()
             .subtract(6.1, 'h')
@@ -780,7 +806,7 @@ describe('setBoxStatus', () => {
     test('unlocked with different program on', () => {
       const live = {
         ...automationBox,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'B',
         },
@@ -798,7 +824,7 @@ describe('setBoxStatus', () => {
           moment()
             .subtract(6.1, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'A',
           start:
@@ -820,7 +846,7 @@ describe('setBoxStatus', () => {
           moment()
             .subtract(0.2, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'A',
           start:
@@ -842,7 +868,7 @@ describe('setBoxStatus', () => {
           moment()
             .subtract(0.1, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {
           programmingId: 'A',
           end:
@@ -864,7 +890,7 @@ describe('setBoxStatus', () => {
           moment()
             .subtract(0.1, 'h')
             .unix() * 1000,
-        lockedProgrammingId: 'A',
+        lockedProgrammingIds: ['A'],
         program: {},
       };
       const box = {

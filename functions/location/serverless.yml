@@ -264,14 +264,14 @@ functions:
       - http:
           path: airtable/now-showing
           method: post
-  syncAirtableLocations:
-    handler: location.syncAirtableLocations
-    timeout: 10
-    events:
-      - schedule: cron(00 10 * * ? *) # every day @ 6am eastern
-      - http:
-          path: airtable/data/locations
-          method: post
+  # syncAirtableLocations:
+  #   handler: location.syncAirtableLocations
+  #   timeout: 10
+  #   events:
+  #     - schedule: cron(00 10 * * ? *) # every day @ 6am eastern
+  #     - http:
+  #         path: airtable/data/locations
+  #         method: post
   syncAirtableRegions:
     handler: location.syncAirtableRegions
     timeout: 10

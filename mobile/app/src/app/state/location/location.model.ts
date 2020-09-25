@@ -11,7 +11,7 @@ export interface Location {
   announcement?: string;
   ip: string;
   zip: number;
-  // free?: boolean;
+  free?: boolean;
   openTvs?: boolean;
   active?: boolean;
   connected?: boolean;
