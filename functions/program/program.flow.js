@@ -1014,9 +1014,10 @@ module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
-  const updatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
+  const recentlyUpdatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
+  const windowAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
-  for (const airtableProgram of updatedAirtablePrograms) {
+  for (const airtableProgram of [...recentlyUpdatedAirtablePrograms, ...windowAirtablePrograms]) {
     const programmingId = airtableProgram.get('programmingId');
     const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
