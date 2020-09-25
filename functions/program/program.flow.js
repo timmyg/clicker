@@ -965,9 +965,12 @@ async function getRecentlyUpdatedAirtablePrograms() {
   const airtableProgramsName = 'Control Center';
 
   console.time('airtable getRecentlyUpdatedAirtablePrograms call');
+  let filterByFormula: string[] = [];
+  filterByFormula.push(`{ratingUpdatedAtMinutesAgo} <= 10`);
+  filterByFormula.push(`{ratingUpdatedAtMinutesAgo} != BLANK()`);
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
-      filterByFormula: `{ratingUpdatedAtMinutesAgo} <= 10`,
+      filterByFormula: `AND(${filterByFormula.join(',')})`,
       sort: [{ field: 'start', direction: 'asc' }],
     })
     .all();
