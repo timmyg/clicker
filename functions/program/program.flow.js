@@ -1022,14 +1022,29 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
   const recentlyUpdatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
   const windowAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
-  for (const airtableProgram of [...recentlyUpdatedAirtablePrograms, ...windowAirtablePrograms]) {
+  let allPrograms = [...recentlyUpdatedAirtablePrograms, ...windowAirtablePrograms];
+  allPrograms = [
+    ...allPrograms.filter(p => !p.fields.targetingIds),
+    ...allPrograms.filter(p => !!p.fields.targetingIds),
+  ];
+  for (const airtableProgram of allPrograms) {
     const programmingId = airtableProgram.get('programmingId');
     const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
-    const programs = await dbProgram
-      .query('programmingId')
-      .eq(programmingId)
-      .exec();
+    // if targeted at region update that first
+    let regionName;
+    if (!!airtableProgram.fields.targetingIds) {
+      regionName = airtableProgram.fields.targetingIds[0].replace('region:', '');
+    }
+    let programsQuery = dbProgram.query('programmingId').eq(programmingId);
+    // .exec();
+    if (!!regionName) {
+      programsQuery = programsQuery
+        .and()
+        .filter('region')
+        .eq(regionName);
+    }
+    const programs = await programsQuery.exec();
 
     for (const program of programs) {
       const { region, id } = program;
