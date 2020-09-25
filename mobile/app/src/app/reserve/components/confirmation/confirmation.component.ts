@@ -116,7 +116,20 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
         // const manageLocations = roles && roles["manageLocations"];
         // const isManager =
         //   manageLocations && manageLocations.includes(reservation.location.id);
-        
+        if (reservation.location.free) {
+          // timeframes = getFreeLocationTimeframe()
+          // console.log({timeframes});
+          // timeframes.map(t => {
+          //   t.tokens = 0
+          // })
+          // console.log({timeframes});
+          timeframes = [
+            {
+              minutes: 0,
+              tokens: 0
+            }
+          ]
+        }
         if (reservation.isVip) {
           timeframes.map(t => {
             t.tokens = 0
@@ -215,6 +228,14 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getManagerFreeTimeframe(): Timeframe {
+    return {
+      tokens: 0,
+      minutes: 0,
+      isManager: true
+    };
+  }
+
+  getFreeLocationTimeframe(): Timeframe {
     return {
       tokens: 0,
       minutes: 0,

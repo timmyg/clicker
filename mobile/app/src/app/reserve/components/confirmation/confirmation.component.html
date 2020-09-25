@@ -59,7 +59,12 @@
                 </ng-template>
               </span>
               <ng-template #minutes>
-                {{ timeframe.minutes }} minutes
+                <span *ngIf="timeframe.minutes !== 0; else free"
+                  >{{ timeframe.minutes }} minutes</span
+                >
+                <ng-template #free>
+                  Free change
+                </ng-template>
               </ng-template>
               <!-- <span> {{ timeframe.minutes }} minutes </span> -->
             </span>

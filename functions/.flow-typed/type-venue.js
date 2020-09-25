@@ -8,7 +8,7 @@ class BoxLive {
   locked: boolean;
   appLocked: boolean;
   lockedUntil: number;
-  lockedProgrammingId: string;
+  lockedProgrammingIds: string[];
   lockedMessage: string;
   program: Program;
 }
@@ -51,9 +51,9 @@ export class Venue extends Base {
   shortId: string;
   losantId: string;
   boxes: Box[];
-  channels: {
-    exclude: string[],
-  };
+  // channels: {
+  //   exclude: string[],
+  // };
   packages: string[];
   name: string;
   neighborhood: string;

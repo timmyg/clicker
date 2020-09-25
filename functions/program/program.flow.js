@@ -38,6 +38,14 @@ type region = {
   localChannels: number[],
 };
 
+// duplicated!
+const allPackages: any = [
+  {
+    name: 'NFL Sunday Ticket',
+    channels: [703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719],
+  },
+];
+
 const allRegions: region[] = [
   {
     name: 'Cincinnati',
@@ -765,14 +773,33 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('current + next programming combine');
 
   // console.log('exclude', location.channels);
-  console.time('remove excluded');
-  if (location.channels && location.channels.exclude) {
-    const excludedChannels = location.channels.exclude.map(function(item) {
-      return parseInt(item, 10);
+  console.time('remove premium unless have package');
+
+  currentPrograms = currentPrograms.filter(p => {
+    // retallPackages
+    let skip = false;
+    allPackages.map(pkg => {
+      // check if premium channel
+      console.log('check');
+      if (pkg.channels.includes(p.channel)) {
+        // check if location has package
+        console.log('is premium', location.packages, pkg.name);
+        const locationPackages = location.packages || [];
+        if (!locationPackages.includes(pkg.name)) {
+          skip = true;
+        }
+      }
     });
-    currentPrograms = currentPrograms.filter(p => !excludedChannels.includes(p.channel));
-  }
-  console.timeEnd('remove excluded');
+    return !skip;
+  });
+
+  // if (location.packages && location.packages.length) {
+  //   // const excludedChannels = location.channels.exclude.map(function(item) {
+  //   //   return parseInt(item, 10);
+  //   // });
+  //   currentPrograms = currentPrograms.filter(p => !excludedChannels.includes(p.channel));
+  // }
+  console.timeEnd('remove premium unless have package');
 
   console.time('sort');
   // sort
@@ -869,10 +896,14 @@ module.exports.clearAirtable = RavenLambdaWrapper.handler(Raven, async event => 
 });
 
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const { stage } = process.env;
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  const daysToPull = 2;
+  let daysToPull = 2;
+  if (stage === 'develop') {
+    daysToPull = 7;
+  }
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
@@ -929,6 +960,25 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+async function getRecentlyUpdatedAirtablePrograms() {
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableProgramsName = 'Control Center';
+
+  console.time('airtable getRecentlyUpdatedAirtablePrograms call');
+  let filterByFormula: string[] = [];
+  filterByFormula.push(`{ratingUpdatedAtMinutesAgo} <= 10`);
+  filterByFormula.push(`{ratingUpdatedAtMinutesAgo} != BLANK()`);
+  const updatedAirtablePrograms = await base(airtableProgramsName)
+    .select({
+      filterByFormula: `AND(${filterByFormula.join(',')})`,
+      sort: [{ field: 'start', direction: 'asc' }],
+    })
+    .all();
+  console.timeEnd('airtable getRecentlyUpdatedAirtablePrograms call');
+  console.log(updatedAirtablePrograms.length);
+  return updatedAirtablePrograms;
+}
+
 async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Control Center';
@@ -944,14 +994,15 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   filterByFormula.push(`{start} < '${fourHoursFromNow}'`);
   filterByFormula.push(`{rating} != BLANK()`);
   filterByFormula.push(`{isOver} != 'Y'`);
-  console.time('airtable call');
+  console.time('airtable window call');
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
       filterByFormula: `AND(${filterByFormula.join(',')})`,
       sort: [{ field: 'start', direction: 'asc' }],
     })
     .all();
-  console.timeEnd('airtable call');
+  console.timeEnd('airtable window call');
+  console.log(updatedAirtablePrograms.length);
   return updatedAirtablePrograms;
 }
 
@@ -968,16 +1019,32 @@ module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
-  const updatedAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
+  const recentlyUpdatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
+  const windowAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
-  for (const airtableProgram of updatedAirtablePrograms) {
+  let allPrograms = [...recentlyUpdatedAirtablePrograms, ...windowAirtablePrograms];
+  allPrograms = [
+    ...allPrograms.filter(p => !p.fields.targetingIds),
+    ...allPrograms.filter(p => !!p.fields.targetingIds),
+  ];
+  for (const airtableProgram of allPrograms) {
     const programmingId = airtableProgram.get('programmingId');
     const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
-    const programs = await dbProgram
-      .query('programmingId')
-      .eq(programmingId)
-      .exec();
+    // if targeted at region update that first
+    let regionName;
+    if (!!airtableProgram.fields.targetingIds) {
+      regionName = airtableProgram.fields.targetingIds[0].replace('region:', '');
+    }
+    let programsQuery = dbProgram.query('programmingId').eq(programmingId);
+    // .exec();
+    if (!!regionName) {
+      programsQuery = programsQuery
+        .and()
+        .filter('region')
+        .eq(regionName);
+    }
+    const programs = await programsQuery.exec();
 
     for (const program of programs) {
       const { region, id } = program;
@@ -1209,7 +1276,7 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
   const { id, programmingId, region } = program;
   if (!programmingId.includes('GDM')) {
     console.time('getProgramDetails');
-    console.log('calling getProgramDetails');
+    console.log('calling getProgramDetails', program);
     const programDetails = await getProgramDetails(program);
     console.timeEnd('getProgramDetails');
     if (!!programDetails) {
