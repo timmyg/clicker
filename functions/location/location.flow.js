@@ -554,36 +554,36 @@ module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async eve
   return respond(200, { count });
 });
 
-module.exports.syncAirtableLocations = RavenLambdaWrapper.handler(Raven, async event => {
-  const dbLocations: Venue[] = await dbLocation.scan().exec();
-  const airtableDataTable = 'Data';
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableLocations = await base(airtableDataTable)
-    .select({
-      filterByFormula: `{type} = 'location'`,
-    })
-    .all();
-  const airtableLocationIds: string[] = airtableLocations.map(l => l.fields.id);
-  const newLocations = dbLocations.filter(dbLocation => {
-    return !airtableLocationIds.includes(dbLocation.id);
-  });
-  let count = 0;
-  if (newLocations && newLocations.length) {
-    const promises = [];
-    newLocations.forEach(newLocation => {
-      count++;
-      promises.push(
-        base(airtableDataTable).create({
-          id: newLocation.id,
-          type: 'location',
-          name: `${newLocation.name}: ${newLocation.neighborhood}`,
-        }),
-      );
-    });
-    await Promise.all(promises);
-  }
-  return respond(200, { count });
-});
+// module.exports.syncAirtableLocations = RavenLambdaWrapper.handler(Raven, async event => {
+//   const dbLocations: Venue[] = await dbLocation.scan().exec();
+//   const airtableDataTable = 'Data';
+//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+//   const airtableLocations = await base(airtableDataTable)
+//     .select({
+//       filterByFormula: `{type} = 'location'`,
+//     })
+//     .all();
+//   const airtableLocationIds: string[] = airtableLocations.map(l => l.fields.id);
+//   const newLocations = dbLocations.filter(dbLocation => {
+//     return !airtableLocationIds.includes(dbLocation.id);
+//   });
+//   let count = 0;
+//   if (newLocations && newLocations.length) {
+//     const promises = [];
+//     newLocations.forEach(newLocation => {
+//       count++;
+//       promises.push(
+//         base(airtableDataTable).create({
+//           id: newLocation.id,
+//           type: 'location',
+//           name: `${newLocation.name}: ${newLocation.neighborhood}`,
+//         }),
+//       );
+//     });
+//     await Promise.all(promises);
+//   }
+//   return respond(200, { count });
+// });
 
 module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
