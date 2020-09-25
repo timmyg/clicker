@@ -964,14 +964,15 @@ async function getRecentlyUpdatedAirtablePrograms() {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Control Center';
 
-  console.time('airtable call');
+  console.time('airtable getRecentlyUpdatedAirtablePrograms call');
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
       filterByFormula: `{ratingUpdatedAtMinutesAgo} <= 10`,
       sort: [{ field: 'start', direction: 'asc' }],
     })
     .all();
-  console.timeEnd('airtable call');
+  console.timeEnd('airtable getRecentlyUpdatedAirtablePrograms call');
+  console.log(updatedAirtablePrograms.length);
   return updatedAirtablePrograms;
 }
 
@@ -990,14 +991,15 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   filterByFormula.push(`{start} < '${fourHoursFromNow}'`);
   filterByFormula.push(`{rating} != BLANK()`);
   filterByFormula.push(`{isOver} != 'Y'`);
-  console.time('airtable call');
+  console.time('airtable window call');
   const updatedAirtablePrograms = await base(airtableProgramsName)
     .select({
       filterByFormula: `AND(${filterByFormula.join(',')})`,
       sort: [{ field: 'start', direction: 'asc' }],
     })
     .all();
-  console.timeEnd('airtable call');
+  console.timeEnd('airtable window call');
+  console.log(updatedAirtablePrograms.length);
   return updatedAirtablePrograms;
 }
 
