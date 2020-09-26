@@ -48,6 +48,10 @@ const allPackages: any = [
     name: 'ACC', // for testing
     channels: [612],
   },
+  {
+    name: 'TVG', // for testing
+    channels: [602],
+  },
 ];
 
 const allRegions: region[] = [
