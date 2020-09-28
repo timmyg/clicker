@@ -344,6 +344,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       p.endFromNow = moment(p.end).fromNow();
     });
     console.log(`programs: ${programs.length}`);
+    console.log(JSON.stringify({ programs }));
     const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     const existingProgram = sortedPrograms[sortedPrograms.length - 1];
     console.log({ existingProgram });
