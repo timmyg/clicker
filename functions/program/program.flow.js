@@ -44,14 +44,14 @@ const allPackages: any = [
     name: 'NFL Sunday Ticket',
     channels: [703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719],
   },
-  {
-    name: 'ACC', // for testing
-    channels: [612],
-  },
-  {
-    name: 'TVG', // for testing
-    channels: [602],
-  },
+  // {
+  //   name: 'ACC', // for testing
+  //   channels: [612],
+  // },
+  // {
+  //   name: 'TVG', // for testing
+  //   channels: [602],
+  // },
 ];
 
 const allRegions: region[] = [
