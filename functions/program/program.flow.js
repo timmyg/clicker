@@ -167,7 +167,8 @@ const dbProgram = dynamoose.model(
       //   name: 'idGlobalIndex',
       // },
     },
-    start: { type: Number },
+    start: Number,
+    startOriginal: Number,
     end: Number,
     channel: {
       type: Number,
@@ -1065,17 +1066,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
       // console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
       const update: Object = { gameId: gameDatabaseId, clickerRating: programRating };
       if (!!earlyMinutes) {
-        // const fullProgram = await dbProgram
-        //   .queryOne('id')
-        //   .eq(id)
-        //   .exec();
-        const fullProgram = await dbProgram
-          .queryOne('region')
-          .eq(region)
-          .and()
-          .filter('id')
-          .eq(id)
-          .exec();
+        const fullProgram = await dbProgram.get({ id, region });
         console.log({ fullProgram });
         let { startOriginal, start } = fullProgram;
         if (!startOriginal) startOriginal = start;
