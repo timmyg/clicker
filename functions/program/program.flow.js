@@ -345,6 +345,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     });
     console.log(`programs: ${programs.length}`);
     console.log(JSON.stringify({ programs }));
+    // sort by end, in case start time was changed via admin so it starts early
     const sortedPrograms = programs.sort((a, b) => a.end - b.end);
     const existingProgram = sortedPrograms[sortedPrograms.length - 1];
     console.log({ existingProgram });
