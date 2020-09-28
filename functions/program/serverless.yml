@@ -230,7 +230,9 @@ resources:
               - AttributeName: programmingId
                 KeyType: HASH
             Projection:
-              ProjectionType: KEYS_ONLY
+              NonKeyAttributes:
+                - start
+              ProjectionType: INCLUDE
           - IndexName: gameIdGlobalIndex
             KeySchema:
               - AttributeName: gameId
@@ -319,7 +321,7 @@ functions:
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
     runtime: nodejs12.x
-    description: sync user program game id/rating from airtable to programs db
+    description: sync user program game id/rating/early from airtable to programs db
     timeout: 15
     events:
       - schedule: cron(9/10 * * * ? *) # every minute ending in 9

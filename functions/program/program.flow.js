@@ -1031,6 +1031,10 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     const programmingId = airtableProgram.get('programmingId');
     const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
+    const earlyMinutes: number = parseInt(airtableProgram.get('earlyTune'), 10);
+    if (!!earlyMinutes) {
+      console.log({ earlyMinutes });
+    }
     // if targeted at region update that first
     let regionName;
     if (!!airtableProgram.fields.targetingIds) {
@@ -1047,9 +1051,22 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     const programs = await programsQuery.exec();
 
     for (const program of programs) {
-      const { region, id } = program;
-      console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
-      promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating }));
+      const { region, id, start } = program;
+      console.log({ program });
+      let { startOriginal } = program;
+      if (!startOriginal) startOriginal = start;
+      console.log({ start, startOriginal });
+      // console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
+      const update: Object = { gameId: gameDatabaseId, clickerRating: programRating };
+      if (!!earlyMinutes) {
+        const newStart =
+          moment(startOriginal)
+            .subtract(earlyMinutes, 'm')
+            .unix() * 1000;
+        update.start = newStart;
+      }
+      console.log(update);
+      promises.push(dbProgram.update({ region, id }, update));
     }
   }
   await Promise.all(promises);
@@ -1406,6 +1423,7 @@ function build(dtvSchedule: any, regionId: string) {
         program.repeat = program.repeat;
         program.region = regionId;
         program.start = moment(program.airTime).unix() * 1000;
+        program.startOriginal = program.start;
         program.end =
           moment(program.airTime)
             .add(program.durationMins, 'minutes')
