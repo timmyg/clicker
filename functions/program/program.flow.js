@@ -156,7 +156,17 @@ const dbProgram = dynamoose.model(
       hashKey: true,
       index: true,
     },
-    id: { type: String, rangeKey: true },
+    id: {
+      type: String,
+      rangeKey: true,
+      // hashKey: true,
+      // index: true,
+      // index: {
+      //   global: true,
+      //   project: true,
+      //   name: 'idGlobalIndex',
+      // },
+    },
     start: { type: Number },
     end: Number,
     channel: {
@@ -1032,9 +1042,9 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
     const earlyMinutes: number = parseInt(airtableProgram.get('earlyTune'), 10);
-    if (!!earlyMinutes) {
-      console.log({ earlyMinutes });
-    }
+    // if (!!earlyMinutes) {
+    //   console.log({ earlyMinutes });
+    // }
     // if targeted at region update that first
     let regionName;
     if (!!airtableProgram.fields.targetingIds) {
@@ -1055,10 +1065,18 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
       // console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
       const update: Object = { gameId: gameDatabaseId, clickerRating: programRating };
       if (!!earlyMinutes) {
+        // const fullProgram = await dbProgram
+        //   .queryOne('id')
+        //   .eq(id)
+        //   .exec();
         const fullProgram = await dbProgram
-          .queryOne('id')
+          .queryOne('region')
+          .eq(region)
+          .and()
+          .filter('id')
           .eq(id)
           .exec();
+        console.log({ fullProgram });
         let { startOriginal, start } = fullProgram;
         if (!startOriginal) startOriginal = start;
         const newStart =
