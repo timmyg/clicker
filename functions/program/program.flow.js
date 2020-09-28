@@ -1040,10 +1040,7 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     if (!!airtableProgram.fields.targetingIds) {
       regionName = airtableProgram.fields.targetingIds[0].replace('region:', '');
     }
-    let programsQuery = dbProgram
-      .query('programmingId')
-      .using('programmingId2GlobalIndex')
-      .eq(programmingId);
+    let programsQuery = dbProgram.query('programmingId').eq(programmingId);
     // .exec();
     if (!!regionName) {
       programsQuery = programsQuery
@@ -1054,21 +1051,23 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     const programs = await programsQuery.exec();
 
     for (const program of programs) {
-      const { region, id, start } = program;
-      console.log({ program });
-      let { startOriginal } = program;
-      if (!startOriginal) startOriginal = start;
-      console.log({ start, startOriginal });
+      const { region, id } = program;
       // console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
       const update: Object = { gameId: gameDatabaseId, clickerRating: programRating };
       if (!!earlyMinutes) {
+        const fullProgram = await dbProgram
+          .queryOne('id')
+          .eq(id)
+          .exec();
+        let { startOriginal, start } = fullProgram;
+        if (!startOriginal) startOriginal = start;
         const newStart =
           moment(startOriginal)
             .subtract(earlyMinutes, 'm')
             .unix() * 1000;
         update.start = newStart;
       }
-      console.log(update);
+      console.log({ update });
       promises.push(dbProgram.update({ region, id }, update));
     }
   }
