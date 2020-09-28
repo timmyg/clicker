@@ -3,6 +3,8 @@ export class Program {
   region: string;
   id: string;
   start: number;
+  startOriginal: number;
+  start: number;
   end: number;
   channel: number;
   channelId: number;
