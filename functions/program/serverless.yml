@@ -251,12 +251,12 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: idGlobalIndex
-            KeySchema:
-              - AttributeName: id
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
+          # - IndexName: idGlobalIndex
+          #   KeySchema:
+          #     - AttributeName: id
+          #       KeyType: HASH
+          #   Projection:
+          #     ProjectionType: ALL
         LocalSecondaryIndexes:
           - IndexName: startLocalIndex
             KeySchema:
