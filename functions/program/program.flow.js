@@ -44,14 +44,6 @@ const allPackages: any = [
     name: 'NFL Sunday Ticket',
     channels: [703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719],
   },
-  // {
-  //   name: 'ACC', // for testing
-  //   channels: [612],
-  // },
-  // {
-  //   name: 'TVG', // for testing
-  //   channels: [602],
-  // },
 ];
 
 const allRegions: region[] = [
@@ -164,8 +156,19 @@ const dbProgram = dynamoose.model(
       hashKey: true,
       index: true,
     },
-    id: { type: String, rangeKey: true },
-    start: { type: Number },
+    id: {
+      type: String,
+      rangeKey: true,
+      // hashKey: true,
+      // index: true,
+      // index: {
+      //   global: true,
+      //   project: true,
+      //   name: 'idGlobalIndex',
+      // },
+    },
+    start: Number,
+    startOriginal: Number,
     end: Number,
     channel: {
       type: Number,
@@ -1039,6 +1042,10 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     const programmingId = airtableProgram.get('programmingId');
     const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
+    const earlyMinutes: number = parseInt(airtableProgram.get('earlyTune'), 10);
+    // if (!!earlyMinutes) {
+    //   console.log({ earlyMinutes });
+    // }
     // if targeted at region update that first
     let regionName;
     if (!!airtableProgram.fields.targetingIds) {
@@ -1056,8 +1063,21 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
 
     for (const program of programs) {
       const { region, id } = program;
-      console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
-      promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating }));
+      // console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
+      const update: Object = { gameId: gameDatabaseId, clickerRating: programRating };
+      if (!!earlyMinutes) {
+        const fullProgram = await dbProgram.get({ id, region });
+        console.log({ fullProgram });
+        let { startOriginal, start } = fullProgram;
+        if (!startOriginal) startOriginal = start;
+        const newStart =
+          moment(startOriginal)
+            .subtract(earlyMinutes, 'm')
+            .unix() * 1000;
+        update.start = newStart;
+      }
+      console.log({ update });
+      promises.push(dbProgram.update({ region, id }, update));
     }
   }
   await Promise.all(promises);
@@ -1414,6 +1434,7 @@ function build(dtvSchedule: any, regionId: string) {
         program.repeat = program.repeat;
         program.region = regionId;
         program.start = moment(program.airTime).unix() * 1000;
+        program.startOriginal = program.start;
         program.end =
           moment(program.airTime)
             .add(program.durationMins, 'minutes')
