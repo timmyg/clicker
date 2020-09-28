@@ -1179,7 +1179,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     // const isCloseHighlyRated = [10, 9].includes(program.fields.rating) && program.isMinutesFromNow(10);
     // const isCloseNotHighlyRated = [7, 6, 5, 4, 3, 2, 1].includes(program.fields.rating) && program.isMinutesFromNow(5);
     // if (isCloseHighlyRated || isCloseNotHighlyRated) {
-    if (program.isMinutesFromNow(0)) {
+    if (program.isMinutesFromNow(60)) {
       selectedBox = findBoxGameOver(availableBoxes);
       // if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
@@ -1687,7 +1687,12 @@ async function getAirtablePrograms(location: Venue): Promise<ControlCenterProgra
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
-      filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
+      filterByFormula: `AND( 
+        {rating} != BLANK(),
+        {isOver} != 'Y',
+        {startHoursFromNow} >= -4,
+        {startHoursFromNow} <= 1 
+      )`,
     })
     .all();
   console.log({ location });
