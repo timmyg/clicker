@@ -1040,7 +1040,10 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     if (!!airtableProgram.fields.targetingIds) {
       regionName = airtableProgram.fields.targetingIds[0].replace('region:', '');
     }
-    let programsQuery = dbProgram.query('programmingId').eq(programmingId);
+    let programsQuery = dbProgram
+      .query('programmingId')
+      .using('programmingId2GlobalIndex')
+      .eq(programmingId);
     // .exec();
     if (!!regionName) {
       programsQuery = programsQuery

@@ -230,6 +230,12 @@ resources:
               - AttributeName: programmingId
                 KeyType: HASH
             Projection:
+              ProjectionType: KEYS_ONLY
+          - IndexName: programmingId2GlobalIndex
+            KeySchema:
+              - AttributeName: programmingId
+                KeyType: HASH
+            Projection:
               NonKeyAttributes:
                 - start
               ProjectionType: INCLUDE
