@@ -57,6 +57,7 @@ const allRegions: region[] = [
   // { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
   // { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
   { id: 'cripple-creek-co', name: 'Cripple Creek', defaultZip: '80813', localChannels: [5, 11, 13, 21] },
+  { id: 'houston', name: 'Houston', defaultZip: '77064', localChannels: [2, 11, 13, 26] },
 ];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
 const nationalChannels: any[] = [
