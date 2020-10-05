@@ -113,7 +113,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => {
   const webhookEvent = getBody(event);
-  console.log({ webhookEvent });
+  console.log(JSON.stringify(webhookEvent));
   switch (webhookEvent.type) {
     case 'invoice.paid':
       const invoice = webhookEvent.data.object;
@@ -129,7 +129,7 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
       return respond(200);
     case 'invoice.payment_failed':
       const failedInvoice = webhookEvent.data.object;
-      const { customer_email: failedCustomerEmail, id } = failedInvoice;
+      const { customer_email: failedCustomerEmail, id } = failedInvoice[0];
       const failedDescription = failedInvoice.lines.data[0].description;
       const failedText = `Invoice Failed :( ${failedCustomerEmail} (${failedDescription}: ${id})`;
       await new Invoke()
