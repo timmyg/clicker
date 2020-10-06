@@ -129,13 +129,13 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
       return respond(200);
     case 'invoice.payment_failed':
       const failedInvoice = webhookEvent.data.object;
-      const { customer_email: failedCustomerEmail, id } = failedInvoice[0];
+      const { customer_email: failedCustomerEmail, id } = failedInvoice;
       const failedDescription = failedInvoice.lines.data[0].description;
       const failedText = `Invoice Failed :( ${failedCustomerEmail} (${failedDescription}: ${id})`;
       await new Invoke()
         .service('notification')
         .name('sendMoney')
-        .body({ failedText })
+        .body({ text: failedText })
         .async()
         .go();
       return respond(200);
