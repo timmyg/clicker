@@ -1014,6 +1014,7 @@ class ControlCenterProgram {
     programmingId: string,
     title: string,
     targetingIds: string[],
+    tuneEarly: number,
   };
   db: Program;
   constructor(obj: any) {
@@ -1067,10 +1068,8 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     let skip = false;
     allPackages.map(pkg => {
       // check if premium channel
-      console.log('check');
       if (pkg.channels.includes(ccp.db.channel)) {
         // check if location has package
-        console.log('is premium', location.packages, pkg.name);
         const locationPackages = location.packages || [];
         if (!locationPackages.includes(pkg.name)) {
           console.log('skip');
@@ -1079,25 +1078,26 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
         }
       }
     });
-    console.log('1');
     if (skip) return;
-    console.log('2');
-
     const program: Program = ccp.db;
+
+    // if there are two from the same channel, skip one (due to tuneEarly)
+    const other = ccPrograms.find(p => {
+      return p.db.channel === program.channel && !!p.fields.tuneEarly && p.fields.start !== ccp.fields.start;
+    });
+    if (other) {
+      return;
+    }
+
     if (!currentlyShowingPrograms.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
-      console.log('pushing');
       return ccProgramsFiltered.push(ccp);
     } else {
       // remove from array, in case of replication
       const index = currentlyShowingPrograms.findIndex(
         p => p.channel == program.channel && p.channelMinor == program.channelMinor,
       );
-      console.log({ index });
       if (index > -1) {
-        // console.log({ index });
-        // console.log({ currentlyShowingPrograms });
         currentlyShowingPrograms.splice(index, 1);
-        // console.log({ currentlyShowingPrograms });
       }
     }
   });

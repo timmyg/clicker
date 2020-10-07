@@ -210,6 +210,24 @@ describe('filterPrograms', () => {
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(0);
   });
+  test('duplicated channel', () => {
+    const firstStart = moment()
+      .subtract(65, 'm')
+      .toDate();
+    const secondStart = moment()
+      .add(5, 'm')
+      .toDate();
+    const ccPrograms = [
+      { fields: { channelTitle: 'FS1HD', start: firstStart }, db: { channel: 219 } },
+      { fields: { channelTitle: 'FS1HD', start: secondStart, tuneEarly: 30 }, db: { channel: 219 } },
+    ];
+
+    const location = {
+      boxes: [{ configuration, zone: '1', live: { channel: 5 } }],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(1);
+  });
   test('highly rated already showing on 1 (replicated to 2)', () => {
     const ccPrograms = [
       { fields: { rating: 9 }, db: { channel: 245 } }, // showing
