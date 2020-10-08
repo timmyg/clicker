@@ -99,10 +99,10 @@ const nationalChannels: any[] = [
   { channel: 716, channelTitle: 'NFLT' }, //NFL
   { channel: 717, channelTitle: 'NFLT' }, //NFL
   { channel: 718, channelTitle: 'NFLT' }, //NFL
-  { channel: 719, channelTitle: 'NFLT' }, //NFL
-  // 671 // FSMW, turned on at tin roof once
-  //   701, //NFLMX // 4 game mix
-  // 702, //NFLMX // 8 game mix
+  { channel: 290, channelTitle: 'DIS' },
+  { channel: 292, channelTitle: 'DISXD' },
+  { channel: 296, channelTitle: 'CTNW' },
+  { channel: 299, channelTitle: 'NICK' },
 ];
 
 // 2661
