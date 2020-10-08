@@ -57,6 +57,7 @@ const allRegions: region[] = [
   // { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
   // { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
   { id: 'cripple-creek-co', name: 'Cripple Creek', defaultZip: '80813', localChannels: [5, 11, 13, 21] },
+  { id: 'houston', name: 'Houston', defaultZip: '77064', localChannels: [2, 11, 13, 26] },
 ];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
 const nationalChannels: any[] = [
@@ -344,7 +345,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       p.endFromNow = moment(p.end).fromNow();
     });
     console.log(`programs: ${programs.length}`);
-    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    console.log(JSON.stringify({ programs }));
+    // sort by end, in case start time was changed via admin so it starts early
+    const sortedPrograms = programs.sort((a, b) => a.end - b.end);
     const existingProgram = sortedPrograms[sortedPrograms.length - 1];
     console.log({ existingProgram });
     if (sortedPrograms.length > 1) {
