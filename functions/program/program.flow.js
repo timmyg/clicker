@@ -100,7 +100,7 @@ const nationalChannels: any[] = [
   { channel: 716, channelTitle: 'NFLT' }, //NFL
   { channel: 717, channelTitle: 'NFLT' }, //NFL
   { channel: 718, channelTitle: 'NFLT' }, //NFL
-  { channel: 289, channelTitle: 'DSJRHD' },
+  // { channel: 289, channelTitle: 'DSJRHD' },
   { channel: 290, channelTitle: 'DIS' },
   // { channel: 292, channelTitle: 'DISXD' },
   { channel: 296, channelTitle: 'CTNW' },
