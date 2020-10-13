@@ -100,6 +100,8 @@ export class TvsComponent implements OnDestroy, OnInit {
     this.store.dispatch(
       new fromReservation.SetLocation(
         this.reservation.location,
+        this.reservation.isManager,
+        this.reservation.isVip,
         this.userGeolocation && this.userGeolocation.latitude,
         this.userGeolocation && this.userGeolocation.longitude
       )
