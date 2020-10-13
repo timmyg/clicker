@@ -97,7 +97,6 @@ export class TvsComponent implements OnDestroy, OnInit {
   }
 
   refresh() {
-    console.log("refresh");
     this.store.dispatch(
       new fromReservation.SetLocation(
         this.reservation.location,
