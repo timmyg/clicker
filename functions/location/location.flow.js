@@ -662,11 +662,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       };
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
-      const manualLockDurationHours = 1;
-      updateBoxInfoBody.lockedUntil =
-        moment()
-          .add(manualLockDurationHours, 'h')
-          .unix() * 1000;
+      updateBoxInfoBody.lockedProgrammingIds = [];
 
       console.log({ channel: major, region: location.region });
       const queryParams = { channel: major, channelMinor: minor, region: location.region };
@@ -685,9 +681,16 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       }
       program = programResult && programResult.data;
       console.log({ program });
-      if (program && program.programmingId) {
+      const hasProgram = !!program && !!program.programmingId;
+      if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
       }
+      const manualLockDurationHours = 1;
+      const manualLockUnknownProgramDurationHours = 3.5;
+      updateBoxInfoBody.lockedUntil =
+        moment()
+          .add(hasProgram ? manualLockDurationHours : manualLockUnknownProgramDurationHours, 'h')
+          .unix() * 1000;
 
       // also, lets check what's on in 65 mins and lock that if it's a game
       queryParams.time =
