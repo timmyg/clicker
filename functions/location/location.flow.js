@@ -662,11 +662,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       };
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
-      const manualLockDurationHours = 1;
-      updateBoxInfoBody.lockedUntil =
-        moment()
-          .add(manualLockDurationHours, 'h')
-          .unix() * 1000;
+      updateBoxInfoBody.lockedProgrammingIds = [];
 
       console.log({ channel: major, region: location.region });
       const queryParams = { channel: major, channelMinor: minor, region: location.region };
@@ -685,8 +681,25 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       }
       program = programResult && programResult.data;
       console.log({ program });
-      if (program && program.programmingId) {
+      const hasProgram = !!program && !!program.programmingId;
+      const manualLockDurationHours = 1;
+      const manualLockUnknownProgramDurationHours = 3.5;
+      updateBoxInfoBody.lockedUntil =
+        moment()
+          .add(hasProgram ? manualLockDurationHours : manualLockUnknownProgramDurationHours, 'h')
+          .unix() * 1000;
+      const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes')
+      if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
+      } else {
+        let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
+        unknownProgramText += `Locking TV for ${lockMinutes} minutes`
+        await new Invoke()
+          .service('notification')
+          .name('sendTasks')
+          .body({ text: unknownProgramText, importance: 2 })
+          .async()
+          .go();
       }
 
       // also, lets check what's on in 65 mins and lock that if it's a game
@@ -754,6 +767,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName},${labelName}) *${program &&
           program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
+          text+= `\nLocking TV for ${lockMinutes} minutes`
 
         const isRecentAutomationChange =
           location.boxes[i].live &&

@@ -51,7 +51,7 @@ const allRegions: region[] = [
     name: 'Cincinnati',
     id: 'cincinnati',
     defaultZip: '45202',
-    localChannels: [5, 9, 12, 19, 661, 660],
+    localChannels: [5, 9, 12, 19, 64, 661, 660],
   },
   // { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   // { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
