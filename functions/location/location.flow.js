@@ -684,6 +684,14 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       const hasProgram = !!program && !!program.programmingId;
       if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
+      } else {
+        const unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}`;
+        await new Invoke()
+          .service('notification')
+          .name('sendTasks')
+          .body({ text: unknownProgramText, importance: 2 })
+          .async()
+          .go();
       }
       const manualLockDurationHours = 1;
       const manualLockUnknownProgramDurationHours = 3.5;
