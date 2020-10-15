@@ -682,10 +682,18 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       program = programResult && programResult.data;
       console.log({ program });
       const hasProgram = !!program && !!program.programmingId;
+      const manualLockDurationHours = 1;
+      const manualLockUnknownProgramDurationHours = 3.5;
+      updateBoxInfoBody.lockedUntil =
+        moment()
+          .add(hasProgram ? manualLockDurationHours : manualLockUnknownProgramDurationHours, 'h')
+          .unix() * 1000;
       if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
       } else {
-        const unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}`;
+        let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
+        const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes')
+        unknownProgramText += `Locking TV for ${updateBoxInfoBody.lockedUntil} minutes`
         await new Invoke()
           .service('notification')
           .name('sendTasks')
@@ -693,12 +701,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .async()
           .go();
       }
-      const manualLockDurationHours = 1;
-      const manualLockUnknownProgramDurationHours = 3.5;
-      updateBoxInfoBody.lockedUntil =
-        moment()
-          .add(hasProgram ? manualLockDurationHours : manualLockUnknownProgramDurationHours, 'h')
-          .unix() * 1000;
 
       // also, lets check what's on in 65 mins and lock that if it's a game
       queryParams.time =
