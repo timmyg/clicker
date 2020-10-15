@@ -693,7 +693,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       } else {
         let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
         const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes')
-        unknownProgramText += `Locking TV for ${updateBoxInfoBody.lockedUntil} minutes`
+        unknownProgramText += `Locking TV for ${lockMinutes} minutes`
         await new Invoke()
           .service('notification')
           .name('sendTasks')
