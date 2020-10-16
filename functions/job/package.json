@@ -21,7 +21,7 @@
     "serverless-sentry": "^1.2.0"
   },
   "dependencies": {
-    "airtable": "^0.7.2",
+    "airtable": "^0.10.0",
     "aws-sdk": "^2.580.0",
     "aws-xray-sdk": "^2.5.0",
     "dotenv": "^6.2.0",
