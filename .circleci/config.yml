@@ -59,7 +59,7 @@ parameters:
 executors:
   node:
     docker:
-      - image: circleci/node:8.10
+      - image: circleci/node:8.17
   pynode:
     docker:
       - image: nikolaik/python-nodejs
