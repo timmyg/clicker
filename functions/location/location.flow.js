@@ -682,7 +682,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       program = programResult && programResult.data;
       console.log({ program });
       const hasProgram = !!program && !!program.programmingId;
-      const manualLockDurationHours = 1;
+      const manualLockDurationHours = 1.5;
       const manualLockUnknownProgramDurationHours = 3.5;
       updateBoxInfoBody.lockedUntil =
         moment()
@@ -691,15 +691,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes')
       if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
-      } else {
-        let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
-        unknownProgramText += `Locking TV for ${lockMinutes} minutes`
-        await new Invoke()
-          .service('notification')
-          .name('sendTasks')
-          .body({ text: unknownProgramText, importance: 2 })
-          .async()
-          .go();
       }
 
       // also, lets check what's on in 65 mins and lock that if it's a game
@@ -768,6 +759,17 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
           text+= `\nLocking TV for ${lockMinutes} minutes`
+
+        if (!hasProgram) {
+          let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
+          unknownProgramText += `Locking TV for ${lockMinutes} minutes`
+          await new Invoke()
+            .service('notification')
+            .name('sendTasks')
+            .body({ text: unknownProgramText, importance: 2 })
+            .async()
+            .go();
+        }
 
         const isRecentAutomationChange =
           location.boxes[i].live &&

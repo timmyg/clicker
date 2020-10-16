@@ -238,7 +238,7 @@ class Widget {
    */
   async init() {
     // await this.api.register();
-    await this.syncIpsAndBoxes();
+    // await this.syncIpsAndBoxes();
     this.device.connect((error) => {
       if (error) {
         logger.error(error);
