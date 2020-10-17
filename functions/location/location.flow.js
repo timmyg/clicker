@@ -688,7 +688,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         moment()
           .add(hasProgram ? manualLockDurationHours : manualLockUnknownProgramDurationHours, 'h')
           .unix() * 1000;
-      const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes')
+      const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes');
       if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
       }
@@ -758,12 +758,12 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName},${labelName}) *${program &&
           program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
-          text+= `\nLocking TV for ${lockMinutes} minutes`
+        text += `\nLocking TV for ${lockMinutes} minutes`;
 
 
         if (!hasProgram) {
           let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
-          unknownProgramText += `Locking TV for ${lockMinutes} minutes`
+          unknownProgramText += `Locking TV for ${lockMinutes} minutes`;
           await new Invoke()
             .service('notification')
             .name('sendTasks')
@@ -1853,7 +1853,7 @@ async function updateLocationBox(
   // console.log('returned');
   try {
     const x = await docClient.update(params).promise();
-    console.log({ x });
+    console.log('db result:', JSON.stringify(x));
   } catch (err) {
     console.log({ err });
     return err;
