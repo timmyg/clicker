@@ -119,6 +119,7 @@ const dbLocation = dynamoose.model(
           // program: Map, // populated every few minutes
         },
         updatedAt: Number, // date
+        updatedSource: String,
       },
     ],
     channels: {
@@ -688,7 +689,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         moment()
           .add(hasProgram ? manualLockDurationHours : manualLockUnknownProgramDurationHours, 'h')
           .unix() * 1000;
-      const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes')
+      const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes');
       if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
       }
@@ -758,11 +759,11 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName},${labelName}) *${program &&
           program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
-          text+= `\nLocking TV for ${lockMinutes} minutes`
+        text += `\nLocking TV for ${lockMinutes} minutes`;
 
         if (!hasProgram) {
           let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
-          unknownProgramText += `Locking TV for ${lockMinutes} minutes`
+          unknownProgramText += `Locking TV for ${lockMinutes} minutes`;
           await new Invoke()
             .service('notification')
             .name('sendTasks')
@@ -950,7 +951,19 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
         console.time('update location box');
         const boxIndex = location.boxes.findIndex(b => b.id === box.id);
         console.log(location.id, boxIndex, box.live.channel, program.title);
-        await updateLocationBox(location.id, boxIndex, box.live.channel, box.live.channelMinor, undefined, program);
+        await updateLocationBox(
+          location.id,
+          boxIndex,
+          box.live.channel,
+          box.live.channelMinor,
+          undefined,
+          program,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'updateAllBoxesPrograms',
+        );
         console.timeEnd('update location box');
       }
     }
@@ -1017,6 +1030,8 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     channelChangeAt,
     lockedUntil,
     lockedProgrammingIds,
+    undefined,
+    'updateBoxInfo',
   );
   console.timeEnd('update location box');
 
@@ -1794,6 +1809,7 @@ async function updateLocationBox(
   lockedUntil?: number,
   lockedProgrammingIds?: string[],
   removeLockedUntil?: boolean,
+  updatedSource: string,
 ) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -1839,6 +1855,8 @@ async function updateLocationBox(
   }
   updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
   expressionAttributeValues[':updatedAt'] = now;
+  updateExpression += `boxes[${boxIndex}].updatedSource = :updatedSource`;
+  expressionAttributeValues[':updatedSource'] = updatedSource;
   console.log(expressionAttributeValues);
   var params = {
     TableName: process.env.tableLocation,
@@ -1852,7 +1870,7 @@ async function updateLocationBox(
   // console.log('returned');
   try {
     const x = await docClient.update(params).promise();
-    console.log({ x });
+    console.log('db result:', JSON.stringify(x));
   } catch (err) {
     console.log({ err });
     return err;
