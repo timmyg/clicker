@@ -1810,10 +1810,9 @@ async function updateLocationBox(
   if (Number.isInteger(channelMinor)) {
     updateExpression += `${prefix}.channelMinor = :channelMinor,`;
     expressionAttributeValues[':channelMinor'] = parseInt(channelMinor);
+  } else {
+    removeExpression += `REMOVE ${prefix}.channelMinor`;
   }
-  // else {
-  //   removeExpression += `REMOVE ${prefix}.channelMinor`;
-  // }
   if (channelChangeAt) {
     updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;
     expressionAttributeValues[':channelChangeAt'] = channelChangeAt;

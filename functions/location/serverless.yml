@@ -225,6 +225,10 @@ functions:
     handler: location.updateBoxInfo
     timeout: 12
     memorySize: 512
+    events:
+      - http:
+          path: '{id}/boxes/{boxId}/info'
+          method: post
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
     description: check what is on all locations boxes (to detect manual changes)
