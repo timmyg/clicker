@@ -760,7 +760,6 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
         text += `\nLocking TV for ${lockMinutes} minutes`;
 
-
         if (!hasProgram) {
           let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
           unknownProgramText += `Locking TV for ${lockMinutes} minutes`;
@@ -1811,9 +1810,10 @@ async function updateLocationBox(
   if (Number.isInteger(channelMinor)) {
     updateExpression += `${prefix}.channelMinor = :channelMinor,`;
     expressionAttributeValues[':channelMinor'] = parseInt(channelMinor);
-  } else {
-    removeExpression += `REMOVE ${prefix}.channelMinor`;
   }
+  // else {
+  //   removeExpression += `REMOVE ${prefix}.channelMinor`;
+  // }
   if (channelChangeAt) {
     updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;
     expressionAttributeValues[':channelChangeAt'] = channelChangeAt;
