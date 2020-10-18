@@ -1853,7 +1853,7 @@ async function updateLocationBox(
     updateExpression += `${prefix}.lockedUntil = :lockedUntilRemove,`;
     expressionAttributeValues[':lockedUntilRemove'] = null;
   }
-  updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
+  updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt,`;
   expressionAttributeValues[':updatedAt'] = now;
   updateExpression += `boxes[${boxIndex}].updatedSource = :updatedSource`;
   expressionAttributeValues[':updatedSource'] = updatedSource;
