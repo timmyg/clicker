@@ -118,7 +118,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     .name('updateBoxInfo')
     .body(updateBoxInfoBody)
     .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
-    .async()
+    // .sync()
     .go();
 
   const name = source;
