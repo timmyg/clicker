@@ -203,7 +203,7 @@ functions:
   saveBoxesInfo:
     description: called from antenna to update whats on each box
     handler: location.saveBoxesInfo
-    timeout: 12
+    timeout: 60
     events:
       - http:
           path: '{id}/boxes/info'
@@ -224,7 +224,7 @@ functions:
     description: called by location.saveBoxesInfo for manual and remote for other changes
     handler: location.updateBoxInfo
     timeout: 12
-    memorySize: 512
+    memorySize: 1024
     events:
       - http:
           path: '{id}/boxes/{boxId}/info'
