@@ -788,6 +788,9 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.timeEnd('current + next programming combine');
 
+  // remove non sports programs
+  currentPrograms = currentPrograms.filter(cp => !!cp.isSports);
+
   // console.log('exclude', location.channels);
   console.time('remove premium unless have package');
 
