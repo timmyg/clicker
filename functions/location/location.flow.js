@@ -702,7 +702,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           .unix() * 1000;
 
       const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes');
-      if (hasProgram) {
+      if (hasProgram && !isBoxAppOnly) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
       }
 
@@ -718,7 +718,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         .go();
       const program2 = programResult2 && programResult2.data;
       console.log({ program2 });
-      if (program2 && program2.programmingId && program.gameId) {
+      if (!isBoxAppOnly && program2 && program2.programmingId && program.gameId) {
         updateBoxInfoBody.lockedProgrammingIds.push(program2.programmingId);
       }
 
