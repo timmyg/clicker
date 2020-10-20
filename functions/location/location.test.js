@@ -209,6 +209,27 @@ describe('filterPrograms', () => {
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(0);
+<<<<<<< HEAD
+=======
+  });
+  test('duplicated channel', () => {
+    const firstStart = moment()
+      .subtract(65, 'm')
+      .toDate();
+    const secondStart = moment()
+      .add(5, 'm')
+      .toDate();
+    const ccPrograms = [
+      { fields: { channelTitle: 'FS1HD', start: firstStart }, db: { channel: 219 } },
+      { fields: { channelTitle: 'FS1HD', start: secondStart, tuneEarly: 30 }, db: { channel: 219 } },
+    ];
+
+    const location = {
+      boxes: [{ configuration, zone: '1', live: { channel: 5 } }],
+    };
+    const result = filterPrograms(ccPrograms, location);
+    expect(result.length).toBe(1);
+>>>>>>> a32e0553d6f762d7f9c4d87eaad183279fa2aee6
   });
   test('highly rated already showing on 1 (replicated to 2)', () => {
     const ccPrograms = [

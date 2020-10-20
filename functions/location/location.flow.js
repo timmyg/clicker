@@ -119,6 +119,7 @@ const dbLocation = dynamoose.model(
           // program: Map, // populated every few minutes
         },
         updatedAt: Number, // date
+        updatedSource: String,
       },
     ],
     channels: {
@@ -662,11 +663,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       };
       updateBoxInfoBody.source = zapTypes.manual;
       updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
-      const manualLockDurationHours = 1;
-      updateBoxInfoBody.lockedUntil =
-        moment()
-          .add(manualLockDurationHours, 'h')
-          .unix() * 1000;
+      updateBoxInfoBody.lockedProgrammingIds = [];
 
       console.log({ channel: major, region: location.region });
       const queryParams = { channel: major, channelMinor: minor, region: location.region };
@@ -685,7 +682,27 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       }
       program = programResult && programResult.data;
       console.log({ program });
-      if (program && program.programmingId) {
+      const hasProgram = !!program && !!program.programmingId;
+      const manualLockDurationHours = 1.5;
+      const manualLockUnknownProgramDurationHours = 3.5;
+      const manualLockAppDurationHours = 0;
+      const isBoxAppOnly =
+        location.boxes[i].configuration.appActive && !location.boxes[i].configuration.automationActive;
+      let lockHours;
+      if (isBoxAppOnly) {
+        lockHours = manualLockAppDurationHours;
+      } else if (hasProgram) {
+        lockHours = manualLockDurationHours;
+      } else {
+        lockHours = manualLockUnknownProgramDurationHours;
+      }
+      updateBoxInfoBody.lockedUntil =
+        moment()
+          .add(lockHours, 'h')
+          .unix() * 1000;
+
+      const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes');
+      if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
       }
 
@@ -754,6 +771,18 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName},${labelName}) *${program &&
           program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
           previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
+        text += `\nLocking TV for ${lockMinutes} minutes`;
+
+        if (!hasProgram) {
+          let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
+          unknownProgramText += `Locking TV for ${lockMinutes} minutes`;
+          await new Invoke()
+            .service('notification')
+            .name('sendTasks')
+            .body({ text: unknownProgramText, importance: 2 })
+            .async()
+            .go();
+        }
 
         const isRecentAutomationChange =
           location.boxes[i].live &&
@@ -761,6 +790,12 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
           moment().diff(moment(location.boxes[i].live.channelChangeAt), 'minutes') < 10;
         if (isRecentAutomationChange) {
           text = `*Recent Automation Change!* ${text}`;
+          await new Invoke()
+            .service('notification')
+            .name('sendTasks')
+            .body({ text, importance: 2 })
+            .async()
+            .go();
         }
         //   await new Invoke()
         //     .service('notification')
@@ -928,7 +963,19 @@ module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async 
         console.time('update location box');
         const boxIndex = location.boxes.findIndex(b => b.id === box.id);
         console.log(location.id, boxIndex, box.live.channel, program.title);
-        await updateLocationBox(location.id, boxIndex, box.live.channel, box.live.channelMinor, undefined, program);
+        await updateLocationBox(
+          location.id,
+          boxIndex,
+          box.live.channel,
+          box.live.channelMinor,
+          undefined,
+          program,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'updateAllBoxesPrograms',
+        );
         console.timeEnd('update location box');
       }
     }
@@ -995,6 +1042,8 @@ module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => 
     channelChangeAt,
     lockedUntil,
     lockedProgrammingIds,
+    undefined,
+    'updateBoxInfo',
   );
   console.timeEnd('update location box');
 
@@ -1008,6 +1057,7 @@ class ControlCenterProgram {
     programmingId: string,
     title: string,
     targetingIds: string[],
+    tuneEarly: number,
   };
   db: Program;
   constructor(obj: any) {
@@ -1061,10 +1111,8 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     let skip = false;
     allPackages.map(pkg => {
       // check if premium channel
-      console.log('check');
       if (pkg.channels.includes(ccp.db.channel)) {
         // check if location has package
-        console.log('is premium', location.packages, pkg.name);
         const locationPackages = location.packages || [];
         if (!locationPackages.includes(pkg.name)) {
           console.log('skip');
@@ -1073,25 +1121,26 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
         }
       }
     });
-    console.log('1');
     if (skip) return;
-    console.log('2');
-
     const program: Program = ccp.db;
+
+    // if there are two from the same channel, skip one (due to tuneEarly)
+    const other = ccPrograms.find(p => {
+      return p.db.channel === program.channel && !!p.fields.tuneEarly && p.fields.start !== ccp.fields.start;
+    });
+    if (other) {
+      return;
+    }
+
     if (!currentlyShowingPrograms.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
-      console.log('pushing');
       return ccProgramsFiltered.push(ccp);
     } else {
       // remove from array, in case of replication
       const index = currentlyShowingPrograms.findIndex(
         p => p.channel == program.channel && p.channelMinor == program.channelMinor,
       );
-      console.log({ index });
       if (index > -1) {
-        // console.log({ index });
-        // console.log({ currentlyShowingPrograms });
         currentlyShowingPrograms.splice(index, 1);
-        // console.log({ currentlyShowingPrograms });
       }
     }
   });
@@ -1179,7 +1228,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     // const isCloseHighlyRated = [10, 9].includes(program.fields.rating) && program.isMinutesFromNow(10);
     // const isCloseNotHighlyRated = [7, 6, 5, 4, 3, 2, 1].includes(program.fields.rating) && program.isMinutesFromNow(5);
     // if (isCloseHighlyRated || isCloseNotHighlyRated) {
-    if (program.isMinutesFromNow(0)) {
+    if (program.isMinutesFromNow(60)) {
       selectedBox = findBoxGameOver(availableBoxes);
       // if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
@@ -1687,7 +1736,12 @@ async function getAirtablePrograms(location: Venue): Promise<ControlCenterProgra
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   let ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
     .select({
-      filterByFormula: `AND( {rating} != BLANK(), {isOver} != 'Y', {startHoursFromNow} >= -4, {startHoursFromNow} <= 1 )`,
+      filterByFormula: `AND( 
+        {rating} != BLANK(),
+        {isOver} != 'Y',
+        {startHoursFromNow} >= -4,
+        {startHoursFromNow} <= 1 
+      )`,
     })
     .all();
   console.log({ location });
@@ -1767,6 +1821,7 @@ async function updateLocationBox(
   lockedUntil?: number,
   lockedProgrammingIds?: string[],
   removeLockedUntil?: boolean,
+  updatedSource: string,
 ) {
   const AWS = require('aws-sdk');
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -1810,8 +1865,10 @@ async function updateLocationBox(
     updateExpression += `${prefix}.lockedUntil = :lockedUntilRemove,`;
     expressionAttributeValues[':lockedUntilRemove'] = null;
   }
-  updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt`;
+  updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt,`;
   expressionAttributeValues[':updatedAt'] = now;
+  updateExpression += `boxes[${boxIndex}].updatedSource = :updatedSource`;
+  expressionAttributeValues[':updatedSource'] = updatedSource;
   console.log(expressionAttributeValues);
   var params = {
     TableName: process.env.tableLocation,
@@ -1825,7 +1882,7 @@ async function updateLocationBox(
   // console.log('returned');
   try {
     const x = await docClient.update(params).promise();
-    console.log({ x });
+    console.log('db result:', JSON.stringify(x));
   } catch (err) {
     console.log({ err });
     return err;

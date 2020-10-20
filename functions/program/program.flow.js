@@ -51,12 +51,13 @@ const allRegions: region[] = [
     name: 'Cincinnati',
     id: 'cincinnati',
     defaultZip: '45202',
-    localChannels: [5, 9, 12, 19, 661, 660],
+    localChannels: [5, 9, 12, 19, 64, 661, 660],
   },
   // { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   // { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
   // { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
   { id: 'cripple-creek-co', name: 'Cripple Creek', defaultZip: '80813', localChannels: [5, 11, 13, 21] },
+  { id: 'houston', name: 'Houston', defaultZip: '77064', localChannels: [2, 11, 13, 26] },
 ];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
 const nationalChannels: any[] = [
@@ -99,10 +100,12 @@ const nationalChannels: any[] = [
   { channel: 716, channelTitle: 'NFLT' }, //NFL
   { channel: 717, channelTitle: 'NFLT' }, //NFL
   { channel: 718, channelTitle: 'NFLT' }, //NFL
-  { channel: 719, channelTitle: 'NFLT' }, //NFL
-  // 671 // FSMW, turned on at tin roof once
-  //   701, //NFLMX // 4 game mix
-  // 702, //NFLMX // 8 game mix
+  // { channel: 289, channelTitle: 'DSJRHD' },
+  { channel: 290, channelTitle: 'DIS' },
+  // { channel: 292, channelTitle: 'DISXD' },
+  { channel: 296, channelTitle: 'CTNW' },
+  // { channel: 299, channelTitle: 'NICK' },
+  { channel: 301, channelTitle: 'NICKJR' },
 ];
 
 // 2661
@@ -156,8 +159,19 @@ const dbProgram = dynamoose.model(
       hashKey: true,
       index: true,
     },
-    id: { type: String, rangeKey: true },
-    start: { type: Number },
+    id: {
+      type: String,
+      rangeKey: true,
+      // hashKey: true,
+      // index: true,
+      // index: {
+      //   global: true,
+      //   project: true,
+      //   name: 'idGlobalIndex',
+      // },
+    },
+    start: Number,
+    startOriginal: Number,
     end: Number,
     channel: {
       type: Number,
@@ -333,7 +347,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       p.endFromNow = moment(p.end).fromNow();
     });
     console.log(`programs: ${programs.length}`);
-    const sortedPrograms = programs.sort((a, b) => a.start - b.start);
+    console.log(JSON.stringify({ programs }));
+    // sort by end, in case start time was changed via admin so it starts early
+    const sortedPrograms = programs.sort((a, b) => a.end - b.end);
     const existingProgram = sortedPrograms[sortedPrograms.length - 1];
     console.log({ existingProgram });
     if (sortedPrograms.length > 1) {
@@ -772,6 +788,9 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.timeEnd('current + next programming combine');
 
+  // remove non sports programs
+  currentPrograms = currentPrograms.filter(cp => !!cp.isSports);
+
   // console.log('exclude', location.channels);
   console.time('remove premium unless have package');
 
@@ -1031,6 +1050,10 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     const programmingId = airtableProgram.get('programmingId');
     const gameDatabaseId = airtableProgram.get('gameId') && airtableProgram.get('gameId')[0];
     const programRating = airtableProgram.get('rating');
+    const earlyMinutes: number = parseInt(airtableProgram.get('earlyTune'), 10);
+    // if (!!earlyMinutes) {
+    //   console.log({ earlyMinutes });
+    // }
     // if targeted at region update that first
     let regionName;
     if (!!airtableProgram.fields.targetingIds) {
@@ -1048,8 +1071,21 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
 
     for (const program of programs) {
       const { region, id } = program;
-      console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
-      promises.push(dbProgram.update({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating }));
+      // console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
+      const update: Object = { gameId: gameDatabaseId, clickerRating: programRating };
+      if (!!earlyMinutes) {
+        const fullProgram = await dbProgram.get({ id, region });
+        console.log({ fullProgram });
+        let { startOriginal, start } = fullProgram;
+        if (!startOriginal) startOriginal = start;
+        const newStart =
+          moment(startOriginal)
+            .subtract(earlyMinutes, 'm')
+            .unix() * 1000;
+        update.start = newStart;
+      }
+      console.log({ update });
+      promises.push(dbProgram.update({ region, id }, update));
     }
   }
   await Promise.all(promises);
@@ -1406,6 +1442,7 @@ function build(dtvSchedule: any, regionId: string) {
         program.repeat = program.repeat;
         program.region = regionId;
         program.start = moment(program.airTime).unix() * 1000;
+        program.startOriginal = program.start;
         program.end =
           moment(program.airTime)
             .add(program.durationMins, 'minutes')
