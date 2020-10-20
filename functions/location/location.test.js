@@ -209,6 +209,8 @@ describe('filterPrograms', () => {
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(0);
+<<<<<<< HEAD
+=======
   });
   test('duplicated channel', () => {
     const firstStart = moment()
@@ -227,6 +229,7 @@ describe('filterPrograms', () => {
     };
     const result = filterPrograms(ccPrograms, location);
     expect(result.length).toBe(1);
+>>>>>>> a32e0553d6f762d7f9c4d87eaad183279fa2aee6
   });
   test('highly rated already showing on 1 (replicated to 2)', () => {
     const ccPrograms = [
