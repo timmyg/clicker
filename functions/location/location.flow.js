@@ -685,10 +685,22 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       const hasProgram = !!program && !!program.programmingId;
       const manualLockDurationHours = 1.5;
       const manualLockUnknownProgramDurationHours = 3.5;
+      const manualLockAppDurationHours = 0;
+      const isBoxAppOnly =
+        location.boxes[i].configuration.appActive && !location.boxes[i].configuration.automationActive;
+      let lockHours;
+      if (isBoxAppOnly) {
+        lockHours = manualLockAppDurationHours;
+      } else if (hasProgram) {
+        lockHours = manualLockDurationHours;
+      } else {
+        lockHours = manualLockUnknownProgramDurationHours;
+      }
       updateBoxInfoBody.lockedUntil =
         moment()
-          .add(hasProgram ? manualLockDurationHours : manualLockUnknownProgramDurationHours, 'h')
+          .add(lockHours, 'h')
           .unix() * 1000;
+
       const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes');
       if (hasProgram) {
         updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
