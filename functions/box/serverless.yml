@@ -46,6 +46,7 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
+  - serverless-bundle
 
 custom:
   stage: ${opt:stage}
