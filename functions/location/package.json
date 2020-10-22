@@ -33,7 +33,7 @@
     "dotenv": "^7.0.0",
     "dynamodb-toolbox": "^0.1.0",
     "dynamoose": "^1.11.1",
-    "geolib": "^2.0.24",
+    "geolib": "^3.0.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
     "mustache": "^4.0.0",
