@@ -13,7 +13,7 @@ provider:
     stage: ${self:custom.stage}
     tableBox: ${self:custom.tableBox}
   iamRoleStatements:
-    - ${file(../serverless.common.yml):iamRoleStatements}
+    ${file(../serverless.common.yml):iamRoleStatements}
     # - Effect: 'Allow'
     #   Action:
     #     - dynamodb:*
