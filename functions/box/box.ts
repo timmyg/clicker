@@ -66,6 +66,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const locationId = uuid();
   const id = uuid();
   const zone = '4';
+  console.log({ locationId, id, zone });
   const item = Box.put({ locationId, id, zone });
   console.log({ item });
   const result = await DocumentClient.put(item).promise();
