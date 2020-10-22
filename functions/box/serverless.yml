@@ -30,7 +30,15 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
-plugins: ${file(../serverless.common.yml):plugins}
+plugins:
+  # ...${file(../serverless.common.yml):plugins}
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+  - serverless-domain-manager
+  - serverless-sentry
+  - serverless-dotenv-plugin
+  - serverless-plugin-tracing
+  - serverless-bundle
 
 custom:
   stage: ${opt:stage}
