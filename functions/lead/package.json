@@ -26,6 +26,6 @@
     "dotenv": "^6.2.0",
     "hubspot": "^2.0.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
-    "trello": "^0.9.1"
+    "trello": "^0.10.0"
   }
 }
