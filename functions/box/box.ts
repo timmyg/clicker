@@ -11,8 +11,8 @@ const Box = new Model('Box', {
   partitionKey: 'locationId',
   sortKey: 'id',
   schema: {
-    // dayType: { type: 'string', alias: 'id' },
-    // timestamp: { type: 'string' },
+    locationId: { type: 'string' },
+    id: { type: 'string' },
     // entity: { type: 'map' },
     // id: String,
     zone: { type: 'string' },
