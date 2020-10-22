@@ -24,7 +24,7 @@
     "@slack/webhook": "^5.0.2",
     "aws-sdk": "^2.580.0",
     "aws-xray-sdk": "^2.5.0",
-    "dotenv": "^6.2.0",
+    "dotenv": "^8.0.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
   }
 }
