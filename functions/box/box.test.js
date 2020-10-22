@@ -1,5 +1,6 @@
+// const { health } = require('./box');
 
-// test('smoke test', () => {
-//     expect(true).toBeTruthy;
-//   });
-  
+test('smoke test', () => {
+//   const response = health();
+  expect(true).toBeTruthy;
+});
