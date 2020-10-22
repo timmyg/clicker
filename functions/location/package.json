@@ -29,7 +29,7 @@
   "dependencies": {
     "airtable": "^0.8.1",
     "aws-sdk": "^2.752.0",
-    "aws-xray-sdk": "^2.5.0",
+    "aws-xray-sdk": "^3.0.0",
     "dotenv": "^7.0.0",
     "dynamodb-toolbox": "^0.1.0",
     "dynamoose": "^1.11.1",
