@@ -62,11 +62,13 @@ export const health = async (event, context) => {
 };
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('hi');
   const locationId = uuid();
   const id = uuid();
   const zone = '4';
   const item = Box.put({ locationId, id, zone });
   console.log({ item });
   const result = await DocumentClient.put(item).promise();
-  return respond(200, result);
+  console.log(result);
+  return respond(200, 'hi');
 });
