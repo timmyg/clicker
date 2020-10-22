@@ -2,6 +2,7 @@ active:
   - functions/admin
   - functions/analytics
   - functions/app
+  - functions/box
   - functions/audit
   - functions/game
   - functions/job
