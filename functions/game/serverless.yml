@@ -2,7 +2,7 @@ service: game
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  memorySize: 128
+  memorySize: 1024
   versionFunctions: false
   runtime: nodejs10.x
   # tracing: true
@@ -103,7 +103,6 @@ functions:
   syncNextFewDays:
     handler: game.syncNextFewDays
     description: sync action network api to database for next few days
-    memorySize: 1024
     timeout: 30
     # environment:
     #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
@@ -115,7 +114,6 @@ functions:
   syncActive:
     handler: game.syncActive
     description: pull active from action network api, sync to db
-    memorySize: 1024
     timeout: 12
     events:
       # - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
@@ -129,7 +127,6 @@ functions:
     handler: game.syncAirtable
     description: sync games from AN api to airtable Games table
     timeout: 30
-    memorySize: 1024
     events:
       - schedule: cron(59 8 * * ? *) # every day @ 3:59/4:59am eastern
       - http:
@@ -145,7 +142,6 @@ functions:
   scoreboard:
     handler: game.scoreboard
     description: get all games scores, used by webapp /scoreboard
-    memorySize: 1024
     events:
       - http:
           path: scoreboard
@@ -153,7 +149,6 @@ functions:
   scoreboardLiveUpcoming:
     handler: game.scoreboardLiveUpcoming
     description: get 3 upcoming games scores
-    memorySize: 1024
     timeout: 10
     events:
       - http:
