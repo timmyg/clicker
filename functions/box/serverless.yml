@@ -12,16 +12,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableBox: ${self:custom.tableBox}
-  iamRoleStatements:
-    ${file(../serverless.common.yml):iamRoleStatements}
-    # - Effect: 'Allow'
-    #   Action:
-    #     - dynamodb:*
-    #     - lambda:InvokeFunction
-    #     - lambda:InvokeAsync
-    #     - xray:PutTraceSegments
-    #     - xray:PutTelemetryRecords
-    #   Resource: '*'
+  iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
     BoxesTable:
@@ -39,14 +30,7 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
-plugins:
-  - serverless-prune-plugin
-  - serverless-deployment-bucket
-  - serverless-domain-manager
-  - serverless-sentry
-  - serverless-dotenv-plugin
-  - serverless-plugin-tracing
-  - serverless-bundle
+plugins: ${file(../serverless.common.yml):plugins}
 
 custom:
   stage: ${opt:stage}
