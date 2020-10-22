@@ -27,7 +27,7 @@
     "axios-retry": "^3.1.2",
     "camelcase-keys": "^6.1.0",
     "dotenv": "^6.2.0",
-    "dynamoose": "^1.11.1",
+    "dynamoose": "^2.0.0",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.27",
     "object-mapper": "^6.0.1",
