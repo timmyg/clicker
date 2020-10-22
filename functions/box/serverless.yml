@@ -13,14 +13,15 @@ provider:
     stage: ${self:custom.stage}
     tableBox: ${self:custom.tableBox}
   iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:*
-        - lambda:InvokeFunction
-        - lambda:InvokeAsync
-        - xray:PutTraceSegments
-        - xray:PutTelemetryRecords
-      Resource: '*'
+    - ${file(../serverless.common.yml):iamRoleStatements}
+    # - Effect: 'Allow'
+    #   Action:
+    #     - dynamodb:*
+    #     - lambda:InvokeFunction
+    #     - lambda:InvokeAsync
+    #     - xray:PutTraceSegments
+    #     - xray:PutTelemetryRecords
+    #   Resource: '*'
 resources:
   Resources:
     BoxesTable:

@@ -1,4 +1,4 @@
-// @flow
+//      
 const { getBody, respond, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const moment = require('moment');
 const { Model } = require('dynamodb-toolbox');
