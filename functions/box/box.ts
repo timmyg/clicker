@@ -57,9 +57,9 @@ const Box = new Model('Box', {
   },
 });
 
-export const health = async (event, context) => {
+export const health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, { vals });
-};
+});
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('hi');
