@@ -3,7 +3,7 @@ frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
   # runtime: nodejs12.x
-  memorySize: 128
+  memorySize: 1024
   versionFunctions: false
   # tracing: true
   logRetentionInDays: 14
@@ -280,7 +280,6 @@ functions:
     handler: program.getAll
     # provisionedConcurrency: 1
     runtime: nodejs12.x
-    memorySize: 1024
     timeout: 20
     events:
       - http:
@@ -339,7 +338,6 @@ functions:
           path: sync/airtable/updates
           method: post
   consumeNewProgramUpdateDetails:
-    memorySize: 512
     timeout: 30
     handler: program.consumeNewProgramUpdateDetails
     runtime: nodejs12.x
@@ -352,7 +350,6 @@ functions:
             - Arn
           batchSize: 1
   consumeNewProgramAirtableUpdateDetails:
-    memorySize: 256
     timeout: 30
     handler: program.consumeNewProgramAirtableUpdateDetails
     runtime: nodejs12.x
@@ -383,7 +380,6 @@ functions:
   get:
     handler: program.get
     runtime: nodejs12.x
-    memorySize: 256
     events:
       - http:
           path: ''
@@ -415,7 +411,6 @@ functions:
     description: clear out programs database table
     runtime: nodejs12.x
     timeout: 120
-    memorySize: 512
     events:
       - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern
       - http:
@@ -426,7 +421,6 @@ functions:
     description: clear out games and control center airtables
     runtime: nodejs12.x
     timeout: 120
-    memorySize: 512
     events:
       - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern
       - http:
