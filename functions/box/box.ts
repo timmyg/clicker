@@ -3,7 +3,7 @@ import { getBody, respond, Invoke, Raven, RavenLambdaWrapper } from 'serverless-
 import moment from 'moment';
 import { Model } from 'dynamodb-toolbox';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
-import uuid from 'uuid/v5';
+import uuid from 'uuid/v1';
 const DocumentClient = new DynamoDB.DocumentClient();
 
 const Box = new Model('Box', {
