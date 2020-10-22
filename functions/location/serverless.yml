@@ -2,7 +2,7 @@ service: location
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  memorySize: 128
+  memorySize: 1024
   versionFunctions: false
   runtime: nodejs12.x
   # tracing: true
@@ -224,7 +224,6 @@ functions:
     description: called by location.saveBoxesInfo for manual and remote for other changes
     handler: location.updateBoxInfo
     timeout: 12
-    memorySize: 1024
     events:
       - http:
           path: '{id}/boxes/{boxId}/info'
