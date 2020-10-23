@@ -16,15 +16,7 @@ provider:
 resources:
   Resources:
     BoxesTable: ${file(./table.boxes.yml)}
-plugins:
-  # ...${file(../serverless.common.yml):plugins}
-  - serverless-prune-plugin
-  - serverless-deployment-bucket
-  - serverless-domain-manager
-  - serverless-sentry
-  - serverless-dotenv-plugin
-  - serverless-plugin-tracing
-  - serverless-bundle
+plugins: ${file(../serverless.common.plugins.yml)}
 
 custom:
   stage: ${opt:stage}
