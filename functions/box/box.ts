@@ -1,6 +1,5 @@
 import vals from '../shared/test';
-import { getBody, respond, Invoke, Raven, RavenLambdaWrapper } from 'serverless-helpers';
-import moment from 'moment';
+import { respond, Raven, RavenLambdaWrapper } from 'serverless-helpers';
 import { Model } from 'dynamodb-toolbox';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import uuid from 'uuid/v1';
@@ -67,7 +66,14 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const id = uuid();
   const zone = '4';
   console.log({ locationId, id, zone });
-  const item = Box.put({ locationId, id, zone });
+  const item = Box.put({
+    locationId,
+    id,
+    zone,
+    info: {
+      ip: '192.168.5.3',
+    },
+  });
   console.log({ item });
   const result = await DocumentClient.put(item).promise();
   console.log(result);

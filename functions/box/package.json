@@ -4,9 +4,9 @@
   "description": "",
   "main": "box.js",
   "scripts": {
-    "build": "",
-    "test": "npm run build && jest --coverage",
-    "invoke:health": "npm run build && serverless invoke local --function health --stage develop"
+    "test": "jest --coverage",
+    "invoke:health": "serverless invoke local --function health --stage develop",
+    "invoke:create": "serverless invoke local --function create --stage develop"
   },
   "author": "",
   "license": "ISC",
