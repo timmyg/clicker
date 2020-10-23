@@ -1,0 +1,14 @@
+Type: 'AWS::DynamoDB::Table'
+Properties:
+  TableName: ${self:custom.tableBox}
+  BillingMode: PAY_PER_REQUEST
+  AttributeDefinitions:
+    - AttributeName: locationId
+      AttributeType: S
+    - AttributeName: id
+      AttributeType: S
+  KeySchema:
+    - AttributeName: locationId
+      KeyType: HASH
+    - AttributeName: id
+      KeyType: RANGE

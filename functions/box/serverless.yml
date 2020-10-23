@@ -15,21 +15,7 @@ provider:
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
-    BoxesTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableBox}
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: locationId
-            AttributeType: S
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: locationId
-            KeyType: HASH
-          - AttributeName: id
-            KeyType: RANGE
+    BoxesTable: ${file(./table.boxes.yml)}
 plugins:
   # ...${file(../serverless.common.yml):plugins}
   - serverless-prune-plugin
