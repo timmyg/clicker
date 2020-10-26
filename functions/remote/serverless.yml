@@ -73,6 +73,10 @@ functions:
           method: post
   syncWidgetBoxes:
     handler: remote.syncWidgetBoxes
+    events:
+      - http:
+          path: boxes/sync
+          method: post
   debug:
     handler: remote.debug
     events:
