@@ -58,6 +58,7 @@ const dbReservation = dynamoose.model(
       // zip: { type: String, required: true },
       ip: { type: String, required: true },
       img: { type: String, required: true },
+      free: Boolean,
     },
     box: {
       id: { type: String, required: true },
