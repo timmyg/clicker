@@ -69,7 +69,7 @@ const nationalChannels: any[] = [
   { channel: 219, channelTitle: 'FS1' },
   { channel: 220, channelTitle: 'NBCSN' },
   { channel: 212, channelTitle: 'NFL' },
-  { channel: 217, channelTitle: 'TNNSHD' },
+  // { channel: 217, channelTitle: 'TNNSHD' },
   { channel: 215, channelTitle: 'NHLHD' },
   { channel: 216, channelTitle: 'NBAHD' },
   { channel: 218, channelTitle: 'GOLF' },
@@ -101,10 +101,10 @@ const nationalChannels: any[] = [
   { channel: 717, channelTitle: 'NFLT' }, //NFL
   { channel: 718, channelTitle: 'NFLT' }, //NFL
   // { channel: 289, channelTitle: 'DSJRHD' },
-  { channel: 290, channelTitle: 'DIS' },
+  // { channel: 290, channelTitle: 'DIS' },
   // { channel: 292, channelTitle: 'DISXD' },
   { channel: 296, channelTitle: 'CTNW' },
-  // { channel: 299, channelTitle: 'NICK' },
+  { channel: 299, channelTitle: 'NICK' },
   { channel: 301, channelTitle: 'NICKJR' },
 ];
 
