@@ -2,7 +2,11 @@
   <ion-card-content>
     <ion-row>
       <ion-avatar>
-        <img [src]="reservation.location.img" class="logo" alt="location logo" />
+        <img
+          [src]="reservation.location.img"
+          class="logo"
+          alt="location logo"
+        />
       </ion-avatar>
       <ion-col>
         <ion-row>
@@ -25,7 +29,14 @@
             size="3"
             class="flex ion-justify-content-center ion-align-items-center"
           >
-            <span class="icon">⏱️</span>
+            <span
+              class="icon"
+              *ngIf="
+                timeLeft?.minutes > 0 ||
+                (timeLeft?.minutes <= 0 && reservation.minutes)
+              "
+              >⏱️</span
+            >
           </ion-col>
           <ion-col class="flex ion-align-items-center">
             <span *ngIf="timeLeft?.minutes > 0"
@@ -34,7 +45,7 @@
             <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes"
               >Expired</span
             >
-            <span *ngIf="!reservation.minutes">One-time change</span>
+            <!-- <span *ngIf="!reservation.minutes">One-time change</span> -->
           </ion-col>
         </ion-row>
       </ion-col>
@@ -42,7 +53,8 @@
         size="3"
         class="flex ion-text-center ion-padding-top ion-align-items-center"
       >
-        <a (click)="modify()">Modify</a>
+        <!-- <a (click)="modify()">Modify</a> -->
+        <a (click)="modify()">Change Channel</a>
       </ion-col>
     </ion-row>
   </ion-card-content>

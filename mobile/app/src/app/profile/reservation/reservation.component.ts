@@ -4,7 +4,7 @@ import * as moment from "moment";
 import {
   ModalController,
   AlertController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { Store } from "@ngrx/store";
 import * as fromStore from "../../state/app.reducer";
@@ -18,7 +18,7 @@ interface TimeLeft {
 @Component({
   selector: "app-reservation",
   templateUrl: "./reservation.component.html",
-  styleUrls: ["./reservation.component.scss"]
+  styleUrls: ["./reservation.component.scss"],
 })
 export class ReservationComponent implements OnInit {
   @Input() reservation: Reservation;
@@ -80,7 +80,7 @@ export class ReservationComponent implements OnInit {
     }
     return {
       label,
-      minutes
+      minutes,
     };
   }
 }

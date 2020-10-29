@@ -87,15 +87,14 @@ export class ProfilePage {
       const endTime = moment(reservation.end);
       const duration = moment.duration(endTime.diff(moment())).asMilliseconds();
       if (duration > 0) {
-        this.showModify(reservation);
+        // this.showModify(reservation);
+        this.routeToChannelChange(reservation);
       } else {
         this.showToast("Sorry, your reservation has expired.", true);
       }
     } else {
-      this.showToast(
-        "Sorry, you did not reserve this TV for a time period.",
-        true
-      );
+      // free reservation, so allow channge change
+      this.routeToChannelChange(reservation);
     }
   }
 
@@ -143,6 +142,15 @@ export class ProfilePage {
     return remaining > 0;
   }
 
+  routeToChannelChange(reservation: Reservation) {
+    const reservationToUpdate = Object.assign({}, reservation);
+    delete reservationToUpdate.program;
+    this.store.dispatch(
+      new fromReservation.SetForUpdateChannel(reservationToUpdate)
+    );
+    this.router.navigate(["/tabs/reserve"]);
+  }
+
   async showModify(reservation: Reservation) {
     const actionSheet = await this.actionSheetController.create({
       header: "Modify Reservation",
@@ -150,12 +158,7 @@ export class ProfilePage {
         {
           text: "Change Channel",
           handler: () => {
-            const reservationToUpdate = Object.assign({}, reservation);
-            delete reservationToUpdate.program;
-            this.store.dispatch(
-              new fromReservation.SetForUpdateChannel(reservationToUpdate)
-            );
-            this.router.navigate(["/tabs/reserve"]);
+            this.routeToChannelChange(reservation);
           },
         },
         {
@@ -219,14 +222,14 @@ export class ProfilePage {
   async showVersion() {
     // this.showVersionClicks++;
     // if (this.showVersionClicks >= 1) {
-      const version = this.appService.getVersion();
-      const configuration: ICurrentConfig = await this.deploy.getConfiguration();
-      const toast = await this.toastController.create({
-        message: `Version: ${version} 😏 (${configuration.channel})`,
-        duration: 3000,
-        cssClass: "ion-text-center",
-      });
-      await toast.present();
+    const version = this.appService.getVersion();
+    const configuration: ICurrentConfig = await this.deploy.getConfiguration();
+    const toast = await this.toastController.create({
+      message: `Version: ${version} 😏 (${configuration.channel})`,
+      duration: 3000,
+      cssClass: "ion-text-center",
+    });
+    await toast.present();
     //   this.showVersionClicks = 0;
     // }
   }

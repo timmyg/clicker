@@ -29,7 +29,7 @@ ion-label {
 // body.dark {
 //   .summary-wrapper {
 //     background: var(--ion-color-dark);
-//   }  
+//   }
 // }
 .summary-wrapper {
   background: var(--ion-color-light);
@@ -81,4 +81,14 @@ ion-label {
   60% {
     transform: translate3d(4px, 0, 0);
   }
+}
+
+.waiting {
+  opacity: 0.3;
+}
+
+ion-avatar {
+  padding-right: 8px;
+  padding-bottom: 8px;
+  height: inherit;
 }
