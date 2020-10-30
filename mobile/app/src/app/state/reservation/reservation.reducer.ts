@@ -84,7 +84,9 @@ export function reducer(
         loading: false,
       };
     case fromReservation.SET_RESERVATION_PROGRAM:
+      console.log({ state });
       if (!!state.updateType) {
+        console.log("update program", action.payload);
         state.reservation.update = {
           program: action.payload,
         };
@@ -95,12 +97,28 @@ export function reducer(
         ...state,
         loading: false,
       };
+      // case fromReservation.SET_RESERVATION_PROGRAM_UPDATE:
+      //     if (!!state.updateType) {
+      //       state.reservation.update = {
+      //         program: action.payload,
+      //       };
+      //     } else {
+      //       state.reservation.program = action.payload;
+      //     }
+      return {
+        ...state,
+        loading: false,
+      };
     case fromReservation.SET_RESERVATION_TIMEFRAME:
       if (!!state.updateType) {
-        state.reservation.update = {
-          cost: action.payload.tokens,
-          minutes: action.payload.minutes,
-        };
+        console.log("action", action);
+        if (!state.reservation.update) state.reservation.update = {};
+        state.reservation.update.cost = action.payload
+          ? action.payload.tokens
+          : 0;
+        state.reservation.update.minutes = action.payload
+          ? action.payload.minutes
+          : 0;
       } else {
         state.reservation.cost = action.payload.tokens;
         state.reservation.minutes = action.payload.minutes;
@@ -137,4 +155,5 @@ export const getReservationTvs = (state: State) =>
 export const getAllReservations = (state: State) => state.reservations;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;
-export const getReservationIsManager = (state: State) => state.reservation && state.reservation.isManager;
+export const getReservationIsManager = (state: State) =>
+  state.reservation && state.reservation.isManager;

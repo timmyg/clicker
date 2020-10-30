@@ -76,7 +76,6 @@ functions:
           method: post
   airtableRemoveExpired:
     handler: admin.airtableRemoveExpired
-    memorySize: 512
     timeout: 60
     events:
       - http:

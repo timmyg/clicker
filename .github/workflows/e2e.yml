@@ -28,15 +28,15 @@ jobs:
           branch=${GITHUB_REF##*/}
           echo $branch
           if [ branch == "master" ]; then
-            echo "::set-env ENV=production"
-            echo "::set-env cypress_apiBaseUrl=https://api.tryclicker.com"
+            echo "ENV=production" >> $GITHUB_ENV
+            echo "cypress_apiBaseUrl=https://api.tryclicker.com" >> $GITHUB_ENV
           fi
           if [ branch == "release" ]; then
-            echo "::set-env ENV=release"
-            echo "::set-env cypress_apiBaseUrl=https://api-release.tryclicker.com"
+            echo "ENV=release" >> $GITHUB_ENV
+            echo "cypress_apiBaseUrl=https://api-release.tryclicker.com" >> $GITHUB_ENV
           fi
           if [ branch == "develop" ]; then
-            echo "::set-env ENV=develop"
+            echo "ENV=develop" >> $GITHUB_ENV
           fi
       - name: Cypress run
         # if: steps.changed-app-or-functions.outputs.changed == 'true'

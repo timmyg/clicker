@@ -16,6 +16,9 @@ parameters:
   functions-app:
     type: boolean
     default: false
+  functions-box:
+    type: boolean
+    default: false
   functions-game:
     type: boolean
     default: false
@@ -166,6 +169,11 @@ workflows:
     jobs:
       - serverless-build-test-deploy:
           package_dir: ~/clicker/functions/app
+  functions-box:
+    when: << pipeline.parameters.functions-box >>
+    jobs:
+      - serverless-build-test-deploy:
+          package_dir: ~/clicker/functions/box
   functions-game:
     when: << pipeline.parameters.functions-game >>
     jobs:

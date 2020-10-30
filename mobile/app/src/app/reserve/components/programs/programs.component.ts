@@ -117,13 +117,21 @@ export class ProgramsComponent implements OnDestroy, OnInit {
 
   async onProgramSelect(program: Program) {
     this.reserveService.emitCloseSearch();
+    // console.log({ program });
     this.store.dispatch(new fromReservation.SetProgram(program));
+    // this.actions$
+    // .pipe(ofType(fromReservation.SET_RESERVATION_LOCATION_SUCCESS))
+    // .pipe(first())
+    // .subscribe(async () => {
+
     // if editing, may already have a tv
     const state = await this.store.pipe(first()).toPromise();
     const updateType: string = state.reservation.updateType;
     // if (reservation.id && reservation.box && reservation.box.label) {
     if (!!updateType) {
+      // setTimeout(() => {
       this.router.navigate(["../confirmation"], { relativeTo: this.route });
+      // }, 1000);
     } else {
       this.segment.track(
         this.globals.events.reservation.selectedProgram,

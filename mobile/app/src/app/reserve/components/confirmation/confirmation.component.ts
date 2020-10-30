@@ -69,6 +69,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   isInitializing = true;
   sub: Subscription;
   timeframeSub: Subscription;
+  autotuneSub: Subscription;
   timeframe0: Timeframe = {
     minutes: 0,
     tokens: 0,
@@ -76,6 +77,8 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   overrideDistanceClicks = 0;
   overrideDistanceDisable = false;
   loginModal;
+  isAutotuneWaiting = true;
+  // public isAutotuneWaiting$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -163,9 +166,31 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     if (this.timeframeSub) {
       this.timeframeSub.unsubscribe();
     }
+    if (this.autotuneSub) {
+      this.autotuneSub.unsubscribe();
+    }
   }
 
   ngOnInit() {
+    // if updating a free reservation, auto change
+    this.autotuneSub = combineLatest(this.reservationUpdateType$, this.reservation$, this.visibleTimeframes$)
+      .pipe(first())
+      .subscribe(([updateType, reservation, timeframes]) => {
+        console.log({updateType, reservation, timeframes});
+        // console.log(reservation && reservation.location ? reservation.location.free : '');
+        // const isUpdateFreeLocation = updateType === "channel" && reservation.location?.free;
+        const freeTimeframe = timeframes && timeframes.length == 1 ? timeframes[0] : null;
+        // const isFreeLocation = reservation.location?.free;
+        if (!!updateType) {
+          console.log("autotune!");
+          this.store.dispatch(new fromReservation.SetTimeframe(freeTimeframe));
+          this.onConfirm()
+        }
+        console.log('done');
+        this.isAutotuneWaiting = false;
+      })
+
+
     this.reservation$
       .pipe(
         filter((r) => r !== null),
@@ -269,6 +294,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       )
       .pipe(first())
       .subscribe(() => {
+        console.log({r});
         const program =
           r.update && r.update.program ? r.update.program : r.program;
         const minutes =

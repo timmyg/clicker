@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="title">My Reservations</ion-title>
+    <ion-title class="title">My TVs</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -67,14 +67,23 @@
       </div>
       <ng-template #empty>
         <div class="ion-padding-horizontal ion-text-center">
-          <p>No active reservations</p>
+          <p>You have no active TVs</p>
         </div>
       </ng-template>
       <p class="ion-text-center">
-        <ion-button (click)="createNewReservation('link')">
+        <ion-button
+          (click)="createNewReservation('link')"
+          *ngIf="(reservations$ | async).length === 0; else hasReservations"
+        >
           <ion-icon slot="start" name="flash"></ion-icon>
-          Reserve a TV
+          Change a TV
         </ion-button>
+        <ng-template #hasReservations>
+          <ion-button (click)="createNewReservation('link')" fill="clear">
+            <ion-icon slot="start" name="flash"></ion-icon>
+            Change a different TV
+          </ion-button>
+        </ng-template>
       </p>
     </ng-template>
   </ion-grid>

@@ -58,6 +58,7 @@ const dbReservation = dynamoose.model(
       // zip: { type: String, required: true },
       ip: { type: String, required: true },
       img: { type: String, required: true },
+      free: Boolean,
     },
     box: {
       id: { type: String, required: true },
@@ -361,9 +362,9 @@ module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
     const filtered = userReservations.filter(
       r =>
         r.cancelled != true &&
-        r.end >
+        r.updatedAt >
           moment()
-            .subtract(30, 'm')
+            .subtract(45, 'm')
             .toDate(),
     );
     const sorted = filtered.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
