@@ -71,10 +71,19 @@
         </div>
       </ng-template>
       <p class="ion-text-center">
-        <ion-button (click)="createNewReservation('link')">
+        <ion-button
+          (click)="createNewReservation('link')"
+          *ngIf="(reservations$ | async).length === 0; else hasReservations"
+        >
           <ion-icon slot="start" name="flash"></ion-icon>
-          Change a new TV
+          Change a TV
         </ion-button>
+        <ng-template #hasReservations>
+          <ion-button (click)="createNewReservation('link')" fill="clear">
+            <ion-icon slot="start" name="flash"></ion-icon>
+            Change a different TV
+          </ion-button>
+        </ng-template>
       </p>
     </ng-template>
   </ion-grid>
