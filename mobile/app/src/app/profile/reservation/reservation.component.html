@@ -1,48 +1,34 @@
 <ion-card class="ion-no-margin-horizontal">
+  <!-- </ion-card-header> -->
   <ion-card-content>
-    <ion-row>
-      <ion-avatar>
-        <img [src]="reservation.location.img" class="logo" alt="location logo" />
-      </ion-avatar>
-      <ion-col>
-        <ion-row>
-          <ion-col
-            size="3"
-            class="flex ion-justify-content-center ion-align-items-center"
-          >
-            <span class="icon">📺</span>
-          </ion-col>
-          <ion-col class="flex ion-align-items-center">
-            <span class="info"
-              ><span class="brand-text">{{ reservation.box.label }}</span> ({{
-                reservation.program.channelTitle
-              }})
-            </span>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col
-            size="3"
-            class="flex ion-justify-content-center ion-align-items-center"
-          >
-            <span class="icon">⏱️</span>
-          </ion-col>
-          <ion-col class="flex ion-align-items-center">
-            <span *ngIf="timeLeft?.minutes > 0"
-              >{{ timeLeft?.label }} left</span
-            >
-            <span *ngIf="timeLeft?.minutes <= 0 && reservation.minutes"
-              >Expired</span
-            >
-            <span *ngIf="!reservation.minutes">One-time change</span>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-      <ion-col
-        size="3"
-        class="flex ion-text-center ion-padding-top ion-align-items-center"
+    <ion-row class="flex ion-align-items-center ion-justify-content-center">
+      <ion-icon name="tv-outline"></ion-icon>
+      <strong>&nbsp;{{ reservation.box.label }}&nbsp;</strong>
+      <span>now showing</span>
+      <strong>&nbsp;{{ reservation.program.channelTitle }}&nbsp;</strong>
+      <!-- <span class="ion-float-right"> -->
+    </ion-row>
+    <ion-row class="flex ion-align-items-center ion-justify-content-center">
+      <ng-container *ngIf="timeLeft?.minutes > 0"
+        ><ion-icon name="hourglass-outline"></ion-icon>
+        {{ timeLeft?.label }} remaining</ng-container
       >
-        <a (click)="modify()">Modify</a>
+      <ng-container *ngIf="timeLeft?.minutes <= 0 && reservation.minutes"
+        >Expired</ng-container
+      >
+      <!-- </span> -->
+    </ion-row>
+    <ion-row>
+      <img [src]="reservation.location.img" class="logo" alt="location logo" />
+      <ion-col
+        size="12"
+        class="flex ion-justify-content-center ion-align-items-center"
+      >
+        <!-- <a (click)="modify()">Modify</a> -->
+        <!-- <a (click)="modify()">Change Channel</a> -->
+        <ion-button color="primary" (click)="modify()"
+          ><ion-icon name="flash"></ion-icon> Change</ion-button
+        >
       </ion-col>
     </ion-row>
   </ion-card-content>

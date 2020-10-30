@@ -1,0 +1,17 @@
+iamRoleStatements:
+  - Effect: 'Allow'
+    Action:
+      - dynamodb:*
+      - lambda:InvokeFunction
+      - lambda:InvokeAsync
+      - xray:PutTraceSegments
+      - xray:PutTelemetryRecords
+    Resource: '*'
+# plugins:
+#   - serverless-prune-plugin
+#   - serverless-deployment-bucket
+#   - serverless-domain-manager
+#   - serverless-sentry
+#   - serverless-dotenv-plugin
+#   - serverless-plugin-tracing
+#   - serverless-bundle

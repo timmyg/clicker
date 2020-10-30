@@ -1,5 +1,5 @@
 <ion-card *ngIf="(reservation$ | async)">
-  <ion-card-content>
+  <ion-card-content [ngClass]="{ waiting: isAutotuneWaiting }">
     <div class="summary-wrapper">
       <div>
         <label> Location: </label>
@@ -62,9 +62,7 @@
                 <span *ngIf="timeframe.minutes !== 0; else free"
                   >{{ timeframe.minutes }} minutes</span
                 >
-                <ng-template #free>
-                  Free change
-                </ng-template>
+                <ng-template #free> Free change </ng-template>
               </ng-template>
               <!-- <span> {{ timeframe.minutes }} minutes </span> -->
             </span>

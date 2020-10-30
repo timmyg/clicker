@@ -1,0 +1,62 @@
+service: box
+frameworkVersion: '>=1.1.0 <2.0.0'
+provider:
+  name: aws
+  memorySize: 1024
+  versionFunctions: false
+  runtime: nodejs12.x
+  # tracing: true
+  logRetentionInDays: 14
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    tableBox: ${self:custom.tableBox}
+  iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
+resources:
+  Resources:
+    BoxesTable: ${file(./table.boxes.yml)}
+plugins:
+  # ${file(../serverless.common.yml):plugins}
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+  - serverless-domain-manager
+  - serverless-sentry
+  - serverless-dotenv-plugin
+  - serverless-plugin-tracing
+  - serverless-bundle
+
+custom:
+  stage: ${opt:stage}
+  tableBox: boxes-${self:custom.stage}
+  prune:
+    automatic: true
+    number: 3
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: boxes
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
+functions:
+  health:
+    handler: box.health
+    events:
+      - http:
+          path: health
+          method: get
+  create:
+    handler: box.create
+    events:
+      - http:
+          path: ''
+          method: post
