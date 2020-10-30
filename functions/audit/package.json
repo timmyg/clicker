@@ -12,16 +12,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "flow-bin": "^0.107.0",
-    "flow-remove-types": "^2.107.0",
-    "jest": "^24.1.0",
-    "serverless": "^1.63.0",
-    "serverless-deployment-bucket": "^1.1.0",
-    "serverless-domain-manager": "^3.3.0",
-    "serverless-dotenv-plugin": "^2.1.1",
-    "serverless-plugin-tracing": "^2.0.0",
-    "serverless-prune-plugin": "^1.4.0",
-    "serverless-sentry": "^1.2.0"
+    "flow-bin": "0.107.0",
+    "flow-remove-types": "2.107.0",
+    "jest": "24.9.0",
+    "serverless": "1.63.0",
+    "serverless-deployment-bucket": "1.1.0",
+    "serverless-domain-manager": "3.3.1",
+    "serverless-dotenv-plugin": "2.3.2",
+    "serverless-plugin-tracing": "2.0.0",
+    "serverless-prune-plugin": "1.4.1",
+    "serverless-sentry": "1.2.0"
   },
   "dependencies": {
     "aws-sdk": "^2.619.0",

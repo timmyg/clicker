@@ -8,13 +8,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
-    "directv-remote-minor": "^0.1.0",
-    "dotenv": "^6.1.0",
+    "axios": "0.18.0",
+    "directv-remote-minor": "0.1.0",
+    "dotenv": "6.2.0",
     "iotdb-arp": "0.0.6",
-    "losant-mqtt": "^3.1.0",
-    "request": "^2.88.0",
-    "winston": "^3.1.0",
+    "losant-mqtt": "3.1.0",
+    "request": "2.88.0",
+    "winston": "3.2.1",
     "winston-logzio": "https://github.com/timmyg/winston-logzio.git"
   }
 }
