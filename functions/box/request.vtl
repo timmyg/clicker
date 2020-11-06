@@ -1,0 +1,16 @@
+{
+    "version" : "2017-02-28",
+    "operation" : "PutItem",
+    "key" : {
+        "id" : { "S" : "${context.arguments.id}" }
+    },
+    "attributeValues" : {
+        "author": { "S" : "${context.arguments.author}" },
+        "title": { "S" : "${context.arguments.title}" },
+        "content": { "S" : "${context.arguments.content}" },
+        "url": { "S" : "${context.arguments.url}" },
+        "ups" : { "N" : 1 },
+        "downs" : { "N" : 0 },
+        "version" : { "N" : 1 }
+    }
+}

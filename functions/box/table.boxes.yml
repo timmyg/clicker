@@ -1,3 +1,4 @@
+# component: '@serverless/aws-dynamodb'
 Type: 'AWS::DynamoDB::Table'
 Properties:
   TableName: ${self:custom.tableBox}
