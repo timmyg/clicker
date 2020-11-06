@@ -2,7 +2,8 @@
     "version" : "2017-02-28",
     "operation" : "PutItem",
     "key" : {
-        "id" : { "S" : "${context.arguments.id}" }
+        "id" : { "S" : "${context.arguments.id}" },
+        "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "attributeValues" : {
         "zone": { "S" : "${context.arguments.author}" }
