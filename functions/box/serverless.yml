@@ -12,6 +12,7 @@ provider:
   environment:
     stage: ${self:custom.stage}
     tableBox: ${self:custom.tableBox}
+    graphqlApiUrl: Ref::GraphQlApi
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
@@ -51,6 +52,7 @@ custom:
   appSync:
     # component: '@serverless/aws-app-sync'
     # inputs:
+    # domain:
     name: ${self:service}-${self:custom.stage}
     authenticationType: API_KEY
     apiKeys:
