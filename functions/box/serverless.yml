@@ -51,17 +51,17 @@ custom:
   appSync:
     # component: '@serverless/aws-app-sync'
     # inputs:
-    name: ${self:custom.tableBox}
+    name: ${self:service}-${self:custom.stage}
     authenticationType: API_KEY
     apiKeys:
       - myApiKey
     dataSources:
       - type: AMAZON_DYNAMODB
-        name: ${self:custom.tableBox}
+        name: Boxes
         config:
           tableName: ${self:custom.tableBox}
     mappingTemplates:
-      - dataSource: ${self:custom.tableBox}
+      - dataSource: Boxes
         type: Mutation
         field: addBox
         request: request.vtl
