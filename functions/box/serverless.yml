@@ -44,6 +44,7 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
   - serverless-bundle
+  - serverless-appsync-plugin
 
 custom:
   stage: ${opt:stage}
