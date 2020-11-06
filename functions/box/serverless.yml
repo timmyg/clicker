@@ -16,25 +16,6 @@ provider:
 resources:
   Resources:
     BoxesTable: ${file(./table.boxes.yml)}
-appsync:
-  component: '@serverless/aws-app-sync'
-  inputs:
-    name: ${self:custom.tableBox}
-    authenticationType: API_KEY
-    apiKeys:
-      - myApiKey
-    dataSources:
-      - type: AMAZON_DYNAMODB
-        name: ${self:custom.tableBox}
-        config:
-          tableName: ${self:custom.tableBox}
-    mappingTemplates:
-      - dataSource: ${self:custom.tableBox}
-        type: Mutation
-        field: addBox
-        request: request.vtl
-        response: response.vtl
-    schema: 'schema.graphql'
 plugins:
   # ${file(../serverless.common.yml):plugins}
   - serverless-prune-plugin
@@ -67,6 +48,25 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
+  appSync:
+    component: '@serverless/aws-app-sync'
+    inputs:
+      name: ${self:custom.tableBox}
+      authenticationType: API_KEY
+      apiKeys:
+        - myApiKey
+      dataSources:
+        - type: AMAZON_DYNAMODB
+          name: ${self:custom.tableBox}
+          config:
+            tableName: ${self:custom.tableBox}
+      mappingTemplates:
+        - dataSource: ${self:custom.tableBox}
+          type: Mutation
+          field: addBox
+          request: request.vtl
+          response: response.vtl
+      schema: 'schema.graphql'
 functions:
   health:
     handler: box.health
