@@ -76,12 +76,11 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   // console.log(process.env.graphqlApiUrl, process.env.graphqlApiKey, process.env.region);
   const { graphqlApiUrl, graphqlApiUrl2, graphqlApiUrl3, graphqlApiKey, region } = process.env;
   // console.log({ graphqlApiUrl, x3: JSON.stringify(graphqlApiUrl), graphqlApiKey, region });
-  console.log(graphqlApiUrl);
-  console.log(graphqlApiUrl2);
-  console.log(graphqlApiUrl3);
-  console.log(JSON.stringify(graphqlApiUrl));
+  // console.log(graphqlApiUrl2);
+  // console.log(graphqlApiUrl3);
+  // console.log(JSON.stringify(graphqlApiUrl));
   // console.log(JSON.stringify(graphqlApiUrl2));
-
+  console.log(graphqlApiUrl, region, AUTH_TYPE.API_KEY, graphqlApiKey);
   const appsyncClient = new AWSAppSyncClient(
     {
       url: graphqlApiUrl,
@@ -92,14 +91,14 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
       },
       disableOffline: true,
     },
-    {
-      defaultOptions: {
-        query: {
-          fetchPolicy: 'network-only',
-          errorPolicy: 'all',
-        },
-      },
-    },
+    // {
+    //   defaultOptions: {
+    //     query: {
+    //       fetchPolicy: 'network-only',
+    //       errorPolicy: 'all',
+    //     },
+    //   },
+    // },
   );
 
   const client = await appsyncClient.hydrated();
@@ -115,27 +114,31 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   // const mutation2 = ;
 
   try {
-    const result = await client.mutate({
-      mutation: gql(`mutation AddBox($id: ID!, $locationId: String!, $zone: String!){
-        addBox(id: $id, locationId: $locationId, zone: $zone){
-          id
-          locationId
-        }
-      }`),
-      variables: {
-        id: '324234',
-        locationId: '23424',
-        zone: '56445',
-      },
+    const result = await appsyncClient.mutate({
+      // mutation: gql(`mutation addBox($id: ID!, $locationId: String!, $zone: String!){
+      //   addBox(id: $id, locationId: $locationId, zone: $zone){
+      //     id
+      //     locationId
+      //   }
+      // }`),
+      // variables: {
+      //   id: '324234',
+      //   locationId: '23424',
+      //   zone: '56445',
+      // },
+      mutation: gql(`mutation PutPost {  addBox(id: \"555\", locationId: \"555\", zone: \"555\") { id locationId }}`),
+      variables: null,
     });
     console.log('2');
 
     console.log(JSON.stringify(result));
+    return respond(200, 'hi');
 
-    return result;
+    // return result;
   } catch (error) {
     console.log(JSON.stringify(error));
-    return error;
+    // return error;
+    return respond(400, { error });
   }
 
   // const item = Box.put({
@@ -149,5 +152,4 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   // console.log({ item });
   // const result = await DocumentClient.put(item).promise();
   // console.log(result);
-  return respond(200, 'hi');
 });
