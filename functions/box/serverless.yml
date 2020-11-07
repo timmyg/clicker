@@ -11,8 +11,19 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
+    region: ${opt:region, self:provider.region}
     tableBox: ${self:custom.tableBox}
-    graphqlApiUrl: Ref::GraphQlApi
+    # graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
+    # graphqlApiUrl:
+    #   Fn::GetAtt:
+    #     - GraphQlApi
+    #     - GraphQLUrl
+    graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
+    # graphqlApiUrl: { Fn::GetAtt: ['graphQLAPI', GraphQLUrl] }
+    # graphqlApiUrl2: { 'Fn::ImportValue': GraphQlApi }
+    # graphqlApiUrl3: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
+    # graphqlApiUrl3: ${ssm:/${self:provider.stage}/formsli/graphql/api/url}
+    graphqlApiKey: ${env:GRAPHQL_API_KEY}
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
@@ -27,6 +38,8 @@ plugins:
   - serverless-plugin-tracing
   - serverless-bundle
   - serverless-appsync-plugin
+  - serverless-pseudo-parameters
+  - serverless-stack-output
 
 custom:
   stage: ${opt:stage}
