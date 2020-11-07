@@ -13,8 +13,8 @@ provider:
     stage: ${self:custom.stage}
     region: ${opt:region, self:provider.region}
     tableBox: ${self:custom.tableBox}
-    graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
-    # graphqlApiUrl: ${env:GRAPHQL_API_URL}
+    # graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
+    graphqlApiUrl: ${env:GRAPHQL_API_URL, self:custom.graphqlApiUrl}
     graphqlApiKey: ${env:GRAPHQL_API_KEY}
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
@@ -36,6 +36,7 @@ plugins:
 custom:
   stage: ${opt:stage}
   tableBox: boxes-${self:custom.stage}
+  graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
   prune:
     automatic: true
     number: 3
