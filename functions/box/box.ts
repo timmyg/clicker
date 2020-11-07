@@ -11,7 +11,7 @@ import { AUTH_TYPE } from 'aws-appsync';
 
 // global.fetch = require('node-fetch');
 require('isomorphic-fetch');
-require('es6-promise').polyfill();
+// require('es6-promise').polyfill();
 
 // const Box = new Model('Box', {
 //   table: process.env.tableBox,
