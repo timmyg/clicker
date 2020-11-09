@@ -259,6 +259,47 @@ function isBlowout(game: Game): boolean {
   }
 }
 
+module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  // pull latest from AN
+  const timeToPull = moment()
+    .subtract(12, 'hours')
+    .toDate();
+  const allEvents = await pullFromActionNetwork([timeToPull]);
+  const ipAndCompletedGames = getInProgressAndCompletedGames(allEvents);
+  // get from airtable Games table where:
+  //  "waitOnGamesLink" or "controlCenterLink" are not null
+  //  isOver is false
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableGamesName = 'Games';
+  const allExistingGames = await base(airtableGamesName)
+    .select({
+      filterByFormula: `
+        AND(
+          OR(
+            LEN({controlCenterLink}) > 0,
+            LEN({waitOnGamesLinks}) > 0
+          ),
+          {isOver} != TRUE()
+        )
+      `,
+    })
+    .all();
+  const updates = [];
+  allExistingGames.forEach(game => {
+    const gameId = game.fields.id;
+    const gameScore = ipAndCompletedGames.find(g => g.id === gameId);
+    if (gameScore) {
+      game.isOver = gameScore.status === 'complete';
+      game.description = gameScore.scoreboard && gameScore.scoreboard.display;
+      updates.push(game);
+    }
+  });
+  if (updates.length) {
+    await Promise.all(base(airtableGamesName).update(updates));
+  }
+  return respond();
+});
+
 module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
   // 5 hours messed up at midnight
   const timeToPull = moment()
