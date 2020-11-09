@@ -1550,7 +1550,7 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
   }
 
   switch (action) {
-    case 'enable':
+    case 'enable': {
       const locationEnabled = await dbLocation.update(
         { id: location.id },
         { controlCenter: true },
@@ -1566,7 +1566,8 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
         .async()
         .go();
       return respond(200, text);
-    case 'disable':
+    }
+    case 'disable': {
       const locationDisabled = await dbLocation.update(
         { id: location.id },
         { controlCenter: false },
@@ -1582,6 +1583,7 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
         .async()
         .go();
       return respond(200, text);
+    }
     default:
       return respond(400, 'unknown action');
   }
