@@ -1558,7 +1558,14 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
           returnValues: 'ALL_NEW',
         },
       );
-      return respond(200, `control center enabled at ${locationEnabled.name}`);
+      const text = `control center enabled at ${locationEnabled.name}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendControlCenter')
+        .body({ text })
+        .async()
+        .go();
+      return respond(200, text);
     case 'disable':
       const locationDisabled = await dbLocation.update(
         { id: location.id },
@@ -1567,7 +1574,14 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
           returnValues: 'ALL_NEW',
         },
       );
-      return respond(200, `control center disabled at ${locationDisabled.name}`);
+      const text = `control center disabled at ${locationDisabled.name}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendControlCenter')
+        .body({ text })
+        .async()
+        .go();
+      return respond(200, text);
     default:
       return respond(400, 'unknown action');
   }
