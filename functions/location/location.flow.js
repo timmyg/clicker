@@ -1163,13 +1163,13 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   return ccProgramsFiltered.sort((a, b) => b.fields.rating - a.fields.rating);
 }
 
-const priority = {
-  force: 'force', // force
-  worseRated: 'worse rating', // turn off game with worse rating
-  blowout: 'blowout', // blowout
-  // blowoutMajor: 4, // major blowout
-  gameOver: 'game over', // game over
-};
+// const priority = {
+//   force: 'force', // force
+//   worseRated: 'worse rating', // turn off game with worse rating
+//   blowout: 'blowout', // blowout
+//   // blowoutMajor: 4, // major blowout
+//   gameOver: 'game over', // game over
+// };
 
 // npm run invoke:controlCenterByLocation
 module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async event => {
@@ -1756,7 +1756,8 @@ async function getAirtablePrograms(location: Venue): Promise<ControlCenterProgra
         {rating} != BLANK(),
         {isOver} != 'Y',
         {startHoursFromNow} >= -4,
-        {startHoursFromNow} <= 1 
+        {startHoursFromNow} <= 1,
+        {isReady} != 0
       )`,
     })
     .all();
