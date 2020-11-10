@@ -1163,13 +1163,13 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   return ccProgramsFiltered.sort((a, b) => b.fields.rating - a.fields.rating);
 }
 
-const priority = {
-  force: 'force', // force
-  worseRated: 'worse rating', // turn off game with worse rating
-  blowout: 'blowout', // blowout
-  // blowoutMajor: 4, // major blowout
-  gameOver: 'game over', // game over
-};
+// const priority = {
+//   force: 'force', // force
+//   worseRated: 'worse rating', // turn off game with worse rating
+//   blowout: 'blowout', // blowout
+//   // blowoutMajor: 4, // major blowout
+//   gameOver: 'game over', // game over
+// };
 
 // npm run invoke:controlCenterByLocation
 module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async event => {
@@ -1550,7 +1550,7 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
   }
 
   switch (action) {
-    case 'enable':
+    case 'enable': {
       const locationEnabled = await dbLocation.update(
         { id: location.id },
         { controlCenter: true },
@@ -1558,8 +1558,16 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
           returnValues: 'ALL_NEW',
         },
       );
-      return respond(200, `control center enabled at ${locationEnabled.name}`);
-    case 'disable':
+      const text = `control center enabled at ${locationEnabled.name}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendControlCenter')
+        .body({ text })
+        .async()
+        .go();
+      return respond(200, text);
+    }
+    case 'disable': {
       const locationDisabled = await dbLocation.update(
         { id: location.id },
         { controlCenter: false },
@@ -1567,7 +1575,15 @@ module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async
           returnValues: 'ALL_NEW',
         },
       );
-      return respond(200, `control center disabled at ${locationDisabled.name}`);
+      const text = `control center disabled at ${locationDisabled.name}`;
+      await new Invoke()
+        .service('notification')
+        .name('sendControlCenter')
+        .body({ text })
+        .async()
+        .go();
+      return respond(200, text);
+    }
     default:
       return respond(400, 'unknown action');
   }
@@ -1740,7 +1756,8 @@ async function getAirtablePrograms(location: Venue): Promise<ControlCenterProgra
         {rating} != BLANK(),
         {isOver} != 'Y',
         {startHoursFromNow} >= -4,
-        {startHoursFromNow} <= 1 
+        {startHoursFromNow} <= 1,
+        {isReady} != 0
       )`,
     })
     .all();

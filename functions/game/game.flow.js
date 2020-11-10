@@ -259,6 +259,58 @@ function isBlowout(game: Game): boolean {
   }
 }
 
+module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+  const timeToPull = moment()
+    .subtract(12, 'hours')
+    .toDate();
+  const allEvents = await pullFromActionNetwork([timeToPull]);
+  const ipAndCompletedGames = [allEvents.find(e => e.id === 85412)];
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableGamesName = 'Games';
+  const allExistingGames = await base(airtableGamesName)
+    .select({
+      filterByFormula: `
+        AND(
+          OR(
+            LEN({controlCenterLink}) > 0,
+            LEN({waitOnGamesLinks}) > 0
+          ),
+          {isOver} != TRUE()
+        )
+      `,
+    })
+    .all();
+  const updateGames = [];
+  for (const game of allExistingGames) {
+    console.log({ game });
+    const gameId = game.fields.id;
+    const gameRecordId = game.id;
+    const gameScore = ipAndCompletedGames.find(g => g.id === gameId);
+    console.log({ gameScore });
+    if (gameScore) {
+      const updatedGame = {
+        id: gameRecordId,
+        fields: {
+          isOver: gameScore.status === 'complete',
+          description: gameScore.status_display,
+        },
+      };
+      updateGames.push(updatedGame);
+    }
+  }
+  const promises = [];
+  while (!!updateGames.length) {
+    try {
+      const slice = updateGames.splice(0, 10);
+      promises.push(base(airtableGamesName).update(slice));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  await Promise.all(promises);
+  return respond(200);
+});
+
 module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
   // 5 hours messed up at midnight
   const timeToPull = moment()
@@ -617,8 +669,8 @@ async function pullFromActionNetwork(dates: Date[]) {
       requests.push(request);
     }
   }
-  console.log('requests:');
-  console.log(require('util').inspect(requests));
+  // console.log('requests:');
+  // console.log(require('util').inspect(requests));
   const responses = await Promise.all(requests);
   // console.log('responses[0]', responses[0].config.params);
   // console.log('responses[1]', responses[1].config.params);

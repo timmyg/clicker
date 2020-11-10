@@ -24,13 +24,19 @@
     "serverless-sentry": "^1.2.0"
   },
   "dependencies": {
+    "aws-appsync": "^1.7.0",
     "aws-sdk": "^2.619.0",
     "aws-xray-sdk": "^2.5.0",
+    "cross-fetch": "^3.0.6",
     "dotenv": "^6.2.0",
     "dynamodb-toolbox": "^0.1.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
+    "graphql-tag": "^2.11.0",
     "moment": "^2.24.0",
+    "serverless-appsync-plugin": "^1.4.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
+    "serverless-pseudo-parameters": "^2.5.0",
+    "serverless-stack-output": "^0.2.3",
     "uuid": "^3.3.2"
   }
 }

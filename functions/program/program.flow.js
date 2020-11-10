@@ -1463,9 +1463,9 @@ function getDefaultRating(program: Program): ?number {
     { search: 'good morning football', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
     { search: 'college gameday', rating: 5 },
-    { search: 'mlb tonight', rating: 1 },
-    { search: 'inside the nba', rating: 1 },
-    { search: 'quick pitch', rating: 1 },
+    // { search: 'mlb tonight', rating: 1 },
+    // { search: 'inside the nba', rating: 1 },
+    // { search: 'quick pitch', rating: 1 },
   ];
   // jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec
   const currentMonth = moment().format('MMM');
