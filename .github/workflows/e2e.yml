@@ -15,8 +15,12 @@ jobs:
     name: mobile app e2e tests
     runs-on: ubuntu-16.04
     steps:
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@master
       # - uses: marceloprado/has-changed-path@master
       #   id: changed-app-or-functions
       #   with:
