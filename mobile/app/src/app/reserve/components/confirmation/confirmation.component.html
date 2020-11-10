@@ -94,19 +94,13 @@
       </ion-radio-group>
     </ion-list>
     <p class="ion-text-center ion-padding-top" *ngIf="!isEditMode">
-      <span *ngIf="reservation.minutes !== 0; else noReservation">
+      <span *ngIf="reservation.minutes > 0">
         😎
         <b
-          >You will be able to freely change the channel during your reservation
+          >You will be able to freely change the channel during this reservation
           timeframe.</b
         >
       </span>
-      <ng-template #noReservation>
-        <!-- ⚠️
-        <b
-          >This is a one-time channel change, others will be able to change it
-          at any time.</b> -->
-      </ng-template>
     </p>
     <ion-button
       size="large"

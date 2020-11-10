@@ -260,7 +260,6 @@ function isBlowout(game: Game): boolean {
 }
 
 module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async event => {
-  // pull latest from AN
   const timeToPull = moment()
     .subtract(12, 'hours')
     .toDate();
@@ -284,20 +283,35 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async even
       `,
     })
     .all();
-  const updates = [];
-  allExistingGames.forEach(game => {
+  const updateGames = [];
+  for (const game of allExistingGames) {
+    console.log({ game });
     const gameId = game.fields.id;
+    const gameRecordId = game.id;
     const gameScore = ipAndCompletedGames.find(g => g.id === gameId);
+    console.log({ gameScore });
     if (gameScore) {
-      game.isOver = gameScore.status === 'complete';
-      game.description = gameScore.scoreboard && gameScore.scoreboard.display;
-      updates.push(game);
+      const updatedGame = {
+        id: gameRecordId,
+        fields: {
+          isOver: gameScore.status === 'complete',
+          description: gameScore.status_display,
+        },
+      };
+      updateGames.push(updatedGame);
     }
-  });
-  if (updates.length) {
-    await Promise.all(base(airtableGamesName).update(updates));
   }
-  return respond();
+  const promises = [];
+  while (!!updateGames.length) {
+    try {
+      const slice = updateGames.splice(0, 10);
+      promises.push(base(airtableGamesName).update(slice));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  await Promise.all(promises);
+  return respond(200);
 });
 
 module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
@@ -658,8 +672,8 @@ async function pullFromActionNetwork(dates: Date[]) {
       requests.push(request);
     }
   }
-  console.log('requests:');
-  console.log(require('util').inspect(requests));
+  // console.log('requests:');
+  // console.log(require('util').inspect(requests));
   const responses = await Promise.all(requests);
   // console.log('responses[0]', responses[0].config.params);
   // console.log('responses[1]', responses[1].config.params);
