@@ -216,6 +216,10 @@ async function sendNotification(source: string, reservation: Reservation) {
     if (reservation.isVip) {
       eventName += ' (VIP)';
     }
+    const isUpdate = moment(reservation.updatedAt).diff(reservation.createdAt) > 500;
+    if (isUpdate) {
+      eventName += ' (Update)';
+    }
     userId = reservation.userId;
     const text =
       getCurrentProgramText(eventName, reservation.location, program) +
