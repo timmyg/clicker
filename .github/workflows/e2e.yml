@@ -40,7 +40,7 @@ jobs:
           fi
       - name: Cypress run
         # if: steps.changed-app-or-functions.outputs.changed == 'true'
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v2.3.6
         with:
           working-directory: mobile/app
           build: npm run build
