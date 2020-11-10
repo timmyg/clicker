@@ -11,7 +11,11 @@ provider:
     name: serverless-deploys-clicker
   environment:
     stage: ${self:custom.stage}
+    region: ${opt:region, self:provider.region}
     tableBox: ${self:custom.tableBox}
+    # graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
+    graphqlApiUrl: ${env:GRAPHQL_API_URL, self:custom.graphqlApiUrl}
+    graphqlApiKey: ${env:GRAPHQL_API_KEY, self:custom.graphqlApiKey}
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
@@ -25,10 +29,15 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
   - serverless-bundle
+  - serverless-appsync-plugin
+  - serverless-pseudo-parameters
+  - serverless-stack-output
 
 custom:
   stage: ${opt:stage}
   tableBox: boxes-${self:custom.stage}
+  graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
+  graphqlApiKey: { Fn::GetAtt: [GraphQlApiKeyDefault, ApiKey] }
   prune:
     automatic: true
     number: 3
@@ -47,6 +56,26 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
+  appSync:
+    # component: '@serverless/aws-app-sync'
+    # inputs:
+    # domain:
+    name: ${self:service}-${self:custom.stage}
+    authenticationType: API_KEY
+    apiKeys:
+      - myApiKey
+    dataSources:
+      - type: AMAZON_DYNAMODB
+        name: Boxes
+        config:
+          tableName: ${self:custom.tableBox}
+    mappingTemplates:
+      - dataSource: Boxes
+        type: Mutation
+        field: addBox
+        request: request.vtl
+        response: response.vtl
+    schema: 'schema.graphql'
 functions:
   health:
     handler: box.health

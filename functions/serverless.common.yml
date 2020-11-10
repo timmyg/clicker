@@ -6,6 +6,7 @@ iamRoleStatements:
       - lambda:InvokeAsync
       - xray:PutTraceSegments
       - xray:PutTelemetryRecords
+      - appsync:GraphQL
     Resource: '*'
 # plugins:
 #   - serverless-prune-plugin
