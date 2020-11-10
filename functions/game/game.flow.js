@@ -264,7 +264,7 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async even
     .subtract(12, 'hours')
     .toDate();
   const allEvents = await pullFromActionNetwork([timeToPull]);
-  const ipAndCompletedGames = [allEvents.find(e => e.id === 85412)];
+  const ipAndCompletedGames = getInProgressAndCompletedGames(allEvents);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGamesName = 'Games';
   const allExistingGames = await base(airtableGamesName)
