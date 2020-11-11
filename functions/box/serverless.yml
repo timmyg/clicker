@@ -39,7 +39,7 @@ custom:
   graphqlApiKey: { Fn::GetAtt: [GraphQlApiKeyDefault, ApiKey] }
   bundle:
     tsConfig: 'tsconfig.json'
-    sourcemaps: true # Enable source maps
+    sourcemaps: false # Enable source maps
   # webpack:
   #   # webpackConfig: ./webpack.config.js
   #   includeModules: true
