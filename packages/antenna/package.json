@@ -1,6 +1,6 @@
 {
   "name": "antenna",
-  "version": "0.2.0",
+  "version": "0.3.0-alpha1",
   "description": "",
   "scripts": {
     "start": "npx node startup.js"

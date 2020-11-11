@@ -8,8 +8,8 @@ class Api {
       baseURL: process.env.API_BASE_URL,
       timeout: 6000,
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   }
 
@@ -30,9 +30,9 @@ class Api {
       logger.info(boxes);
       logger.info(`/locations/${this.locationId}/boxes`);
 
-      return await this.axios.put(`/locations/${this.locationId}/boxes`, {
+      return await this.axios.put(`/boxes?locationId=${this.locationId}`, {
         boxes,
-        ip
+        ip,
       });
     } catch (error) {
       return console.error(error);
