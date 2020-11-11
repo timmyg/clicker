@@ -4,9 +4,10 @@
   "description": "",
   "main": "box.js",
   "scripts": {
+    "postinstall": "cp -a ../node_modules/source-map-support ./node_modules/source-map-support",
     "test": "jest --coverage",
     "invoke:health": "serverless invoke local --function health --stage develop",
-    "invoke:create": "serverless invoke local --function create --stage develop"
+    "invoke:create": "serverless invoke local --function create --stage develop --path ../.resources/data/audit-reservation.json"
   },
   "author": "",
   "license": "ISC",
