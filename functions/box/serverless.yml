@@ -94,3 +94,9 @@ functions:
       - http:
           path: ''
           method: post
+  get:
+    handler: box.get
+    events:
+      - http:
+          path: '{id}'
+          method: get

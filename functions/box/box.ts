@@ -1,4 +1,4 @@
-import { getBody, respond, Raven, RavenLambdaWrapper } from 'serverless-helpers';
+import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper } from 'serverless-helpers';
 const appsync = require('aws-appsync');
 const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
@@ -37,12 +37,9 @@ class DirectvBoxRequest {
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const data: DirectvBoxRequest = getBody(event);
-  console.log({ event });
   const { locationId } = event.queryStringParameters;
-  console.log({ locationId });
 
   const graphqlClient = getGraphqlClient();
-
   const result = await graphqlClient.mutate({
     mutation: gql(`mutation addBox($id: ID!, $locationId: String!, $zone: String!){
       addBox(id: $id, locationId: $locationId, zone: $zone){
@@ -59,6 +56,25 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
       },
     },
   });
-  console.log('2', { result });
-  return respond(200, 'hi');
+  return respond(200, result);
+});
+
+export const get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id } = getPathParameters(event);
+  const { locationId } = event.queryStringParameters;
+
+  const graphqlClient = getGraphqlClient();
+  const result = await graphqlClient.query({
+    query: gql(`query GetBox($id: ID!, $locationId: String!) {
+      getBox($id: ID!, $locationId: String!) {
+        id
+        locationId
+      }
+    }`),
+    variables: {
+      id,
+      locationId,
+    },
+  });
+  return respond(200, result);
 });
