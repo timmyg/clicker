@@ -23,14 +23,14 @@ function getGraphqlClient() {
   });
 }
 
-interface DirectvBox {
+class DirectvBox {
   major: number;
   minor: number;
   clientAddr: string;
   locationName: string;
 }
 
-interface DirectvBoxRequest {
+class DirectvBoxRequest {
   boxes: DirectvBox[];
   ip: string;
 }
