@@ -14,5 +14,8 @@ type Mutation {
 type Box {
   id: ID!
   locationId: String
-  zone: String
+  info: {
+    ip: String,
+    clientAddress: String
+  }
 }

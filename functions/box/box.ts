@@ -37,7 +37,9 @@ class DirectvBoxRequest {
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const data: DirectvBoxRequest = getBody(event);
+  console.log({ event });
   const { locationId } = event.queryStringParameters;
+  console.log({ locationId });
 
   const graphqlClient = getGraphqlClient();
 
