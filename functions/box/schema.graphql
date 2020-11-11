@@ -11,11 +11,13 @@ type Mutation {
   addBox(id: ID!, locationId: String!, zone: String!): Box!
 }
 
+type BoxInfo {
+  ip: String
+  clientAddress: String
+}
+
 type Box {
   id: ID!
   locationId: String
-  info: {
-    ip: String,
-    clientAddress: String
-  }
+  info: BoxInfo
 }
