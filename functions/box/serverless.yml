@@ -37,9 +37,9 @@ custom:
   tableBox: boxes-${self:custom.stage}
   graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
   graphqlApiKey: { Fn::GetAtt: [GraphQlApiKeyDefault, ApiKey] }
-  webpack:
-    # webpackConfig: ./webpack.config.js
-    includeModules: true
+  # webpack:
+  #   # webpackConfig: ./webpack.config.js
+  #   includeModules: true
   prune:
     automatic: true
     number: 3
