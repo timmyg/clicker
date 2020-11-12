@@ -60,21 +60,29 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const get = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id } = getPathParameters(event);
-  const { locationId } = event.queryStringParameters;
+  // const { id } = getPathParameters(event);
+  // const { locationId } = event.queryStringParameters;
 
   const graphqlClient = getGraphqlClient();
-  const result = await graphqlClient.query({
-    query: gql(`query GetBox($id: ID!, $locationId: String!) {
-      getBox($id: ID!, $locationId: String!) {
-        id
-        locationId
+  // const query = gql(`query GetBox($id: ID!, $locationId: String!) {
+  //   getBox($id: ID!, $locationId: String!) {
+  //     id
+  //     locationId
+  //   }
+  // }`)
+  const query = gql(`
+    {
+      box {
+        name
       }
-    }`),
-    variables: {
-      id,
-      locationId,
-    },
+    }
+  `);
+  const result = await graphqlClient.query({
+    query,
+    // variables: {
+    //   id,
+    //   locationId,
+    // },
   });
   return respond(200, result);
 });
