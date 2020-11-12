@@ -8,10 +8,10 @@ type Query {
 }
 
 type Mutation {
-  addBox(id: ID!, locationId: String!, info: BobInfoInput!): Box!
+  addBox(id: ID!, locationId: String!, info: BoxInfoInput!): Box!
 }
 
-input BobInfoInput {
+input BoxInfoInput {
   ip: String!
   clientAddress: String!
 }
