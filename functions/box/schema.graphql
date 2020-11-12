@@ -4,7 +4,7 @@ schema {
 }
 
 type Query {
-  getBox(id: ID!, locationId: String!): Box
+  box(id: ID!, locationId: String!): Box
 }
 
 type Mutation {
@@ -12,7 +12,8 @@ type Mutation {
 }
 
 input BobInfoInput {
-  boxInfo: BoxInfo!
+  ip: String!
+  clientAddress: String!
 }
 
 type BoxInfo {
