@@ -8,8 +8,8 @@
     "attributeValues" : {
         "info": {
             "M": {
-              "ip": { "S" : "${context.arguments.ip}" },
-              "clientAddress": { "S" : "${context.arguments.clientAddress}" }
+              "ip": { "S" : "${context.arguments.info.ip}" },
+              "clientAddress": { "S" : "${context.arguments.info.clientAddress}" }
             }
           }
     }
