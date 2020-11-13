@@ -6,6 +6,15 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "attributeValues" : {
-        "zone": { "S" : "${context.arguments.zone}" }
+        "info": {
+            "M": {
+              "ip": {
+                "S": false
+              },
+              "clientAddress": {
+                "S": true
+              }
+            }
+          }
     }
 }
