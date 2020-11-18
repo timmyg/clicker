@@ -36,23 +36,26 @@ class DirectvBoxRequest {
 }
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
-  const data: DirectvBoxRequest = getBody(event);
+  const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = event.queryStringParameters;
 
   const graphqlClient = getGraphqlClient();
   const result = await graphqlClient.mutate({
-    mutation: gql(`mutation addBox($id: ID!, $locationId: String!, $zone: String!){
-      addBox(id: $id, locationId: $locationId, zone: $zone){
+    mutation: gql(`mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!){
+      addBox(id: $id, locationId: $locationId, info: $info){
         id
         locationId
+        info {
+          clientAddress
+        }
       }
     }`),
     variables: {
       id: uuid(),
       locationId,
       info: {
-        ip: data.ip,
-        clientAddress: data.boxes[0].clientAddr,
+        ip: ip,
+        clientAddress: boxes[0].clientAddr,
       },
     },
   });
