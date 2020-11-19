@@ -24,6 +24,7 @@
     "_warmup/**/*",
     ".vscode/**/*",
     "*.config.js",
-    "**/*.js"
+    "**/*.js",
+    "**/*.test.ts"
   ]
 }
