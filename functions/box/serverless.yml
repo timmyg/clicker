@@ -78,8 +78,13 @@ custom:
       - dataSource: Boxes
         type: Mutation
         field: addBox
-        request: request.vtl
-        response: response.vtl
+        request: request-create.vtl
+        response: response-create.vtl
+      - dataSource: Boxes
+        type: Query
+        field: box
+        request: request-get.vtl
+        response: response-get.vtl
     schema: 'schema.graphql'
 functions:
   health:

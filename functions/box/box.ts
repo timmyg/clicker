@@ -41,15 +41,17 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
 
   const graphqlClient = getGraphqlClient();
   const result = await graphqlClient.mutate({
-    mutation: gql(`mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!){
-      addBox(id: $id, locationId: $locationId, info: $info){
-        id
-        locationId
-        info {
-          clientAddress
+    mutation: gql(
+      `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!){
+        addBox(id: $id, locationId: $locationId, info: $info){
+          id
+          locationId
+          info {
+            clientAddress
+          }
         }
-      }
-    }`),
+      }`,
+    ),
     variables: {
       id: uuid(),
       locationId,
@@ -63,29 +65,23 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const get = RavenLambdaWrapper.handler(Raven, async event => {
-  // const { id } = getPathParameters(event);
-  // const { locationId } = event.queryStringParameters;
-
   const graphqlClient = getGraphqlClient();
-  // const query = gql(`query GetBox($id: ID!, $locationId: String!) {
-  //   getBox($id: ID!, $locationId: String!) {
-  //     id
-  //     locationId
-  //   }
-  // }`)
   const query = gql(`
-    {
-      box {
-        name
+    query box($id: ID!, $locationId: String!)
+      {
+        box(id: $id, locationId: $locationId) {
+          info {
+            ip
+          }
+        }
       }
-    }
   `);
   const result = await graphqlClient.query({
     query,
-    // variables: {
-    //   id,
-    //   locationId,
-    // },
+    variables: {
+      id: 'a6908950-29e2-11eb-9ae6-e91cccf3b94f',
+      locationId: '2315bdc0-e9c4-11e9-8e67-69a62af831a3',
+    },
   });
   return respond(200, result);
 });
