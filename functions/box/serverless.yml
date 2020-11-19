@@ -13,7 +13,6 @@ provider:
     stage: ${self:custom.stage}
     region: ${opt:region, self:provider.region}
     tableBox: ${self:custom.tableBox}
-    # graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
     graphqlApiUrl: ${env:GRAPHQL_API_URL, self:custom.graphqlApiUrl}
     graphqlApiKey: ${env:GRAPHQL_API_KEY, self:custom.graphqlApiKey}
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
@@ -31,7 +30,7 @@ plugins:
   - serverless-bundle
   - serverless-appsync-plugin
   - serverless-pseudo-parameters
-  - serverless-stack-output
+  # - serverless-stack-output
 custom:
   stage: ${opt:stage}
   tableBox: boxes-${self:custom.stage}
