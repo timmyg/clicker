@@ -9,6 +9,8 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, { vals });
 });
 
+
+
 function getGraphqlClient() {
   const { graphqlApiUrl, graphqlApiKey, region } = process.env;
 
