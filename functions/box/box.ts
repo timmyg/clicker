@@ -38,21 +38,22 @@ class DirectvBoxRequest {
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = event.queryStringParameters;
-
   const graphqlClient = getGraphqlClient();
-  console.time('create');
-  const result = await graphqlClient.mutate({
-    mutation: gql(
-      `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!){
-        addBox(id: $id, locationId: $locationId, info: $info){
-          id
-          locationId
-          info {
-            clientAddress
-          }
+
+  const mutation = gql(
+    `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!){
+      addBox(id: $id, locationId: $locationId, info: $info){
+        id
+        locationId
+        info {
+          clientAddress
         }
-      }`,
-    ),
+      }
+    }`,
+  );
+  console.time('create');
+  const gqlMutation = graphqlClient.mutate({
+    mutation,
     variables: {
       id: uuid(),
       locationId,
@@ -63,6 +64,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
     },
   });
   console.timeEnd('create');
+  const result = await gqlMutation;
   return respond(200, result);
 });
 
@@ -73,20 +75,22 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
     query box($id: ID!, $locationId: String!)
       {
         box(id: $id, locationId: $locationId) {
+          id
           info {
             ip
           }
         }
       }
   `);
-  console.time('query');
-  const result = await graphqlClient.query({
+  const gqlQuery = graphqlClient.query({
     query,
     variables: {
       id,
       locationId,
     },
   });
+  console.time('query');
+  const { data } = await gqlQuery;
   console.timeEnd('query');
-  return respond(200, result);
+  return respond(200, data.box);
 });
