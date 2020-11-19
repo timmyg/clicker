@@ -39,6 +39,7 @@ custom:
   # webpack:
   #   # webpackConfig: ./webpack.config.js
   #   includeModules: true
+  
   prune:
     automatic: true
     number: 3
