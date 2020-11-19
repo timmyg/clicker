@@ -5,10 +5,10 @@
   "main": "box.js",
   "scripts": {
     "postinstall": "cp -a ../node_modules/source-map-support ./node_modules/source-map-support",
-    "test": "jest --coverage",
-    "invoke:health": "serverless invoke local --function health --stage develop",
-    "invoke:create": "serverless invoke local --function create --stage develop --path ../.resources/data/box-directv.json",
-    "invoke:get": "serverless invoke local --function get --stage develop --path ../.resources/data/box-get.json"
+    "test": "npx jest --coverage",
+    "invoke:health": "npx serverless invoke local --function health --stage develop",
+    "invoke:create": "npx serverless invoke local --function create --stage develop --path ../.resources/data/box-directv.json",
+    "invoke:get": "npx serverless invoke local --function get --stage develop --path ../.resources/data/box-get.json"
   },
   "author": ""
 }
