@@ -103,5 +103,5 @@ functions:
     handler: box.get
     events:
       - http:
-          path: '{id}'
+          path: ''
           method: get
