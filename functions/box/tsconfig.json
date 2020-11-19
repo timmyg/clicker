@@ -13,7 +13,8 @@
     "incremental": true,
     "watch": true,
     "target": "es2017",
-    "outDir": "lib"
+    "outDir": "lib",
+    "baseUrl": "./"
   },
   "include": ["./**/*.ts"],
   "exclude": [
