@@ -6,6 +6,7 @@ provider:
   versionFunctions: false
   runtime: nodejs12.x
   # tracing: true
+  
   logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker
@@ -39,7 +40,7 @@ custom:
   # webpack:
   #   # webpackConfig: ./webpack.config.js
   #   includeModules: true
-  
+
   prune:
     automatic: true
     number: 3
