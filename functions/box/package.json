@@ -8,7 +8,7 @@
     "test": "jest --coverage",
     "invoke:health": "serverless invoke local --function health --stage develop",
     "invoke:create": "serverless invoke local --function create --stage develop --path ../.resources/data/box-directv.json",
-    "invoke:get": "serverless invoke local --function get --stage develop"
+    "invoke:get": "serverless invoke local --function get --stage develop --path ../.resources/data/box-get.json"
   },
   "author": "",
   "license": "ISC",

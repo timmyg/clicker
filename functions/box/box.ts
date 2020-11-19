@@ -40,6 +40,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = event.queryStringParameters;
 
   const graphqlClient = getGraphqlClient();
+  console.time('create');
   const result = await graphqlClient.mutate({
     mutation: gql(
       `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!){
@@ -61,10 +62,12 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
       },
     },
   });
+  console.timeEnd('create');
   return respond(200, result);
 });
 
 export const get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id, locationId } = event.queryStringParameters;
   const graphqlClient = getGraphqlClient();
   const query = gql(`
     query box($id: ID!, $locationId: String!)
@@ -76,12 +79,14 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
         }
       }
   `);
+  console.time('query');
   const result = await graphqlClient.query({
     query,
     variables: {
-      id: 'a6908950-29e2-11eb-9ae6-e91cccf3b94f',
-      locationId: '2315bdc0-e9c4-11e9-8e67-69a62af831a3',
+      id,
+      locationId,
     },
   });
+  console.timeEnd('query');
   return respond(200, result);
 });
