@@ -8,6 +8,10 @@ iamRoleStatements:
       - xray:PutTelemetryRecords
       - appsync:GraphQL
     Resource: '*'
+domains:
+  prod: api.tryclicker.com
+  release: api-release.tryclicker.com
+  develop: api-develop.tryclicker.com
 # plugins:
 #   - serverless-prune-plugin
 #   - serverless-deployment-bucket

@@ -34,19 +34,11 @@ custom:
   graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
   graphqlApiKey: { Fn::GetAtt: [GraphQlApiKeyDefault, ApiKey] }
   bundle:
-    #   tsConfig: 'tsconfig.json'
-    sourcemaps: false # Enable source maps
-  # webpack:
-  #   # webpackConfig: ./webpack.config.js
-  #   includeModules: true
-
+    sourcemaps: false
   prune:
     automatic: true
     number: 3
-  domains:
-    prod: api.tryclicker.com
-    release: api-release.tryclicker.com
-    develop: api-develop.tryclicker.com
+  domains: ${file(../serverless.common.yml):domains}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: boxes
@@ -59,9 +51,6 @@ custom:
   dotenv:
     basePath: ../
   appSync:
-    # component: '@serverless/aws-app-sync'
-    # inputs:
-    # domain:
     name: ${self:service}-${self:custom.stage}
     authenticationType: API_KEY
     apiKeys:
