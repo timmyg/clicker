@@ -25,6 +25,6 @@
     ".vscode/**/*",
     "*.config.js",
     "**/*.js",
-    "**/*.test.ts"
+    "../shared/**/*"
   ]
 }
