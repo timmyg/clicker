@@ -2,7 +2,7 @@ import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper } from '
 const appsync = require('aws-appsync');
 const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
-import vals from '../shared/test';
+import vals from '../shared/example';
 require('cross-fetch/polyfill');
 
 export const health = RavenLambdaWrapper.handler(Raven, async event => {
