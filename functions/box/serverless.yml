@@ -30,7 +30,7 @@ plugins:
   - serverless-bundle
   - serverless-appsync-plugin
   # - serverless-pseudo-parameters
-  - serverless-stack-output
+  # - serverless-stack-output
 custom:
   stage: ${opt:stage}
   tableBox: boxes-${self:custom.stage}
