@@ -8,10 +8,16 @@
     "invoke:widget:register": "serverless invoke local --function register --path ../.resources/data/widget.json",
     "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
   },
-  "workspaces": [
-    "box"
-  ],
+  "workspaces": {
+    "packages": [
+      "box"
+    ],
+    "nohoist": [
+      "**/box/**"
+    ]
+  },
   "dependencies": {
+    "@clicker/example": "^0.1.0",
     "aws-appsync": "^1.7.0",
     "aws-sdk": "^2.619.0",
     "aws-xray-sdk": "^2.5.0",

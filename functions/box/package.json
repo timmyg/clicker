@@ -4,7 +4,6 @@
   "description": "",
   "main": "box.js",
   "scripts": {
-    "preinstall": "cd .. && npm install",
     "postinstall": "cp -a ../node_modules/source-map-support ./node_modules/source-map-support",
     "test": "jest --coverage",
     "invoke:health": "serverless invoke local --function health --stage develop",
