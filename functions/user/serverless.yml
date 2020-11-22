@@ -111,6 +111,12 @@ functions:
               - authorization
               - content-type
   wallet:
+    handler: user.get
+    events:
+      - http:
+          path: '{id}'
+          method: get
+  wallet:
     handler: user.wallet
     events:
       - http:
