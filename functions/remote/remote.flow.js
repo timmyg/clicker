@@ -226,7 +226,7 @@ async function sendNotification(source: string, reservation: Reservation) {
       .name('get')
       .pathParams({ id: userId })
       .go();
-    console.log({user});
+    console.log({userResult});
     const userLifetimeZaps = userResult && userResult.data ? userResult.data.lifetimeZaps : ''
 
     const text =
