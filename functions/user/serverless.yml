@@ -110,7 +110,7 @@ functions:
               - clicker
               - authorization
               - content-type
-  wallet:
+  get:
     handler: user.get
     events:
       - http:
