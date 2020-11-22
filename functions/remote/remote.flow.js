@@ -221,9 +221,16 @@ async function sendNotification(source: string, reservation: Reservation) {
       eventName += ' (Update)';
     }
     userId = reservation.userId;
+    const {data: user} = await new Invoke()
+      .service('user')
+      .name('get')
+      .pathParams({ id: userId })
+      .go();
+    console.log({user});
+
     const text =
       getCurrentProgramText(eventName, reservation.location, program) +
-      ` [${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)}]` +
+      ` [${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)}, ${user.lifetimeZaps || 0} zaps]` +
       previousProgramText;
     await new Invoke()
       .service('notification')
