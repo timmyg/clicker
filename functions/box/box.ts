@@ -43,27 +43,38 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const graphqlClient = getGraphqlClient();
 
   const mutation = gql(
-    `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!){
-      addBox(id: $id, locationId: $locationId, info: $info){
+    `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
+      addBox(id: $id, locationId: $locationId, info: $info, configuration: $configuration){
         id
         locationId
         info {
           clientAddress
         }
+        configuration {
+          appActive
+        }
       }
     }`,
   );
   console.time('create');
+  const box = {
+    id: uuid(),
+    locationId,
+    configuration: {
+      appActive: false,
+      automationActive: false
+    },
+    info: {
+      ip,
+      clientAddress: boxes[0].clientAddr,
+      locationName: boxes[0].locationName,
+    },
+    live: {}
+  }
+  console.log({box});
   const gqlMutation = graphqlClient.mutate({
     mutation,
-    variables: {
-      id: uuid(),
-      locationId,
-      info: {
-        ip: ip,
-        clientAddress: boxes[0].clientAddr,
-      },
-    },
+    variables: box,
   });
   console.timeEnd('create');
   const result = await gqlMutation;

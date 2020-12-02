@@ -8,7 +8,7 @@ type Query {
 }
 
 type Mutation {
-  addBox(id: ID!, locationId: String!, info: BoxInfoInput!): Box!
+  addBox(id: ID!, locationId: String!, info: BoxInfoInput!, configuration: BoxConfigurationInput!): Box!
 }
 
 input BoxInfoInput {
@@ -16,9 +16,9 @@ input BoxInfoInput {
   clientAddress: String!
 }
 
-type BoxInfo {
-  ip: String!
-  clientAddress: String!
+type BoxConfigurationInput {
+  appActive: Boolean
+  automationActive: Boolean
 }
 
 type BoxLive {
@@ -29,9 +29,9 @@ type BoxLive {
 }
 
 type BoxInfo {
-  clientAddress: String
+  ip: String!
+  clientAddress: String!
   locationName: String
-  ip: String
   notes: String
 }
 
