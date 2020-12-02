@@ -11,8 +11,32 @@ type Mutation {
   addBox(id: ID!, locationId: String!, zone: String!): Box!
 }
 
+type BoxLive {
+  channel: Int
+  channelMinor: Int
+  channelChangeAt: Int
+  channelChangeSource: String
+}
+
+type BoxInfo {
+  clientAddress: String
+  locationName: String
+  ip: String
+  notes: String
+}
+
+type BoxConfiguration {
+  appActive: Boolean
+  automationActive: Boolean
+}
+
 type Box {
   id: ID!
   locationId: String
+  label: String
   zone: String
+  configuration: BoxConfiguration
+  info: BoxInfo
+  live: BoxLive
+  updatedAt: Int
 }
