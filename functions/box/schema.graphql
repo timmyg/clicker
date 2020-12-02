@@ -14,9 +14,11 @@ type Mutation {
 input BoxInfoInput {
   ip: String!
   clientAddress: String!
+  locationName: String
+  notes: String
 }
 
-type BoxConfigurationInput {
+input BoxConfigurationInput {
   appActive: Boolean
   automationActive: Boolean
 }
