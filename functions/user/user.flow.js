@@ -206,6 +206,15 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
+module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { id: userId } = getPathParameters(event);
+  const user = await dbUser
+    .queryOne('id')
+    .eq(userId)
+    .exec();
+  return respond(200, user);
+})
+
 module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
   let user = await dbUser

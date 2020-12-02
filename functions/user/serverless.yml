@@ -110,6 +110,12 @@ functions:
               - clicker
               - authorization
               - content-type
+  get:
+    handler: user.get
+    events:
+      - http:
+          path: '{id}'
+          method: get
   wallet:
     handler: user.wallet
     events:
