@@ -9,7 +9,15 @@
         "info": {
             "M": {
               "ip": { "S" : "${context.arguments.info.ip}" },
-              "clientAddress": { "S" : "${context.arguments.info.clientAddress}" }
+              "clientAddress": { "S" : "${context.arguments.info.clientAddress}" },
+              "locationName": { "S" : "${context.arguments.info.locationName}" },
+              "notes": { "S" : "${context.arguments.info.notes}" }
+            }
+          },
+        "configuration": {
+            "M": {
+              "appActive": { "S" : "${context.arguments.configuration.appActive}" },
+              "automationActive": { "S" : "${context.arguments.configuration.automationActive}" }
             }
           }
     }
