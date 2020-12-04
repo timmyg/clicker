@@ -105,7 +105,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('query');
   const { data } = await gqlQuery;
   console.timeEnd('query');
-  return respond(200, data);
+  return respond(200, data.box);
 });
 
 export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
