@@ -31,8 +31,7 @@ class LosantApi {
 
   async sendCommand(name, losantId, payload, losantProductionOverride?: boolean) {
     try {
-      // TODO: for non-production environment, maybe lets have an override param
-      //  that is set on the location?
+      // only send in non production environment when has losantProductionOverride
       if (process.env.stage === 'prod' || losantProductionOverride) {
         const params = {
           applicationId: process.env.losantAppId,
@@ -256,11 +255,11 @@ async function sendNotification(source: string, reservation: Reservation) {
 
 module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    const { losantId } = getBody(event);
+    const { losantId, losantProductionOverride } = getBody(event);
     const api = new LosantApi();
 
     const command = 'sync.boxes';
-    await api.sendCommand(command, losantId, {});
+    await api.sendCommand(command, losantId, {}, losantProductionOverride);
     return respond();
   } catch (e) {
     console.error(e);
