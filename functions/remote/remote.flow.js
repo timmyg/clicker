@@ -31,6 +31,7 @@ class LosantApi {
 
   async sendCommand(name, losantId, payload, losantProductionOverride?: boolean) {
     try {
+      console.log({losantId});
       // only send in non production environment when has losantProductionOverride
       if (process.env.stage === 'prod' || losantProductionOverride) {
         const params = {
@@ -38,6 +39,9 @@ class LosantApi {
           deviceId: losantId,
           deviceCommand: { name, payload },
         };
+        console.info(
+          `changing channel via losant (${process.env.stage})`,
+        );
         return await this.client.device
           .sendCommand(params)
           .then(console.info)
