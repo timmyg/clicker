@@ -455,19 +455,11 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { requestBoxes, ip } = getBody(event);
   const { id } = getPathParameters(event);
 
-
-  const {data} = await new Invoke()
+  const {data: {boxes: locationBoxes}} = await new Invoke()
     .service('box')
     .name('getAll')
     .pathParams({locationId: id})
     .go();
-
-  const { boxes: locationBoxes } = data
-  
-  // const location: Venue = await dbLocation
-  //   .queryOne('id')
-  //   .eq(id)
-  //   .exec();
 
   for (const dtvBox: DirecTVBoxRaw of requestBoxes) {
    const isExistingBox =
@@ -493,12 +485,12 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         .go();
       
       const text = `*New DirecTV Box Added* ${JSON.stringify(dtvBox)}`;
-      await new Invoke()
-        .service('notification')
-        .name('sendAntenna')
-        .body({ text })
-        .async()
-        .go();
+      // await new Invoke()
+      //   .service('notification')
+      //   .name('sendAntenna')
+      //   .body({ text })
+      //   .async()
+      //   .go();
       await new Invoke()
         .service('notification')
         .name('sendTasks')

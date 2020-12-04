@@ -10,6 +10,7 @@ type Query {
 
 type Mutation {
   addBox(id: ID!, locationId: String!, info: BoxInfoInput!, configuration: BoxConfigurationInput!): Box!
+  updateBoxChannel(id: ID!, locationId: String!, live: BoxLiveInput!): Box!
 }
 
 input BoxInfoInput {
@@ -22,6 +23,13 @@ input BoxInfoInput {
 input BoxConfigurationInput {
   appActive: Boolean
   automationActive: Boolean
+}
+
+input BoxLiveInput {
+  channel: Int
+  channelMinor: Int
+  channelChangeAt: Int
+  channelChangeSource: String
 }
 
 type BoxLive {

@@ -67,6 +67,11 @@ custom:
         request: request-create.vtl
         response: response-create.vtl
       - dataSource: Boxes
+        type: Mutation
+        field: updateBoxChannel
+        request: request-update.vtl
+        response: response-update.vtl
+      - dataSource: Boxes
         type: Query
         field: box
         request: request-get.vtl
@@ -90,6 +95,12 @@ functions:
       - http:
           path: '{locationId}'
           method: post
+  updateChannel:
+    handler: box.updateChannel
+    events:
+      - http:
+          path: '{locationId}'
+          method: put
   get:
     handler: box.get
     events:

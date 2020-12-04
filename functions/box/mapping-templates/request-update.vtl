@@ -1,0 +1,14 @@
+{
+    "version" : "2017-02-28",
+    "operation" : "UpdateItem",
+    "key" : {
+        "id" : { "S" : "${context.arguments.id}" },
+        "locationId" : { "S" : "${context.arguments.locationId}" }
+    },
+    "update" : {
+        "expression" : "SET live = :live",
+        "expressionValues": {
+        	":live" : { "M" : "${context.arguments.live}" }
+        }
+    }
+}
