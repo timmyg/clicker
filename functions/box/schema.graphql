@@ -38,17 +38,17 @@ type BoxInfo {
 }
 
 type BoxConfiguration {
-  appActive: Boolean
-  automationActive: Boolean
+  appActive: Boolean!
+  automationActive: Boolean!
 }
 
 type Box {
   id: ID!
-  locationId: String
+  locationId: String!
   label: String
   zone: String
-  configuration: BoxConfiguration
-  info: BoxInfo
+  configuration: BoxConfiguration!
+  info: BoxInfo!
   live: BoxLive
   updatedAt: Int
 }
