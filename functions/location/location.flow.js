@@ -452,7 +452,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  const { requestBoxes, ip } = getBody(event);
+  const { boxes: requestBoxes, ip } = getBody(event);
   const { id } = getPathParameters(event);
 
   const {data: {boxes: locationBoxes}} = await new Invoke()
@@ -471,7 +471,10 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
           locationBox.info.clientAddress === dtvBox.clientAddr,
       );
     if (!isExistingBox) {
-      console.log('add new box!', dtvBox.ip);
+      console.log('add new box!', ip);
+
+      console.log({locationId: id});
+      console.log({ip, boxes: dtvBox});
       
       await new Invoke()
         .service('box')
@@ -479,7 +482,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         .pathParams({locationId: id})
         .body({
           ip,
-          boxes: dtvBox
+          boxes: [dtvBox]
         })
         .async()
         .go();
