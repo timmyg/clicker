@@ -5,6 +5,7 @@ schema {
 
 type Query {
   box(id: ID!, locationId: String!): Box
+  boxes(locationId: String!): [Box]
 }
 
 type Mutation {

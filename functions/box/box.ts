@@ -82,7 +82,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const get = RavenLambdaWrapper.handler(Raven, async event => {
-  const { id, locationId } = event.queryStringParameters;
+  const { locationId, boxId } = getPathParameters(event);
   const graphqlClient = getGraphqlClient();
   const query = gql(`
     query box($id: ID!, $locationId: String!)
@@ -98,7 +98,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
   const gqlQuery = graphqlClient.query({
     query,
     variables: {
-      id,
+      id: boxId,
       locationId,
     },
   });
@@ -106,4 +106,31 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
   const { data } = await gqlQuery;
   console.timeEnd('query');
   return respond(200, data.box);
+});
+
+export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId } = getPathParameters(event);
+  const graphqlClient = getGraphqlClient();
+  const query = gql(`
+    query boxes($locationId: String!)
+      {
+        boxes(locationId: $locationId) {
+          id
+          info {
+            ip
+          }
+        }
+      }
+  `);
+  const gqlQuery = graphqlClient.query({
+    query,
+    variables: {
+      locationId,
+    },
+  });
+  console.log({locationId});
+  console.time('query');
+  const { data } = await gqlQuery;
+  console.timeEnd('query');
+  return respond(200, data);
 });

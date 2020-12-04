@@ -457,6 +457,20 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ boxes, ip });
   const { id } = getPathParameters(event);
 
+
+
+  // await new Invoke()
+  // .service('box')
+  // .name('getAll')
+  // .body({ text })
+  // .async()
+  // .go();
+
+
+
+
+
+
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(id)

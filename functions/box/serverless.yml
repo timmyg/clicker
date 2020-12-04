@@ -71,6 +71,11 @@ custom:
         field: box
         request: request-get.vtl
         response: response-get.vtl
+      - dataSource: Boxes
+        type: Query
+        field: boxes
+        request: request-get-all.vtl
+        response: response-get-all.vtl
     schema: 'schema.graphql'
 functions:
   health:
@@ -89,5 +94,11 @@ functions:
     handler: box.get
     events:
       - http:
-          path: ''
+          path: '{locationId}/{boxId}'
+          method: get
+  getAll:
+    handler: box.getAll
+    events:
+      - http:
+          path: '{locationId}'
           method: get
