@@ -40,7 +40,7 @@ class LosantApi {
           deviceCommand: { name, payload },
         };
         console.info(
-          `changing channel via losant (${process.env.stage})`,
+          `running command via losant (${process.env.stage})`,
         );
         return await this.client.device
           .sendCommand(params)
@@ -48,7 +48,7 @@ class LosantApi {
           .catch(console.error);
       } else {
         console.info(
-          `*** not changing channel via losant (${process.env.stage} environment, no losantProductionOverride)`,
+          `*** not running command via losant (${process.env.stage} environment, no losantProductionOverride)`,
         );
       }
     } catch (error) {

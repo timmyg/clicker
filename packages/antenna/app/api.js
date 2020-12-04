@@ -30,7 +30,7 @@ class Api {
       logger.info(boxes);
       logger.info(`/locations/${this.locationId}/boxes`);
 
-      return await this.axios.put(`/boxes?locationId=${this.locationId}`, {
+      return await this.axios.put(`/locations/${this.locationId}/boxes`, {
         boxes,
         ip,
       });
