@@ -69,8 +69,8 @@ custom:
       - dataSource: Boxes
         type: Mutation
         field: updateBoxChannel
-        request: request-update.vtl
-        response: response-update.vtl
+        request: request-update-channel.vtl
+        response: response-update-channel.vtl
       - dataSource: Boxes
         type: Query
         field: box
