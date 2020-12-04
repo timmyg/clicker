@@ -22,7 +22,8 @@
     "invoke:updateAllBoxesPrograms": "npm run build && serverless invoke local --function updateAllBoxesPrograms --stage develop",
     "invoke:getLocationDetailsPage": "npm run build && serverless invoke local --function getLocationDetailsPage --path ../.resources/data/location-update.json --stage develop",
     "invoke:syncAirtableLocations": "npm run build && serverless invoke local --function syncAirtableLocations --stage develop",
-    "invoke:syncAirtableRegions": "npm run build && serverless invoke local --function syncAirtableRegions --stage develop"
+    "invoke:syncAirtableRegions": "npm run build && serverless invoke local --function syncAirtableRegions --stage develop",
+    "invoke:setBoxes": "npm run build && serverless invoke local --function setBoxes --path ../.resources/data/v2/antenna-boxes.json --stage develop"
   },
   "author": "",
   "license": "ISC",

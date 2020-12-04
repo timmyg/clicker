@@ -88,7 +88,7 @@ functions:
     handler: box.create
     events:
       - http:
-          path: ''
+          path: '{locationId}'
           method: post
   get:
     handler: box.get

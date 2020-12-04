@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npx jest --coverage",
     "invoke:health": "npx serverless invoke local --function health --stage develop",
-    "invoke:create": "npx serverless invoke local --function create --stage develop --path ../.resources/data/box-directv.json",
+    "invoke:create": "npx serverless invoke local --function create --stage develop --path ../.resources/data/v2/new-box.json",
     "invoke:get": "npx serverless invoke local --function get --stage develop --path ../.resources/data/box-get.json",
     "invoke:getAll": "npx serverless invoke local --function getAll --stage develop --path ../.resources/data/box-get.json"
   },

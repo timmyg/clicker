@@ -452,66 +452,47 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('setBoxes');
-  const { boxes, ip } = getBody(event);
-  console.log({ boxes, ip });
+  const { requestBoxes, ip } = getBody(event);
   const { id } = getPathParameters(event);
 
 
+  const {data} = await new Invoke()
+    .service('box')
+    .name('getAll')
+    .pathParams({locationId: id})
+    .go();
 
-  // await new Invoke()
-  // .service('box')
-  // .name('getAll')
-  // .body({ text })
-  // .async()
-  // .go();
+  const { boxes: locationBoxes } = data
+  
+  // const location: Venue = await dbLocation
+  //   .queryOne('id')
+  //   .eq(id)
+  //   .exec();
 
-
-
-
-
-
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-
-  for (const dtvBox: DirecTVBoxRaw of boxes) {
-    // $FlowFixMe
-    const box: Box = {
-      info: {
-        clientAddress: dtvBox.clientAddr,
-        ip,
-      },
-    }; // this might blow up?
-    // let box: Box | {} = Object.freeze({});
-
-    const existingBox =
-      location.boxes &&
-      location.boxes.find(
+  for (const dtvBox: DirecTVBoxRaw of requestBoxes) {
+   const isExistingBox =
+      locationBoxes &&
+      locationBoxes.find(
         locationBox =>
           locationBox.info &&
-          locationBox.info.ip === box.info.ip &&
-          locationBox.info.clientAddress === box.info.clientAddress,
+          locationBox.info.ip === ip &&
+          locationBox.info.clientAddress === dtvBox.clientAddr,
       );
-    if (!existingBox) {
-      box.id = uuid();
-      box.configuration = {
-        appActive: false,
-        automationActive: false,
-      };
-      // $FlowFixMe
-      box.live = {};
-      // set label to locationName or random 2 alphanumeric characters
-      box.label =
-        box.info.locationName ||
-        Math.random()
-          .toString(36)
-          .substr(2, 2);
-      console.log('add new box!', box);
-      await dbLocation.update({ id }, { $ADD: { boxes: [box] } });
-      // location.boxes.push(box);
-      const text = `*New DirecTV Box Added* @ ${location.name} (${location.neighborhood}): ${box.id}`;
+    if (!isExistingBox) {
+      console.log('add new box!', dtvBox.ip);
+      
+      await new Invoke()
+        .service('box')
+        .name('create')
+        .pathParams({locationId: id})
+        .body({
+          ip,
+          boxes: dtvBox
+        })
+        .async()
+        .go();
+      
+      const text = `*New DirecTV Box Added* ${JSON.stringify(dtvBox)}`;
       await new Invoke()
         .service('notification')
         .name('sendAntenna')
@@ -525,7 +506,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
         .async()
         .go();
     } else {
-      console.log('existing box', box.ip);
+      console.log('existing box', dtvBox.ip);
     }
   }
 
