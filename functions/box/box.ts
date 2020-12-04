@@ -160,6 +160,7 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
           id
           info {
             ip
+            clientAddress
           }
         }
       }
