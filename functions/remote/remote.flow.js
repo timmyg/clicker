@@ -117,10 +117,10 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ updateBoxInfoBody });
 
   await new Invoke()
-    .service('location')
-    .name('updateBoxInfo')
+    .service('box')
+    .name('updateChannel')
     .body(updateBoxInfoBody)
-    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
+    .pathParams({ locationId: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
 
