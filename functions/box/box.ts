@@ -113,7 +113,9 @@ export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const gqlMutation = graphqlClient.mutate({
     mutation,
     variables: {
-      live,
+      live: {
+        channel: live.channel
+      },
       id: boxId,
       locationId
     },
