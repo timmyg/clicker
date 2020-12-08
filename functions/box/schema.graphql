@@ -32,6 +32,11 @@ input BoxLiveInput {
   channelChangeSource: String
 }
 
+type Program {
+  gameId: Int
+  channelTitle: String
+}
+
 type BoxLive {
   channel: Int! 
   channelMinor: Int
@@ -59,5 +64,6 @@ type Box {
   configuration: BoxConfiguration!
   info: BoxInfo!
   live: BoxLive
+  program: Program
   updatedAt: Int
 }

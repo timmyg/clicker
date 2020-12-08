@@ -60,6 +60,10 @@ custom:
         name: Boxes
         config:
           tableName: ${self:custom.tableBox}
+      # - type: AWS_LAMBDA
+      #   name: myLambda
+      #   config:
+      #     lambdaFunctionArn: ${myLambda.arn}
     mappingTemplates:
       - dataSource: Boxes
         type: Mutation
@@ -76,13 +80,26 @@ custom:
         field: box
         request: request-get.vtl
         response: response-get.vtl
+        kind: PIPELINE
+        functions:
+          - fetchProgramFunction
       - dataSource: Boxes
         type: Query
         field: boxes
         request: request-get-all.vtl
         response: response-get-all.vtl
+      - dataSource: myLambda
+        name: fetchProgramFunction
+        request: './mapping-templates/fetchData.vtl' # defaults to {name}.request.vtl
+        response: './mapping-templates/common-response.vtl' # defaults to {name}.response.vtl
+        # type: Box
+      #   field: program
+      #   request: getFavourites-request-mapping-template.txt
+      #   response: response-get-all.vtl
     schema: 'schema.graphql'
 functions:
+  myLambda:
+    handler: box.myLambda
   health:
     handler: box.health
     events:
