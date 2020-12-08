@@ -60,10 +60,10 @@ custom:
         name: Boxes
         config:
           tableName: ${self:custom.tableBox}
-      # - type: AWS_LAMBDA
-      #   name: myLambda
-      #   config:
-      #     lambdaFunctionArn: ${myLambda.arn}
+      - type: AWS_LAMBDA
+        name: myLambda
+        config:
+          lambdaFunctionArn: ${myLambda.arn}
     mappingTemplates:
       - dataSource: Boxes
         type: Mutation
