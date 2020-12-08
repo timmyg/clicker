@@ -92,6 +92,7 @@ export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const live = getBody(event);
   const graphqlClient = getGraphqlClient();
 
+  // https://github.com/serverless/serverless-graphql/blob/master/app-backend/appsync
   const mutation = gql(
     `mutation updateBoxChannel($id: ID!, $locationId: String!, $live: BoxLiveInput!){
       updateBoxChannel(id: $id, locationId: $locationId, live: $live){

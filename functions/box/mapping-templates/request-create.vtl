@@ -18,6 +18,11 @@
               "appActive": { "S" : "${context.arguments.configuration.appActive}" },
               "automationActive": { "S" : "${context.arguments.configuration.automationActive}" }
             }
+          },
+        "live": {
+            "M": {
+              "channel": { "N" : 0 }
+            }
           }
     }
 }
