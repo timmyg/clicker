@@ -898,7 +898,6 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
     };
     
     const locationBoxes = await getLocationBoxes(location.id);
-
     if (locationBoxes) {
       for (const box of locationBoxes) {
         const { id: boxId, info } = box;
