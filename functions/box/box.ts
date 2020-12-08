@@ -89,33 +89,32 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
 
 export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getPathParameters(event);
-  const { channel } = getBody(event);
+  const live = getBody(event);
   const graphqlClient = getGraphqlClient();
 
   const mutation = gql(
-    `mutation updateBox($id: ID!, $locationId: String!, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
-      updateBox(id: $id, locationId: $locationId, info: $info, configuration: $configuration){
+    `mutation updateBoxChannel($id: ID!, $locationId: String!, $live: BoxLiveInput!){
+      updateBoxChannel(id: $id, locationId: $locationId, live: $live){
         id
         locationId
-        info {
-          clientAddress
-          ip
-        }
-        configuration {
-          appActive
+        live {
+          channel
         }
       }
     }`,
   );
   console.time('create');
+  console.log('vars:', {
+    live,
+    id: boxId,
+    locationId
+  });
   const gqlMutation = graphqlClient.mutate({
     mutation,
     variables: {
-      live: {
-        channel,
-        id: boxId,
-        locationId
-      }
+      live,
+      id: boxId,
+      locationId
     },
   });
   console.timeEnd('create');

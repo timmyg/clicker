@@ -26,14 +26,14 @@ input BoxConfigurationInput {
 }
 
 input BoxLiveInput {
-  channel: Int
+  channel: Int!
   channelMinor: Int
   channelChangeAt: Int
   channelChangeSource: String
 }
 
 type BoxLive {
-  channel: Int
+  channel: Int! 
   channelMinor: Int
   channelChangeAt: Int
   channelChangeSource: String
