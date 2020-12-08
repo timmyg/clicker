@@ -89,6 +89,7 @@ custom:
         request: request-get-all.vtl
         response: response-get-all.vtl
       - dataSource: myLambda
+        type: Box
         name: fetchProgramFunction
         request: 'getFavourites-request-mapping-template.txt' # defaults to {name}.request.vtl
         response: 'response-get.vtl' # defaults to {name}.response.vtl
