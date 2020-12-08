@@ -654,7 +654,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
+    let source = '';
     if (originalChannel !== major) {
+      source = zapTypes.manual;
       // let program: Program = null;
 
       // $FlowFixMe
@@ -824,7 +826,12 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     await new Invoke()
       .service('box')
       .name('updateChannel')
-      .body({channel: major, minor})
+      .body({
+        channel: major,
+        channelMinor: minor,
+        channelChangeSource: source,
+        channelChangeAt: moment().unix() * 1000
+      })
       .pathParams({ locationId, boxId })
       .async()
       .go();

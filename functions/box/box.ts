@@ -105,16 +105,16 @@ export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
     }`,
   );
   console.time('create');
-  console.log('vars:', {
-    live,
-    id: boxId,
-    locationId
-  });
+  
+  console.log({live});
   const gqlMutation = graphqlClient.mutate({
     mutation,
     variables: {
       live: {
-        channel: live.channel
+        channel: live.channel,
+        channelMinor: live.channelMinor,
+        channelChangeAt: live.channelChangeAt,
+        channelChangeSource: live.channelChangeSource
       },
       id: boxId,
       locationId
