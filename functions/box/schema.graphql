@@ -38,7 +38,7 @@ type Program {
 }
 
 type BoxLive {
-  channel: Int! 
+  channel: Int!
   channelMinor: Int
   channelChangeAt: Int
   channelChangeSource: String
