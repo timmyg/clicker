@@ -165,6 +165,10 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
       {
         boxes(locationId: $locationId) {
           id
+          configuration {
+            automationActive
+            appActive
+          }
           info {
             ip
             clientAddress
