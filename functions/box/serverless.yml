@@ -61,12 +61,13 @@ custom:
         config:
           tableName: ${self:custom.tableBox}
       - type: AWS_LAMBDA
-        name: myLambda
+        name: fetchBoxProgramFunction
         description: 'attach current program'
         config:
-          # lambdaFunctionArn: ${myLambda.arn}
-          functionName: fetchBoxProgram #
-          # lambdaFunctionArn: { Fn::GetAtt: [myLambda, Arn] } # Where GraphqlLambdaFunction is the lambda function cloudformation resource created by serverless for the serverless function named graphql
+          functionName: fetchBoxProgram
+    # defaultMappingTemplates: # default templates. Useful for Lambda templates that are often repetitive. Will be used if the template is not specified in a resolver
+    #   request: request-get-source.vtl
+    #   response: response-get.vtl
     mappingTemplates:
       - dataSource: Boxes
         type: Mutation
@@ -83,24 +84,16 @@ custom:
         field: box
         request: request-get.vtl
         response: response-get.vtl
-        # kind: PIPELINE
-        # functions:
-        #   - fetchProgramFunction
       - dataSource: Boxes
         type: Query
         field: boxes
         request: request-get-all.vtl
         response: response-get-all.vtl
-      - dataSource: myLambda
+      - dataSource: fetchBoxProgramFunction
         type: BoxLive
         field: program
-        # name: fetchProgramFunction
-        request: request-get-program.vtl # defaults to {name}.request.vtl
-        response: response-get.vtl # defaults to {name}.response.vtl
-        # type: Box
-      #   field: program
-      #   request: getFavourites-request-mapping-template.txt
-      #   response: response-get-all.vtl
+        request: request-get-source.vtl
+        response: response-get.vtl
     schema: 'schema.graphql'
 functions:
   fetchBoxProgram:

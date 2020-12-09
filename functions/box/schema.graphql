@@ -32,7 +32,6 @@ input BoxLiveInput {
   channelChangeSource: String
 }
 
-
 type GameScoreboard {
   display: String
   clock: String

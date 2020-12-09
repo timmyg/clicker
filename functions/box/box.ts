@@ -1,4 +1,4 @@
-import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper } from 'serverless-helpers';
+import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-helpers';
 const appsync = require('aws-appsync');
 const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
@@ -10,12 +10,19 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log({event});
-  const {channel } = event.source;
-  return {
-    gameId: "324324",
-    channelTitle: `channel title for ${channel}`
-  }
+  const { channel, channelMinor } = event.source;
+  // TODO need region
+  const region = 'cincinnati';
+  const queryParams = { channel, channelMinor, region };
+  console.log({ queryParams });
+  const programResult = await new Invoke()
+    .service('program')
+    .name('get')
+    .queryParams(queryParams)
+    .go();
+  const program = programResult && programResult.data;
+
+  return program;
 });
 
 function getGraphqlClient() {
@@ -69,7 +76,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
     locationId,
     configuration: {
       appActive: false,
-      automationActive: false
+      automationActive: false,
     },
     info: {
       ip,
@@ -82,9 +89,9 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
     zone: Math.random()
       .toString(36)
       .substr(2, 2),
-    live: {}
-  }
-  console.log({newBox});
+    live: {},
+  };
+  console.log({ newBox });
   const gqlMutation = graphqlClient.mutate({
     mutation,
     variables: newBox,
@@ -112,8 +119,8 @@ export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
     }`,
   );
   console.time('create');
-  
-  console.log({live});
+
+  console.log({ live });
   const gqlMutation = graphqlClient.mutate({
     mutation,
     variables: {
@@ -121,10 +128,10 @@ export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
         channel: live.channel,
         channelMinor: live.channelMinor,
         channelChangeAt: live.channelChangeAt,
-        channelChangeSource: live.channelChangeSource
+        channelChangeSource: live.channelChangeSource,
       },
       id: boxId,
-      locationId
+      locationId,
     },
   });
   console.timeEnd('create');
@@ -180,7 +187,7 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
       locationId,
     },
   });
-  console.log({locationId});
+  console.log({ locationId });
   console.time('query');
   const { data } = await gqlQuery;
   console.timeEnd('query');
