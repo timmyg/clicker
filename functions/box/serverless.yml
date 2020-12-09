@@ -93,7 +93,7 @@ custom:
         response: response-get-all.vtl
       - dataSource: myLambda
         type: Box
-        field: live.program
+        field: program
         # name: fetchProgramFunction
         request: request-get-program.vtl # defaults to {name}.request.vtl
         response: response-get.vtl # defaults to {name}.response.vtl

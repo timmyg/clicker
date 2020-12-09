@@ -50,7 +50,7 @@ type BoxLive {
   channelMinor: Int
   channelChangeAt: Int
   channelChangeSource: String
-  program: Program
+  # program: Program
 }
 
 type BoxInfo {
@@ -74,7 +74,7 @@ type Box {
   info: BoxInfo!
   live: BoxLive
   # program: Program
-  # program: String
+  program: String
   # program2: String
   updatedAt: Int
 }
