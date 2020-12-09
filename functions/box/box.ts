@@ -12,7 +12,7 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 export const nodeFunction = RavenLambdaWrapper.handler(Raven, async event => {
   return {
     node: "hello world from node"
-}  
+  }  
 });
 
 function getGraphqlClient() {

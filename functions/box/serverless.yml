@@ -92,8 +92,8 @@ custom:
         type: Box
         field: program
         # name: fetchProgramFunction
-        # request: 'getFavourites-request-mapping-template.txt' # defaults to {name}.request.vtl
-        # response: 'response-get.vtl' # defaults to {name}.response.vtl
+        request: getFavourites-request-mapping-template.txt # defaults to {name}.request.vtl
+        response: response-get.vtl # defaults to {name}.response.vtl
         # type: Box
       #   field: program
       #   request: getFavourites-request-mapping-template.txt
