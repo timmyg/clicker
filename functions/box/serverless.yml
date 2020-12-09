@@ -80,9 +80,9 @@ custom:
         field: box
         request: request-get.vtl
         response: response-get.vtl
-        kind: PIPELINE
-        functions:
-          - fetchProgramFunction
+        # kind: PIPELINE
+        # functions:
+        #   - fetchProgramFunction
       - dataSource: Boxes
         type: Query
         field: boxes
@@ -90,17 +90,18 @@ custom:
         response: response-get-all.vtl
       - dataSource: myLambda
         type: Box
-        name: fetchProgramFunction
-        request: 'getFavourites-request-mapping-template.txt' # defaults to {name}.request.vtl
-        response: 'response-get.vtl' # defaults to {name}.response.vtl
+        field: program
+        # name: fetchProgramFunction
+        # request: 'getFavourites-request-mapping-template.txt' # defaults to {name}.request.vtl
+        # response: 'response-get.vtl' # defaults to {name}.response.vtl
         # type: Box
       #   field: program
       #   request: getFavourites-request-mapping-template.txt
       #   response: response-get-all.vtl
     schema: 'schema.graphql'
 functions:
-  myLambda:
-    handler: box.myLambda
+  nodeFunction:
+    handler: box.nodeFunction
   health:
     handler: box.health
     events:

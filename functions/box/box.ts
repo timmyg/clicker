@@ -9,22 +9,10 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, { vals });
 });
 
-export const myLambda = RavenLambdaWrapper.handler(Raven, async event => {
-  // return respond(200, { vals });
-
-  console.log({event});
-
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers":
-      "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,partner",
-    "Content-Type": "application/json"
-  };
+export const nodeFunction = RavenLambdaWrapper.handler(Raven, async event => {
   return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify({gameId: 324, channelTitle: 'ESPN8'})
-  };
+    node: "hello world from node"
+}  
 });
 
 function getGraphqlClient() {
