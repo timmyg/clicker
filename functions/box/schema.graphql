@@ -121,7 +121,7 @@ type BoxLive {
   lockedProgrammingIds: [String]
   locked: Boolean
   appLocked: Boolean
-  lockedUntil: Number
+  lockedUntil: AWSTimestamp
 }
 
 type BoxInfo {
