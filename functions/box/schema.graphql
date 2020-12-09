@@ -3,6 +3,8 @@ schema {
   mutation: Mutation
 }
 
+scalar Long
+
 type Query {
   box(id: ID!, locationId: String!): Box
   boxes(locationId: String!): [Box]
@@ -28,7 +30,7 @@ input BoxConfigurationInput {
 input BoxLiveInput {
   channel: Int!
   channelMinor: Int
-  channelChangeAt: Int
+  channelChangeAt: Long
   channelChangeSource: String
 }
 
@@ -133,6 +135,7 @@ type BoxConfiguration {
 type Box {
   id: ID!
   locationId: String!
+  locationRegion: String!
   label: String
   zone: String
   configuration: BoxConfiguration!
