@@ -1,23 +1,27 @@
 ## EXPRESSION
 
-#set( $expression = "SET live.channel = :channel" )
+#set( $removeExpression = "" )
+#set($expressions = [])
 
+#if( ${context.arguments.live.channel} )
+    $expressions.add("live.channel = :channel");
+#end
 #if( ${context.arguments.live.channelChangeAt} )
-    #set( $expression = "${expression}, live.channelChangeAt = :channelChangeAt" )
+    $expressions.add("live.channelChangeAt = :channelChangeAt")
 #end
 #if( ${context.arguments.live.channelChangeSource} )
-    #set( $expression = "${expression}, live.channelChangeSource = :channelChangeSource" )
+    $expressions.add("live.channelChangeSource = :channelChangeSource")
 #end
 #if( ${context.arguments.live.lockedProgrammingIds} )
-    #set( $expression = "${expression}, live.lockedProgrammingIds = :lockedProgrammingIds" )
+    $expressions.add("live.lockedProgrammingIds = :lockedProgrammingIds")
 #end
 #if( ${context.arguments.live.lockedUntil} )
-    #set( $expression = "${expression}, live.lockedUntil = :lockedUntil" )
+    $expressions.add("live.lockedUntil = :lockedUntil")
 #end
 #if( ${context.arguments.live.channelMinor} )
-    #set( $expression = "${expression}, live.channelMinor = :channelMinor" )
+    $expressions.add("live.channelMinor = :channelMinor")
 #else
-    #set( $expression = "${expression} REMOVE live.channelMinor" )
+    #set( $removeExpression = "REMOVE live.channelMinor" )
 #end
 
 {
@@ -28,9 +32,11 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "update" : {
-        "expression" : "${expression}",
+        "expression" : "SET ${expressions}.join(',') ${removeExpression}",
         "expressionValues": {
+            #if( ${context.arguments.live.channel} )
         	 ":channel" : { "N" : "${context.arguments.live.channel}" }
+            #end
             #if( ${context.arguments.live.channelMinor} )
                 ,":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }
             #end
