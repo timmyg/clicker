@@ -64,7 +64,8 @@ custom:
         name: myLambda
         config:
           # lambdaFunctionArn: ${myLambda.arn}
-          functionName: myLambda #
+          functionName: nodeFunction #
+          # lambdaFunctionArn: { Fn::GetAtt: [myLambda, Arn] } # Where GraphqlLambdaFunction is the lambda function cloudformation resource created by serverless for the serverless function named graphql
     mappingTemplates:
       - dataSource: Boxes
         type: Mutation
