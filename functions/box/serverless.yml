@@ -62,6 +62,7 @@ custom:
           tableName: ${self:custom.tableBox}
       - type: AWS_LAMBDA
         name: myLambda
+        description: 'attach current program'
         config:
           # lambdaFunctionArn: ${myLambda.arn}
           functionName: nodeFunction #
