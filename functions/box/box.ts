@@ -11,6 +11,7 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 
 export const nodeFunction = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({event});
+  console.log(event.source.live.channel);
   return "hello world from node"
 });
 
