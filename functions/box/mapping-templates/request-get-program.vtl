@@ -1,8 +1,9 @@
 {
-    "version" : "2017-02-28",
-    "operation" : "GetItem",
-    "key" : {
-        "id" : { "S" : "${context.arguments.id}" },
-        "locationId" : { "S" : "${context.arguments.locationId}" }
+    "version": "2017-02-28",
+    "operation": "Invoke",
+    "payload": {
+        "field": "program",
+        "arguments":  $utils.toJson($context.arguments),
+        "handle" : $utils.toJson($context.identity)
     }
 }
