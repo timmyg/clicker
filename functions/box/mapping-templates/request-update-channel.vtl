@@ -8,6 +8,12 @@
 #if( ${context.arguments.live.channelChangeSource} )
     #set( $expression = "${expression}, live.channelChangeSource = :channelChangeSource" )
 #end
+#if( ${context.arguments.live.lockedProgrammingIds} )
+    #set( $expression = "${expression}, live.lockedProgrammingIds = :lockedProgrammingIds" )
+#end
+#if( ${context.arguments.live.lockedUntil} )
+    #set( $expression = "${expression}, live.lockedUntil = :lockedUntil" )
+#end
 #if( ${context.arguments.live.channelMinor} )
     #set( $expression = "${expression}, live.channelMinor = :channelMinor" )
 #else
@@ -33,6 +39,12 @@
             #end    
             #if( ${context.arguments.live.channelChangeSource} )
                 ,":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" }
+            #end
+            #if( ${context.arguments.live.lockedProgrammingIds} )
+                ,":lockedProgrammingIds" : { "S" : "${context.arguments.live.lockedProgrammingIds}" }
+            #end    
+            #if( ${context.arguments.live.lockedUntil} )
+                ,":lockedUntil" : { "S" : "${context.arguments.live.lockedUntil}" }
             #end    
         }
     }

@@ -118,6 +118,10 @@ type BoxLive {
   channelChangeAt: AWSTimestamp
   channelChangeSource: String
   program: Program
+  lockedProgrammingIds: [String]
+  locked: Boolean
+  appLocked: Boolean
+  lockedUntil: Number
 }
 
 type BoxInfo {
