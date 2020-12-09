@@ -1,3 +1,19 @@
+## EXPRESSION
+
+#set( $expression = "SET live.channel = :channel" )
+
+#if( ${context.arguments.live.channelChangeAt} )
+    #set( $expression = "${expression}, live.channelChangeAt = :channelChangeAt" )
+#end
+#if( ${context.arguments.live.channelChangeSource} )
+    #set( $expression = "${expression}, live.channelChangeSource = :channelChangeSource" )
+#end
+#if( ${context.arguments.live.channelMinor} )
+    #set( $expression = "${expression}, live.channelMinor = :channelMinor" )
+#else
+    #set( $expression = "${expression} REMOVE live.channelMinor" )
+#end
+
 {
     "version" : "2017-02-28",
     "operation" : "UpdateItem",
@@ -6,7 +22,7 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "update" : {
-        "expression" : "SET live.channel = :channel #if(${context.arguments.live.channelMinor}) , live.channelMinor = :channelMinor  #end #if(${context.arguments.live.channelChangeAt}) , live.channelChangeAt = :channelChangeAt  #end #if(${context.arguments.live.channelChangeSource}) , live.channelChangeSource = :channelChangeSource  #end",
+        "expression" : "${expression}",
         "expressionValues": {
         	 ":channel" : { "N" : "${context.arguments.live.channel}" }
             #if( ${context.arguments.live.channelMinor} )
