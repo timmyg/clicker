@@ -125,7 +125,7 @@ export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
       channel: live.channel,
       channelMinor: live.channelMinor,
       channelChangeAt: live.channelChangeAt,
-      channelChangeSource: live.source,
+      channelChangeSource: live.channelChangeSource,
     },
     id: boxId,
     locationId,

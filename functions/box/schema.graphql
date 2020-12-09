@@ -115,7 +115,7 @@ type Program {
 type BoxLive {
   channel: Int!
   channelMinor: Int
-  channelChangeAt: Int
+  channelChangeAt: AWSTimestamp
   channelChangeSource: String
   program: Program
 }
