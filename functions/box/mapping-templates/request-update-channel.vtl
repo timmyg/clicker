@@ -1,5 +1,6 @@
 ## EXPRESSION
 
+#set( $expression = "" )
 #set( $removeExpression = "" )
 #set($expressions = [])
 
@@ -24,6 +25,15 @@
     #set( $removeExpression = "REMOVE live.channelMinor" )
 #end
 
+## #foreach($item in expressions)
+## #set($expression  = $expression  + $item + ",")
+## #set($separator = ",")
+## #end
+#foreach($item in $expressions)
+    #set($expression = $expression + $item)
+    #if( $foreach.hasNext ) #set($expression = $expression  + ",") #end
+#end
+
 {
     "version" : "2017-02-28",
     "operation" : "UpdateItem",
@@ -32,7 +42,7 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "update" : {
-        "expression" : "SET ${expressions}.join(',') ${removeExpression}",
+        "expression" : "SET ${expression} ${removeExpression}",
         "expressionValues": {
             #if( ${context.arguments.live.channel} )
         	 ":channel" : { "N" : "${context.arguments.live.channel}" }
