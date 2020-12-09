@@ -9,10 +9,13 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, { vals });
 });
 
-export const nodeFunction = RavenLambdaWrapper.handler(Raven, async event => {
+export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({event});
-  console.log(event.source.channel);
-  return "hello world from node"
+  const {channel } = event.source;
+  return {
+    gameId: "324324",
+    channelTitle: `channel title for ${channel}`
+  }
 });
 
 function getGraphqlClient() {

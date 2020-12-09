@@ -65,7 +65,7 @@ custom:
         description: 'attach current program'
         config:
           # lambdaFunctionArn: ${myLambda.arn}
-          functionName: nodeFunction #
+          functionName: fetchBoxProgram #
           # lambdaFunctionArn: { Fn::GetAtt: [myLambda, Arn] } # Where GraphqlLambdaFunction is the lambda function cloudformation resource created by serverless for the serverless function named graphql
     mappingTemplates:
       - dataSource: Boxes
@@ -103,8 +103,8 @@ custom:
       #   response: response-get-all.vtl
     schema: 'schema.graphql'
 functions:
-  nodeFunction:
-    handler: box.nodeFunction
+  fetchBoxProgram:
+    handler: box.fetchBoxProgram
   health:
     handler: box.health
     events:

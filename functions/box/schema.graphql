@@ -14,12 +14,12 @@ type Mutation {
   updateBoxChannel(id: ID!, locationId: String!, live: BoxLiveInput!): Box!
 }
 
-type HelloWorld {
-	# go: String
-	nodeFunction: String
-	# python: String
-	# ruby: String
-}
+# type HelloWorld {
+# 	# go: String
+# 	nodeFunction: String
+# 	# python: String
+# 	# ruby: String
+# }
 
 input BoxInfoInput {
   ip: String!
@@ -50,7 +50,7 @@ type BoxLive {
   channelMinor: Int
   channelChangeAt: Int
   channelChangeSource: String
-  program: String
+  program: Program
 }
 
 type BoxInfo {
