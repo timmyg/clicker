@@ -3,7 +3,7 @@
     "operation": "Invoke",
     "payload": {
         "field": "program",
-        "arguments": $util.toJson($context.arguments),
+        "arguments": $util.toJson($context.arguments.id),
         "handle" : $utils.toJson($context.result)
     }
 }
