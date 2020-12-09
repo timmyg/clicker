@@ -266,25 +266,23 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   }
 
   // loop through boxes, and update reserved status if necessary
-  let locationBoxes = await getLocationBoxes(location.id);
-  if (locationBoxes) {
+  if (location.boxes) {
     console.time('update reserved status');
-    locationBoxes = locationBoxes.map(b => setBoxStatus(b));
+    location.boxes = location.boxes.map(b => setBoxStatus(b));
     console.timeEnd('update reserved status');
 
     console.time('filter + sort');
     if (event.headers && event.headers.app && event.headers.app.length) {
-      locationBoxes = locationBoxes.filter(b => b.configuration).filter(b => b.configuration.appActive);
+      location.boxes = location.boxes.filter(b => b.configuration).filter(b => b.configuration.appActive);
     }
 
     // filter out inactive boxes
     // sort boxes alphabetically
-    locationBoxes = locationBoxes.sort((a, b) => {
+    location.boxes = location.boxes.sort((a, b) => {
       return (a.label || '').localeCompare(b.label || '');
     });
     console.timeEnd('filter + sort');
   }
-  location.boxes = locationBoxes;
 
   // delete location.losantId;
 
@@ -461,12 +459,13 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   //   .name('getAll')
   //   .pathParams({locationId: id})
   //   .go();
-  const locationBoxes = await getLocationBoxes(id);
+  // const locationBoxes = await getLocationBoxes(id);
+  const location = await getLocationWithBoxes(id);
 
   for (const dtvBox: DirecTVBoxRaw of requestBoxes) {
     const isExistingBox =
-      locationBoxes &&
-      locationBoxes.find(
+      location.boxes &&
+      location.boxes.find(
         locationBox =>
           locationBox.info && locationBox.info.ip === ip && locationBox.info.clientAddress === dtvBox.clientAddr,
       );
@@ -621,6 +620,24 @@ async function getLocationBoxes(locationId) {
   return locationBoxes;
 }
 
+// TODO use graphql for this
+async function getLocationWithBoxes(locationId) {
+  const location: Venue = await dbLocation
+    .queryOne('id')
+    .eq(locationId)
+    .exec();
+  console.log({ location });
+  const {
+    data: { boxes: locationBoxes },
+  } = await new Invoke()
+    .service('box')
+    .name('getAll')
+    .pathParams({ locationId })
+    .go();
+  location.boxes = locationBoxes;
+  return locationBoxes;
+}
+
 // called from antenna
 module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
@@ -632,7 +649,8 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
   //   .exec();
   // console.log({ location });
 
-  const locationBoxes = await getLocationBoxes(locationId);
+  // const locationBoxes = await getLocationBoxes(locationId);
+  const location = await getLocationWithBoxes(locationId);
 
   for (const box: DirecTVBox of boxes) {
     const { boxId, info } = box;
@@ -650,7 +668,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       minor = null;
     }
 
-    const locationBox = locationBoxes.find(lb => lb.id === boxId);
+    const locationBox = location.boxes.find(lb => lb.id === boxId);
     const originalChannel = locationBox.live && locationBox.live.channel;
     console.log('original channel', originalChannel);
     console.log('current channel', major);
@@ -905,14 +923,15 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
       boxes: [],
     };
 
-    const locationBoxes = await getLocationBoxes(location.id);
-    if (locationBoxes) {
-      for (const box of locationBoxes) {
+    // const locationBoxes = await getLocationBoxes(location.id);
+    const locationWithBoxes = await getLocationWithBoxes(location.id);
+    if (locationWithBoxes.boxes) {
+      for (const box of locationWithBoxes.boxes) {
         const { id: boxId, info } = box;
         const { ip, clientAddress: client } = info;
         body.boxes.push({ boxId, ip, client });
       }
-      console.log('locationBoxes', locationBoxes.length);
+      console.log('locationWithBoxes.boxes', locationWithBoxes.boxes.length);
       if (losantId.length > 3 && !!body.boxes.length) {
         console.log({ body });
         console.log(i);
@@ -1105,13 +1124,12 @@ module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200, { locations: locations.length });
 });
 
-async function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
-  // const { boxes } = location;
-  const locationBoxes = await getLocationBoxes(location.id);
+function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
+  const { boxes } = location;
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
-  const currentlyShowingPrograms: BoxLive[] = locationBoxes
+  const currentlyShowingPrograms: BoxLive[] = boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
     .map(b => b.live);
@@ -1194,12 +1212,11 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
 
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
-  const locationBoxes = await getLocationBoxes(location.id);
-  const currentlyShowingProgrammingIds: string[] = locationBoxes
+  const currentlyShowingProgrammingIds: string[] = location.boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live)
     .map(b => b.live.program && b.live.program.programmingId);
-  const locationBoxesCount = locationBoxes.filter(b => b.configuration && b.configuration.automationActive).length;
+  const locationBoxesCount = location.boxes.filter(b => b.configuration && b.configuration.automationActive).length;
   console.info(`location boxes: ${locationBoxesCount}`);
   console.info(`all cc programs before replication: ${ccPrograms.length}`);
   ccPrograms = replicatePrograms(ccPrograms, locationBoxesCount);
@@ -1231,7 +1248,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
   ccPrograms = filterPrograms(ccPrograms, location);
 
   // get boxes that are CC active, and not locked
-  let availableBoxes: Box[] = getAvailableBoxes(locationBoxes);
+  let availableBoxes: Box[] = getAvailableBoxes(location.boxes);
   console.log('availableBoxes', availableBoxes.length);
   console.log(JSON.stringify({ availableBoxes }));
 
@@ -1305,9 +1322,8 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
     .queryOne('id')
     .eq(id)
     .exec();
-  const locationBoxes = await getLocationBoxes(location.id);
   console.timeEnd('get location');
-  const boxes = locationBoxes
+  const boxes = location.boxes
     .filter(box => !!box.configuration.automationActive || !!box.configuration.appActive)
     .sort((a, b) => (a.zone || b.label || '').localeCompare(b.zone || b.label || ''));
 
@@ -1329,7 +1345,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
       .tz('America/New_York')
       .fromNow());
   });
-  const currentProgrammingIds = locationBoxes
+  const currentProgrammingIds = location.boxes
     .filter(b => !!b.live)
     .filter(b => !!b.live.program)
     .map(b => b.live.program.programmingId);
@@ -1389,7 +1405,6 @@ async function migrateLocationsToVersion2(version?: number) {
     .filter('_v')
     .eq(1)
     .exec();
-
   console.log('v1 locations', locations.length);
   const promises = [];
   locations.forEach(location => {
