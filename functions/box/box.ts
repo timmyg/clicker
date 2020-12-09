@@ -30,7 +30,7 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
   const result = await new Invoke()
     .service('program')
     .name('get')
-    .pathParms({ id: gameId })
+    .pathParams({ id: gameId })
     .go();
   const game = result && result.data;
   return game;

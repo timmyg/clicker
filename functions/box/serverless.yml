@@ -55,6 +55,7 @@ custom:
     authenticationType: API_KEY
     apiKeys:
       - myApiKey
+    schema: 'schema.graphql'
     dataSources:
       - type: AMAZON_DYNAMODB
         name: Boxes
@@ -104,7 +105,6 @@ custom:
         field: game
         request: request-get-source.vtl
         response: response-get.vtl
-    schema: 'schema.graphql'
 functions:
   fetchBoxProgram:
     handler: box.fetchBoxProgram
