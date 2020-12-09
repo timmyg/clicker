@@ -2,9 +2,9 @@
 
 #set( $expression = "SET live.channel = :channel" )
 
-## #if( ${context.arguments.live.channelChangeAt} )
-##     #set( $expression = "${expression}, live.channelChangeAt = :channelChangeAt" )
-## #end
+#if( ${context.arguments.live.channelChangeAt} )
+    #set( $expression = "${expression}, live.channelChangeAt = :channelChangeAt" )
+#end
 ## #if( ${context.arguments.live.channelChangeSource} )
 ##     #set( $expression = "${expression}, live.channelChangeSource = :channelChangeSource" )
 ## #end
@@ -28,9 +28,9 @@
             ## #if( ${context.arguments.live.channelMinor} )
             ##     ,":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }
             ## #end
-            ## #if( ${context.arguments.live.channelChangeAt} )
-            ##     ,":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" }
-            ## #end    
+            #if( ${context.arguments.live.channelChangeAt} )
+                ,":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" }
+            #end    
             ## #if( ${context.arguments.live.channelChangeSource} )
             ##     ,":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" 
             ## #end    
