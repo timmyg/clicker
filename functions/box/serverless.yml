@@ -63,7 +63,8 @@ custom:
       - type: AWS_LAMBDA
         name: myLambda
         config:
-          lambdaFunctionArn: ${myLambda.arn}
+          # lambdaFunctionArn: ${myLambda.arn}
+          functionName: myLambda #
     mappingTemplates:
       - dataSource: Boxes
         type: Mutation
