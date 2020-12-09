@@ -65,6 +65,11 @@ custom:
         description: 'attach current program'
         config:
           functionName: fetchBoxProgram
+      - type: AWS_LAMBDA
+        name: fetchBoxProgramGameFunction
+        description: 'attach program game'
+        config:
+          functionName: fetchBoxProgramGame
     # defaultMappingTemplates: # default templates. Useful for Lambda templates that are often repetitive. Will be used if the template is not specified in a resolver
     #   request: request-get-source.vtl
     #   response: response-get.vtl
@@ -94,10 +99,17 @@ custom:
         field: program
         request: request-get-source.vtl
         response: response-get.vtl
+      - dataSource: fetchBoxProgramGameFunction
+        type: Program
+        field: game
+        request: request-get-source.vtl
+        response: response-get.vtl
     schema: 'schema.graphql'
 functions:
   fetchBoxProgram:
     handler: box.fetchBoxProgram
+  fetchBoxProgramGame:
+    handler: box.fetchBoxProgramGame
   health:
     handler: box.health
     events:

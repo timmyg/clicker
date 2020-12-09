@@ -25,31 +25,16 @@ export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => 
   return program;
 });
 
-function getGraphqlClient() {
-  const { graphqlApiUrl, graphqlApiKey, region } = process.env;
-
-  return new appsync.AWSAppSyncClient({
-    url: graphqlApiUrl,
-    region: region,
-    auth: {
-      type: appsync.AUTH_TYPE.API_KEY,
-      apiKey: graphqlApiKey,
-    },
-    disableOffline: true,
-  });
-}
-
-class DirectvBox {
-  major: number;
-  minor: number;
-  clientAddr: string;
-  locationName: string;
-}
-
-class DirectvBoxRequest {
-  boxes: DirectvBox[];
-  ip: string;
-}
+export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event => {
+  const { gameId } = event.source;
+  const result = await new Invoke()
+    .service('program')
+    .name('get')
+    .pathParms({ id: gameId })
+    .go();
+  const game = result && result.data;
+  return game;
+});
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
@@ -194,3 +179,29 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('query');
   return respond(200, data);
 });
+
+function getGraphqlClient() {
+  const { graphqlApiUrl, graphqlApiKey, region } = process.env;
+
+  return new appsync.AWSAppSyncClient({
+    url: graphqlApiUrl,
+    region: region,
+    auth: {
+      type: appsync.AUTH_TYPE.API_KEY,
+      apiKey: graphqlApiKey,
+    },
+    disableOffline: true,
+  });
+}
+
+class DirectvBox {
+  major: number;
+  minor: number;
+  clientAddr: string;
+  locationName: string;
+}
+
+class DirectvBoxRequest {
+  boxes: DirectvBox[];
+  ip: string;
+}
