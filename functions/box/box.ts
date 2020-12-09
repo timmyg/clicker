@@ -13,28 +13,30 @@ export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => 
   const { channel, channelMinor } = event.source;
   // TODO need region
   const region = 'cincinnati';
-  const queryParams = { channel, channelMinor, region };
-  console.log({ queryParams });
-  const programResult = await new Invoke()
-    .service('program')
-    .name('get')
-    .queryParams(queryParams)
-    .go();
-  const program = programResult && programResult.data;
 
-  return program;
+  if (channel) {
+    const queryParams = { channel, channelMinor, region };
+    console.log({ queryParams });
+    const programResult = await new Invoke()
+      .service('program')
+      .name('get')
+      .queryParams(queryParams)
+      .go();
+    return programResult && programResult.data;
+  }
 });
 
 export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.source);
   const { gameId } = event.source;
-  const result = await new Invoke()
-    .service('program')
-    .name('get')
-    .pathParams({ id: gameId })
-    .go();
-  const game = result && result.data;
-  return game;
+  if (gameId) {
+    const result = await new Invoke()
+      .service('game')
+      .name('get')
+      .pathParams({ id: gameId })
+      .go();
+    return result && result.data;
+  }
 });
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
