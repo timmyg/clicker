@@ -30,7 +30,7 @@ input BoxConfigurationInput {
 input BoxLiveInput {
   channel: Int!
   channelMinor: Int
-  channelChangeAt: Long
+  channelChangeAt: AWSTimestamp
   channelChangeSource: String
 }
 
