@@ -8,7 +8,10 @@
     "update" : {
         "expression" : "SET live.channel = :channel",
         "expressionValues": {
-        	":channel" : { "N" : "${context.arguments.live.channel}" }
+        	":channel" : { "N" : "${context.arguments.live.channel}" },
+            ":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" },
+            ":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" },
+            ":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" }
         }
     }
 }
