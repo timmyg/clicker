@@ -26,6 +26,7 @@ export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => 
 });
 
 export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log(event.source);
   const { gameId } = event.source;
   const result = await new Invoke()
     .service('program')
