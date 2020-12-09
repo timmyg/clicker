@@ -6,20 +6,12 @@ schema {
 type Query {
   box(id: ID!, locationId: String!): Box
   boxes(locationId: String!): [Box]
-  getHelloWorld: HelloWorld
 }
 
 type Mutation {
   addBox(id: ID!, locationId: String!, info: BoxInfoInput!, configuration: BoxConfigurationInput!): Box!
   updateBoxChannel(id: ID!, locationId: String!, live: BoxLiveInput!): Box!
 }
-
-# type HelloWorld {
-# 	# go: String
-# 	nodeFunction: String
-# 	# python: String
-# 	# ruby: String
-# }
 
 input BoxInfoInput {
   ip: String!
