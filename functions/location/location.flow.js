@@ -1204,10 +1204,11 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 // npm run invoke:controlCenterByLocation
 module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(locationId)
-    .exec();
+  // const location: Venue = await dbLocation
+  //   .queryOne('id')
+  //   .eq(locationId)
+  //   .exec();
+  const location = await getLocationWithBoxes(locationId);
   console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
 
   // get control center programs
