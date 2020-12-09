@@ -6,7 +6,7 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "update" : {
-        "expression" : "SET live.channel = :channel",
+        "expression" : "SET live.channel = :channel #if($context.arguments.live.channelMinor) ,":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }#end" }",
         "expressionValues": {
         	 ":channel" : { "N" : "${context.arguments.live.channel}" }
             #if( ${context.arguments.live.channelMinor} )
