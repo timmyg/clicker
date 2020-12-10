@@ -1,31 +1,31 @@
 ## EXPRESSION
 
-#set( $expression = "" )
 #set( $removeExpression = "" )
-#set( $expressions = [] )
+#set( $expressionsArray = [] )
 
 #if( ${context.arguments.live.channel} )
-    $expressions.add("live.channel = :channel");
+    $expressionsArray.add($util.dynamodb.toDynamoDBJson("live.channel = :channel"));
 #end
 #if( ${context.arguments.live.channelChangeAt} )
-    $expressions.add("live.channelChangeAt = :channelChangeAt")
+    $expressionsArray.add($util.dynamodb.toDynamoDBJson("live.channelChangeAt = :channelChangeAt"))
 #end
 #if( ${context.arguments.live.channelChangeSource} )
-    $expressions.add("live.channelChangeSource = :channelChangeSource")
+    $expressionsArray.add($util.dynamodb.toDynamoDBJson("live.channelChangeSource = :channelChangeSource"))
 #end
 #if( ${context.arguments.live.lockedProgrammingIds} )
-    $expressions.add("live.lockedProgrammingIds = :lockedProgrammingIds")
+    $expressionsArray.add($util.dynamodb.toDynamoDBJson("live.lockedProgrammingIds = :lockedProgrammingIds"))
 #end
 #if( ${context.arguments.live.lockedUntil} )
-    $expressions.add("live.lockedUntil = :lockedUntil")
+    $expressionsArray.add($util.dynamodb.toDynamoDBJson("live.lockedUntil = :lockedUntil"))
 #end
 #if( ${context.arguments.live.channelMinor} )
-    $expressions.add("live.channelMinor = :channelMinor")
+    $expressionsArray.add($util.dynamodb.toDynamoDBJson("live.channelMinor = :channelMinor"))
 #else
     #set( $removeExpression = "REMOVE live.channelMinor" )
 #end
 
-#foreach($item in $expressions)
+#set( $expression = "" )
+#foreach($item in $expressionsArray)
     #set( $expression = "${expression} ${item}" )
     #if( $foreach.hasNext )
         #set( $expression = "${expression}," )
