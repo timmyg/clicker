@@ -34,26 +34,27 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "update" : {
-        "expression" : "SET ${expression} ${removeExpression}",
+        ## "expression" : "SET ${expression} ${removeExpression}",
+        "expression" : "live.channel = :channel",
         "expressionValues": {
-            #if( ${context.arguments.live.channel} )
+            ## #if( ${context.arguments.live.channel} )
         	 ":channel" : { "N" : "${context.arguments.live.channel}" }
-            #end
-            #if( ${context.arguments.live.channelMinor} )
-                ,":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }
-            #end
-            #if( ${context.arguments.live.channelChangeAt} )
-                ,":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" }
-            #end    
-            #if( ${context.arguments.live.channelChangeSource} )
-                ,":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" }
-            #end
-            #if( ${context.arguments.live.lockedProgrammingIds} )
-                ,":lockedProgrammingIds" : { "S" : "${context.arguments.live.lockedProgrammingIds}" }
-            #end    
-            #if( ${context.arguments.live.lockedUntil} )
-                ,":lockedUntil" : { "S" : "${context.arguments.live.lockedUntil}" }
-            #end    
+            ## #end
+            ## #if( ${context.arguments.live.channelMinor} )
+            ##     ,":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }
+            ## #end
+            ## #if( ${context.arguments.live.channelChangeAt} )
+            ##     ,":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" }
+            ## #end    
+            ## #if( ${context.arguments.live.channelChangeSource} )
+            ##     ,":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" }
+            ## #end
+            ## #if( ${context.arguments.live.lockedProgrammingIds} )
+            ##     ,":lockedProgrammingIds" : { "S" : "${context.arguments.live.lockedProgrammingIds}" }
+            ## #end    
+            ## #if( ${context.arguments.live.lockedUntil} )
+            ##     ,":lockedUntil" : { "S" : "${context.arguments.live.lockedUntil}" }
+            ## #end    
         }
     }
 }
