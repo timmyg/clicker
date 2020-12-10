@@ -18,7 +18,7 @@
     "update" : {
         "expression" : "${updateExpression}",
         "expressionValues": {
-            ":updatedAt" : { "N" : "${context.arguments.live.updatedAt}" },
+            ":updatedAt" : { "N" : "$util.time.nowEpochMilliSeconds()" },
             #if( ${context.arguments.live.channel} )
                 ":channel" : { "N" : "${context.arguments.live.channel}" }
             #end

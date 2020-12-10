@@ -32,7 +32,6 @@ input BoxLiveInput {
   channelMinor: Int
   channelChangeAt: AWSTimestamp
   channelChangeSource: String
-  updatedAt: AWSTimestamp!
 }
 
 type GameScoreboard {
@@ -123,7 +122,7 @@ type BoxLive {
   locked: Boolean
   appLocked: Boolean
   lockedUntil: AWSTimestamp
-  updatedAt: AWSTimestamp
+  updatedAt: String
 }
 
 type BoxInfo {
