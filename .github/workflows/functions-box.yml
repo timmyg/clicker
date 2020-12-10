@@ -20,12 +20,12 @@ jobs:
       - name: Install Serverless Framework
         working-directory: ./functions/box
         run: npm install -g serverless
-      - name: Serverless AWS authentication
-        working-directory: ./functions/box
-        run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Install NPM dependencies
         working-directory: ./functions/box
         run: npm install
+      - name: Serverless AWS authentication
+        working-directory: ./functions/box
+        run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Build if needed
         working-directory: ./functions/box
         run: npm run build --if-present
