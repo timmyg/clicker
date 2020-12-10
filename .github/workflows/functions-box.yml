@@ -2,7 +2,7 @@ name: deploy serverless functions
 on:
   push:
     paths:
-      - functions/box
+      - "functions/box/**"
     branches:
       - master
       - release
