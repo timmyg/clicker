@@ -28,7 +28,7 @@ input BoxConfigurationInput {
 }
 
 input BoxLiveInput {
-  channel: Int!
+  channel: Int
   channelMinor: Int
   channelChangeAt: AWSTimestamp
   channelChangeSource: String
