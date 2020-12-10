@@ -1,31 +1,5 @@
 ## EXPRESSION
 
-#set( $removeExpression = "" )
-#set( $expressionsArray = [] )
-
-#if( ${context.arguments.live.channel} )
-    $expressionsArray.add("live.channel = :channel")
-#end
-#if( ${context.arguments.live.channelChangeAt} )
-    $expressionsArray.add("live.channelChangeAt = :channelChangeAt")
-#end
-#if( ${context.arguments.live.channelChangeSource} )
-    $expressionsArray.add("live.channelChangeSource = :channelChangeSource")
-#end
-#if( ${context.arguments.live.lockedProgrammingIds} )
-    $expressionsArray.add("live.lockedProgrammingIds = :lockedProgrammingIds")
-#end
-#if( ${context.arguments.live.lockedUntil} )
-    $expressionsArray.add("live.lockedUntil = :lockedUntil")
-#end
-#if( ${context.arguments.live.channelMinor} )
-    $expressionsArray.add("live.channelMinor = :channelMinor")
-#else
-    #set( $removeExpression = "REMOVE live.channelMinor" )
-#end
-
-#set( $expression = $display.list($expressionsArray,",") )
-
 {
     "version" : "2017-02-28",
     "operation" : "UpdateItem",
@@ -34,27 +8,9 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "update" : {
-        ## "expression" : "SET ${expression} ${removeExpression}",
-        "expression" : "live.channel = :channel",
+        "expression" : "SET live.channel = :channel",
         "expressionValues": {
-            ## #if( ${context.arguments.live.channel} )
         	 ":channel" : { "N" : "${context.arguments.live.channel}" }
-            ## #end
-            ## #if( ${context.arguments.live.channelMinor} )
-            ##     ,":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }
-            ## #end
-            ## #if( ${context.arguments.live.channelChangeAt} )
-            ##     ,":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" }
-            ## #end    
-            ## #if( ${context.arguments.live.channelChangeSource} )
-            ##     ,":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" }
-            ## #end
-            ## #if( ${context.arguments.live.lockedProgrammingIds} )
-            ##     ,":lockedProgrammingIds" : { "S" : "${context.arguments.live.lockedProgrammingIds}" }
-            ## #end    
-            ## #if( ${context.arguments.live.lockedUntil} )
-            ##     ,":lockedUntil" : { "S" : "${context.arguments.live.lockedUntil}" }
-            ## #end    
         }
     }
 }
