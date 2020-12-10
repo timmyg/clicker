@@ -1,12 +1,12 @@
 ## EXPRESSION
 
-#set( $expressionsArray = [] )
+#set( $updateExpression = "SET" )
 
 #if( ${context.arguments.live.channel} )
-    $expressionsArray.add("live.channel = :channel");
+    #set($updateExpression = "${updateExpression} live.channel = :channel,")
 #end
 
-#set( $expression = $display.list($expressionsArray,",") )
+#set($updateExpression = "${updateExpression} updatedAt = :updatedAt")
 
 {
     "version" : "2017-02-28",
@@ -16,8 +16,9 @@
         "locationId" : { "S" : "${context.arguments.locationId}" }
     },
     "update" : {
-        "expression" : "SET ${expression}",
+        "expression" : "${updateExpression}",
         "expressionValues": {
+            ":updatedAt" : { "N" : "${context.arguments.live.updatedAt}" },
             #if( ${context.arguments.live.channel} )
                 ":channel" : { "N" : "${context.arguments.live.channel}" }
             #end

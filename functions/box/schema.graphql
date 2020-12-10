@@ -122,6 +122,7 @@ type BoxLive {
   locked: Boolean
   appLocked: Boolean
   lockedUntil: AWSTimestamp
+  updatedAt: AWSTimestamp
 }
 
 type BoxInfo {

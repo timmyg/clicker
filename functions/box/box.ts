@@ -3,6 +3,7 @@ const appsync = require('aws-appsync');
 const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
 import vals from '../shared/example';
+import * as moment from 'moment';
 require('cross-fetch/polyfill');
 
 export const health = RavenLambdaWrapper.handler(Raven, async event => {
@@ -116,6 +117,7 @@ export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
       channelChangeSource: live.channelChangeSource,
       lockedProgrammingIds: live.lockedProgrammingIds,
       lockedUntil: live.lockedUntil,
+      updatedAt: moment().unix() * 1000,
     },
     id: boxId,
     locationId,

@@ -22,7 +22,7 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.1",
     "serverless-appsync-plugin": "^1.4.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
     "source-map-support": "^0.5.19",
