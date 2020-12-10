@@ -635,7 +635,7 @@ async function getLocationWithBoxes(locationId) {
     .go();
   location.boxes = locationBoxes;
   console.log({ locationId, location });
-  return locationBoxes;
+  return location;
 }
 
 // called from antenna

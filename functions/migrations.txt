@@ -21,3 +21,4 @@
 21. airtable channel changes refactor
 22. data table with views
 23. link programs to data with targeting, targetingIds fields
+24. move location.boxes to own table
