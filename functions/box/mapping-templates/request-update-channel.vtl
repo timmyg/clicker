@@ -24,13 +24,7 @@
     #set( $removeExpression = "REMOVE live.channelMinor" )
 #end
 
-#set( $expression = "" )
-#foreach($item in $expressionsArray)
-    #set( $expression = "${expression} ${item}" )
-    #if( $foreach.hasNext )
-        #set( $expression = "${expression}," )
-    #end
-#end
+#set( $expression = $display.list($expressionsArray,",") )
 
 {
     "version" : "2017-02-28",
