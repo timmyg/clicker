@@ -2,7 +2,7 @@
 
 #set( $expression = "" )
 #set( $removeExpression = "" )
-#set($expressions = [])
+#set( $expressions = [] )
 
 #if( ${context.arguments.live.channel} )
     $expressions.add("live.channel = :channel");
@@ -25,13 +25,11 @@
     #set( $removeExpression = "REMOVE live.channelMinor" )
 #end
 
-## #foreach($item in expressions)
-## #set($expression  = $expression  + $item + ",")
-## #set($separator = ",")
-## #end
 #foreach($item in $expressions)
-    #set($expression = $expression + $item)
-    #if( $foreach.hasNext ) #set($expression = $expression  + ",") #end
+    #set( $expression = "${expression} ${item}" )
+    #if( $foreach.hasNext )
+        #set( $expression = "${expression}," )
+    #end
 #end
 
 {
