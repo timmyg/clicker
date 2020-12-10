@@ -32,7 +32,7 @@ input BoxLiveInput {
   channelMinor: Int
   channelChangeAt: AWSTimestamp
   channelChangeSource: String
-  updatedAt: AWSTimestamp
+  updatedAt: AWSTimestamp!
 }
 
 type GameScoreboard {
