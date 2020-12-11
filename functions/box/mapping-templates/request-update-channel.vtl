@@ -8,6 +8,12 @@
 #if( ${context.arguments.live.channelMinor} )
     #set($updateExpression = "${updateExpression} live.channelMinor = :channelMinor,")
 #end
+#if( ${context.arguments.live.channelChangeAt} )
+    #set($updateExpression = "${updateExpression} live.channelChangeAt = :channelChangeAt,")
+#end
+#if( ${context.arguments.live.channelChangeSource} )
+    #set($updateExpression = "${updateExpression} live.channelChangeSource = :channelChangeSource,")
+#end
 
 #set($updateExpression = "${updateExpression} updatedAt = :updatedAt")
 
@@ -26,6 +32,12 @@
             #end
             #if( ${context.arguments.live.channelMinor} )
                 ":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" },
+            #end
+            #if( ${context.arguments.live.channelChangeAt} )
+                ":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" },
+            #end
+            #if( ${context.arguments.live.channelChangeSource} )
+                ":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" },
             #end
             ":updatedAt" : { "N" : "${util.time.nowEpochMilliSeconds()}" }
         }
