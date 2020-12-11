@@ -13,8 +13,6 @@ provider:
     name: serverless-deploys-clicker
   environment:
     hubspotApiKey: ${env:HUBSPOT_API_KEY}
-    trelloApiKey: ${env:TRELLO_API_KEY}
-    trelloAuthToken: ${env:TRELLO_AUTH_TOKEN}
     stage: ${self:custom.stage}
   iamRoleStatements:
     - Effect: 'Allow'
