@@ -17,6 +17,12 @@
 #if( ${context.arguments.live.channelChangeSource} )
     #set($updateExpression = "${updateExpression} live.channelChangeSource = :channelChangeSource,")
 #end
+#if( ${context.arguments.live.lockedProgrammingIds} )
+    #set($updateExpression = "${updateExpression} live.lockedProgrammingIds = :lockedProgrammingIds,")
+#end
+#if( ${context.arguments.live.lockedUntil} )
+    #set($updateExpression = "${updateExpression} live.lockedUntil = :lockedUntil,")
+#end
 
 #set($updateExpression = "${updateExpression} live.updatedAt = :updatedAt")
 
@@ -41,6 +47,12 @@
             #end
             #if( ${context.arguments.live.channelChangeSource} )
                 ":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" },
+            #end
+            #if( ${context.arguments.live.lockedProgrammingIds} )
+                ":lockedProgrammingIds" : { "S" : "${context.arguments.live.lockedProgrammingIds}" },
+            #end
+            #if( ${context.arguments.live.lockedUntil} )
+                ":lockedUntil" : { "S" : "${context.arguments.live.lockedUntil}" },
             #end
             ":updatedAt" : { "N" : ${util.time.nowEpochMilliSeconds()} }
         }

@@ -2,7 +2,7 @@ name: deploy serverless functions
 on:
   push:
     paths:
-      - "functions/box/**"
+      - "functions/location/**"
     branches:
       - master
       - release
@@ -22,7 +22,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          working-directory: ./functions/box
+          working-directory: ./functions/location
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
@@ -30,10 +30,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install NPM dependencies
-        working-directory: ./functions/box
+        working-directory: ./functions/location
         run: npm install
       - name: Build if needed
-        working-directory: ./functions/box
+        working-directory: ./functions/location
         run: npm run build --if-present
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -44,6 +44,6 @@ jobs:
       - name: Deploy Lambda functions develop
         env:
           SENTRY_DSN_ENDPOINT: ${{ secrets.SENTRY_DSN_ENDPOINT }}
-        working-directory: ./functions/box
+        working-directory: ./functions/location
         if: github.ref == 'refs/heads/develop'
         run: SLS_DEBUG=* npx serverless deploy --stage develop --verbose

@@ -580,14 +580,23 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
   const { end } = getBody(event);
   console.log({ end });
 
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(locationId)
-    .exec();
+  // const location: Venue = await dbLocation
+  //   .queryOne('id')
+  //   .eq(locationId)
+  //   .exec();
 
-  const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  location.boxes[boxIndex].live.lockedUntil = end;
-  await location.save();
+  // const boxIndex = location.boxes.findIndex(b => b.id === boxId);
+  // location.boxes[boxIndex].live.lockedUntil = end;
+  // await location.save();
+  await new Invoke()
+    .service('box')
+    .name('updateChannel')
+    .body({
+      lockedUntil: end,
+    })
+    .pathParams({ locationId, boxId })
+    .async()
+    .go();
 
   return respond(200);
 });
@@ -595,16 +604,25 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
 module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
 
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(locationId)
-    .exec();
+  // const location: Venue = await dbLocation
+  //   .queryOne('id')
+  //   .eq(locationId)
+  //   .exec();
 
-  const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  // location.boxes[boxIndex].reserved = false;
-  // location.boxes[boxIndex].end;
-  location.boxes[boxIndex].live.lockedUntil = moment().unix() * 1000;
-  await location.save();
+  // const boxIndex = location.boxes.findIndex(b => b.id === boxId);
+  // // location.boxes[boxIndex].reserved = false;
+  // // location.boxes[boxIndex].end;
+  // location.boxes[boxIndex].live.lockedUntil = moment().unix() * 1000;
+  // await location.save();
+  await new Invoke()
+    .service('box')
+    .name('updateChannel')
+    .body({
+      lockedUntil: 0,
+    })
+    .pathParams({ locationId, boxId })
+    .async()
+    .go();
 
   return respond(200);
 });

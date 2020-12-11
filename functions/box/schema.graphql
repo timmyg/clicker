@@ -33,6 +33,10 @@ input BoxLiveInput {
   channelChangeAt: AWSTimestamp
   channelChangeSource: String
   updatedAt: AWSTimestamp
+  lockedProgrammingIds: [String]
+  # locked: Boolean
+  # appLocked: Boolean
+  lockedUntil: AWSTimestamp
 }
 
 type GameScoreboard {
