@@ -39,7 +39,7 @@
             #if( ${context.arguments.live.channelChangeSource} )
                 ":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" },
             #end
-            ":updatedAt" : { "N" : "${util.time.nowEpochMilliSeconds()}" }
+            ":updatedAt" : { "N" : ${util.time.nowEpochMilliSeconds()} }
         }
     }
 }
