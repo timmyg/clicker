@@ -21,13 +21,13 @@
     "update" : {
         "expression" : "${updateExpression}",
         "expressionValues": {
-            ":updatedAt" : { "N" : "${util.time.nowEpochMilliSeconds()}" },
             #if( ${context.arguments.live.channel} )
-                ":channel" : { "N" : "${context.arguments.live.channel}" }
+                ":channel" : { "N" : "${context.arguments.live.channel}" },
             #end
             #if( ${context.arguments.live.channelMinor} )
-                ":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }
+                ":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" },
             #end
+            ":updatedAt" : { "N" : "${util.time.nowEpochMilliSeconds()}" }
         }
     }
 }
