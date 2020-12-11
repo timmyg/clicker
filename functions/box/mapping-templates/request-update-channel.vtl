@@ -5,6 +5,9 @@
 #if( ${context.arguments.live.channel} )
     #set($updateExpression = "${updateExpression} live.channel = :channel,")
 #end
+#if( ${context.arguments.live.channelMinor} )
+    #set($updateExpression = "${updateExpression} live.channelMinor = :channelMinor,")
+#end
 
 #set($updateExpression = "${updateExpression} updatedAt = :updatedAt")
 
@@ -18,9 +21,12 @@
     "update" : {
         "expression" : "${updateExpression}",
         "expressionValues": {
-            ":updatedAt" : { "N" : "$util.time.nowEpochMilliSeconds()" },
+            ":updatedAt" : { "N" : "${util.time.nowEpochMilliSeconds()}" },
             #if( ${context.arguments.live.channel} )
                 ":channel" : { "N" : "${context.arguments.live.channel}" }
+            #end
+            #if( ${context.arguments.live.channelMinor} )
+                ":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" }
             #end
         }
     }
