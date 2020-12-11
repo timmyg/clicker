@@ -15,7 +15,7 @@
     #set($updateExpression = "${updateExpression} live.channelChangeSource = :channelChangeSource,")
 #end
 
-#set($updateExpression = "${updateExpression} updatedAt = :updatedAt")
+#set($updateExpression = "${updateExpression} live.updatedAt = :updatedAt")
 
 {
     "version" : "2017-02-28",
