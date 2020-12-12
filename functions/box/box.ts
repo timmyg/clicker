@@ -212,6 +212,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
             ip
             clientAddress
           }
+          label
+          zone
         }
       }
   `);
