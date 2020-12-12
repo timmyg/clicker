@@ -96,6 +96,8 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getPathParameters(event);
   const graphqlClient = getGraphqlClient();
 
+  // TODO we should call create rather than recreating mutation here
+
   const mutation = gql(
     `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
       addBox(id: $id, locationId: $locationId, info: $info, configuration: $configuration){

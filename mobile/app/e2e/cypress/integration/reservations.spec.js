@@ -10,11 +10,11 @@ context("Reservations", () => {
   let location;
   let boxes;
   before("create test location", async (done) => {
-    const location = require("../fixtures/requests/location.json");
-    cy.request("POST", `${apiBaseUrl}/locations`, location).then((l) => {
+    const locationData = require("../fixtures/requests/location.json");
+    cy.request("POST", `${apiBaseUrl}/locations`, locationData).then((l) => {
       location = l;
-      const boxes = require("../fixtures/requests/boxes.json");
-      cy.request("POST", `${apiBaseUrl}/boxes/${location.id}`, boxes).then(
+      const boxesData = require("../fixtures/requests/boxes.json");
+      cy.request("POST", `${apiBaseUrl}/boxes/${location.id}`, boxesData).then(
         (bxs) => {
           boxes = bxs;
         }
