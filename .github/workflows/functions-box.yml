@@ -71,7 +71,6 @@ jobs:
           AIRTABLE_KEY: ${{ secrets.AIRTABLE_KEY }}
           AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }}
           HUBSPOT_API_KEY: ${{ secrets.HUBSPOT_API_KEY }}
-          SENTRY_DSN_ENDPOINT: ${{ secrets.SENTRY_DSN_ENDPOINT }}
         working-directory: ./functions/box
         if: github.ref == 'refs/heads/develop'
         run: SLS_DEBUG=* npx serverless deploy --stage develop --verbose
