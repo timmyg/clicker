@@ -37,25 +37,24 @@
         "expression" : "${updateExpression} ${removeExpression}",
         "expressionValues": {
             #if( ${context.arguments.live.channel} )
-                ## ":channel" : { "N" : "${context.arguments.live.channel}" },
                 ":channel" : $util.dynamodb.toDynamoDBJson($context.arguments.live.channel),
             #end
             #if( ${context.arguments.live.channelMinor} )
-                ":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" },
+                ":channelMinor" : $util.dynamodb.toDynamoDBJson($context.arguments.live.channelMinor),
             #end
             #if( ${context.arguments.live.channelChangeAt} )
-                ":channelChangeAt" : { "N" : "${context.arguments.live.channelChangeAt}" },
+                ":channelChangeAt" : $util.dynamodb.toDynamoDBJson($context.arguments.live.channelChangeAt),
             #end
             #if( ${context.arguments.live.channelChangeSource} )
-                ":channelChangeSource" : { "S" : "${context.arguments.live.channelChangeSource}" },
+                ":channelChangeSource" : $util.dynamodb.toDynamoDBJson($context.arguments.live.channelChangeSource),
             #end
             #if( ${context.arguments.live.lockedProgrammingIds} )
-                ":lockedProgrammingIds" : { "S" : "${context.arguments.live.lockedProgrammingIds}" },
+                ":lockedProgrammingIds" : $util.dynamodb.toDynamoDBJson($context.arguments.live.lockedProgrammingIds),
             #end
             #if( ${context.arguments.live.lockedUntil} )
-                ":lockedUntil" : { "N" : "${context.arguments.live.lockedUntil}" },
+                ":lockedUntil" : $util.dynamodb.toDynamoDBJson($context.arguments.live.lockedUntil),
             #end
-            ":updatedAt" : { "N" : "${util.time.nowEpochMilliSeconds()}" }
+            ":updatedAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
         }
     }
 }
