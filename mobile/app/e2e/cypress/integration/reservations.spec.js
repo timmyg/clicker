@@ -9,17 +9,22 @@ const apiBaseUrl =
 context("Reservations", () => {
   let location;
   let boxes;
-  before("create test location", (done) => {
+  // cy.log("create reservation");
+  before("create test location", (done2) => {
+    cy.log("1");
     const locationData = require("../fixtures/requests/location.json");
     cy.request("POST", `${apiBaseUrl}/locations`, locationData).then((l) => {
-      location = l;
+      cy.log("2");
+      location = l.body;
+      cy.log("2.1", location.id);
       const boxesData = require("../fixtures/requests/boxes.json");
       cy.request("POST", `${apiBaseUrl}/boxes/${location.id}`, boxesData).then(
         (bxs) => {
-          boxes = bxs;
+          cy.log("3");
+          boxes = bxs.body;
+          done2();
         }
       );
-      done();
     });
   });
 
@@ -29,9 +34,11 @@ context("Reservations", () => {
   });
 
   after("delete test boxes", () => {
-    boxes.forEach((b) => {
-      cy.request("DELETE", `${apiBaseUrl}/boxes/${b.locationId}/${b.id}`);
-    });
+    cy.log("8");
+    cy.log(JSON.stringify(boxes));
+    // boxes.forEach((b) => {
+    //   cy.request("DELETE", `${apiBaseUrl}/boxes/${b.locationId}/${b.id}`);
+    // });
   });
 
   beforeEach("login + set geolocation", (done) => {

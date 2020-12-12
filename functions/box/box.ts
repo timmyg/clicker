@@ -67,9 +67,8 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const boxes = getBody(event);
   const graphqlClient = getGraphqlClient();
 
-  let i = 0;
+  const boxesCreated = [];
   for (let newBox of boxes) {
-    i++;
     const mutation = gql(
       `mutation addBox($id: ID!, $locationId: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
         addBox(id: $id, locationId: $locationId, label: $label, zone: $zone, info: $info, configuration: $configuration){
@@ -86,9 +85,10 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
       variables: newBox,
     });
     console.timeEnd('create');
-    const result = await gqlMutation;
+    const { data } = await gqlMutation;
+    boxesCreated.push(data);
   }
-  return respond(200, { count: i });
+  return respond(200, boxesCreated);
 });
 
 export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
