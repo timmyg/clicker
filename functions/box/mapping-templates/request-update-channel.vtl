@@ -54,7 +54,7 @@
             #if( ${context.arguments.live.lockedUntil} )
                 ":lockedUntil" : { "N" : "${context.arguments.live.lockedUntil}" },
             #end
-            ":updatedAt" : { "N" : ${util.time.nowEpochMilliSeconds()} }
+            ":updatedAt" : { "N" : "${util.time.nowEpochMilliSeconds()}" }
         }
     }
 }
