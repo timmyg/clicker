@@ -86,7 +86,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
     });
     console.timeEnd('create');
     const { data } = await gqlMutation;
-    boxesCreated.push(data);
+    boxesCreated.push(data.addBox);
   }
   return respond(200, boxesCreated);
 });
