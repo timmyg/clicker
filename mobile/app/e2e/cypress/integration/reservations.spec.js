@@ -28,10 +28,10 @@ context("Reservations", () => {
     });
   });
 
-  after("delete test location", () => {
-    const { id } = require("../fixtures/requests/location.json");
-    cy.request("DELETE", `${apiBaseUrl}/locations/${id}`);
-  });
+  // after("delete test location", () => {
+  //   const { id } = require("../fixtures/requests/location.json");
+  //   cy.request("DELETE", `${apiBaseUrl}/locations/${id}`);
+  // });
 
   after("delete test boxes", () => {
     cy.log("8");

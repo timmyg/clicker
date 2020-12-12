@@ -243,12 +243,13 @@ module.exports.getBox = RavenLambdaWrapper.handler(Raven, async event => {
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
 
-  console.time('get from db');
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  console.timeEnd('get from db');
+  // console.time('get from db');
+  // const location: Venue = await dbLocation
+  //   .queryOne('id')
+  //   .eq(id)
+  //   .exec();
+  // console.timeEnd('get from db');
+  const location: Venue = async function getLocationWithBoxes(locationId) {
   if (!location) {
     return respond(400, 'location doesnt exist');
   }
