@@ -12,6 +12,10 @@ jobs:
   serverless:
     name: serverless
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        # shell: bash
+        working-directory: functions/location
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -29,10 +33,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install NPM dependencies
-        working-directory: ./functions/location
+        # working-directory: ./functions/location
         run: npm install
       - name: Build if needed
-        working-directory: ./functions/location
+        # working-directory: ./functions/location
         run: npm run build --if-present
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -43,6 +47,6 @@ jobs:
       - name: Deploy Lambda functions develop
         env:
           SENTRY_DSN_ENDPOINT: ${{ secrets.SENTRY_DSN_ENDPOINT }}
-        working-directory: ./functions/location
+        # working-directory: ./functions/location
         if: github.ref == 'refs/heads/develop'
         run: SLS_DEBUG=* npx serverless deploy --stage develop --verbose
