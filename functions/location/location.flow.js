@@ -477,7 +477,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 
       await new Invoke()
         .service('box')
-        .name('create')
+        .name('createDirectv')
         .pathParams({ locationId: id })
         .body({
           ip,

@@ -41,6 +41,34 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
 });
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId } = getPathParameters(event);
+  const boxes = getBody(event);
+  const graphqlClient = getGraphqlClient();
+
+  let i = 0;
+  for (let newBox of boxes) {
+    i++;
+    const mutation = gql(
+      `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
+        addBox(id: $id, locationId: $locationId, info: $info, configuration: $configuration){
+          id
+        }
+      }`,
+    );
+    console.time('create');
+    newBox.locationId = locationId;
+    console.log({ newBox });
+    const gqlMutation = graphqlClient.mutate({
+      mutation,
+      variables: newBox,
+    });
+    console.timeEnd('create');
+    const result = await gqlMutation;
+  }
+  return respond(200, { count: i });
+});
+
+export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = getPathParameters(event);
   const graphqlClient = getGraphqlClient();

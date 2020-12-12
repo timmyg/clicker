@@ -11,7 +11,14 @@ type Query {
 }
 
 type Mutation {
-  addBox(id: ID!, locationId: String!, info: BoxInfoInput!, configuration: BoxConfigurationInput!): Box!
+  addBox(
+    id: ID!
+    locationId: String!
+    info: BoxInfoInput!
+    zone: String
+    label: String
+    configuration: BoxConfigurationInput!
+  ): Box!
   updateBoxChannel(id: ID!, locationId: String!, live: BoxLiveInput!): Box!
 }
 
@@ -145,11 +152,11 @@ type BoxConfiguration {
 type Box {
   id: ID!
   locationId: String!
-  locationRegion: String!
+  # locationRegion: String!
   label: String
   zone: String
   configuration: BoxConfiguration!
   info: BoxInfo!
-  live: BoxLive
+  live: BoxLive!
   updatedAt: Int
 }
