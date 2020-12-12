@@ -578,7 +578,7 @@ module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async eve
 module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
-  console.log({ end });
+  console.log({ locationId, boxId, end });
 
   // const location: Venue = await dbLocation
   //   .queryOne('id')
