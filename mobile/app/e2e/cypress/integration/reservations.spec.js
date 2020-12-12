@@ -36,9 +36,9 @@ context("Reservations", () => {
   after("delete test boxes", () => {
     cy.log("8");
     cy.log(JSON.stringify(boxes));
-    // boxes.forEach((b) => {
-    //   cy.request("DELETE", `${apiBaseUrl}/boxes/${b.locationId}/${b.id}`);
-    // });
+    boxes.forEach((b) => {
+      cy.request("DELETE", `${apiBaseUrl}/boxes/${b.locationId}/${b.id}`);
+    });
   });
 
   beforeEach("login + set geolocation", (done) => {

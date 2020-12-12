@@ -73,6 +73,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
       `mutation addBox($id: ID!, $locationId: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
         addBox(id: $id, locationId: $locationId, label: $label, zone: $zone, info: $info, configuration: $configuration){
           id
+          locationId
         }
       }`,
     );
