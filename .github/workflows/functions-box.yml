@@ -1,8 +1,8 @@
-name: test + deploy serverless functions
+name: test + deploy serverless function {{env.working-directory}}
 on:
   push:
     paths:
-      - "functions/box/**"
+      - "{{env.working-directory}}/**"
     branches:
       - master
       - release
@@ -12,9 +12,11 @@ jobs:
   serverless:
     name: serverless
     runs-on: ubuntu-latest
+    env:
+      working-directory: functions/box
     defaults:
       run:
-        working-directory: functions/box
+        working-directory: { { env.working-directory } }
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -24,7 +26,7 @@ jobs:
         id: node-cache
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-node-modules-{{env.working-directory}}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
