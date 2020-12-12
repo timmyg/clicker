@@ -14,7 +14,7 @@
     "update" : {
         "expression" : "${updateExpression}",
         "expressionValues": {
-            ":updatedAt": $util.dynamodb.toDynamoDBJson("$util.time.nowEpochMilliSeconds()")
+            ":updatedAt": $utils.dynamodb.toDynamoDBJson("$util.time.nowEpochMilliSeconds()")
         }
     }
 }
