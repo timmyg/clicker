@@ -1,0 +1,78 @@
+name: deploy serverless functions
+on:
+  push:
+    paths:
+      - "functions/location/**"
+    branches:
+      - master
+      - release
+      - develop
+
+jobs:
+  serverless:
+    name: serverless
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # shell: bash
+        working-directory: functions/location
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/functions/location/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install NPM dependencies
+        run: npm install
+      - name: Build if needed
+        run: npm run build --if-present
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy Lambda functions develop
+        env:
+          # TODO these arent all needed for this function
+          SENTRY_DSN_ENDPOINT: ${{ secrets.SENTRY_DSN_ENDPOINT }}
+          TWILIO_SERVICE_SID: ${{ secret.TWILIO_SERVICE_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secret.TWILIO_AUTH_TOKEN }}
+          TWILIO_ACCOUNT_SID: ${{ secret.TWILIO_ACCOUNT_SID }}
+          TRELLO_AUTH_TOKEN: ${{ secret.TRELLO_AUTH_TOKEN }}
+          TRELLO_API_KEY: ${{ secret.TRELLO_API_KEY }}
+          STRIPE_SECRET_KEY_DEV: ${{ secret.STRIPE_SECRET_KEY_DEV }}
+          STRIPE_SECRET_KEY: ${{ secret.STRIPE_SECRET_KEY }}
+          SLACK_SANDBOX_WEBHOOK_URL: ${{ secret.SLACK_SANDBOX_WEBHOOK_URL }}
+          SLACK_TASKS_WEBHOOK_URL: ${{ secret.SLACK_TASKS_WEBHOOK_URL }}
+          SLACK_APP_WEBHOOK_URL: ${{ secret.SLACK_APP_WEBHOOK_URL }}
+          SLACK_MONEY_WEBHOOK_URL: ${{ secret.SLACK_MONEY_WEBHOOK_URL }}
+          SLACK_CONTROL_CENTER_WEBHOOK_URL: ${{ secret.SLACK_CONTROL_CENTER_WEBHOOK_URL }}
+          SLACK_LANDING_WEBHOOK_URL: ${{ secret.SLACK_LANDING_WEBHOOK_URL }}
+          SLACK_MANUAL_ZAPS_WEBHOOK_URL: ${{ secret.SLACK_MANUAL_ZAPS_WEBHOOK_URL }}
+          SLACK_ANTENNA_WEBHOOK_URL: ${{ secret.SLACK_ANTENNA_WEBHOOK_URL }}
+          SEGMENT_WRITE_KEY_DEV: ${{ secret.SEGMENT_WRITE_KEY_DEV }}
+          SEGMENT_WRITE_KEY: ${{ secret.SEGMENT_WRITE_KEY }}
+          LOSANT_APP_ID: ${{ secret.LOSANT_APP_ID }}
+          LOSANT_KEY: ${{ secret.LOSANT_KEY }}
+          LOSANT_SECRET: ${{ secret.LOSANT_SECRET }}
+          LOGZIO_TOKEN: ${{ secret.LOGZIO_TOKEN }}
+          LOSANT_ACCESS_TOKEN: ${{ secret.LOSANT_ACCESS_TOKEN }}
+          AIRTABLE_BASE_DEV: ${{ secret.AIRTABLE_BASE_DEV }}
+          AIRTABLE_BASE_RELEASE: ${{ secret.AIRTABLE_BASE_RELEASE }}
+          AIRTABLE_KEY: ${{ secret.AIRTABLE_KEY }}
+          AIRTABLE_BASE: ${{ secret.AIRTABLE_BASE }}
+          HUBSPOT_API_KEY: ${{ secret.HUBSPOT_API_KEY }}
+          SENTRY_DSN_ENDPOINT: ${{ secret.SENTRY_DSN_ENDPOINT }}
+        if: github.ref == 'refs/heads/develop'
+        run: SLS_DEBUG=* npx serverless deploy --stage develop --verbose
