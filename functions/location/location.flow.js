@@ -249,7 +249,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   //   .eq(id)
   //   .exec();
   // console.timeEnd('get from db');
-  const location: Venue = async function getLocationWithBoxes(locationId) {
+  const location: Venue = await getLocationWithBoxes(id);
   if (!location) {
     return respond(400, 'location doesnt exist');
   }
