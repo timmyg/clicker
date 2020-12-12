@@ -40,6 +40,28 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
   }
 });
 
+export const remove = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, id: boxId } = getPathParameters(event);
+  const graphqlClient = getGraphqlClient();
+
+  const mutation = gql(
+    `mutation deleteBox($id: ID!, $locationId: String!){
+      deleteBox(id: $id, locationId: $locationId){
+        id
+      }
+    }`,
+  );
+  const gqlMutation = graphqlClient.mutate({
+    mutation,
+    variables: {
+      locationId,
+      id: boxId,
+    },
+  });
+  const result = await gqlMutation;
+  return respond(200, result);
+});
+
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getPathParameters(event);
   const boxes = getBody(event);

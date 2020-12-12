@@ -134,6 +134,12 @@ functions:
       - http:
           path: '{locationId}'
           method: put
+  remove:
+    handler: box.remove
+    events:
+      - http:
+          path: '{locationId}/{boxId}'
+          method: delete
   get:
     handler: box.get
     events:

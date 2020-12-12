@@ -20,6 +20,7 @@ type Mutation {
     configuration: BoxConfigurationInput!
   ): Box!
   updateBoxChannel(id: ID!, locationId: String!, live: BoxLiveInput!): Box!
+  deleteBox(id: ID!, locationId: String!): Box!
 }
 
 input BoxInfoInput {
