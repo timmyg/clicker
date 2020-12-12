@@ -7,14 +7,22 @@ const apiBaseUrl =
   Cypress.env("apiBaseUrl") || "https://api-develop.tryclicker.com";
 
 context("Reservations", () => {
-  before("create test location", () => {
+  before("create test location", async () => {
     const location = require("../fixtures/requests/location.json");
+    const location = await cy.request(
+      "POST",
+      `${apiBaseUrl}/locations`,
+      location
+    );
+
+    const boxes = require("../fixtures/requests/boxes.json");
     cy.request("POST", `${apiBaseUrl}/locations`, location);
   });
 
   after("delete test location", () => {
     const { id } = require("../fixtures/requests/location.json");
     cy.request("DELETE", `${apiBaseUrl}/locations/${id}`);
+    // TODO delete boxes
   });
 
   beforeEach("login + set geolocation", (done) => {
@@ -63,4 +71,3 @@ context("Reservations", () => {
       .contains("0");
   });
 });
-
