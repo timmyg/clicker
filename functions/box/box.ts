@@ -49,14 +49,15 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   for (let newBox of boxes) {
     i++;
     const mutation = gql(
-      `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
-        addBox(id: $id, locationId: $locationId, info: $info, configuration: $configuration){
+      `mutation addBox($id: ID!, $locationId: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
+        addBox(id: $id, locationId: $locationId, label: $label, $zone: zone, info: $info, configuration: $configuration){
           id
         }
       }`,
     );
     console.time('create');
     newBox.locationId = locationId;
+    newBox.id = uuid();
     console.log({ newBox });
     const gqlMutation = graphqlClient.mutate({
       mutation,
