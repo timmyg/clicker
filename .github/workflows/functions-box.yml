@@ -1,4 +1,4 @@
-name: test + deploy serverless function ${{env.working-directory}}
+name: test + deploy serverless function
 on:
   push:
     paths:
