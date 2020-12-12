@@ -94,25 +94,7 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
 export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = getPathParameters(event);
-  const graphqlClient = getGraphqlClient();
 
-  // TODO we should call create rather than recreating mutation here
-
-  const mutation = gql(
-    `mutation addBox($id: ID!, $locationId: String!, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
-      addBox(id: $id, locationId: $locationId, info: $info, configuration: $configuration){
-        id
-        locationId
-        info {
-          clientAddress
-        }
-        configuration {
-          appActive
-        }
-      }
-    }`,
-  );
-  console.time('create');
   const newBox = {
     id: uuid(),
     locationId,
@@ -134,12 +116,14 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
     live: {},
   };
   console.log({ newBox });
-  const gqlMutation = graphqlClient.mutate({
-    mutation,
-    variables: newBox,
-  });
-  console.timeEnd('create');
-  const result = await gqlMutation;
+
+  const result = await new Invoke()
+    .service('box')
+    .name('create')
+    .pathParams({ locationId })
+    .body([newBox])
+    .go();
+
   return respond(200, result.data.addBox);
 });
 

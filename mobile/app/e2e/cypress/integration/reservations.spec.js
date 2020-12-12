@@ -9,7 +9,7 @@ const apiBaseUrl =
 context("Reservations", () => {
   let location;
   let boxes;
-  before("create test location", async (done) => {
+  before("create test location", (done) => {
     const locationData = require("../fixtures/requests/location.json");
     cy.request("POST", `${apiBaseUrl}/locations`, locationData).then((l) => {
       location = l;
