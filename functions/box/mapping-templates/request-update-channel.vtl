@@ -37,7 +37,8 @@
         "expression" : "${updateExpression} ${removeExpression}",
         "expressionValues": {
             #if( ${context.arguments.live.channel} )
-                ":channel" : { "N" : "${context.arguments.live.channel}" },
+                ## ":channel" : { "N" : "${context.arguments.live.channel}" },
+                ":channel" : $util.dynamodb.toDynamoDB($context.arguments.live.channel),
             #end
             #if( ${context.arguments.live.channelMinor} )
                 ":channelMinor" : { "N" : "${context.arguments.live.channelMinor}" },
