@@ -2,7 +2,7 @@ name: test + deploy serverless function {{env.working-directory}}
 on:
   push:
     paths:
-      - "{{env.working-directory}}/**"
+      - "functions/box/**"
     branches:
       - master
       - release
