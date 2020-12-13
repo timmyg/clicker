@@ -41,7 +41,7 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
 });
 
 export const remove = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId, id: boxId } = getPathParameters(event);
+  const { locationId, boxId } = getPathParameters(event);
   const graphqlClient = getGraphqlClient();
 
   const mutation = gql(

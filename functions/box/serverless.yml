@@ -84,27 +84,32 @@ custom:
         type: Mutation
         field: updateBoxChannel
         request: request-update-channel.vtl
-        response: response-update-channel.vtl
+        response: response.vtl
       - dataSource: Boxes
         type: Query
         field: box
         request: request-get.vtl
-        response: response-get.vtl
+        response: response.vtl
       - dataSource: Boxes
         type: Query
         field: boxes
         request: request-get-all.vtl
-        response: response-get-all.vtl
+        response: response-list.vtl
+      - dataSource: Boxes
+        type: Mutation
+        field: deleteBox
+        request: request-delete.vtl
+        response: response.vtl
       - dataSource: fetchBoxProgramFunction
         type: BoxLive
         field: program
         request: request-get-source.vtl
-        response: response-get.vtl
+        response: response.vtl
       - dataSource: fetchBoxProgramGameFunction
         type: Program
         field: game
         request: request-get-source.vtl
-        response: response-get.vtl
+        response: response.vtl
 functions:
   fetchBoxProgram:
     handler: box.fetchBoxProgram
