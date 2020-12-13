@@ -2,7 +2,7 @@
     "version" : "2017-02-28",
     "operation" : "PutItem",
     "key" : {
-        "id" : $util.dynamodb.toDynamoDBJson($context.arguments.id) 
+        "id" : $util.dynamodb.toDynamoDBJson($context.arguments.id),
         "locationId" : $util.dynamodb.toDynamoDBJson($context.arguments.locationId)
     },
     "attributeValues" : {
@@ -10,14 +10,14 @@
         "zone": $util.dynamodb.toDynamoDBJson(context.arguments.zone),
         "info": {
             "M": {
-              "ip": $util.dynamodb.toDynamoDBJson(context.arguments.info.ip)
-              "clientAddress": $util.dynamodb.toDynamoDBJson(context.arguments.info.clientAddress)
+              "ip": $util.dynamodb.toDynamoDBJson(context.arguments.info.ip),
+              "clientAddress": $util.dynamodb.toDynamoDBJson(context.arguments.info.clientAddress),
               "locationName": $util.dynamodb.toDynamoDBJson(context.arguments.info.locationName)
             }
           },
         "configuration": {
             "M": {
-              "appActive": $util.dynamodb.toDynamoDBJson($context.arguments.configuration.appActive)
+              "appActive": $util.dynamodb.toDynamoDBJson($context.arguments.configuration.appActive),
               "automationActive": $util.dynamodb.toDynamoDBJson($context.arguments.configuration.automationActive)
             }
           },
