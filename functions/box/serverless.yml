@@ -79,7 +79,7 @@ custom:
         type: Mutation
         field: addBox
         request: request-create.vtl
-        response: response-create.vtl
+        response: response.vtl
       - dataSource: Boxes
         type: Mutation
         field: updateBoxChannel
