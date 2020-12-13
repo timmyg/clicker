@@ -2,26 +2,28 @@
     "version" : "2017-02-28",
     "operation" : "PutItem",
     "key" : {
-        "id" : { "S" : "${context.arguments.id}" },
-        "locationId" : { "S" : "${context.arguments.locationId}" }
+        "id" : $util.dynamodb.toDynamoDBJson($context.arguments.id) 
+        "locationId" : $util.dynamodb.toDynamoDBJson($context.arguments.locationId)
     },
     "attributeValues" : {
+        "label": $util.dynamodb.toDynamoDBJson(context.arguments.label),
+        "zone": $util.dynamodb.toDynamoDBJson(context.arguments.zone),
         "info": {
             "M": {
-              "ip": { "S" : "${context.arguments.info.ip}" },
-              "clientAddress": { "S" : "${context.arguments.info.clientAddress}" },
-              "locationName": { "S" : "${context.arguments.info.locationName}" }
+              "ip": $util.dynamodb.toDynamoDBJson(context.arguments.info.ip)
+              "clientAddress": $util.dynamodb.toDynamoDBJson(context.arguments.info.clientAddress)
+              "locationName": $util.dynamodb.toDynamoDBJson(context.arguments.info.locationName)
             }
           },
         "configuration": {
             "M": {
-              "appActive": { "S" : "${context.arguments.configuration.appActive}" },
-              "automationActive": { "S" : "${context.arguments.configuration.automationActive}" }
+              "appActive": $util.dynamodb.toDynamoDBJson($context.arguments.configuration.appActive)
+              "automationActive": $util.dynamodb.toDynamoDBJson($context.arguments.configuration.automationActive)
             }
           },
         "live": {
             "M": {
-              "channel": { "N" : 0 }
+              "channel": $util.dynamodb.toDynamoDBJson(0)
             }
           }
     }
