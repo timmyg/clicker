@@ -6,8 +6,8 @@
         "locationId" : $util.dynamodb.toDynamoDBJson($context.arguments.locationId)
     },
     "attributeValues" : {
-        "label": { "S": $util.dynamodb.toDynamoDBJson(context.arguments.label) },
-        "zone": { "S": $util.dynamodb.toDynamoDBJson(context.arguments.zone) },
+        "label": $util.dynamodb.toDynamoDBJson(context.arguments.label),
+        "zone": $util.dynamodb.toDynamoDBJson(context.arguments.zone),
         "info": {
             "M": {
               "ip": $util.dynamodb.toDynamoDBJson(context.arguments.info.ip),
