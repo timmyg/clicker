@@ -9,15 +9,18 @@ const apiBaseUrl =
 context("Reservations", () => {
   let location;
   let boxes;
-  before("create test location", (done) => {
+  before("create test location", () => {
+    cy.log("1");
     const locationData = require("../fixtures/requests/location.json");
     cy.request("POST", `${apiBaseUrl}/locations`, locationData).then((l) => {
       location = l.body;
       const boxesData = require("../fixtures/requests/boxes.json");
       cy.request("POST", `${apiBaseUrl}/boxes/${location.id}`, boxesData).then(
         (bxs) => {
+          cy.log("2");
           boxes = bxs.body;
-          done();
+          cy.log("3");
+          // done();
         }
       );
     });
@@ -46,7 +49,7 @@ context("Reservations", () => {
   });
 
   it("should create a reservation", () => {
-    cy.wait(1000);
+    cy.wait(5000);
     cy.get("app-coins")
       .find(".count")
       .contains("1");
@@ -60,20 +63,22 @@ context("Reservations", () => {
       .contains("Test Wicked Wolf")
       .click({ force: true });
     cy.screenshot();
-    cy.wait(1000);
+    cy.wait(5000);
     cy.get(
       "ion-list[data-atm='programs']:not(.content-loading) app-program:nth-of-type(2) ion-card-content .title"
     ).click({ force: true });
     cy.screenshot();
-    cy.wait(1000);
+    cy.wait(5000);
     cy.get("app-tvs ion-button")
       .contains("2")
       .click({ force: true });
+    cy.wait(5000);
     cy.get("ion-radio-group ion-radio")
       .first()
       .click({ force: true });
-    cy.get("ion-button#confirm:not([disabled])").click();
+    cy.get("ion-button#confirm:not([disabled])").click({ force: true });
     cy.screenshot();
+    cy.wait(5000);
     cy.get("app-reservation").should(($reservations) => {
       expect($reservations).to.have.length(1);
     });
