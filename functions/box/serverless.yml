@@ -42,10 +42,6 @@ custom:
   dotenv:
     basePath: ../
 functions:
-  fetchBoxProgram:
-    handler: box.fetchBoxProgram
-  fetchBoxProgramGame:
-    handler: box.fetchBoxProgramGame
   health:
     handler: box.health
     events:
