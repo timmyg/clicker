@@ -117,3 +117,7 @@ functions:
       - http:
           path: health
           method: get
+  fetchBoxProgram:
+    handler: graphql.fetchBoxProgram
+  fetchBoxProgramGame:
+    handler: graphql.fetchBoxProgramGame
