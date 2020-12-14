@@ -78,37 +78,37 @@ custom:
       - dataSource: Boxes
         type: Mutation
         field: addBox
-        request: mapping-templates/box/request-create.vtl
+        request: box/request-create.vtl
         response: response.vtl
       - dataSource: Boxes
         type: Mutation
         field: updateBoxLive
-        request: mapping-templates/box/request-update-live.vtl
+        request: box/request-update-live.vtl
         response: response.vtl
       - dataSource: Boxes
         type: Query
         field: box
-        request: mapping-templates/box/request-get.vtl
+        request: box/request-get.vtl
         response: response.vtl
       - dataSource: Boxes
         type: Query
         field: boxes
-        request: mapping-templates/box/request-get-all.vtl
+        request: box/request-get-all.vtl
         response: response-list.vtl
       - dataSource: Boxes
         type: Mutation
         field: deleteBox
-        request: mapping-templates/box/request-delete.vtl
+        request: box/request-delete.vtl
         response: response.vtl
       - dataSource: fetchBoxProgramFunction
         type: BoxLive
         field: program
-        request: mapping-templates/box/request-get-source.vtl
+        request: box/request-get-source.vtl
         response: response.vtl
       - dataSource: fetchBoxProgramGameFunction
         type: Program
         field: game
-        request: mapping-templates/box/request-get-source.vtl
+        request: box/request-get-source.vtl
         response: response.vtl
 functions:
   health:
