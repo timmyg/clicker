@@ -37,3 +37,44 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
     return result && result.data;
   }
 });
+
+export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, boxId } = getBody(event);
+  const graphqlClient = getGraphqlClient();
+  const query = gql(`
+    query box($id: ID!, $locationId: String!)
+      {
+        box(id: $id, locationId: $locationId) {
+          id
+          info {
+            ip
+          }
+        }
+      }
+  `);
+  const gqlQuery = graphqlClient.query({
+    query,
+    variables: {
+      id: boxId,
+      locationId,
+    },
+  });
+  console.time('query');
+  const { data } = await gqlQuery;
+  console.timeEnd('query');
+  return respond(200, data.box);
+});
+
+function getGraphqlClient() {
+  const { graphqlApiUrl, graphqlApiKey, region } = process.env;
+
+  return new appsync.AWSAppSyncClient({
+    url: graphqlApiUrl,
+    region: region,
+    auth: {
+      type: appsync.AUTH_TYPE.API_KEY,
+      apiKey: graphqlApiKey,
+    },
+    disableOffline: true,
+  });
+}

@@ -1,12 +1,47 @@
 import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-helpers';
-const appsync = require('aws-appsync');
-const gql = require('graphql-tag');
+// const appsync = require('aws-appsync');
+// const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
 import vals from '../shared/example';
 require('cross-fetch/polyfill');
 
 export const health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, { vals });
+});
+
+export const get = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, boxId } = getPathParameters(event);
+
+  const result = await new Invoke()
+    .service('graphql')
+    .name('getBox')
+    .body({ locationId, boxId })
+    .sync()
+    .go();
+
+  // const graphqlClient = getGraphqlClient();
+  // const query = gql(`
+  //   query box($id: ID!, $locationId: String!)
+  //     {
+  //       box(id: $id, locationId: $locationId) {
+  //         id
+  //         info {
+  //           ip
+  //         }
+  //       }
+  //     }
+  // `);
+  // const gqlQuery = graphqlClient.query({
+  //   query,
+  //   variables: {
+  //     id: boxId,
+  //     locationId,
+  //   },
+  // });
+  // console.time('query');
+  // const { data } = await gqlQuery;
+  // console.timeEnd('query');
+  return respond(200, result.data);
 });
 
 export const remove = RavenLambdaWrapper.handler(Raven, async event => {
@@ -136,33 +171,6 @@ export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('create');
   const result = await gqlMutation;
   return respond(200, result.data.addBox);
-});
-
-export const get = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId, boxId } = getPathParameters(event);
-  const graphqlClient = getGraphqlClient();
-  const query = gql(`
-    query box($id: ID!, $locationId: String!)
-      {
-        box(id: $id, locationId: $locationId) {
-          id
-          info {
-            ip
-          }
-        }
-      }
-  `);
-  const gqlQuery = graphqlClient.query({
-    query,
-    variables: {
-      id: boxId,
-      locationId,
-    },
-  });
-  console.time('query');
-  const { data } = await gqlQuery;
-  console.timeEnd('query');
-  return respond(200, data.box);
 });
 
 export const getAll = RavenLambdaWrapper.handler(Raven, async event => {

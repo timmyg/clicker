@@ -4,7 +4,7 @@
   "description": "",
   "main": "box.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "npx jest --coverage",
     "invoke:health": "npx serverless invoke local --function health --stage develop",
     "invoke:create": "npx serverless invoke local --function create --stage develop --path ../.resources/data/v2/new-boxes.json",
     "invoke:createDirectv": "npx serverless invoke local --function createDirectv --stage develop --path ../.resources/data/v2/new-boxes-directv.json",
