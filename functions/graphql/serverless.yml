@@ -122,3 +122,9 @@ functions:
     handler: index.fetchBoxProgram
   fetchBoxProgramGame:
     handler: index.fetchBoxProgramGame
+  getBox:
+    handler: index.getBox
+    events:
+      - http:
+          path: '{locationId}/{boxId}'
+          method: get
