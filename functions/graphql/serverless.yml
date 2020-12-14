@@ -35,6 +35,7 @@ custom:
   graphqlApiKey: { Fn::GetAtt: [GraphQlApiKeyDefault, ApiKey] }
   bundle:
     sourcemaps: false
+    linting: false
   prune:
     automatic: true
     number: 3
