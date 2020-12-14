@@ -19,28 +19,6 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
     .sync()
     .go();
 
-  // const graphqlClient = getGraphqlClient();
-  // const query = gql(`
-  //   query box($id: ID!, $locationId: String!)
-  //     {
-  //       box(id: $id, locationId: $locationId) {
-  //         id
-  //         info {
-  //           ip
-  //         }
-  //       }
-  //     }
-  // `);
-  // const gqlQuery = graphqlClient.query({
-  //   query,
-  //   variables: {
-  //     id: boxId,
-  //     locationId,
-  //   },
-  // });
-  // console.time('query');
-  // const { data } = await gqlQuery;
-  // console.timeEnd('query');
   return respond(200, result.data);
 });
 

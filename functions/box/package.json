@@ -2,7 +2,7 @@
   "name": "box",
   "version": "1.0.0",
   "description": "",
-  "main": "box.js",
+  "main": "index.js",
   "scripts": {
     "test": "npx jest --coverage",
     "invoke:health": "npx serverless invoke local --function health --stage develop",
