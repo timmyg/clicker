@@ -13,7 +13,7 @@ jobs:
     name: serverless
     runs-on: ubuntu-latest
     env:
-      working-directory: functions/box
+      working-directory: functions/graphql
       # TODO these arent all needed for this function
       SENTRY_DSN_ENDPOINT: ${{ secrets.SENTRY_DSN_ENDPOINT }}
       TWILIO_SERVICE_SID: ${{ secrets.TWILIO_SERVICE_SID }}
