@@ -17,7 +17,6 @@
     ]
   },
   "dependencies": {
-    "@clicker/example": "^0.1.0",
     "aws-appsync": "^1.7.0",
     "aws-sdk": "^2.619.0",
     "aws-xray-sdk": "^2.5.0",

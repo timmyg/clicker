@@ -3,7 +3,6 @@ const appsync = require('aws-appsync');
 const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
 import vals from '../shared/example';
-// import * as moment from 'moment';
 require('cross-fetch/polyfill');
 
 export const health = RavenLambdaWrapper.handler(Raven, async event => {
@@ -128,15 +127,15 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, result.data.addBox);
 });
 
-export const updateChannel = RavenLambdaWrapper.handler(Raven, async event => {
+export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getPathParameters(event);
   const live = getBody(event);
   const graphqlClient = getGraphqlClient();
 
   // https://github.com/serverless/serverless-graphql/blob/master/app-backend/appsync
   const mutation = gql(
-    `mutation updateBoxChannel($id: ID!, $locationId: String!, $live: BoxLiveInput!){
-      updateBoxChannel(id: $id, locationId: $locationId, live: $live){
+    `mutation updateBoxLive($id: ID!, $locationId: String!, $live: BoxLiveInput!){
+      updateBoxLive(id: $id, locationId: $locationId, live: $live){
         id
         locationId
         live {
