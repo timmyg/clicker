@@ -128,3 +128,9 @@ functions:
       - http:
           path: '{locationId}/{boxId}'
           method: get
+  getBoxes:
+    handler: index.getBoxes
+    events:
+      - http:
+          path: '{locationId}'
+          method: get

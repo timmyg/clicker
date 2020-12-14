@@ -22,6 +22,19 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, result.data);
 });
 
+export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId } = getPathParameters(event);
+
+  const result = await new Invoke()
+    .service('graphql')
+    .name('getBoxes')
+    .body({ locationId })
+    .sync()
+    .go();
+
+  return respond(200, result.data);
+});
+
 // export const remove = RavenLambdaWrapper.handler(Raven, async event => {
 //   const { locationId, boxId } = getPathParameters(event);
 //   const graphqlClient = getGraphqlClient();
@@ -149,40 +162,6 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
 //   console.timeEnd('create');
 //   const result = await gqlMutation;
 //   return respond(200, result.data.addBox);
-// });
-
-// export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { locationId } = getPathParameters(event);
-//   const graphqlClient = getGraphqlClient();
-//   const query = gql(`
-//     query boxes($locationId: String!)
-//       {
-//         boxes(locationId: $locationId) {
-//           id
-//           configuration {
-//             automationActive
-//             appActive
-//           }
-//           info {
-//             ip
-//             clientAddress
-//           }
-//           label
-//           zone
-//         }
-//       }
-//   `);
-//   const gqlQuery = graphqlClient.query({
-//     query,
-//     variables: {
-//       locationId,
-//     },
-//   });
-//   console.log({ locationId });
-//   console.time('query');
-//   const { data } = await gqlQuery;
-//   console.timeEnd('query');
-//   return respond(200, data);
 // });
 
 // class DirectvBox {

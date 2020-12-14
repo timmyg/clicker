@@ -65,6 +65,41 @@ export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, data.box);
 });
 
+export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId } = getPathParameters(event);
+  const graphqlClient = getGraphqlClient();
+  const query = gql(`
+    query boxes($locationId: String!)
+      {
+        boxes(locationId: $locationId) {
+          id
+          configuration {
+            automationActive
+            appActive
+          }
+          info {
+            ip
+            clientAddress
+          }
+          label
+          zone
+        }
+      }
+  `);
+  const gqlQuery = graphqlClient.query({
+    query,
+    variables: {
+      locationId,
+    },
+  });
+  console.log({ locationId });
+  console.time('query');
+  const { data } = await gqlQuery;
+  console.timeEnd('query');
+  console.log({ data });
+  return respond(200, data.boxes);
+});
+
 function getGraphqlClient() {
   const { graphqlApiUrl, graphqlApiKey, region } = process.env;
 
