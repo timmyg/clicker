@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "eslint": "^7.15.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-developit": "^1.2.0",
     "eslint-config-medikoo": "^4.0.0",
     "eslint-config-prettier": "^7.0.0",
