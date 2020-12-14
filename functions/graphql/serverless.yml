@@ -41,7 +41,7 @@ custom:
   domains: ${file(../serverless.common.yml):domains}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    basePath: boxes
+    basePath: graphql
     certificateName: 'api.tryclicker.com'
     stage: ${self:custom.stage}
     createRoute53Record: true
@@ -112,7 +112,7 @@ custom:
         response: response.vtl
 functions:
   health:
-    handler: box.health
+    handler: graphql.health
     events:
       - http:
           path: health
