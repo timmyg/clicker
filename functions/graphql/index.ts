@@ -1,4 +1,4 @@
-import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-helpers';
+import { getBody, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-helpers';
 const appsync = require('aws-appsync');
 const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
@@ -66,7 +66,6 @@ export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log({ event });
   const { locationId } = getBody(event);
   const graphqlClient = getGraphqlClient();
   const query = gql(`
@@ -99,6 +98,58 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('query');
   console.log({ data });
   return respond(200, data.boxes);
+});
+
+export const removeBox = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, boxId } = getBody(event);
+  const graphqlClient = getGraphqlClient();
+
+  const mutation = gql(
+    `mutation deleteBox($id: ID!, $locationId: String!){
+      deleteBox(id: $id, locationId: $locationId){
+        id
+      }
+    }`,
+  );
+  const gqlMutation = graphqlClient.mutate({
+    mutation,
+    variables: {
+      locationId,
+      id: boxId,
+    },
+  });
+  const result = await gqlMutation;
+  return respond(200, result);
+});
+
+export const createBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, boxes } = getBody(event);
+  // const boxes = getBody(event);
+  const graphqlClient = getGraphqlClient();
+
+  const boxesCreated = [];
+  for (let newBox of boxes) {
+    const mutation = gql(
+      `mutation addBox($id: ID!, $locationId: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
+        addBox(id: $id, locationId: $locationId, label: $label, zone: $zone, info: $info, configuration: $configuration){
+          id
+          locationId
+        }
+      }`,
+    );
+    console.time('create');
+    newBox.locationId = locationId;
+    newBox.id = uuid();
+    console.log({ newBox });
+    const gqlMutation = graphqlClient.mutate({
+      mutation,
+      variables: newBox,
+    });
+    console.timeEnd('create');
+    const { data } = await gqlMutation;
+    boxesCreated.push(data.addBox);
+  }
+  return respond(201, boxesCreated);
 });
 
 function getGraphqlClient() {

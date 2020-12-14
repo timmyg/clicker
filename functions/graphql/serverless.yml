@@ -124,13 +124,7 @@ functions:
     handler: index.fetchBoxProgramGame
   getBox:
     handler: index.getBox
-    events:
-      - http:
-          path: '{locationId}/{boxId}'
-          method: get
   getBoxes:
     handler: index.getBoxes
-    events:
-      - http:
-          path: '{locationId}'
-          method: get
+  removeBox:
+    handler: index.removeBox
