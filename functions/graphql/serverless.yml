@@ -26,8 +26,8 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  - serverless-bundle
   - serverless-appsync-plugin
+  - serverless-bundle
 custom:
   stage: ${opt:stage}
   tableBox: boxes-${self:custom.stage}
@@ -113,12 +113,12 @@ custom:
         response: response.vtl
 functions:
   health:
-    handler: graphql.health
+    handler: index.health
     events:
       - http:
           path: health
           method: get
   fetchBoxProgram:
-    handler: graphql.fetchBoxProgram
+    handler: index.fetchBoxProgram
   fetchBoxProgramGame:
-    handler: graphql.fetchBoxProgramGame
+    handler: index.fetchBoxProgramGame
