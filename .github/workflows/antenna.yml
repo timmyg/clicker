@@ -63,10 +63,14 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install NPM dependencies
-        # if: steps.node-cache.outputs.cache-hit != 'true'
-        run: npm install
+      # - name: Install NPM dependencies
+      #   # if: steps.node-cache.outputs.cache-hit != 'true'
+      #   run: npm install
       - name: Deploy to s3
+        uses: chrislennon/action-aws-cli@v1.1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           echo -e "upload antenna package to s3"
           filename=
@@ -79,9 +83,9 @@ jobs:
           if [ "${{github.ref}}" == "refs/heads/develop" ]; then
           filename="antenna-develop.tar.gz"
           fi
-          echo -e "sh dir"
+          # echo -e "sh dir"
           echo -e pwd
-          cd packages/antenna
+          # cd packages/antenna
           npm i
           tar zcvf $filename *
           aws s3 cp $filename s3://clicker-antenna/app/
