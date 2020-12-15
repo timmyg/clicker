@@ -59,7 +59,7 @@ functions:
     handler: box.create
     events:
       - http:
-          path: '{locationId}/{region}'
+          path: '{locationId}'
           method: post
   updateLive:
     handler: box.updateLive
