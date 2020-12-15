@@ -32,6 +32,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
     .sync()
     .go();
 
+  console.log({ result });
+
   return respond(200, result.data);
 });
 
