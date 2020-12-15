@@ -128,3 +128,7 @@ functions:
     handler: index.getBoxes
   removeBox:
     handler: index.removeBox
+  createBoxes:
+    handler: index.createBoxes
+  updateBoxLive:
+    handler: index.updateBoxLive

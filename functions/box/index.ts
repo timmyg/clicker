@@ -54,98 +54,69 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const result = await new Invoke()
     .service('graphql')
     .name('createBoxes')
-    .body({ locationId })
+    .body({ locationId, boxes })
     .sync()
     .go();
 
   return respond(201, result);
 });
 
-// export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { ip, boxes }: DirectvBoxRequest = getBody(event);
-//   const { locationId } = getPathParameters(event);
+export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
+  const { ip, boxes }: DirectvBoxRequest = getBody(event);
+  const { locationId } = getPathParameters(event);
 
-//   const newBox = {
-//     id: uuid(),
-//     locationId,
-//     configuration: {
-//       appActive: false,
-//       automationActive: false,
-//     },
-//     info: {
-//       ip,
-//       clientAddress: boxes[0].clientAddr,
-//       locationName: boxes[0].locationName,
-//     },
-//     label: Math.random()
-//       .toString(36)
-//       .substr(2, 2),
-//     zone: Math.random()
-//       .toString(36)
-//       .substr(2, 2),
-//     live: {},
-//   };
-//   console.log({ newBox });
+  const newBox = {
+    id: uuid(),
+    locationId,
+    configuration: {
+      appActive: false,
+      automationActive: false,
+    },
+    info: {
+      ip,
+      clientAddress: boxes[0].clientAddr,
+      locationName: boxes[0].locationName,
+    },
+    label: Math.random()
+      .toString(36)
+      .substr(2, 2),
+    zone: Math.random()
+      .toString(36)
+      .substr(2, 2),
+    live: {},
+  };
+  console.log({ newBox });
 
-//   const result = await new Invoke()
-//     .service('box')
-//     .name('create')
-//     .pathParams({ locationId })
-//     .body([newBox])
-//     .go();
+  const result = await new Invoke()
+    .service('graphql')
+    .name('createBoxes')
+    .body({ locationId, boxes: [newBox] })
+    .go();
 
-//   return respond(200, result.data.addBox);
-// });
+  return respond(200, result);
+});
 
-// export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { locationId, boxId } = getPathParameters(event);
-//   const live = getBody(event);
-//   const graphqlClient = getGraphqlClient();
+export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, boxId } = getPathParameters(event);
+  const live = getBody(event);
 
-//   // https://github.com/serverless/serverless-graphql/blob/master/app-backend/appsync
-//   const mutation = gql(
-//     `mutation updateBoxLive($id: ID!, $locationId: String!, $live: BoxLiveInput!){
-//       updateBoxLive(id: $id, locationId: $locationId, live: $live){
-//         id
-//         locationId
-//         live {
-//           channel
-//         }
-//       }
-//     }`,
-//   );
-//   console.time('create');
+  const { data } = await new Invoke()
+    .service('graphql')
+    .name('updateBoxLive')
+    .body({ locationId, boxId, live })
+    .go();
 
-//   const variables = {
-//     live: {
-//       channel: live.channel,
-//       channelMinor: live.channelMinor,
-//       channelChangeAt: live.channelChangeAt,
-//       channelChangeSource: live.channelChangeSource,
-//       lockedProgrammingIds: live.lockedProgrammingIds,
-//       lockedUntil: live.lockedUntil,
-//     },
-//     id: boxId,
-//     locationId,
-//   };
-//   console.log({ variables });
-//   const gqlMutation = graphqlClient.mutate({
-//     mutation,
-//     variables,
-//   });
-//   console.timeEnd('create');
-//   const result = await gqlMutation;
-//   return respond(200, result.data.addBox);
-// });
+  return respond(200, data);
+});
 
-// class DirectvBox {
-//   major: number;
-//   minor: number;
-//   clientAddr: string;
-//   locationName: string;
-// }
+class DirectvBox {
+  major: number;
+  minor: number;
+  clientAddr: string;
+  locationName: string;
+}
 
-// class DirectvBoxRequest {
-//   boxes: DirectvBox[];
-//   ip: string;
-// }
+class DirectvBoxRequest {
+  boxes: DirectvBox[];
+  ip: string;
+}

@@ -152,6 +152,46 @@ export const createBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(201, boxesCreated);
 });
 
+export const updateBoxLive = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, boxId, live } = getBody(event);
+  const graphqlClient = getGraphqlClient();
+
+  // https://github.com/serverless/serverless-graphql/blob/master/app-backend/appsync
+  const mutation = gql(
+    `mutation updateBoxLive($id: ID!, $locationId: String!, $live: BoxLiveInput!){
+      updateBoxLive(id: $id, locationId: $locationId, live: $live){
+        id
+        locationId
+        live {
+          channel
+        }
+      }
+    }`,
+  );
+  console.time('create');
+
+  const variables = {
+    live: {
+      channel: live.channel,
+      channelMinor: live.channelMinor,
+      channelChangeAt: live.channelChangeAt,
+      channelChangeSource: live.channelChangeSource,
+      lockedProgrammingIds: live.lockedProgrammingIds,
+      lockedUntil: live.lockedUntil,
+    },
+    id: boxId,
+    locationId,
+  };
+  console.log({ variables });
+  const gqlMutation = graphqlClient.mutate({
+    mutation,
+    variables,
+  });
+  console.timeEnd('create');
+  const result = await gqlMutation;
+  return respond(200, result.data.updateBoxLive);
+});
+
 function getGraphqlClient() {
   const { graphqlApiUrl, graphqlApiKey, region } = process.env;
 
