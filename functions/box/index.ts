@@ -38,27 +38,27 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
 export const remove = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getPathParameters(event);
 
-  const result = await new Invoke()
+  const { data } = await new Invoke()
     .service('graphql')
     .name('removeBox')
     .body({ locationId, boxId })
     .sync()
     .go();
 
-  return respond(200, result.data);
+  return respond(200, data);
 });
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getPathParameters(event);
   const boxes = getBody(event);
-  const result = await new Invoke()
+  const { data } = await new Invoke()
     .service('graphql')
     .name('createBoxes')
     .body({ locationId, boxes })
     .sync()
     .go();
 
-  return respond(201, result);
+  return respond(201, data);
 });
 
 export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
@@ -87,13 +87,13 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   };
   console.log({ newBox });
 
-  const result = await new Invoke()
+  const { data } = await new Invoke()
     .service('graphql')
     .name('createBoxes')
     .body({ locationId, boxes: [newBox] })
     .go();
 
-  return respond(200, result);
+  return respond(200, data);
 });
 
 export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
