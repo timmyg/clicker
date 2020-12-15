@@ -56,7 +56,8 @@ custom:
     authenticationType: API_KEY
     apiKeys:
       - myApiKey
-    schema: 'schema.graphql'
+    schema:
+      - schemas/box.graphql
     dataSources:
       - type: AMAZON_DYNAMODB
         name: Boxes
