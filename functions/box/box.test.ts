@@ -1,4 +1,4 @@
-import { health } from '.';
+import { health } from 'box';
 import vals from '../shared/example';
 
 test('smoke test', async () => {

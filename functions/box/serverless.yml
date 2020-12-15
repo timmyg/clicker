@@ -44,43 +44,43 @@ custom:
     basePath: ../
 functions:
   health:
-    handler: index.health
+    handler: box.health
     events:
       - http:
           path: health
           method: get
   createDirectv:
-    handler: index.createDirectv
+    handler: box.createDirectv
     events:
       - http:
           path: '{locationId}/directv'
           method: post
   create:
-    handler: index.create
+    handler: box.create
     events:
       - http:
           path: '{locationId}/{region}'
           method: post
   updateLive:
-    handler: index.updateLive
+    handler: box.updateLive
     events:
       - http:
           path: '{locationId}/{boxId}/live'
           method: put
   remove:
-    handler: index.remove
+    handler: box.remove
     events:
       - http:
           path: '{locationId}/{boxId}'
           method: delete
   get:
-    handler: index.get
+    handler: box.get
     events:
       - http:
           path: '{locationId}/{boxId}'
           method: get
   getAll:
-    handler: index.getAll
+    handler: box.getAll
     events:
       - http:
           path: '{locationId}'

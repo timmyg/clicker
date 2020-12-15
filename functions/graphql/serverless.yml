@@ -114,22 +114,22 @@ custom:
         response: response.vtl
 functions:
   health:
-    handler: index.health
+    handler: box.health
     events:
       - http:
           path: health
           method: get
   fetchBoxProgram:
-    handler: index.fetchBoxProgram
+    handler: box.fetchBoxProgram
   fetchBoxProgramGame:
-    handler: index.fetchBoxProgramGame
+    handler: box.fetchBoxProgramGame
   getBox:
-    handler: index.getBox
+    handler: box.getBox
   getBoxes:
-    handler: index.getBoxes
+    handler: box.getBoxes
   removeBox:
-    handler: index.removeBox
+    handler: box.removeBox
   createBoxes:
-    handler: index.createBoxes
+    handler: box.createBoxes
   updateBoxLive:
-    handler: index.updateBoxLive
+    handler: box.updateBoxLive

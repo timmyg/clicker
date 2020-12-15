@@ -51,6 +51,7 @@ export const remove = RavenLambdaWrapper.handler(Raven, async event => {
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getPathParameters(event);
 
+  console.log({ locationId });
   const { data: locationData } = await new Invoke()
     .service('location')
     .name('get')
