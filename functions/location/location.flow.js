@@ -649,7 +649,9 @@ async function getLocationWithBoxes(locationId) {
     .service('box')
     .name('getAll')
     .pathParams({ locationId })
+    .sync()
     .go();
+  console.log(locationBoxes);
   location.boxes = locationBoxes;
   console.log({ locationId, location });
   return location;
