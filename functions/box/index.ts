@@ -50,11 +50,19 @@ export const remove = RavenLambdaWrapper.handler(Raven, async event => {
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getPathParameters(event);
+
+  const { data: locationData } = await new Invoke()
+    .service('location')
+    .name('get')
+    .pathParams({ id: locationId })
+    .sync()
+    .go();
+
   const boxes = getBody(event);
   const { data } = await new Invoke()
     .service('graphql')
     .name('createBoxes')
-    .body({ locationId, boxes })
+    .body({ locationId, boxes, region: locationData.region })
     .sync()
     .go();
 
@@ -64,6 +72,13 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
 export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = getPathParameters(event);
+
+  const { data: location } = await new Invoke()
+    .service('location')
+    .name('get')
+    .pathParams({ id: locationId })
+    .sync()
+    .go();
 
   const newBox = {
     id: uuid(),
@@ -90,7 +105,7 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   const { data } = await new Invoke()
     .service('graphql')
     .name('createBoxes')
-    .body({ locationId, boxes: [newBox] })
+    .body({ locationId, boxes: [newBox], region: location.region })
     .go();
 
   return respond(200, data);

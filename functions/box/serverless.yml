@@ -59,7 +59,7 @@ functions:
     handler: index.create
     events:
       - http:
-          path: '{locationId}'
+          path: '{locationId}/{region}'
           method: post
   updateLive:
     handler: index.updateLive

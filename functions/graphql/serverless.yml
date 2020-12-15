@@ -18,7 +18,7 @@ provider:
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
-    BoxesTable: ${file(./table.boxes.yml)}
+    BoxesTable: ${file(./resources/table.boxes.yml)}
 plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
@@ -57,7 +57,7 @@ custom:
     apiKeys:
       - myApiKey
     schema:
-      - schemas/box.graphql
+      - schemas/schema.box.graphql
     dataSources:
       - type: AMAZON_DYNAMODB
         name: Boxes

@@ -9,12 +9,9 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
-  const { channel, channelMinor } = event.source;
-  // TODO need region
-  const region = 'cincinnati';
-
+  const { channel, channelMinor, locationRegion } = event.source;
   if (channel) {
-    const queryParams = { channel, channelMinor, region };
+    const queryParams = { channel, channelMinor, region: locationRegion };
     console.log({ queryParams });
     const programResult = await new Invoke()
       .service('program')
@@ -123,15 +120,15 @@ export const removeBox = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const createBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId, boxes } = getBody(event);
+  const { locationId, boxes, region } = getBody(event);
   // const boxes = getBody(event);
   const graphqlClient = getGraphqlClient();
 
   const boxesCreated = [];
   for (let newBox of boxes) {
     const mutation = gql(
-      `mutation addBox($id: ID!, $locationId: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
-        addBox(id: $id, locationId: $locationId, label: $label, zone: $zone, info: $info, configuration: $configuration){
+      `mutation addBox($id: ID!, $locationId: String!, $region: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!){
+        addBox(id: $id, locationId: $locationId, label: $label, region: $region, zone: $zone, info: $info, configuration: $configuration){
           id
           locationId
         }
@@ -140,6 +137,7 @@ export const createBoxes = RavenLambdaWrapper.handler(Raven, async event => {
     console.time('create');
     newBox.locationId = locationId;
     newBox.id = uuid();
+    newBox.region = region;
     console.log({ newBox });
     const gqlMutation = graphqlClient.mutate({
       mutation,

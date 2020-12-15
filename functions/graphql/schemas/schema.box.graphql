@@ -14,6 +14,7 @@ type Mutation {
   addBox(
     id: ID!
     locationId: String!
+    region: String!
     info: BoxInfoInput!
     zone: String
     label: String
@@ -153,7 +154,7 @@ type BoxConfiguration {
 type Box {
   id: ID!
   locationId: String!
-  # locationRegion: String!
+  locationRegion: String!
   label: String
   zone: String
   configuration: BoxConfiguration!
