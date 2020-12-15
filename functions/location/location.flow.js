@@ -645,9 +645,7 @@ async function getLocationWithBoxes(locationId) {
     .queryOne('id')
     .eq(locationId)
     .exec();
-  const {
-    data: { boxes: locationBoxes },
-  } = await new Invoke()
+  const { data: locationBoxes } = await new Invoke()
     .service('box')
     .name('getAll')
     .pathParams({ locationId })

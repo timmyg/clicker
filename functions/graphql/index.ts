@@ -119,7 +119,7 @@ export const removeBox = RavenLambdaWrapper.handler(Raven, async event => {
     },
   });
   const result = await gqlMutation;
-  return respond(200, result);
+  return respond(200, result.deleteBox);
 });
 
 export const createBoxes = RavenLambdaWrapper.handler(Raven, async event => {
