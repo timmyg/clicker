@@ -58,6 +58,8 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
     .sync()
     .go();
 
+  console.log({ locationData });
+
   const boxes = getBody(event);
   const { data } = await new Invoke()
     .service('graphql')
@@ -101,6 +103,8 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
     live: {},
   };
   console.log({ newBox });
+
+  console.log({ location });
 
   const { data } = await new Invoke()
     .service('graphql')
