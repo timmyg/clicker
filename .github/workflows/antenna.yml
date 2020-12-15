@@ -9,8 +9,8 @@ on:
       - develop
 
 jobs:
-  serverless:
-    name: serverless
+  s3:
+    name: s3 deploy
     runs-on: ubuntu-latest
     env:
       working-directory: packages/antenna
@@ -67,20 +67,21 @@ jobs:
         # if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm install
       - name: Deploy to s3
-        run: echo -e "upload antenna package to s3" \
-          filename= \
-          if [ "${{github.ref}}" == "refs/heads/master" ]; then \
-          filename="antenna.tar.gz" \
-          fi \
-          if [ "${{github.ref}}" == "refs/heads/release" ]; then \
-          filename="antenna-release.tar.gz" \
-          fi \
-          if [ "${{github.ref}}" == "refs/heads/develop" ]; then \
-          filename="antenna-develop.tar.gz" \
-          fi \
-          echo -e "sh dir" \
-          echo -e pwd \
-          cd packages/antenna \
-          npm i \
-          tar zcvf $filename * \
+        run: |
+          echo -e "upload antenna package to s3"
+          filename=
+          if [ "${{github.ref}}" == "refs/heads/master" ]; then
+          filename="antenna.tar.gz"
+          fi
+          if [ "${{github.ref}}" == "refs/heads/release" ]; then
+          filename="antenna-release.tar.gz"
+          fi
+          if [ "${{github.ref}}" == "refs/heads/develop" ]; then
+          filename="antenna-develop.tar.gz"
+          fi
+          echo -e "sh dir"
+          echo -e pwd
+          cd packages/antenna
+          npm i
+          tar zcvf $filename *
           aws s3 cp $filename s3://clicker-antenna/app/
