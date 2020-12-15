@@ -591,7 +591,7 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
   // await location.save();
   await new Invoke()
     .service('box')
-    .name('updateChannel')
+    .name('updateLive')
     .body({
       lockedUntil: end,
     })
@@ -617,7 +617,7 @@ module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
   // await location.save();
   await new Invoke()
     .service('box')
-    .name('updateChannel')
+    .name('updateLive')
     .body({
       lockedUntil: 0,
     })
@@ -861,7 +861,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
     await new Invoke()
       .service('box')
-      .name('updateChannel')
+      .name('updateLive')
       .body({
         channel: major,
         channelMinor: minor,
