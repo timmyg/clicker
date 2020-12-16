@@ -400,7 +400,10 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .exec();
     const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     console.log('querying for', region, { programmingIds });
-    console.log('returned', programs.map(p => p.programmingId));
+    console.log(
+      'returned',
+      programs.map(p => p.programmingId),
+    );
     if (programmingIds.length > programs.length) {
       // console.error(`missing: ${programmingIds.map(pid => !programs.map(p => p.programmingId).includes(pid))}`);
       console.error(
@@ -1199,24 +1202,27 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
   const messagePromises = [];
-  console.time(`publish ${programs.length} messages`);
-  for (const program of programs) {
-    const messageData = {
-      Message: JSON.stringify(program),
-      TopicArn: topicArn,
-    };
 
-    try {
-      if (!process.env.IS_LOCAL) {
-        messagePromises.push(sns.publish(messageData).promise());
-        i++;
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  await Promise.all(messagePromises);
-  console.timeEnd(`publish ${messagePromises.length} messages`);
+  // commenting out publish because consumers are taking way too many resources
+
+  // console.time(`publish ${programs.length} messages`);
+  // for (const program of programs) {
+  //   const messageData = {
+  //     Message: JSON.stringify(program),
+  //     TopicArn: topicArn,
+  //   };
+
+  //   try {
+  //     if (!process.env.IS_LOCAL) {
+  //       messagePromises.push(sns.publish(messageData).promise());
+  //       i++;
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }
+  // await Promise.all(messagePromises);
+  // console.timeEnd(`publish ${messagePromises.length} messages`);
   console.log(i, 'topics published to:', topicArn);
 }
 
