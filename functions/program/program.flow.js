@@ -1205,6 +1205,9 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
 
   // commenting out publish because consumers are taking way too many resources
 
+
+
+
   // console.time(`publish ${programs.length} messages`);
   // for (const program of programs) {
   //   const messageData = {
