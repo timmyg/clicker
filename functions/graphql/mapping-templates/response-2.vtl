@@ -1,4 +1,10 @@
-{
-    "data": $util.toJson($context.result.data),
-    "theContext": $util.toJson($context)
-}
+## {
+##     "data": $util.toJson($context.result.data),
+##     "theContext": $util.toJson($context)
+## }
+
+#set($myresponse = {
+  "$ctx.args.testy": $ctx.result
+})    
+
+$util.toJson($myresponse)
