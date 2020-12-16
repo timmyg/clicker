@@ -1,0 +1,96 @@
+name: test + deploy antenna
+on:
+  push:
+    paths:
+      - "packages/antenna/**"
+    branches:
+      - master
+      - release
+      - develop
+
+jobs:
+  s3:
+    name: s3 deploy
+    runs-on: ubuntu-latest
+    env:
+      working-directory: packages/antenna
+      # TODO these arent all needed for this function
+      SENTRY_DSN_ENDPOINT: ${{ secrets.SENTRY_DSN_ENDPOINT }}
+      TWILIO_SERVICE_SID: ${{ secrets.TWILIO_SERVICE_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TRELLO_AUTH_TOKEN: ${{ secrets.TRELLO_AUTH_TOKEN }}
+      TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
+      STRIPE_SECRET_KEY_DEV: ${{ secrets.STRIPE_SECRET_KEY_DEV }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      SLACK_SANDBOX_WEBHOOK_URL: ${{ secrets.SLACK_SANDBOX_WEBHOOK_URL }}
+      SLACK_TASKS_WEBHOOK_URL: ${{ secrets.SLACK_TASKS_WEBHOOK_URL }}
+      SLACK_APP_WEBHOOK_URL: ${{ secrets.SLACK_APP_WEBHOOK_URL }}
+      SLACK_MONEY_WEBHOOK_URL: ${{ secrets.SLACK_MONEY_WEBHOOK_URL }}
+      SLACK_CONTROL_CENTER_WEBHOOK_URL: ${{ secrets.SLACK_CONTROL_CENTER_WEBHOOK_URL }}
+      SLACK_LANDING_WEBHOOK_URL: ${{ secrets.SLACK_LANDING_WEBHOOK_URL }}
+      SLACK_MANUAL_ZAPS_WEBHOOK_URL: ${{ secrets.SLACK_MANUAL_ZAPS_WEBHOOK_URL }}
+      SLACK_ANTENNA_WEBHOOK_URL: ${{ secrets.SLACK_ANTENNA_WEBHOOK_URL }}
+      SEGMENT_WRITE_KEY_DEV: ${{ secrets.SEGMENT_WRITE_KEY_DEV }}
+      SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+      LOSANT_APP_ID: ${{ secrets.LOSANT_APP_ID }}
+      LOSANT_KEY: ${{ secrets.LOSANT_KEY }}
+      LOSANT_SECRET: ${{ secrets.LOSANT_SECRET }}
+      LOGZIO_TOKEN: ${{ secrets.LOGZIO_TOKEN }}
+      LOSANT_ACCESS_TOKEN: ${{ secrets.LOSANT_ACCESS_TOKEN }}
+      AIRTABLE_BASE_DEV: ${{ secrets.AIRTABLE_BASE_DEV }}
+      AIRTABLE_BASE_RELEASE: ${{ secrets.AIRTABLE_BASE_RELEASE }}
+      AIRTABLE_KEY: ${{ secrets.AIRTABLE_KEY }}
+      AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }}
+      HUBSPOT_API_KEY: ${{ secrets.HUBSPOT_API_KEY }}
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Cache node modules
+        id: node-cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules-${{env.working-directory}}
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/${{env.working-directory}}/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      # - name: Install NPM dependencies
+      #   # if: steps.node-cache.outputs.cache-hit != 'true'
+      #   run: npm install
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy to s3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          echo -e "upload antenna package to s3"
+          filename=
+          if [ "${{github.ref}}" == "refs/heads/master" ]; then
+          filename="antenna.tar.gz"
+          fi
+          if [ "${{github.ref}}" == "refs/heads/release" ]; then
+          filename="antenna-release.tar.gz"
+          fi
+          if [ "${{github.ref}}" == "refs/heads/develop" ]; then
+          filename="antenna-develop.tar.gz"
+          fi
+          # echo -e "sh dir"
+          echo -e pwd
+          # cd packages/antenna
+          npm i
+          tar zcvf $filename *
+          aws s3 cp $filename s3://clicker-antenna/app/
