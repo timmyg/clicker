@@ -1,3 +1,5 @@
+#set($device = $util.defaultIfNullOrBlank($ctx.args, $ctx.source))
+
 {
     "version": "2017-02-28",
     "operation": "Invoke",
@@ -6,6 +8,7 @@
         "context" : $utils.toJson($context),
         "obj" : $utils.toJson($obj),
         "args" : $utils.toJson($args),
-        "info" : $utils.toJson($info)
+        "info" : $utils.toJson($info),
+        "device": $utils.toJson($device),
     }
 }
