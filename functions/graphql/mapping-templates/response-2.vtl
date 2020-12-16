@@ -10,4 +10,8 @@
 ##   "$ctx.args.testy": $ctx.result
 ## })    
 
-$util.toJson($context.result)
+#set( $book = $ctx.result )
+$util.qr($book.put("testy", $ctx))
+$util.toJson($book)
+
+## $util.toJson($context.result)
