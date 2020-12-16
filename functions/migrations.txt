@@ -22,3 +22,4 @@
 22. data table with views
 23. link programs to data with targeting, targetingIds fields
 24. move location.boxes to own table
+25. airtable Control Center gameId should reference game.recordId

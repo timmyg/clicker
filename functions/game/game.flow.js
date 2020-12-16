@@ -433,10 +433,14 @@ module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, asy
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
-  const game: Game = await dbGame
-    .queryOne('id')
-    .eq(id)
-    .exec();
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableGamesName = 'Games';
+  const game = await base(airtableGamesName)
+    // .select({
+    //   filterByFormula: `{id} == ${id}`,
+    // })
+    .find(id);
+  // .all();
   return respond(200, game);
 });
 

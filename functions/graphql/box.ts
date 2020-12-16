@@ -9,6 +9,7 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('event', JSON.stringify(event));
   const { channel, channelMinor, locationRegion } = event.source;
   if (channel) {
     const queryParams = { channel, channelMinor, region: locationRegion };
