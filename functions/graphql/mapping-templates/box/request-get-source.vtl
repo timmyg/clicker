@@ -3,6 +3,9 @@
     "operation": "Invoke",
     "payload": {
         "source" : $utils.toJson($context.source),
-        "context" : $utils.toJson($context)
+        "context" : $utils.toJson($context),
+        "obj" : $utils.toJson($obj),
+        "args" : $utils.toJson($args),
+        "info" : $utils.toJson($info)
     }
 }
