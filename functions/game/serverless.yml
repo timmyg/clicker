@@ -120,18 +120,6 @@ functions:
       - http:
           path: sync/airtable/active
           method: post
-  syncActive:
-    handler: game.syncActive
-    description: pull active from action network api, sync to db
-    timeout: 12
-    events:
-      # - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
-      # - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
-      - schedule: cron(3/10 * * * ? *) # Every 3th minute
-      - schedule: cron(8/10 * * * ? *) # Every 8th minute
-      - http:
-          path: sync/scores
-          method: post
   syncAirtable:
     handler: game.syncAirtable
     description: sync games from AN api to airtable Games table

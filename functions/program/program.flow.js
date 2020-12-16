@@ -400,7 +400,10 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       .exec();
     const sortedPrograms = programs.sort((a, b) => a.start - b.start);
     console.log('querying for', region, { programmingIds });
-    console.log('returned', programs.map(p => p.programmingId));
+    console.log(
+      'returned',
+      programs.map(p => p.programmingId),
+    );
     if (programmingIds.length > programs.length) {
       // console.error(`missing: ${programmingIds.map(pid => !programs.map(p => p.programmingId).includes(pid))}`);
       console.error(
@@ -1324,23 +1327,6 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
   } else {
     console.info(`skipping ${programmingId}`);
   }
-  return respond(200);
-});
-
-module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async event => {
-  const game: Game = getBody(event);
-  console.log({ game });
-  const programs = await dbProgram
-    .query('gameId')
-    .eq(game.id)
-    .exec();
-  const promises = [];
-  for (const program of programs) {
-    promises.push(updateProgramGame(program.id, program.region, game));
-  }
-  console.log('promises:', promises.length);
-  const updateGamesResult = await Promise.all(promises);
-  console.log({ updateGamesResult: JSON.stringify(updateGamesResult) });
   return respond(200);
 });
 

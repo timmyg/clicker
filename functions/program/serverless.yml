@@ -391,13 +391,6 @@ functions:
       - http:
           path: regions
           method: get
-  updateGame:
-    handler: program.updateGame
-    runtime: nodejs12.x
-    events:
-      - http:
-          path: game
-          method: post
   upcoming:
     handler: program.upcoming
     runtime: nodejs12.x

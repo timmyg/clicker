@@ -311,50 +311,6 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async even
   return respond(200);
 });
 
-module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
-  // 5 hours messed up at midnight
-  const timeToPull = moment()
-    .subtract(12, 'hours')
-    .toDate();
-  console.log({ timeToPull });
-  const allEvents = await pullFromActionNetwork([timeToPull]);
-  if (allEvents && allEvents.length) {
-    console.log('allEvents', allEvents.length);
-    let ipAndCompletedGames = getInProgressAndCompletedGames(allEvents);
-    console.log('ipAndCompletedGames', ipAndCompletedGames.length);
-    let gamesToUpdate = [];
-    // let updatedGames;
-    if (ipAndCompletedGames && ipAndCompletedGames.length) {
-      // dont update again in database if already updated...
-      const alreadyCompletedGameIds = await getCompleteGameIds();
-      console.log({ alreadyCompletedGameIds });
-      gamesToUpdate = ipAndCompletedGames.filter(g => !alreadyCompletedGameIds.includes(g.id));
-      console.log({ gamesToUpdate });
-      console.log('gamesToUpdate', gamesToUpdate.length);
-      if (!!gamesToUpdate.length) {
-        const totalGames = gamesToUpdate.length;
-        const updatedGames = await syncGamesDatabase(gamesToUpdate, false);
-        const messagePromises = [];
-        for (const game of updatedGames) {
-          messagePromises.push(
-            new Invoke()
-              .service('program')
-              .name('updateGame')
-              .body(game)
-              .async()
-              .go(),
-          );
-        }
-        await Promise.all(messagePromises);
-        return respond(200, { updatedGames: totalGames });
-      }
-    }
-    return respond(200, { updatedGames: 0 });
-  } else {
-    return respond(200, { events: 0 });
-  }
-});
-
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGamesName = 'Games';
@@ -636,7 +592,10 @@ async function getCompleteGameIds(): Promise<number[]> {
     .query('status')
     .eq('complete')
     .exec();
-  console.log('getCompleteGameIds', completeGames.map(g => g.id));
+  console.log(
+    'getCompleteGameIds',
+    completeGames.map(g => g.id),
+  );
   return completeGames.map(g => g.id);
 }
 
@@ -691,48 +650,6 @@ async function pullFromActionNetwork(dates: Date[]) {
     // console.log('all.length', all.length);
   });
   return all;
-}
-
-async function syncGamesDatabase(events: any[], deduplicate: boolean = false): Promise<Game[]> {
-  console.log('all events', events.length);
-  events = uniqBy(events, 'id');
-  console.log('all events unique', events.length);
-  if (deduplicate) {
-    const existingGames = await dbGame
-      .scan()
-      .all()
-      .exec();
-    const existingUniqueGameIds = [...new Set(existingGames.map(g => g.id))];
-    console.log('existingUniqueGameIds', existingUniqueGameIds.length);
-    events = events.filter(e => !existingUniqueGameIds.includes(e.id));
-    console.log({ events });
-    console.log('new events', events.length);
-  }
-  events.forEach((part, index, eventsArray) => {
-    const game = eventsArray[index];
-    eventsArray[index] = game.teams ? transformGame(game) : transformNonGame(game);
-  });
-  // copy so we can splice array but return entire array
-  const eventsCopy = JSON.parse(JSON.stringify(events));
-  const { tableGame } = process.env;
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  console.log('cleaned');
-
-  while (!!events.length) {
-    try {
-      const dbEvents = events.splice(0, 25);
-      console.log('batch putting:', dbEvents.length);
-      console.log('remaining:', events.length);
-      console.log({ dbEvents });
-      const result = await dbGame.batchPut(dbEvents);
-      console.log({ result });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  return eventsCopy;
-  // await publishNewGames(eventsCopy);
-  // return eventsCopy;
 }
 
 function transformNonGame(game: any): Game {
