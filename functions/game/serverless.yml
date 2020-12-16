@@ -100,17 +100,17 @@ functions:
             headers:
               - partner
               - authorization
-  syncNextFewDays:
-    handler: game.syncNextFewDays
-    description: sync action network api to database for next few days
-    timeout: 30
-    # environment:
-    #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
-    events:
-      - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
-      - http:
-          path: sync
-          method: post
+  # syncNextFewDays:
+  #   handler: game.syncNextFewDays
+  #   description: sync action network api to database for next few days
+  #   timeout: 30
+  #   # environment:
+  #   #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+  #   events:
+  #     - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
+  #     - http:
+  #         path: sync
+  #         method: post
   syncActiveAirtable:
     handler: game.syncActiveAirtable
     description: sync active games into airtable

@@ -536,22 +536,22 @@ function buildAirtableGames(games: Game[]) {
   return transformed;
 }
 
-module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('sync games to database for next few days...');
-  const datesToPull = [
-    moment().toDate(),
-    moment()
-      .add(1, 'd')
-      .toDate(),
-    moment()
-      .add(2, 'd')
-      .toDate(),
-  ];
-  console.log('sync');
-  const allEvents: any = await pullFromActionNetwork(datesToPull);
-  await syncGamesDatabase(allEvents, true);
-  return respond(200);
-});
+// module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async event => {
+//   console.log('sync games to database for next few days...');
+//   const datesToPull = [
+//     moment().toDate(),
+//     moment()
+//       .add(1, 'd')
+//       .toDate(),
+//     moment()
+//       .add(2, 'd')
+//       .toDate(),
+//   ];
+//   console.log('sync');
+//   const allEvents: any = await pullFromActionNetwork(datesToPull);
+//   await syncGamesDatabase(allEvents, true);
+//   return respond(200);
+// });
 
 // module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
 // 	const game: Game = JSON.parse(event.Records[0].body);
