@@ -3,8 +3,11 @@
 ##     "theContext": $util.toJson($context)
 ## }
 
-#set($myresponse = {
-  "$ctx.args.testy": $ctx.result
-})    
+## #set($myresponse = {
+##   "$ctx.args.testy": $ctx.result
+## })    
+## #set($myresponse = {
+##   "$ctx.args.testy": $ctx.result
+## })    
 
-$util.toJson($myresponse)
+$util.toJson($context)
