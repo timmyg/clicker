@@ -105,7 +105,7 @@ custom:
       - dataSource: fetchBoxProgramFunction
         type: BoxLive
         field: program
-        request: box/request-get-source.vtl
+        request: box/request-get-source-2.vtl
         response: response.vtl
       - dataSource: fetchBoxProgramGameFunction
         type: Program
