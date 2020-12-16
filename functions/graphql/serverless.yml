@@ -91,7 +91,7 @@ custom:
         type: Query
         field: box
         request: box/request-get.vtl
-        response: response.vtl
+        response: response-2.vtl
       - dataSource: Boxes
         type: Query
         field: boxes
