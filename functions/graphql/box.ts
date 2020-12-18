@@ -10,9 +10,9 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 
 export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('event', JSON.stringify(event));
-  const { channel, channelMinor, locationRegion } = event.source;
+  const { channel, channelMinor, region } = event.source;
   if (channel) {
-    const queryParams = { channel, channelMinor, region: locationRegion };
+    const queryParams = { channel, channelMinor, region };
     console.log({ queryParams });
     const programResult = await new Invoke()
       .service('program')
