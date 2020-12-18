@@ -99,6 +99,7 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     channelMinor,
     channelChangeSource: source,
     channelChangeAt: moment().unix() * 1000,
+    region: location.region,
   };
 
   // set lockedProgrammingId if highly rated automation
