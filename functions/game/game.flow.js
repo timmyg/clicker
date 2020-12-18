@@ -441,6 +441,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     // })
     .find(id);
   // .all();
+  console.log({ game });
   return respond(200, game);
 });
 
