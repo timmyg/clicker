@@ -103,7 +103,7 @@ type Game {
 }
 
 type Program {
-  gameId: Int
+  gameId: String
   game: Game
   channel: Int
   channelId: Int
