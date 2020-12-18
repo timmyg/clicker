@@ -24,7 +24,8 @@
           },
         "live": {
             "M": {
-              "channel": $util.dynamodb.toDynamoDBJson(0)
+              "channel": $util.dynamodb.toDynamoDBJson(0),
+              "region": $util.dynamodb.toDynamoDBJson($context.arguments.region)
             }
           }
     }
