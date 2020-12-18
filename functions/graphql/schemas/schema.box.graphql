@@ -156,7 +156,7 @@ type BoxConfiguration {
 type Box {
   id: ID!
   locationId: String!
-  locationRegion: String!
+  region: String!
   label: String
   zone: String
   configuration: BoxConfiguration!
