@@ -91,6 +91,7 @@ type GameTeam {
 type Game {
   id: String!
   title: String!
+  isOver: Boolean
   # start: String
   # id: Int
   # status: String
