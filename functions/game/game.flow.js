@@ -347,7 +347,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ event });
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGamesName = 'Games';
-  const { recordId, homeTeam, awayTeam } = await base(airtableGamesName).find(id);
+  const airtableGame = await base(airtableGamesName).find(id).fields;
+  console.log({ airtableGame });
+  const { recordId, homeTeam, awayTeam } = airtableGame;
   console.log({ recordId, homeTeam, awayTeam });
   const game = {
     id: recordId,
