@@ -33,95 +33,6 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
-const dbGame = dynamoose.model(
-  process.env.tableGame,
-  {
-    start: { type: String, hashKey: true },
-    id: {
-      type: Number,
-      rangeKey: true,
-      index: {
-        global: true,
-        // name: 'idOnlyGlobalIndex',
-        // project: false,
-      },
-    },
-    status: {
-      type: String,
-      required: true,
-      index: {
-        global: true,
-      },
-    },
-    leagueName: String,
-    scoreboard: {
-      display: String,
-      clock: String,
-      period: Number,
-    },
-    broadcast: {
-      network: String,
-    },
-    away: {
-      id: Number,
-      score: Number,
-      name: {
-        full: String,
-        short: String,
-        abbr: String,
-        display: String,
-      },
-      logo: String,
-      rank: Number,
-      book: {
-        moneyline: String,
-        spread: String,
-      },
-    },
-    home: {
-      id: Number,
-      score: Number,
-      name: {
-        full: String,
-        short: String,
-        abbr: String,
-        display: String,
-      },
-      logo: String,
-      rank: Number,
-      book: {
-        moneyline: String,
-        spread: String,
-      },
-    },
-    book: {
-      total: Number,
-    },
-    summary: {
-      // GameStatus
-      started: Boolean,
-      blowout: Boolean,
-      ended: Boolean,
-      description: String,
-      liveRating: Number,
-    },
-  },
-  {
-    timestamps: true,
-    expires: {
-      ttl: 86400,
-      attribute: 'expires',
-      returnExpiredItems: false,
-      defaultExpires: x => {
-        return moment(x.start)
-          .add(9, 'hours')
-          .toDate();
-      },
-    },
-  },
-);
-// }
-
 type actionNetworkRequest = {
   sport: string,
   params?: any,
@@ -435,13 +346,12 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGamesName = 'Games';
-  const game = await base(airtableGamesName)
-    // .select({
-    //   filterByFormula: `{id} == ${id}`,
-    // })
-    .find(id);
-  // .all();
-  console.log({ game });
+  const { recordId, homeTeam, awayTeam } = await base(airtableGamesName).find(id);
+  console.log({ recordId, homeTeam, awayTeam });
+  const game = {
+    id: recordId,
+    title: `${awayTeam} @ ${homeTeam}`,
+  };
   return respond(200, game);
 });
 
@@ -455,67 +365,67 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 //   return respond(200, game);
 // });
 
-module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('get games');
-  console.time('all scores!');
-  // const allGames: Game[] = await dbGame.scan().exec();
-  let games: Game[] = await dbGame.scan().exec();
-  console.log('allGames', games.length);
-  games = [
-    ...games.filter(g => g.status === 'inprogress'),
-    ...games.filter(g => g.status === 'complete'),
-    ...games.filter(g => g.status === 'scheduled'),
-    ...games.filter(g => g.status === 'time-tbd'),
-  ];
-  console.log('sortedGames', games.length);
-  games = [
-    ...games.filter(g => g.leagueName === 'ncaaf'),
-    ...games.filter(g => g.leagueName === 'ncaab'),
-    ...games.filter(g => g.leagueName === 'nfl'),
-    ...games.filter(g => g.leagueName === 'nba'),
-    ...games.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
-  ];
-  console.log('sortedGames', games.length);
-  return respond(200, games);
-});
+// module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
+//   console.log('get games');
+//   console.time('all scores!');
+//   // const allGames: Game[] = await dbGame.scan().exec();
+//   let games: Game[] = await dbGame.scan().exec();
+//   console.log('allGames', games.length);
+//   games = [
+//     ...games.filter(g => g.status === 'inprogress'),
+//     ...games.filter(g => g.status === 'complete'),
+//     ...games.filter(g => g.status === 'scheduled'),
+//     ...games.filter(g => g.status === 'time-tbd'),
+//   ];
+//   console.log('sortedGames', games.length);
+//   games = [
+//     ...games.filter(g => g.leagueName === 'ncaaf'),
+//     ...games.filter(g => g.leagueName === 'ncaab'),
+//     ...games.filter(g => g.leagueName === 'nfl'),
+//     ...games.filter(g => g.leagueName === 'nba'),
+//     ...games.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
+//   ];
+//   console.log('sortedGames', games.length);
+//   return respond(200, games);
+// });
 
-module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
-  const gamesCount = 5;
+// module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
+//   const gamesCount = 5;
 
-  const inProgressGamesPromise: Game[] = dbGame
-    .query('status')
-    .eq('inprogress')
-    .exec();
+//   const inProgressGamesPromise: Game[] = dbGame
+//     .query('status')
+//     .eq('inprogress')
+//     .exec();
 
-  const upcomingGamesPromise: Game[] = dbGame
-    .query('status')
-    .eq('scheduled')
-    .exec();
+//   const upcomingGamesPromise: Game[] = dbGame
+//     .query('status')
+//     .eq('scheduled')
+//     .exec();
 
-  console.time('games');
-  let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
-  console.timeEnd('games');
+//   console.time('games');
+//   let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
+//   console.timeEnd('games');
 
-  inProgressGames = inProgressGames
-    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
-    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .filter(g => !!g.broadcast)
-    .sort((a, b) => a.start.localeCompare(b.start));
-  upcomingGames = upcomingGames
-    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
-    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .filter(g => !!g.broadcast)
-    .sort((a, b) => a.start.localeCompare(b.start));
+//   inProgressGames = inProgressGames
+//     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+//     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+//     .filter(g => !!g.broadcast)
+//     .sort((a, b) => a.start.localeCompare(b.start));
+//   upcomingGames = upcomingGames
+//     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+//     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+//     .filter(g => !!g.broadcast)
+//     .sort((a, b) => a.start.localeCompare(b.start));
 
-  let games = upcomingGames;
+//   let games = upcomingGames;
 
-  if (inProgressGames && inProgressGames[0]) {
-    games = [inProgressGames[0], ...games];
-  }
+//   if (inProgressGames && inProgressGames[0]) {
+//     games = [inProgressGames[0], ...games];
+//   }
 
-  games = games.slice(0, gamesCount);
-  return respond(200, games);
-});
+//   games = games.slice(0, gamesCount);
+//   return respond(200, games);
+// });
 
 function buildAirtableGames(games: Game[]) {
   const transformed = [];
@@ -592,17 +502,17 @@ function getInProgressAndCompletedGames(response: any): Game[] {
   return response.filter(e => ['inprogress', 'complete'].includes(e.status));
 }
 
-async function getCompleteGameIds(): Promise<number[]> {
-  const completeGames: Game[] = await dbGame
-    .query('status')
-    .eq('complete')
-    .exec();
-  console.log(
-    'getCompleteGameIds',
-    completeGames.map(g => g.id),
-  );
-  return completeGames.map(g => g.id);
-}
+// async function getCompleteGameIds(): Promise<number[]> {
+//   const completeGames: Game[] = await dbGame
+//     .query('status')
+//     .eq('complete')
+//     .exec();
+//   console.log(
+//     'getCompleteGameIds',
+//     completeGames.map(g => g.id),
+//   );
+//   return completeGames.map(g => g.id);
+// }
 
 async function pullFromActionNetwork(dates: Date[]) {
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';

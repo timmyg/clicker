@@ -89,15 +89,17 @@ type GameTeam {
 }
 
 type Game {
-  start: String
-  id: Int
-  status: String
-  leagueName: String
-  scoreboard: GameScoreboard
-  broadcast: GameBroadcast
-  away: GameTeam
-  home: GameTeam
-  summary: GameStatus
+  id: String!
+  title: String!
+  # start: String
+  # id: Int
+  # status: String
+  # leagueName: String
+  # scoreboard: GameScoreboard
+  # broadcast: GameBroadcast
+  # away: GameTeam
+  # home: GameTeam
+  # summary: GameStatus
 }
 
 type Program {
