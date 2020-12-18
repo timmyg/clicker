@@ -196,7 +196,7 @@ const dbProgram = dynamoose.model(
     description: String,
     durationMins: Number, // mins
     gameId: {
-      type: Number,
+      type: String,
       index: {
         global: true,
         // name: 'idOnlyGlobalIndex',
@@ -1204,9 +1204,6 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
   const messagePromises = [];
 
   // commenting out publish because consumers are taking way too many resources
-
-
-
 
   // console.time(`publish ${programs.length} messages`);
   // for (const program of programs) {
