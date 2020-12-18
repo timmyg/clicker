@@ -2,10 +2,13 @@
   <layout-basic>
     <Header></Header>
     <section class="main">
-      <c-section-header :data="sectionHeader" class="center-content reveal-from-bottom brand-font" />
+      <c-section-header
+        :data="sectionHeader"
+        class="center-content reveal-from-bottom brand-font"
+      />
       <Features />
       <FeaturesCards />
-      <ScoreboardMini />
+      <!-- <ScoreboardMini /> -->
       <Buy />
       <TilesProducts :skip="'control-center'" />
     </section>
@@ -44,7 +47,7 @@ export default {
           content: this.sectionHeader.paragraph
         }
       ]
-    }
+    };
   },
   data() {
     return {

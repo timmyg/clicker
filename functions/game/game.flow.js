@@ -387,49 +387,49 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  console.log('searching for games to update');
-  try {
-    const programs = await base(airtableControlCenter)
-      .select({
-        filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 1 )`,
-      })
-      .all();
+// module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
+//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+//   console.log('searching for games to update');
+//   try {
+//     const programs = await base(airtableControlCenter)
+//       .select({
+//         filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 1 )`,
+//       })
+//       .all();
 
-    console.log(`found ${programs.length} programs`);
-    if (programs.length) {
-      for (const program of programs) {
-        const recordId: string = program.id;
-        const gameId: number = program.get('gameId');
-        const game: Game = await dbGame
-          .queryOne('id')
-          .eq(gameId)
-          .exec();
-        console.log({ recordId, gameId, game });
-        if (game) {
-          if (game.summary) {
-            await base(airtableControlCenter).update(recordId, {
-              gameOver: game.summary.ended,
-              gameStatus: game.summary.description,
-            });
-          }
-        } else {
-          await new Invoke()
-            .service('notification')
-            .name('sendControlCenter')
-            .body({ text: `game not found: ${gameId}` })
-            .async()
-            .go();
-        }
-      }
-    }
-    return respond(200);
-  } catch (e) {
-    console.error(e);
-    Raven.captureException(e);
-  }
-});
+//     console.log(`found ${programs.length} programs`);
+//     if (programs.length) {
+//       for (const program of programs) {
+//         const recordId: string = program.id;
+//         const gameId: number = program.get('gameId');
+//         const game: Game = await dbGame
+//           .queryOne('id')
+//           .eq(gameId)
+//           .exec();
+//         console.log({ recordId, gameId, game });
+//         if (game) {
+//           if (game.summary) {
+//             await base(airtableControlCenter).update(recordId, {
+//               gameOver: game.summary.ended,
+//               gameStatus: game.summary.description,
+//             });
+//           }
+//         } else {
+//           await new Invoke()
+//             .service('notification')
+//             .name('sendControlCenter')
+//             .body({ text: `game not found: ${gameId}` })
+//             .async()
+//             .go();
+//         }
+//       }
+//     }
+//     return respond(200);
+//   } catch (e) {
+//     console.error(e);
+//     Raven.captureException(e);
+//   }
+// });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
