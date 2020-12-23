@@ -89,8 +89,13 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
           }
           live {
             channel
+            channelChangeSource
+            channelChangeAt
+            lockedUntil
+            lockedProgrammingIds
             program @include(if: $fetchProgram) {
               title
+              start
               game {
                 isOver
               }
