@@ -84,7 +84,7 @@ functions:
     description: sync active games into airtable
     timeout: 12
     events:
-      - schedule: cron(9/10 * * * ? *) # Every 9th minute
+      - schedule: cron(4/10,9/10 * * * ? *)
       - http:
           path: sync/airtable/active
           method: post

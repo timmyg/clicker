@@ -8,6 +8,8 @@ const dynamoose = require('dynamoose');
 const moment = require('moment-timezone');
 const objectMapper = require('object-mapper');
 const { uniqBy } = require('lodash');
+const airtableGamesName = 'Games';
+
 let AWS;
 if (!process.env.IS_LOCAL) {
   AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
@@ -170,61 +172,55 @@ function isBlowout(game: Game): boolean {
   }
 }
 
-module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () => {
   const timeToPull = moment()
     .subtract(12, 'hours')
     .toDate();
-  const allEvents = await pullFromActionNetwork([timeToPull]);
-  const ipAndCompletedGames = getInProgressAndCompletedGames(allEvents);
+  // get everything from AN
+  const allActionEvents = await pullFromActionNetwork([timeToPull]);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableGamesName = 'Games';
-  const allExistingGames = await base(airtableGamesName)
+  const allExistingAirtableGames = await base(airtableGamesName)
     .select({
-      filterByFormula: `
-        AND(
-          OR(
-            LEN({controlCenterLink}) > 0,
-            LEN({waitOnGamesLinks}) > 0
-          ),
-          {isOver} != TRUE()
-        )
-      `,
+      fields: ['id', 'statusDisplay', 'recordId'],
     })
     .all();
-  const updateGames = [];
-  for (const game of allExistingGames) {
-    console.log({ game });
-    const gameId = game.fields.id;
-    const gameRecordId = game.id;
-    const gameScore = ipAndCompletedGames.find(g => g.id === gameId);
-    console.log({ gameScore });
-    if (gameScore) {
-      const updatedGame = {
-        id: gameRecordId,
-        fields: {
-          isOver: gameScore.status === 'complete',
-          description: gameScore.status_display,
-        },
+  const airtablePromises = [];
+  for (const actionGame of allActionEvents) {
+    // check if game existing in airtable
+    const existingAirtableGame = allExistingAirtableGames.find(atGame => atGame.fields.id === actionGame.id);
+    // create if not
+    if (!existingAirtableGame) {
+      const newAirtableGame = transformGameActionToAirtable(actionGame);
+      console.info('creating', newAirtableGame);
+      airtablePromises.push(base(airtableGamesName).create(newAirtableGame));
+      continue;
+    }
+    // if status is not same, update
+    if (existingAirtableGame.fields.statusDisplay != actionGame.status_display) {
+      const gameToUpdate = {
+        fields: transformGameActionToAirtable(actionGame),
+        id: existingAirtableGame.fields.recordId,
       };
-      updateGames.push(updatedGame);
+      console.log('updating', gameToUpdate);
+      airtablePromises.push(base(airtableGamesName).update(gameToUpdate));
+      continue;
     }
   }
-  const promises = [];
-  while (!!updateGames.length) {
+  const promisesSliced = [];
+  while (!!airtablePromises.length) {
     try {
-      const slice = updateGames.splice(0, 10);
-      promises.push(base(airtableGamesName).update(slice));
+      const slice = airtablePromises.splice(0, 10);
+      promisesSliced.push(slice);
     } catch (e) {
       console.error(e);
     }
   }
-  await Promise.all(promises);
+  await Promise.all(promisesSliced);
   return respond(200);
 });
 
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableGamesName = 'Games';
   const allExistingGames = await base(airtableGamesName)
     .select({ fields: ['id', 'start'] })
     .all();
@@ -346,7 +342,6 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   console.log({ event });
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableGamesName = 'Games';
   const airtableGame = await base(airtableGamesName).find(id);
   console.log({ airtableGame });
   const { recordId, homeTeam, awayTeam, isOver } = airtableGame.fields;
@@ -435,7 +430,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 function buildAirtableGames(games: Game[]) {
   const transformed = [];
   games.forEach(game => {
-    console.log({ game });
+    // console.log({ game });
     // console.log({ game });
     const { id, leagueName, start, broadcast } = game;
     const homeTeam = game.home ? game.home.name.full : '';
@@ -570,6 +565,27 @@ async function pullFromActionNetwork(dates: Date[]) {
     // console.log('all.length', all.length);
   });
   return all;
+}
+
+function transformGameActionToAirtable(game: any) {
+  const away = game.teams.find(t => t.id === game.away_team_id);
+  const home = game.teams.find(t => t.id === game.home_team_id);
+  const map = {
+    id: 'id',
+    start_time: 'start',
+    status: 'status',
+    status_display: 'statusDisplay',
+    'broadcast.network': 'channelTitle',
+    league_name: 'leagueName',
+    status: 'status',
+  };
+  const transformedGame = objectMapper(game, map);
+  transformedGame.homeTeam = home.full_name;
+  transformedGame.awayTeam = away.full_name;
+  // console.log({ transformedGame });
+  transformedGame.isOver = transformedGame.status === 'complete';
+
+  return transformedGame;
 }
 
 function transformNonGame(game: any): Game {
