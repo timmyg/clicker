@@ -46,7 +46,7 @@ input BoxLiveInput {
   # locked: Boolean
   # appLocked: Boolean
   lockedUntil: AWSTimestamp
-  region: String!
+  region: String
 }
 
 type GameScoreboard {
