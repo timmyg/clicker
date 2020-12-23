@@ -81,11 +81,14 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
             ip
             clientAddress
           }
-          program @include(if: $fetchProgram) {
-            name
-            title
-            game {
-              isOver
+          live {
+            channel
+            program @include(if: $fetchProgram) {
+              name
+              title
+              game {
+                isOver
+              }
             }
           }
           label
