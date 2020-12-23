@@ -24,11 +24,13 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
 
 export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getPathParameters(event);
+  const fetchProgram = event.queryStringParameters && event.queryStringParameters.fetchProgram;
 
   const result = await new Invoke()
     .service('graphql')
     .name('getBoxes')
     .body({ locationId })
+    .queryParams({ fetchProgram: true })
     .sync()
     .go();
 

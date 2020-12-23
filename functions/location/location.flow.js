@@ -649,6 +649,7 @@ async function getLocationWithBoxes(locationId) {
     .service('box')
     .name('getAll')
     .pathParams({ locationId })
+    .queryParams({ fetchProgram: true })
     .sync()
     .go();
   console.log(locationBoxes);
@@ -1259,7 +1260,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     .go();
   const programs = programsResult && programsResult.data;
 
-  // attach db program
+  // attach db program (this is bad code)
   ccPrograms.map(ccp => {
     const program: Program = programs.find(p => p.programmingId === ccp.fields.programmingId);
     ccp.db = program;
@@ -1730,7 +1731,7 @@ function findBoxGameOver(boxes: Box[]): ?Box {
     .filter(b => b.live)
     .filter(b => b.live.program)
     .filter(b => b.live.program.game)
-    .find(b => b.live.program.game.summary.ended);
+    .find(b => b.live.program.game.isOver);
 }
 
 function findBoxBlowout(boxes: Box[]): ?Box {
@@ -1744,6 +1745,7 @@ function findBoxBlowout(boxes: Box[]): ?Box {
 
 function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   console.info('findBoxWithoutRating');
+  // console.log({ boxes });
   return boxes
     .filter(b => b.live)
     .filter(b => b.live.program)

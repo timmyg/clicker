@@ -17,7 +17,7 @@
     "invoke:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json",
     "invoke:boxes:updateBoxInfo": "serverless invoke local --function updateBoxInfo --stage develop --path ../.resources/data/box-update.json",
-    "invoke:controlCenterV2byLocation": "npm run build && serverless invoke local --function controlCenterV2byLocation --path ../.resources/data/location-update.json --stage develop",
+    "invoke:controlCenterByLocation": "npm run build && serverless invoke local --function controlCenterByLocation --path ../.resources/data/location-update.json --stage develop",
     "invoke:updateAirtableNowShowing": "npm run build && serverless invoke local --function updateAirtableNowShowing --stage develop",
     "invoke:updateAllBoxesPrograms": "npm run build && serverless invoke local --function updateAllBoxesPrograms --stage develop",
     "invoke:getLocationDetailsPage": "npm run build && serverless invoke local --function getLocationDetailsPage --path ../.resources/data/location-update.json --stage develop",

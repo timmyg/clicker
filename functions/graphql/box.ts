@@ -65,6 +65,8 @@ export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
 
 export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getBody(event);
+  const fetchProgram = event.queryStringParameters && event.queryStringParameters.fetchProgram;
+
   const graphqlClient = getGraphqlClient();
   const query = gql(`
     query boxes($locationId: String!)
@@ -79,6 +81,13 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
             ip
             clientAddress
           }
+          program @include(if: $fetchProgram) {
+            name
+            title
+            game {
+              isOver
+            }
+          }
           label
           zone
         }
@@ -88,6 +97,7 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
     query,
     variables: {
       locationId,
+      fetchProgram,
     },
   });
   console.log({ locationId });
