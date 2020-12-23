@@ -124,6 +124,8 @@ export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getPathParameters(event);
   const live = getBody(event);
 
+  console.log({ locationId, boxId, live });
+
   const { data } = await new Invoke()
     .service('graphql')
     .name('updateBoxLive')
