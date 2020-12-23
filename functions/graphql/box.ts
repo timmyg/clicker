@@ -36,6 +36,12 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
   }
 });
 
+export const fetchBoxIsLocked = RavenLambdaWrapper.handler(Raven, async event => {
+  const live = event.source;
+  console.log({ live });
+  return true;
+});
+
 export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getBody(event);
   const graphqlClient = getGraphqlClient();
@@ -89,6 +95,7 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
                 isOver
               }
             }
+            locked
           }
           label
           zone
@@ -175,6 +182,7 @@ export const updateBoxLive = RavenLambdaWrapper.handler(Raven, async event => {
         locationId
         live {
           channel
+          locked
         }
       }
     }`,

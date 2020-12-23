@@ -43,8 +43,6 @@ input BoxLiveInput {
   channelChangeSource: String
   updatedAt: AWSTimestamp
   lockedProgrammingIds: [String]
-  # locked: Boolean
-  # appLocked: Boolean
   lockedUntil: AWSTimestamp
   region: String
 }
@@ -138,7 +136,6 @@ type BoxLive {
   program: Program
   lockedProgrammingIds: [String]
   locked: Boolean
-  appLocked: Boolean
   lockedUntil: AWSTimestamp
   updatedAt: AWSTimestamp
   region: String!
