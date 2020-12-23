@@ -12,7 +12,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     serviceName: ${self:service}
-    tableGame: ${self:custom.tableGame}
     airtableKey: ${env:AIRTABLE_KEY}
     airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
   iamRoleStatements:
@@ -33,7 +32,6 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  tableGame: games-${self:custom.stage}
   prune:
     automatic: true
     number: 3
