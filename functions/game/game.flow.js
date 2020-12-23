@@ -184,15 +184,19 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () =
       fields: ['id', 'statusDisplay', 'recordId'],
     })
     .all();
-  const airtablePromises = [];
+  const airtableCreates = [];
+  const airtableUpdates = [];
   for (const actionGame of allActionEvents) {
     // check if game existing in airtable
     const existingAirtableGame = allExistingAirtableGames.find(atGame => atGame.fields.id === actionGame.id);
     // create if not
     if (!existingAirtableGame) {
-      const newAirtableGame = transformGameActionToAirtable(actionGame);
+      const newAirtableGame = {
+        fields: transformGameActionToAirtable(actionGame),
+      };
       console.info('creating', newAirtableGame);
-      airtablePromises.push(base(airtableGamesName).create(newAirtableGame));
+      // airtableCreatePromises.push(base(airtableGamesName).create(newAirtableGame));
+      airtableCreates.push(newAirtableGame);
       continue;
     }
     // if status is not same, update
@@ -202,15 +206,25 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () =
         id: existingAirtableGame.fields.recordId,
       };
       console.log('updating', gameToUpdate);
-      airtablePromises.push(base(airtableGamesName).update(gameToUpdate));
+      // airtableUpdatePromises.push(base(airtableGamesName).update(gameToUpdate));
+      airtableUpdates.push(gameToUpdate);
       continue;
     }
   }
   const promisesSliced = [];
-  while (!!airtablePromises.length) {
+  while (!!airtableCreates.length) {
     try {
-      const slice = airtablePromises.splice(0, 10);
-      promisesSliced.push(slice);
+      const slice = airtableCreates.splice(0, 10);
+      console.log('hii!', slice[0]);
+      promisesSliced.push(base(airtableGamesName).create(slice));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  while (!!airtableUpdates.length) {
+    try {
+      const slice = airtableUpdates.splice(0, 10);
+      promisesSliced.push(base(airtableGamesName).update(slice));
     } catch (e) {
       console.error(e);
     }
