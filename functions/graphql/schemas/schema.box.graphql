@@ -110,7 +110,7 @@ type Program {
   createdAt: String
   description: String
   durationMins: Int
-  end: Int
+  end: AWSTimestamp
   endFromNow: String
   expires: String
   hd: Boolean
@@ -121,9 +121,9 @@ type Program {
   programType: String
   region: String
   repeat: Boolean
-  start: Int
+  start: AWSTimestamp
   startFromNow: String
-  startOriginal: Int
+  startOriginal: AWSTimestamp
   title: String
   updatedAt: String
 }
