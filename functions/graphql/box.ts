@@ -69,7 +69,7 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 
   const graphqlClient = getGraphqlClient();
   const query = gql(`
-    query boxes($locationId: String!)
+    query boxes($locationId: String!, $fetchProgram: Boolean)
       {
         boxes(locationId: $locationId) {
           id

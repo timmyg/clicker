@@ -7,7 +7,7 @@ scalar Long
 
 type Query {
   box(id: ID!, locationId: String!): Box
-  boxes(locationId: String!): [Box]
+  boxes(locationId: String!, fetchProgram: Boolean = false): [Box]
 }
 
 type Mutation {
