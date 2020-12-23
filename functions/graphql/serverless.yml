@@ -68,11 +68,11 @@ custom:
         description: 'attach current program'
         config:
           functionName: fetchBoxProgram
-      - type: AWS_LAMBDA
-        name: fetchBoxIsLocked
-        description: 'logic for whether box is locked or not'
-        config:
-          functionName: fetchBoxIsLocked
+      # - type: AWS_LAMBDA
+      #   name: fetchBoxIsLocked
+      #   description: 'logic for whether box is locked or not'
+      #   config:
+      #     functionName: fetchBoxIsLocked
       - type: AWS_LAMBDA
         name: fetchBoxProgramGameFunction
         description: 'attach program game'
@@ -112,11 +112,11 @@ custom:
         field: program
         request: box/request-get-source.vtl
         response: response.vtl
-      - dataSource: fetchBoxIsLocked
-        type: BoxLive
-        field: locked
-        request: box/request-get-source.vtl
-        response: response.vtl
+      # - dataSource: fetchBoxIsLocked
+      #   type: BoxLive
+      #   field: locked
+      #   request: box/request-get-source.vtl
+      #   response: response.vtl
       - dataSource: fetchBoxProgramGameFunction
         type: Program
         field: game
@@ -133,8 +133,8 @@ functions:
     handler: box.fetchBoxProgram
   fetchBoxProgramGame:
     handler: box.fetchBoxProgramGame
-  fetchBoxIsLocked:
-    handler: box.fetchBoxIsLocked
+  # fetchBoxIsLocked:
+  #   handler: box.fetchBoxIsLocked
   getBox:
     handler: box.getBox
   getBoxes:

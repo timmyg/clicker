@@ -36,11 +36,11 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
   }
 });
 
-export const fetchBoxIsLocked = RavenLambdaWrapper.handler(Raven, async event => {
-  const live = event.source;
-  console.log({ live });
-  return true;
-});
+// export const fetchBoxIsLocked = RavenLambdaWrapper.handler(Raven, async event => {
+//   const live = event.source;
+//   console.log({ live });
+//   return true;
+// });
 
 export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getBody(event);

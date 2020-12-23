@@ -1745,7 +1745,7 @@ function findBoxBlowout(boxes: Box[]): ?Box {
 
 function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): ?Box {
   console.info('findBoxWithoutRating');
-  // console.log({ boxes });
+  console.log({ boxes });
   return boxes
     .filter(b => b.live)
     .filter(b => b.live.program)
