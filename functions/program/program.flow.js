@@ -1205,24 +1205,24 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
 
   // commenting out publish because consumers are taking way too many resources
 
-  // console.time(`publish ${programs.length} messages`);
-  // for (const program of programs) {
-  //   const messageData = {
-  //     Message: JSON.stringify(program),
-  //     TopicArn: topicArn,
-  //   };
+  console.time(`publish ${programs.length} messages`);
+  for (const program of programs) {
+    const messageData = {
+      Message: JSON.stringify(program),
+      TopicArn: topicArn,
+    };
 
-  //   try {
-  //     if (!process.env.IS_LOCAL) {
-  //       messagePromises.push(sns.publish(messageData).promise());
-  //       i++;
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // await Promise.all(messagePromises);
-  // console.timeEnd(`publish ${messagePromises.length} messages`);
+    try {
+      if (!process.env.IS_LOCAL) {
+        messagePromises.push(sns.publish(messageData).promise());
+        i++;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  await Promise.all(messagePromises);
+  console.timeEnd(`publish ${messagePromises.length} messages`);
   console.log(i, 'topics published to:', topicArn);
 }
 
