@@ -132,7 +132,7 @@ type BoxLive {
   channel: Int!
   channelMinor: Int
   channelChangeAt: AWSTimestamp
-  channelChangeSource: String
+  channelChangeSource: String!
   program: Program
   lockedProgrammingIds: [String]
   locked: Boolean
