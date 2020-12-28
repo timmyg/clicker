@@ -7,8 +7,8 @@ provider:
   runtime: nodejs10.x
   # tracing: true
   logRetentionInDays: 14
-  apiKeys:
-    - myFirstKey
+  # apiKeys:
+  #   - myFirstKey
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
