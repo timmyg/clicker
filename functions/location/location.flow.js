@@ -693,7 +693,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
-    let source = '';
+    let source = null;
     if (originalChannel !== major) {
       source = zapTypes.manual;
       // let program: Program = null;

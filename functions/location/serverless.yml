@@ -233,8 +233,7 @@ functions:
     description: check what is on all locations boxes (to detect manual changes)
     timeout: 30
     events:
-      - schedule: cron(3/10 * * * ? *) # Every 3rd minute
-      - schedule: cron(8/10 * * * ? *) # Every 8th minute
+      - schedule: cron(3/10,8/10 * * * ? *) # Every 3rd and 8th minute
       - http:
           path: boxes/info
           method: post
