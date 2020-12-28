@@ -8,6 +8,8 @@ const dynamoose = require('dynamoose');
 const moment = require('moment-timezone');
 const objectMapper = require('object-mapper');
 const { uniqBy } = require('lodash');
+const airtableGamesName = 'Games';
+
 let AWS;
 if (!process.env.IS_LOCAL) {
   AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
@@ -33,95 +35,6 @@ if (process.env.NODE_ENV === 'test') {
     region: 'test',
   });
 }
-const dbGame = dynamoose.model(
-  process.env.tableGame,
-  {
-    start: { type: String, hashKey: true },
-    id: {
-      type: Number,
-      rangeKey: true,
-      index: {
-        global: true,
-        // name: 'idOnlyGlobalIndex',
-        // project: false,
-      },
-    },
-    status: {
-      type: String,
-      required: true,
-      index: {
-        global: true,
-      },
-    },
-    leagueName: String,
-    scoreboard: {
-      display: String,
-      clock: String,
-      period: Number,
-    },
-    broadcast: {
-      network: String,
-    },
-    away: {
-      id: Number,
-      score: Number,
-      name: {
-        full: String,
-        short: String,
-        abbr: String,
-        display: String,
-      },
-      logo: String,
-      rank: Number,
-      book: {
-        moneyline: String,
-        spread: String,
-      },
-    },
-    home: {
-      id: Number,
-      score: Number,
-      name: {
-        full: String,
-        short: String,
-        abbr: String,
-        display: String,
-      },
-      logo: String,
-      rank: Number,
-      book: {
-        moneyline: String,
-        spread: String,
-      },
-    },
-    book: {
-      total: Number,
-    },
-    summary: {
-      // GameStatus
-      started: Boolean,
-      blowout: Boolean,
-      ended: Boolean,
-      description: String,
-      liveRating: Number,
-    },
-  },
-  {
-    timestamps: true,
-    expires: {
-      ttl: 86400,
-      attribute: 'expires',
-      returnExpiredItems: false,
-      defaultExpires: x => {
-        return moment(x.start)
-          .add(9, 'hours')
-          .toDate();
-      },
-    },
-  },
-);
-// }
-
 type actionNetworkRequest = {
   sport: string,
   params?: any,
@@ -259,105 +172,69 @@ function isBlowout(game: Game): boolean {
   }
 }
 
-module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () => {
   const timeToPull = moment()
     .subtract(12, 'hours')
     .toDate();
-  const allEvents = await pullFromActionNetwork([timeToPull]);
-  const ipAndCompletedGames = getInProgressAndCompletedGames(allEvents);
+  // get everything from AN
+  const allActionEvents = await pullFromActionNetwork([timeToPull]);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableGamesName = 'Games';
-  const allExistingGames = await base(airtableGamesName)
+  const allExistingAirtableGames = await base(airtableGamesName)
     .select({
-      filterByFormula: `
-        AND(
-          OR(
-            LEN({controlCenterLink}) > 0,
-            LEN({waitOnGamesLinks}) > 0
-          ),
-          {isOver} != TRUE()
-        )
-      `,
+      fields: ['id', 'statusDisplay', 'recordId'],
     })
     .all();
-  const updateGames = [];
-  for (const game of allExistingGames) {
-    console.log({ game });
-    const gameId = game.fields.id;
-    const gameRecordId = game.id;
-    const gameScore = ipAndCompletedGames.find(g => g.id === gameId);
-    console.log({ gameScore });
-    if (gameScore) {
-      const updatedGame = {
-        id: gameRecordId,
-        fields: {
-          isOver: gameScore.status === 'complete',
-          description: gameScore.status_display,
-        },
+  const airtableCreates = [];
+  const airtableUpdates = [];
+  for (const actionGame of allActionEvents) {
+    // check if game existing in airtable
+    const existingAirtableGame = allExistingAirtableGames.find(atGame => atGame.fields.id === actionGame.id);
+    // create if not
+    if (!existingAirtableGame) {
+      const newAirtableGame = {
+        fields: transformGameActionToAirtable(actionGame),
       };
-      updateGames.push(updatedGame);
+      console.info('creating', newAirtableGame);
+      // airtableCreatePromises.push(base(airtableGamesName).create(newAirtableGame));
+      airtableCreates.push(newAirtableGame);
+      continue;
+    }
+    // if status is not same, update
+    if (existingAirtableGame.fields.statusDisplay != actionGame.status_display) {
+      const gameToUpdate = {
+        fields: transformGameActionToAirtable(actionGame),
+        id: existingAirtableGame.fields.recordId,
+      };
+      console.log('updating', gameToUpdate);
+      // airtableUpdatePromises.push(base(airtableGamesName).update(gameToUpdate));
+      airtableUpdates.push(gameToUpdate);
+      continue;
     }
   }
-  const promises = [];
-  while (!!updateGames.length) {
+  const promisesSliced = [];
+  while (!!airtableCreates.length) {
     try {
-      const slice = updateGames.splice(0, 10);
-      promises.push(base(airtableGamesName).update(slice));
+      const slice = airtableCreates.splice(0, 10);
+      console.log('hii!', slice[0]);
+      promisesSliced.push(base(airtableGamesName).create(slice));
     } catch (e) {
       console.error(e);
     }
   }
-  await Promise.all(promises);
-  return respond(200);
-});
-
-module.exports.syncActive = RavenLambdaWrapper.handler(Raven, async event => {
-  // 5 hours messed up at midnight
-  const timeToPull = moment()
-    .subtract(12, 'hours')
-    .toDate();
-  console.log({ timeToPull });
-  const allEvents = await pullFromActionNetwork([timeToPull]);
-  if (allEvents && allEvents.length) {
-    console.log('allEvents', allEvents.length);
-    let ipAndCompletedGames = getInProgressAndCompletedGames(allEvents);
-    console.log('ipAndCompletedGames', ipAndCompletedGames.length);
-    let gamesToUpdate = [];
-    // let updatedGames;
-    if (ipAndCompletedGames && ipAndCompletedGames.length) {
-      // dont update again in database if already updated...
-      const alreadyCompletedGameIds = await getCompleteGameIds();
-      console.log({ alreadyCompletedGameIds });
-      gamesToUpdate = ipAndCompletedGames.filter(g => !alreadyCompletedGameIds.includes(g.id));
-      console.log({ gamesToUpdate });
-      console.log('gamesToUpdate', gamesToUpdate.length);
-      if (!!gamesToUpdate.length) {
-        const totalGames = gamesToUpdate.length;
-        const updatedGames = await syncGamesDatabase(gamesToUpdate, false);
-        const messagePromises = [];
-        for (const game of updatedGames) {
-          messagePromises.push(
-            new Invoke()
-              .service('program')
-              .name('updateGame')
-              .body(game)
-              .async()
-              .go(),
-          );
-        }
-        await Promise.all(messagePromises);
-        return respond(200, { updatedGames: totalGames });
-      }
+  while (!!airtableUpdates.length) {
+    try {
+      const slice = airtableUpdates.splice(0, 10);
+      promisesSliced.push(base(airtableGamesName).update(slice));
+    } catch (e) {
+      console.error(e);
     }
-    return respond(200, { updatedGames: 0 });
-  } else {
-    return respond(200, { events: 0 });
   }
+  await Promise.all(promisesSliced);
+  return respond(200);
 });
 
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableGamesName = 'Games';
   const allExistingGames = await base(airtableGamesName)
     .select({ fields: ['id', 'start'] })
     .all();
@@ -431,56 +308,64 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  console.log('searching for games to update');
-  try {
-    const programs = await base(airtableControlCenter)
-      .select({
-        filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 1 )`,
-      })
-      .all();
+// module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
+//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+//   console.log('searching for games to update');
+//   try {
+//     const programs = await base(airtableControlCenter)
+//       .select({
+//         filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 1 )`,
+//       })
+//       .all();
 
-    console.log(`found ${programs.length} programs`);
-    if (programs.length) {
-      for (const program of programs) {
-        const recordId: string = program.id;
-        const gameId: number = program.get('gameId');
-        const game: Game = await dbGame
-          .queryOne('id')
-          .eq(gameId)
-          .exec();
-        console.log({ recordId, gameId, game });
-        if (game) {
-          if (game.summary) {
-            await base(airtableControlCenter).update(recordId, {
-              gameOver: game.summary.ended,
-              gameStatus: game.summary.description,
-            });
-          }
-        } else {
-          await new Invoke()
-            .service('notification')
-            .name('sendControlCenter')
-            .body({ text: `game not found: ${gameId}` })
-            .async()
-            .go();
-        }
-      }
-    }
-    return respond(200);
-  } catch (e) {
-    console.error(e);
-    Raven.captureException(e);
-  }
-});
+//     console.log(`found ${programs.length} programs`);
+//     if (programs.length) {
+//       for (const program of programs) {
+//         const recordId: string = program.id;
+//         const gameId: number = program.get('gameId');
+//         const game: Game = await dbGame
+//           .queryOne('id')
+//           .eq(gameId)
+//           .exec();
+//         console.log({ recordId, gameId, game });
+//         if (game) {
+//           if (game.summary) {
+//             await base(airtableControlCenter).update(recordId, {
+//               gameOver: game.summary.ended,
+//               gameStatus: game.summary.description,
+//             });
+//           }
+//         } else {
+//           await new Invoke()
+//             .service('notification')
+//             .name('sendControlCenter')
+//             .body({ text: `game not found: ${gameId}` })
+//             .async()
+//             .go();
+//         }
+//       }
+//     }
+//     return respond(200);
+//   } catch (e) {
+//     console.error(e);
+//     Raven.captureException(e);
+//   }
+// });
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
-  const game: Game = await dbGame
-    .queryOne('id')
-    .eq(id)
-    .exec();
+  console.log({ event });
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableGame = await base(airtableGamesName).find(id);
+  console.log({ airtableGame });
+  const { recordId, homeTeam, awayTeam, isOver } = airtableGame.fields;
+  console.log({ recordId, homeTeam, awayTeam, isOver });
+  const game = {
+    id: recordId,
+    title: `${awayTeam} @ ${homeTeam}`,
+    isOver,
+  };
+  console.log({ game });
   return respond(200, game);
 });
 
@@ -494,72 +379,72 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 //   return respond(200, game);
 // });
 
-module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('get games');
-  console.time('all scores!');
-  // const allGames: Game[] = await dbGame.scan().exec();
-  let games: Game[] = await dbGame.scan().exec();
-  console.log('allGames', games.length);
-  games = [
-    ...games.filter(g => g.status === 'inprogress'),
-    ...games.filter(g => g.status === 'complete'),
-    ...games.filter(g => g.status === 'scheduled'),
-    ...games.filter(g => g.status === 'time-tbd'),
-  ];
-  console.log('sortedGames', games.length);
-  games = [
-    ...games.filter(g => g.leagueName === 'ncaaf'),
-    ...games.filter(g => g.leagueName === 'ncaab'),
-    ...games.filter(g => g.leagueName === 'nfl'),
-    ...games.filter(g => g.leagueName === 'nba'),
-    ...games.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
-  ];
-  console.log('sortedGames', games.length);
-  return respond(200, games);
-});
+// module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
+//   console.log('get games');
+//   console.time('all scores!');
+//   // const allGames: Game[] = await dbGame.scan().exec();
+//   let games: Game[] = await dbGame.scan().exec();
+//   console.log('allGames', games.length);
+//   games = [
+//     ...games.filter(g => g.status === 'inprogress'),
+//     ...games.filter(g => g.status === 'complete'),
+//     ...games.filter(g => g.status === 'scheduled'),
+//     ...games.filter(g => g.status === 'time-tbd'),
+//   ];
+//   console.log('sortedGames', games.length);
+//   games = [
+//     ...games.filter(g => g.leagueName === 'ncaaf'),
+//     ...games.filter(g => g.leagueName === 'ncaab'),
+//     ...games.filter(g => g.leagueName === 'nfl'),
+//     ...games.filter(g => g.leagueName === 'nba'),
+//     ...games.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
+//   ];
+//   console.log('sortedGames', games.length);
+//   return respond(200, games);
+// });
 
-module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
-  const gamesCount = 5;
+// module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
+//   const gamesCount = 5;
 
-  const inProgressGamesPromise: Game[] = dbGame
-    .query('status')
-    .eq('inprogress')
-    .exec();
+//   const inProgressGamesPromise: Game[] = dbGame
+//     .query('status')
+//     .eq('inprogress')
+//     .exec();
 
-  const upcomingGamesPromise: Game[] = dbGame
-    .query('status')
-    .eq('scheduled')
-    .exec();
+//   const upcomingGamesPromise: Game[] = dbGame
+//     .query('status')
+//     .eq('scheduled')
+//     .exec();
 
-  console.time('games');
-  let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
-  console.timeEnd('games');
+//   console.time('games');
+//   let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
+//   console.timeEnd('games');
 
-  inProgressGames = inProgressGames
-    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
-    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .filter(g => !!g.broadcast)
-    .sort((a, b) => a.start.localeCompare(b.start));
-  upcomingGames = upcomingGames
-    .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
-    .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-    .filter(g => !!g.broadcast)
-    .sort((a, b) => a.start.localeCompare(b.start));
+//   inProgressGames = inProgressGames
+//     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+//     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+//     .filter(g => !!g.broadcast)
+//     .sort((a, b) => a.start.localeCompare(b.start));
+//   upcomingGames = upcomingGames
+//     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
+//     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
+//     .filter(g => !!g.broadcast)
+//     .sort((a, b) => a.start.localeCompare(b.start));
 
-  let games = upcomingGames;
+//   let games = upcomingGames;
 
-  if (inProgressGames && inProgressGames[0]) {
-    games = [inProgressGames[0], ...games];
-  }
+//   if (inProgressGames && inProgressGames[0]) {
+//     games = [inProgressGames[0], ...games];
+//   }
 
-  games = games.slice(0, gamesCount);
-  return respond(200, games);
-});
+//   games = games.slice(0, gamesCount);
+//   return respond(200, games);
+// });
 
 function buildAirtableGames(games: Game[]) {
   const transformed = [];
   games.forEach(game => {
-    console.log({ game });
+    // console.log({ game });
     // console.log({ game });
     const { id, leagueName, start, broadcast } = game;
     const homeTeam = game.home ? game.home.name.full : '';
@@ -580,22 +465,22 @@ function buildAirtableGames(games: Game[]) {
   return transformed;
 }
 
-module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async event => {
-  console.log('sync games to database for next few days...');
-  const datesToPull = [
-    moment().toDate(),
-    moment()
-      .add(1, 'd')
-      .toDate(),
-    moment()
-      .add(2, 'd')
-      .toDate(),
-  ];
-  console.log('sync');
-  const allEvents: any = await pullFromActionNetwork(datesToPull);
-  await syncGamesDatabase(allEvents, true);
-  return respond(200);
-});
+// module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async event => {
+//   console.log('sync games to database for next few days...');
+//   const datesToPull = [
+//     moment().toDate(),
+//     moment()
+//       .add(1, 'd')
+//       .toDate(),
+//     moment()
+//       .add(2, 'd')
+//       .toDate(),
+//   ];
+//   console.log('sync');
+//   const allEvents: any = await pullFromActionNetwork(datesToPull);
+//   await syncGamesDatabase(allEvents, true);
+//   return respond(200);
+// });
 
 // module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
 // 	const game: Game = JSON.parse(event.Records[0].body);
@@ -631,14 +516,17 @@ function getInProgressAndCompletedGames(response: any): Game[] {
   return response.filter(e => ['inprogress', 'complete'].includes(e.status));
 }
 
-async function getCompleteGameIds(): Promise<number[]> {
-  const completeGames: Game[] = await dbGame
-    .query('status')
-    .eq('complete')
-    .exec();
-  console.log('getCompleteGameIds', completeGames.map(g => g.id));
-  return completeGames.map(g => g.id);
-}
+// async function getCompleteGameIds(): Promise<number[]> {
+//   const completeGames: Game[] = await dbGame
+//     .query('status')
+//     .eq('complete')
+//     .exec();
+//   console.log(
+//     'getCompleteGameIds',
+//     completeGames.map(g => g.id),
+//   );
+//   return completeGames.map(g => g.id);
+// }
 
 async function pullFromActionNetwork(dates: Date[]) {
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
@@ -693,46 +581,25 @@ async function pullFromActionNetwork(dates: Date[]) {
   return all;
 }
 
-async function syncGamesDatabase(events: any[], deduplicate: boolean = false): Promise<Game[]> {
-  console.log('all events', events.length);
-  events = uniqBy(events, 'id');
-  console.log('all events unique', events.length);
-  if (deduplicate) {
-    const existingGames = await dbGame
-      .scan()
-      .all()
-      .exec();
-    const existingUniqueGameIds = [...new Set(existingGames.map(g => g.id))];
-    console.log('existingUniqueGameIds', existingUniqueGameIds.length);
-    events = events.filter(e => !existingUniqueGameIds.includes(e.id));
-    console.log({ events });
-    console.log('new events', events.length);
-  }
-  events.forEach((part, index, eventsArray) => {
-    const game = eventsArray[index];
-    eventsArray[index] = game.teams ? transformGame(game) : transformNonGame(game);
-  });
-  // copy so we can splice array but return entire array
-  const eventsCopy = JSON.parse(JSON.stringify(events));
-  const { tableGame } = process.env;
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  console.log('cleaned');
+function transformGameActionToAirtable(game: any) {
+  const away = game.teams.find(t => t.id === game.away_team_id);
+  const home = game.teams.find(t => t.id === game.home_team_id);
+  const map = {
+    id: 'id',
+    start_time: 'start',
+    status: 'status',
+    status_display: 'statusDisplay',
+    'broadcast.network': 'channelTitle',
+    league_name: 'leagueName',
+    status: 'status',
+  };
+  const transformedGame = objectMapper(game, map);
+  transformedGame.homeTeam = home.full_name;
+  transformedGame.awayTeam = away.full_name;
+  // console.log({ transformedGame });
+  transformedGame.isOver = transformedGame.status === 'complete';
 
-  while (!!events.length) {
-    try {
-      const dbEvents = events.splice(0, 25);
-      console.log('batch putting:', dbEvents.length);
-      console.log('remaining:', events.length);
-      console.log({ dbEvents });
-      const result = await dbGame.batchPut(dbEvents);
-      console.log({ result });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  return eventsCopy;
-  // await publishNewGames(eventsCopy);
-  // return eventsCopy;
+  return transformedGame;
 }
 
 function transformNonGame(game: any): Game {

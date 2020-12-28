@@ -196,7 +196,7 @@ const dbProgram = dynamoose.model(
     description: String,
     durationMins: Number, // mins
     gameId: {
-      type: Number,
+      type: String,
       index: {
         global: true,
         // name: 'idOnlyGlobalIndex',
@@ -1205,9 +1205,6 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
 
   // commenting out publish because consumers are taking way too many resources
 
-
-
-
   // console.time(`publish ${programs.length} messages`);
   // for (const program of programs) {
   //   const messageData = {
@@ -1333,23 +1330,6 @@ module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven
   } else {
     console.info(`skipping ${programmingId}`);
   }
-  return respond(200);
-});
-
-module.exports.updateGame = RavenLambdaWrapper.handler(Raven, async event => {
-  const game: Game = getBody(event);
-  console.log({ game });
-  const programs = await dbProgram
-    .query('gameId')
-    .eq(game.id)
-    .exec();
-  const promises = [];
-  for (const program of programs) {
-    promises.push(updateProgramGame(program.id, program.region, game));
-  }
-  console.log('promises:', promises.length);
-  const updateGamesResult = await Promise.all(promises);
-  console.log({ updateGamesResult: JSON.stringify(updateGamesResult) });
   return respond(200);
 });
 

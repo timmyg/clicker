@@ -8,8 +8,8 @@ class Api {
       baseURL: process.env.API_BASE_URL,
       timeout: 6000,
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   }
 
@@ -32,7 +32,7 @@ class Api {
 
       return await this.axios.put(`/locations/${this.locationId}/boxes`, {
         boxes,
-        ip
+        ip,
       });
     } catch (error) {
       return console.error(error);
@@ -50,7 +50,7 @@ class Api {
 
   async saveBoxesInfo(boxes) {
     try {
-      console.log("saveBoxesInfo ->", boxes);
+      logger.info("saveBoxesInfo..... ->", boxes);
       const res = await this.axios.post(
         `/locations/${this.locationId}/boxes/info`,
         { boxes }

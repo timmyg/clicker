@@ -1,0 +1,7 @@
+{
+    "body": { "ip": "193.44.34.544", "boxes": [{ "clientAddr": "0", "locationName": "name12" }] },
+    "pathParameters": {
+      "locationId": "2315bdc0-e9c4-11e9-8e67-69a62af831a3"
+    }
+  }
+  
