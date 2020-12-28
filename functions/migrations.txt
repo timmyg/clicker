@@ -24,3 +24,4 @@
 24. move location.boxes to own table
 25. airtable Control Center gameId should reference game.recordId
 26. delete program and game stacks
+27. add status, statusDisplay to Games
