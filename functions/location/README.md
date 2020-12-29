@@ -8,3 +8,5 @@ location needs
 box needs
 
 - zone
+
+* zone

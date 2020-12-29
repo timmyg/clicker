@@ -960,6 +960,8 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
         );
         return !alreadyExists;
       });
+      // combine when same programmingId
+      allPrograms = combineByProgrammingId(allPrograms);
       console.log('pulled programs unique:', allPrograms.length);
 
       let allAirtablePrograms = buildAirtablePrograms(allPrograms);
@@ -986,6 +988,30 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   }
   return respond(200);
 });
+
+function combineByProgrammingId(programs: Program[]) {
+  const programsProgrammingIdMap = {};
+  programs.forEach(p => {
+    const id = p.programmingId + p.start;
+    if (programsProgrammingIdMap[id]) {
+      programsProgrammingIdMap[id].push(p);
+    } else {
+      programsProgrammingIdMap[id] = [p];
+    }
+  });
+
+  const programsCombined = [];
+  Object.keys(programsProgrammingIdMap).map(function(key, i) {
+    console.log(key, i);
+    const program = {
+      ...programsProgrammingIdMap[key][0],
+      channelTitle: programsProgrammingIdMap[key].map(p => p.channelTitle).join(', '),
+    };
+    programsCombined.push(program);
+  });
+
+  return programsCombined;
+}
 
 async function getRecentlyUpdatedAirtablePrograms() {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -1551,3 +1577,4 @@ module.exports.getLocalChannelName = getLocalChannelName;
 module.exports.getChannels = getChannels;
 module.exports.getDefaultRating = getDefaultRating;
 module.exports.getProgramListTiebreaker = getProgramListTiebreaker;
+module.exports.combineByProgrammingId = combineByProgrammingId;

@@ -23,5 +23,9 @@
 23. link programs to data with targeting, targetingIds fields
 24. move location.boxes to own table
 25. airtable Control Center gameId should reference game.recordId
+<<<<<<< HEAD
+26. delete program and game stacks
+=======
 26. delete program and game stacks
 27. add status, statusDisplay to Games
+>>>>>>> 06eb1313bae924b3cb583068ba354a5efd01ffdc
