@@ -8,6 +8,7 @@ const {
   transformSIUrl,
   getDefaultRating,
   getProgramListTiebreaker,
+  combineByProgrammingId,
 } = require('./program');
 const data = require('../.resources/old/channelschedule-2.json');
 const file = require('./program');
@@ -15,6 +16,23 @@ const file = require('./program');
 test('smoke test', () => {
   const response = file.health();
   expect(response).toBeTruthy;
+});
+
+test('combineByProgrammingId combines programs by programming id and start time', () => {
+  const programs = [
+    { channel: 'FS1', programmingId: '1', start: 100 },
+    { channel: 'ABC', programmingId: '3', start: 100 }, // combine
+    { channel: 'FOX', programmingId: '2', start: 100 },
+    { channel: 'ESPN', programmingId: '3', start: 100 }, // combine
+    { channel: 'ESPN2', programmingId: '3', start: 900 },
+  ];
+
+  const result = combineByProgrammingId(programs);
+  expect(result.length).toEqual(4);
+  expect(result[0].channelTitle).toEqual('FS1');
+  expect(result[1].channelTitle).toEqual('FOX');
+  expect(result[2].channelTitle).toEqual('ABC, ESPN');
+  expect(result[3].channelTitle).toEqual('ESPN2');
 });
 
 test('generateId generates the same id when same program', () => {
