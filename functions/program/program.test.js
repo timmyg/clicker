@@ -20,11 +20,11 @@ test('smoke test', () => {
 
 test('combineByProgrammingId combines programs by programming id and start time', () => {
   const programs = [
-    { channel: 'FS1', programmingId: '1', start: 100 },
-    { channel: 'ABC', programmingId: '3', start: 100 }, // combine
-    { channel: 'FOX', programmingId: '2', start: 100 },
-    { channel: 'ESPN', programmingId: '3', start: 100 }, // combine
-    { channel: 'ESPN2', programmingId: '3', start: 900 },
+    { channelTitle: 'FS1', programmingId: '1', start: 100 },
+    { channelTitle: 'ABC', programmingId: '3', start: 100 }, // combine
+    { channelTitle: 'FOX', programmingId: '2', start: 100 },
+    { channelTitle: 'ESPN', programmingId: '3', start: 100 }, // combine
+    { channelTitle: 'ESPN2', programmingId: '3', start: 900 },
   ];
 
   const result = combineByProgrammingId(programs);

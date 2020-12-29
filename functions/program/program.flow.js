@@ -1005,7 +1005,7 @@ function combineByProgrammingId(programs: Program[]) {
     console.log(key, i);
     const program = {
       ...programsProgrammingIdMap[key][0],
-      channelTitle: programsProgrammingIdMap[key].map(p => p.channel).join(', '),
+      channelTitle: programsProgrammingIdMap[key].map(p => p.channelTitle).join(', '),
     };
     programsCombined.push(program);
   });
