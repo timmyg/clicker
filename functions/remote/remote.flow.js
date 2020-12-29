@@ -31,21 +31,22 @@ class LosantApi {
 
   async sendCommand(name, losantId, payload, losantProductionOverride?: boolean) {
     try {
-      // TODO: for non-production environment, maybe lets have an override param
-      //  that is set on the location?
+      console.log({ losantId });
+      // only send in non production environment when has losantProductionOverride
       if (process.env.stage === 'prod' || losantProductionOverride) {
         const params = {
           applicationId: process.env.losantAppId,
           deviceId: losantId,
           deviceCommand: { name, payload },
         };
+        console.info(`running command via losant (${process.env.stage})`);
         return await this.client.device
           .sendCommand(params)
           .then(console.info)
           .catch(console.error);
       } else {
         console.info(
-          `*** not changing channel via losant (${process.env.stage} environment, no losantProductionOverride)`,
+          `*** not running command via losant (${process.env.stage} environment, no losantProductionOverride)`,
         );
       }
     } catch (error) {
@@ -96,8 +97,9 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
   let updateBoxInfoBody: BoxInfoRequest = {
     channel,
     channelMinor,
-    source,
+    channelChangeSource: source,
     channelChangeAt: moment().unix() * 1000,
+    region: reservation.location.region,
   };
 
   // set lockedProgrammingId if highly rated automation
@@ -107,17 +109,17 @@ module.exports.command = RavenLambdaWrapper.handler(Raven, async event => {
     reservation.program && reservation.program.clickerRating && highRatings.includes(reservation.program.clickerRating);
   if (source === zapTypes.automation && isHighlyRated) {
     updateBoxInfoBody.lockedProgrammingIds = [reservation.program.programmingId];
-    updateBoxInfoBody.removeLockedUntil = true;
-    updateBoxInfoBody.program = reservation.program;
+    // updateBoxInfoBody.removeLockedUntil = true;
+    // updateBoxInfoBody.program = reservation.program;
   }
 
   console.log({ updateBoxInfoBody });
 
   await new Invoke()
-    .service('location')
-    .name('updateBoxInfo')
+    .service('box')
+    .name('updateLive')
     .body(updateBoxInfoBody)
-    .pathParams({ id: reservation.location.id, boxId: reservation.box.id })
+    .pathParams({ locationId: reservation.location.id, boxId: reservation.box.id })
     .async()
     .go();
 
@@ -226,12 +228,14 @@ async function sendNotification(source: string, reservation: Reservation) {
       .name('get')
       .pathParams({ id: userId })
       .go();
-    console.log({userResult});
-    const userLifetimeZaps = userResult && userResult.data ? userResult.data.lifetimeZaps : ''
+    console.log({ userResult });
+    const userLifetimeZaps = userResult && userResult.data ? userResult.data.lifetimeZaps : '';
 
     const text =
       getCurrentProgramText(eventName, reservation.location, program) +
-      ` [${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(userId.length - 5)}, ${userLifetimeZaps} zaps]` +
+      ` [${reservation.minutes} mins, TV: ${reservation.box.label}, user: ${userId.substr(
+        userId.length - 5,
+      )}, ${userLifetimeZaps} zaps]` +
       previousProgramText;
     await new Invoke()
       .service('notification')
@@ -256,11 +260,11 @@ async function sendNotification(source: string, reservation: Reservation) {
 
 module.exports.syncWidgetBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    const { losantId } = getBody(event);
+    const { losantId, losantProductionOverride } = getBody(event);
     const api = new LosantApi();
 
     const command = 'sync.boxes';
-    await api.sendCommand(command, losantId, {});
+    await api.sendCommand(command, losantId, {}, losantProductionOverride);
     return respond();
   } catch (e) {
     console.error(e);

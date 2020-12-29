@@ -1,0 +1,44 @@
+{
+  "body": [
+    {
+      "configuration": {
+        "automationActive": true,
+        "appActive": true
+      },
+      "updatedAt": 1586106408000,
+      "label": "1",
+      "zone": "1",
+      "info": {
+        "clientAddress": "0",
+        "ip": "192.168.0.1"
+      },
+      "live": {
+        "channel": 5,
+        "channelChangeAt": 1585951332000,
+        "channelChangeSource": "app",
+        "lockedUntil": 1585953126000
+      }
+    },
+    {
+      "configuration": {
+        "automationActive": true,
+        "appActive": true
+      },
+      "label": "2",
+      "zone": "2",
+      "info": {
+        "clientAddress": "0",
+        "ip": "192.168.0.2"
+      },
+      "live": {
+        "channel": 5,
+        "channelChangeAt": 1585951332000,
+        "channelChangeSource": "app",
+        "lockedUntil": 1585953126000
+      }
+    }
+  ],
+  "pathParameters": {
+    "locationId": "2315bdc0-e9c4-11e9-8e67-69a62af831a3"
+  }
+}

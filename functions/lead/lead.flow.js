@@ -4,8 +4,6 @@ const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 const Hubspot = require('hubspot');
 const hubspot = new Hubspot({ apiKey: process.env.hubspotApiKey });
-const Trello = require('trello');
-const trello = new Trello(process.env.trelloApiKey, process.env.trelloAuthToken);
 const stage = process.env.stage;
 const webSignupsListId = '5ca63bbb28858a47be1b5f9a';
 
@@ -45,7 +43,10 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 async function createHubspotContact(email: string, promo: string) {
-  const properties = [{ property: 'email', value: email }, { property: 'source', value: 'landing page' }];
+  const properties = [
+    { property: 'email', value: email },
+    { property: 'source', value: 'landing page' },
+  ];
   if (promo) {
     properties.push({ property: 'promo', value: promo });
   }
@@ -56,7 +57,7 @@ async function createHubspotContact(email: string, promo: string) {
   return hubspotContact;
 }
 
-async function createTrelloCard(email) {
-  const card = await trello.addCard(email, '', webSignupsListId);
-  return card;
-}
+// async function createTrelloCard(email) {
+//   const card = await trello.addCard(email, '', webSignupsListId);
+//   return card;
+// }

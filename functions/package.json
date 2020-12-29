@@ -1,6 +1,6 @@
 {
   "name": "functions",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "wrapper project for serverless functions",
   "scripts": {
     "test": "jest --coverage",
@@ -8,14 +8,44 @@
     "invoke:widget:register": "serverless invoke local --function register --path ../.resources/data/widget.json",
     "invoke:command": "serverless invoke local --function remoteCommand --path resources/data/command.json"
   },
+  "workspaces": {
+    "packages": [
+      "box"
+    ],
+    "nohoist": [
+      "**/box/**"
+    ]
+  },
   "dependencies": {
-    "clicker-types": "git+https://github.com/teamclicker/clicker-types.git#v0.0.1",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12"
+    "aws-appsync": "^1.7.0",
+    "aws-sdk": "^2.619.0",
+    "aws-xray-sdk": "^2.5.0",
+    "cross-fetch": "^3.0.6",
+    "dotenv": "^6.2.0",
+    "dynamodb-toolbox": "^0.1.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "graphql-tag": "^2.11.0",
+    "moment": "^2.24.0",
+    "serverless-appsync-plugin": "^1.4.0",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
+    "source-map-support": "^0.5.19",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "flow-bin": "^0.113.0",
-    "flow-typed": "^2.5.1",
+    "@types/jest": "^26.0.15",
+    "flow-bin": "^0.107.0",
+    "flow-remove-types": "^2.107.0",
+    "jest": "^24.1.0",
+    "serverless": "^2.11.1",
+    "serverless-bundle": "^3.2.1",
+    "serverless-deployment-bucket": "^1.1.0",
+    "serverless-domain-manager": "^3.3.0",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-plugin-tracing": "^2.0.0",
+    "serverless-plugin-typescript": "^1.1.9",
     "serverless-prune-plugin": "^1.4.0",
-    "serverless-sentry": "^1.2.0"
+    "serverless-sentry": "^1.2.0",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.0.5"
   }
 }

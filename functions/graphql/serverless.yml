@@ -1,0 +1,147 @@
+service: graphql
+frameworkVersion: '>=2.0.0 <3.0.0'
+provider:
+  name: aws
+  memorySize: 1024
+  versionFunctions: false
+  runtime: nodejs12.x
+  # tracing: true
+  logRetentionInDays: 14
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    region: ${opt:region, self:provider.region}
+    tableBox: ${self:custom.tableBox}
+    graphqlApiUrl: ${env:GRAPHQL_API_URL, self:custom.graphqlApiUrl}
+    graphqlApiKey: ${env:GRAPHQL_API_KEY, self:custom.graphqlApiKey}
+  iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
+resources:
+  Resources:
+    BoxesTable: ${file(./resources/table.boxes.yml)}
+plugins:
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+  - serverless-domain-manager
+  - serverless-sentry
+  - serverless-dotenv-plugin
+  - serverless-plugin-tracing
+  - serverless-appsync-plugin
+  - serverless-bundle
+custom:
+  stage: ${opt:stage}
+  tableBox: boxes-${self:custom.stage}
+  graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
+  graphqlApiKey: { Fn::GetAtt: [GraphQlApiKeyDefault, ApiKey] }
+  bundle:
+    sourcemaps: false
+    linting: false
+  prune:
+    automatic: true
+    number: 3
+  domains: ${file(../serverless.common.yml):domains}
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: graphql
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
+  dotenv:
+    basePath: ../
+  appSync:
+    name: ${self:service}-${self:custom.stage}
+    authenticationType: API_KEY
+    apiKeys:
+      - myApiKey
+    schema:
+      - schemas/schema.box.graphql
+    dataSources:
+      - type: AMAZON_DYNAMODB
+        name: Boxes
+        config:
+          tableName: ${self:custom.tableBox}
+      - type: AWS_LAMBDA
+        name: fetchBoxProgramFunction
+        description: 'attach current program'
+        config:
+          functionName: fetchBoxProgram
+      # - type: AWS_LAMBDA
+      #   name: fetchBoxIsLocked
+      #   description: 'logic for whether box is locked or not'
+      #   config:
+      #     functionName: fetchBoxIsLocked
+      - type: AWS_LAMBDA
+        name: fetchBoxProgramGameFunction
+        description: 'attach program game'
+        config:
+          functionName: fetchBoxProgramGame
+    # defaultMappingTemplates: # default templates. Useful for Lambda templates that are often repetitive. Will be used if the template is not specified in a resolver
+    #   request: request-get-source.vtl
+    #   response: response-get.vtl
+    mappingTemplates:
+      - dataSource: Boxes
+        type: Mutation
+        field: addBox
+        request: box/request-create.vtl
+        response: response.vtl
+      - dataSource: Boxes
+        type: Mutation
+        field: updateBoxLive
+        request: box/request-update-live.vtl
+        response: response.vtl
+      - dataSource: Boxes
+        type: Query
+        field: box
+        request: box/request-get.vtl
+        response: response.vtl
+      - dataSource: Boxes
+        type: Query
+        field: boxes
+        request: box/request-get-all.vtl
+        response: response-list.vtl
+      - dataSource: Boxes
+        type: Mutation
+        field: deleteBox
+        request: box/request-delete.vtl
+        response: response.vtl
+      - dataSource: fetchBoxProgramFunction
+        type: BoxLive
+        field: program
+        request: box/request-get-source.vtl
+        response: response.vtl
+      # - dataSource: fetchBoxIsLocked
+      #   type: BoxLive
+      #   field: locked
+      #   request: box/request-get-source.vtl
+      #   response: response.vtl
+      - dataSource: fetchBoxProgramGameFunction
+        type: Program
+        field: game
+        request: box/request-get-source.vtl
+        response: response.vtl
+functions:
+  health:
+    handler: box.health
+    events:
+      - http:
+          path: health
+          method: get
+  fetchBoxProgram:
+    handler: box.fetchBoxProgram
+  fetchBoxProgramGame:
+    handler: box.fetchBoxProgramGame
+  # fetchBoxIsLocked:
+  #   handler: box.fetchBoxIsLocked
+  getBox:
+    handler: box.getBox
+  getBoxes:
+    handler: box.getBoxes
+  removeBox:
+    handler: box.removeBox
+  createBoxes:
+    handler: box.createBoxes
+  updateBoxLive:
+    handler: box.updateBoxLive

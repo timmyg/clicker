@@ -12,7 +12,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     serviceName: ${self:service}
-    tableGame: ${self:custom.tableGame}
     airtableKey: ${env:AIRTABLE_KEY}
     airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
   iamRoleStatements:
@@ -33,7 +32,6 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  tableGame: games-${self:custom.stage}
   prune:
     automatic: true
     number: 3
@@ -56,38 +54,6 @@ custom:
     dsn: ${env:SENTRY_DSN_ENDPOINT}
   dotenv:
     basePath: ../
-resources:
-  Resources:
-    GamesTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableGame}
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: N
-          - AttributeName: status
-            AttributeType: S
-          - AttributeName: start
-            AttributeType: S
-        KeySchema:
-          - AttributeName: start
-            KeyType: HASH
-          - AttributeName: id
-            KeyType: RANGE
-        GlobalSecondaryIndexes:
-          - IndexName: statusGlobalIndex
-            KeySchema:
-              - AttributeName: status
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-          - IndexName: idGlobalIndex
-            KeySchema:
-              - AttributeName: id
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
 functions:
   health:
     handler: game.health
@@ -100,37 +66,25 @@ functions:
             headers:
               - partner
               - authorization
-  syncNextFewDays:
-    handler: game.syncNextFewDays
-    description: sync action network api to database for next few days
-    timeout: 30
-    # environment:
-    #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
-    events:
-      - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
-      - http:
-          path: sync
-          method: post
+  # syncNextFewDays:
+  #   handler: game.syncNextFewDays
+  #   description: sync action network api to database for next few days
+  #   timeout: 30
+  #   # environment:
+  #   #   newGameTopicArn: ${self:custom.newGameTopicArn.deployed}
+  #   events:
+  #     - schedule: cron(00 9 * * ? *) # every day @ 5:00am eastern
+  #     - http:
+  #         path: sync
+  #         method: post
   syncActiveAirtable:
     handler: game.syncActiveAirtable
     description: sync active games into airtable
     timeout: 12
     events:
-      - schedule: cron(9/10 * * * ? *) # Every 9th minute
+      - schedule: cron(4/10,9/10 * * * ? *)
       - http:
           path: sync/airtable/active
-          method: post
-  syncActive:
-    handler: game.syncActive
-    description: pull active from action network api, sync to db
-    timeout: 12
-    events:
-      # - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
-      # - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
-      - schedule: cron(3/10 * * * ? *) # Every 3th minute
-      - schedule: cron(8/10 * * * ? *) # Every 8th minute
-      - http:
-          path: sync/scores
           method: post
   syncAirtable:
     handler: game.syncAirtable
@@ -148,30 +102,30 @@ functions:
       - http:
           path: '{id}'
           method: get
-  scoreboard:
-    handler: game.scoreboard
-    description: get all games scores, used by webapp /scoreboard
-    events:
-      - http:
-          path: scoreboard
-          method: get
-  scoreboardLiveUpcoming:
-    handler: game.scoreboardLiveUpcoming
-    description: get 3 upcoming games scores
-    timeout: 10
-    events:
-      - http:
-          path: scoreboard/upcoming
-          method: get
-  updateAirtableGamesStatus:
-    handler: game.updateAirtableGamesStatus
-    description: update active games in airtable from db
-    timeout: 30
-    events:
-      # - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
-      # - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
-      # - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
-      - schedule: cron(9/10 * * * ? *) # Every 9th minute
-      - http:
-          path: airtable/live/status
-          method: put
+  # scoreboard:
+  #   handler: game.scoreboard
+  #   description: get all games scores, used by webapp /scoreboard
+  #   events:
+  #     - http:
+  #         path: scoreboard
+  #         method: get
+  # scoreboardLiveUpcoming:
+  #   handler: game.scoreboardLiveUpcoming
+  #   description: get 3 upcoming games scores
+  #   timeout: 10
+  #   events:
+  #     - http:
+  #         path: scoreboard/upcoming
+  #         method: get
+  # updateAirtableGamesStatus:
+  #   handler: game.updateAirtableGamesStatus
+  #   description: update active games in airtable from db
+  #   timeout: 30
+  #   events:
+  #     # - schedule: cron(0/2 21-4 ? * * *) # Every 2 minutes between 11pm UTC and 4am UTC
+  #     # - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
+  #     # - schedule: cron(0/10 4-21 ? * * *) # Every 10 minutes between 4am UTC and 9pm UTC
+  #     - schedule: cron(9/10 * * * ? *) # Every 9th minute
+  #     - http:
+  #         path: airtable/live/status
+  #         method: put

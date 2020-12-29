@@ -60,6 +60,7 @@ class Widget {
         return logger.error(err);
       }
       logger.info({ boxes: response, ip });
+      // {"boxes":{"locations":[{"clientAddr":"0","locationName":""}]},"ip":"192.168.0.19"}
       return this.api.setBoxes(ip, response.locations);
     });
   }
@@ -123,6 +124,7 @@ class Widget {
               const _remote = new DirecTV.Remote(ip);
               logger.info(`getTuned... ${boxId}, ${client}, ${ip}`);
               _remote.getTuned(client || "0", (err, response) => {
+                logger.info(err, response);
                 if (err) {
                   logger.error("getTuned error!!", err, ip);
                   if (
@@ -138,7 +140,7 @@ class Widget {
                   }
                 } else {
                   boxesInfo.push({ boxId, info: response });
-                  logger.info("saveBoxesInfo single saving...");
+                  logger.info("saveBoxesInfo saving 123...");
                   context.api.saveBoxesInfo(boxesInfo);
                 }
               });

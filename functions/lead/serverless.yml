@@ -7,14 +7,12 @@ provider:
   runtime: nodejs10.x
   # tracing: true
   logRetentionInDays: 14
-  apiKeys:
-    - myFirstKey
+  # apiKeys:
+  #   - myFirstKey
   deploymentBucket:
     name: serverless-deploys-clicker
   environment:
     hubspotApiKey: ${env:HUBSPOT_API_KEY}
-    trelloApiKey: ${env:TRELLO_API_KEY}
-    trelloAuthToken: ${env:TRELLO_AUTH_TOKEN}
     stage: ${self:custom.stage}
   iamRoleStatements:
     - Effect: 'Allow'

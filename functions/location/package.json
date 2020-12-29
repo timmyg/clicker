@@ -17,12 +17,13 @@
     "invoke:boxes:identify": "serverless invoke local --function identifyBoxes --path ../.resources/data/boxes.json",
     "invoke:boxes:labels": "serverless invoke local --function setLabels --path ../.resources/data/boxes-labels.json",
     "invoke:boxes:updateBoxInfo": "serverless invoke local --function updateBoxInfo --stage develop --path ../.resources/data/box-update.json",
-    "invoke:controlCenterV2byLocation": "npm run build && serverless invoke local --function controlCenterV2byLocation --path ../.resources/data/location-update.json --stage develop",
+    "invoke:controlCenterByLocation": "npm run build && serverless invoke local --function controlCenterByLocation --path ../.resources/data/location-update.json --stage develop",
     "invoke:updateAirtableNowShowing": "npm run build && serverless invoke local --function updateAirtableNowShowing --stage develop",
     "invoke:updateAllBoxesPrograms": "npm run build && serverless invoke local --function updateAllBoxesPrograms --stage develop",
     "invoke:getLocationDetailsPage": "npm run build && serverless invoke local --function getLocationDetailsPage --path ../.resources/data/location-update.json --stage develop",
     "invoke:syncAirtableLocations": "npm run build && serverless invoke local --function syncAirtableLocations --stage develop",
-    "invoke:syncAirtableRegions": "npm run build && serverless invoke local --function syncAirtableRegions --stage develop"
+    "invoke:syncAirtableRegions": "npm run build && serverless invoke local --function syncAirtableRegions --stage develop",
+    "invoke:setBoxes": "npm run build && serverless invoke local --function setBoxes --path ../.resources/data/v2/antenna-boxes.json --stage develop"
   },
   "author": "",
   "license": "ISC",
@@ -37,7 +38,7 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
     "mustache": "^4.0.0",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
+    "serverless-helpers": "github:timmyg/serverless-helpers#v0.3.12",
     "serverless-plugin-scripts": "^1.0.2"
   },
   "devDependencies": {
