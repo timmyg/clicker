@@ -975,6 +975,10 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
           console.error(e);
         }
       }
+      // publish live sports to get descriptions
+      const liveSportsPrograms = allPrograms.filter(p => {
+        return p.live && p.mainCategory === 'Sports';
+      });
       await publishNewPrograms(allPrograms, process.env.newProgramAirtableTopicArn);
       console.timeEnd('create');
     }
@@ -1194,7 +1198,7 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
   let transformedPrograms: Program[] = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);
-  await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
+  // await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
   console.log(dbResult);
 }
 
@@ -1202,8 +1206,6 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
   const messagePromises = [];
-
-  // commenting out publish because consumers are taking way too many resources
 
   console.time(`publish ${programs.length} messages`);
   for (const program of programs) {
