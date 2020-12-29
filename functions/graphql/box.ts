@@ -117,10 +117,10 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.log({ locationId });
   console.time('query');
-  const { data } = await gqlQuery;
+  const result = await gqlQuery;
   console.timeEnd('query');
-  console.log({ data });
-  return respond(200, data.boxes);
+  console.log(result);
+  return respond(200, !result || !result.data ? [] : result.data.boxes);
 });
 
 export const removeBox = RavenLambdaWrapper.handler(Raven, async event => {
