@@ -1340,10 +1340,11 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
 module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   console.time('get location');
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
+  // const location: Venue = await dbLocation
+  //   .queryOne('id')
+  //   .eq(id)
+  //   .exec();
+  const location: Venue = await getLocationWithBoxes(id);
   console.timeEnd('get location');
   const boxes = location.boxes
     .filter(box => !!box.configuration.automationActive || !!box.configuration.appActive)

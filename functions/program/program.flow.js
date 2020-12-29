@@ -975,7 +975,12 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
           console.error(e);
         }
       }
-      await publishNewPrograms(allPrograms, process.env.newProgramAirtableTopicArn);
+      // publish live sports to get descriptions
+      const liveSportsPrograms = allPrograms.filter(p => {
+        return p.live && p.mainCategory === 'Sports';
+      });
+      console.log('liveSportsPrograms to publish', liveSportsPrograms.length);
+      await publishNewPrograms(liveSportsPrograms, process.env.newProgramAirtableTopicArn);
       console.timeEnd('create');
     }
   }
@@ -1194,7 +1199,7 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
   let transformedPrograms: Program[] = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);
-  await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
+  // await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
   console.log(dbResult);
 }
 
@@ -1203,26 +1208,24 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
   let i = 0;
   const messagePromises = [];
 
-  // commenting out publish because consumers are taking way too many resources
+  console.time(`publish ${programs.length} messages`);
+  for (const program of programs) {
+    const messageData = {
+      Message: JSON.stringify(program),
+      TopicArn: topicArn,
+    };
 
-  // console.time(`publish ${programs.length} messages`);
-  // for (const program of programs) {
-  //   const messageData = {
-  //     Message: JSON.stringify(program),
-  //     TopicArn: topicArn,
-  //   };
-
-  //   try {
-  //     if (!process.env.IS_LOCAL) {
-  //       messagePromises.push(sns.publish(messageData).promise());
-  //       i++;
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // await Promise.all(messagePromises);
-  // console.timeEnd(`publish ${messagePromises.length} messages`);
+    try {
+      if (!process.env.IS_LOCAL) {
+        messagePromises.push(sns.publish(messageData).promise());
+        i++;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  await Promise.all(messagePromises);
+  console.timeEnd(`publish ${messagePromises.length} messages`);
   console.log(i, 'topics published to:', topicArn);
 }
 
