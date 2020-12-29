@@ -979,7 +979,8 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       const liveSportsPrograms = allPrograms.filter(p => {
         return p.live && p.mainCategory === 'Sports';
       });
-      await publishNewPrograms(allPrograms, process.env.newProgramAirtableTopicArn);
+      console.log('liveSportsPrograms to publish', liveSportsPrograms.length);
+      await publishNewPrograms(liveSportsPrograms, process.env.newProgramAirtableTopicArn);
       console.timeEnd('create');
     }
   }
