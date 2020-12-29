@@ -96,6 +96,7 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
             program @include(if: $fetchProgram) {
               title
               start
+              clickerRating
               game {
                 isOver
               }
