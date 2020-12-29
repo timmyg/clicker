@@ -24,9 +24,10 @@
           },
         "live": {
             "M": {
-              "channel": $util.dynamodb.toDynamoDBJson(0),
+              "channel": $util.dynamodb.toDynamoDBJson($context.arguments.channel),
+              "channelMinor": $util.dynamodb.toDynamoDBJson($context.arguments.channelMinor),
               "region": $util.dynamodb.toDynamoDBJson($context.arguments.region),
-              "channelChangeSource": $util.dynamodb.toDynamoDBJson("manual")
+              "channelChangeSource": $util.dynamodb.toDynamoDBJson($context.arguments.channelChangeSource)
             }
           }
     }
