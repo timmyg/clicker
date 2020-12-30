@@ -99,8 +99,12 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
               clickerRating
               channel
               channelMinor
+              gameId
               game {
                 isOver
+                title
+                status
+                statusDisplay
               }
             }
             locked
