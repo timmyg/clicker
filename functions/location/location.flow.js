@@ -872,10 +872,10 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         channelChangeSource: source,
         channelChangeAt: moment().unix() * 1000,
         region: locationBox.region,
-        // lockedUntil:
-        //   moment()
-        //     .add(lockHours, 'h')
-        //     .unix() * 1000,
+        lockedUntil:
+          moment()
+            .add(lockHours, 'h')
+            .unix() * 1000,
       })
       .pathParams({ locationId, boxId })
       .async()
