@@ -57,6 +57,9 @@
             #if( ${context.arguments.live.lockedUntil} )
                 ":lockedUntil" : $util.dynamodb.toDynamoDBJson($context.arguments.live.lockedUntil),
             #end
+            #if( ${context.arguments.live.region} )
+                ":region" : $util.dynamodb.toDynamoDBJson($context.arguments.live.region),
+            #end
             ":updatedAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
         }
     }
