@@ -91,6 +91,8 @@ type Game {
   id: String!
   title: String!
   isOver: Boolean
+  status: String
+  statusDisplay: String
   # start: String
   # id: Int
   # status: String
@@ -107,6 +109,7 @@ type Program {
   game: Game
   clickerRating: Int
   channel: Int
+  channelMinor: Int
   channelId: Int
   channelTitle: String
   createdAt: String

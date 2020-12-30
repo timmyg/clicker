@@ -356,10 +356,21 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       console.log(' is multiple');
       // check if first program is game, and if it is over
       const previousProgram = sortedPrograms[0];
+      // const previousProgramGame = previousProgram.gameId;
       console.log({ previousProgram });
-      if (previousProgram.game && previousProgram.game.status === 'inprogress') {
-        console.log('previous game in progress');
-        return respond(200, previousProgram);
+      console.log('gameId:', previousProgram.gameId);
+      if (previousProgram.gameId) {
+        const result = await new Invoke()
+          .service('game')
+          .name('get')
+          .pathParams({ id: previousProgram.gameId })
+          .go();
+        const game = result && result.data;
+        console.log({ game });
+        if (game && game.status === 'inprogress') {
+          console.log('previous game in progress');
+          return respond(200, previousProgram);
+        }
       }
     } else if (
       existingProgram &&
