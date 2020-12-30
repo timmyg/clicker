@@ -693,9 +693,13 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
 
-    let source = null;
+    const now = moment().unix() * 1000;
+    let updateBoxInfoBody = {
+      updatedAt: now,
+      region: locationBox.region,
+    };
     if (originalChannel !== major) {
-      source = zapTypes.manual;
+      // const source = zapTypes.manual;
       // let program: Program = null;
 
       // $FlowFixMe
@@ -860,23 +864,24 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       //     .async()
       //     .go();
       // }
-    }
-
-    const lockHours = 2;
-    await new Invoke()
-      .service('box')
-      .name('updateLive')
-      .body({
+      const lockHours = 2;
+      updateBoxInfoBody = {
+        ...updateBoxInfoBody,
+        channelChangeSource: zapTypes.manual,
+        channelChangeAt: now,
         channel: major,
         channelMinor: minor,
-        channelChangeSource: source,
-        channelChangeAt: moment().unix() * 1000,
-        region: locationBox.region,
         lockedUntil:
           moment()
             .add(lockHours, 'h')
             .unix() * 1000,
-      })
+      };
+    }
+
+    await new Invoke()
+      .service('box')
+      .name('updateLive')
+      .body(updateBoxInfoBody)
       .pathParams({ locationId, boxId })
       .async()
       .go();
