@@ -38,6 +38,11 @@
     },
     "update" : {
         "expression" : "${updateExpression} ${removeExpression}",
+        "expressionNames": {
+            #if( ${context.arguments.live.region} )
+                "#region": "live.region"
+            #end
+        },
         "expressionValues": {
             #if( ${context.arguments.live.channel} )
                 ":channel" : $util.dynamodb.toDynamoDBJson($context.arguments.live.channel),
@@ -61,11 +66,6 @@
                 ":region" : $util.dynamodb.toDynamoDBJson($context.arguments.live.region),
             #end
             ":updatedAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
-        },
-        "expressionAttributeNames": {
-            #if( ${context.arguments.live.region} )
-                "#region": "live.region"
-            #end
         }
     }
 }
