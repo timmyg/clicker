@@ -107,6 +107,7 @@ type Program {
   game: Game
   clickerRating: Int
   channel: Int
+  channelMinor: Int
   channelId: Int
   channelTitle: String
   createdAt: String
