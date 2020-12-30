@@ -93,6 +93,7 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
             channelChangeAt
             lockedUntil
             lockedProgrammingIds
+            region
             program @include(if: $fetchProgram) {
               title
               start
@@ -111,6 +112,7 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
           }
           label
           zone
+          region
         }
       }
   `);
