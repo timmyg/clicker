@@ -91,6 +91,8 @@ type Game {
   id: String!
   title: String!
   isOver: Boolean
+  status: String
+  statusDisplay: String
   # start: String
   # id: Int
   # status: String
