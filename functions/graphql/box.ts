@@ -211,7 +211,7 @@ export const updateBoxLive = RavenLambdaWrapper.handler(Raven, async event => {
       channelChangeSource: live.channelChangeSource,
       lockedProgrammingIds: live.lockedProgrammingIds,
       lockedUntil: live.lockedUntil,
-      region: live.region,
+      regionName: live.region,
       updatedAt: live.updatedAt,
     },
     id: boxId,
