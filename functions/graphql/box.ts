@@ -97,6 +97,8 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
               title
               start
               clickerRating
+              channel
+              channelMinor
               game {
                 isOver
               }
