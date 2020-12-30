@@ -1242,6 +1242,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
   const location = await getLocationWithBoxes(locationId);
   console.log('location:', JSON.stringify(location));
   console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
+
   // return;
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);

@@ -100,6 +100,7 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
               channel
               channelMinor
               gameId
+              region
               game {
                 isOver
                 title
