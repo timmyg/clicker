@@ -652,9 +652,9 @@ async function getLocationWithBoxes(locationId) {
     .queryParams({ fetchProgram: true })
     .sync()
     .go();
-  console.log(locationBoxes);
+  // console.log(locationBoxes);
   location.boxes = locationBoxes;
-  console.log({ locationId, location });
+  // console.log({ locationId, location });
   return location;
 }
 
@@ -1164,7 +1164,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live && b.live.channel)
     .map(b => b.live);
-  console.log({ currentlyShowingPrograms });
+  // console.log({ currentlyShowingPrograms });
   let ccProgramsFiltered = [];
   ccPrograms.forEach(ccp => {
     // if (cc)
@@ -1176,7 +1176,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
         // check if location has package
         const locationPackages = location.packages || [];
         if (!locationPackages.includes(pkg.name)) {
-          console.log('skip');
+          // console.log('skip');
           skip = true;
           return;
         }
@@ -1240,8 +1240,9 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
   //   .eq(locationId)
   //   .exec();
   const location = await getLocationWithBoxes(locationId);
+  console.log('location:', JSON.stringify(location));
   console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
-
+  // return;
   // get control center programs
   let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
   const currentlyShowingProgrammingIds: string[] = location.boxes
@@ -1249,10 +1250,10 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     .filter(b => b.live)
     .map(b => b.live.program && b.live.program.programmingId);
   const locationBoxesCount = location.boxes.filter(b => b.configuration && b.configuration.automationActive).length;
-  console.info(`location boxes: ${locationBoxesCount}`);
-  console.info(`all cc programs before replication: ${ccPrograms.length}`);
+  // console.info(`location boxes: ${locationBoxesCount}`);
+  // console.info(`all cc programs before replication: ${ccPrograms.length}`);
   ccPrograms = replicatePrograms(ccPrograms, locationBoxesCount);
-  console.info(`all cc programs after replication: ${ccPrograms.length}`);
+  // console.info(`all cc programs after replication: ${ccPrograms.length}`);
   if (!ccPrograms.length) {
     return respond(200, 'no programs');
   }
@@ -1261,7 +1262,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
   const { region } = location;
   // const { programmingId } = program.fields;
   const programmingIds = ccPrograms.map(p => p.fields.programmingId).join(',');
-  console.log({ region, programmingIds });
+  // console.log({ region, programmingIds });
   const programsResult = await new Invoke()
     .service('program')
     .name('get')
@@ -1791,7 +1792,7 @@ function replicatePrograms(
       } else if (ccp.fields.rating === 8) {
         replicationCount = Math.floor(boxesCount * 0.34);
       }
-      console.log({ replicationCount });
+      // console.log({ replicationCount });
       // subtract another if channel already on
       // if (currentlyShowingProgrammingIds.includes(ccp.fields.programmingId)) {
       //   const existingCount = currentlyShowingProgrammingIds.filter(pid => pid === ccp.fields.programmingId).length;
@@ -1807,7 +1808,7 @@ function replicatePrograms(
       programsWithReplication.push(ccp);
     }
   });
-  console.log(JSON.stringify({ programsWithReplication }));
+  // console.log(JSON.stringify({ programsWithReplication }));
   return programsWithReplication;
 }
 
