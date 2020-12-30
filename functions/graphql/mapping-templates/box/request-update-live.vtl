@@ -23,6 +23,9 @@
 #if( ${context.arguments.live.lockedUntil} )
     #set($updateExpression = "${updateExpression} live.lockedUntil = :lockedUntil,")
 #end
+#if( ${context.arguments.live.region} )
+    #set($updateExpression = "${updateExpression} live.region = :region,")
+#end
 
 #set($updateExpression = "${updateExpression} live.updatedAt = :updatedAt")
 

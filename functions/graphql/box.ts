@@ -100,7 +100,6 @@ export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
               channel
               channelMinor
               gameId
-              region
               game {
                 isOver
                 title
@@ -210,6 +209,8 @@ export const updateBoxLive = RavenLambdaWrapper.handler(Raven, async event => {
       channelChangeSource: live.channelChangeSource,
       lockedProgrammingIds: live.lockedProgrammingIds,
       lockedUntil: live.lockedUntil,
+      region: live.region,
+      updatedAt: live.updatedAt,
     },
     id: boxId,
     locationId,
