@@ -336,10 +336,10 @@ describe('get boxes', () => {
     id: 3,
     zone: 'A',
     live: {
-      lockedUntil:
-        moment()
-          .add(27, 'm')
-          .unix() * 1000,
+      // lockedUntil:
+      //   moment()
+      //     .add(27, 'm')
+      //     .unix() * 1000,
       channelChangeSource: 'manual',
       channelChangeAt:
         moment()
