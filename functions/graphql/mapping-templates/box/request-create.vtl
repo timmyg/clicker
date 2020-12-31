@@ -24,10 +24,10 @@
           },
         "live": {
             "M": {
-              "channel": $util.dynamodb.toDynamoDBJson($context.arguments.channel),
-              "channelMinor": $util.dynamodb.toDynamoDBJson($context.arguments.channelMinor),
-              "region": $util.dynamodb.toDynamoDBJson($context.arguments.region),
-              "channelChangeSource": $util.dynamodb.toDynamoDBJson($context.arguments.channelChangeSource)
+              "channel": $util.dynamodb.toDynamoDBJson($context.arguments.live.channel),
+              "channelMinor": $util.dynamodb.toDynamoDBJson($context.arguments.live.channelMinor),
+              "region": $util.dynamodb.toDynamoDBJson($context.arguments.live.region),
+              "channelChangeSource": $util.dynamodb.toDynamoDBJson($context.arguments.live.channelChangeSource)
             }
           }
     }
