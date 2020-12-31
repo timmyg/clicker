@@ -16,6 +16,7 @@ const stripe = require('stripe')(stripeSecretKey);
 const uuid = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
+const moment = require('moment');
 const initialTokens = 1;
 const key = 'clikr';
 const demo = {
@@ -117,7 +118,7 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
   switch (webhookEvent.type) {
     case 'invoice.paid':
       const invoice = webhookEvent.data.object;
-      const { customer_email: customerEmail, amount_paid: amountPaid } = invoice;
+      const { customer_email: customerEmail, amount_paid: amountPaid, created } = invoice;
       const description = invoice.lines.data[0].description;
       const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100} ${description}`;
       await new Invoke()
@@ -129,7 +130,12 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
       await new Invoke()
         .service('analytics')
         .name('track')
-        .body({ userId: 'system', name: 'Invoice Paid', data: invoice })
+        .body({
+          userId: 'system',
+          name: 'Invoice Paid',
+          data: invoice,
+          timestamp: moment(created * 1000).toISOString(),
+        })
         .async()
         .go();
       return respond(200);
