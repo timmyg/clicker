@@ -59,20 +59,21 @@ custom:
     schema:
       - schemas/schema.box.graphql
     dataSources:
-      - type: AMAZON_DYNAMODB
-        name: Boxes
-        config:
-          tableName: ${self:custom.tableBox}
-      - type: AWS_LAMBDA
-        name: fetchBoxProgramFunction
-        description: 'attach current program'
-        config:
-          functionName: fetchBoxProgram
-      - type: AWS_LAMBDA
-        name: fetchBoxProgramGameFunction
-        description: 'attach program game'
-        config:
-          functionName: fetchBoxProgramGame
+      ${file(./box.yml):dataSources
+      # - type: AMAZON_DYNAMODB
+      #   name: Boxes
+      #   config:
+      #     tableName: ${self:custom.tableBox}
+      # - type: AWS_LAMBDA
+      #   name: fetchBoxProgramFunction
+      #   description: 'attach current program'
+      #   config:
+      #     functionName: fetchBoxProgram
+      # - type: AWS_LAMBDA
+      #   name: fetchBoxProgramGameFunction
+      #   description: 'attach program game'
+      #   config:
+      #     functionName: fetchBoxProgramGame
     # defaultMappingTemplates: # default templates. Useful for Lambda templates that are often repetitive. Will be used if the template is not specified in a resolver
     #   request: request-get-source.vtl
     #   response: response-get.vtl

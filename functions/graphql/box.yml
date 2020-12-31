@@ -1,0 +1,15 @@
+dataSources:
+  - type: AMAZON_DYNAMODB
+    name: Boxes
+    config:
+      tableName: ${self:custom.tableBox}
+  - type: AWS_LAMBDA
+    name: fetchBoxProgramFunction
+    description: 'attach current program'
+    config:
+      functionName: fetchBoxProgram
+  - type: AWS_LAMBDA
+    name: fetchBoxProgramGameFunction
+    description: 'attach program game'
+    config:
+      functionName: fetchBoxProgramGame
