@@ -131,6 +131,7 @@ export const remove = RavenLambdaWrapper.handler(Raven, async event => {
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getPathParameters(event);
+  const boxes = getBody(event);
 
   console.log({ locationId });
   const { data: locationData } = await new Invoke()
@@ -141,8 +142,6 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
     .go();
 
   console.log({ locationData });
-
-  const boxes = getBody(event);
 
   const boxesCreated = [];
   for (let newBox of boxes) {
@@ -185,14 +184,12 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = getPathParameters(event);
 
-  console.log({ locationId });
   const { data: location } = await new Invoke()
     .service('location')
     .name('get')
     .pathParams({ id: locationId })
     .sync()
     .go();
-  console.log({ location });
 
   const newBox = {
     id: uuid(),
@@ -218,14 +215,15 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
       region: location.region,
     },
   };
-  console.log({ newBox });
-
-  console.log({ location });
+  console.log({ locationId });
+  console.log([newBox]);
+  console.log({ region: location.region });
 
   const { data } = await new Invoke()
     .service('box')
     .name('create')
-    .body({ locationId, boxes: [newBox], region: location.region })
+    .pathParams({ locationId })
+    .body([newBox])
     .go();
 
   return respond(200, data);

@@ -9,6 +9,8 @@
         "region": $util.dynamodb.toDynamoDBJson($context.arguments.region),
         "label": $util.dynamodb.toDynamoDBJson($context.arguments.label),
         "zone": $util.dynamodb.toDynamoDBJson($context.arguments.zone),
+        "updatedAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
+        "createdAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
         "info": {
             "M": {
               "ip": $util.dynamodb.toDynamoDBJson($context.arguments.info.ip),

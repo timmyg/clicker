@@ -167,5 +167,6 @@ type Box {
   configuration: BoxConfiguration!
   info: BoxInfo!
   live: BoxLive!
-  updatedAt: Int
+  updatedAt: AWSTimestamp
+  createdAt: AWSTimestamp
 }
