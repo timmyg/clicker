@@ -127,7 +127,3 @@ functions:
     handler: graphql.query
   mutate:
     handler: graphql.mutate
-  createBoxes:
-    handler: graphql.createBoxes
-  updateBoxLive:
-    handler: graphql.updateBoxLive

@@ -143,14 +143,35 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ locationData });
 
   const boxes = getBody(event);
-  const { data } = await new Invoke()
-    .service('graphql')
-    .name('createBoxes')
-    .body({ locationId, boxes, region: locationData.region })
-    .sync()
-    .go();
 
-  return respond(201, data);
+  const boxesCreated = [];
+  for (let newBox of boxes) {
+    const mutation = gql(
+      `mutation addBox($id: ID!, $locationId: String!, $region: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!, $live: BoxLiveInput){
+        addBox(id: $id, locationId: $locationId, label: $label, region: $region, zone: $zone, info: $info, configuration: $configuration, live: $live){
+          id
+          locationId
+        }
+      }`,
+    );
+    console.time('create');
+    newBox.locationId = locationId;
+    newBox.id = uuid();
+    newBox.region = locationData.region;
+    console.log({ newBox });
+
+    const variables = newBox;
+
+    const result = await new Invoke()
+      .service('graphql')
+      .name('mutate')
+      .body({ mutation, variables })
+      .sync()
+      .go();
+
+    boxesCreated.push(result.data.addBox);
+  }
+  return respond(201, boxesCreated);
 });
 
 export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
@@ -189,8 +210,8 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   console.log({ location });
 
   const { data } = await new Invoke()
-    .service('graphql')
-    .name('createBoxes')
+    .service('box')
+    .name('create')
     .body({ locationId, boxes: [newBox], region: location.region })
     .go();
 
@@ -201,15 +222,42 @@ export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getPathParameters(event);
   const live = getBody(event);
 
-  console.log({ locationId, boxId, live });
+  const mutation = gql(
+    `mutation updateBoxLive($id: ID!, $locationId: String!, $live: BoxLiveInput!){
+      updateBoxLive(id: $id, locationId: $locationId, live: $live){
+        id
+        locationId
+        live {
+          channel
+          locked
+        }
+      }
+    }`,
+  );
 
-  const { data } = await new Invoke()
+  const variables = {
+    live: {
+      channel: live.channel,
+      channelMinor: live.channelMinor,
+      channelChangeAt: live.channelChangeAt,
+      channelChangeSource: live.channelChangeSource,
+      lockedProgrammingIds: live.lockedProgrammingIds,
+      lockedUntil: live.lockedUntil,
+      region: live.region,
+      updatedAt: live.updatedAt,
+    },
+    id: boxId,
+    locationId,
+  };
+
+  const result = await new Invoke()
     .service('graphql')
-    .name('updateBoxLive')
-    .body({ locationId, boxId, live })
+    .name('mutate')
+    .body({ mutation, variables })
+    .sync()
     .go();
 
-  return respond(200, data);
+  return respond(200, result.data.updateBoxLive);
 });
 
 class DirectvBox {
