@@ -56,64 +56,9 @@ custom:
     authenticationType: API_KEY
     apiKeys:
       - myApiKey
-    schema:
-      - schemas/schema.box.graphql
-    dataSources:
-      ${file(./box.yml):dataSources}
-      # ${file(../serverless.common.yml):iamRoleStatements}
-      # - type: AMAZON_DYNAMODB
-      #   name: Boxes
-      #   config:
-      #     tableName: ${self:custom.tableBox}
-      # - type: AWS_LAMBDA
-      #   name: fetchBoxProgramFunction
-      #   description: 'attach current program'
-      #   config:
-      #     functionName: fetchBoxProgram
-      # - type: AWS_LAMBDA
-      #   name: fetchBoxProgramGameFunction
-      #   description: 'attach program game'
-      #   config:
-      #     functionName: fetchBoxProgramGame
-    # defaultMappingTemplates: # default templates. Useful for Lambda templates that are often repetitive. Will be used if the template is not specified in a resolver
-    #   request: request-get-source.vtl
-    #   response: response-get.vtl
-    mappingTemplates:
-      - dataSource: Boxes
-        type: Mutation
-        field: addBox
-        request: box/request-create.vtl
-        response: response.vtl
-      - dataSource: Boxes
-        type: Mutation
-        field: updateBoxLive
-        request: box/request-update-live.vtl
-        response: response.vtl
-      - dataSource: Boxes
-        type: Query
-        field: box
-        request: box/request-get.vtl
-        response: response.vtl
-      - dataSource: Boxes
-        type: Query
-        field: boxes
-        request: box/request-get-all.vtl
-        response: response-list.vtl
-      - dataSource: Boxes
-        type: Mutation
-        field: deleteBox
-        request: box/request-delete.vtl
-        response: response.vtl
-      - dataSource: fetchBoxProgramFunction
-        type: BoxLive
-        field: program
-        request: box/request-get-source.vtl
-        response: response.vtl
-      - dataSource: fetchBoxProgramGameFunction
-        type: Program
-        field: game
-        request: box/request-get-source.vtl
-        response: response.vtl
+    schema: ${file(./resouces/data.yml):schemas}
+    dataSources: ${file(./resouces/data.yml):dataSources}
+    mappingTemplates: ${file(./resouces/data.yml):mappingTemplates}
 functions:
   health:
     handler: graphql.health

@@ -1,0 +1,55 @@
+schemas:
+  - schemas/schema.box.graphql
+
+dataSources:
+  - type: AMAZON_DYNAMODB
+    name: Boxes
+    config:
+      tableName: ${self:custom.tableBox}
+  - type: AWS_LAMBDA
+    name: fetchBoxProgramFunction
+    description: 'attach current program'
+    config:
+      functionName: fetchBoxProgram
+  - type: AWS_LAMBDA
+    name: fetchBoxProgramGameFunction
+    description: 'attach program game'
+    config:
+      functionName: fetchBoxProgramGame
+
+mappingTemplates:
+  - dataSource: Boxes
+    type: Mutation
+    field: addBox
+    request: box/request-create.vtl
+    response: response.vtl
+  - dataSource: Boxes
+    type: Mutation
+    field: updateBoxLive
+    request: box/request-update-live.vtl
+    response: response.vtl
+  - dataSource: Boxes
+    type: Query
+    field: box
+    request: box/request-get.vtl
+    response: response.vtl
+  - dataSource: Boxes
+    type: Query
+    field: boxes
+    request: box/request-get-all.vtl
+    response: response-list.vtl
+  - dataSource: Boxes
+    type: Mutation
+    field: deleteBox
+    request: box/request-delete.vtl
+    response: response.vtl
+  - dataSource: fetchBoxProgramFunction
+    type: BoxLive
+    field: program
+    request: box/request-get-source.vtl
+    response: response.vtl
+  - dataSource: fetchBoxProgramGameFunction
+    type: Program
+    field: game
+    request: box/request-get-source.vtl
+    response: response.vtl
