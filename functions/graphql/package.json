@@ -20,8 +20,7 @@
     "graphql-tag": "^2.11.0",
     "serverless-bundle": "^4.1.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
-    "source-map-support": "^0.5.19",
-    "uuid": "^3.3.2"
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "-": "0.0.1",

@@ -23,7 +23,6 @@ plugins:
   - serverless-bundle
 custom:
   stage: ${opt:stage}
-  tableBox: boxes-${self:custom.stage}
   bundle:
     sourcemaps: false
     linting: false
