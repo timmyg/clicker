@@ -36,56 +36,38 @@ export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event
   }
 });
 
-export const query = RavenLambdaWrapper.handler(Raven, async event => {
-  const { query, variables } = getBody(event);
-  const gqlQuery = getGraphqlClient().query({
+// export const fetchBoxIsLocked = RavenLambdaWrapper.handler(Raven, async event => {
+//   const live = event.source;
+//   console.log({ live });
+//   return true;
+// });
+
+export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId, boxId } = getBody(event);
+  const graphqlClient = getGraphqlClient();
+  const query = gql(`
+    query box($id: ID!, $locationId: String!)
+      {
+        box(id: $id, locationId: $locationId) {
+          id
+          info {
+            ip
+          }
+        }
+      }
+  `);
+  const gqlQuery = graphqlClient.query({
     query,
-    variables,
+    variables: {
+      id: boxId,
+      locationId,
+    },
   });
   console.time('query');
   const { data } = await gqlQuery;
   console.timeEnd('query');
-  return respond(200, data);
+  return respond(200, data.box);
 });
-
-export const mutation = RavenLambdaWrapper.handler(Raven, async event => {
-  const { mutation, variables } = getBody(event);
-  const gqlMutation = getGraphqlClient().mutate({
-    mutation,
-    variables,
-  });
-  console.time('mutation');
-  const { data } = await gqlMutation;
-  console.timeEnd('mutation');
-  return respond(200, data);
-});
-
-// export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { locationId, boxId } = getBody(event);
-//   const graphqlClient = getGraphqlClient();
-//   const query = gql(`
-//     query box($id: ID!, $locationId: String!)
-//       {
-//         box(id: $id, locationId: $locationId) {
-//           id
-//           info {
-//             ip
-//           }
-//         }
-//       }
-//   `);
-//   const gqlQuery = graphqlClient.query({
-//     query,
-//     variables: {
-//       id: boxId,
-//       locationId,
-//     },
-//   });
-//   console.time('query');
-//   const { data } = await gqlQuery;
-//   console.timeEnd('query');
-//   return respond(200, data.box);
-// });
 
 export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId } = getBody(event);
