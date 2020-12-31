@@ -59,7 +59,8 @@ custom:
     schema:
       - schemas/schema.box.graphql
     dataSources:
-      ${file(./box.yml):dataSources
+      ${file(./box.yml):dataSources}
+      # ${file(../serverless.common.yml):iamRoleStatements}
       # - type: AMAZON_DYNAMODB
       #   name: Boxes
       #   config:
