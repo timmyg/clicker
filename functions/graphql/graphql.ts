@@ -48,7 +48,7 @@ export const query = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, data);
 });
 
-export const mutation = RavenLambdaWrapper.handler(Raven, async event => {
+export const mutate = RavenLambdaWrapper.handler(Raven, async event => {
   const { mutation, variables } = getBody(event);
   const gqlMutation = getGraphqlClient().mutate({
     mutation,
@@ -58,59 +58,6 @@ export const mutation = RavenLambdaWrapper.handler(Raven, async event => {
   const { data } = await gqlMutation;
   console.timeEnd('mutation');
   return respond(200, data);
-});
-
-// export const getBox = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { locationId, boxId } = getBody(event);
-//   const graphqlClient = getGraphqlClient();
-//   const query = gql(`
-//     query box($id: ID!, $locationId: String!)
-//       {
-//         box(id: $id, locationId: $locationId) {
-//           id
-//           info {
-//             ip
-//           }
-//         }
-//       }
-//   `);
-//   const gqlQuery = graphqlClient.query({
-//     query,
-//     variables: {
-//       id: boxId,
-//       locationId,
-//     },
-//   });
-//   console.time('query');
-//   const { data } = await gqlQuery;
-//   console.timeEnd('query');
-//   return respond(200, data.box);
-// });
-
-// export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-
-// });
-
-export const removeBox = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId, boxId } = getBody(event);
-  const graphqlClient = getGraphqlClient();
-
-  const mutation = gql(
-    `mutation deleteBox($id: ID!, $locationId: String!){
-      deleteBox(id: $id, locationId: $locationId){
-        id
-      }
-    }`,
-  );
-  const gqlMutation = graphqlClient.mutate({
-    mutation,
-    variables: {
-      locationId,
-      id: boxId,
-    },
-  });
-  const result = await gqlMutation;
-  return respond(200, result.deleteBox);
 });
 
 export const createBoxes = RavenLambdaWrapper.handler(Raven, async event => {

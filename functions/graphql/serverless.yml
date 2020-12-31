@@ -114,22 +114,20 @@ custom:
         response: response.vtl
 functions:
   health:
-    handler: box.health
+    handler: graphql.health
     events:
       - http:
           path: health
           method: get
   fetchBoxProgram:
-    handler: box.fetchBoxProgram
+    handler: graphql.fetchBoxProgram
   fetchBoxProgramGame:
-    handler: box.fetchBoxProgramGame
+    handler: graphql.fetchBoxProgramGame
   query:
-    handler: box.query
-  mutation:
-    handler: box.mutation
-  removeBox:
-    handler: box.removeBox
+    handler: graphql.query
+  mutate:
+    handler: graphql.mutate
   createBoxes:
-    handler: box.createBoxes
+    handler: graphql.createBoxes
   updateBoxLive:
-    handler: box.updateBoxLive
+    handler: graphql.updateBoxLive

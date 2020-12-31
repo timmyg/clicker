@@ -93,14 +93,12 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.log({ query, variables });
 
-  console.log('1');
   const result = await new Invoke()
     .service('graphql')
     .name('query')
     .body({ query, variables })
     .sync()
     .go();
-  console.log('2');
 
   return respond(200, !result || !result.data ? [] : result.data.boxes);
 });
@@ -108,14 +106,27 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
 export const remove = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getPathParameters(event);
 
-  const { data } = await new Invoke()
+  const mutation = gql(
+    `mutation deleteBox($id: ID!, $locationId: String!){
+      deleteBox(id: $id, locationId: $locationId){
+        id
+      }
+    }`,
+  );
+
+  const variables = {
+    locationId,
+    id: boxId,
+  };
+
+  const result = await new Invoke()
     .service('graphql')
-    .name('removeBox')
-    .body({ locationId, boxId })
+    .name('mutate')
+    .body({ mutation, variables })
     .sync()
     .go();
 
-  return respond(200, data);
+  return respond(200, result.deleteBox);
 });
 
 export const create = RavenLambdaWrapper.handler(Raven, async event => {
