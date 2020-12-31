@@ -147,20 +147,27 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
   const boxesCreated = [];
   for (let newBox of boxes) {
     const mutation = gql(
-      `mutation addBox($id: ID!, $locationId: String!, $region: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!, $live: BoxLiveInput){
+      `mutation addBox($id: ID!, $locationId: String!, $region: String!, $label: String, $zone: String, $info: BoxInfoInput!, $configuration: BoxConfigurationInput!, $live: BoxLiveInput!){
         addBox(id: $id, locationId: $locationId, label: $label, region: $region, zone: $zone, info: $info, configuration: $configuration, live: $live){
           id
           locationId
+          live {
+            channel
+          }
         }
       }`,
     );
-    console.time('create');
     newBox.locationId = locationId;
     newBox.id = uuid();
     newBox.region = locationData.region;
-    console.log({ newBox });
+    newBox.live = {
+      channel: 0,
+      channelChangeSource: 'manual',
+      region: locationData.region,
+    };
 
     const variables = newBox;
+    console.log(variables);
 
     const result = await new Invoke()
       .service('graphql')
@@ -178,12 +185,14 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = getPathParameters(event);
 
+  console.log({ locationId });
   const { data: location } = await new Invoke()
     .service('location')
     .name('get')
     .pathParams({ id: locationId })
     .sync()
     .go();
+  console.log({ location });
 
   const newBox = {
     id: uuid(),
@@ -203,7 +212,11 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
     zone: Math.random()
       .toString(36)
       .substr(2, 2),
-    live: {},
+    live: {
+      channel: 0,
+      channelChangeSource: 'manual',
+      region: location.region,
+    },
   };
   console.log({ newBox });
 

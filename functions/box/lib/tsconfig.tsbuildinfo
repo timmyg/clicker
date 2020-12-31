@@ -152,8 +152,8 @@
         "affectsGlobalScope": false
       },
       "../box.ts": {
-        "version": "8ed4e70a5441cf65813c8eee8ab10e5ddf9b2b25898994484224dbe216da5d2b",
-        "signature": "9c490dc5f013354778536f18812c8a05598785a06fd2793fd8dcc78a61e438ff",
+        "version": "281e74f8de5a9367da1f5911bdd59d9a0e5dccfe3c67d19bc3721f48baf2db3d",
+        "signature": "ed8e1b725d1c51ef6e70cbb34b32c9c5c73a6d26ab01ac968a3eefad31171fa3",
         "affectsGlobalScope": false
       },
       "../box.test.ts": {
