@@ -18,7 +18,7 @@ provider:
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
-    BoxesTable: ${file(./resources/table.boxes.yml)}
+    BoxesTable: ${file(./resources/tables/table.boxes.yml)}
 plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
