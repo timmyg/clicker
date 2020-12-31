@@ -19,3 +19,4 @@ import.csv
 **/__pycache__
 
 .webpack
+**/tsconfig.tsbuildinfo

@@ -19,7 +19,7 @@ type Mutation {
     zone: String
     label: String
     configuration: BoxConfigurationInput!
-    live: BoxLiveInput
+    live: BoxLiveInput!
   ): Box!
   updateBoxLive(id: ID!, locationId: String!, live: BoxLiveInput!): Box!
   deleteBox(id: ID!, locationId: String!): Box
@@ -167,5 +167,6 @@ type Box {
   configuration: BoxConfiguration!
   info: BoxInfo!
   live: BoxLive!
-  updatedAt: Int
+  updatedAt: AWSTimestamp
+  createdAt: AWSTimestamp
 }

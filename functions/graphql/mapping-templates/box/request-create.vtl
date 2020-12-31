@@ -9,6 +9,8 @@
         "region": $util.dynamodb.toDynamoDBJson($context.arguments.region),
         "label": $util.dynamodb.toDynamoDBJson($context.arguments.label),
         "zone": $util.dynamodb.toDynamoDBJson($context.arguments.zone),
+        "updatedAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
+        "createdAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
         "info": {
             "M": {
               "ip": $util.dynamodb.toDynamoDBJson($context.arguments.info.ip),
@@ -24,10 +26,10 @@
           },
         "live": {
             "M": {
-              "channel": $util.dynamodb.toDynamoDBJson($context.arguments.channel),
-              "channelMinor": $util.dynamodb.toDynamoDBJson($context.arguments.channelMinor),
-              "region": $util.dynamodb.toDynamoDBJson($context.arguments.region),
-              "channelChangeSource": $util.dynamodb.toDynamoDBJson($context.arguments.channelChangeSource)
+              "channel": $util.dynamodb.toDynamoDBJson($context.arguments.live.channel),
+              "channelMinor": $util.dynamodb.toDynamoDBJson($context.arguments.live.channelMinor),
+              "region": $util.dynamodb.toDynamoDBJson($context.arguments.live.region),
+              "channelChangeSource": $util.dynamodb.toDynamoDBJson($context.arguments.live.channelChangeSource)
             }
           }
     }

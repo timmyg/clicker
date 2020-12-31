@@ -23,9 +23,6 @@
 #if( ${context.arguments.live.lockedUntil} )
     #set($updateExpression = "${updateExpression} live.lockedUntil = :lockedUntil,")
 #end
-#if( ${context.arguments.live.region} )
-    #set($updateExpression = "${updateExpression} #region = :region,")
-#end
 
 #set($updateExpression = "${updateExpression} live.updatedAt = :updatedAt")
 
@@ -38,11 +35,6 @@
     },
     "update" : {
         "expression" : "${updateExpression} ${removeExpression}",
-        "expressionNames": {
-            #if( ${context.arguments.live.region} )
-                "#region": "live.region"
-            #end
-        },
         "expressionValues": {
             #if( ${context.arguments.live.channel} )
                 ":channel" : $util.dynamodb.toDynamoDBJson($context.arguments.live.channel),
@@ -61,9 +53,6 @@
             #end
             #if( ${context.arguments.live.lockedUntil} )
                 ":lockedUntil" : $util.dynamodb.toDynamoDBJson($context.arguments.live.lockedUntil),
-            #end
-            #if( ${context.arguments.live.region} )
-                ":region" : $util.dynamodb.toDynamoDBJson($context.arguments.live.region),
             #end
             ":updatedAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
         }

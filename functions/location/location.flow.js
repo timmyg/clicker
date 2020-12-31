@@ -692,178 +692,45 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     const originalChannel = locationBox.live && locationBox.live.channel;
     console.log('original channel', originalChannel);
     console.log('current channel', major);
+    const region = locationBox.region;
 
     const now = moment().unix() * 1000;
     let updateBoxInfoBody = {
       updatedAt: now,
-      region: locationBox.region,
+      region,
     };
     if (originalChannel !== major) {
-      // const source = zapTypes.manual;
-      // let program: Program = null;
+      const queryParams = { channel: major, channelMinor: minor, region };
+      const programResult = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams(queryParams)
+        .go();
 
-      // $FlowFixMe
-      // let updateBoxInfoBody: BoxInfoRequest = {
-      //   channel: major,
-      //   channelMinor: minor,
-      // };
-      // updateBoxInfoBody.source = zapTypes.manual;
-      // updateBoxInfoBody.channelChangeAt = moment().unix() * 1000;
-      // updateBoxInfoBody.lockedProgrammingIds = [];
+      const program = programResult && programResult.data;
+      updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
 
-      // console.log({ channel: major, region: location.region });
-      // const queryParams = { channel: major, channelMinor: minor, region: location.region };
-      // const programResult = await new Invoke()
-      //   .service('program')
-      //   .name('get')
-      //   .queryParams(queryParams)
-      //   .go();
-      // if (!programResult || !programResult.data) {
-      //   await new Invoke()
-      //     .service('notification')
-      //     .name('sendManual')
-      //     .body({ text: JSON.stringify(queryParams) })
-      //     .async()
-      //     .go();
-      // }
-      // program = programResult && programResult.data;
-      // console.log({ program });
-      // const hasProgram = !!program && !!program.programmingId;
-      // const manualLockDurationHours = 1.5;
-      // const manualLockUnknownProgramDurationHours = 3.5;
-      // const manualLockAppDurationHours = 0;
-      // const isBoxAppOnly =
-      //   location.boxes[i].configuration.appActive && !location.boxes[i].configuration.automationActive;
-      // let lockHours;
-      // if (isBoxAppOnly) {
-      //   lockHours = manualLockAppDurationHours;
-      // } else if (hasProgram) {
-      //   lockHours = manualLockDurationHours;
-      // } else {
-      //   lockHours = manualLockUnknownProgramDurationHours;
-      // }
-      // updateBoxInfoBody.lockedUntil =
-      //   moment()
-      //     .add(lockHours, 'h')
-      //     .unix() * 1000;
-
-      // const lockMinutes = moment(moment(updateBoxInfoBody.lockedUntil)).diff(moment(), 'minutes');
-      // if (hasProgram && !isBoxAppOnly) {
-      //   updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
-      // }
-
-      // also, lets check what's on in 65 mins and lock that if it's a game
-      // queryParams.time =
-      //   moment()
-      //     .add(65, 'm')
-      //     .unix() * 1000;
-      // const programResult2 = await new Invoke()
-      //   .service('program')
-      //   .name('get')
-      //   .queryParams(queryParams)
-      //   .go();
-      // const program2 = programResult2 && programResult2.data;
-      // console.log({ program2 });
-      // if (!isBoxAppOnly && program2 && program2.programmingId && program.gameId) {
-      //   updateBoxInfoBody.lockedProgrammingIds.push(program2.programmingId);
-      // }
-      // }
-
-      // tg moved this to inside manual change block
-      // await new Invoke()
-      //   .service('location')
-      //   .name('updateBoxInfo')
-      //   .body(updateBoxInfoBody)
-      //   .pathParams({ id: location.id, boxId })
-      //   .async()
-      //   .go();
-
-      // if channel is different and is a control center box
-      //  - track via analytics
-
-      // if (originalChannel !== major) {
-      // const userId = 'system';
-      // const name = 'Manual Zap';
-      // const data = {
-      //   from: originalChannel,
-      //   to: major,
-      //   locationId: location.id,
-      //   locationName: location.name,
-      //   locationNeighborhood: location.neighborhood,
-      // };
-      // await new Invoke()
-      //   .service('analytics')
-      //   .name('track')
-      //   .body({ userId, name, data })
-      //   .async()
-      //   .go();
-
-      // if control center or app box
-      //  - send slack notif
-      //  - send to airtable sheet
-
-      // if (location.boxes[i].configuration.automationActive || location.boxes[i].configuration.appActive) {
-      //   const previousProgram = location.boxes[i].live && location.boxes[i].live.program;
-      //   const previousChannel = location.boxes[i].live && location.boxes[i].live.channel;
-      //   const zoneName = `Z${location.boxes[i].zone || ''}` || 'Z-';
-      //   const labelName = `L${location.boxes[i].label || ''}` || 'L-';
-      //   let text = `Manual Zap @ ${location.name} (${location.neighborhood} ${zoneName},${labelName}) *${program &&
-      //     program.channelTitle}: ${program && program.title} [${major}]* ~${previousProgram &&
-      //     previousProgram.channelTitle}: ${previousProgram && previousProgram.title} [${previousChannel}]~`;
-      //   text += `\nLocking TV for ${lockMinutes} minutes`;
-
-      //   if (!hasProgram) {
-      //     let unknownProgramText = `*Unknown channel programming* ${JSON.stringify(queryParams)}\n`;
-      //     unknownProgramText += `Locking TV for ${lockMinutes} minutes`;
-      //     await new Invoke()
-      //       .service('notification')
-      //       .name('sendTasks')
-      //       .body({ text: unknownProgramText, importance: 2 })
-      //       .async()
-      //       .go();
-      //   }
-
-      //   const isRecentAutomationChange =
-      //     location.boxes[i].live &&
-      //     location.boxes[i].live.channelChangeSource === 'automation' &&
-      //     moment().diff(moment(location.boxes[i].live.channelChangeAt), 'minutes') < 10;
-      //   if (isRecentAutomationChange) {
-      //     text = `*Recent Automation Change!* ${text}`;
-      //     await new Invoke()
-      //       .service('notification')
-      //       .name('sendTasks')
-      //       .body({ text, importance: 2 })
-      //       .async()
-      //       .go();
-      //   }
-      //   //   await new Invoke()
-      //   //     .service('notification')
-      //   //     .name('sendManual')
-      //   //     .body({ text: "" })
-      //   //     .async()
-      //   //     .go();
-      //   // }
+      const isRecentAutomationChange =
+        locationBox.live &&
+        locationBox.live.channelChangeSource === 'automation' &&
+        moment().diff(moment(locationBox.live.channelChangeAt), 'minutes') < 10;
+      if (isRecentAutomationChange) {
+        text = `*Recent Automation Change!* at ${location.name}`;
+        await new Invoke()
+          .service('notification')
+          .name('sendTasks')
+          .body({ text, importance: 2 })
+          .async()
+          .go();
+      }
 
       await new Invoke()
         .service('notification')
         .name('sendManual')
-        .body({ text: `manual zap ${locationBox.id} from ${originalChannel} to ${major}` })
+        .body({ text: `manual zap ${location.name} from ${originalChannel} to ${major}` })
         .async()
         .go();
 
-      //   await new Invoke()
-      //     .service('admin')
-      //     .name('logChannelChange')
-      //     .body({
-      //       location,
-      //       box: location.boxes[i],
-      //       program,
-      //       time: new Date(),
-      //       type: name,
-      //     })
-      //     .async()
-      //     .go();
-      // }
       const lockHours = 2;
       updateBoxInfoBody = {
         ...updateBoxInfoBody,
@@ -1005,112 +872,6 @@ module.exports.health = async (event: any) => {
   return respond(200, 'ok');
 };
 
-// npm run invoke:updateAllBoxesPrograms
-// module.exports.updateAllBoxesPrograms = RavenLambdaWrapper.handler(Raven, async event => {
-//   const locations: Venue[] = await dbLocation.scan().exec();
-//   // console.log({ location });
-//   for (const location of locations) {
-//     for (const box of location.boxes) {
-//       if (box.live && box.live.channel) {
-//         console.time('get program');
-//         const programResult = await new Invoke()
-//           .service('program')
-//           .name('get')
-//           .queryParams({ channel: box.live.channel, channelMinor: box.live.channelMinor, region: location.region })
-//           .go();
-//         const program = programResult && programResult.data;
-//         console.timeEnd('get program');
-
-//         console.time('update location box');
-//         const boxIndex = location.boxes.findIndex(b => b.id === box.id);
-//         console.log(location.id, boxIndex, box.live.channel, program.title);
-//         await updateLocationBox(
-//           location.id,
-//           boxIndex,
-//           box.live.channel,
-//           box.live.channelMinor,
-//           undefined,
-//           program,
-//           undefined,
-//           undefined,
-//           undefined,
-//           undefined,
-//           'updateAllBoxesPrograms',
-//         );
-//         console.timeEnd('update location box');
-//       }
-//     }
-//   }
-//   return respond(200);
-// });
-
-// module.exports.updateBoxInfo = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { id: locationId, boxId } = getPathParameters(event);
-//   const body: BoxInfoRequest = getBody(event);
-//   const { channel, channelMinor, source, channelChangeAt, lockedUntil, lockedProgrammingIds } = body;
-
-//   console.log({ body });
-//   console.time('get location');
-//   const location: Venue = await dbLocation
-//     .queryOne('id')
-//     .eq(locationId)
-//     .exec();
-//   console.timeEnd('get location');
-//   // console.log(location.name);
-
-//   const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-//   console.log({ boxId, boxIndex });
-
-//   console.time('get program');
-//   // HACK adding one minute here so that if this is called at :58,
-//   //  it'll get :00 program
-//   const inTwoMinutesUnix =
-//     moment()
-//       .add(2, 'm')
-//       .unix() * 1000;
-//   const programResult = await new Invoke()
-//     .service('program')
-//     .name('get')
-//     .queryParams({
-//       channel,
-//       channelMinor,
-//       region: location.region,
-//       time: inTwoMinutesUnix,
-//     })
-//     .go();
-//   console.log({ programResult });
-//   const program = programResult && programResult.data;
-//   console.log({ program });
-//   console.timeEnd('get program');
-
-//   console.time('update location box');
-//   console.log({
-//     locationId,
-//     boxIndex,
-//     channel,
-//     channelMinor,
-//     source,
-//     program,
-//     channelChangeAt,
-//   });
-//   await updateLocationBox(
-//     locationId,
-//     boxIndex,
-//     channel,
-//     channelMinor,
-//     source,
-//     program,
-//     channelChangeAt,
-//     lockedUntil,
-//     lockedProgrammingIds,
-//     undefined,
-//     'updateBoxInfo',
-//   );
-//   console.timeEnd('update location box');
-
-//   return respond(200);
-// });
-
 class ControlCenterProgram {
   fields: {
     start: Date,
@@ -1224,21 +985,9 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
   return ccProgramsFiltered.sort((a, b) => b.fields.rating - a.fields.rating);
 }
 
-// const priority = {
-//   force: 'force', // force
-//   worseRated: 'worse rating', // turn off game with worse rating
-//   blowout: 'blowout', // blowout
-//   // blowoutMajor: 4, // major blowout
-//   gameOver: 'game over', // game over
-// };
-
 // npm run invoke:controlCenterByLocation
 module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
-  // const location: Venue = await dbLocation
-  //   .queryOne('id')
-  //   .eq(locationId)
-  //   .exec();
   const location = await getLocationWithBoxes(locationId);
   console.log('location:', JSON.stringify(location));
   console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
@@ -1891,86 +1640,6 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
     }
   });
   return results;
-}
-
-async function updateLocationBox(
-  locationId,
-  boxIndex,
-  channel: number,
-  channelMinor?: number,
-  source?: string,
-  program: Program,
-  channelChangeAt?: number,
-  lockedUntil?: number,
-  lockedProgrammingIds?: string[],
-  removeLockedUntil?: boolean,
-  updatedSource: string,
-) {
-  const AWS = require('aws-sdk');
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  const now = moment().unix() * 1000;
-  let updateExpression = `set `;
-  let removeExpression = '';
-  let expressionAttributeValues = {};
-  const prefix = `boxes[${boxIndex}].live`;
-  console.log({ channel, channelMinor });
-  if (channel) {
-    updateExpression += `${prefix}.channel = :channel,`;
-    expressionAttributeValues[':channel'] = parseInt(channel);
-  }
-  if (Number.isInteger(channelMinor)) {
-    updateExpression += `${prefix}.channelMinor = :channelMinor,`;
-    expressionAttributeValues[':channelMinor'] = parseInt(channelMinor);
-  } else {
-    removeExpression += `REMOVE ${prefix}.channelMinor`;
-  }
-  if (channelChangeAt) {
-    updateExpression += `${prefix}.channelChangeAt = :channelChangeAt,`;
-    expressionAttributeValues[':channelChangeAt'] = channelChangeAt;
-  }
-  if (source) {
-    updateExpression += `${prefix}.channelChangeSource = :channelChangeSource,`;
-    expressionAttributeValues[':channelChangeSource'] = source;
-  }
-  if (program) {
-    updateExpression += `${prefix}.program = :program,`;
-    expressionAttributeValues[':program'] = program;
-  }
-  if (lockedUntil) {
-    updateExpression += `${prefix}.lockedUntil = :lockedUntil,`;
-    expressionAttributeValues[':lockedUntil'] = lockedUntil;
-  }
-  if (lockedProgrammingIds) {
-    updateExpression += `${prefix}.lockedProgrammingIds = :lockedProgrammingIds,`;
-    expressionAttributeValues[':lockedProgrammingIds'] = lockedProgrammingIds;
-  }
-  if (removeLockedUntil) {
-    updateExpression += `${prefix}.lockedUntil = :lockedUntilRemove,`;
-    expressionAttributeValues[':lockedUntilRemove'] = null;
-  }
-  updateExpression += `boxes[${boxIndex}].updatedAt = :updatedAt,`;
-  expressionAttributeValues[':updatedAt'] = now;
-  updateExpression += `boxes[${boxIndex}].updatedSource = :updatedSource`;
-  expressionAttributeValues[':updatedSource'] = updatedSource;
-  console.log(expressionAttributeValues);
-  var params = {
-    TableName: process.env.tableLocation,
-    Key: { id: locationId },
-    ReturnValues: 'ALL_NEW',
-    UpdateExpression: updateExpression + ' ' + removeExpression,
-    ExpressionAttributeValues: expressionAttributeValues,
-  };
-  // console.log('calling...');
-  console.log('params', JSON.stringify(params));
-  // console.log('returned');
-  try {
-    const x = await docClient.update(params).promise();
-    console.log('db result:', JSON.stringify(x));
-  } catch (err) {
-    console.log({ err });
-    return err;
-  }
-  return;
 }
 
 module.exports.ControlCenterProgram = ControlCenterProgram;
