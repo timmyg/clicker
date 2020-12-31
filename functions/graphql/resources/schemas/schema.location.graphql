@@ -1,0 +1,39 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  location(id: ID!): Location
+}
+
+type Location {
+  id: String;
+  shortId: String;
+  losantId: String;
+  boxes: Box[];
+  packages: String[];
+  name: String;
+  neighborhood: String;
+  geo: Geolocation
+  free: Boolean;
+  losantProductionOverride: Boolean;
+  img: String;
+  region: String;
+  active: Boolean;
+  hidden: Boolean;
+  demo: Boolean;
+  connected: Boolean;
+  setup: Boolean;
+  controlCenter: Boolean;
+  controlCenterV2: Boolean;
+  announcement: String;
+  notes: String;
+  # distance: number;
+  # openTvs: Boolean;
+}
+
+type Geolocation {
+    latitude: Int
+    longitude: Int
+}
