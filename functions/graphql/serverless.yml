@@ -56,9 +56,9 @@ custom:
     authenticationType: API_KEY
     apiKeys:
       - myApiKey
-    schema: ${file(./resouces/data.yml):schemas}
-    dataSources: ${file(./resouces/data.yml):dataSources}
-    mappingTemplates: ${file(./resouces/data.yml):mappingTemplates}
+    schema: ${file(./resources/data.yml):schemas}
+    dataSources: ${file(./resources/data.yml):dataSources}
+    mappingTemplates: ${file(./resources/data.yml):mappingTemplates}
 functions:
   health:
     handler: graphql.health
