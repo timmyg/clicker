@@ -123,10 +123,6 @@ functions:
     handler: box.fetchBoxProgram
   fetchBoxProgramGame:
     handler: box.fetchBoxProgramGame
-  getBox:
-    handler: box.getBox
-  # getBoxes:
-  #   handler: box.getBoxes
   query:
     handler: box.query
   mutation:

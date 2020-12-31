@@ -1,8 +1,7 @@
 import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-helpers';
-// const appsync = require('aws-appsync');
-// const gql = require('graphql-tag');
 const uuid = require('uuid/v1');
 import vals from '../shared/example';
+const gql = require('graphql-tag');
 require('cross-fetch/polyfill');
 
 export const health = RavenLambdaWrapper.handler(Raven, async event => {
@@ -12,31 +11,98 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 export const get = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getPathParameters(event);
 
+  const query = gql(`
+    query box($id: ID!, $locationId: String!)
+      {
+        box(id: $id, locationId: $locationId) {
+          id
+          info {
+            ip
+          }
+        }
+      }
+  `);
+
+  const variables = {
+    id: boxId,
+    locationId,
+  };
   const result = await new Invoke()
     .service('graphql')
-    .name('getBox')
-    .body({ locationId, boxId })
-    .sync()
-    .go();
-
-  return respond(200, result.data);
-});
-
-export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId } = getPathParameters(event);
-  const fetchProgram = event.queryStringParameters && event.queryStringParameters.fetchProgram;
-
-  const result = await new Invoke()
-    .service('graphql')
-    .name('getBoxes')
-    .body({ locationId })
-    .queryParams({ fetchProgram: true })
+    .name('query')
+    .body({ query, variables })
     .sync()
     .go();
 
   console.log({ result });
 
-  return respond(200, result.data);
+  return respond(200, result.data.box);
+});
+
+export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
+  const { locationId } = getPathParameters(event);
+  const fetchProgram = (event.queryStringParameters && event.queryStringParameters.fetchProgram) || false;
+
+  const query = gql(`
+    query boxes($locationId: String!, $fetchProgram: Boolean!)
+      {
+        boxes(locationId: $locationId) {
+          id
+          configuration {
+            automationActive
+            appActive
+          }
+          info {
+            ip
+            clientAddress
+          }
+          live {
+            channel
+            channelChangeSource
+            channelChangeAt
+            lockedUntil
+            lockedProgrammingIds
+            region
+            program @include(if: $fetchProgram) {
+              title
+              start
+              clickerRating
+              channel
+              channelMinor
+              gameId
+              game {
+                isOver
+                title
+                status
+                statusDisplay
+              }
+            }
+            locked
+          }
+          label
+          zone
+          region
+        }
+      }
+  `);
+
+  const variables = {
+    locationId,
+    fetchProgram,
+  };
+
+  console.log({ query, variables });
+
+  console.log('1');
+  const result = await new Invoke()
+    .service('graphql')
+    .name('query')
+    .body({ query, variables })
+    .sync()
+    .go();
+  console.log('2');
+
+  return respond(200, !result || !result.data ? [] : result.data.boxes);
 });
 
 export const remove = RavenLambdaWrapper.handler(Raven, async event => {

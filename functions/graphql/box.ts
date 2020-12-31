@@ -87,67 +87,9 @@ export const mutation = RavenLambdaWrapper.handler(Raven, async event => {
 //   return respond(200, data.box);
 // });
 
-export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
-  const { locationId } = getBody(event);
-  const fetchProgram = event.queryStringParameters && event.queryStringParameters.fetchProgram;
+// export const getBoxes = RavenLambdaWrapper.handler(Raven, async event => {
 
-  const graphqlClient = getGraphqlClient();
-  const query = gql(`
-    query boxes($locationId: String!, $fetchProgram: Boolean!)
-      {
-        boxes(locationId: $locationId) {
-          id
-          configuration {
-            automationActive
-            appActive
-          }
-          info {
-            ip
-            clientAddress
-          }
-          live {
-            channel
-            channelChangeSource
-            channelChangeAt
-            lockedUntil
-            lockedProgrammingIds
-            region
-            program @include(if: $fetchProgram) {
-              title
-              start
-              clickerRating
-              channel
-              channelMinor
-              gameId
-              game {
-                isOver
-                title
-                status
-                statusDisplay
-              }
-            }
-            locked
-          }
-          label
-          zone
-          region
-        }
-      }
-  `);
-  const gqlQuery = graphqlClient.query({
-    query,
-    variables: {
-      locationId,
-      fetchProgram,
-    },
-  });
-  console.log({ locationId });
-  console.time('query');
-  const result = await gqlQuery;
-  console.timeEnd('query');
-  console.log(result);
-  return respond(200, !result || !result.data ? [] : result.data.boxes);
-});
+// });
 
 export const removeBox = RavenLambdaWrapper.handler(Raven, async event => {
   const { locationId, boxId } = getBody(event);
