@@ -8,7 +8,7 @@
     "invoke:health": "npx serverless invoke local --function health --stage develop",
     "invoke:create": "npx serverless invoke local --function create --stage develop --path ../.resources/data/v2/new-boxes.json",
     "invoke:createDirectv": "npx serverless invoke local --function createDirectv --stage develop --path ../.resources/data/v2/new-boxes-directv.json",
-    "invoke:updateChannel": "npx serverless invoke local --function updateChannel --stage develop --path ../.resources/data/v2/update-box-live.json",
+    "invoke:updateLive": "npx serverless invoke local --function updateLive --stage develop --path ../.resources/data/v2/update-box-live.json",
     "invoke:remove": "npx serverless invoke local --function remove --stage develop --path ../.resources/data/box-get.json",
     "invoke:get": "npx serverless invoke local --function get --stage develop --path ../.resources/data/box-get.json",
     "invoke:getAll": "npx serverless invoke local --function getAll --stage develop --path ../.resources/data/box-get.json"
