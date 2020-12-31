@@ -126,6 +126,12 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
         .body({ text })
         .async()
         .go();
+      await new Invoke()
+        .service('analytics')
+        .name('track')
+        .body({ userId: 'system', name: 'Invoice Paid', data: invoice })
+        .async()
+        .go();
       return respond(200);
     case 'invoice.payment_failed':
       const failedInvoice = webhookEvent.data.object;
@@ -213,7 +219,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     .eq(userId)
     .exec();
   return respond(200, user);
-})
+});
 
 module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
   const userId = getUserId(event);
