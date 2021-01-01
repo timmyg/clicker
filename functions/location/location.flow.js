@@ -1030,6 +1030,9 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     ccp.db = program;
   });
 
+  // filter out programs that didnt get a program
+  // ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
+
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
 
