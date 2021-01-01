@@ -79,6 +79,7 @@ functions:
           path: '{locationId}/{boxId}'
           method: get
   getAll:
+    timeout: 12
     handler: box.getAll
     events:
       - http:
