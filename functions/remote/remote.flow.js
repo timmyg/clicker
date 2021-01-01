@@ -193,9 +193,8 @@ async function zapViaFirebase(
 }
 
 function getCurrentProgramText(eventName, location, program) {
-  return `*${eventName}* @ ${location.name} to ${program.title} {${program.clickerRating || 'NR'}}  [${
-    program.channelTitle
-  } ${program.channel}]`;
+  return `*${eventName}* @ ${location.name} to ${program.title} {${program.clickerRating ||
+    'NR'}}  [${program.channelTitle || ''} ${program.channel || ''}]`;
 }
 
 async function sendNotification(source: string, reservation: Reservation) {
@@ -205,9 +204,8 @@ async function sendNotification(source: string, reservation: Reservation) {
   // const { channel } = program;
   const previousProgram = reservation.box && reservation.box.live && reservation.box.live.program;
   const previousProgramText = previousProgram
-    ? ` ~${previousProgram.title} {${previousProgram.clickerRating || 'NR'}} [${previousProgram.channelTitle} ${
-        previousProgram.channel
-      }]~`
+    ? ` ~${previousProgram.title || ''} {${previousProgram.clickerRating || 'NR'}} [${previousProgram.channelTitle ||
+        ''} ${previousProgram.channel || ''}]~`
     : '';
 
   if (source === zapTypes.app) {

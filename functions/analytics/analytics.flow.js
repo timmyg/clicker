@@ -5,10 +5,13 @@ const awsXRay = require('aws-xray-sdk');
 const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
 
 module.exports.track = RavenLambdaWrapper.handler(Raven, async event => {
-  const { userId, name, data } = getBody(event);
+  const { userId, name, data, timestamp } = getBody(event);
   // add in time
   data.date = new Date().toISOString();
   const body = { userId, event: name, properties: data };
+  if (timestamp) {
+    body.timestamp = timestamp;
+  }
   const options = {
     auth: {
       username: process.env.segmentWriteKey,

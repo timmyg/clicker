@@ -65,6 +65,7 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
             region
             program @include(if: $fetchProgram) {
               title
+              channelTitle
               start
               clickerRating
               channel

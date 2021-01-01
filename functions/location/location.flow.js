@@ -715,7 +715,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
         locationBox.live.channelChangeSource === 'automation' &&
         moment().diff(moment(locationBox.live.channelChangeAt), 'minutes') < 10;
       if (isRecentAutomationChange) {
-        text = `*Recent Automation Change!* at ${location.name}`;
+        const text = `*Recent Automation Change!* @ ${location.shortId} from ${originalChannel} to ${major} [Zone ${locationBox.zone}]`;
         await new Invoke()
           .service('notification')
           .name('sendTasks')
@@ -727,7 +727,9 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       await new Invoke()
         .service('notification')
         .name('sendManual')
-        .body({ text: `manual zap ${location.name} from ${originalChannel} to ${major}` })
+        .body({
+          text: `Manual Zap @ ${location.shortId} from ${originalChannel} to ${major} [Zone ${locationBox.zone}]`,
+        })
         .async()
         .go();
 
