@@ -40,6 +40,7 @@ export const query = RavenLambdaWrapper.handler(Raven, async event => {
     query,
     variables,
   });
+  console.log({ query, variables });
   console.time('query');
   const { data } = await gqlQuery;
   console.timeEnd('query');
@@ -52,6 +53,7 @@ export const mutate = RavenLambdaWrapper.handler(Raven, async event => {
     mutation,
     variables,
   });
+  console.log({ mutation, variables });
   console.time('mutation');
   const { data } = await gqlMutation;
   console.timeEnd('mutation');
