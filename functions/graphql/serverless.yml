@@ -71,6 +71,8 @@ functions:
   fetchBoxProgramGame:
     handler: graphql.fetchBoxProgramGame
   query:
+    timeout: 12
     handler: graphql.query
   mutate:
+    timeout: 12
     handler: graphql.mutate
