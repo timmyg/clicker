@@ -425,7 +425,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       const errorText = 'Program not found in database';
       console.error(errorText);
       console.error({ channel, time, region, programmingId, programmingIds });
-      Raven.captureException(new Error(errorText));
+      // Raven.captureException(new Error(errorText));
     }
     const chosenPrograms2 = sortedPrograms.length > 1 ? getProgramListTiebreaker(sortedPrograms) : sortedPrograms;
     return respond(200, chosenPrograms2);
