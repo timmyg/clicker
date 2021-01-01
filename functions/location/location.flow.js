@@ -641,6 +641,7 @@ async function getLocationBoxes(locationId) {
 
 // TODO use graphql for this
 async function getLocationWithBoxes(locationId) {
+  console.log({ locationId });
   const location: Venue = await dbLocation
     .queryOne('id')
     .eq(locationId)
