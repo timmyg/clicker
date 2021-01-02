@@ -357,6 +357,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
   const redisExpirationSeconds = 60;
 
+  console.log(('host': process.env.redisHost));
+
   // redis check if in cache
   const redisClient = redis.createClient({
     host: process.env.redisHost,
