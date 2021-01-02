@@ -12,9 +12,6 @@ provider:
   environment:
     stage: ${self:custom.stage}
     region: ${opt:region, self:provider.region}
-    redisHost: ${env:REDIS_HOST}
-    redisPassword: ${env:REDIS_PASSWORD}
-    redisPort: ${env:REDIS_PORT}
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 plugins:
   - serverless-prune-plugin

@@ -14,6 +14,9 @@ provider:
     serviceName: ${self:service}
     airtableKey: ${env:AIRTABLE_KEY}
     airtableBase: ${self:custom.airtableBase.${self:custom.stage}}
+    redisHost: ${env:REDIS_HOST}
+    redisPassword: ${env:REDIS_PASSWORD}
+    redisPort: ${env:REDIS_PORT}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
