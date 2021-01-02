@@ -9,6 +9,7 @@ const moment = require('moment-timezone');
 const objectMapper = require('object-mapper');
 const { uniqBy } = require('lodash');
 const airtableGamesName = 'Games';
+const redis = require('async-redis');
 
 let AWS;
 if (!process.env.IS_LOCAL) {
@@ -354,7 +355,23 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
 
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   const { id } = getPathParameters(event);
-  console.log({ event });
+  const redisExpirationSeconds = 60;
+
+  // redis check if in cache
+  const redisClient = redis.createClient({
+    host: process.env.redisHost,
+    password: process.env.redisPassword,
+    port: process.env.redisPort,
+  });
+  const redisGameKey = `game.${id}.${process.env.stage}`;
+  const gameCache = await redisClient.get(redisGameKey);
+  if (!!gameCache) {
+    console.log('got from cache!', JSON.parse(gameCache));
+    await redisClient.quit();
+    return respond(200, JSON.parse(gameCache));
+  }
+  console.log('not in cache :(');
+
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableGame = await base(airtableGamesName).find(id);
   console.log({ airtableGame });
@@ -368,6 +385,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     statusDisplay,
   };
   console.log({ game });
+  await redisClient.set(redisGameKey, JSON.stringify(game), 'EX', redisExpirationSeconds);
+  await redisClient.quit();
+
   return respond(200, game);
 });
 
