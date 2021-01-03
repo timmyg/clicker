@@ -952,10 +952,8 @@ module.exports.syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async even
     allPrograms = allPrograms.filter((program: Program) => {
       const { programmingId, start, channelTitle } = program;
       const alreadyExists = allExistingPrograms.some(
-        ep =>
-          ep.fields.programmingId === programmingId &&
-          moment(ep.fields.start).unix() * 1000 === start &&
-          ep.fields.channelTitle === channelTitle,
+        ep => ep.fields.programmingId === programmingId && moment(ep.fields.start).unix() * 1000 === start,
+        //  &&ep.fields.channelTitle === channelTitle,
       );
       return !alreadyExists;
     });
@@ -1250,7 +1248,13 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
   let transformedPrograms: Program[] = buildProgramObjects(allPrograms);
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);
-  // await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
+
+  const liveSportsPrograms = transformedPrograms.filter(p => {
+    return p.live && p.mainCategory === 'Sports';
+  });
+  console.log('liveSportsPrograms to publish', liveSportsPrograms.length);
+  await publishNewPrograms(transformedPrograms, process.env.newProgramTopicArn);
+
   console.log(dbResult);
 }
 
