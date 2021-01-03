@@ -359,6 +359,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.log({ penv: process.env });
   console.log({ host: process.env.redisHost });
+  
 
   // redis check if in cache
   const redisClient = redis.createClient({
