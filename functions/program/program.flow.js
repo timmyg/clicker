@@ -998,15 +998,16 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.log({ datesToPull });
   for (const region of allRegions) {
-    await new Invoke()
-      .service('program')
-      .name('syncAirtableRegion')
-      .body({
-        region,
-        daysToPull,
-      })
-      .async()
-      .go();
+    console.log({ region });
+    // await new Invoke()
+    //   .service('program')
+    //   .name('syncAirtableRegion')
+    //   .body({
+    //     region,
+    //     daysToPull,
+    //   })
+    //   .async()
+    //   .go();
   }
   return respond(200);
 });
