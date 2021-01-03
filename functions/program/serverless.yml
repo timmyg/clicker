@@ -326,7 +326,7 @@ functions:
           path: sync/airtable
           method: post
   syncAirtableRegion:
-    handler: program.syncAirtable
+    handler: program.syncAirtableRegion
     runtime: nodejs12.x
     description: sync programs in DTV api to airtable for region
     timeout: 120
