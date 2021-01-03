@@ -1006,7 +1006,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
       .name('syncAirtableRegion')
       .body({
         region,
-        daysToPull,
+        datesToPull,
       })
       .async()
       .go();
