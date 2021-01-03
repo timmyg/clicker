@@ -330,6 +330,7 @@ functions:
     runtime: nodejs12.x
     description: sync programs in DTV api to airtable for region
     timeout: 120
+    reservedConcurrency: 1
     environment:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
   syncAirtableUpdates:
