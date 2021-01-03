@@ -998,7 +998,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.log({ datesToPull });
   for (const region of allRegions) {
-    new Invoke()
+    await new Invoke()
       .service('program')
       .name('syncAirtableRegion')
       .body({

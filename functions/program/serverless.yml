@@ -318,7 +318,7 @@ functions:
   syncAirtable:
     handler: program.syncAirtable
     runtime: nodejs12.x
-    description: sync programs in db to airtable
+    description: sync programs in DTV api to airtable
     timeout: 120
     environment:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
