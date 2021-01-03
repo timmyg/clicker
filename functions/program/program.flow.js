@@ -932,6 +932,7 @@ module.exports.clearAirtable = RavenLambdaWrapper.handler(Raven, async event => 
 
 module.exports.syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event => {
   const { region, datesToPull } = getBody(event);
+  console.log({ region, datesToPull });
   const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   // TODO:SENTRY results is not iterable
