@@ -983,6 +983,7 @@ module.exports.syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async even
     await publishNewPrograms(liveSportsPrograms, process.env.newProgramAirtableTopicArn);
     console.timeEnd('create');
   }
+  return respond(200);
 });
 
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {

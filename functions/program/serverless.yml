@@ -315,23 +315,23 @@ functions:
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
-  # syncAirtable:
-  #   handler: program.syncAirtable
-  #   runtime: nodejs12.x
-  #   description: call syncAirtableRegion for each region
-  #   timeout: 12
-  #   events:
-  #     - schedule: cron(59 8 * * ? *) # every day @ 3:59/4:59am eastern
-  #     - http:
-  #         path: sync/airtable
-  #         method: post
-  # syncAirtableRegion:
-  #   handler: program.syncAirtable
-  #   runtime: nodejs12.x
-  #   description: sync programs in DTV api to airtable for region
-  #   timeout: 120
-  #   environment:
-  #     newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
+  syncAirtable:
+    handler: program.syncAirtable
+    runtime: nodejs12.x
+    description: call syncAirtableRegion for each region
+    timeout: 12
+    events:
+      - schedule: cron(59 8 * * ? *) # every day @ 3:59/4:59am eastern
+      - http:
+          path: sync/airtable
+          method: post
+  syncAirtableRegion:
+    handler: program.syncAirtable
+    runtime: nodejs12.x
+    description: sync programs in DTV api to airtable for region
+    timeout: 120
+    environment:
+      newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
     runtime: nodejs12.x
