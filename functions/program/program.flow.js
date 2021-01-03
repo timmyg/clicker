@@ -1326,8 +1326,8 @@ async function getProgramDetails(program: Program): Promise<any> {
 
 module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
   // HACK sleep randomly so we dont hit airtable too hard
-  const randomBetweenZeroAndThirty = Math.floor(Math.random() * 31);
-  await sleep(randomBetweenZeroAndThirty * 1000);
+  // const randomBetweenZeroAndThirty = Math.floor(Math.random() * 31);
+  // await sleep(randomBetweenZeroAndThirty * 1000);
 
   console.log('consume');
   const program = JSON.parse(event.Records[0].body);
