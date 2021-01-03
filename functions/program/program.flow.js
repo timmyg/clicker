@@ -14,6 +14,8 @@ const { uniqBy, uniqWith } = require('lodash');
 const uuid = require('uuid/v5');
 const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
+const airtablePrograms = 'Control Center';
+const sleep = require('util').promisify(setTimeout);
 
 declare class process {
   static env: {
@@ -928,15 +930,65 @@ module.exports.clearAirtable = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200, 'ok');
 });
 
+module.exports.syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event => {
+  const { region, datesToPull } = getBody(event);
+  const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  // TODO:SENTRY results is not iterable
+  for (const result of results) {
+    const schedule = result.data;
+    let allPrograms: Program[] = build(schedule, region.id);
+    // allPrograms = allPrograms.filter(p => !!p.live);
+    // allPrograms = uniqBy(allPrograms, 'programmingId');
+    // filter out programs already created
+    const allExistingPrograms = await base(airtablePrograms)
+      .select({ fields: ['programmingId', 'start', 'channelTitle'] })
+      .all();
+
+    // filter out allPrograms where there is an existing game with same programmingId, start and channel title
+    console.log('existing programs:', allExistingPrograms.length);
+    console.log('pulled programs:', allPrograms.length);
+    allPrograms = allPrograms.filter((program: Program) => {
+      const { programmingId, start, channelTitle } = program;
+      const alreadyExists = allExistingPrograms.some(
+        ep =>
+          ep.fields.programmingId === programmingId &&
+          moment(ep.fields.start).unix() * 1000 === start &&
+          ep.fields.channelTitle === channelTitle,
+      );
+      return !alreadyExists;
+    });
+    // combine when same programmingId
+    allPrograms = combineByProgrammingId(allPrograms);
+    console.log('pulled programs unique:', allPrograms.length);
+
+    let allAirtablePrograms = buildAirtablePrograms(allPrograms);
+    console.time('create');
+    while (!!allAirtablePrograms.length) {
+      try {
+        const promises = [];
+        const programsSlice = allAirtablePrograms.splice(0, 10);
+        // console.log('batch putting:', programsSlice.length, 'remaining:', allAirtablePrograms.length);
+        promises.push(base(airtablePrograms).create(programsSlice));
+        await Promise.all(promises);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    // publish live sports to get descriptions
+    const liveSportsPrograms = allPrograms.filter(p => {
+      return p.live && p.mainCategory === 'Sports';
+    });
+    console.log('liveSportsPrograms to publish', liveSportsPrograms.length);
+    await publishNewPrograms(liveSportsPrograms, process.env.newProgramAirtableTopicArn);
+    console.timeEnd('create');
+  }
+});
+
 module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const { stage } = process.env;
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtablePrograms = 'Control Center';
   const datesToPull = [];
-  let daysToPull = 2;
-  if (stage === 'develop') {
-    daysToPull = 7;
-  }
+  const daysToPull = 2;
   [...Array(daysToPull)].forEach((_, i) => {
     const dateToSync = moment()
       .subtract(5, 'hrs')
@@ -946,56 +998,14 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.log({ datesToPull });
   for (const region of allRegions) {
-    const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
-    // TODO:SENTRY results is not iterable
-    for (const result of results) {
-      const schedule = result.data;
-      let allPrograms: Program[] = build(schedule, region.id);
-      // allPrograms = allPrograms.filter(p => !!p.live);
-      // allPrograms = uniqBy(allPrograms, 'programmingId');
-      // filter out programs already created
-      const allExistingPrograms = await base(airtablePrograms)
-        .select({ fields: ['programmingId', 'start', 'channelTitle'] })
-        .all();
-
-      // filter out allPrograms where there is an existing game with same programmingId, start and channel title
-      console.log('existing programs:', allExistingPrograms.length);
-      console.log('pulled programs:', allPrograms.length);
-      allPrograms = allPrograms.filter((program: Program) => {
-        const { programmingId, start, channelTitle } = program;
-        const alreadyExists = allExistingPrograms.some(
-          ep =>
-            ep.fields.programmingId === programmingId &&
-            moment(ep.fields.start).unix() * 1000 === start &&
-            ep.fields.channelTitle === channelTitle,
-        );
-        return !alreadyExists;
-      });
-      // combine when same programmingId
-      allPrograms = combineByProgrammingId(allPrograms);
-      console.log('pulled programs unique:', allPrograms.length);
-
-      let allAirtablePrograms = buildAirtablePrograms(allPrograms);
-      console.time('create');
-      while (!!allAirtablePrograms.length) {
-        try {
-          const promises = [];
-          const programsSlice = allAirtablePrograms.splice(0, 10);
-          // console.log('batch putting:', programsSlice.length, 'remaining:', allAirtablePrograms.length);
-          promises.push(base(airtablePrograms).create(programsSlice));
-          await Promise.all(promises);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      // publish live sports to get descriptions
-      const liveSportsPrograms = allPrograms.filter(p => {
-        return p.live && p.mainCategory === 'Sports';
-      });
-      console.log('liveSportsPrograms to publish', liveSportsPrograms.length);
-      await publishNewPrograms(liveSportsPrograms, process.env.newProgramAirtableTopicArn);
-      console.timeEnd('create');
-    }
+    new Invoke()
+      .service('program')
+      .name('syncAirtableRegion')
+      .body({
+        region,
+        daysToPull,
+      })
+      .go();
   }
   return respond(200);
 });
@@ -1315,6 +1325,10 @@ async function getProgramDetails(program: Program): Promise<any> {
 }
 
 module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
+  // HACK sleep randomly so we dont hit airtable too hard
+  const randomBetweenZeroAndThirty = Math.floor(Math.random() * 31);
+  await sleep(randomBetweenZeroAndThirty * 1000);
+
   console.log('consume');
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
