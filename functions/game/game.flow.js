@@ -179,12 +179,14 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () =
     .toDate();
   // get everything from AN
   const allActionEvents = await pullFromActionNetwork([timeToPull]);
+  console.log('allActionEvents', allActionEvents.length);
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const allExistingAirtableGames = await base(airtableGamesName)
     .select({
       fields: ['id', 'statusDisplay', 'recordId'],
     })
     .all();
+  console.log('allExistingAirtableGames', allExistingAirtableGames.length);
   const airtableCreates = [];
   const airtableUpdates = [];
   for (const actionGame of allActionEvents) {
@@ -216,7 +218,6 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () =
   while (!!airtableCreates.length) {
     try {
       const slice = airtableCreates.splice(0, 10);
-      console.log('hii!', slice[0]);
       promisesSliced.push(base(airtableGamesName).create(slice));
     } catch (e) {
       console.error(e);
@@ -230,7 +231,10 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () =
       console.error(e);
     }
   }
+  console.log('airtable slices:', promisesSliced.length);
+  console.time('airtableSlices create/update');
   await Promise.all(promisesSliced);
+  console.timeEnd('airtableSlices create/update');
   return respond(200);
 });
 
@@ -359,7 +363,6 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.log({ penv: process.env });
   console.log({ host: process.env.redisHost });
-  
 
   // redis check if in cache
   const redisClient = redis.createClient({

@@ -83,7 +83,7 @@ functions:
   syncActiveAirtable:
     handler: game.syncActiveAirtable
     description: sync active games into airtable
-    timeout: 12
+    timeout: 30
     events:
       - schedule: cron(4/10,9/10 * * * ? *)
       - http:
