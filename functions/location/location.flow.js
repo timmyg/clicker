@@ -1019,7 +1019,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
   const programsResult = await new Invoke()
     .service('program')
     .name('get')
-    .queryParams({ region, programmingIds })
+    .queryParams({ region, programmingIds }) // TODOpids
     // .async()
     .go();
   const programs = programsResult && programsResult.data;
@@ -1030,8 +1030,8 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
     ccp.db = program;
   });
 
-  // filter out programs that didnt get a program
-  // ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
+  // filter out programs that didnt get a program attached
+  ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
 
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
