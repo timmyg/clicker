@@ -249,7 +249,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   //   .eq(id)
   //   .exec();
   // console.timeEnd('get from db');
-  const location: Venue = await getLocationWithBoxes(id);
+  const location: Venue = await getLocationWithBoxes(id, false);
   if (!location) {
     return respond(400, 'location doesnt exist');
   }
@@ -461,7 +461,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   //   .pathParams({locationId: id})
   //   .go();
   // const locationBoxes = await getLocationBoxes(id);
-  const location = await getLocationWithBoxes(id);
+  const location = await getLocationWithBoxes(id, false);
 
   for (const dtvBox: DirecTVBoxRaw of requestBoxes) {
     const isExistingBox =
@@ -640,7 +640,7 @@ async function getLocationBoxes(locationId) {
 }
 
 // TODO use graphql for this
-async function getLocationWithBoxes(locationId) {
+async function getLocationWithBoxes(locationId, fetchProgram) {
   console.log({ locationId });
   const location: Venue = await dbLocation
     .queryOne('id')
@@ -671,7 +671,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
   // console.log({ location });
 
   // const locationBoxes = await getLocationBoxes(locationId);
-  const location = await getLocationWithBoxes(locationId);
+  const location = await getLocationWithBoxes(locationId, false);
 
   for (const box: DirecTVBox of boxes) {
     const { boxId, info } = box;
@@ -825,7 +825,7 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
     };
 
     // const locationBoxes = await getLocationBoxes(location.id);
-    const locationWithBoxes = await getLocationWithBoxes(location.id);
+    const locationWithBoxes = await getLocationWithBoxes(location.id, false);
     if (locationWithBoxes.boxes) {
       for (const box of locationWithBoxes.boxes) {
         const { id: boxId, info } = box;
@@ -991,7 +991,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 // npm run invoke:controlCenterByLocation
 module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async event => {
   const { id: locationId } = getPathParameters(event);
-  const location = await getLocationWithBoxes(locationId);
+  const location = await getLocationWithBoxes(locationId, true);
   console.log('location:', JSON.stringify(location));
   console.info(`Running Control Center for: ${location.name} (${location.neighborhood})`);
 
@@ -1111,7 +1111,7 @@ module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async 
   //   .queryOne('id')
   //   .eq(id)
   //   .exec();
-  const location: Venue = await getLocationWithBoxes(id);
+  const location: Venue = await getLocationWithBoxes(id, true);
   console.timeEnd('get location');
   const boxes = location.boxes
     .filter(box => !!box.configuration.automationActive || !!box.configuration.appActive)
