@@ -50,12 +50,14 @@ functions:
           method: get
   createDirectv:
     handler: box.createDirectv
+    timeout: 12
     events:
       - http:
           path: '{locationId}/directv'
           method: post
   create:
     handler: box.create
+    timeout: 12
     events:
       - http:
           path: '{locationId}'
