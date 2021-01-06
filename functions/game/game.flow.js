@@ -611,8 +611,9 @@ async function pullFromActionNetwork(dates: Date[]) {
 }
 
 function transformGameActionToAirtable(game: any) {
-  const away = game.teams.find(t => t.id === game.away_team_id);
-  const home = game.teams.find(t => t.id === game.home_team_id);
+  console.log({ game });
+  const away = game.teams ? game.teams.find(t => t.id === game.away_team_id) : game.competitors[0];
+  const home = game.teams ? game.teams.find(t => t.id === game.home_team_id) : game.competitors[1];
   const map = {
     id: 'id',
     start_time: 'start',
