@@ -333,6 +333,8 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       programsQuery = programsQuery.null();
     }
 
+    console.log({ programsQuery });
+
     const programs: Program[] = await programsQuery.exec();
     console.log({ programs });
 

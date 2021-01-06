@@ -386,6 +386,7 @@ functions:
   get:
     handler: program.get
     runtime: nodejs12.x
+    timeout: 12
     events:
       - http:
           path: ''

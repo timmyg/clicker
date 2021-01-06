@@ -17,8 +17,10 @@ export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => 
       .name('get')
       .queryParams(queryParams)
       .go();
+    console.log({ programResult });
     return programResult && programResult.data;
   }
+  return {};
 });
 
 export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event => {
