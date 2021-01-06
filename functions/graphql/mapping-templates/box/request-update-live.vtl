@@ -20,6 +20,9 @@
 #if( ${context.arguments.live.lockedProgrammingIds} )
     #set($updateExpression = "${updateExpression} live.lockedProgrammingIds = :lockedProgrammingIds,")
 #end
+#if( ${context.arguments.live.region} )
+    #set($updateExpression = "${updateExpression} live.region = :region,")
+#end
 #if( ${context.arguments.live.lockedUntil} )
     #set($updateExpression = "${updateExpression} live.lockedUntil = :lockedUntil,")
 #end
@@ -53,6 +56,9 @@
             #end
             #if( ${context.arguments.live.lockedUntil} )
                 ":lockedUntil" : $util.dynamodb.toDynamoDBJson($context.arguments.live.lockedUntil),
+            #end
+            #if( ${context.arguments.live.region} )
+                ":region" : $util.dynamodb.toDynamoDBJson($context.arguments.live.region),
             #end
             ":updatedAt" : $util.dynamodb.toDynamoDBJson($util.time.nowEpochMilliSeconds()),
         }
