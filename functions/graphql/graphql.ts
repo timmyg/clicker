@@ -9,6 +9,10 @@ export const health = RavenLambdaWrapper.handler(Raven, async event => {
 export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('event', JSON.stringify(event));
   const { channel, channelMinor, region } = event.source;
+  if (!region) {
+    console.error('no region set');
+    return null;
+  }
   if (channel) {
     const queryParams = { channel, channelMinor, region };
     console.log({ queryParams });
