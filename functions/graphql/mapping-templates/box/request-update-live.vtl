@@ -21,7 +21,8 @@
     #set($updateExpression = "${updateExpression} live.lockedProgrammingIds = :lockedProgrammingIds,")
 #end
 #if( ${context.arguments.live.region} )
-    #set($updateExpression = "${updateExpression} live.region = :region,")
+    ## region is a reserved keyword, so had to do this workaround
+    #set($updateExpression = "${updateExpression} #live.#region = :region,")
 #end
 #if( ${context.arguments.live.lockedUntil} )
     #set($updateExpression = "${updateExpression} live.lockedUntil = :lockedUntil,")
@@ -38,6 +39,12 @@
     },
     "update" : {
         "expression" : "${updateExpression} ${removeExpression}",
+        "expressionNames": {
+            #if( ${context.arguments.live.region} )
+                "#live": "live",
+                "#region": "region"
+            #end
+        },
         "expressionValues": {
             #if( ${context.arguments.live.channel} )
                 ":channel" : $util.dynamodb.toDynamoDBJson($context.arguments.live.channel),
