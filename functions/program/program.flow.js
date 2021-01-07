@@ -313,11 +313,11 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
         .unix() * 1000;
     // get programs that are on now or ended within last 30 mins
     let programsQuery = dbProgram
-      .query('channel')
-      .eq(channel)
-      .and()
-      .filter('region')
+      .query('region')
       .eq(region)
+      .and()
+      .filter('channel')
+      .eq(channel)
       .and()
       .filter('start')
       .lt(timeToSearch) // now
@@ -335,6 +335,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
 
     console.log({ programsQuery });
 
+    // this query takes a long time
     const programs: Program[] = await programsQuery.exec();
     console.log({ programs });
 
