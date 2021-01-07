@@ -333,7 +333,13 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       programsQuery = programsQuery.null();
     }
 
+    console.log({ programsQuery });
+    console.log((channel, region, timeToSearch, timeToSearchPreviousProgram));
+    console.log('running query...');
+
+    // this query takes a long time
     const programs: Program[] = await programsQuery.exec();
+    console.log('returned from query!');
     console.log({ programs });
 
     console.log({ timeToSearch, timeToSearchPreviousProgram });

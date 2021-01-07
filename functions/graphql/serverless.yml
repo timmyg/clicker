@@ -68,8 +68,10 @@ functions:
           method: get
   fetchBoxProgram:
     handler: graphql.fetchBoxProgram
+    timeout: 12
   fetchBoxProgramGame:
     handler: graphql.fetchBoxProgramGame
+    timeout: 12
   query:
     timeout: 12
     handler: graphql.query
