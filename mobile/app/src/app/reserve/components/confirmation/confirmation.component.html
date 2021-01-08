@@ -1,15 +1,17 @@
-<ion-card *ngIf="(reservation$ | async)">
-  <ion-card-content [ngClass]="{ waiting: isAutotuneWaiting }">
-    <div class="summary-wrapper">
-      <div>
+<div *ngIf="reservation$ | async" class="ion-padding">
+  <!-- <div [ngClass]="{ waiting: isAutotuneWaiting$ }"> -->
+  <div>
+    <!-- <div class="summary-wrapper ion-text-center"> -->
+    <!-- <div>
         <label> Location: </label>
         <span>{{ getLocationName() | truncate: [24] }}</span>
-      </div>
-      <div>
-        <label> Channel: </label>
-        <span>{{ getChannelDescription() | truncate: [24] }}</span>
-      </div>
-      <div>
+      </div> -->
+    <!-- <div> -->
+    <!-- <label> Channel: </label> -->
+    <!-- <span>{{ getChannelDescription() | truncate: [24] }}</span> -->
+    <!-- <span>{{ getChannelDescription() }}</span> -->
+    <!-- </div> -->
+    <!-- <div>
         <label> Reserved: </label>
         <span
           *ngIf="
@@ -24,13 +26,16 @@
         <ng-template #chooseTimeframe>
           <b *ngIf="reservation.minutes === undefined">Choose timeframe</b>
           <span *ngIf="reservation.minutes === 0">One-time change</span>
-        </ng-template>
+        </ng-template> -->
 
-        <!-- <ng-template #noReservation> One-time change </ng-template> -->
-      </div>
-      <div></div>
-    </div>
-    <ion-list class="timeframes" *ngIf="!isEditChannel">
+    <!-- <ng-template #noReservation> One-time change </ng-template> -->
+    <!-- </div> -->
+    <!-- <div></div> -->
+    <!-- </div> -->
+    <ion-list
+      class="timeframes"
+      *ngIf="!isEditChannel && !reservation.location.free"
+    >
       <ion-radio-group (ionChange)="onTimeframeChange($event)">
         <ion-list-header class="ion-no-padding">
           <ion-label>
@@ -42,7 +47,7 @@
         <ion-row *ngIf="isAppLoading" class="ion-margin-vertical">
           <ion-spinner name="dots" color="primary" class="center"></ion-spinner>
         </ion-row>
-        <ion-item *ngFor="let timeframe of (visibleTimeframes$ | async)">
+        <ion-item *ngFor="let timeframe of visibleTimeframes$ | async">
           <ion-label class="flex ion-align-items-center">
             <span data-atm-class="timeframe" class="timeframe">
               <span
@@ -112,7 +117,7 @@
       [disabled]="
         saving ||
         (tokenCount$ | async) < getCost() ||
-        (!isEditChannel && isAppLoading) ||
+        (isAppLoading$ | async) ||
         (outOfRange && !overrideDistanceDisable) ||
         isInitializing ||
         isConflictingUser
@@ -147,6 +152,9 @@
         >
       </ng-template>
     </ion-button>
+    <ion-row class="ion-text-center ion-margin-top">
+      <em class="description"> {{ getChannelDescription() }} </em>
+    </ion-row>
     <ion-row
       class="ion-text-center ion-margin-top"
       *ngIf="(tokenCount$ | async) < getCost()"
@@ -187,5 +195,5 @@
         Sorry, you cannot update this reservation. Please try again.
       </ion-text>
     </ion-row>
-  </ion-card-content>
-</ion-card>
+  </div>
+</div>

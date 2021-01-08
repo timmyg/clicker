@@ -7,7 +7,14 @@ import {
 } from "@angular/core";
 import { Reservation } from "../../../state/reservation/reservation.model";
 import { ReserveService } from "../../reserve.service";
-import { Observable, Subscription, combineLatest, Subject, pipe } from "rxjs";
+import {
+  Observable,
+  Subscription,
+  combineLatest,
+  Subject,
+  pipe,
+  BehaviorSubject,
+} from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getReservation,
@@ -77,8 +84,10 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   overrideDistanceClicks = 0;
   overrideDistanceDisable = false;
   loginModal;
-  isAutotuneWaiting = true;
-  // public isAutotuneWaiting$: Subject<boolean> = new Subject<boolean>();
+  // isAutotuneWaiting = true;
+  // public isAutotuneWaiting$: BehaviorSubject<boolean> = new BehaviorSubject<
+  //   boolean
+  // >(true);
 
   constructor(
     private store: Store<fromStore.AppState>,
@@ -101,10 +110,12 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     this.isLoggedIn$ = this.store.select(isLoggedIn);
     // TODO this is ugly but gets rid of ExpressionChangedAfterItHasBeenCheckedError issue when opening wallet
     this.isAppLoading$ = this.store.pipe(select(getAppLoading));
-    this.sub = this.isAppLoading$.subscribe((x) => {
-      this.isAppLoading = x;
-    });
+    // this.sub = this.isAppLoading$.subscribe((x) => {
+    //   console.log({ x });
+    //   this.isAppLoading = x;
+    // });
     this.userRoles$ = this.store.select(getUserRoles);
+    const store2 = this.store;
 
     // const name$ = this._personService.getName(id);
     // const document$ = this._documentService.getDocument();
@@ -129,21 +140,26 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
           timeframes = [
             {
               minutes: 0,
-              tokens: 0
-            }
-          ]
+              tokens: 0,
+            },
+          ];
+          // reservation.minutes = 0;
+          // console.log("dispatch");
+          this.store.dispatch(new fromReservation.SetTimeframe(timeframes[0]));
+          // this.reservation.cost = 0;
         }
         if (reservation.isVip) {
-          timeframes.map(t => {
-            t.tokens = 0
+          timeframes.map((t) => {
+            t.tokens = 0;
             t.isVip = true;
-          })
+          });
         }
         if (reservation.isManager) {
           timeframes.unshift(this.getManagerFreeTimeframe());
         }
+        console.log({ timeframes });
         this.visibleTimeframes$.next(timeframes);
-        this.isBoxLocked = reservation.box?.live?.locked
+        this.isBoxLocked = reservation.box?.live?.locked;
       }
     });
 
@@ -173,23 +189,27 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     // if updating a free reservation, auto change
-    this.autotuneSub = combineLatest(this.reservationUpdateType$, this.reservation$, this.visibleTimeframes$)
+    this.autotuneSub = combineLatest(
+      this.reservationUpdateType$,
+      this.reservation$,
+      this.visibleTimeframes$
+    )
       .pipe(first())
       .subscribe(([updateType, reservation, timeframes]) => {
-        console.log({updateType, reservation, timeframes});
+        console.log({ updateType, reservation, timeframes });
         // console.log(reservation && reservation.location ? reservation.location.free : '');
         // const isUpdateFreeLocation = updateType === "channel" && reservation.location?.free;
-        const freeTimeframe = timeframes && timeframes.length == 1 ? timeframes[0] : null;
+        const freeTimeframe =
+          timeframes && timeframes.length == 1 ? timeframes[0] : null;
         // const isFreeLocation = reservation.location?.free;
         if (!!updateType) {
           console.log("autotune!");
           this.store.dispatch(new fromReservation.SetTimeframe(freeTimeframe));
-          this.onConfirm()
+          this.onConfirm();
         }
-        console.log('done');
-        this.isAutotuneWaiting = false;
-      })
-
+        console.log("done");
+        // this.isAutotuneWaiting$.next(false);
+      });
 
     this.reservation$
       .pipe(
@@ -256,7 +276,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     return {
       tokens: 0,
       minutes: 0,
-      isManager: true
+      isManager: true,
     };
   }
 
@@ -264,7 +284,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     return {
       tokens: 0,
       minutes: 0,
-      isManager: true
+      isManager: true,
     };
   }
 
@@ -294,7 +314,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
       )
       .pipe(first())
       .subscribe(() => {
-        console.log({r});
+        console.log({ r });
         const program =
           r.update && r.update.program ? r.update.program : r.program;
         const minutes =
@@ -378,7 +398,7 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
     } else if (this.isEditTime) {
       return !!this.reservation.update && !!this.reservation.update.minutes;
     } else {
-      return this.reservation.minutes != null;
+      return this.reservation.minutes != null || this.reservation.location.free;
     }
   }
 
@@ -411,13 +431,11 @@ export class ConfirmationComponent implements OnDestroy, OnInit {
   }
 
   getLocationName() {
-    return `${this.reservation.location.name} (${
-      this.reservation.location.neighborhood
-    })`;
+    return `${this.reservation.location.name} (${this.reservation.location.neighborhood})`;
   }
 
   getChannelDescription() {
-    return `${this.getProgram().channelTitle} (${this.getProgram().title})`;
+    return `${this.getProgram().title} on ${this.getProgram().channelTitle}`;
   }
 
   async onLogin() {
