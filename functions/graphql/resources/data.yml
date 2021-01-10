@@ -1,5 +1,6 @@
 schemas:
   - resources/schemas/schema.box.graphql
+  - resources/schemas/schema.program.graphql
 
 dataSources:
   - type: AMAZON_DYNAMODB
