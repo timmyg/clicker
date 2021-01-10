@@ -203,7 +203,7 @@ resources:
         RawMessageDelivery: 'true'
 functions:
   health:
-    handler: program2.health
+    handler: program22.health
     runtime: nodejs12.x
     events:
       - http:
@@ -301,7 +301,7 @@ functions:
             - Arn
           batchSize: 1
   getSchedulePy:
-    handler: programPy.getPrograms
+    handler: program2Py.getPrograms
     runtime: python3.6
     timeout: 40
     events:
@@ -309,7 +309,7 @@ functions:
           path: py/schedule
           method: get
   getProgramDetailPy:
-    handler: programPy.getProgramDetail
+    handler: program2Py.getProgramDetail
     runtime: python3.6
     timeout: 60
     events:
@@ -317,8 +317,8 @@ functions:
           path: py/program/detail
           method: get
   getByLocation:
-    handler: program.getByLocation
     runtime: nodejs12.x
+    handler: program.getByLocation
     events:
       - http:
           path: 'location/sweet'

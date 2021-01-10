@@ -4,7 +4,7 @@ schema {
 }
 
 type Query {
-  getByLocation(region: ID!, locationId: String!): Program[]
+  getByLocation(region: ID!, locationId: String!): [Program]
 }
 
 type GameScoreboard {

@@ -1,4 +1,7 @@
-// @flow
+import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-helpers';
+const uuid = require('uuid/v1');
+const gql = require('graphql-tag');
+require('cross-fetch/polyfill');
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
 let AWS;
@@ -11,33 +14,23 @@ if (!process.env.IS_LOCAL) {
 const axios = require('axios');
 const moment = require('moment');
 const { uniqBy, uniqWith } = require('lodash');
-const uuid = require('uuid/v5');
-const { respond, getPathParameters, getBody, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
 const directvEndpoint = 'https://www.directv.com/json';
 const airtablePrograms = 'Control Center';
 const sleep = require('util').promisify(setTimeout);
 
-declare class process {
-  static env: {
-    airtableBase: string,
-    airtableKey: string,
-    tableProgram: string,
-    serviceName: string,
-    newProgramTopicArn: string,
-    newProgramAirtableTopicArn: string,
-    tableProgram: string,
-    stage: string,
-    syncProgramsAirtableDateTopicArn: string,
-    NODE_ENV: string,
-    IS_LOCAL: string,
-  };
-}
+export const health = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200, 'hello!');
+});
+
+export const getByLocation = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200, 'hello!');
+});
 
 type region = {
-  id: string,
-  name: string,
-  defaultZip: string,
-  localChannels: number[],
+  id: string;
+  name: string;
+  defaultZip: string;
+  localChannels: number[];
 };
 
 // duplicated!
@@ -54,12 +47,21 @@ const allRegions: region[] = [
     id: 'cincinnati',
     defaultZip: '45202',
     localChannels: [5, 9, 12, 19, 64, 661, 660],
-  },
-  // { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
+  }, // { id: 'chicago', name: 'Chicago', defaultZip: '60613', localChannels: [2, 5, 7, 32] },
   // { id: 'nyc', name: 'NYC', defaultZip: '10004', localChannels: [2, 4, 5, 7] },
   // { id: 'indy', name: 'Indy', defaultZip: '46204', localChannels: [4, 6, 13, 59] },
-  { id: 'cripple-creek-co', name: 'Cripple Creek', defaultZip: '80813', localChannels: [5, 11, 13, 21] },
-  { id: 'houston', name: 'Houston', defaultZip: '77064', localChannels: [2, 11, 13, 26] },
+  {
+    id: 'cripple-creek-co',
+    name: 'Cripple Creek',
+    defaultZip: '80813',
+    localChannels: [5, 11, 13, 21],
+  },
+  {
+    id: 'houston',
+    name: 'Houston',
+    defaultZip: '77064',
+    localChannels: [2, 11, 13, 26],
+  },
 ];
 const nationalExcludedChannels: string[] = ['MLBaHD', 'MLB', 'INFO', 'NHLaHD'];
 const nationalChannels: any[] = [
@@ -70,8 +72,7 @@ const nationalChannels: any[] = [
   { channel: 213, channelTitle: 'MLB' },
   { channel: 219, channelTitle: 'FS1' },
   { channel: 220, channelTitle: 'NBCSN' },
-  { channel: 212, channelTitle: 'NFL' },
-  // { channel: 217, channelTitle: 'TNNSHD' },
+  { channel: 212, channelTitle: 'NFL' }, // { channel: 217, channelTitle: 'TNNSHD' },
   { channel: 215, channelTitle: 'NHLHD' },
   { channel: 216, channelTitle: 'NBAHD' },
   { channel: 218, channelTitle: 'GOLF' },
@@ -123,7 +124,7 @@ const complexChannels = [
         minor: 1,
         channelIds: [5660],
       },
-      { minor: 2, channelIds: [624] }, // 623?
+      { minor: 2, channelIds: [624] },
     ],
   },
   {
@@ -137,7 +138,7 @@ const complexChannels = [
         minor: 1,
         channelIds: [5661], // 2661?
       },
-      { minor: 2, channelIds: [625] }, //  626
+      { minor: 2, channelIds: [625] },
     ],
   },
 ];
@@ -277,6 +278,8 @@ module.exports.regions = RavenLambdaWrapper.handler(Raven, async event => {
 //   return respond(200, result);
 // });
 
+// type Program {}
+
 module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
@@ -334,7 +337,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
     }
 
     console.log({ programsQuery });
-    console.log((channel, region, timeToSearch, timeToSearchPreviousProgram));
+    // console.log(
+    //     (channel, region, timeToSearch, timeToSearchPreviousProgram),
+    // );
     console.log('running query...');
 
     // this query takes a long time
@@ -432,7 +437,13 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
       );
       const errorText = 'Program not found in database';
       console.error(errorText);
-      console.error({ channel, time, region, programmingId, programmingIds });
+      console.error({
+        channel,
+        time,
+        region,
+        programmingId,
+        programmingIds,
+      });
       // Raven.captureException(new Error(errorText));
     }
     const chosenPrograms2 = sortedPrograms.length > 1 ? getProgramListTiebreaker(sortedPrograms) : sortedPrograms;
@@ -513,7 +524,10 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
-        game: { home: { book: { spread: '-4', moneyline: '-144' } }, summary: { description: 'UC 59 - XU 71' } },
+        game: {
+          home: { book: { spread: '-4', moneyline: '-144' } },
+          summary: { description: 'UC 59 - XU 71' },
+        },
       },
       {
         title: 'Arsenal vs. Bayern',
@@ -696,7 +710,6 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
         clickerRating: 7,
         subcategories: ['Wrestling'],
       },
-
       {
         title: 'Orioles @ Reds',
         channelTitle: 'FSN',
@@ -789,7 +802,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming query');
-  const [programs: Program[], programsNext: Program[]] = await Promise.all([programsQuery, programsNextQuery]);
+  const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
   // console.log(programs.length, programsNext.length);
   console.timeEnd('current + next programming query');
 
@@ -958,8 +971,7 @@ module.exports.syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async even
     allPrograms = allPrograms.filter((program: Program) => {
       const { programmingId, start, channelTitle } = program;
       const alreadyExists = allExistingPrograms.some(
-        ep => ep.fields.programmingId === programmingId && moment(ep.fields.start).unix() * 1000 === start,
-        //  &&ep.fields.channelTitle === channelTitle,
+        ep => ep.fields.programmingId === programmingId && moment(ep.fields.start).unix() * 1000 === start, //  &&ep.fields.channelTitle === channelTitle,
       );
       return !alreadyExists;
     });
@@ -1135,7 +1147,9 @@ module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async eve
     for (const program of programs) {
       const { region, id } = program;
       // console.log({ region, id }, { gameId: gameDatabaseId, clickerRating: programRating });
-      const update: Object = { gameId: gameDatabaseId, clickerRating: programRating };
+      const update: {
+        [key: string]: any;
+      } = { gameId: gameDatabaseId, clickerRating: programRating };
       if (!!earlyMinutes) {
         const fullProgram = await dbProgram.get({ id, region });
         console.log({ fullProgram });
@@ -1310,8 +1324,7 @@ async function pullFromDirecTV(
           zip,
           hours: totalHours,
           channels: channelsString,
-        })
-        // .headers(event.headers)
+        }) // .headers(event.headers)
         .go(),
     );
   });
@@ -1472,7 +1485,7 @@ function build(dtvSchedule: any, regionId: string) {
         // console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
         if (complexChannels.map(c => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
-          // console.log('minor!');
+
           const minorChannelMatch: any = complexChannels.find(c => c.channel === program.channel);
           // console.log({ minorChannelMatch });
           const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
@@ -1514,15 +1527,12 @@ function build(dtvSchedule: any, regionId: string) {
   return filteredPrograms;
 }
 
-function getDefaultRating(program: Program): ?number {
+function getDefaultRating(program: Program): number | null | undefined {
   const defaultRatings = [
     { search: 'sportscenter', rating: 2 },
     { search: 'good morning football', rating: 1 },
     { search: 'skip and shannon', rating: 1 },
     { search: 'college gameday', rating: 5 },
-    // { search: 'mlb tonight', rating: 1 },
-    // { search: 'inside the nba', rating: 1 },
-    // { search: 'quick pitch', rating: 1 },
   ];
   // jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec
   const currentMonth = moment().format('MMM');
