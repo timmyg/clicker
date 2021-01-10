@@ -13,12 +13,14 @@ provider:
     stage: ${self:custom.stage}
     region: ${opt:region, self:provider.region}
     tableBox: ${self:custom.tableBox}
+    tableProgram: ${self:custom.tableProgram}
     graphqlApiUrl: ${env:GRAPHQL_API_URL, self:custom.graphqlApiUrl}
     graphqlApiKey: ${env:GRAPHQL_API_KEY, self:custom.graphqlApiKey}
   iamRoleStatements: ${file(../serverless.common.yml):iamRoleStatements}
 resources:
   Resources:
     BoxesTable: ${file(./resources/tables/table.boxes.yml)}
+    ProgramsTable: ${file(./resources/tables/table.programs.yml)}
 plugins:
   - serverless-prune-plugin
   - serverless-deployment-bucket
@@ -31,6 +33,7 @@ plugins:
 custom:
   stage: ${opt:stage}
   tableBox: boxes-${self:custom.stage}
+  tableProgram: programs-${self:custom.stage}
   graphqlApiUrl: { Fn::GetAtt: [GraphQlApi, GraphQLUrl] }
   graphqlApiKey: { Fn::GetAtt: [GraphQlApiKeyDefault, ApiKey] }
   bundle:

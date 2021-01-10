@@ -2,7 +2,7 @@ service: program
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  # runtime: nodejs12.x
+  runtime: nodejs12.x
   memorySize: 1024
   versionFunctions: false
   # tracing: true
@@ -58,6 +58,7 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
   - serverless-python-requirements
+  - serverless-bundle
 custom:
   stage: ${opt:stage, self:provider.stage}
   prune:
@@ -201,76 +202,9 @@ resources:
           - Arn
         Protocol: sqs
         RawMessageDelivery: 'true'
-    ProgramTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableProgram}
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: region
-            AttributeType: S
-          - AttributeName: start
-            AttributeType: N
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: programmingId
-            AttributeType: S
-          - AttributeName: channel
-            AttributeType: N
-          - AttributeName: gameId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: region
-            KeyType: HASH
-          - AttributeName: id
-            KeyType: RANGE
-        GlobalSecondaryIndexes:
-          - IndexName: programmingIdGlobalIndex
-            KeySchema:
-              - AttributeName: programmingId
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
-          # - IndexName: programmingId2GlobalIndex
-          #   KeySchema:
-          #     - AttributeName: programmingId
-          #       KeyType: HASH
-          #   Projection:
-          #     NonKeyAttributes:
-          #       - start
-          #     ProjectionType: INCLUDE
-          - IndexName: gameIdGlobalIndex
-            KeySchema:
-              - AttributeName: gameId
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
-          - IndexName: channelGlobalIndex
-            KeySchema:
-              - AttributeName: channel
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-          # - IndexName: idGlobalIndex
-          #   KeySchema:
-          #     - AttributeName: id
-          #       KeyType: HASH
-          #   Projection:
-          #     ProjectionType: ALL
-        LocalSecondaryIndexes:
-          - IndexName: startLocalIndex
-            KeySchema:
-              - AttributeName: region
-                KeyType: HASH
-              - AttributeName: start
-                KeyType: RANGE
-            Projection:
-              NonKeyAttributes:
-                - id
-              ProjectionType: INCLUDE
 functions:
   health:
-    handler: program.health
+    handler: program2.health
     runtime: nodejs12.x
     events:
       - http:
@@ -382,6 +316,12 @@ functions:
     events:
       - http:
           path: py/program/detail
+          method: get
+  getByLocation:
+    handler: program.getByLocation
+    events:
+      - http:
+          path: 'location/sweet'
           method: get
   get:
     handler: program.get
