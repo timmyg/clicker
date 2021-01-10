@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx flow-remove-types program.flow.js -o program.js",
     "test": "npm run build && jest --coverage",
     "invoke:health": "serverless invoke local --function health --stage develop",
     "invoke:getAll": "serverless invoke local --function getAll --stage develop  --path ../.resources/data/reservation.json",
