@@ -319,101 +319,103 @@ if (process.env.NODE_ENV === 'test') {
   });
 }
 
-const dbProgram = dynamoose.model(
-  process.env.tableProgram,
-  {
-    region: {
-      type: String,
-      hashKey: true,
-      index: true,
+let dbProgram;
+function init() {
+  dbProgram = dynamoose.model(
+    process.env.tableProgram,
+    {
+      region: {
+        type: String,
+        hashKey: true,
+        index: true,
+      },
+      id: {
+        type: String,
+        rangeKey: true,
+        // hashKey: true,
+        // index: true,
+        // index: {
+        //   global: true,
+        //   project: true,
+        //   name: 'idGlobalIndex',
+        // },
+      },
+      start: Number,
+      startOriginal: Number,
+      end: Number,
+      channel: {
+        type: Number,
+        index: {
+          global: true,
+          project: true,
+          // project: [
+          //   'start',
+          //   'end',
+          //   'region',
+          //   'gameId',
+          //   'game',
+          //   // 'programmingId'
+          // ],
+        },
+      },
+      channelMinor: Number,
+      channelId: Number,
+      channelTitle: String,
+      title: String, // "Oklahoma State @ Kansas"
+      episodeTitle: String, // "Oklahoma State at Kansas"
+      description: String,
+      durationMins: Number, // mins
+      gameId: {
+        type: String,
+        index: {
+          global: true,
+          // name: 'idOnlyGlobalIndex',
+          project: false,
+        },
+      },
+      // game: saveUnknown below
+      clickerRating: Number,
+      live: Boolean,
+      repeat: Boolean,
+      sports: Boolean,
+      hd: Boolean,
+      programmingId: {
+        type: String,
+        index: {
+          global: true,
+          // name: 'idOnlyGlobalIndex',
+          project: false,
+        },
+      }, // "SH000296530000" - use this to get summary
+      channelCategories: [String], // ["Sports Channels"]
+      subcategories: [String], // ["Basketball"]
+      mainCategory: String, // "Sports"
+      programType: String, // "Sports non-event"
+      // dynamic fields
+      nextProgramTitle: String,
+      nextProgramStart: Number,
+      points: Number,
+      synced: Boolean, // synced with description from separate endpoint
+      isSports: Boolean,
+      isLocal: Boolean,
     },
-    id: {
-      type: String,
-      rangeKey: true,
-      // hashKey: true,
-      // index: true,
-      // index: {
-      //   global: true,
-      //   project: true,
-      //   name: 'idGlobalIndex',
-      // },
-    },
-    start: Number,
-    startOriginal: Number,
-    end: Number,
-    channel: {
-      type: Number,
-      index: {
-        global: true,
-        project: true,
-        // project: [
-        //   'start',
-        //   'end',
-        //   'region',
-        //   'gameId',
-        //   'game',
-        //   // 'programmingId'
-        // ],
+    {
+      saveUnknown: ['game'],
+      timestamps: true,
+      expires: {
+        ttl: 86400,
+        attribute: 'expires',
+        returnExpiredItems: false,
+        defaultExpires: x => {
+          // expire 6 hours after end
+          return moment(x.end)
+            .add(6, 'hours')
+            .toDate();
+        },
       },
     },
-    channelMinor: Number,
-    channelId: Number,
-    channelTitle: String,
-    title: String, // "Oklahoma State @ Kansas"
-    episodeTitle: String, // "Oklahoma State at Kansas"
-    description: String,
-    durationMins: Number, // mins
-    gameId: {
-      type: String,
-      index: {
-        global: true,
-        // name: 'idOnlyGlobalIndex',
-        project: false,
-      },
-    },
-    // game: saveUnknown below
-    clickerRating: Number,
-    live: Boolean,
-    repeat: Boolean,
-    sports: Boolean,
-    hd: Boolean,
-    programmingId: {
-      type: String,
-      index: {
-        global: true,
-        // name: 'idOnlyGlobalIndex',
-        project: false,
-      },
-    }, // "SH000296530000" - use this to get summary
-    channelCategories: [String], // ["Sports Channels"]
-    subcategories: [String], // ["Basketball"]
-    mainCategory: String, // "Sports"
-    programType: String, // "Sports non-event"
-    // dynamic fields
-    nextProgramTitle: String,
-    nextProgramStart: Number,
-    points: Number,
-    synced: Boolean, // synced with description from separate endpoint
-    isSports: Boolean,
-    isLocal: Boolean,
-  },
-  {
-    saveUnknown: ['game'],
-    timestamps: true,
-    expires: {
-      ttl: 86400,
-      attribute: 'expires',
-      returnExpiredItems: false,
-      defaultExpires: x => {
-        // expire 6 hours after end
-        return moment(x.end)
-          .add(6, 'hours')
-          .toDate();
-      },
-    },
-  },
-);
-
+  );
+}
 // export const health = RavenLambdaWrapper.handler(Raven, async event => {
 //   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 // });
@@ -446,6 +448,7 @@ export const regions = RavenLambdaWrapper.handler(Raven, async event => {
 // type Program {}
 
 export const get = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
   const {
@@ -617,6 +620,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const params = getPathParameters(event);
   const { locationId } = params;
 
@@ -1062,6 +1066,7 @@ export const syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async ev
 
 export const clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
   // clear programs table
+  init();
   const promises = [];
   for (const region of allRegions) {
     const regionId = region.id;
@@ -1279,6 +1284,7 @@ export const upcoming = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
+  init();
   const recentlyUpdatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
   const windowAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
@@ -1390,6 +1396,7 @@ export function buildAirtablePrograms(programs: Program[]) {
 
 export async function syncRegionChannels(regionName: string, regionChannels: number[], zip: string) {
   // get latest program
+  init();
   console.log('querying region:', regionName);
   // const regionPrograms = await dbProgram.query('region').eq(regionName).exec();
   const existingRegionPrograms = await dbProgram
