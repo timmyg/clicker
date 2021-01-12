@@ -26,12 +26,175 @@ export const getByLocation = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'hello!');
 });
 
-// type region = {
-//   id: string;
-//   name: string;
-//   defaultZip: string;
-//   localChannels: number[];
-// };
+type region = {
+  id: string;
+  name: string;
+  defaultZip: string;
+  localChannels: number[];
+};
+
+type Program = {
+  region: string;
+  id: string;
+  start: number;
+  startOriginal: number;
+  end: number;
+  channel: number;
+  channelId: number;
+  channelMinor: number;
+  channelTitle: string;
+  title: string;
+  episodeTitle: string;
+  description: string;
+  durationMins: number;
+  live: boolean;
+  repeat: boolean;
+  sports: boolean;
+  programmingId: string;
+  channelCategories: string[];
+  subcategories: string[];
+  mainCategory: string;
+  type: string;
+  nextProgramTitle: string;
+  nextProgramStart: number;
+  points: number;
+  synced: boolean;
+  clickerRating: number;
+  gameId: number;
+  game: Game;
+  createdAt: number;
+  updatedAt: number;
+
+  // dynamic
+  startFromNow: number;
+  endFromNow: number;
+  isSports: boolean;
+};
+
+class Team {
+  id: number;
+  score: number;
+  name: {
+    full: string;
+    short: string;
+    abbr: string;
+    display: string;
+  };
+  logo: string;
+  rank: number;
+  book: {
+    moneyline: string;
+    spread: string;
+  };
+}
+
+class GameStatus {
+  started: boolean;
+  blowout: boolean;
+  ended: boolean;
+  description: string;
+}
+class Game {
+  start: string;
+  id: number;
+  status: string;
+  leagueName: string;
+  scoreboard: {
+    display: string;
+    clock: string;
+    period: number;
+  };
+  broadcast: {
+    network: string;
+  };
+  away: Team;
+  home: Team;
+  book: {
+    total: number;
+  };
+  summary: GameStatus;
+}
+
+class BoxLive {
+  channel: number;
+  channelMinor: number;
+  channelChangeAt: number;
+  channelChangeSource: string;
+  locked: boolean;
+  appLocked: boolean;
+  lockedUntil: number;
+  lockedProgrammingIds: string[];
+  lockedMessage: string;
+  program: Program;
+}
+
+class Box {
+  id: string;
+  label: string;
+  zone: string;
+  configuration: {
+    appActive: boolean;
+    automationActive: boolean;
+  };
+  info: {
+    clientAddress: string;
+    locationName: string;
+    ip: string;
+    notes: string;
+  };
+  live: BoxLive;
+  updatedAt: number;
+}
+
+class DirecTVBox {
+  boxId: string;
+  info: DirecTVBoxRaw;
+}
+
+class DirecTVBoxRaw {
+  major: number;
+  minor: number;
+  clientAddr: string;
+  ip: string;
+}
+
+class Base {
+  _v: number;
+}
+
+class Venue extends Base {
+  id: string;
+  shortId: string;
+  losantId: string;
+  boxes: Box[];
+  // channels: {
+  //   exclude: string[],
+  // };
+  packages: string[];
+  name: string;
+  neighborhood: string;
+  geo: {
+    latitude: number;
+    longitude: number;
+  };
+  free: boolean;
+  losantProductionOverride: boolean;
+  img: string;
+  region: string;
+  active: boolean;
+  hidden: boolean;
+  demo: boolean;
+  connected: boolean;
+  setup: boolean;
+  controlCenter: boolean;
+  controlCenterV2: boolean;
+  announcement: string;
+  notes: string;
+  // calculated fields
+  distance: number;
+  openTvs: boolean;
+  save() {}
+}
 
 // duplicated!
 const allPackages: any = [
@@ -458,12 +621,13 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   console.time('entire call');
   console.time('get location');
   console.log({ locationId });
-  const { data: location }: { data: Venue } = await new Invoke()
+  const locationResult = await new Invoke()
     .service('location')
     .name('get')
     .pathParams({ id: locationId })
     .headers(event.headers)
     .go();
+  const location: Venue = locationResult.data;
   console.timeEnd('get location');
   if (!location) {
     return respond(400, 'location doesnt exist');
@@ -1308,7 +1472,7 @@ async function pullFromDirecTV(
   regionName: string,
   regionChannels: number[],
   zip: string,
-  startTimes: moment[],
+  startTimes: typeof moment[],
   totalHours,
 ): Promise<any> {
   const promises = [];
@@ -1593,7 +1757,7 @@ function getProgramListTiebreaker(programs: Program[]): Program[] {
   console.log('! ! ! ! ! ! programs', programs.length);
   // get unique set of programmingIds
   const programmingIds = programs.map(p => p.programmingId);
-  const uniqueProgrammingIds = [...new Set(programmingIds)];
+  const uniqueProgrammingIds = [...Array.from(new Set(programmingIds))];
   console.log({ uniqueProgrammingIds });
   const deduplicatedPrograms = [];
   uniqueProgrammingIds.forEach(pId => {
