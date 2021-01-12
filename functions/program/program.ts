@@ -26,12 +26,12 @@ export const getByLocation = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'hello!');
 });
 
-type region = {
-  id: string;
-  name: string;
-  defaultZip: string;
-  localChannels: number[];
-};
+// type region = {
+//   id: string;
+//   name: string;
+//   defaultZip: string;
+//   localChannels: number[];
+// };
 
 // duplicated!
 const allPackages: any = [
