@@ -5,11 +5,13 @@ require('cross-fetch/polyfill');
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
 let AWS;
-if (!process.env.IS_LOCAL) {
-  AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
+console.log('NODE_ENV', process.env.NODE_ENV);
+if (process.env.NODE_ENV === 'test') {
+} else if (!process.env.IS_LOCAL) {
+  // AWS = require('aws-xray-sdk').captureAWS(require('aws-sdk'));
 } else {
-  console.info('Serverless Offline detected; skipping AWS X-Ray setup');
-  AWS = require('aws-sdk');
+  // console.info('Serverless Offline detected; skipping AWS X-Ray setup');
+  // AWS = require('aws-sdk');
 }
 const axios = require('axios');
 const moment = require('moment');
@@ -412,15 +414,15 @@ const dbProgram = dynamoose.model(
   },
 );
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
-});
+// export const health = RavenLambdaWrapper.handler(Raven, async event => {
+//   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
+// });
 
-module.exports.regions = RavenLambdaWrapper.handler(Raven, async event => {
+export const regions = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, allRegions);
 });
 
-// module.exports.getScheduleTest = RavenLambdaWrapper.handler(Raven, async event => {
+// export const getScheduleTest = RavenLambdaWrapper.handler(Raven, async event => {
 //   const url = `https://www.directv.com/json/channelschedule`;
 //   const channelsString = [9, 206].join(',');
 //   const params = { startTime: 'Fri Dec 20 2019 10:00:00 GMT+0000', hours: 8, channels: channelsString };
@@ -443,7 +445,7 @@ module.exports.regions = RavenLambdaWrapper.handler(Raven, async event => {
 
 // type Program {}
 
-module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+export const get = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
   const {
@@ -614,7 +616,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
+export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const params = getPathParameters(event);
   const { locationId } = params;
 
@@ -1032,7 +1034,7 @@ module.exports.getAll = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, currentPrograms);
 });
 
-module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     for (const region of allRegions) {
       const { defaultZip, id, localChannels } = region;
@@ -1051,14 +1053,14 @@ module.exports.syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async event => {
   console.log(JSON.stringify(event));
   const { id: regionId, defaultZip, localChannels } = getBody(event);
   await syncRegionChannels(regionId, localChannels, defaultZip);
   return respond(200);
 });
 
-module.exports.clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
+export const clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
   // clear programs table
   const promises = [];
   for (const region of allRegions) {
@@ -1083,7 +1085,7 @@ module.exports.clearDatabase = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200, 'ok');
 });
 
-module.exports.clearAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+export const clearAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   // clear control center records
   const airtablesToClear = ['Control Center', 'Games'];
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -1113,7 +1115,7 @@ module.exports.clearAirtable = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200, 'ok');
 });
 
-module.exports.syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event => {
   const { region, datesToPull } = getBody(event);
   console.log({ region, datesToPull });
   const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
@@ -1167,7 +1169,7 @@ module.exports.syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async even
   return respond(200);
 });
 
-module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   const { stage } = process.env;
   const datesToPull = [];
   const daysToPull = 2;
@@ -1194,7 +1196,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-function combineByProgrammingId(programs: Program[]) {
+export function combineByProgrammingId(programs: Program[]) {
   const programsProgrammingIdMap = {};
   programs.forEach(p => {
     const id = p.programmingId + p.start;
@@ -1218,7 +1220,7 @@ function combineByProgrammingId(programs: Program[]) {
   return programsCombined;
 }
 
-async function getRecentlyUpdatedAirtablePrograms() {
+export async function getRecentlyUpdatedAirtablePrograms() {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Control Center';
 
@@ -1237,7 +1239,7 @@ async function getRecentlyUpdatedAirtablePrograms() {
   return updatedAirtablePrograms;
 }
 
-async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
+export async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Control Center';
   const fourHoursAgo = moment()
@@ -1264,7 +1266,7 @@ async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   return updatedAirtablePrograms;
 }
 
-module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
+export const upcoming = RavenLambdaWrapper.handler(Raven, async event => {
   const { location } = getBody(event);
 
   const locationProgrammingIds = location.boxes
@@ -1276,7 +1278,7 @@ module.exports.upcoming = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, upcomingPrograms);
 });
 
-module.exports.syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
   const recentlyUpdatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
   const windowAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
@@ -1349,7 +1351,7 @@ class ProgramAirtable {
   get(x: string): any {}
 }
 
-function buildAirtablePrograms(programs: Program[]) {
+export function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
   programs.forEach(program => {
     const {
@@ -1386,7 +1388,7 @@ function buildAirtablePrograms(programs: Program[]) {
   return transformed;
 }
 
-async function syncRegionChannels(regionName: string, regionChannels: number[], zip: string) {
+export async function syncRegionChannels(regionName: string, regionChannels: number[], zip: string) {
   // get latest program
   console.log('querying region:', regionName);
   // const regionPrograms = await dbProgram.query('region').eq(regionName).exec();
@@ -1442,7 +1444,7 @@ async function syncRegionChannels(regionName: string, regionChannels: number[], 
   console.log(dbResult);
 }
 
-async function publishNewPrograms(programs: Program[], topicArn: string) {
+export async function publishNewPrograms(programs: Program[], topicArn: string) {
   const sns = new AWS.SNS({ region: 'us-east-1' });
   let i = 0;
   const messagePromises = [];
@@ -1468,7 +1470,7 @@ async function publishNewPrograms(programs: Program[], topicArn: string) {
   console.log(i, 'topics published to:', topicArn);
 }
 
-async function pullFromDirecTV(
+export async function pullFromDirecTV(
   regionName: string,
   regionChannels: number[],
   zip: string,
@@ -1515,7 +1517,7 @@ async function getProgramDetails(program: Program): Promise<any> {
   return result ? result.data : null;
 }
 
-module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
+export const consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
   // HACK sleep randomly so we dont hit airtable too hard
   // const randomBetweenZeroAndThirty = Math.floor(Math.random() * 31);
   // await sleep(randomBetweenZeroAndThirty * 1000);
@@ -1558,7 +1560,7 @@ module.exports.consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handl
   return respond(200);
 });
 
-module.exports.consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
+export const consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
   if (!programmingId.includes('GDM')) {
@@ -1629,7 +1631,7 @@ function buildProgramObjects(programs) {
   return transformedPrograms;
 }
 
-function build(dtvSchedule: any, regionId: string) {
+export function build(dtvSchedule: any, regionId: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
   dtvSchedule.forEach(channel => {
@@ -1691,7 +1693,7 @@ function build(dtvSchedule: any, regionId: string) {
   return filteredPrograms;
 }
 
-function getDefaultRating(program: Program): number | null | undefined {
+export function getDefaultRating(program: Program): number | null | undefined {
   const defaultRatings = [
     { search: 'sportscenter', rating: 2 },
     { search: 'good morning football', rating: 1 },
@@ -1727,7 +1729,7 @@ function getDefaultRating(program: Program): number | null | undefined {
   }
 }
 
-function generateId(program: Program) {
+export function generateId(program: Program) {
   const { programmingId, channel, start, region } = program;
   let id = programmingId + channel + start;
   if (region) {
@@ -1736,7 +1738,7 @@ function generateId(program: Program) {
   return uuid(id, uuid.DNS);
 }
 
-function getLocalChannelName(chName: string) {
+export function getLocalChannelName(chName: string) {
   // chName will be Cincinnati, OH WCPO ABC 9 SD
   if (chName.toLowerCase().includes(' abc ')) {
     return 'ABC';
@@ -1749,11 +1751,11 @@ function getLocalChannelName(chName: string) {
   }
 }
 
-function getChannels(channels: number[]): number[] {
+export function getChannels(channels: number[]): number[] {
   return channels.map(c => Math.floor(c));
 }
 
-function getProgramListTiebreaker(programs: Program[]): Program[] {
+export function getProgramListTiebreaker(programs: Program[]): Program[] {
   console.log('! ! ! ! ! ! programs', programs.length);
   // get unique set of programmingIds
   const programmingIds = programs.map(p => p.programmingId);
@@ -1784,10 +1786,10 @@ function getProgramListTiebreaker(programs: Program[]): Program[] {
   return deduplicatedPrograms;
 }
 
-module.exports.build = build;
-module.exports.generateId = generateId;
-module.exports.getLocalChannelName = getLocalChannelName;
-module.exports.getChannels = getChannels;
-module.exports.getDefaultRating = getDefaultRating;
-module.exports.getProgramListTiebreaker = getProgramListTiebreaker;
-module.exports.combineByProgrammingId = combineByProgrammingId;
+// export const build = build;
+// export const generateId = generateId;
+// export const getLocalChannelName = getLocalChannelName;
+// export const getChannels = getChannels;
+// export const getDefaultRating = getDefaultRating;
+// export const getProgramListTiebreaker = getProgramListTiebreaker;
+// export const combineByProgrammingId = combineByProgrammingId;
