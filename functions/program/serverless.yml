@@ -63,6 +63,9 @@ custom:
   prune:
     automatic: true
     number: 3
+  bundle:
+    sourcemaps: false
+    linting: false
   tableProgram: programs-${self:custom.stage}
   domains:
     prod: api.tryclicker.com
