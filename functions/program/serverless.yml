@@ -203,7 +203,7 @@ resources:
         RawMessageDelivery: 'true'
 functions:
   health:
-    handler: program22.health
+    handler: program.health
     runtime: nodejs12.x
     events:
       - http:
