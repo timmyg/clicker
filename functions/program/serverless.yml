@@ -324,7 +324,7 @@ functions:
     handler: program.getByLocation
     events:
       - http:
-          path: 'location/sweet'
+          path: 'locationgetget'
           method: get
   get:
     handler: program.get
