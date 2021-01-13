@@ -309,7 +309,7 @@ functions:
     timeout: 40
     events:
       - http:
-          path: py/schedule
+          path: 'py/schedule'
           method: get
   getProgramDetailPy:
     handler: program2Py.getProgramDetail
@@ -317,7 +317,7 @@ functions:
     timeout: 60
     events:
       - http:
-          path: py/program/detail
+          path: 'py/program/detail'
           method: get
   getByLocation:
     runtime: nodejs12.x
