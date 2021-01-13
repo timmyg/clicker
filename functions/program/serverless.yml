@@ -56,7 +56,7 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  # - serverless-python-requirements
+  - serverless-python-requirements
   - serverless-bundle
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -71,8 +71,8 @@ custom:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
-  # pythonRequirements:
-  #   dockerizePip: non-linux
+  pythonRequirements:
+    dockerizePip: non-linux
   airtableBase:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
