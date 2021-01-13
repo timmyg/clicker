@@ -304,7 +304,7 @@ functions:
             - Arn
           batchSize: 1
   getSchedulePy:
-    handler: program2Py.getPrograms
+    handler: programPy.getPrograms
     runtime: python3.6
     timeout: 40
     events:
@@ -312,7 +312,7 @@ functions:
           path: 'py/schedule'
           method: get
   getProgramDetailPy:
-    handler: program2Py.getProgramDetail
+    handler: programPy.getProgramDetail
     runtime: python3.6
     timeout: 60
     events:
