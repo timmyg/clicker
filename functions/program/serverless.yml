@@ -303,22 +303,22 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  getSchedulePy:
-    handler: programPy.getPrograms
-    runtime: python3.6
-    timeout: 40
-    events:
-      - http:
-          path: 'py/schedule'
-          method: get
-  getProgramDetailPy:
-    handler: programPy.getProgramDetail
-    runtime: python3.6
-    timeout: 60
-    events:
-      - http:
-          path: 'py/program/detail'
-          method: get
+  # getSchedulePy:
+  #   handler: programPy.getPrograms
+  #   runtime: python3.6
+  #   timeout: 40
+  #   events:
+  #     - http:
+  #         path: 'py/schedule'
+  #         method: get
+  # getProgramDetailPy:
+  #   handler: programPy.getProgramDetail
+  #   runtime: python3.6
+  #   timeout: 60
+  #   events:
+  #     - http:
+  #         path: 'py/program/detail'
+  #         method: get
   getByLocation:
     runtime: nodejs12.x
     handler: program.getByLocation
@@ -369,4 +369,3 @@ functions:
       - http:
           path: clear/airtable
           method: post
-
