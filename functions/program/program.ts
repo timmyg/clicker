@@ -13,12 +13,9 @@ if (process.env.NODE_ENV === 'test') {
   // console.info('Serverless Offline detected; skipping AWS X-Ray setup');
   // AWS = require('aws-sdk');
 }
-const axios = require('axios');
 const moment = require('moment');
 const { uniqBy, uniqWith } = require('lodash');
-const directvEndpoint = 'https://www.directv.com/json';
 const airtablePrograms = 'Control Center';
-const sleep = require('util').promisify(setTimeout);
 
 export const health = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'hello!');

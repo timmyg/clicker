@@ -86,7 +86,7 @@ async function call({ path, queryParams, headers }, agentIndex?, retryFailures =
       url: directvEndpoint + path,
       method: 'GET',
       qs: queryParams,
-      proxy: 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225',
+      // proxy: 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225',
       timeout: 5000,
       gzip: true,
 
@@ -108,7 +108,7 @@ async function call({ path, queryParams, headers }, agentIndex?, retryFailures =
       },
     };
     const response = await request(options);
-    console.log('success');
+    // console.log('success');
     return {
       data: JSON.parse(response),
       requestUserAgent: options['headers']['User-Agent'],
@@ -138,16 +138,27 @@ export const evaluateUserAgents = RavenLambdaWrapper.handler(Raven, async event 
   const { programmingId } = event.queryStringParameters;
   const path = '/program/flip/' + programmingId;
   let i = 0;
+  const results = {
+    good: [],
+    failed: [],
+  };
   while (i <= userAgentList.length) {
     const response = await call(buildRequest(path), i, false);
     if (response.data) {
       console.error('   ok with', response.requestUserAgent);
+      results.good.push(response.requestUserAgent);
     } else {
       console.error('error with', response.requestUserAgent);
+      results.failed.push(response.requestUserAgent);
     }
     i++;
   }
-  return respond(200, { ok: 'ok' });
+  return respond(200, {
+    totalEvaluated: i,
+    goodCount: results.good.length,
+    failedCount: results.failed.length,
+    good: results.good,
+  });
 });
 
 export const getProgramDetail = RavenLambdaWrapper.handler(Raven, async event => {

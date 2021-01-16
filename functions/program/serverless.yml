@@ -320,6 +320,10 @@ functions:
     handler: programDirectv.evaluateUserAgents
     runtime: nodejs12.x
     timeout: 300
+    events:
+      - http:
+          path: 'dtv/evaluate'
+          method: get
   getByLocation:
     runtime: nodejs12.x
     handler: program.getByLocation
