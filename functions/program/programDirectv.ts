@@ -3,6 +3,7 @@ require('cross-fetch/polyfill');
 const directvEndpoint = 'https://www.directv.com/json';
 import request from 'request-promise';
 const BrowserHeadersGenerator = require('browser-headers-generator');
+const proxyAddress = 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225';
 
 const userAgentList = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
@@ -89,13 +90,17 @@ async function getRandomizedBrowserHeaders() {
 
 async function call({ path, queryParams, headers }, agentIndex?, retryFailures = true, proxy = true) {
   const userAgent = getUserAgent(agentIndex);
+  const HttpsProxyAgent = require('https-proxy-agent');
   let options = {};
+
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   try {
     options = {
       url: directvEndpoint + path,
       method: 'GET',
       qs: queryParams,
-      proxy: proxy ? 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225' : null,
+      proxy: proxy ? proxyAddress : null,
+      agent: new HttpsProxyAgent(proxyAddress),
       timeout: 1000,
       gzip: true,
 
@@ -171,11 +176,31 @@ export const evaluateUserAgents = RavenLambdaWrapper.handler(Raven, async event 
   });
 });
 
-export const getProgramDetail = RavenLambdaWrapper.handler(Raven, async event => {
+export const getProgramDetail = RavenLambdaWrapper.handler(Raven, event => {
   const { programmingId } = event.queryStringParameters;
   const path = '/program/flip/' + programmingId;
-  const response = await call(buildRequest(path));
-  return respond(200, response.data);
+  // const response = await call(buildRequest(path));
+  var needle = require('needle');
+
+  console.log(directvEndpoint + path);
+  const resp = needle.get(directvEndpoint + path, {
+    proxy: proxyAddress,
+    compressed: true,
+    json: true,
+    headers: { content_type: 'application/json' },
+  });
+  let data;
+  resp.on('readable', function() {
+    while ((data = this.read())) {
+      console.log(data.toString());
+    }
+  });
+
+  resp.on('done', function(err) {
+    // if our request had an error, our 'done' event will tell us.
+    if (!err) console.log('Great success!');
+  });
+  // console.log({ x });
 });
 
 export const getSchedule = RavenLambdaWrapper.handler(Raven, async event => {
