@@ -78,7 +78,7 @@ function getUserAgent(i?) {
   return userAgentList[index];
 }
 
-async function call({ path, queryParams, headers }, agentIndex?, retryFailures = true) {
+async function call({ path, queryParams, headers }, agentIndex?, retryFailures = true, proxy = true) {
   const userAgent = getUserAgent(agentIndex);
   let options = {};
   try {
@@ -86,7 +86,7 @@ async function call({ path, queryParams, headers }, agentIndex?, retryFailures =
       url: directvEndpoint + path,
       method: 'GET',
       qs: queryParams,
-      // proxy: 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225',
+      proxy: proxy ? 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225' : false,
       timeout: 5000,
       gzip: true,
 
@@ -135,7 +135,7 @@ function buildRequest(path, queryParams?, headers?) {
 
 export const evaluateUserAgents = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('evaluateUserAgents');
-  const { programmingId } = event.queryStringParameters;
+  const { programmingId, proxy } = event.queryStringParameters;
   const path = '/program/flip/' + programmingId;
   let i = 0;
   const results = {
@@ -143,7 +143,7 @@ export const evaluateUserAgents = RavenLambdaWrapper.handler(Raven, async event 
     failed: [],
   };
   while (i <= userAgentList.length) {
-    const response = await call(buildRequest(path), i, false);
+    const response = await call(buildRequest(path), i, false, proxy);
     if (response.data) {
       console.error('   ok with', response.requestUserAgent);
       results.good.push(response.requestUserAgent);

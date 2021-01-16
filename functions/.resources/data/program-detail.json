@@ -1,5 +1,6 @@
 {
   "queryStringParameters": {
-    "programmingId": "EP036892051657"
+    "programmingId": "EP036892051657",
+    "proxy": true
   }
 }

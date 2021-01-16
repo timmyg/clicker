@@ -319,7 +319,7 @@ functions:
   evaluateUserAgents:
     handler: programDirectv.evaluateUserAgents
     runtime: nodejs12.x
-    timeout: 300
+    timeout: 600
     events:
       - http:
           path: 'dtv/evaluate'
