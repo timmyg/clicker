@@ -95,7 +95,7 @@ async function call({ path, queryParams, headers }, agentIndex?, retryFailures =
       url: directvEndpoint + path,
       method: 'GET',
       qs: queryParams,
-      // proxy: proxy ? 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225' : null,
+      proxy: proxy ? 'http://lum-customer-clicker-zone-static:959l49mpzwwb@zproxy.lum-superproxy.io:22225' : null,
       timeout: 1000,
       gzip: true,
 
