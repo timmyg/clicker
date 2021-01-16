@@ -303,22 +303,28 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  # getSchedulePy:
-  #   handler: programPy.getPrograms
-  #   runtime: python3.6
-  #   timeout: 40
-  #   events:
-  #     - http:
-  #         path: 'py/schedule'
-  #         method: get
-  # getProgramDetailPy:
-  #   handler: programPy.getProgramDetail
-  #   runtime: python3.6
-  #   timeout: 60
-  #   events:
-  #     - http:
-  #         path: 'py/program/detail'
-  #         method: get
+  getProgramDetail:
+    handler: programDirectv.getProgramDetail
+    # runtime: python3.6
+    runtime: nodejs12.x
+    timeout: 40
+    events:
+      - http:
+          path: 'dtv/schedule'
+          method: get
+  getSchedule:
+    handler: programDirectv.getSchedule
+    # runtime: python3.6
+    runtime: nodejs12.x
+    timeout: 60
+    events:
+      - http:
+          path: 'dtv/program/detail'
+          method: get
+  evaluateUserAgents:
+    handler: programDirectv.evaluateUserAgents
+    runtime: nodejs12.x
+    timeout: 300
   getByLocation:
     runtime: nodejs12.x
     handler: program.getByLocation

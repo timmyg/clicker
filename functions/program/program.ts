@@ -1491,7 +1491,7 @@ export async function pullFromDirecTV(
     promises.push(
       new Invoke()
         .service('program')
-        .name('getSchedulePy')
+        .name('getSchedule')
         .queryParams({
           start: startTime.toString(),
           zip,
@@ -1518,7 +1518,7 @@ async function getProgramDetails(program: Program): Promise<any> {
   const { programmingId } = program;
   const result = await new Invoke()
     .service('program')
-    .name('getProgramDetailPy')
+    .name('getProgramDetail')
     .queryParams({ programmingId })
     .go();
   return result ? result.data : null;
