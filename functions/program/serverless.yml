@@ -56,7 +56,6 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  - serverless-python-requirements
   - serverless-bundle
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -71,8 +70,6 @@ custom:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
-  pythonRequirements:
-    dockerizePip: non-linux
   airtableBase:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
@@ -305,7 +302,6 @@ functions:
           batchSize: 1
   getProgramDetail:
     handler: programDirectv.getProgramDetail
-    # runtime: python3.6
     runtime: nodejs12.x
     timeout: 40
     events:
@@ -314,7 +310,6 @@ functions:
           method: get
   getSchedule:
     handler: programDirectv.getSchedule
-    # runtime: python3.6
     runtime: nodejs12.x
     timeout: 60
     events:
