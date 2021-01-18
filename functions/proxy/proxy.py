@@ -13,7 +13,7 @@ def health():
     return {
         'statusCode': 200,
         'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps({message: 'ok'})
+        'body': json.dumps({'message': 'ok'})
     }
 
 def getHeaders():
