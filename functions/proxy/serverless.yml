@@ -26,6 +26,9 @@ plugins:
   - serverless-sentry
   - serverless-plugin-tracing
   - serverless-python-requirements
+package:
+  exclude:
+    - node_modules/**
 custom:
   stage: ${opt:stage, self:provider.stage}
   prune:
