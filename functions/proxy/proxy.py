@@ -44,8 +44,8 @@ def getHeaders():
     }
 
 
-def getPrograms(event, context):
-    print('getPrograms')
+def getSchedule(event, context):
+    print('getSchedule')
     data = event['queryStringParameters']
     print(data['start'])
     print(data['zip'])

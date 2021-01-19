@@ -1487,7 +1487,7 @@ export async function pullFromDirecTV(
     const channelsString = getChannels([...regionChannels, ...nationalChannelNumbers]).join(',');
     promises.push(
       new Invoke()
-        .service('program')
+        .service('proxy')
         .name('getSchedule')
         .queryParams({
           start: startTime.toString(),
@@ -1514,7 +1514,7 @@ async function getProgramDetails(program: Program): Promise<any> {
   console.log({ program });
   const { programmingId } = program;
   const result = await new Invoke()
-    .service('program')
+    .service('proxy')
     .name('getProgramDetail')
     .queryParams({ programmingId })
     .go();

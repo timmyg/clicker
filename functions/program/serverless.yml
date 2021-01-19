@@ -300,22 +300,6 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  getProgramDetail:
-    handler: programDirectv.getProgramDetail
-    runtime: nodejs12.x
-    timeout: 40
-    events:
-      - http:
-          path: 'dtv/schedule'
-          method: get
-  getSchedule:
-    handler: programDirectv.getSchedule
-    runtime: nodejs12.x
-    timeout: 60
-    events:
-      - http:
-          path: 'dtv/program/detail'
-          method: get
   evaluateUserAgents:
     handler: programDirectv.evaluateUserAgents
     runtime: nodejs12.x

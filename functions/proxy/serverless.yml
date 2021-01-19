@@ -57,14 +57,14 @@ functions:
       - http:
           path: health
           method: get
-  getSchedulePy:
-    handler: proxy.getPrograms
+  getSchedule:
+    handler: proxy.getSchedule
     timeout: 40
     events:
       - http:
           path: py/schedule
           method: get
-  getProgramDetailPy:
+  getProgramDetail:
     handler: proxy.getProgramDetail
     timeout: 60
     events:

@@ -14,8 +14,6 @@
     "invoke:consumeNewProgramAirtableUpdateDetails": "serverless invoke local --function consumeNewProgramAirtableUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
     "invoke:consumeNewProgramUpdateDetails": "serverless invoke local --function consumeNewProgramUpdateDetails  --stage develop --path ../.resources/data/queue-new-program.json",
     "invoke:syncRatings": "serverless invoke local --function syncRatings  --stage develop",
-    "invoke:getProgramDetail": "serverless invoke local --function getProgramDetail --path ../.resources/data/program-detail.json",
-    "invoke:getSchedule": "serverless invoke local --function getSchedule --path ../.resources/data/program-schedules.json",
     "invoke:evaluateUserAgents": "serverless invoke local --function evaluateUserAgents --path ../.resources/data/program-detail.json",
     "invoke:get": "serverless invoke local --function get --path ../.resources/data/program.json --stage develop",
     "invoke:get:programmingId": "serverless invoke local --function get --path ../.resources/data/program-programmingId.json --stage develop",
