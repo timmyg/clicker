@@ -17,14 +17,6 @@ const moment = require('moment');
 const { uniqBy, uniqWith } = require('lodash');
 const airtablePrograms = 'Control Center';
 
-export const health = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond(200, 'hello!');
-});
-
-export const getByLocation = RavenLambdaWrapper.handler(Raven, async event => {
-  return respond(200, 'hello!');
-});
-
 type region = {
   id: string;
   name: string;
@@ -32,43 +24,7 @@ type region = {
   localChannels: number[];
 };
 
-type Program = {
-  region: string;
-  id: string;
-  start: number;
-  startOriginal: number;
-  end: number;
-  channel: number;
-  channelId: number;
-  channelMinor: number;
-  channelTitle: string;
-  title: string;
-  episodeTitle: string;
-  description: string;
-  durationMins: number;
-  live: boolean;
-  repeat: boolean;
-  sports: boolean;
-  programmingId: string;
-  channelCategories: string[];
-  subcategories: string[];
-  mainCategory: string;
-  type: string;
-  nextProgramTitle: string;
-  nextProgramStart: number;
-  points: number;
-  synced: boolean;
-  clickerRating: number;
-  gameId: number;
-  game: Game;
-  createdAt: number;
-  updatedAt: number;
-
-  // dynamic
-  startFromNow: number;
-  endFromNow: number;
-  isSports: boolean;
-};
+import Program from '../models/program';
 
 class Team {
   id: number;
@@ -114,37 +70,6 @@ class Game {
   summary: GameStatus;
 }
 
-class BoxLive {
-  channel: number;
-  channelMinor: number;
-  channelChangeAt: number;
-  channelChangeSource: string;
-  locked: boolean;
-  appLocked: boolean;
-  lockedUntil: number;
-  lockedProgrammingIds: string[];
-  lockedMessage: string;
-  program: Program;
-}
-
-class Box {
-  id: string;
-  label: string;
-  zone: string;
-  configuration: {
-    appActive: boolean;
-    automationActive: boolean;
-  };
-  info: {
-    clientAddress: string;
-    locationName: string;
-    ip: string;
-    notes: string;
-  };
-  live: BoxLive;
-  updatedAt: number;
-}
-
 class DirecTVBox {
   boxId: string;
   info: DirecTVBoxRaw;
@@ -157,43 +82,10 @@ class DirecTVBoxRaw {
   ip: string;
 }
 
-class Base {
-  _v: number;
-}
+import Box from '../models/box';
+import Venue from '../models/venue';
 
-class Venue extends Base {
-  id: string;
-  shortId: string;
-  losantId: string;
-  boxes: Box[];
-  // channels: {
-  //   exclude: string[],
-  // };
-  packages: string[];
-  name: string;
-  neighborhood: string;
-  geo: {
-    latitude: number;
-    longitude: number;
-  };
-  free: boolean;
-  losantProductionOverride: boolean;
-  img: string;
-  region: string;
-  active: boolean;
-  hidden: boolean;
-  demo: boolean;
-  connected: boolean;
-  setup: boolean;
-  controlCenter: boolean;
-  controlCenterV2: boolean;
-  announcement: string;
-  notes: string;
-  // calculated fields
-  distance: number;
-  openTvs: boolean;
-  save() {}
-}
+class Venue {
 
 // duplicated!
 const allPackages: any = [
@@ -413,9 +305,9 @@ function init() {
     },
   );
 }
-// export const health = RavenLambdaWrapper.handler(Raven, async event => {
-//   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
-// });
+export const health = RavenLambdaWrapper.handler(Raven, async event => {
+  return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
+});
 
 export const regions = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, allRegions);
@@ -1601,26 +1493,6 @@ async function updateProgram(id, region, description, type) {
   try {
     const x = await docClient.update(params).promise();
     console.log({ x });
-  } catch (err) {
-    console.log({ err });
-    return err;
-  }
-}
-
-function updateProgramGame(programId, region, game) {
-  console.log({ programId, region, game });
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  var params = {
-    TableName: process.env.tableProgram,
-    Key: { id: programId, region },
-    UpdateExpression: 'set game = :game',
-    ExpressionAttributeValues: {
-      ':game': game,
-    },
-    ReturnValues: 'UPDATED_NEW',
-  };
-  try {
-    return docClient.update(params).promise();
   } catch (err) {
     console.log({ err });
     return err;

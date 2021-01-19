@@ -5,6 +5,7 @@ provider:
   memorySize: 1024
   versionFunctions: false
   # tracing: true
+  runtime: nodejs12.x
   logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker
@@ -204,7 +205,6 @@ resources:
 functions:
   health:
     handler: program.health
-    runtime: nodejs12.x
     events:
       - http:
           path: health
@@ -212,7 +212,6 @@ functions:
   getAll:
     handler: program.getAll
     # provisionedConcurrency: 1
-    runtime: nodejs12.x
     timeout: 20
     events:
       - http:
@@ -229,7 +228,6 @@ functions:
   syncRegions:
     handler: program.syncRegions
     description: pull in directv data from their api into programs table for all regions
-    runtime: nodejs12.x
     # timeout: 60
     events:
       - schedule: rate(2 hours)
@@ -243,14 +241,12 @@ functions:
           method: post
   syncRegionNextFewHours:
     handler: program.syncRegionNextFewHours
-    runtime: nodejs12.x
     timeout: 30
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
   syncAirtable:
     handler: program.syncAirtable
-    runtime: nodejs12.x
     description: call syncAirtableRegion for each region
     timeout: 12
     events:
@@ -260,7 +256,6 @@ functions:
           method: post
   syncAirtableRegion:
     handler: program.syncAirtableRegion
-    runtime: nodejs12.x
     description: sync programs in DTV api to airtable for region
     timeout: 120
     reservedConcurrency: 1
@@ -268,7 +263,6 @@ functions:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
-    runtime: nodejs12.x
     description: sync user program game id/rating/early from airtable to programs db
     timeout: 15
     events:
@@ -279,7 +273,6 @@ functions:
   consumeNewProgramUpdateDetails:
     timeout: 30
     handler: program.consumeNewProgramUpdateDetails
-    runtime: nodejs12.x
     description: Consume new db program and update description
     reservedConcurrency: 1
     events:
@@ -291,7 +284,6 @@ functions:
   consumeNewProgramAirtableUpdateDetails:
     timeout: 30
     handler: program.consumeNewProgramAirtableUpdateDetails
-    runtime: nodejs12.x
     description: Consume new airtable program update description
     reservedConcurrency: 1
     events:
@@ -302,22 +294,13 @@ functions:
           batchSize: 1
   # evaluateUserAgents:
   #   handler: programDirectv.evaluateUserAgents
-  #   runtime: nodejs12.x
   #   timeout: 600
   #   events:
   #     - http:
   #         path: 'dtv/evaluate'
   #         method: get
-  getByLocation:
-    runtime: nodejs12.x
-    handler: program.getByLocation
-    events:
-      - http:
-          path: 'locationgetget'
-          method: get
   get:
     handler: program.get
-    runtime: nodejs12.x
     timeout: 30
     events:
       - http:
@@ -325,14 +308,12 @@ functions:
           method: get
   regions:
     handler: program.regions
-    runtime: nodejs12.x
     events:
       - http:
           path: regions
           method: get
   upcoming:
     handler: program.upcoming
-    runtime: nodejs12.x
     # reservedConcurrency: 1
     events:
       - http:
@@ -341,7 +322,6 @@ functions:
   clearDatabase:
     handler: program.clearDatabase
     description: clear out programs database table
-    runtime: nodejs12.x
     timeout: 120
     events:
       - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern
@@ -351,7 +331,6 @@ functions:
   clearAirtable:
     handler: program.clearAirtable
     description: clear out games and control center airtables
-    runtime: nodejs12.x
     timeout: 120
     events:
       - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern

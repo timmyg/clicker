@@ -28,11 +28,14 @@ plugins:
   - serverless-prune-plugin
   - serverless-sentry
   - serverless-dotenv-plugin
-  - serverless-plugin-tracing
-  - serverless-plugin-scripts
-
+  # - serverless-plugin-tracing
+  # - serverless-plugin-scripts
+  - serverless-bundle
 custom:
   stage: ${opt:stage}
+  bundle:
+    sourcemaps: false
+    linting: false
   # hooks:
   #   after:deploy:finalize:
   #     - npx sls invoke -f migration

@@ -272,12 +272,7 @@ export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, result.data.updateBoxLive);
 });
 
-class DirectvBox {
-  major: number;
-  minor: number;
-  clientAddr: string;
-  locationName: string;
-}
+import DirectvBox from '../models/directvBox';
 
 class DirectvBoxRequest {
   boxes: DirectvBox[];
