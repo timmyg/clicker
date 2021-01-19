@@ -300,14 +300,14 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  evaluateUserAgents:
-    handler: programDirectv.evaluateUserAgents
-    runtime: nodejs12.x
-    timeout: 600
-    events:
-      - http:
-          path: 'dtv/evaluate'
-          method: get
+  # evaluateUserAgents:
+  #   handler: programDirectv.evaluateUserAgents
+  #   runtime: nodejs12.x
+  #   timeout: 600
+  #   events:
+  #     - http:
+  #         path: 'dtv/evaluate'
+  #         method: get
   getByLocation:
     runtime: nodejs12.x
     handler: program.getByLocation
