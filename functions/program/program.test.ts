@@ -35,7 +35,7 @@ test('combineByProgrammingId combines programs by programming id and start time'
   expect(result[3].channelTitle).toEqual('ESPN2');
 });
 
-test.skip('generateId generates the same id when same program', () => {
+test('generateId generates the same id when same program', () => {
   // const region1 = 'cincinnati';
   const program = {
     channel: 206,
@@ -79,7 +79,7 @@ test('generateId generates different ids when different channels', () => {
   expect(program1Id).not.toEqual(program2Id);
 });
 
-test.skip('build programs', () => {
+test('build programs', () => {
   // fix dates
   data.schedule.forEach((s, i) => {
     s.schedules.forEach((c, i, channels) => {});
