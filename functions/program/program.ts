@@ -1341,7 +1341,8 @@ export async function syncRegionChannels(regionName: string, regionChannels: num
 }
 
 export async function publishNewPrograms(programs: Program[], topicArn: string) {
-  const sns = new AWS.SNS({ region: 'us-east-1' });
+  const AWS2 = require('aws-sdk');
+  const sns = new AWS2.SNS({ region: 'us-east-1' });
   let i = 0;
   const messagePromises = [];
 
