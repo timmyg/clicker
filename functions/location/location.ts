@@ -1,4 +1,4 @@
-const { respond, getBody, getPathParameters, Invoke, Raven, RavenLambdaWrapper } = require('serverless-helpers');
+const { respond, getBody, getPathParameters, Invoke } = require('serverless-helpers');
 const dynamoose = require('dynamoose');
 const geolib = require('geolib');
 const moment = require('moment-timezone');
@@ -8,6 +8,7 @@ const uuid = require('uuid/v1');
 const url = require('url');
 const Airtable = require('airtable');
 const { Model } = require('dynamodb-toolbox');
+const withSentry = require('serverless-sentry-lib');
 
 // const awsXRay = require('aws-xray-sdk');
 // const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
@@ -182,7 +183,7 @@ function init() {
   );
 }
 
-module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.all = withSentry(async function(event, context) {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   // const { partner, clicker, app } = event.headers;
@@ -240,7 +241,7 @@ module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, sorted);
 });
 
-module.exports.getBox = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.getBox = withSentry(async function(event, context) {
   const { id, boxId } = getPathParameters(event);
   const location: Venue = await dbLocation
     .queryOne('id')
@@ -250,7 +251,7 @@ module.exports.getBox = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, setBoxStatus(box));
 });
 
-module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.get = withSentry(async function(event, context) {
   const { id } = getPathParameters(event);
 
   // console.time('get from db');
@@ -422,13 +423,13 @@ function setBoxStatus(box: Box): Box {
   return box;
 }
 
-module.exports.delete = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.delete = withSentry(async function(event, context) {
   const { id } = getPathParameters(event);
   const location: Venue = await dbLocation.delete({ id });
   return respond(202, location);
 });
 
-module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.create = withSentry(async function(event, context) {
   try {
     const body = getBody(event);
     body._v = 2;
@@ -449,7 +450,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.update = withSentry(async function(event, context) {
   try {
     const { id } = getPathParameters(event);
     const body = getBody(event);
@@ -464,7 +465,7 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.setBoxes = withSentry(async function(event, context) {
   const body = getBody(event);
   const requestBoxes: DirecTVBoxRaw[] = body.boxes;
   const ip = body.ip;
@@ -524,7 +525,7 @@ module.exports.setBoxes = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(201);
 });
 
-module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncAirtableRegions = withSentry(async function(event, context) {
   const { data: regions } = await new Invoke()
     .service('program')
     .name('regions')
@@ -561,7 +562,7 @@ module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async eve
   return respond(200, { count });
 });
 
-// module.exports.syncAirtableLocations = RavenLambdaWrapper.handler(Raven, async event => {
+// module.exports.syncAirtableLocations = withSentry(async function (event, context) {
 //   const dbLocations: Venue[] = await dbLocation.scan().exec();
 //   const airtableDataTable = 'Data';
 //   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -592,7 +593,7 @@ module.exports.syncAirtableRegions = RavenLambdaWrapper.handler(Raven, async eve
 //   return respond(200, { count });
 // });
 
-module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.setBoxReserved = withSentry(async function(event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
   console.log({ locationId, boxId, end });
@@ -618,7 +619,7 @@ module.exports.setBoxReserved = RavenLambdaWrapper.handler(Raven, async event =>
   return respond(200);
 });
 
-module.exports.setBoxFree = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.setBoxFree = withSentry(async function(event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
 
   // const location: Venue = await dbLocation
@@ -676,7 +677,7 @@ async function getLocationWithBoxes(locationId, fetchProgram) {
 }
 
 // called from antenna
-module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.saveBoxesInfo = withSentry(async function(event, context) {
   const { id: locationId } = getPathParameters(event);
   const body = getBody(event);
   // const boxes: DirecTVBox[] = body.boxes;
@@ -788,7 +789,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
   return respond(200);
 });
 
-module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.connected = withSentry(async function(event, context) {
   const { losantId } = getPathParameters(event);
 
   const connected = true;
@@ -813,7 +814,7 @@ module.exports.connected = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
 });
 
-module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.disconnected = withSentry(async function(event, context) {
   const { losantId } = getPathParameters(event);
 
   const connected = false;
@@ -839,7 +840,7 @@ module.exports.disconnected = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
 });
 
-module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.checkAllBoxesInfo = withSentry(async function(event, context) {
   let allLocations: Venue[] = await dbLocation.scan().exec();
 
   let i = 0;
@@ -877,7 +878,7 @@ module.exports.checkAllBoxesInfo = RavenLambdaWrapper.handler(Raven, async event
   return respond(200, 'ok');
 });
 
-module.exports.controlCenterLocationsByRegion = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.controlCenterLocationsByRegion = withSentry(async function(event, context) {
   const { regions } = getPathParameters(event);
   console.log(regions);
   if (!regions || !regions.length) {
@@ -921,7 +922,7 @@ class ControlCenterProgram {
   }
 }
 
-module.exports.controlCenter = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.controlCenter = withSentry(async function(event, context) {
   console.log(JSON.stringify({ event }));
   let locations: Venue[] = await dbLocation.scan().exec();
   locations = locations.filter(l => l.controlCenter === true);
@@ -1017,7 +1018,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 }
 
 // npm run invoke:controlCenterByLocation
-module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.controlCenterByLocation = withSentry(async function(event, context) {
   const { id: locationId } = getPathParameters(event);
   const location = await getLocationWithBoxes(locationId, true);
   console.log('location:', JSON.stringify(location));
@@ -1102,7 +1103,7 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
 });
 
 // npm run invoke:updateAirtableNowShowing
-module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.updateAirtableNowShowing = withSentry(async function(event, context) {
   let locations: Venue[] = await dbLocation
     .scan()
     .filter('active')
@@ -1132,7 +1133,7 @@ module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, asyn
   return respond(200);
 });
 
-module.exports.getLocationDetailsPage = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.getLocationDetailsPage = withSentry(async function(event, context) {
   const { id } = getPathParameters(event);
   console.time('get location');
   // const location: Venue = await dbLocation
@@ -1262,7 +1263,7 @@ async function migrateLocationsToVersion2(version?: number) {
   // await Promise.all(promises);
 }
 
-module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.migration = withSentry(async function(event, context) {
   console.log('-_%^#$@+$(%     running db migrations     -_%^#$@+$(%');
 
   await migrateNullToVersion1();
@@ -1271,7 +1272,7 @@ module.exports.migration = RavenLambdaWrapper.handler(Raven, async event => {
   return respond();
 });
 
-module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncLocationsBoxes = withSentry(async function(event, context) {
   const { data: allRegions } = await new Invoke()
     .service('program')
     .name('regions')
@@ -1307,7 +1308,7 @@ module.exports.syncLocationsBoxes = RavenLambdaWrapper.handler(Raven, async even
   return respond(200);
 });
 
-module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.slackSlashChangeChannel = withSentry(async function(event, context) {
   console.log({ event });
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
@@ -1340,7 +1341,7 @@ module.exports.slackSlashChangeChannel = RavenLambdaWrapper.handler(Raven, async
   return respond(200, `[${location.name}] channel zapped to ${channel} ${channelMinor ? channelMinor : ''}`);
 });
 
-module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.slackSlashLocationsSearch = withSentry(async function(event, context) {
   console.time('function');
   const body = getBody(event);
   console.log({ event });
@@ -1392,7 +1393,7 @@ module.exports.slackSlashLocationsSearch = RavenLambdaWrapper.handler(Raven, asy
   return response;
 });
 
-module.exports.slackSlashControlCenter = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.slackSlashControlCenter = withSentry(async function(event, context) {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
   const [action, locationShortId] = queryData.text.split(' ');

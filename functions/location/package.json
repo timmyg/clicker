@@ -27,6 +27,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sentry/node": "^6.0.0",
+    "@sentry/serverless": "^6.0.0",
     "airtable": "^0.8.1",
     "aws-sdk": "^2.752.0",
     "aws-xray-sdk": "^2.5.0",
@@ -39,7 +41,8 @@
     "mustache": "^4.0.0",
     "serverless-bundle": "^4.2.0",
     "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.13",
-    "serverless-plugin-scripts": "^1.0.2"
+    "serverless-plugin-scripts": "^1.0.2",
+    "serverless-sentry-lib": "^2.3.0"
   },
   "devDependencies": {
     "flow-bin": "^0.107.0",
