@@ -38,7 +38,7 @@
     "moment-timezone": "^0.5.27",
     "mustache": "^4.0.0",
     "serverless-bundle": "^4.2.0",
-    "serverless-helpers": "github:timmyg/serverless-helpers#v0.3.12",
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.3.12",
     "serverless-plugin-scripts": "^1.0.2"
   },
   "devDependencies": {
