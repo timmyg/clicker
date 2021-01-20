@@ -430,7 +430,7 @@ describe('get boxes', () => {
       },
     },
   };
-  const reservedZonelessBox = { ...automationInactive, id: 7, zone: '' };
+  const reservedZonelessBox = { ...automationInactive, id: 7, zone: '', live: {} };
   describe("getAvailableBoxes removes boxes that shouldn't be changed", () => {
     test('openGoodBox', () => {
       const result = getAvailableBoxes([openGoodBox]);

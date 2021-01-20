@@ -85,7 +85,7 @@ class DirecTVBoxRaw {
 import Box from '../models/box';
 import Venue from '../models/venue';
 
-class Venue {
+// class Venue {
 
 // duplicated!
 const allPackages: any = [

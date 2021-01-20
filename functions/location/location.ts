@@ -58,79 +58,90 @@ const allPackages: any = [
   },
 ];
 
-const dbLocation = dynamoose.model(
-  process.env.tableLocation,
-  {
-    id: {
-      type: String,
-      default: uuid,
-      hashKey: true,
-    },
-    losantId: {
-      type: String,
-      required: true,
-      index: {
-        global: true,
-        project: true, // ProjectionType: ALL
+let dbLocation;
+function init() {
+  dbLocation = dynamoose.model(
+    process.env.tableLocation,
+    {
+      id: {
+        type: String,
+        default: uuid,
+        hashKey: true,
       },
-    },
-    _v: {
-      type: Number,
-      index: {
-        global: true,
-        project: false, // ProjectionType: KEYS_ONLY
-      },
-    },
-    shortId: {
-      type: String,
-      index: {
-        global: true,
-        project: false, // ProjectionType: KEYS_ONLY
-      },
-    },
-    boxes: [
-      {
-        id: String,
-        zone: String,
-        label: String, // physical label id on tv (defaults to locationName)
-        info: {
-          clientAddress: String, // dtv calls this clientAddr
-          locationName: String, // dtv name
-          ip: String,
-          notes: String,
+      losantId: {
+        type: String,
+        required: true,
+        index: {
+          global: true,
+          project: true, // ProjectionType: ALL
         },
-        configuration: {
-          appActive: Boolean,
-          automationActive: Boolean, // new
+      },
+      _v: {
+        type: Number,
+        index: {
+          global: true,
+          project: false, // ProjectionType: KEYS_ONLY
         },
-        live: {
-          locked: Boolean, // new, dynamic
-          lockedUntil: Number, // date
-          // lockedProgrammingId: String,
-          lockedProgrammingIds: {
-            type: 'list',
-            list: [
-              {
-                type: 'string',
-              },
-            ],
+      },
+      shortId: {
+        type: String,
+        index: {
+          global: true,
+          project: false, // ProjectionType: KEYS_ONLY
+        },
+      },
+      boxes: [
+        {
+          id: String,
+          zone: String,
+          label: String, // physical label id on tv (defaults to locationName)
+          info: {
+            clientAddress: String, // dtv calls this clientAddr
+            locationName: String, // dtv name
+            ip: String,
+            notes: String,
           },
-          lockedMessage: String,
-          channelChangeSource: {
-            type: String,
-            enum: [zapTypes.app, zapTypes.automation, zapTypes.manual],
+          configuration: {
+            appActive: Boolean,
+            automationActive: Boolean, // new
           },
-          channel: Number,
-          channelMinor: Number,
-          channelChangeAt: Number, // date
-          // program: Map, // populated every few minutes
+          live: {
+            locked: Boolean, // new, dynamic
+            lockedUntil: Number, // date
+            // lockedProgrammingId: String,
+            lockedProgrammingIds: {
+              type: 'list',
+              list: [
+                {
+                  type: 'string',
+                },
+              ],
+            },
+            lockedMessage: String,
+            channelChangeSource: {
+              type: String,
+              enum: [zapTypes.app, zapTypes.automation, zapTypes.manual],
+            },
+            channel: Number,
+            channelMinor: Number,
+            channelChangeAt: Number, // date
+            // program: Map, // populated every few minutes
+          },
+          updatedAt: Number, // date
+          updatedSource: String,
         },
-        updatedAt: Number, // date
-        updatedSource: String,
+      ],
+      channels: {
+        exclude: {
+          type: 'list',
+          list: [
+            {
+              type: 'string',
+            },
+          ],
+        },
       },
-    ],
-    channels: {
-      exclude: {
+      packages: {
         type: 'list',
         list: [
           {
@@ -138,46 +149,38 @@ const dbLocation = dynamoose.model(
           },
         ],
       },
+      name: { type: String, required: true },
+      neighborhood: { type: String, required: true },
+      city: { type: String },
+      // zip: { type: String, required: true },
+      geo: {
+        latitude: { type: Number, required: true },
+        longitude: { type: Number, required: true },
+      },
+      demo: Boolean,
+      free: Boolean,
+      losantProductionOverride: Boolean,
+      img: String,
+      client: String,
+      region: String,
+      active: Boolean,
+      hidden: Boolean,
+      connected: Boolean,
+      controlCenter: Boolean,
+      vipOnly: Boolean,
+      announcement: String,
+      notes: String,
+      // calculated fields
+      distance: Number,
+      openTvs: Boolean,
     },
-    packages: {
-      type: 'list',
-      list: [
-        {
-          type: 'string',
-        },
-      ],
+    {
+      saveUnknown: ['program'],
+      timestamps: true,
+      allowEmptyArray: true,
     },
-    name: { type: String, required: true },
-    neighborhood: { type: String, required: true },
-    city: { type: String },
-    // zip: { type: String, required: true },
-    geo: {
-      latitude: { type: Number, required: true },
-      longitude: { type: Number, required: true },
-    },
-    demo: Boolean,
-    free: Boolean,
-    losantProductionOverride: Boolean,
-    img: String,
-    client: String,
-    region: String,
-    active: Boolean,
-    hidden: Boolean,
-    connected: Boolean,
-    controlCenter: Boolean,
-    vipOnly: Boolean,
-    announcement: String,
-    notes: String,
-    // calculated fields
-    distance: Number,
-    openTvs: Boolean,
-  },
-  {
-    saveUnknown: ['program'],
-    timestamps: true,
-    allowEmptyArray: true,
-  },
-);
+  );
+}
 
 module.exports.all = RavenLambdaWrapper.handler(Raven, async event => {
   let latitude, longitude;
