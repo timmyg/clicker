@@ -1479,7 +1479,8 @@ export const consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, 
 
 async function updateProgram(id, region, description, type) {
   console.log({ id, region, description, type });
-  const docClient = new AWS.DynamoDB.DocumentClient();
+  const AWS2 = require('aws-sdk');
+  const docClient = new AWS2.DynamoDB.DocumentClient();
   var params = {
     TableName: process.env.tableProgram,
     Key: { id, region },
