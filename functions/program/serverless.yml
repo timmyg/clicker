@@ -231,10 +231,6 @@ functions:
     # timeout: 60
     events:
       - schedule: rate(2 hours)
-      # - schedule: rate(60 minutes)
-      # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
-      # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
-      # - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
       - schedule: cron(58 8 * * ? *) # every day @ 3:58/4:58am eastern
       - http:
           path: sync

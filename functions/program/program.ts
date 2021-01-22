@@ -509,6 +509,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
+  // TODO
   init();
   const params = getPathParameters(event);
   const { locationId } = params;
@@ -835,29 +836,70 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('current + next programming setup queries');
 
-  const programsQuery = dbProgram
-    .query('region')
-    .eq(location.region)
-    .and()
-    .filter('start')
-    .lt(now)
-    .and()
-    .filter('end')
-    .gt(now)
-    .all()
-    .exec();
+  // TODO graphql
 
-  const programsNextQuery = dbProgram
-    .query('region')
-    .eq(location.region)
-    .and()
-    .filter('end')
-    .gt(in25Mins)
-    .and()
-    .filter('start')
-    .lt(in25Mins)
-    .all()
-    .exec();
+  // const programsQuery = dbProgram
+  //   .query('region')
+  //   .eq(location.region)
+  //   .and()
+  //   .filter('start')
+  //   .lt(now)
+  //   .and()
+  //   .filter('end')
+  //   .gt(now)
+  //   .all()
+  //   .exec();
+  const query = gql(`
+  query programs($region: String!, $start: Int!, $end: Int!)
+      {
+        programs(region: $region, start: $start, end: $end) {
+          id
+          info {
+            ip
+          }
+        }
+      }
+  `);
+
+  const programsQuery = new Invoke()
+    .service('graphql')
+    .name('query')
+    .body({
+      query,
+      variables: {
+        region: location.region,
+        startBefore: now,
+        endAfter: now,
+      },
+    })
+    .sync()
+    .go();
+  const programsNextQuery = new Invoke()
+    .service('graphql')
+    .name('query')
+    .body({
+      query,
+      variables: {
+        region: location.region,
+        startBefore: in25Mins,
+        endAfter: in25Mins,
+      },
+    })
+    .sync()
+    .go();
+
+  // const programsNextQuery = dbProgram
+  //   .query('region')
+  //   .eq(location.region)
+  //   .and()
+  //   .filter('end')
+  //   .gt(in25Mins)
+  //   .and()
+  //   .filter('start')
+  //   .lt(in25Mins)
+  //   .all()
+  //   .exec();
+
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming query');

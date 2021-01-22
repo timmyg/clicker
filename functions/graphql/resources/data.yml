@@ -17,6 +17,10 @@ dataSources:
     description: 'attach program game'
     config:
       functionName: fetchBoxProgramGame
+  - type: AMAZON_DYNAMODB
+    name: Programs
+    config:
+      tableName: ${self:custom.tableProgram}
 
 mappingTemplates:
   - dataSource: Boxes
@@ -54,3 +58,8 @@ mappingTemplates:
     field: game
     request: box/request-get-source.vtl
     response: response.vtl
+  - dataSource: Programs
+    type: Query
+    field: programs
+    request: program/request-get-all.vtl
+    response: response-list.vtl

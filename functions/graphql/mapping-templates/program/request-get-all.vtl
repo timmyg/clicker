@@ -1,0 +1,25 @@
+{
+    "version" : "2017-02-28",
+    "operation" : "Query",
+    "query" : {
+        "expression": "region = :region",
+        "expressionNames" : { "#region": "region"},
+        "expressionValues" : {
+            ":region" : {
+                "S" : "${context.arguments.region}"
+            }
+        },
+        "filter" : {
+            "expression": "start < :start AND end > :end",
+            "expressionNames" : {"#start": "start", "#end": "end"},
+            "expressionValues" : {
+                ":start" : {
+                    "N" : "${context.arguments.start}"
+                },
+                ":end" : {
+                    "N" : "${context.arguments.end}"
+                }
+            }
+        }
+    },
+}
