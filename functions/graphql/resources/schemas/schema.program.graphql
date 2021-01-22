@@ -4,7 +4,7 @@ schema {
 }
 
 type Query {
-  get(region: ID!, startAfter: Int!, endBefore: Int!): [Program]
+  getPrograms(region: ID!, startAfter: Int!, endBefore: Int!): [Program]
 }
 
 type GameScoreboard {

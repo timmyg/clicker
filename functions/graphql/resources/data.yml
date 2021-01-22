@@ -60,6 +60,6 @@ mappingTemplates:
     response: response.vtl
   - dataSource: Programs
     type: Query
-    field: programs
+    field: getPrograms
     request: program/request-get-all.vtl
     response: response-list.vtl
