@@ -878,28 +878,6 @@ module.exports.checkAllBoxesInfo = withSentry(async function(event, context) {
   return respond(200, 'ok');
 });
 
-module.exports.controlCenterLocationsByRegion = withSentry(async function(event, context) {
-  const { regions } = getPathParameters(event);
-  console.log(regions);
-  if (!regions || !regions.length) {
-    return respond(200, []);
-  }
-  const locations: Venue[] = await dbLocation
-    .scan()
-    .filter('active')
-    .eq(true)
-    .and()
-    .filter('controlCenter')
-    .eq(true)
-    .and()
-    .filter('region')
-    .in(regions)
-    .all()
-    .exec();
-  console.log({ locations });
-  return respond(200, locations);
-});
-
 module.exports.health = async (event: any) => {
   return respond(200, 'ok');
 };
@@ -1273,20 +1251,18 @@ module.exports.migration = withSentry(async function(event, context) {
 });
 
 module.exports.syncLocationsBoxes = withSentry(async function(event, context) {
-  const { data: allRegions } = await new Invoke()
-    .service('program')
-    .name('regions')
-    .go();
-  const allRegionIds = allRegions.map(r => r.id);
+  const locations: Venue[] = await dbLocation
+    .scan()
+    .filter('active')
+    .eq(true)
+    .all()
+    .exec();
 
-  const { data: locations }: { data: Venue[] } = await new Invoke()
-    .service('location')
-    .name('controlCenterLocationsByRegion')
-    .pathParams({ regions: allRegionIds })
-    .headers(event.headers)
-    .go();
   for (const location of locations) {
     const { losantId, losantProductionOverride } = location;
+    if (!losantId) {
+      return;
+    }
     console.log(`sync box (${location.name}):`, {
       losantId,
       losantProductionOverride,
@@ -1297,13 +1273,6 @@ module.exports.syncLocationsBoxes = withSentry(async function(event, context) {
       .body({ losantId, losantProductionOverride })
       .async()
       .go();
-    // const text = `Boxes Synced @ ${location.name} (${location.neighborhood})`;
-    // await new Invoke()
-    //   .service('notification')
-    //   .name('sendAntenna')
-    //   .body({ text })
-    //   .async()
-    //   .go();
   }
   return respond(200);
 });

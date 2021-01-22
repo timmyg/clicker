@@ -240,12 +240,6 @@ functions:
       - http:
           path: boxes/info
           method: post
-  controlCenterLocationsByRegion:
-    handler: location.controlCenterLocationsByRegion
-    events:
-      - http:
-          path: 'regions/{regions}'
-          method: get
   controlCenter:
     handler: location.controlCenter
     timeout: 30
