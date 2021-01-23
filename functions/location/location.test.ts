@@ -1,4 +1,4 @@
-const file = require('./location');
+// const file = require('./location');
 const {
   getAvailableBoxes,
   filterPrograms,
@@ -15,10 +15,10 @@ const {
 
 const moment = require('moment');
 
-test('smoke test', () => {
-  const response = file.health();
-  expect(response).toBeTruthy;
-});
+// test('smoke test', () => {
+//   // const response = file.health();
+//   expect(response).toBeTruthy;
+// });
 
 const program = {
   programmingId: 'A',

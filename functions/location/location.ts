@@ -7,7 +7,6 @@ const mustache = require('mustache');
 const uuid = require('uuid/v1');
 const url = require('url');
 const Airtable = require('airtable');
-const { Model } = require('dynamodb-toolbox');
 const withSentry = require('serverless-sentry-lib');
 
 // const awsXRay = require('aws-xray-sdk');
@@ -183,7 +182,7 @@ function init() {
   );
 }
 
-export const all = withSentry(async function(event, context) {
+export const all = withSentry(async function (event, context) {
   init();
   let latitude, longitude;
   const pathParams = getPathParameters(event);
@@ -207,11 +206,11 @@ export const all = withSentry(async function(event, context) {
   // set whether open tv's
   allLocations.forEach((l, i, locations) => {
     if (l.boxes) {
-      l.boxes = l.boxes.map(b => setBoxStatus(b));
+      l.boxes = l.boxes.map((b) => setBoxStatus(b));
       l.openTvs = l.boxes
-        .filter(b => b.configuration)
-        .filter(b => b.configuration.appActive)
-        .some(b => !b.live.locked);
+        .filter((b) => b.configuration)
+        .filter((b) => b.configuration.appActive)
+        .some((b) => !b.live.locked);
     }
   });
 
@@ -233,7 +232,7 @@ export const all = withSentry(async function(event, context) {
   });
   console.log({ allLocations });
   if (milesRadius && latitude && longitude) {
-    allLocations = allLocations.filter(l => l.distance <= milesRadius);
+    allLocations = allLocations.filter((l) => l.distance <= milesRadius);
   }
   console.log('locations after geo', allLocations.length);
   const sorted = allLocations.sort((a, b) => (a.distance < b.distance ? -1 : 1));
@@ -242,17 +241,14 @@ export const all = withSentry(async function(event, context) {
   return respond(200, sorted);
 });
 
-export const getBox = withSentry(async function(event, context) {
+export const getBox = withSentry(async function (event, context) {
   const { id, boxId } = getPathParameters(event);
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(id)
-    .exec();
-  const box = location.boxes.find(b => b.id === boxId);
+  const location: Venue = await dbLocation.queryOne('id').eq(id).exec();
+  const box = location.boxes.find((b) => b.id === boxId);
   return respond(200, setBoxStatus(box));
 });
 
-export const get = withSentry(async function(event, context) {
+export const get = withSentry(async function (event, context) {
   const { id } = getPathParameters(event);
 
   // console.time('get from db');
@@ -281,12 +277,12 @@ export const get = withSentry(async function(event, context) {
   // loop through boxes, and update reserved status if necessary
   if (location.boxes) {
     console.time('update reserved status');
-    location.boxes = location.boxes.map(b => setBoxStatus(b));
+    location.boxes = location.boxes.map((b) => setBoxStatus(b));
     console.timeEnd('update reserved status');
 
     console.time('filter + sort');
     if (event.headers && event.headers.app && event.headers.app.length) {
-      location.boxes = location.boxes.filter(b => b.configuration).filter(b => b.configuration.appActive);
+      location.boxes = location.boxes.filter((b) => b.configuration).filter((b) => b.configuration.appActive);
     }
 
     // filter out inactive boxes
@@ -424,21 +420,18 @@ export function setBoxStatus(box: Box): Box {
   return box;
 }
 
-export const remove = withSentry(async function(event, context) {
+export const remove = withSentry(async function (event, context) {
   const { id } = getPathParameters(event);
   const location: Venue = await dbLocation.delete({ id });
   return respond(202, location);
 });
 
-export const create = withSentry(async function(event, context) {
+export const create = withSentry(async function (event, context) {
   try {
     const body = getBody(event);
     body._v = 2;
     if (body.id) {
-      const existingLocation: Venue = await dbLocation
-        .queryOne('id')
-        .eq(body.id)
-        .exec();
+      const existingLocation: Venue = await dbLocation.queryOne('id').eq(body.id).exec();
       if (existingLocation) {
         return respond(200, existingLocation);
       }
@@ -451,7 +444,7 @@ export const create = withSentry(async function(event, context) {
   }
 });
 
-export const update = withSentry(async function(event, context) {
+export const update = withSentry(async function (event, context) {
   try {
     const { id } = getPathParameters(event);
     const body = getBody(event);
@@ -466,7 +459,7 @@ export const update = withSentry(async function(event, context) {
   }
 });
 
-export const setBoxes = withSentry(async function(event, context) {
+export const setBoxes = withSentry(async function (event, context) {
   const body = getBody(event);
   const requestBoxes: DirecTVBoxRaw[] = body.boxes;
   const ip = body.ip;
@@ -485,7 +478,7 @@ export const setBoxes = withSentry(async function(event, context) {
     const isExistingBox =
       location.boxes &&
       location.boxes.find(
-        locationBox =>
+        (locationBox) =>
           locationBox.info && locationBox.info.ip === ip && locationBox.info.clientAddress === dtvBox.clientAddr,
       );
     if (!isExistingBox) {
@@ -512,12 +505,7 @@ export const setBoxes = withSentry(async function(event, context) {
       //   .body({ text })
       //   .async()
       //   .go();
-      await new Invoke()
-        .service('notification')
-        .name('sendTasks')
-        .body({ text, importance: 1 })
-        .async()
-        .go();
+      await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
     } else {
       console.log('existing box', dtvBox.ip);
     }
@@ -526,11 +514,8 @@ export const setBoxes = withSentry(async function(event, context) {
   return respond(201);
 });
 
-export const syncAirtableRegions = withSentry(async function(event, context) {
-  const { data: regions } = await new Invoke()
-    .service('program')
-    .name('regions')
-    .go();
+export const syncAirtableRegions = withSentry(async function (event, context) {
+  const { data: regions } = await new Invoke().service('program').name('regions').go();
   console.log({ regions });
 
   const airtableDataTable = 'Data';
@@ -540,15 +525,15 @@ export const syncAirtableRegions = withSentry(async function(event, context) {
       filterByFormula: `{type} = 'region'`,
     })
     .all();
-  const airtableRegionIds: string[] = airtableRegions.map(l => l.fields.id);
-  const newRegions = regions.filter(dbRegion => {
+  const airtableRegionIds: string[] = airtableRegions.map((l) => l.fields.id);
+  const newRegions = regions.filter((dbRegion) => {
     return !airtableRegionIds.includes(dbRegion.id);
   });
 
   let count = 0;
   if (newRegions && newRegions.length) {
     const promises = [];
-    newRegions.forEach(newRegion => {
+    newRegions.forEach((newRegion) => {
       count++;
       promises.push(
         base(airtableDataTable).create({
@@ -594,7 +579,7 @@ export const syncAirtableRegions = withSentry(async function(event, context) {
 //   return respond(200, { count });
 // });
 
-export const setBoxReserved = withSentry(async function(event, context) {
+export const setBoxReserved = withSentry(async function (event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
   console.log({ locationId, boxId, end });
@@ -620,7 +605,7 @@ export const setBoxReserved = withSentry(async function(event, context) {
   return respond(200);
 });
 
-export const setBoxFree = withSentry(async function(event, context) {
+export const setBoxFree = withSentry(async function (event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
 
   // const location: Venue = await dbLocation
@@ -649,22 +634,15 @@ export const setBoxFree = withSentry(async function(event, context) {
 async function getLocationBoxes(locationId) {
   const {
     data: { boxes: locationBoxes },
-  } = await new Invoke()
-    .service('box')
-    .name('getAll')
-    .pathParams({ locationId })
-    .go();
+  } = await new Invoke().service('box').name('getAll').pathParams({ locationId }).go();
   return locationBoxes;
 }
 
 // TODO use graphql for this
 async function getLocationWithBoxes(locationId, fetchProgram) {
   init();
-  console.log({ locationId });
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(locationId)
-    .exec();
+  console.log({ locationId, dbLocation });
+  const location: Venue = await dbLocation.queryOne('id').eq(locationId).exec();
   const { data: locationBoxes } = await new Invoke()
     .service('box')
     .name('getAll')
@@ -679,7 +657,7 @@ async function getLocationWithBoxes(locationId, fetchProgram) {
 }
 
 // called from antenna
-export const saveBoxesInfo = withSentry(async function(event, context) {
+export const saveBoxesInfo = withSentry(async function (event, context) {
   const { id: locationId } = getPathParameters(event);
   const body = getBody(event);
   // const boxes: DirecTVBox[] = body.boxes;
@@ -710,7 +688,7 @@ export const saveBoxesInfo = withSentry(async function(event, context) {
       minor = null;
     }
 
-    const locationBox = location.boxes.find(lb => lb.id === boxId);
+    const locationBox = location.boxes.find((lb) => lb.id === boxId);
     const originalChannel = locationBox.live && locationBox.live.channel;
     console.log('original channel', originalChannel);
     console.log('current channel', major);
@@ -733,11 +711,7 @@ export const saveBoxesInfo = withSentry(async function(event, context) {
         channelMinor: minor,
         region,
       };
-      const programResult = await new Invoke()
-        .service('program')
-        .name('get')
-        .queryParams(queryParams)
-        .go();
+      const programResult = await new Invoke().service('program').name('get').queryParams(queryParams).go();
 
       const program = programResult && programResult.data;
       updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
@@ -748,12 +722,7 @@ export const saveBoxesInfo = withSentry(async function(event, context) {
         moment().diff(moment(locationBox.live.channelChangeAt), 'minutes') < 10;
       if (isRecentAutomationChange) {
         const text = `*Recent Automation Change!* @ ${location.shortId} from ${originalChannel} to ${major} [Zone ${locationBox.zone}]`;
-        await new Invoke()
-          .service('notification')
-          .name('sendTasks')
-          .body({ text, importance: 2 })
-          .async()
-          .go();
+        await new Invoke().service('notification').name('sendTasks').body({ text, importance: 2 }).async().go();
       }
 
       await new Invoke()
@@ -772,10 +741,7 @@ export const saveBoxesInfo = withSentry(async function(event, context) {
         channelChangeAt: now,
         channel: major,
         channelMinor: minor,
-        lockedUntil:
-          moment()
-            .add(lockHours, 'h')
-            .unix() * 1000,
+        lockedUntil: moment().add(lockHours, 'h').unix() * 1000,
       };
     }
 
@@ -791,14 +757,11 @@ export const saveBoxesInfo = withSentry(async function(event, context) {
   return respond(200);
 });
 
-export const connected = withSentry(async function(event, context) {
+export const connected = withSentry(async function (event, context) {
   const { losantId } = getPathParameters(event);
 
   const connected = true;
-  const location: Venue = await dbLocation
-    .queryOne('losantId')
-    .eq(losantId)
-    .exec();
+  const location: Venue = await dbLocation.queryOne('losantId').eq(losantId).exec();
   console.log({ location });
   if (!!location) {
     await dbLocation.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
@@ -806,24 +769,16 @@ export const connected = withSentry(async function(event, context) {
   const text = `Antenna Connected @ ${location ? location.name : 'unknown losantId'} (${
     location ? location.neighborhood : ''
   })`;
-  await new Invoke()
-    .service('notification')
-    .name('sendTasks')
-    .body({ text, importance: 1 })
-    .async()
-    .go();
+  await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
 
   return respond(200, 'ok');
 });
 
-export const disconnected = withSentry(async function(event, context) {
+export const disconnected = withSentry(async function (event, context) {
   const { losantId } = getPathParameters(event);
 
   const connected = false;
-  const location: Venue = await dbLocation
-    .queryOne('losantId')
-    .eq(losantId)
-    .exec();
+  const location: Venue = await dbLocation.queryOne('losantId').eq(losantId).exec();
   console.log({ location });
   if (!!location) {
     await dbLocation.update({ id: location.id }, { connected }, { returnValues: 'ALL_NEW' });
@@ -832,17 +787,12 @@ export const disconnected = withSentry(async function(event, context) {
   const text = `Antenna Disconnected @ ${location ? location.name : 'unknown losantId'} (${
     location ? location.neighborhood : ''
   })`;
-  await new Invoke()
-    .service('notification')
-    .name('sendTasks')
-    .body({ text, importance: 1 })
-    .async()
-    .go();
+  await new Invoke().service('notification').name('sendTasks').body({ text, importance: 1 }).async().go();
 
   return respond(200, 'ok');
 });
 
-export const checkAllBoxesInfo = withSentry(async function(event, context) {
+export const checkAllBoxesInfo = withSentry(async function (event, context) {
   init();
   let allLocations: Venue[] = await dbLocation.scan().exec();
 
@@ -868,12 +818,7 @@ export const checkAllBoxesInfo = withSentry(async function(event, context) {
       if (losantId.length > 3 && !!body.boxes.length) {
         console.log({ body });
         console.log(i);
-        await new Invoke()
-          .service('remote')
-          .name('checkBoxesInfo')
-          .body(body)
-          .async()
-          .go();
+        await new Invoke().service('remote').name('checkBoxesInfo').body(body).async().go();
       }
     }
     i++;
@@ -905,29 +850,21 @@ export class AirtableControlCenterProgram {
   }
 }
 
-export const controlCenter = withSentry(async function(event, context) {
+export const controlCenter = withSentry(async function (event, context) {
   console.log(JSON.stringify({ event }));
   init();
   let locations: Venue[] = await dbLocation.scan().exec();
-  locations = locations.filter(l => l.controlCenter === true);
-  console.log(locations.map(l => l.name));
+  locations = locations.filter((l) => l.controlCenter === true);
+  console.log(locations.map((l) => l.name));
   const isHttp = !!event.httpMethod;
   if (isHttp) {
     console.log('1');
-    await new Invoke()
-      .service('program')
-      .name('syncAirtableUpdates')
-      .go();
+    await new Invoke().service('program').name('syncAirtableUpdates').go();
   }
   console.log('2');
   for (const location of locations) {
     console.log('3');
-    await new Invoke()
-      .service('location')
-      .name('controlCenterByLocation')
-      .pathParams({ id: location.id })
-      .async()
-      .go();
+    await new Invoke().service('location').name('controlCenterByLocation').pathParams({ id: location.id }).async().go();
   }
   return respond(200, { locations: locations.length });
 });
@@ -938,19 +875,19 @@ export function filterPrograms(
 ): AirtableControlCenterProgram[] {
   const { boxes } = location;
   // remove if we couldnt find a match in the database
-  ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
+  ccPrograms = ccPrograms.filter((ccp) => !!ccp.db);
 
   const currentlyShowingPrograms: BoxLive[] = boxes
-    .filter(b => b.configuration && b.configuration.automationActive)
-    .filter(b => b.live && b.live.channel)
-    .map(b => b.live);
+    .filter((b) => b.configuration && b.configuration.automationActive)
+    .filter((b) => b.live && b.live.channel)
+    .map((b) => b.live);
   // console.log({ currentlyShowingPrograms });
   let ccProgramsFiltered = [];
-  ccPrograms.forEach(ccp => {
+  ccPrograms.forEach((ccp) => {
     // if (cc)
     // if premium channel, check if has package
     let skip = false;
-    allPackages.map(pkg => {
+    allPackages.map((pkg) => {
       // check if premium channel
       if (pkg.channels.includes(ccp.db.channel)) {
         // check if location has package
@@ -966,19 +903,21 @@ export function filterPrograms(
     const program: Program = ccp.db;
 
     // if there are two from the same channel, skip one (due to tuneEarly)
-    const other = ccPrograms.find(p => {
+    const other = ccPrograms.find((p) => {
       return p.db.channel === program.channel && !!p.fields.tuneEarly && p.fields.start !== ccp.fields.start;
     });
     if (other) {
       return;
     }
 
-    if (!currentlyShowingPrograms.find(c => c.channel === program.channel && c.channelMinor === program.channelMinor)) {
+    if (
+      !currentlyShowingPrograms.find((c) => c.channel === program.channel && c.channelMinor === program.channelMinor)
+    ) {
       return ccProgramsFiltered.push(ccp);
     } else {
       // remove from array, in case of replication
       const index = currentlyShowingPrograms.findIndex(
-        p => p.channel == program.channel && p.channelMinor == program.channelMinor,
+        (p) => p.channel == program.channel && p.channelMinor == program.channelMinor,
       );
       if (index > -1) {
         currentlyShowingPrograms.splice(index, 1);
@@ -1005,7 +944,7 @@ export function filterPrograms(
 }
 
 // npm run invoke:controlCenterByLocation
-export const controlCenterByLocation = withSentry(async function(event, context) {
+export const controlCenterByLocation = withSentry(async function (event, context) {
   const { id: locationId } = getPathParameters(event);
   const location = await getLocationWithBoxes(locationId, true);
   console.log('location:', JSON.stringify(location));
@@ -1015,10 +954,10 @@ export const controlCenterByLocation = withSentry(async function(event, context)
   // get control center programs
   let ccPrograms: AirtableControlCenterProgram[] = await getAirtablePrograms(location);
   const currentlyShowingProgrammingIds: string[] = location.boxes
-    .filter(b => b.configuration && b.configuration.automationActive)
-    .filter(b => b.live)
-    .map(b => b.live.program && b.live.program.programmingId);
-  const locationBoxesCount = location.boxes.filter(b => b.configuration && b.configuration.automationActive).length;
+    .filter((b) => b.configuration && b.configuration.automationActive)
+    .filter((b) => b.live)
+    .map((b) => b.live.program && b.live.program.programmingId);
+  const locationBoxesCount = location.boxes.filter((b) => b.configuration && b.configuration.automationActive).length;
   // console.info(`location boxes: ${locationBoxesCount}`);
   // console.info(`all cc programs before replication: ${ccPrograms.length}`);
   ccPrograms = replicatePrograms(ccPrograms, locationBoxesCount);
@@ -1030,7 +969,7 @@ export const controlCenterByLocation = withSentry(async function(event, context)
   // get programs from db from cc programs
   const { region } = location;
   // const { programmingId } = program.fields;
-  const programmingIds = ccPrograms.map(p => p.fields.programmingId).join(',');
+  const programmingIds = ccPrograms.map((p) => p.fields.programmingId).join(',');
   // console.log({ region, programmingIds });
   const programsResult = await new Invoke()
     .service('program')
@@ -1041,13 +980,13 @@ export const controlCenterByLocation = withSentry(async function(event, context)
   const programs = programsResult && programsResult.data;
 
   // attach db program (this is bad code)
-  ccPrograms.map(ccp => {
-    const program: Program = programs.find(p => p.programmingId === ccp.fields.programmingId);
+  ccPrograms.map((ccp) => {
+    const program: Program = programs.find((p) => p.programmingId === ccp.fields.programmingId);
     ccp.db = program;
   });
 
   // filter out programs that didnt get a program attached
-  ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
+  ccPrograms = ccPrograms.filter((ccp) => !!ccp.db);
 
   // filter out currently showing programs, excluded programs, and sort by rating
   ccPrograms = filterPrograms(ccPrograms, location);
@@ -1076,7 +1015,7 @@ export const controlCenterByLocation = withSentry(async function(event, context)
       await tuneAutomation(location, selectedBox, program.db.channel, program.db.channelMinor, program.db);
       // remove box so it doesnt get reassigned
       console.log(`boxes: ${availableBoxes.length}`);
-      availableBoxes = availableBoxes.filter(b => b.id !== (selectedBox && selectedBox.id));
+      availableBoxes = availableBoxes.filter((b) => b.id !== (selectedBox && selectedBox.id));
       console.log(`boxes remaining: ${availableBoxes.length}`);
     } else {
       console.info('could not find box to put program on');
@@ -1090,7 +1029,7 @@ export const controlCenterByLocation = withSentry(async function(event, context)
 });
 
 // npm run invoke:updateAirtableNowShowing
-export const updateAirtableNowShowing = withSentry(async function(event, context) {
+export const updateAirtableNowShowing = withSentry(async function (event, context) {
   let locations: Venue[] = await dbLocation
     .scan()
     .filter('active')
@@ -1103,7 +1042,7 @@ export const updateAirtableNowShowing = withSentry(async function(event, context
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableName = 'Now Showing';
   const nowShowing = [];
-  locations.forEach(location => {
+  locations.forEach((location) => {
     nowShowing.push(...buildAirtableNowShowing(location));
   });
   console.log('nowShowing:', nowShowing.length);
@@ -1120,7 +1059,7 @@ export const updateAirtableNowShowing = withSentry(async function(event, context
   return respond(200);
 });
 
-export const getLocationDetailsPage = withSentry(async function(event, context) {
+export const getLocationDetailsPage = withSentry(async function (event, context) {
   const { id } = getPathParameters(event);
   console.time('get location');
   // const location: Venue = await dbLocation
@@ -1130,7 +1069,7 @@ export const getLocationDetailsPage = withSentry(async function(event, context) 
   const location: Venue = await getLocationWithBoxes(id, true);
   console.timeEnd('get location');
   const boxes = location.boxes
-    .filter(box => !!box.configuration.automationActive || !!box.configuration.appActive)
+    .filter((box) => !!box.configuration.automationActive || !!box.configuration.appActive)
     .sort((a, b) => (a.zone || b.label || '').localeCompare(b.zone || b.label || ''));
 
   console.time('get upcoming programs');
@@ -1143,20 +1082,18 @@ export const getLocationDetailsPage = withSentry(async function(event, context) 
   console.timeEnd('get upcoming programs');
 
   console.time('mappin');
-  upcomingPrograms.map(p => {
+  upcomingPrograms.map((p) => {
     if (p.fields.rating >= 8) {
       p.highlyRated = true;
     }
-    return (p.fromNow = moment(p.fields.start)
-      .tz('America/New_York')
-      .fromNow());
+    return (p.fromNow = moment(p.fields.start).tz('America/New_York').fromNow());
   });
   const currentProgrammingIds = location.boxes
-    .filter(b => !!b.live)
-    .filter(b => !!b.live.program)
-    .map(b => b.live.program.programmingId);
+    .filter((b) => !!b.live)
+    .filter((b) => !!b.live.program)
+    .map((b) => b.live.program.programmingId);
   console.log({ upcomingPrograms });
-  upcomingPrograms = upcomingPrograms.filter(p => !currentProgrammingIds.includes(p.fields.programmingId));
+  upcomingPrograms = upcomingPrograms.filter((p) => !currentProgrammingIds.includes(p.fields.programmingId));
   const template = `\
 <section> \
 <h3>{{location.name}} ({{location.neighborhood}})</h4> \
@@ -1250,7 +1187,7 @@ async function migrateLocationsToVersion2(version?: number) {
   // await Promise.all(promises);
 }
 
-export const migration = withSentry(async function(event, context) {
+export const migration = withSentry(async function (event, context) {
   console.log('-_%^#$@+$(%     running db migrations     -_%^#$@+$(%');
 
   await migrateNullToVersion1();
@@ -1259,13 +1196,8 @@ export const migration = withSentry(async function(event, context) {
   return respond();
 });
 
-export const syncLocationsBoxes = withSentry(async function(event, context) {
-  const locations: Venue[] = await dbLocation
-    .scan()
-    .filter('active')
-    .eq(true)
-    .all()
-    .exec();
+export const syncLocationsBoxes = withSentry(async function (event, context) {
+  const locations: Venue[] = await dbLocation.scan().filter('active').eq(true).all().exec();
 
   for (const location of locations) {
     const { losantId, losantProductionOverride } = location;
@@ -1286,32 +1218,26 @@ export const syncLocationsBoxes = withSentry(async function(event, context) {
   return respond(200);
 });
 
-export const slackSlashChangeChannel = withSentry(async function(event, context) {
+export const slackSlashChangeChannel = withSentry(async function (event, context) {
   console.log({ event });
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
   const [locationShortId, tvString, channel, channelMinor] = queryData.text.split(' ');
   console.log({ locationShortId, tvString, channel, channelMinor });
-  const locationPartial: Venue = await dbLocation
-    .queryOne('shortId')
-    .eq(locationShortId)
-    .exec();
+  const locationPartial: Venue = await dbLocation.queryOne('shortId').eq(locationShortId).exec();
   if (!locationPartial) {
     return respond(200, 'location not found');
   }
-  const location: Venue = await dbLocation
-    .queryOne('id')
-    .eq(locationPartial.id)
-    .exec();
+  const location: Venue = await dbLocation.queryOne('id').eq(locationPartial.id).exec();
   // const zone = .substring(1,3)
   const zone = tvString.charAt(0) === 'z' && tvString.substring(1, tvString.length);
   const label = tvString.charAt(0) === 'l' && tvString.substring(1, tvString.length);
   let box;
   console.log({ zone, label });
   if (zone) {
-    box = location.boxes.find(b => b.zone === zone);
+    box = location.boxes.find((b) => b.zone === zone);
   } else if (label) {
-    box = location.boxes.find(b => b.label === label);
+    box = location.boxes.find((b) => b.label === label);
   }
 
   console.log(location, box, channel, channelMinor);
@@ -1319,7 +1245,7 @@ export const slackSlashChangeChannel = withSentry(async function(event, context)
   return respond(200, `[${location.name}] channel zapped to ${channel} ${channelMinor ? channelMinor : ''}`);
 });
 
-export const slackSlashLocationsSearch = withSentry(async function(event, context) {
+export const slackSlashLocationsSearch = withSentry(async function (event, context) {
   init();
   console.time('function');
   const body = getBody(event);
@@ -1333,18 +1259,18 @@ export const slackSlashLocationsSearch = withSentry(async function(event, contex
   console.log({ locations });
 
   if (!!searchTerm) {
-    locations = locations.filter(l => l.name.toLowerCase().includes(searchTerm));
+    locations = locations.filter((l) => l.name.toLowerCase().includes(searchTerm));
   }
   console.time('create message');
   let responseText = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n';
-  locations.forEach(location => {
+  locations.forEach((location) => {
     responseText += `${location.name} (${location.neighborhood})\n`;
     responseText += `${location.shortId}\n`;
-    location.boxes = location.boxes.map(b => setBoxStatus(b));
+    location.boxes = location.boxes.map((b) => setBoxStatus(b));
     location.boxes
-      .filter(box => box.configuration.automationActive || box.configuration.appActive)
+      .filter((box) => box.configuration.automationActive || box.configuration.appActive)
       .sort((a, b) => (a.zone || a.label).localeCompare(b.zone || b.label))
-      .forEach(box => {
+      .forEach((box) => {
         const { channel, channelMinor } = box.live && box.live;
         const program = box.live && box.live.program;
         responseText += `\t`;
@@ -1372,14 +1298,11 @@ export const slackSlashLocationsSearch = withSentry(async function(event, contex
   return response;
 });
 
-export const slackSlashControlCenter = withSentry(async function(event, context) {
+export const slackSlashControlCenter = withSentry(async function (event, context) {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
   const [action, locationShortId] = queryData.text.split(' ');
-  const location: Venue = await dbLocation
-    .queryOne('shortId')
-    .eq(locationShortId)
-    .exec();
+  const location: Venue = await dbLocation.queryOne('shortId').eq(locationShortId).exec();
   if (!location) {
     return respond(200, 'location not found');
   }
@@ -1394,12 +1317,7 @@ export const slackSlashControlCenter = withSentry(async function(event, context)
         },
       );
       const text = `control center enabled at ${locationEnabled.name}`;
-      await new Invoke()
-        .service('notification')
-        .name('sendControlCenter')
-        .body({ text })
-        .async()
-        .go();
+      await new Invoke().service('notification').name('sendControlCenter').body({ text }).async().go();
       return respond(200, text);
     }
     case 'disable': {
@@ -1411,12 +1329,7 @@ export const slackSlashControlCenter = withSentry(async function(event, context)
         },
       );
       const text = `control center disabled at ${locationDisabled.name}`;
-      await new Invoke()
-        .service('notification')
-        .name('sendControlCenter')
-        .body({ text })
-        .async()
-        .go();
+      await new Invoke().service('notification').name('sendControlCenter').body({ text }).async().go();
       return respond(200, text);
     }
     default:
@@ -1426,7 +1339,7 @@ export const slackSlashControlCenter = withSentry(async function(event, context)
 
 function buildAirtableNowShowing(location: Venue) {
   const transformed = [];
-  location.boxes.forEach(box => {
+  location.boxes.forEach((box) => {
     const { zone, label } = box;
     const { appActive } = box.configuration;
     const { channel, channelChangeSource: source, program } = box.live;
@@ -1459,10 +1372,10 @@ function buildAirtableNowShowing(location: Venue) {
 
 export function getAvailableBoxes(boxes: Box[]): Box[] {
   console.log({ boxes });
-  boxes = boxes.map(b => setBoxStatus(b));
-  boxes = boxes.filter(b => b.configuration.automationActive);
+  boxes = boxes.map((b) => setBoxStatus(b));
+  boxes = boxes.filter((b) => b.configuration.automationActive);
   // return if automation locked as we still want to evaluate those
-  boxes = boxes.filter(b => !b.live.locked || (b.live.locked && b.live.channelChangeSource === zapTypes.automation));
+  boxes = boxes.filter((b) => !b.live.locked || (b.live.locked && b.live.channelChangeSource === zapTypes.automation));
   return boxes;
 }
 
@@ -1521,38 +1434,38 @@ async function tuneAutomation(location: Venue, box: Box, channel: number, channe
 export function findBoxGameOver(boxes: Box[]): Box | null | undefined {
   console.info('findBoxGameOver');
   return boxes
-    .filter(b => b.live)
-    .filter(b => b.live.program)
-    .filter(b => b.live.program.game)
-    .find(b => b.live.program.game.isOver);
+    .filter((b) => b.live)
+    .filter((b) => b.live.program)
+    .filter((b) => b.live.program.game)
+    .find((b) => b.live.program.game.isOver);
 }
 
 export function findBoxBlowout(boxes: Box[]): Box | null | undefined {
   console.info('findBoxBlowout');
   return boxes
-    .filter(b => b.live)
-    .filter(b => b.live.program)
-    .filter(b => b.live.program.game)
-    .find(b => b.live.program.game.summary.blowout);
+    .filter((b) => b.live)
+    .filter((b) => b.live.program)
+    .filter((b) => b.live.program.game)
+    .find((b) => b.live.program.game.summary.blowout);
 }
 
 export function findBoxWithoutRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
   console.info('findBoxWithoutRating');
   console.log({ boxes });
   return boxes
-    .filter(b => b.live)
-    .filter(b => b.live.program)
-    .find(b => !b.live.program.clickerRating);
+    .filter((b) => b.live)
+    .filter((b) => b.live.program)
+    .find((b) => !b.live.program.clickerRating);
 }
 
 export function findBoxWorseRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
   console.info('findBoxWorseRating');
   const ratingBuffer = 2;
   const sorted = boxes
-    .filter(b => b.live)
-    .filter(b => b.live.program)
-    .filter(b => b.live.program.clickerRating)
-    .filter(b => program.fields.rating - b.live.program.clickerRating >= ratingBuffer)
+    .filter((b) => b.live)
+    .filter((b) => b.live.program)
+    .filter((b) => b.live.program.clickerRating)
+    .filter((b) => program.fields.rating - b.live.program.clickerRating >= ratingBuffer)
     .sort((a, b) => a.live.program.clickerRating - b.live.program.clickerRating);
   return sorted && sorted.length ? sorted[0] : null;
 }
@@ -1562,7 +1475,7 @@ export function replicatePrograms(
   boxesCount: number, // currentlyShowingProgrammingIds: string[] = [],
 ): AirtableControlCenterProgram[] {
   let programsWithReplication = [];
-  ccPrograms.forEach(ccp => {
+  ccPrograms.forEach((ccp) => {
     if ([10, 9, 8].includes(ccp.fields.rating)) {
       let replicationCount = 0;
       if (ccp.fields.rating === 10) {
@@ -1609,7 +1522,7 @@ async function getAirtablePrograms(location: Venue): Promise<AirtableControlCent
   console.log({ location });
   console.log({ ccPrograms });
   ccPrograms = filterProgramsByTargeting(ccPrograms, location);
-  const ccProgramModels: AirtableControlCenterProgram[] = ccPrograms.map(p => new AirtableControlCenterProgram(p));
+  const ccProgramModels: AirtableControlCenterProgram[] = ccPrograms.map((p) => new AirtableControlCenterProgram(p));
   return ccProgramModels;
 }
 
@@ -1618,14 +1531,16 @@ export function filterProgramsByTargeting(
   ccPrograms: AirtableControlCenterProgram[],
   location: Venue,
 ): AirtableControlCenterProgram[] {
-  ccPrograms = ccPrograms.filter(ccp => {
+  ccPrograms = ccPrograms.filter((ccp) => {
     const targetingRegionIds =
       ccp.fields.targetingIds && ccp.fields.targetingIds.length
-        ? ccp.fields.targetingIds.filter(str => str.startsWith('region:')).map(str => str.replace('region:', ''))
+        ? ccp.fields.targetingIds.filter((str) => str.startsWith('region:')).map((str) => str.replace('region:', ''))
         : [];
     const targetingLocationIds =
       ccp.fields.targetingIds && ccp.fields.targetingIds.length
-        ? ccp.fields.targetingIds.filter(str => str.startsWith('location:')).map(str => str.replace('location:', ''))
+        ? ccp.fields.targetingIds
+            .filter((str) => str.startsWith('location:'))
+            .map((str) => str.replace('location:', ''))
         : [];
     const isTargetedRegion = targetingRegionIds.includes(location.region);
     const isTargetedLocation = targetingLocationIds.includes(location.id);
@@ -1655,15 +1570,15 @@ export function filterProgramsByTargeting(
 
   // console.log('uniques', uniques);
   const results = [];
-  uniques.forEach(ccp => {
+  uniques.forEach((ccp) => {
     const duplicates: AirtableControlCenterProgram[] =
-      ccPrograms.filter(ccp2 => ccp2.fields.programmingId === ccp.fields.programmingId) || [];
+      ccPrograms.filter((ccp2) => ccp2.fields.programmingId === ccp.fields.programmingId) || [];
     if (duplicates.length) {
       const a = duplicates.find(
-        d => d.fields.targetingIds && d.fields.targetingIds.find(str => str.startsWith('location:')),
+        (d) => d.fields.targetingIds && d.fields.targetingIds.find((str) => str.startsWith('location:')),
       );
       const b = duplicates.find(
-        d => d.fields.targetingIds && d.fields.targetingIds.find(str => str.startsWith('region:')),
+        (d) => d.fields.targetingIds && d.fields.targetingIds.find((str) => str.startsWith('region:')),
       );
       const c = duplicates[0];
       const winner: AirtableControlCenterProgram = a || b || c;
