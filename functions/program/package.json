@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "cd .. && npm i",
-    "test": "jest --coverage",
+    "test": "npx jest --coverage",
     "invoke:health": "serverless invoke local --function health --stage develop",
     "invoke:getAll": "serverless invoke local --function getAll --stage develop  --path ../.resources/data/reservation.json",
     "invoke:syncRegions": "serverless invoke local --function syncRegions --stage develop",
