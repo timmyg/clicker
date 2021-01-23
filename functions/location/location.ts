@@ -883,7 +883,7 @@ export const health = async (event: any) => {
   return respond(200, 'ok');
 };
 
-import AirtableControlCenterProgram from '../models/airtable/ControlCenterProgram';
+import AirtableControlCenterProgram from '../models/airtable/controlCenterProgram';
 export const AirtableControlCenterProgram2 = AirtableControlCenterProgram;
 
 export const controlCenter = withSentry(async function(event, context) {
