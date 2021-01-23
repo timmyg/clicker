@@ -10,12 +10,14 @@
     "analytics-node": "^3.3.0",
     "aws-sdk": "^2.425.0",
     "aws-xray-sdk": "^3.2.0",
+    "cross-fetch": "^3.0.6",
     "dotenv": "^8.2.0",
     "dynamoose": "^1.7.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
-    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.4.0"
+    "serverless-helpers": "git+https://github.com/timmyg/serverless-helpers.git#v0.4.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "jest": "^24.0.0",
