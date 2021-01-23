@@ -168,7 +168,7 @@ functions:
           path: '{id}/boxes/{boxId}'
           method: get
   delete:
-    handler: location.delete
+    handler: location.remove
     events:
       - http:
           path: '{id}'

@@ -183,7 +183,7 @@ function init() {
   );
 }
 
-module.exports.all = withSentry(async function(event, context) {
+export const all = withSentry(async function(event, context) {
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   // const { partner, clicker, app } = event.headers;
@@ -241,7 +241,7 @@ module.exports.all = withSentry(async function(event, context) {
   return respond(200, sorted);
 });
 
-module.exports.getBox = withSentry(async function(event, context) {
+export const getBox = withSentry(async function(event, context) {
   const { id, boxId } = getPathParameters(event);
   const location: Venue = await dbLocation
     .queryOne('id')
@@ -251,7 +251,7 @@ module.exports.getBox = withSentry(async function(event, context) {
   return respond(200, setBoxStatus(box));
 });
 
-module.exports.get = withSentry(async function(event, context) {
+export const get = withSentry(async function(event, context) {
   const { id } = getPathParameters(event);
 
   // console.time('get from db');
@@ -423,13 +423,13 @@ function setBoxStatus(box: Box): Box {
   return box;
 }
 
-module.exports.delete = withSentry(async function(event, context) {
+export const remove = withSentry(async function(event, context) {
   const { id } = getPathParameters(event);
   const location: Venue = await dbLocation.delete({ id });
   return respond(202, location);
 });
 
-module.exports.create = withSentry(async function(event, context) {
+export const create = withSentry(async function(event, context) {
   try {
     const body = getBody(event);
     body._v = 2;
@@ -450,7 +450,7 @@ module.exports.create = withSentry(async function(event, context) {
   }
 });
 
-module.exports.update = withSentry(async function(event, context) {
+export const update = withSentry(async function(event, context) {
   try {
     const { id } = getPathParameters(event);
     const body = getBody(event);
@@ -465,7 +465,7 @@ module.exports.update = withSentry(async function(event, context) {
   }
 });
 
-module.exports.setBoxes = withSentry(async function(event, context) {
+export const setBoxes = withSentry(async function(event, context) {
   const body = getBody(event);
   const requestBoxes: DirecTVBoxRaw[] = body.boxes;
   const ip = body.ip;
@@ -525,7 +525,7 @@ module.exports.setBoxes = withSentry(async function(event, context) {
   return respond(201);
 });
 
-module.exports.syncAirtableRegions = withSentry(async function(event, context) {
+export const syncAirtableRegions = withSentry(async function(event, context) {
   const { data: regions } = await new Invoke()
     .service('program')
     .name('regions')
@@ -562,7 +562,7 @@ module.exports.syncAirtableRegions = withSentry(async function(event, context) {
   return respond(200, { count });
 });
 
-// module.exports.syncAirtableLocations = withSentry(async function (event, context) {
+// export const syncAirtableLocations = withSentry(async function (event, context) {
 //   const dbLocations: Venue[] = await dbLocation.scan().exec();
 //   const airtableDataTable = 'Data';
 //   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
@@ -593,7 +593,7 @@ module.exports.syncAirtableRegions = withSentry(async function(event, context) {
 //   return respond(200, { count });
 // });
 
-module.exports.setBoxReserved = withSentry(async function(event, context) {
+export const setBoxReserved = withSentry(async function(event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
   console.log({ locationId, boxId, end });
@@ -619,7 +619,7 @@ module.exports.setBoxReserved = withSentry(async function(event, context) {
   return respond(200);
 });
 
-module.exports.setBoxFree = withSentry(async function(event, context) {
+export const setBoxFree = withSentry(async function(event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
 
   // const location: Venue = await dbLocation
@@ -658,6 +658,7 @@ async function getLocationBoxes(locationId) {
 
 // TODO use graphql for this
 async function getLocationWithBoxes(locationId, fetchProgram) {
+  init()
   console.log({ locationId });
   const location: Venue = await dbLocation
     .queryOne('id')
@@ -677,7 +678,7 @@ async function getLocationWithBoxes(locationId, fetchProgram) {
 }
 
 // called from antenna
-module.exports.saveBoxesInfo = withSentry(async function(event, context) {
+export const saveBoxesInfo = withSentry(async function(event, context) {
   const { id: locationId } = getPathParameters(event);
   const body = getBody(event);
   // const boxes: DirecTVBox[] = body.boxes;
@@ -789,7 +790,7 @@ module.exports.saveBoxesInfo = withSentry(async function(event, context) {
   return respond(200);
 });
 
-module.exports.connected = withSentry(async function(event, context) {
+export const connected = withSentry(async function(event, context) {
   const { losantId } = getPathParameters(event);
 
   const connected = true;
@@ -814,7 +815,7 @@ module.exports.connected = withSentry(async function(event, context) {
   return respond(200, 'ok');
 });
 
-module.exports.disconnected = withSentry(async function(event, context) {
+export const disconnected = withSentry(async function(event, context) {
   const { losantId } = getPathParameters(event);
 
   const connected = false;
@@ -840,7 +841,7 @@ module.exports.disconnected = withSentry(async function(event, context) {
   return respond(200, 'ok');
 });
 
-module.exports.checkAllBoxesInfo = withSentry(async function(event, context) {
+export const checkAllBoxesInfo = withSentry(async function(event, context) {
   let allLocations: Venue[] = await dbLocation.scan().exec();
 
   let i = 0;
@@ -878,7 +879,7 @@ module.exports.checkAllBoxesInfo = withSentry(async function(event, context) {
   return respond(200, 'ok');
 });
 
-module.exports.health = async (event: any) => {
+export const health = async (event: any) => {
   return respond(200, 'ok');
 };
 
@@ -900,7 +901,7 @@ class ControlCenterProgram {
   }
 }
 
-module.exports.controlCenter = withSentry(async function(event, context) {
+export const controlCenter = withSentry(async function(event, context) {
   console.log(JSON.stringify({ event }));
   let locations: Venue[] = await dbLocation.scan().exec();
   locations = locations.filter(l => l.controlCenter === true);
@@ -996,7 +997,7 @@ function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): Co
 }
 
 // npm run invoke:controlCenterByLocation
-module.exports.controlCenterByLocation = withSentry(async function(event, context) {
+export const controlCenterByLocation = withSentry(async function(event, context) {
   const { id: locationId } = getPathParameters(event);
   const location = await getLocationWithBoxes(locationId, true);
   console.log('location:', JSON.stringify(location));
@@ -1081,7 +1082,7 @@ module.exports.controlCenterByLocation = withSentry(async function(event, contex
 });
 
 // npm run invoke:updateAirtableNowShowing
-module.exports.updateAirtableNowShowing = withSentry(async function(event, context) {
+export const updateAirtableNowShowing = withSentry(async function(event, context) {
   let locations: Venue[] = await dbLocation
     .scan()
     .filter('active')
@@ -1111,7 +1112,7 @@ module.exports.updateAirtableNowShowing = withSentry(async function(event, conte
   return respond(200);
 });
 
-module.exports.getLocationDetailsPage = withSentry(async function(event, context) {
+export const getLocationDetailsPage = withSentry(async function(event, context) {
   const { id } = getPathParameters(event);
   console.time('get location');
   // const location: Venue = await dbLocation
@@ -1241,7 +1242,7 @@ async function migrateLocationsToVersion2(version?: number) {
   // await Promise.all(promises);
 }
 
-module.exports.migration = withSentry(async function(event, context) {
+export const migration = withSentry(async function(event, context) {
   console.log('-_%^#$@+$(%     running db migrations     -_%^#$@+$(%');
 
   await migrateNullToVersion1();
@@ -1250,7 +1251,7 @@ module.exports.migration = withSentry(async function(event, context) {
   return respond();
 });
 
-module.exports.syncLocationsBoxes = withSentry(async function(event, context) {
+export const syncLocationsBoxes = withSentry(async function(event, context) {
   const locations: Venue[] = await dbLocation
     .scan()
     .filter('active')
@@ -1277,7 +1278,7 @@ module.exports.syncLocationsBoxes = withSentry(async function(event, context) {
   return respond(200);
 });
 
-module.exports.slackSlashChangeChannel = withSentry(async function(event, context) {
+export const slackSlashChangeChannel = withSentry(async function(event, context) {
   console.log({ event });
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
@@ -1310,7 +1311,7 @@ module.exports.slackSlashChangeChannel = withSentry(async function(event, contex
   return respond(200, `[${location.name}] channel zapped to ${channel} ${channelMinor ? channelMinor : ''}`);
 });
 
-module.exports.slackSlashLocationsSearch = withSentry(async function(event, context) {
+export const slackSlashLocationsSearch = withSentry(async function(event, context) {
   console.time('function');
   const body = getBody(event);
   console.log({ event });
@@ -1362,7 +1363,7 @@ module.exports.slackSlashLocationsSearch = withSentry(async function(event, cont
   return response;
 });
 
-module.exports.slackSlashControlCenter = withSentry(async function(event, context) {
+export const slackSlashControlCenter = withSentry(async function(event, context) {
   const body = getBody(event);
   const queryData = url.parse('?' + body, true).query;
   const [action, locationShortId] = queryData.text.split(' ');
@@ -1662,13 +1663,13 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
   return results;
 }
 
-module.exports.ControlCenterProgram = ControlCenterProgram;
-module.exports.getAvailableBoxes = getAvailableBoxes;
-module.exports.filterPrograms = filterPrograms;
-module.exports.findBoxGameOver = findBoxGameOver;
-module.exports.findBoxBlowout = findBoxBlowout;
-module.exports.findBoxWithoutRating = findBoxWithoutRating;
-module.exports.findBoxWorseRating = findBoxWorseRating;
-module.exports.filterProgramsByTargeting = filterProgramsByTargeting;
-module.exports.replicatePrograms = replicatePrograms;
-module.exports.setBoxStatus = setBoxStatus;
+// export const ControlCenterProgram;
+// export const getAvailableBoxes = getAvailableBoxes;
+// export const filterPrograms = filterPrograms;
+// export const findBoxGameOver = findBoxGameOver;
+// export const findBoxBlowout = findBoxBlowout;
+// export const findBoxWithoutRating = findBoxWithoutRating;
+// export const findBoxWorseRating = findBoxWorseRating;
+// export const filterProgramsByTargeting = filterProgramsByTargeting;
+// export const replicatePrograms = replicatePrograms;
+// export const setBoxStatus = setBoxStatus;
