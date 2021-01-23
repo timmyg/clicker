@@ -1,5 +1,6 @@
 import Program from '../program';
-const moment = require('moment');
+// const moment = require('moment');
+import * as moment from 'moment';
 
 export default class ControlCenterProgram {
   fields: {
