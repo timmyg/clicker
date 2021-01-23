@@ -1,6 +1,6 @@
 const file = require('./location');
+
 const {
-  ControlCenterProgram,
   getAvailableBoxes,
   filterPrograms,
   findBoxGameOver,
@@ -10,7 +10,10 @@ const {
   filterProgramsByTargeting,
   replicatePrograms,
   setBoxStatus,
+  AirtableControlCenterProgram2,
 } = require('./location');
+// const AirtableControlCenterProgram2 = require('../models/airtable/controlCenterProgram');
+
 const moment = require('moment');
 
 test('smoke test', () => {
@@ -43,7 +46,7 @@ test('ControlCenterProgram model', () => {
       },
     },
   ];
-  const ccPrograms = objects.map(p => new ControlCenterProgram(p));
+  const ccPrograms = objects.map(p => new AirtableControlCenterProgram2(p));
   expect(ccPrograms[0].isMinutesFromNow(10)).toBeFalsy();
   expect(ccPrograms[0].isMinutesFromNow(20)).toBeTruthy();
 });

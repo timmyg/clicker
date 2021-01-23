@@ -2,7 +2,7 @@
   "name": "locations",
   "version": "1.0.0",
   "description": "",
-  "main": "locations.js",
+  "main": "locations.ts",
   "scripts": {
     "test": "jest --coverage",
     "invoke:health": "serverless invoke local --function health --stage develop",

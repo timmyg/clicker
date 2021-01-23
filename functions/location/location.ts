@@ -321,7 +321,7 @@ export const get = withSentry(async function(event, context) {
   return respond(200, location);
 });
 
-function setBoxStatus(box: Box): Box {
+export function setBoxStatus(box: Box): Box {
   console.log({ box: JSON.stringify(box) });
   // locked: Boolean, // new
   // lockedUntil: Date,
@@ -658,7 +658,7 @@ async function getLocationBoxes(locationId) {
 
 // TODO use graphql for this
 async function getLocationWithBoxes(locationId, fetchProgram) {
-  init()
+  init();
   console.log({ locationId });
   const location: Venue = await dbLocation
     .queryOne('id')
@@ -883,23 +883,8 @@ export const health = async (event: any) => {
   return respond(200, 'ok');
 };
 
-class ControlCenterProgram {
-  fields: {
-    start: Date;
-    rating: number;
-    programmingId: string;
-    title: string;
-    targetingIds: string[];
-    tuneEarly: number;
-  };
-  db: Program;
-  constructor(obj: any) {
-    Object.assign(this, obj);
-  }
-  isMinutesFromNow(minutes: number) {
-    return moment(this.fields.start).diff(moment(), 'minutes') <= minutes;
-  }
-}
+import AirtableControlCenterProgram from '../models/airtable/ControlCenterProgram';
+export const AirtableControlCenterProgram2 = AirtableControlCenterProgram;
 
 export const controlCenter = withSentry(async function(event, context) {
   console.log(JSON.stringify({ event }));
@@ -927,7 +912,10 @@ export const controlCenter = withSentry(async function(event, context) {
   return respond(200, { locations: locations.length });
 });
 
-function filterPrograms(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
+export function filterPrograms(
+  ccPrograms: AirtableControlCenterProgram[],
+  location: Venue,
+): AirtableControlCenterProgram[] {
   const { boxes } = location;
   // remove if we couldnt find a match in the database
   ccPrograms = ccPrograms.filter(ccp => !!ccp.db);
@@ -1005,7 +993,7 @@ export const controlCenterByLocation = withSentry(async function(event, context)
 
   // return;
   // get control center programs
-  let ccPrograms: ControlCenterProgram[] = await getAirtablePrograms(location);
+  let ccPrograms: AirtableControlCenterProgram[] = await getAirtablePrograms(location);
   const currentlyShowingProgrammingIds: string[] = location.boxes
     .filter(b => b.configuration && b.configuration.automationActive)
     .filter(b => b.live)
@@ -1448,7 +1436,7 @@ function buildAirtableNowShowing(location: Venue) {
   return transformed;
 }
 
-function getAvailableBoxes(boxes: Box[]): Box[] {
+export function getAvailableBoxes(boxes: Box[]): Box[] {
   console.log({ boxes });
   boxes = boxes.map(b => setBoxStatus(b));
   boxes = boxes.filter(b => b.configuration.automationActive);
@@ -1509,7 +1497,7 @@ async function tuneAutomation(location: Venue, box: Box, channel: number, channe
     .go();
 }
 
-function findBoxGameOver(boxes: Box[]): Box | null | undefined {
+export function findBoxGameOver(boxes: Box[]): Box | null | undefined {
   console.info('findBoxGameOver');
   return boxes
     .filter(b => b.live)
@@ -1518,7 +1506,7 @@ function findBoxGameOver(boxes: Box[]): Box | null | undefined {
     .find(b => b.live.program.game.isOver);
 }
 
-function findBoxBlowout(boxes: Box[]): Box | null | undefined {
+export function findBoxBlowout(boxes: Box[]): Box | null | undefined {
   console.info('findBoxBlowout');
   return boxes
     .filter(b => b.live)
@@ -1527,7 +1515,7 @@ function findBoxBlowout(boxes: Box[]): Box | null | undefined {
     .find(b => b.live.program.game.summary.blowout);
 }
 
-function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): Box | null | undefined {
+export function findBoxWithoutRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
   console.info('findBoxWithoutRating');
   console.log({ boxes });
   return boxes
@@ -1536,7 +1524,7 @@ function findBoxWithoutRating(boxes: Box[], program: ControlCenterProgram): Box 
     .find(b => !b.live.program.clickerRating);
 }
 
-function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): Box | null | undefined {
+export function findBoxWorseRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
   console.info('findBoxWorseRating');
   const ratingBuffer = 2;
   const sorted = boxes
@@ -1548,10 +1536,10 @@ function findBoxWorseRating(boxes: Box[], program: ControlCenterProgram): Box | 
   return sorted && sorted.length ? sorted[0] : null;
 }
 
-function replicatePrograms(
-  ccPrograms: ControlCenterProgram[],
+export function replicatePrograms(
+  ccPrograms: AirtableControlCenterProgram[],
   boxesCount: number, // currentlyShowingProgrammingIds: string[] = [],
-): ControlCenterProgram[] {
+): AirtableControlCenterProgram[] {
   let programsWithReplication = [];
   ccPrograms.forEach(ccp => {
     if ([10, 9, 8].includes(ccp.fields.rating)) {
@@ -1583,10 +1571,10 @@ function replicatePrograms(
   return programsWithReplication;
 }
 
-async function getAirtablePrograms(location: Venue): Promise<ControlCenterProgram[]> {
+async function getAirtablePrograms(location: Venue): Promise<AirtableControlCenterProgram[]> {
   const airtableProgramsName = 'Control Center';
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  let ccPrograms: ControlCenterProgram[] = await base(airtableProgramsName)
+  let ccPrograms: AirtableControlCenterProgram[] = await base(airtableProgramsName)
     .select({
       filterByFormula: `AND( 
     {rating} != BLANK(),
@@ -1600,12 +1588,15 @@ async function getAirtablePrograms(location: Venue): Promise<ControlCenterProgra
   console.log({ location });
   console.log({ ccPrograms });
   ccPrograms = filterProgramsByTargeting(ccPrograms, location);
-  const ccProgramModels: ControlCenterProgram[] = ccPrograms.map(p => new ControlCenterProgram(p));
+  const ccProgramModels: AirtableControlCenterProgram[] = ccPrograms.map(p => new AirtableControlCenterProgram(p));
   return ccProgramModels;
 }
 
 // remove programs not targeted at this location
-function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location: Venue): ControlCenterProgram[] {
+export function filterProgramsByTargeting(
+  ccPrograms: AirtableControlCenterProgram[],
+  location: Venue,
+): AirtableControlCenterProgram[] {
   ccPrograms = ccPrograms.filter(ccp => {
     const targetingRegionIds =
       ccp.fields.targetingIds && ccp.fields.targetingIds.length
@@ -1632,7 +1623,7 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
   // remove duplicates if targeted more than once
 
   // only iterate over uniques, but search all
-  const uniques: ControlCenterProgram[] = [];
+  const uniques: AirtableControlCenterProgram[] = [];
   const uniquesMap = new Map();
   for (const item of ccPrograms) {
     if (!uniquesMap.has(item.fields.programmingId)) {
@@ -1644,7 +1635,7 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
   // console.log('uniques', uniques);
   const results = [];
   uniques.forEach(ccp => {
-    const duplicates: ControlCenterProgram[] =
+    const duplicates: AirtableControlCenterProgram[] =
       ccPrograms.filter(ccp2 => ccp2.fields.programmingId === ccp.fields.programmingId) || [];
     if (duplicates.length) {
       const a = duplicates.find(
@@ -1654,7 +1645,7 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
         d => d.fields.targetingIds && d.fields.targetingIds.find(str => str.startsWith('region:')),
       );
       const c = duplicates[0];
-      const winner: ControlCenterProgram = a || b || c;
+      const winner: AirtableControlCenterProgram = a || b || c;
       results.push(winner);
     } else {
       results.push(ccp);
@@ -1663,7 +1654,7 @@ function filterProgramsByTargeting(ccPrograms: ControlCenterProgram[], location:
   return results;
 }
 
-// export const ControlCenterProgram;
+// export const AirtableControlCenterProgram;
 // export const getAvailableBoxes = getAvailableBoxes;
 // export const filterPrograms = filterPrograms;
 // export const findBoxGameOver = findBoxGameOver;
