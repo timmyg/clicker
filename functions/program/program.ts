@@ -4,6 +4,7 @@ const gql = require('graphql-tag');
 require('cross-fetch/polyfill');
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
+const withSentry = require('serverless-sentry-lib');
 let AWS;
 console.log('NODE_ENV', process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'test') {
@@ -295,25 +296,23 @@ function init() {
         ttl: 86400,
         attribute: 'expires',
         returnExpiredItems: false,
-        defaultExpires: x => {
+        defaultExpires: (x) => {
           // expire 6 hours after end
-          return moment(x.end)
-            .add(6, 'hours')
-            .toDate();
+          return moment(x.end).add(6, 'hours').toDate();
         },
       },
     },
   );
 }
-export const health = RavenLambdaWrapper.handler(Raven, async event => {
+export const health = withSentry(async (event) => {
   return respond(200, `${process.env.serviceName}: i\'m flow good (table: ${process.env.tableProgram})`);
 });
 
-export const regions = RavenLambdaWrapper.handler(Raven, async event => {
+export const regions = withSentry(async (event) => {
   return respond(200, allRegions);
 });
 
-// export const getScheduleTest = RavenLambdaWrapper.handler(Raven, async event => {
+// export const getScheduleTest = withSentry(async event => {
 //   const url = `https://www.directv.com/json/channelschedule`;
 //   const channelsString = [9, 206].join(',');
 //   const params = { startTime: 'Fri Dec 20 2019 10:00:00 GMT+0000', hours: 8, channels: channelsString };
@@ -336,7 +335,7 @@ export const regions = RavenLambdaWrapper.handler(Raven, async event => {
 
 // type Program {}
 
-export const get = RavenLambdaWrapper.handler(Raven, async event => {
+export const get = withSentry(async (event) => {
   init();
   console.log(event.queryStringParameters);
   const previousProgramMinutesAgo = 90;
@@ -367,10 +366,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
   }
   if (channel) {
     const timeToSearch = time || moment().unix() * 1000;
-    const timeToSearchPreviousProgram =
-      moment(timeToSearch)
-        .subtract(previousProgramMinutesAgo, 'm')
-        .unix() * 1000;
+    const timeToSearchPreviousProgram = moment(timeToSearch).subtract(previousProgramMinutesAgo, 'm').unix() * 1000;
     // get programs that are on now or ended within last 30 mins
     let programsQuery = dbProgram
       .query('channel')
@@ -408,7 +404,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
 
     // this was causing issues getting location (location.boxes.program.subcategories) when it was empty
     // delete programs[0].subcategories;
-    programs.forEach(p => {
+    programs.forEach((p) => {
       // $FlowFixMe
       delete p.subcategories;
       // $FloplwFixMe
@@ -430,11 +426,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
       console.log({ previousProgram });
       console.log('gameId:', previousProgram.gameId);
       if (previousProgram.gameId) {
-        const result = await new Invoke()
-          .service('game')
-          .name('get')
-          .pathParams({ id: previousProgram.gameId })
-          .go();
+        const result = await new Invoke().service('game').name('get').pathParams({ id: previousProgram.gameId }).go();
         const game = result && result.data;
         console.log({ game });
         if (game && game.status === 'inprogress') {
@@ -483,13 +475,13 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
     console.log('querying for', region, { programmingIds });
     console.log(
       'returned',
-      programs.map(p => p.programmingId),
+      programs.map((p) => p.programmingId),
     );
     if (programmingIds.length > programs.length) {
       // console.error(`missing: ${programmingIds.map(pid => !programs.map(p => p.programmingId).includes(pid))}`);
       console.error(
-        `missing: ${programmingIds.filter(function(el) {
-          return programs.map(p => p.programmingId).indexOf(el) < 0;
+        `missing: ${programmingIds.filter(function (el) {
+          return programs.map((p) => p.programmingId).indexOf(el) < 0;
         })}`,
       );
       const errorText = 'Program not found in database';
@@ -508,7 +500,7 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
+export const getAll = withSentry(async (event) => {
   // TODO
   init();
   const params = getPathParameters(event);
@@ -535,16 +527,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: '2019 Masters',
         channelTitle: 'Golf',
         channel: 218,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(4, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(4, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 9,
         subcategories: ['Golf'],
@@ -553,16 +537,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Clemson vs. Ohio State',
         channelTitle: 'FOX',
         channel: 19,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(30)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(30).unix() * 1000,
         isSports: true,
         clickerRating: 10,
         subcategories: ['Football'],
@@ -571,16 +547,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Cincinnati @ Xavier',
         channelTitle: 'FS1',
         channel: 219,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
@@ -593,16 +561,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Arsenal vs. Bayern',
         channelTitle: 'NBCSN',
         channel: 220,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Soccer'],
@@ -611,16 +571,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'College Gameday',
         channelTitle: 'ESPN',
         channel: 206,
-        start:
-          moment()
-            .subtract(3, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(3, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
@@ -629,16 +581,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Duke @ North Carolina',
         channelTitle: 'ESPN2',
         channel: 209,
-        start:
-          moment()
-            .subtract(2, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(2, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
@@ -647,16 +591,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Texas Tech vs. Louisville',
         channelTitle: 'ACCN',
         channel: 612,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
@@ -665,16 +601,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'XFL: Wildcats @ Roughnecks',
         channelTitle: 'ABC',
         channel: 9,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(2, 'h')
-            .minutes(30)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(2, 'h').minutes(30).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
@@ -683,16 +611,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'FC Cincinnati @ Louisville City',
         channelTitle: 'WSRT',
         channel: 64,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Soccer'],
@@ -701,16 +621,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Florida State @ Wake Forest',
         channelTitle: 'ESPNU',
         channel: 208,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(2, 'h')
-            .minutes(30)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(2, 'h').minutes(30).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
@@ -720,16 +632,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         channelTitle: 'ESPNC',
         replay: true,
         channel: 618,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Basketball'],
@@ -738,16 +642,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Navy @ Notre Dame',
         channelTitle: 'NBC',
         channel: 5,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Football'],
@@ -756,16 +652,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'WWE Raw',
         channelTitle: 'TNT',
         channel: 245,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(3, 'h')
-            .minutes(30)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(3, 'h').minutes(30).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Wrestling'],
@@ -774,16 +662,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Orioles @ Reds',
         channelTitle: 'FSN',
         channel: 661,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['Baseball'],
@@ -792,16 +672,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'UFC 247: Jones vs. Reyes',
         channelTitle: 'FS2',
         channel: 612,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         isSports: true,
         clickerRating: 7,
         subcategories: ['MMA'],
@@ -810,16 +682,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
         title: 'Friends',
         channelTitle: 'TBS',
         channel: 9,
-        start:
-          moment()
-            .subtract(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
-        end:
-          moment()
-            .add(1, 'h')
-            .minutes(0)
-            .unix() * 1000,
+        start: moment().subtract(1, 'h').minutes(0).unix() * 1000,
+        end: moment().add(1, 'h').minutes(0).unix() * 1000,
         clickerRating: 7,
         subcategories: ['MMA'],
       },
@@ -829,10 +693,7 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   // get all programs for right now
   const now = moment().unix() * 1000;
-  const in25Mins =
-    moment()
-      .add(25, 'minutes')
-      .unix() * 1000;
+  const in25Mins = moment().add(25, 'minutes').unix() * 1000;
 
   console.time('current + next programming setup queries');
 
@@ -912,7 +773,7 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
   const nextPrograms: Program[] = programsNext;
   currentPrograms.forEach((program, i) => {
     const nextProgram = nextPrograms.find(
-      np => np.channel === program.channel && np.programmingId !== program.programmingId,
+      (np) => np.channel === program.channel && np.programmingId !== program.programmingId,
     );
     if (nextProgram) {
       currentPrograms[i].nextProgramTitle = nextProgram.title;
@@ -930,10 +791,10 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
   // console.log('exclude', location.channels);
   console.time('remove premium unless have package');
 
-  currentPrograms = currentPrograms.filter(p => {
+  currentPrograms = currentPrograms.filter((p) => {
     // retallPackages
     let skip = false;
-    allPackages.map(pkg => {
+    allPackages.map((pkg) => {
       // check if premium channel
       console.log('check');
       if (pkg.channels.includes(p.channel)) {
@@ -960,8 +821,8 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
   // sort
   currentPrograms = currentPrograms.sort((a, b) => (b.clickerRating || 0) - (a.clickerRating || 0));
   currentPrograms = [
-    ...currentPrograms.filter(cp => cp.mainCategory === 'Sports'),
-    ...currentPrograms.filter(cp => cp.mainCategory !== 'Sports'),
+    ...currentPrograms.filter((cp) => cp.mainCategory === 'Sports'),
+    ...currentPrograms.filter((cp) => cp.mainCategory !== 'Sports'),
   ];
   console.timeEnd('sort');
 
@@ -969,7 +830,7 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, currentPrograms);
 });
 
-export const syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncRegions = withSentry(async (event) => {
   try {
     for (const region of allRegions) {
       const { defaultZip, id, localChannels } = region;
@@ -988,14 +849,14 @@ export const syncRegions = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-export const syncRegionNextFewHours = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncRegionNextFewHours = withSentry(async (event) => {
   console.log(JSON.stringify(event));
   const { id: regionId, defaultZip, localChannels } = getBody(event);
   await syncRegionChannels(regionId, localChannels, defaultZip);
   return respond(200);
 });
 
-export const clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
+export const clearDatabase = withSentry(async (event) => {
   // clear programs table
   init();
   const promises = [];
@@ -1008,7 +869,7 @@ export const clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
       .where('start')
       .descending()
       .exec();
-    const keys = regionPrograms.map(rp => {
+    const keys = regionPrograms.map((rp) => {
       return { region: regionId, id: rp.id };
     });
     promises.push(dbProgram.batchDelete(keys));
@@ -1021,15 +882,13 @@ export const clearDatabase = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
 });
 
-export const clearAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+export const clearAirtable = withSentry(async (event) => {
   // clear control center records
   const airtablesToClear = ['Control Center', 'Games'];
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   for (const table of airtablesToClear) {
-    const allRecords = await base(table)
-      .select()
-      .all();
-    const allRecordsIds = allRecords.map(g => g.id);
+    const allRecords = await base(table).select().all();
+    const allRecordsIds = allRecords.map((g) => g.id);
     console.log('allRecordsIds.length', allRecordsIds.length);
     const promises = [];
     let count = 0;
@@ -1051,7 +910,7 @@ export const clearAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, 'ok');
 });
 
-export const syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncAirtableRegion = withSentry(async (event) => {
   const { region, datesToPull } = getBody(event);
   console.log({ region, datesToPull });
   const results = await pullFromDirecTV(region.id, region.localChannels, region.defaultZip, datesToPull, 24);
@@ -1073,7 +932,7 @@ export const syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event 
     allPrograms = allPrograms.filter((program: Program) => {
       const { programmingId, start, channelTitle } = program;
       const alreadyExists = allExistingPrograms.some(
-        ep => ep.fields.programmingId === programmingId && moment(ep.fields.start).unix() * 1000 === start, //  &&ep.fields.channelTitle === channelTitle,
+        (ep) => ep.fields.programmingId === programmingId && moment(ep.fields.start).unix() * 1000 === start, //  &&ep.fields.channelTitle === channelTitle,
       );
       return !alreadyExists;
     });
@@ -1095,7 +954,7 @@ export const syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event 
       }
     }
     // publish live sports to get descriptions
-    const liveSportsPrograms = allPrograms.filter(p => {
+    const liveSportsPrograms = allPrograms.filter((p) => {
       return p.live && p.mainCategory === 'Sports';
     });
     console.log('liveSportsPrograms to publish', liveSportsPrograms.length);
@@ -1105,15 +964,12 @@ export const syncAirtableRegion = RavenLambdaWrapper.handler(Raven, async event 
   return respond(200);
 });
 
-export const syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncAirtable = withSentry(async (event) => {
   const { stage } = process.env;
   const datesToPull = [];
   const daysToPull = 2;
   [...Array(daysToPull)].forEach((_, i) => {
-    const dateToSync = moment()
-      .subtract(5, 'hrs')
-      .add(i, 'days')
-      .toDate();
+    const dateToSync = moment().subtract(5, 'hrs').add(i, 'days').toDate();
     datesToPull.push(dateToSync);
   });
   console.log({ datesToPull });
@@ -1134,7 +990,7 @@ export const syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
 
 export function combineByProgrammingId(programs: Program[]) {
   const programsProgrammingIdMap = {};
-  programs.forEach(p => {
+  programs.forEach((p) => {
     const id = p.programmingId + p.start;
     if (programsProgrammingIdMap[id]) {
       programsProgrammingIdMap[id].push(p);
@@ -1144,11 +1000,11 @@ export function combineByProgrammingId(programs: Program[]) {
   });
 
   const programsCombined = [];
-  Object.keys(programsProgrammingIdMap).map(function(key, i) {
+  Object.keys(programsProgrammingIdMap).map(function (key, i) {
     console.log(key, i);
     const program = {
       ...programsProgrammingIdMap[key][0],
-      channelTitle: programsProgrammingIdMap[key].map(p => p.channelTitle).join(', '),
+      channelTitle: programsProgrammingIdMap[key].map((p) => p.channelTitle).join(', '),
     };
     programsCombined.push(program);
   });
@@ -1178,12 +1034,8 @@ export async function getRecentlyUpdatedAirtablePrograms() {
 export async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4) {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableProgramsName = 'Control Center';
-  const fourHoursAgo = moment()
-    .subtract(hoursAgo, 'h')
-    .toISOString();
-  const fourHoursFromNow = moment()
-    .add(hoursFromNow, 'h')
-    .toISOString();
+  const fourHoursAgo = moment().subtract(hoursAgo, 'h').toISOString();
+  const fourHoursFromNow = moment().add(hoursFromNow, 'h').toISOString();
 
   let filterByFormula: string[] = [];
   filterByFormula.push(`{start} > '${fourHoursAgo}'`);
@@ -1202,27 +1054,29 @@ export async function getAirtableProgramsInWindow(hoursAgo = 4, hoursFromNow = 4
   return updatedAirtablePrograms;
 }
 
-export const upcoming = RavenLambdaWrapper.handler(Raven, async event => {
+export const upcoming = withSentry(async (event) => {
   const { location } = getBody(event);
 
   const locationProgrammingIds = location.boxes
-    .filter(b => b.configuration.automationActive)
-    .map(b => b.program && b.program.programmingId);
+    .filter((b) => b.configuration.automationActive)
+    .map((b) => b.program && b.program.programmingId);
   const allUpcomingPrograms = await getAirtableProgramsInWindow();
-  const upcomingPrograms = allUpcomingPrograms.filter(upcoming => !locationProgrammingIds.includes(upcoming.episodeId));
+  const upcomingPrograms = allUpcomingPrograms.filter(
+    (upcoming) => !locationProgrammingIds.includes(upcoming.episodeId),
+  );
 
   return respond(200, upcomingPrograms);
 });
 
-export const syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event => {
+export const syncAirtableUpdates = withSentry(async (event) => {
   init();
   const recentlyUpdatedAirtablePrograms = await getRecentlyUpdatedAirtablePrograms();
   const windowAirtablePrograms = await getAirtableProgramsInWindow(6, 1);
   const promises = [];
   let allPrograms = [...recentlyUpdatedAirtablePrograms, ...windowAirtablePrograms];
   allPrograms = [
-    ...allPrograms.filter(p => !p.fields.targetingIds),
-    ...allPrograms.filter(p => !!p.fields.targetingIds),
+    ...allPrograms.filter((p) => !p.fields.targetingIds),
+    ...allPrograms.filter((p) => !!p.fields.targetingIds),
   ];
   for (const airtableProgram of allPrograms) {
     const programmingId = airtableProgram.get('programmingId');
@@ -1240,10 +1094,7 @@ export const syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event
     let programsQuery = dbProgram.query('programmingId').eq(programmingId);
     // .exec();
     if (!!regionName) {
-      programsQuery = programsQuery
-        .and()
-        .filter('region')
-        .eq(regionName);
+      programsQuery = programsQuery.and().filter('region').eq(regionName);
     }
     const programs = await programsQuery.exec();
 
@@ -1258,10 +1109,7 @@ export const syncAirtableUpdates = RavenLambdaWrapper.handler(Raven, async event
         console.log({ fullProgram });
         let { startOriginal, start } = fullProgram;
         if (!startOriginal) startOriginal = start;
-        const newStart =
-          moment(startOriginal)
-            .subtract(earlyMinutes, 'm')
-            .unix() * 1000;
+        const newStart = moment(startOriginal).subtract(earlyMinutes, 'm').unix() * 1000;
         update.start = newStart;
       }
       console.log({ update });
@@ -1290,7 +1138,7 @@ class ProgramAirtable {
 
 export function buildAirtablePrograms(programs: Program[]) {
   const transformed = [];
-  programs.forEach(program => {
+  programs.forEach((program) => {
     const {
       programmingId,
       title,
@@ -1338,25 +1186,19 @@ export async function syncRegionChannels(regionName: string, regionChannels: num
     .descending()
     .exec();
   console.log('existingRegionPrograms:', existingRegionPrograms.length);
-  const existingRegionProgramIds = existingRegionPrograms.map(p => p.id);
+  const existingRegionProgramIds = existingRegionPrograms.map((p) => p.id);
   let totalHours, startTime;
   // if programs, take the largest start time, add 1 minute and start from there and get two hours of programming
   //   add one hour because that seems like min duration for dtv api
   //   (doesnt matter if you set to 5:00 or 5:59, same results until 6:00)
   if (existingRegionPrograms && existingRegionPrograms.length) {
-    startTime = moment(existingRegionPrograms[0].start)
-      .utc()
-      .add(1, 'hour');
+    startTime = moment(existingRegionPrograms[0].start).utc().add(1, 'hour');
     totalHours = 2;
   } else {
     // if no programs, get 4 hours ago and pull 8 hours
     const startHoursFromNow = -4;
     totalHours = 8;
-    startTime = moment()
-      .utc()
-      .add(startHoursFromNow, 'hours')
-      .minutes(0)
-      .seconds(0);
+    startTime = moment().utc().add(startHoursFromNow, 'hours').minutes(0).seconds(0);
   }
   const result = await pullFromDirecTV(regionName, regionChannels, zip, [startTime], totalHours);
   // TODO:SENTRY sometimes this is undefined
@@ -1365,7 +1207,7 @@ export async function syncRegionChannels(regionName: string, regionChannels: num
   let allPrograms: Program[] = build(schedule, regionName);
   // remove existing programs
   console.log('allPrograms:', allPrograms.length);
-  allPrograms = allPrograms.filter(p => !existingRegionProgramIds.includes(p.id));
+  allPrograms = allPrograms.filter((p) => !existingRegionProgramIds.includes(p.id));
   console.log('allPrograms deduped:', allPrograms.length);
   allPrograms = uniqBy(allPrograms, 'id');
   console.log('allPrograms new unique:', allPrograms.length);
@@ -1373,7 +1215,7 @@ export async function syncRegionChannels(regionName: string, regionChannels: num
   console.log('transformedPrograms', transformedPrograms.length);
   let dbResult = await dbProgram.batchPut(transformedPrograms);
 
-  const liveSportsPrograms = transformedPrograms.filter(p => {
+  const liveSportsPrograms = transformedPrograms.filter((p) => {
     return p.live && p.mainCategory === 'Sports';
   });
   console.log('liveSportsPrograms to publish', liveSportsPrograms.length);
@@ -1417,8 +1259,8 @@ export async function pullFromDirecTV(
   totalHours,
 ): Promise<any> {
   const promises = [];
-  startTimes.forEach(startTime => {
-    const nationalChannelNumbers = nationalChannels.map(nc => nc.channel);
+  startTimes.forEach((startTime) => {
+    const nationalChannelNumbers = nationalChannels.map((nc) => nc.channel);
     const channelsString = getChannels([...regionChannels, ...nationalChannelNumbers]).join(',');
     promises.push(
       new Invoke()
@@ -1448,15 +1290,11 @@ export async function pullFromDirecTV(
 async function getProgramDetails(program: Program): Promise<any> {
   console.log({ program });
   const { programmingId } = program;
-  const result = await new Invoke()
-    .service('proxy')
-    .name('getProgramDetail')
-    .queryParams({ programmingId })
-    .go();
+  const result = await new Invoke().service('proxy').name('getProgramDetail').queryParams({ programmingId }).go();
   return result ? result.data : null;
 }
 
-export const consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
+export const consumeNewProgramAirtableUpdateDetails = withSentry(async (event) => {
   // HACK sleep randomly so we dont hit airtable too hard
   // const randomBetweenZeroAndThirty = Math.floor(Math.random() * 31);
   // await sleep(randomBetweenZeroAndThirty * 1000);
@@ -1483,7 +1321,7 @@ export const consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler
     console.timeEnd('airtable');
     console.log({ airtableGames });
     const airtablePromises = [];
-    airtableGames.forEach(g => {
+    airtableGames.forEach((g) => {
       airtablePromises.push(
         airtableBase(airtablePrograms).update(g.id, {
           description,
@@ -1499,7 +1337,7 @@ export const consumeNewProgramAirtableUpdateDetails = RavenLambdaWrapper.handler
   return respond(200);
 });
 
-export const consumeNewProgramUpdateDetails = RavenLambdaWrapper.handler(Raven, async event => {
+export const consumeNewProgramUpdateDetails = withSentry(async (event) => {
   const program = JSON.parse(event.Records[0].body);
   const { id, programmingId, region } = program;
   if (!programmingId.includes('GDM')) {
@@ -1545,7 +1383,7 @@ async function updateProgram(id, region, description, type) {
 
 function buildProgramObjects(programs) {
   const transformedPrograms = [];
-  programs.forEach(p => {
+  programs.forEach((p) => {
     transformedPrograms.push(new dbProgram(p));
   });
   return transformedPrograms;
@@ -1554,8 +1392,8 @@ function buildProgramObjects(programs) {
 export function build(dtvSchedule: any, regionId: string) {
   // pass in channels array (channel, channelMinor) so that we can include the minor number, if needed
   const programs = [];
-  dtvSchedule.forEach(channel => {
-    channel.schedules.forEach(program => {
+  dtvSchedule.forEach((channel) => {
+    channel.schedules.forEach((program) => {
       program.programmingId = program.programID;
       if (program.programmingId !== '-1' && !nationalExcludedChannels.includes(channel.chCall)) {
         program.channel = channel.chNum;
@@ -1569,12 +1407,12 @@ export function build(dtvSchedule: any, regionId: string) {
 
         // if channel is in minors list, try to add a minor channel to it
         // console.log(`minor evaluate: channel: ${program.channel}, ${channel.chId}`);
-        if (complexChannels.map(c => c.channel).includes(program.channel)) {
+        if (complexChannels.map((c) => c.channel).includes(program.channel)) {
           // program.channelMinor = 1;
 
-          const minorChannelMatch: any = complexChannels.find(c => c.channel === program.channel);
+          const minorChannelMatch: any = complexChannels.find((c) => c.channel === program.channel);
           // console.log({ minorChannelMatch });
-          const channelMinor = minorChannelMatch.subChannels.find(c => c.channelIds.includes(channel.chId));
+          const channelMinor = minorChannelMatch.subChannels.find((c) => c.channelIds.includes(channel.chId));
           // console.log({ channelMinor });
           if (!!channelMinor) {
             program.channelMinor = channelMinor.minor;
@@ -1590,7 +1428,7 @@ export function build(dtvSchedule: any, regionId: string) {
         program.mainCategory = program.mainCategory;
 
         // console.log(allRegions, regionId);
-        const region: region = allRegions.find(r => r.id === regionId);
+        const region: region = allRegions.find((r) => r.id === regionId);
         if (region.localChannels.includes(program.channel)) {
           program.isLocal = true;
         }
@@ -1599,10 +1437,7 @@ export function build(dtvSchedule: any, regionId: string) {
         program.region = regionId;
         program.start = moment(program.airTime).unix() * 1000;
         program.startOriginal = program.start;
-        program.end =
-          moment(program.airTime)
-            .add(program.durationMins, 'minutes')
-            .unix() * 1000;
+        program.end = moment(program.airTime).add(program.durationMins, 'minutes').unix() * 1000;
         program.id = generateId(program);
         programs.push(program);
       }
@@ -1643,7 +1478,7 @@ export function getDefaultRating(program: Program): number | null | undefined {
   // get up
   // the dan le batard show
 
-  const match = defaultRatings.find(dr => program.title.toLowerCase().includes(dr.search.toLowerCase()));
+  const match = defaultRatings.find((dr) => program.title.toLowerCase().includes(dr.search.toLowerCase()));
   if (match && !ratingsIgnore.includes(program.title.toLowerCase())) {
     return match.rating;
   }
@@ -1672,18 +1507,18 @@ export function getLocalChannelName(chName: string) {
 }
 
 export function getChannels(channels: number[]): number[] {
-  return channels.map(c => Math.floor(c));
+  return channels.map((c) => Math.floor(c));
 }
 
 export function getProgramListTiebreaker(programs: Program[]): Program[] {
   console.log('! ! ! ! ! ! programs', programs.length);
   // get unique set of programmingIds
-  const programmingIds = programs.map(p => p.programmingId);
+  const programmingIds = programs.map((p) => p.programmingId);
   const uniqueProgrammingIds = [...Array.from(new Set(programmingIds))];
   console.log({ uniqueProgrammingIds });
   const deduplicatedPrograms = [];
-  uniqueProgrammingIds.forEach(pId => {
-    const duplicatedPrograms = programs.filter(p => p.programmingId === pId);
+  uniqueProgrammingIds.forEach((pId) => {
+    const duplicatedPrograms = programs.filter((p) => p.programmingId === pId);
     if (duplicatedPrograms.length > 1) {
       const localChannel = duplicatedPrograms.find(({ channel }) => channel > 0 && channel < 100);
       const regionalChannel = duplicatedPrograms.find(({ channel }) => channel >= 600 && channel < 700);
