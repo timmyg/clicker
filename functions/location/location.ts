@@ -184,6 +184,7 @@ function init() {
 }
 
 export const all = withSentry(async function(event, context) {
+  init();
   let latitude, longitude;
   const pathParams = getPathParameters(event);
   // const { partner, clicker, app } = event.headers;
@@ -842,6 +843,7 @@ export const disconnected = withSentry(async function(event, context) {
 });
 
 export const checkAllBoxesInfo = withSentry(async function(event, context) {
+  init();
   let allLocations: Venue[] = await dbLocation.scan().exec();
 
   let i = 0;
@@ -905,6 +907,7 @@ export class AirtableControlCenterProgram {
 
 export const controlCenter = withSentry(async function(event, context) {
   console.log(JSON.stringify({ event }));
+  init();
   let locations: Venue[] = await dbLocation.scan().exec();
   locations = locations.filter(l => l.controlCenter === true);
   console.log(locations.map(l => l.name));
@@ -1317,6 +1320,7 @@ export const slackSlashChangeChannel = withSentry(async function(event, context)
 });
 
 export const slackSlashLocationsSearch = withSentry(async function(event, context) {
+  init();
   console.time('function');
   const body = getBody(event);
   console.log({ event });
