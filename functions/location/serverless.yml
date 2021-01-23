@@ -23,14 +23,7 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
-plugins:
-  - serverless-domain-manager
-  - serverless-prune-plugin
-  - serverless-sentry
-  - serverless-dotenv-plugin
-  # - serverless-plugin-tracing
-  # - serverless-plugin-scripts
-  - serverless-bundle
+plugins: ${file(../serverless.common.yml):plugins}
 custom:
   stage: ${opt:stage}
   bundle:
@@ -45,10 +38,7 @@ custom:
   prune:
     automatic: true
     number: 3
-  domains:
-    prod: api.tryclicker.com
-    release: api-release.tryclicker.com
-    develop: api-develop.tryclicker.com
+  domains: ${file(../serverless.common.yml):domains}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: locations
@@ -65,11 +55,6 @@ custom:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
     develop: ${env:AIRTABLE_BASE_DEV}
-  # provisionedConcurrencies:
-  #   prod: 1
-  #   release: 1
-  #   default: 0
-  # provisionedConcurrency: ${self:custom.provisionedConcurrencies.${self:custom.stage}, self:custom.provisionedConcurrencies.default}
 resources:
   Resources:
     LocationsTable:
