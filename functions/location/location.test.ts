@@ -1,5 +1,5 @@
 const file = require('./location');
-
+import * as moment from 'moment';
 const {
   getAvailableBoxes,
   filterPrograms,
