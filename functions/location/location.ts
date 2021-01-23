@@ -883,8 +883,25 @@ export const health = async (event: any) => {
   return respond(200, 'ok');
 };
 
-import AirtableControlCenterProgram from '../models/airtable/controlCenterProgram';
-export const AirtableControlCenterProgram2 = AirtableControlCenterProgram;
+// import AirtableControlCenterProgram from '../models/airtable/controlCenterProgram';
+// export const AirtableControlCenterProgram2 = AirtableControlCenterProgram;
+export class AirtableControlCenterProgram {
+  fields: {
+    start: Date;
+    rating: number;
+    programmingId: string;
+    title: string;
+    targetingIds: string[];
+    tuneEarly: number;
+  };
+  db: Program;
+  constructor(obj: any) {
+    Object.assign(this, obj);
+  }
+  isMinutesFromNow(minutes: number) {
+    return moment(this.fields.start).diff(moment(), 'minutes') <= minutes;
+  }
+}
 
 export const controlCenter = withSentry(async function(event, context) {
   console.log(JSON.stringify({ event }));
