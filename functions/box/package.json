@@ -15,11 +15,7 @@
     "invoke:getAll": "npx serverless invoke local --function getAll --stage develop --path ../.resources/data/box-get.json"
   },
   "author": "",
-  "dependencies": {
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "graphql-tag": "^2.11.0",
-    "source-map-support": "^0.5.19"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^7.15.0",
     "eslint-config-airbnb": "^18.2.1",
