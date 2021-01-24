@@ -26,6 +26,7 @@ custom:
   bundle:
     sourcemaps: false
     linting: false
+    
   prune:
     automatic: true
     number: 3
