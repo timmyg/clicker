@@ -505,6 +505,7 @@ export const getAll = withSentry(async (event) => {
   init();
   const params = getPathParameters(event);
   const { locationId } = params;
+  console.log({ locationId });
 
   console.time('entire call');
   console.time('get location');
@@ -711,9 +712,9 @@ export const getAll = withSentry(async (event) => {
   //   .all()
   //   .exec();
   const query = gql(`
-  query programs($region: String!, $start: Int!, $end: Int!)
+  query getPrograms($region: String!, $start: Int!, $end: Int!)
       {
-        programs(region: $region, start: $start, end: $end) {
+        getPrograms(region: $region, start: $start, end: $end) {
           id
           info {
             ip
@@ -764,6 +765,7 @@ export const getAll = withSentry(async (event) => {
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming query');
+  console.log({ query: { region: location.region, startBefore: now, endAfter: now } });
   const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
   // console.log(programs.length, programsNext.length);
   console.timeEnd('current + next programming query');

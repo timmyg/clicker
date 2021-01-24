@@ -10,14 +10,14 @@
             }
         },
         "filter" : {
-            "expression": "start < :start AND end > :end",
-            "expressionNames" : {"#start": "start", "#end": "end"},
+            "expression": "start <= :startAfter AND end >= :endBefore",
+            "expressionNames" : {"#startAfter": "startAfter", "#endBefore": "endBefore"},
             "expressionValues" : {
-                ":start" : {
-                    "N" : "${context.arguments.start}"
+                ":startAfter" : {
+                    "N" : "${context.arguments.startAfter}"
                 },
-                ":end" : {
-                    "N" : "${context.arguments.end}"
+                ":endBefore" : {
+                    "N" : "${context.arguments.endBefore}"
                 }
             }
         }
