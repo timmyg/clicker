@@ -3,7 +3,7 @@ const uuid = require('uuid/v1');
 import vals from '../shared/example';
 const gql = require('graphql-tag');
 const withSentry = require('serverless-sentry-lib');
-require('cross-fetch/polyfill');
+// require('cross-fetch/polyfill');
 
 export const health = withSentry(async (event) => {
   return respond(200, { vals });

@@ -1,7 +1,7 @@
 import { getBody, getPathParameters, respond, Invoke } from 'serverless-helpers';
 const uuid = require('uuid/v5');
 const gql = require('graphql-tag');
-require('cross-fetch/polyfill');
+// require('cross-fetch/polyfill');
 const dynamoose = require('dynamoose');
 const Airtable = require('airtable');
 const withSentry = require('serverless-sentry-lib');
