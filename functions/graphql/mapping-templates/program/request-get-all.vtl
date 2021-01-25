@@ -2,24 +2,18 @@
     "version" : "2017-02-28",
     "operation" : "Query",
     "query" : {
-        "expression": "region = :region",
+        "expression": "#region = :region",
         "expressionNames" : { "#region": "region"},
         "expressionValues" : {
-            ":region" : {
-                "S" : "${context.arguments.region}"
-            }
+            ":region" : $util.dynamodb.toDynamoDBJson(context.arguments.region)
         }
     },
     "filter" : {
         "expression": "start <= :startAfter AND end >= :endBefore",
         "expressionNames" : {"#startAfter": "startAfter", "#endBefore": "endBefore"},
         "expressionValues" : {
-            ":startAfter" : {
-                "N" : "${context.arguments.startAfter}"
-            },
-            ":endBefore" : {
-                "N" : "${context.arguments.endBefore}"
-            }
+            ":startAfter" : $util.dynamodb.toDynamoDBJson(context.arguments.startAfter),
+            ":endBefore" : $util.dynamodb.toDynamoDBJson(context.arguments.endBefore)
         }
     }
 }
