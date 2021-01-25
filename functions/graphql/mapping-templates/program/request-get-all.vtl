@@ -8,18 +8,18 @@
             ":region" : {
                 "S" : "${context.arguments.region}"
             }
-        },
-        "filter" : {
-            "expression": "start <= :startAfter AND end >= :endBefore",
-            "expressionNames" : {"#startAfter": "startAfter", "#endBefore": "endBefore"},
-            "expressionValues" : {
-                ":startAfter" : {
-                    "N" : "${context.arguments.startAfter}"
-                },
-                ":endBefore" : {
-                    "N" : "${context.arguments.endBefore}"
-                }
-            }
         }
     },
+    "filter" : {
+        "expression": "start <= :startAfter AND end >= :endBefore",
+        "expressionNames" : {"#startAfter": "startAfter", "#endBefore": "endBefore"},
+        "expressionValues" : {
+            ":startAfter" : {
+                "N" : "${context.arguments.startAfter}"
+            },
+            ":endBefore" : {
+                "N" : "${context.arguments.endBefore}"
+            }
+        }
+    }
 }

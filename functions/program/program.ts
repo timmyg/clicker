@@ -712,7 +712,7 @@ export const getAll = withSentry(async (event) => {
   //   .all()
   //   .exec();
   const query = gql(`
-  query getPrograms($region: String!, $startAfter: Int!, $endBefore: Int!)
+  query getPrograms($region: String!, $startAfter: AWSTimestamp!, $endBefore: AWSTimestamp!)
       {
         getPrograms(region: $region, startAfter: $startAfter, endBefore: $endBefore) {
           id
