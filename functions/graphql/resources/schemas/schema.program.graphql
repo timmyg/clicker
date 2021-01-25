@@ -7,44 +7,44 @@ type Query {
   getPrograms(region: String!, startAfter: Int!, endBefore: Int!): [Program]
 }
 
-type GameScoreboard {
-  display: String
-  clock: String
-  period: Int
-}
+# type GameScoreboard {
+#   display: String
+#   clock: String
+#   period: Int
+# }
 
-type GameStatus {
-  started: Boolean
-  blowout: Boolean
-  ended: Boolean
-  description: String
-}
+# type GameStatus {
+#   started: Boolean
+#   blowout: Boolean
+#   ended: Boolean
+#   description: String
+# }
 
-type GameBroadcast {
-  network: String
-}
+# type GameBroadcast {
+#   network: String
+# }
 
-type GameBook {
-  total: Int
-  moneyline: String
-  spread: String
-}
+# type GameBook {
+#   total: Int
+#   moneyline: String
+#   spread: String
+# }
 
-type TeamName {
-  full: String
-  short: String
-  abbr: String
-  display: String
-}
+# type TeamName {
+#   full: String
+#   short: String
+#   abbr: String
+#   display: String
+# }
 
-type GameTeam {
-  id: Int
-  score: Int
-  name: TeamName
-  logo: String
-  rank: Int
-  book: GameBook
-}
+# type GameTeam {
+#   id: Int
+#   score: Int
+#   name: TeamName
+#   logo: String
+#   rank: Int
+#   book: GameBook
+# }
 
 type Game {
   id: String!
@@ -90,42 +90,4 @@ type Program {
   startOriginal: AWSTimestamp
   title: String
   updatedAt: String
-}
-
-type BoxLive {
-  channel: Int!
-  channelMinor: Int
-  channelChangeAt: AWSTimestamp
-  channelChangeSource: String!
-  program: Program
-  lockedProgrammingIds: [String]
-  locked: Boolean
-  lockedUntil: AWSTimestamp
-  updatedAt: AWSTimestamp
-  region: String
-}
-
-type BoxInfo {
-  ip: String!
-  clientAddress: String!
-  locationName: String
-  notes: String
-}
-
-type BoxConfiguration {
-  appActive: Boolean!
-  automationActive: Boolean!
-}
-
-type Box {
-  id: ID!
-  locationId: String!
-  region: String!
-  label: String
-  zone: String
-  configuration: BoxConfiguration!
-  info: BoxInfo!
-  live: BoxLive!
-  updatedAt: AWSTimestamp
-  createdAt: AWSTimestamp
 }
