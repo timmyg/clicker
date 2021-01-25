@@ -9,7 +9,7 @@
         }
     },
     "filter" : {
-        "expression": "start <= :startAfter AND end >= :endBefore",
+        "expression": "start <= :startAfter, end >= :endBefore",
         "expressionNames" : {"#startAfter": "startAfter", "#endBefore": "endBefore"},
         "expressionValues" : {
             ":startAfter" : $util.dynamodb.toDynamoDBJson(context.arguments.startAfter),
