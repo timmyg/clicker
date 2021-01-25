@@ -716,9 +716,6 @@ export const getAll = withSentry(async (event) => {
       {
         getPrograms(region: $region, startAfter: $startAfter, endBefore: $endBefore) {
           id
-          info {
-            ip
-          }
         }
       }
   `);

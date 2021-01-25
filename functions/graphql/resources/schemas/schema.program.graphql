@@ -4,47 +4,8 @@ schema {
 }
 
 type Query {
-  getPrograms(region: String!, startAfter: Int!, endBefore: Int!): [Program]
+  getPrograms(region: String!, startAfter: AWSTimestamp!, endBefore: AWSTimestamp!): [Program]
 }
-
-# type GameScoreboard {
-#   display: String
-#   clock: String
-#   period: Int
-# }
-
-# type GameStatus {
-#   started: Boolean
-#   blowout: Boolean
-#   ended: Boolean
-#   description: String
-# }
-
-# type GameBroadcast {
-#   network: String
-# }
-
-# type GameBook {
-#   total: Int
-#   moneyline: String
-#   spread: String
-# }
-
-# type TeamName {
-#   full: String
-#   short: String
-#   abbr: String
-#   display: String
-# }
-
-# type GameTeam {
-#   id: Int
-#   score: Int
-#   name: TeamName
-#   logo: String
-#   rank: Int
-#   book: GameBook
-# }
 
 type Game {
   id: String!
@@ -52,15 +13,6 @@ type Game {
   isOver: Boolean
   status: String
   statusDisplay: String
-  # start: String
-  # id: Int
-  # status: String
-  # leagueName: String
-  # scoreboard: GameScoreboard
-  # broadcast: GameBroadcast
-  # away: GameTeam
-  # home: GameTeam
-  # summary: GameStatus
 }
 
 type Program {
