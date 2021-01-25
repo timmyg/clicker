@@ -712,9 +712,9 @@ export const getAll = withSentry(async (event) => {
   //   .all()
   //   .exec();
   const query = gql(`
-  query getPrograms($region: String!, $start: Int!, $end: Int!)
+  query getPrograms($region: String!, $startAfter: Int!, $endBefore: Int!)
       {
-        getPrograms(region: $region, start: $start, end: $end) {
+        getPrograms(region: $region, startAfter: $startAfter, endBefore: $endBefore) {
           id
           info {
             ip
@@ -730,8 +730,8 @@ export const getAll = withSentry(async (event) => {
       query,
       variables: {
         region: location.region,
-        startBefore: now,
-        endAfter: now,
+        startAfter: now,
+        endBefore: now,
       },
     })
     .sync()
@@ -743,8 +743,8 @@ export const getAll = withSentry(async (event) => {
       query,
       variables: {
         region: location.region,
-        startBefore: in25Mins,
-        endAfter: in25Mins,
+        startAfter: in25Mins,
+        endBefore: in25Mins,
       },
     })
     .sync()
@@ -765,10 +765,13 @@ export const getAll = withSentry(async (event) => {
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming query');
-  console.log({ query: { region: location.region, startBefore: now, endAfter: now } });
+  console.log({ query: { region: location.region, startAfter: now, endBefore: now } });
   const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
   // console.log(programs.length, programsNext.length);
   console.timeEnd('current + next programming query');
+
+  console.log('123');
+  console.log(programs);
 
   console.time('current + next programming combine');
   let currentPrograms: Program[] = programs;
