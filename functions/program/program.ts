@@ -1220,7 +1220,6 @@ export function build(dtvSchedule: any, regionId: string) {
         program.channelId = channel.chId;
         program.hd = channel.chHd;
         program.blackout = channel.blackOut;
-        program.isSports = channel.mainCategory === 'Sports';
         if (blacklistChannelIds.includes(program.channelId)) {
           return true;
         }
@@ -1247,6 +1246,7 @@ export function build(dtvSchedule: any, regionId: string) {
         program.channelCategories = channel.chCat;
         program.subcategories = program.subcategoryList;
         program.mainCategory = program.mainCategory;
+        program.isSports = program.mainCategory === 'Sports';
 
         // console.log(allRegions, regionId);
         const region: region = allRegions.find((r) => r.id === regionId);
