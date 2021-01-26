@@ -92,27 +92,23 @@ const dbReservation = dynamoose.model(
       ttl: 86400,
       attribute: 'expires',
       returnExpiredItems: false,
-      defaultExpires: x => {
+      defaultExpires: (x) => {
         // TODO x is undefined during reservation update and
         //  blows everything up
         console.log({ x });
         console.log(this);
         // expire 60 minutes after end
         if (x) {
-          return moment(x.end)
-            .add(60, 'minutes')
-            .toDate();
+          return moment(x.end).add(60, 'minutes').toDate();
         } else {
-          return moment()
-            .add(300, 'minutes')
-            .toDate();
+          return moment().add(300, 'minutes').toDate();
         }
       },
     },
   },
 );
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async (event) => {
   return respond(200, `hello`);
 });
 
@@ -130,7 +126,7 @@ async function demoZapViaFirebase(boxId: string, channel: number) {
   console.log({ result });
 }
 
-module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.create = RavenLambdaWrapper.handler(Raven, async (event) => {
   let reservation: Reservation = getBody(event);
   console.log({ reservation });
   const { cost } = reservation;
@@ -145,27 +141,13 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
     .headers(event.headers)
     .go();
   console.timeEnd('ensure location active');
-
-  console.log(reservation.location.demo, reservation.box.id, reservation.program.channel);
-  if (reservation.location.demo) {
-    // demo location, send zap via firestore
-    await demoZapViaFirebase(reservation.box.id, reservation.program.channel);
-    await new Invoke()
-      .service('notification')
-      .name('sendControlCenter')
-      .body({ text: 'Demo Zap' })
-      .async()
-      .go();
-    return respond(200);
-  }
-
   // console.log(locationResult);
   const locationResultBody = data;
   if (!locationResultBody.active) {
     return respond(400, 'Sorry, location inactive');
   }
   // ensure tv isnt already reserved
-  let tv: Box = locationResultBody.boxes.find(b => b.id === reservation.box.id);
+  let tv: Box = locationResultBody.boxes.find((b) => b.id === reservation.box.id);
 
   if (!tv || !tv.configuration || !tv.configuration.appActive || tv.live.locked) {
     console.log(tv);
@@ -235,7 +217,7 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(201, reservation);
 });
 
-module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.update = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { id } = getPathParameters(event);
   let updatedReservation = getBody(event);
   const userId = getUserId(event);
@@ -341,31 +323,20 @@ module.exports.update = RavenLambdaWrapper.handler(Raven, async event => {
       .go();
   }
 
-  await new Invoke()
-    .service('audit')
-    .name('create')
-    .body({
-      type: 'reservation:update',
-      reservation,
-    });
+  await new Invoke().service('audit').name('create').body({
+    type: 'reservation:update',
+    reservation,
+  });
 
   return respond(200, `nice`);
 });
 
-module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
-  const userReservations: Reservation[] = await dbReservation
-    .query('userId')
-    .eq(userId)
-    .exec();
+  const userReservations: Reservation[] = await dbReservation.query('userId').eq(userId).exec();
   if (userReservations && userReservations.length) {
     const filtered = userReservations.filter(
-      r =>
-        r.cancelled != true &&
-        r.updatedAt >
-          moment()
-            .subtract(45, 'm')
-            .toDate(),
+      (r) => r.cancelled != true && r.updatedAt > moment().subtract(45, 'm').toDate(),
     );
     const sorted = filtered.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
     return respond(200, sorted);
@@ -373,7 +344,7 @@ module.exports.activeByUser = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, []);
 });
 
-module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.get = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
   const params = getPathParameters(event);
   const { id } = params;
@@ -382,7 +353,7 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, reservation);
 });
 
-module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.cancel = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
   const { id } = getPathParameters(event);
 
@@ -416,21 +387,13 @@ module.exports.cancel = RavenLambdaWrapper.handler(Raven, async event => {
 function calculateReservationEndTime(reservation): number {
   if (reservation.update && reservation.update.minutes) {
     // updating reservation
-    return (
-      moment(reservation.end)
-        .add(reservation.update.minutes, 'm')
-        .unix() * 1000
-    );
+    return moment(reservation.end).add(reservation.update.minutes, 'm').unix() * 1000;
   } else if (reservation.update && reservation.update.program) {
     // keep same time
     return reservation.end;
   } else {
     // new reservation
-    return (
-      moment()
-        .add(reservation.minutes, 'm')
-        .unix() * 1000
-    );
+    return moment().add(reservation.minutes, 'm').unix() * 1000;
   }
   // const initialEndTimeMoment = reservation.end ? moment(reservation.end) : moment();
   // return initialEndTimeMoment.add(reservation.minutes, 'm').unix() * 1000;

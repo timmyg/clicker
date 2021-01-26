@@ -3,7 +3,6 @@ const {
   getAvailableBoxes,
   filterPrograms,
   findBoxGameOver,
-  findBoxBlowout,
   findBoxWithoutRating,
   findBoxWorseRating,
   filterProgramsByTargeting,
@@ -11,14 +10,8 @@ const {
   setBoxStatus,
   AirtableControlCenterProgram,
 } = require('./location');
-// const AirtableControlCenterProgram2 = require('../models/airtable/controlCenterProgram');
 
 const moment = require('moment');
-
-// test('smoke test', () => {
-//   // const response = file.health();
-//   expect(response).toBeTruthy;
-// });
 
 const program = {
   programmingId: 'A',
@@ -128,10 +121,6 @@ describe('findBox', () => {
     const result = findBoxGameOver(createBoxes());
     expect(result.id).toBe(4);
   });
-  // test('findBoxBlowout', () => {
-  //   const result = findBoxBlowout(createBoxes());
-  //   expect(result.id).toBe(5);
-  // });
   test('findBoxWithoutRating', () => {
     const result = findBoxWithoutRating(createBoxes());
     expect(result.id).toBe(5);

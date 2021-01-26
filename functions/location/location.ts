@@ -42,7 +42,6 @@ if (process.env.NODE_ENV === 'test') {
   });
 }
 
-import DirecTVBox from '../models/directvBox';
 import DirecTVBoxRaw from '../models/directvBoxRaw';
 import BoxLive from '../models/boxLive';
 import Box from '../models/box';
@@ -186,9 +185,6 @@ export const all = withSentry(async function (event, context) {
   init();
   let latitude, longitude;
   const pathParams = getPathParameters(event);
-  // const { partner, clicker, app } = event.headers;
-  // console.log({ partner, clicker, app });
-  // console.time('entire');
   const milesRadius =
     event.queryStringParameters && event.queryStringParameters.miles ? event.queryStringParameters.miles : null;
   console.log({ milesRadius });
@@ -251,27 +247,9 @@ export const getBox = withSentry(async function (event, context) {
 export const get = withSentry(async function (event, context) {
   const { id } = getPathParameters(event);
 
-  // console.time('get from db');
-  // const location: Venue = await dbLocation
-  //   .queryOne('id')
-  //   .eq(id)
-  //   .exec();
-  // console.timeEnd('get from db');
   const location: Venue = await getLocationWithBoxes(id, false);
   if (!location) {
     return respond(400, 'location doesnt exist');
-  }
-
-  // demo stuff
-  if (location.demo) {
-    const demoBoxes: any[] = [
-      { id: '1', label: 'TV 1' },
-      { id: '2', label: 'TV 2' },
-      { id: '3', label: 'TV 3' },
-      { id: '4', label: 'TV 4' },
-    ];
-    location.boxes = demoBoxes;
-    return respond(200, location);
   }
 
   // loop through boxes, and update reserved status if necessary
@@ -514,84 +492,11 @@ export const setBoxes = withSentry(async function (event, context) {
   return respond(201);
 });
 
-export const syncAirtableRegions = withSentry(async function (event, context) {
-  const { data: regions } = await new Invoke().service('program').name('regions').go();
-  console.log({ regions });
-
-  const airtableDataTable = 'Data';
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableRegions = await base(airtableDataTable)
-    .select({
-      filterByFormula: `{type} = 'region'`,
-    })
-    .all();
-  const airtableRegionIds: string[] = airtableRegions.map((l) => l.fields.id);
-  const newRegions = regions.filter((dbRegion) => {
-    return !airtableRegionIds.includes(dbRegion.id);
-  });
-
-  let count = 0;
-  if (newRegions && newRegions.length) {
-    const promises = [];
-    newRegions.forEach((newRegion) => {
-      count++;
-      promises.push(
-        base(airtableDataTable).create({
-          id: newRegion.id,
-          type: 'region',
-          name: newRegion.name,
-        }),
-      );
-    });
-    await Promise.all(promises);
-  }
-  return respond(200, { count });
-});
-
-// export const syncAirtableLocations = withSentry(async function (event, context) {
-//   const dbLocations: Venue[] = await dbLocation.scan().exec();
-//   const airtableDataTable = 'Data';
-//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-//   const airtableLocations = await base(airtableDataTable)
-//     .select({
-//       filterByFormula: `{type} = 'location'`,
-//     })
-//     .all();
-//   const airtableLocationIds: string[] = airtableLocations.map(l => l.fields.id);
-//   const newLocations = dbLocations.filter(dbLocation => {
-//     return !airtableLocationIds.includes(dbLocation.id);
-//   });
-//   let count = 0;
-//   if (newLocations && newLocations.length) {
-//     const promises = [];
-//     newLocations.forEach(newLocation => {
-//       count++;
-//       promises.push(
-//         base(airtableDataTable).create({
-//           id: newLocation.id,
-//           type: 'location',
-//           name: `${newLocation.name}: ${newLocation.neighborhood}`,
-//         }),
-//       );
-//     });
-//     await Promise.all(promises);
-//   }
-//   return respond(200, { count });
-// });
-
 export const setBoxReserved = withSentry(async function (event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
   console.log({ locationId, boxId, end });
 
-  // const location: Venue = await dbLocation
-  //   .queryOne('id')
-  //   .eq(locationId)
-  //   .exec();
-
-  // const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  // location.boxes[boxIndex].live.lockedUntil = end;
-  // await location.save();
   await new Invoke()
     .service('box')
     .name('updateLive')
@@ -607,17 +512,6 @@ export const setBoxReserved = withSentry(async function (event, context) {
 
 export const setBoxFree = withSentry(async function (event, context) {
   const { id: locationId, boxId } = getPathParameters(event);
-
-  // const location: Venue = await dbLocation
-  //   .queryOne('id')
-  //   .eq(locationId)
-  //   .exec();
-
-  // const boxIndex = location.boxes.findIndex(b => b.id === boxId);
-  // // location.boxes[boxIndex].reserved = false;
-  // // location.boxes[boxIndex].end;
-  // location.boxes[boxIndex].live.lockedUntil = moment().unix() * 1000;
-  // await location.save();
   await new Invoke()
     .service('box')
     .name('updateLive')
@@ -1004,7 +898,6 @@ export const controlCenterByLocation = withSentry(async function (event, context
     // if (isCloseHighlyRated || isCloseNotHighlyRated) {
     if (program.isMinutesFromNow(60)) {
       selectedBox = findBoxGameOver(availableBoxes);
-      // if (!selectedBox) selectedBox = findBoxBlowout(availableBoxes);
       if (!selectedBox) selectedBox = findBoxWithoutRating(availableBoxes, program);
       if (!selectedBox) selectedBox = findBoxWorseRating(availableBoxes, program);
     } else {
@@ -1024,37 +917,6 @@ export const controlCenterByLocation = withSentry(async function (event, context
       console.info('no more boxes');
       break;
     }
-  }
-  return respond(200);
-});
-
-// npm run invoke:updateAirtableNowShowing
-export const updateAirtableNowShowing = withSentry(async function (event, context) {
-  let locations: Venue[] = await dbLocation
-    .scan()
-    .filter('active')
-    .eq(true)
-    .and()
-    .filter('controlCenter')
-    .eq(true)
-    .all()
-    .exec();
-  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-  const airtableName = 'Now Showing';
-  const nowShowing = [];
-  locations.forEach((location) => {
-    nowShowing.push(...buildAirtableNowShowing(location));
-  });
-  console.log('nowShowing:', nowShowing.length);
-  const promises = [];
-  while (!!nowShowing.length) {
-    const slice = nowShowing.splice(0, 10);
-    promises.push(base(airtableName).create(slice));
-  }
-  try {
-    await Promise.all(promises);
-  } catch (e) {
-    console.error(e);
   }
   return respond(200);
 });
@@ -1132,60 +994,9 @@ export const getLocationDetailsPage = withSentry(async function (event, context)
   return respond(200, { html });
 });
 
-async function migrateNullToVersion1(version?: number) {
-  // const locations: Venue[] = await dbLocation
-  //   .scan()
-  //   .filter('_v')
-  //   .null()
-  //   .exec();
-  // const promises = [];
-  // locations.forEach(location => {
-  //   location._v = 1;
-  //   promises.push(location.save());
-  // });
-  // await Promise.all(promises);
-}
+async function migrateNullToVersion1(version?: number) {}
 
-async function migrateLocationsToVersion2(version?: number) {
-  // const locations: Venue[] = await dbLocation
-  //   .scan()
-  //   .filter('_v')
-  //   .eq(1)
-  //   .exec();
-  // console.log('v1 locations', locations.length);
-  // const promises = [];
-  // locations.forEach(location => {
-  //   location.boxes = location.boxes.map((b: any) => {
-  //     const newBox = {
-  //       id: b.id,
-  //       label: b.label,
-  //       zone: b.zone,
-  //       configuration: {
-  //         appActive: b.appActive,
-  //         automationActive: b.controlCenter,
-  //       },
-  //       info: {
-  //         ip: b.ip,
-  //         clientAddress: b.clientAddress,
-  //       },
-  //       live: {
-  //         channel: b.channel,
-  //       },
-  //     };
-  //     return newBox;
-  //   });
-  //   if (location.controlCenterV2) {
-  //     location.controlCenter = true;
-  //   } else {
-  //     location.controlCenter = false;
-  //   }
-  //   location.controlCenterV2 = null;
-  //   location._v = 2;
-  //   console.log(location.boxes);
-  //   promises.push(location.save());
-  // });
-  // await Promise.all(promises);
-}
+async function migrateLocationsToVersion2(version?: number) {}
 
 export const migration = withSentry(async function (event, context) {
   console.log('-_%^#$@+$(%     running db migrations     -_%^#$@+$(%');
@@ -1337,39 +1148,6 @@ export const slackSlashControlCenter = withSentry(async function (event, context
   }
 });
 
-function buildAirtableNowShowing(location: Venue) {
-  const transformed = [];
-  location.boxes.forEach((box) => {
-    const { zone, label } = box;
-    const { appActive } = box.configuration;
-    const { channel, channelChangeSource: source, program } = box.live;
-    let game, programTitle, rating;
-    if (program) {
-      game = program.game;
-      console.log(game);
-      programTitle = program.title;
-      rating = program.clickerRating;
-      if (program.description) {
-        programTitle += `: ${program.description.substring(0, 20)}`;
-      }
-    }
-    transformed.push({
-      fields: {
-        location: `${location.name}: ${location.neighborhood}`,
-        program: programTitle ? programTitle : '',
-        game: game ? JSON.stringify(game) : '',
-        rating: rating,
-        channel,
-        channelName: program ? program.channelTitle : null,
-        source,
-        zone: zone ? zone : appActive ? `${label} (app)` : '',
-        time: moment().toDate(),
-      },
-    });
-  });
-  return transformed;
-}
-
 export function getAvailableBoxes(boxes: Box[]): Box[] {
   console.log({ boxes });
   boxes = boxes.map((b) => setBoxStatus(b));
@@ -1438,15 +1216,6 @@ export function findBoxGameOver(boxes: Box[]): Box | null | undefined {
     .filter((b) => b.live.program)
     .filter((b) => b.live.program.game)
     .find((b) => b.live.program.game.isOver);
-}
-
-export function findBoxBlowout(boxes: Box[]): Box | null | undefined {
-  console.info('findBoxBlowout');
-  return boxes
-    .filter((b) => b.live)
-    .filter((b) => b.live.program)
-    .filter((b) => b.live.program.game)
-    .find((b) => b.live.program.game.summary.blowout);
 }
 
 export function findBoxWithoutRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
@@ -1589,14 +1358,3 @@ export function filterProgramsByTargeting(
   });
   return results;
 }
-
-// export const AirtableControlCenterProgram;
-// export const getAvailableBoxes = getAvailableBoxes;
-// export const filterPrograms = filterPrograms;
-// export const findBoxGameOver = findBoxGameOver;
-// export const findBoxBlowout = findBoxBlowout;
-// export const findBoxWithoutRating = findBoxWithoutRating;
-// export const findBoxWorseRating = findBoxWorseRating;
-// export const filterProgramsByTargeting = filterProgramsByTargeting;
-// export const replicatePrograms = replicatePrograms;
-// export const setBoxStatus = setBoxStatus;
