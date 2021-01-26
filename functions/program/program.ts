@@ -722,16 +722,9 @@ export const getAll = withSentry(async (event) => {
           channel
           channelTitle
           title
-          episodeTitle
           description
           live
           repeat
-          nextProgramTitle
-          nextProgramStart
-          game {
-            title
-            statusDisplay
-          }
         }
       }
   `);
