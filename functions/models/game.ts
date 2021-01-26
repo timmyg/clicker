@@ -23,23 +23,23 @@ export class GameStatus {
   description: string;
 }
 export default class Game {
-  start: string;
-  id: number;
-  status: string;
-  leagueName: string;
-  scoreboard: {
-    display: string;
-    clock: string;
-    period: number;
-  };
-  broadcast: {
-    network: string;
-  };
-  away: Team;
-  home: Team;
-  book: {
-    total: number;
-  };
-  summary: GameStatus;
-  isOver: boolean;
+  id: string;
+  statusDisplay: string;
+  // start: string;
+  // leagueName: string;
+  // scoreboard: {
+  //   display: string;
+  //   clock: string;
+  //   period: number;
+  // };
+  // broadcast: {
+  //   network: string;
+  // };
+  // away: Team;
+  // home: Team;
+  // book: {
+  //   total: number;
+  // };
+  // summary: GameStatus;
+  // isOver: boolean;
 }

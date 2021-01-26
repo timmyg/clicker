@@ -209,6 +209,10 @@ if (process.env.NODE_ENV === 'test') {
   });
 }
 
+const dynamoProgram = () => {
+  init();
+};
+
 let dbProgram;
 function init() {
   dbProgram = dynamoose.model(
@@ -368,6 +372,11 @@ export const get = withSentry(async (event) => {
     const timeToSearch = time || moment().unix() * 1000;
     const timeToSearchPreviousProgram = moment(timeToSearch).subtract(previousProgramMinutesAgo, 'm').unix() * 1000;
     // get programs that are on now or ended within last 30 mins
+    console.log('xxxxxxxxx');
+    console.log('xxxxxxxxx');
+    console.log('xxxxxxxxx');
+    console.log('xxxxxxxxx');
+    console.log('xxxxxxxxx');
     let programsQuery = dbProgram
       .query('channel')
       .eq(channel)
@@ -389,10 +398,6 @@ export const get = withSentry(async (event) => {
       programsQuery = programsQuery.null();
     }
 
-    console.log({ programsQuery });
-    // console.log(
-    //     (channel, region, timeToSearch, timeToSearchPreviousProgram),
-    // );
     console.log('running query...');
 
     // this query takes a long time
@@ -698,19 +703,6 @@ export const getAll = withSentry(async (event) => {
 
   console.time('current + next programming setup queries');
 
-  // TODO graphql
-
-  // const programsQuery = dbProgram
-  //   .query('region')
-  //   .eq(location.region)
-  //   .and()
-  //   .filter('start')
-  //   .lt(now)
-  //   .and()
-  //   .filter('end')
-  //   .gt(now)
-  //   .all()
-  //   .exec();
   const query = gql(`
   query getPrograms($region: String!, $startAfter: AWSTimestamp!, $endBefore: AWSTimestamp!)
       {
@@ -726,6 +718,11 @@ export const getAll = withSentry(async (event) => {
           live
           repeat
           mainCategory
+          clickerRating
+          game {
+            title
+            statusDisplay
+          }
         }
       }
   `);
@@ -775,9 +772,6 @@ export const getAll = withSentry(async (event) => {
       currentPrograms[i].nextProgramTitle = nextProgram.title;
       currentPrograms[i].nextProgramStart = nextProgram.start;
     }
-    // if (currentPrograms[i].mainCategory === 'Sports') {
-    //   currentPrograms[i].isSports = true;
-    // }
   });
   console.timeEnd('current + next programming combine');
 
