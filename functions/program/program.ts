@@ -716,6 +716,22 @@ export const getAll = withSentry(async (event) => {
       {
         getPrograms(region: $region, startAfter: $startAfter, endBefore: $endBefore) {
           id
+          region
+          start
+          end
+          channel
+          channelTitle
+          title
+          episodeTitle
+          description
+          live
+          repeat
+          nextProgramTitle
+          nextProgramStart
+          game {
+            title
+            statusDisplay
+          }
         }
       }
   `);
@@ -747,32 +763,16 @@ export const getAll = withSentry(async (event) => {
     .sync()
     .go();
 
-  // const programsNextQuery = dbProgram
-  //   .query('region')
-  //   .eq(location.region)
-  //   .and()
-  //   .filter('end')
-  //   .gt(in25Mins)
-  //   .and()
-  //   .filter('start')
-  //   .lt(in25Mins)
-  //   .all()
-  //   .exec();
-
   console.timeEnd('current + next programming setup queries');
 
   console.time('current + next programming query');
   console.log({ query: { region: location.region, startAfter: now, endBefore: now } });
-  const [programs, programsNext] = await Promise.all([programsQuery, programsNextQuery]);
-  // console.log(programs.length, programsNext.length);
+  const [{ data: programsData }, { data: programsNextData }] = await Promise.all([programsQuery, programsNextQuery]);
   console.timeEnd('current + next programming query');
 
-  console.log('123');
-  console.log(programs);
-
   console.time('current + next programming combine');
-  let currentPrograms: Program[] = programs;
-  const nextPrograms: Program[] = programsNext;
+  let currentPrograms: Program[] = programsData.getPrograms;
+  const nextPrograms: Program[] = programsNextData.getPrograms;
   currentPrograms.forEach((program, i) => {
     const nextProgram = nextPrograms.find(
       (np) => np.channel === program.channel && np.programmingId !== program.programmingId,
