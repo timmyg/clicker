@@ -5,15 +5,15 @@
         "expression": "#region = :region",
         "expressionNames" : { "#region": "region"},
         "expressionValues" : {
-            ":region" : $util.dynamodb.toDynamoDBJson(context.arguments.region)
+            ":region" : $util.dynamodb.toDynamoDBJson($context.arguments.region)
         }
     },
     "filter" : {
         "expression": "start <= :startAfter AND end >= :endBefore",
         ## "expressionNames" : {"#start": "start", "#end": "end"},
         "expressionValues" : {
-            ":startAfter" : $util.dynamodb.toDynamoDBJson(context.arguments.startAfter),
-            ":endBefore" : $util.dynamodb.toDynamoDBJson(context.arguments.endBefore)
+            ":startAfter" : $util.dynamodb.toDynamoDBJson($context.arguments.startAfter),
+            ":endBefore" : $util.dynamodb.toDynamoDBJson($context.arguments.endBefore)
         }
     }
 }
