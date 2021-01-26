@@ -725,6 +725,7 @@ export const getAll = withSentry(async (event) => {
           description
           live
           repeat
+          mainCategory
         }
       }
   `);
@@ -774,9 +775,9 @@ export const getAll = withSentry(async (event) => {
       currentPrograms[i].nextProgramTitle = nextProgram.title;
       currentPrograms[i].nextProgramStart = nextProgram.start;
     }
-    if (currentPrograms[i].mainCategory === 'Sports') {
-      currentPrograms[i].isSports = true;
-    }
+    // if (currentPrograms[i].mainCategory === 'Sports') {
+    //   currentPrograms[i].isSports = true;
+    // }
   });
   console.timeEnd('current + next programming combine');
 
@@ -1395,6 +1396,7 @@ export function build(dtvSchedule: any, regionId: string) {
         program.channelId = channel.chId;
         program.hd = channel.chHd;
         program.blackout = channel.blackOut;
+        program.isSports = channel.mainCategory === 'Sports';
         if (blacklistChannelIds.includes(program.channelId)) {
           return true;
         }

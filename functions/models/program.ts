@@ -22,8 +22,6 @@ export default class Program {
   subcategories: string[];
   mainCategory: string;
   type: string;
-  nextProgramTitle: string;
-  nextProgramStart: number;
   points: number;
   synced: boolean;
   clickerRating: number;
@@ -31,9 +29,11 @@ export default class Program {
   game: Game;
   createdAt: number;
   updatedAt: number;
+  isSports: boolean;
 
   // dynamic
   startFromNow: number;
   endFromNow: number;
-  isSports: boolean;
+  nextProgramTitle: string;
+  nextProgramStart: number;
 }
