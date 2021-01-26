@@ -230,6 +230,7 @@ functions:
     timeout: 30
     # called by job
     events:
+      - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
           path: control-center
           method: post

@@ -600,12 +600,15 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
       lockedUntil: null,
     };
     if (originalChannel !== major) {
-      const queryParams = {
-        channel: major,
-        channelMinor: minor,
-        region,
-      };
-      const programResult = await new Invoke().service('program').name('get').queryParams(queryParams).go();
+      const programResult = await new Invoke()
+        .service('program')
+        .name('get')
+        .queryParams({
+          channel: major,
+          channelMinor: minor,
+          region,
+        })
+        .go();
 
       const program = programResult && programResult.data;
       updateBoxInfoBody.lockedProgrammingIds = [program.programmingId];
@@ -1314,11 +1317,11 @@ export function filterProgramsByTargeting(
     const isTargetedRegion = targetingRegionIds.includes(location.region);
     const isTargetedLocation = targetingLocationIds.includes(location.id);
     if (targetingRegionIds.length && targetingLocationIds.length) {
-      return targetingRegionIds.includes(location.region) || targetingLocationIds.includes(location.id);
+      return isTargetedRegion || isTargetedLocation;
     } else if (targetingRegionIds.length) {
-      return targetingRegionIds.includes(location.region);
+      return isTargetedRegion;
     } else if (targetingLocationIds.length) {
-      return targetingLocationIds.includes(location.id);
+      return isTargetedLocation;
     }
     return true;
   });

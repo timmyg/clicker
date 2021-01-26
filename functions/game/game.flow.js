@@ -41,7 +41,7 @@ type actionNetworkRequest = {
   params?: any,
 };
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async (event) => {
   return respond(200);
 });
 
@@ -174,9 +174,7 @@ function isBlowout(game: Game): boolean {
 }
 
 module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () => {
-  const timeToPull = moment()
-    .subtract(12, 'hours')
-    .toDate();
+  const timeToPull = moment().subtract(12, 'hours').toDate();
   // get everything from AN
   const allActionEvents = await pullFromActionNetwork([timeToPull]);
   console.log('allActionEvents', allActionEvents.length);
@@ -191,7 +189,7 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () =
   const airtableUpdates = [];
   for (const actionGame of allActionEvents) {
     // check if game existing in airtable
-    const existingAirtableGame = allExistingAirtableGames.find(atGame => atGame.fields.id === actionGame.id);
+    const existingAirtableGame = allExistingAirtableGames.find((atGame) => atGame.fields.id === actionGame.id);
     // create if not
     if (!existingAirtableGame) {
       const newAirtableGame = {
@@ -238,31 +236,28 @@ module.exports.syncActiveAirtable = RavenLambdaWrapper.handler(Raven, async () =
   return respond(200);
 });
 
-module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async (event) => {
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const allExistingGames = await base(airtableGamesName)
     .select({ fields: ['id', 'start'] })
     .all();
-  const allExistingGamesIds = allExistingGames.map(g => g.get('id'));
+  const allExistingGamesIds = allExistingGames.map((g) => g.get('id'));
   console.log('allExistingGamesIds', allExistingGamesIds.length);
   const daysToPull = 2;
   const datesToPull = [];
   [...Array(daysToPull)].forEach((_, i) => {
-    const dateToSync = moment()
-      .subtract(5, 'hrs')
-      .add(i, 'days')
-      .toDate();
+    const dateToSync = moment().subtract(5, 'hrs').add(i, 'days').toDate();
     datesToPull.push(dateToSync);
   });
   const allEvents: any = await pullFromActionNetwork(datesToPull);
   console.log('allEvents', allEvents.length);
   let eventsNew = uniqBy(allEvents, 'id');
   console.log('unique events', eventsNew.length);
-  eventsNew = eventsNew.filter(e => !allExistingGamesIds.includes(e.id));
+  eventsNew = eventsNew.filter((e) => !allExistingGamesIds.includes(e.id));
   console.log('not existing in airtable events', eventsNew.length);
   console.time('create');
   let transformedGames: Game[] = [];
-  eventsNew.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
+  eventsNew.forEach((g) => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGames = buildAirtableGames(transformedGames);
   const promises = [];
   console.log('creating games:', airtableGames.length);
@@ -279,8 +274,8 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.time('update');
   console.log('allEvents', allEvents.length);
-  let eventsUpdated = allEvents.filter(e => {
-    const airtableGame = allExistingGames.find(g => g.get('id') === e.id);
+  let eventsUpdated = allEvents.filter((e) => {
+    const airtableGame = allExistingGames.find((g) => g.get('id') === e.id);
     // console.log('isUpdated?', airtableGame, e);
     // if (airtableGame.get('id') === 85704) {
     //   console.log(airtableGame.get('id'), airtableGame.get('start'), e.start_time);
@@ -292,10 +287,10 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   });
   console.log('events to update', eventsUpdated.length);
   transformedGames = [];
-  eventsUpdated.forEach(g => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
+  eventsUpdated.forEach((g) => transformedGames.push(g.teams ? transformGame(g) : transformNonGame(g)));
   const airtableGamesUpdated = buildAirtableGames(transformedGames);
-  airtableGamesUpdated.map(atg => {
-    atg['id'] = allExistingGames.find(eg => eg.fields.id === atg.fields.id).id;
+  airtableGamesUpdated.map((atg) => {
+    atg['id'] = allExistingGames.find((eg) => eg.fields.id === atg.fields.id).id;
   });
   const promisesUpdated = [];
   console.log('updating games:', airtableGamesUpdated.length);
@@ -313,51 +308,7 @@ module.exports.syncAirtable = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200);
 });
 
-// module.exports.updateAirtableGamesStatus = RavenLambdaWrapper.handler(Raven, async event => {
-//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-//   console.log('searching for games to update');
-//   try {
-//     const programs = await base(airtableControlCenter)
-//       .select({
-//         filterByFormula: `AND( {gameId} != BLANK(), {gameOver} != TRUE(), {startHoursFromNow} >= -6, {startHoursFromNow} <= 1 )`,
-//       })
-//       .all();
-
-//     console.log(`found ${programs.length} programs`);
-//     if (programs.length) {
-//       for (const program of programs) {
-//         const recordId: string = program.id;
-//         const gameId: number = program.get('gameId');
-//         const game: Game = await dbGame
-//           .queryOne('id')
-//           .eq(gameId)
-//           .exec();
-//         console.log({ recordId, gameId, game });
-//         if (game) {
-//           if (game.summary) {
-//             await base(airtableControlCenter).update(recordId, {
-//               gameOver: game.summary.ended,
-//               gameStatus: game.summary.description,
-//             });
-//           }
-//         } else {
-//           await new Invoke()
-//             .service('notification')
-//             .name('sendControlCenter')
-//             .body({ text: `game not found: ${gameId}` })
-//             .async()
-//             .go();
-//         }
-//       }
-//     }
-//     return respond(200);
-//   } catch (e) {
-//     console.error(e);
-//     Raven.captureException(e);
-//   }
-// });
-
-module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.get = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { id } = getPathParameters(event);
   const redisExpirationSeconds = 60;
 
@@ -398,81 +349,9 @@ module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, game);
 });
 
-// module.exports.getByStartTimeAndNetwork = RavenLambdaWrapper.handler(Raven, async event => {
-//   const { start, network } = event.queryStringParameters;
-//   const games: Game[] = await dbGame
-//     .query('start')
-//     .eq(start) // .filter(filter)
-//     .exec();
-//   const game = games.find(g => g.broadcast && g.broadcast.network === network);
-//   return respond(200, game);
-// });
-
-// module.exports.scoreboard = RavenLambdaWrapper.handler(Raven, async event => {
-//   console.log('get games');
-//   console.time('all scores!');
-//   // const allGames: Game[] = await dbGame.scan().exec();
-//   let games: Game[] = await dbGame.scan().exec();
-//   console.log('allGames', games.length);
-//   games = [
-//     ...games.filter(g => g.status === 'inprogress'),
-//     ...games.filter(g => g.status === 'complete'),
-//     ...games.filter(g => g.status === 'scheduled'),
-//     ...games.filter(g => g.status === 'time-tbd'),
-//   ];
-//   console.log('sortedGames', games.length);
-//   games = [
-//     ...games.filter(g => g.leagueName === 'ncaaf'),
-//     ...games.filter(g => g.leagueName === 'ncaab'),
-//     ...games.filter(g => g.leagueName === 'nfl'),
-//     ...games.filter(g => g.leagueName === 'nba'),
-//     ...games.filter(g => !['ncaaf', 'ncaab', 'nfl', 'nba'].includes(g.leagueName)),
-//   ];
-//   console.log('sortedGames', games.length);
-//   return respond(200, games);
-// });
-
-// module.exports.scoreboardLiveUpcoming = RavenLambdaWrapper.handler(Raven, async event => {
-//   const gamesCount = 5;
-
-//   const inProgressGamesPromise: Game[] = dbGame
-//     .query('status')
-//     .eq('inprogress')
-//     .exec();
-
-//   const upcomingGamesPromise: Game[] = dbGame
-//     .query('status')
-//     .eq('scheduled')
-//     .exec();
-
-//   console.time('games');
-//   let [inProgressGames, upcomingGames] = await Promise.all([inProgressGamesPromise, upcomingGamesPromise]);
-//   console.timeEnd('games');
-
-//   inProgressGames = inProgressGames
-//     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
-//     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-//     .filter(g => !!g.broadcast)
-//     .sort((a, b) => a.start.localeCompare(b.start));
-//   upcomingGames = upcomingGames
-//     .filter(g => moment(g.start) > moment().subtract(2, 'h') && moment(g.start) < moment().add(1, 'd'))
-//     .filter(g => ['ncaaf', 'ncaab', 'nfl', 'nba', 'mlb', 'nhl'].includes(g.leagueName))
-//     .filter(g => !!g.broadcast)
-//     .sort((a, b) => a.start.localeCompare(b.start));
-
-//   let games = upcomingGames;
-
-//   if (inProgressGames && inProgressGames[0]) {
-//     games = [inProgressGames[0], ...games];
-//   }
-
-//   games = games.slice(0, gamesCount);
-//   return respond(200, games);
-// });
-
 function buildAirtableGames(games: Game[]) {
   const transformed = [];
-  games.forEach(game => {
+  games.forEach((game) => {
     // console.log({ game });
     // console.log({ game });
     const { id, leagueName, start, broadcast } = game;
@@ -494,68 +373,10 @@ function buildAirtableGames(games: Game[]) {
   return transformed;
 }
 
-// module.exports.syncNextFewDays = RavenLambdaWrapper.handler(Raven, async event => {
-//   console.log('sync games to database for next few days...');
-//   const datesToPull = [
-//     moment().toDate(),
-//     moment()
-//       .add(1, 'd')
-//       .toDate(),
-//     moment()
-//       .add(2, 'd')
-//       .toDate(),
-//   ];
-//   console.log('sync');
-//   const allEvents: any = await pullFromActionNetwork(datesToPull);
-//   await syncGamesDatabase(allEvents, true);
-//   return respond(200);
-// });
-
-// module.exports.consumeUpdatedGameUpdateProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
-// 	const game: Game = JSON.parse(event.Records[0].body);
-// 	await new Invoke().service('program').name('updateGame').body(game).async().go();
-// 	console.log(game);
-// });
-
-// async function publishNewGames(games) {
-//   // get game ids, publish to sns topic to update description
-//   const sns = new AWS.SNS({ region: 'us-east-1' });
-//   let i = 0;
-//   const messagePromises = [];
-//   for (const game of games) {
-//     const messagePromise = sns
-//       .publish({
-//         Message: JSON.stringify(game),
-//         TopicArn: process.env.newGameTopicArn,
-//       })
-//       .promise();
-//     messagePromises.push(messagePromise);
-//     i++;
-//   }
-//   console.time(`publish ${messagePromises.length} messages`);
-//   console.log(messagePromises[0]);
-//   const [first] = await Promise.all(messagePromises);
-//   console.log({ first });
-//   console.timeEnd(`publish ${messagePromises.length} messages`);
-//   return respond(200);
-// }
-
 function getInProgressAndCompletedGames(response: any): Game[] {
   // return response.filter(e => !['time-tbd', 'scheduled', 'postponed', 'delayed', 'cancelled'].includes(e.status));
-  return response.filter(e => ['inprogress', 'complete'].includes(e.status));
+  return response.filter((e) => ['inprogress', 'complete'].includes(e.status));
 }
-
-// async function getCompleteGameIds(): Promise<number[]> {
-//   const completeGames: Game[] = await dbGame
-//     .query('status')
-//     .eq('complete')
-//     .exec();
-//   console.log(
-//     'getCompleteGameIds',
-//     completeGames.map(g => g.id),
-//   );
-//   return completeGames.map(g => g.id);
-// }
 
 async function pullFromActionNetwork(dates: Date[]) {
   const apiUrl = 'https://api.actionnetwork.com/web/v1/scoreboard';
@@ -586,24 +407,12 @@ async function pullFromActionNetwork(dates: Date[]) {
       requests.push(request);
     }
   }
-  // console.log('requests:');
-  // console.log(require('util').inspect(requests));
   const responses = await Promise.all(requests);
-  // console.log('responses[0]', responses[0].config.params);
-  // console.log('responses[1]', responses[1].config.params);
-  // console.log('responses[2]', responses[2].config.params);
-  // console.log('responses[3]', responses[3].config.params);
   const all = [];
-  responses.forEach(response => {
+  responses.forEach((response) => {
     let responseEvents = response.data.games ? response.data.games : response.data.competitions;
     // remove games in past, not sure why action return them (NCAAF)
-    responseEvents = responseEvents.filter(
-      e =>
-        e.start_time >
-        moment()
-          .subtract(12, 'h')
-          .toISOString(),
-    );
+    responseEvents = responseEvents.filter((e) => e.start_time > moment().subtract(12, 'h').toISOString());
     all.push(...responseEvents);
     // console.log('all.length', all.length);
   });
@@ -612,8 +421,8 @@ async function pullFromActionNetwork(dates: Date[]) {
 
 function transformGameActionToAirtable(game: any) {
   console.log({ game });
-  const away = game.teams ? game.teams.find(t => t.id === game.away_team_id) : game.competitors[0];
-  const home = game.teams ? game.teams.find(t => t.id === game.home_team_id) : game.competitors[1];
+  const away = game.teams ? game.teams.find((t) => t.id === game.away_team_id) : game.competitors[0];
+  const home = game.teams ? game.teams.find((t) => t.id === game.home_team_id) : game.competitors[1];
   const map = {
     id: 'id',
     start_time: 'start',
@@ -650,15 +459,15 @@ function transformNonGame(game: any): Game {
 
 function transformGame(game: any): Game {
   // set away, home teams
-  game.away = game.teams.find(t => t.id === game.away_team_id);
-  game.home = game.teams.find(t => t.id === game.home_team_id);
+  game.away = game.teams.find((t) => t.id === game.away_team_id);
+  game.home = game.teams.find((t) => t.id === game.home_team_id);
   delete game.teams;
 
   // attach rank, if available
   if (!!game.ranks) {
-    const awayRank = game.ranks.find(gr => gr.team_id === game.away.id);
+    const awayRank = game.ranks.find((gr) => gr.team_id === game.away.id);
     game.away.rank = awayRank ? awayRank.rank : null;
-    const homeRank = game.ranks.find(gr => gr.team_id === game.home.id);
+    const homeRank = game.ranks.find((gr) => gr.team_id === game.home.id);
     game.home.rank = homeRank ? homeRank.rank : null;
   }
 

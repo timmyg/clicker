@@ -288,13 +288,6 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  # evaluateUserAgents:
-  #   handler: programDirectv.evaluateUserAgents
-  #   timeout: 600
-  #   events:
-  #     - http:
-  #         path: 'dtv/evaluate'
-  #         method: get
   get:
     handler: program.get
     timeout: 30
