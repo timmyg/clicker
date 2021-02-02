@@ -1,1 +1,1 @@
-sudo balena local flash ./resources/images/raspos-antenna-20200720-build1.img --drive /dev/disk3 --yes
+sudo balena local flash ~/Downloads/raspos-antenna-20200720-build1.img --drive /dev/disk3 --yes

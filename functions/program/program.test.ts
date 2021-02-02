@@ -36,7 +36,7 @@ test('combineByProgrammingId combines programs by programming id and start time'
 });
 
 test('generateId generates the same id when same program', () => {
-  const region1 = 'cincinnati';
+  // const region1 = 'cincinnati';
   const program = {
     channel: 206,
     start: moment().toDate(),

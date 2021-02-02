@@ -40,10 +40,10 @@
                 <div class="flex ion-align-items-center">
                   <ion-chip
                     color="secondary"
-                    *ngIf="program.game && program.game.summary"
+                    *ngIf="program.game && program.game.statusDisplay"
                   >
                     <label color="secondary">{{
-                      program.game.summary.description
+                      program.game.statusDisplay
                     }}</label></ion-chip
                   >
                   <ion-chip color="secondary" *ngIf="vegas">

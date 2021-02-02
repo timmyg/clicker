@@ -2,11 +2,11 @@ import { getBody, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-
 const appsync = require('aws-appsync');
 require('cross-fetch/polyfill');
 
-export const health = RavenLambdaWrapper.handler(Raven, async event => {
+export const health = RavenLambdaWrapper.handler(Raven, async (event) => {
   return respond(200, 'ok');
 });
 
-export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => {
+export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async (event) => {
   console.log('event', JSON.stringify(event));
   const { channel, channelMinor, region } = event.source;
   if (!region) {
@@ -14,12 +14,12 @@ export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => 
     return null;
   }
   if (channel) {
-    const queryParams = { channel, channelMinor, region };
-    console.log({ queryParams });
+    // const queryParams = { channel, channelMinor, region };
+    // console.log({ queryParams });
     const programResult = await new Invoke()
       .service('program')
       .name('get')
-      .queryParams(queryParams)
+      .queryParams({ channel, channelMinor, region })
       .go();
     console.log({ programResult });
     return programResult && programResult.data;
@@ -27,20 +27,16 @@ export const fetchBoxProgram = RavenLambdaWrapper.handler(Raven, async event => 
   return {};
 });
 
-export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async event => {
+export const fetchBoxProgramGame = RavenLambdaWrapper.handler(Raven, async (event) => {
   console.log(event.source);
   const { gameId } = event.source;
   if (gameId) {
-    const result = await new Invoke()
-      .service('game')
-      .name('get')
-      .pathParams({ id: gameId })
-      .go();
+    const result = await new Invoke().service('game').name('get').pathParams({ id: gameId }).go();
     return result && result.data;
   }
 });
 
-export const query = RavenLambdaWrapper.handler(Raven, async event => {
+export const query = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { query, variables } = getBody(event);
   const gqlQuery = getGraphqlClient().query({
     query,
@@ -53,7 +49,7 @@ export const query = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, data);
 });
 
-export const mutate = RavenLambdaWrapper.handler(Raven, async event => {
+export const mutate = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { mutation, variables } = getBody(event);
   const gqlMutation = getGraphqlClient().mutate({
     mutation,

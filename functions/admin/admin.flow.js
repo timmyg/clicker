@@ -27,7 +27,7 @@ module.exports.checkControlCenterEvents = RavenLambdaWrapper.handler(Raven, asyn
     .all();
   console.log(`found ${games.length} games`);
   console.log(games);
-  if (games.length >= 2) {
+  if (games.length >= 3) {
     await sendControlCenterSlack(`${games.length} games scheduled for next 12 hours`);
   } else {
     const text = `*${games.length}* games scheduled for next 12 hours!`;
@@ -79,9 +79,7 @@ module.exports.logChannelChange = RavenLambdaWrapper.handler(Raven, async event 
   console.log('try to find last record to update end');
   const lastChannelChanges: any[] = await base(airtableChannelChanges)
     .select({
-      filterByFormula: `AND( {Record Id} != '${newChannelChange.id}', {Box Id} = '${box.id}', {Zone} = '${
-        box.zone
-      }', {End} = BLANK() )`,
+      filterByFormula: `AND( {Record Id} != '${newChannelChange.id}', {Box Id} = '${box.id}', {Zone} = '${box.zone}', {End} = BLANK() )`,
       sort: [{ field: 'Time', direction: 'desc' }],
       maxRecords: 1,
     })

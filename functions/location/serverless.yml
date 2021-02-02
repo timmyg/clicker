@@ -23,16 +23,20 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
+# plugins: ${file(../serverless.common.yml):plugins}
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
   - serverless-sentry
   - serverless-dotenv-plugin
-  - serverless-plugin-tracing
-  - serverless-plugin-scripts
-
+  # - serverless-plugin-tracing
+  # - serverless-plugin-scripts
+  - serverless-bundle
 custom:
   stage: ${opt:stage}
+  bundle:
+    sourcemaps: false
+    linting: false
   # hooks:
   #   after:deploy:finalize:
   #     - npx sls invoke -f migration
@@ -42,10 +46,7 @@ custom:
   prune:
     automatic: true
     number: 3
-  domains:
-    prod: api.tryclicker.com
-    release: api-release.tryclicker.com
-    develop: api-develop.tryclicker.com
+  domains: ${file(../serverless.common.yml):domains}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: locations
@@ -62,11 +63,6 @@ custom:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
     develop: ${env:AIRTABLE_BASE_DEV}
-  # provisionedConcurrencies:
-  #   prod: 1
-  #   release: 1
-  #   default: 0
-  # provisionedConcurrency: ${self:custom.provisionedConcurrencies.${self:custom.stage}, self:custom.provisionedConcurrencies.default}
 resources:
   Resources:
     LocationsTable:
@@ -165,7 +161,7 @@ functions:
           path: '{id}/boxes/{boxId}'
           method: get
   delete:
-    handler: location.delete
+    handler: location.remove
     events:
       - http:
           path: '{id}'
@@ -220,14 +216,6 @@ functions:
       - http:
           path: '{id}/boxes/{boxId}/free'
           method: post
-  # updateBoxInfo:
-  #   description: called by location.saveBoxesInfo for manual and remote for other changes
-  #   handler: location.updateBoxInfo
-  #   timeout: 12
-  #   events:
-  #     - http:
-  #         path: '{id}/boxes/{boxId}/info'
-  #         method: post
   checkAllBoxesInfo:
     handler: location.checkAllBoxesInfo
     description: check what is on all locations boxes (to detect manual changes)
@@ -237,17 +225,12 @@ functions:
       - http:
           path: boxes/info
           method: post
-  controlCenterLocationsByRegion:
-    handler: location.controlCenterLocationsByRegion
-    events:
-      - http:
-          path: 'regions/{regions}'
-          method: get
   controlCenter:
     handler: location.controlCenter
     timeout: 30
     # called by job
     events:
+      - schedule: cron(*/10 * * * ? *) # every 10th minute
       - http:
           path: control-center
           method: post
@@ -257,41 +240,6 @@ functions:
       - http:
           path: '{id}/control-center'
           method: post
-  # updateAirtableNowShowing:
-  #   handler: location.updateAirtableNowShowing
-  #   timeout: 30
-  #   events:
-  #     - schedule: cron(9/10 * * * ? *)
-  #     - http:
-  #         path: airtable/now-showing
-  #         method: post
-  # syncAirtableLocations:
-  #   handler: location.syncAirtableLocations
-  #   timeout: 10
-  #   events:
-  #     - schedule: cron(00 10 * * ? *) # every day @ 6am eastern
-  #     - http:
-  #         path: airtable/data/locations
-  #         method: post
-  syncAirtableRegions:
-    handler: location.syncAirtableRegions
-    timeout: 10
-    events:
-      - schedule: cron(00 10 * * ? *) # every day @ 6am eastern
-      - http:
-          path: airtable/data/regions
-          method: post
-  # updateAllBoxesPrograms:
-  #   handler: location.updateAllBoxesPrograms
-  #   description: update all location boxes current program (for when antenna doesnt actually call)
-  #   timeout: 30
-  #   events:
-  #     # - schedule: cron(0/5 21-4 ? * * *) # Every 5 minutes between 11pm UTC and 4am UTC
-  #     # - schedule: cron(0/15 4-21 ? * * *) # Every 15 minutes between 4am UTC and 9pm UTC
-  #     - schedule: cron(6/10 * * * ? *) # Every 6th minute
-  #     - http:
-  #         path: boxes/programs
-  #         method: post
   getLocationDetailsPage:
     handler: location.getLocationDetailsPage
     reservedConcurrency: 1

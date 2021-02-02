@@ -1,7 +1,7 @@
 {
   "pathParameters": {
     "id": "b2413370-78d7-11e9-b8bb-dbe01980c307",
-    "locationId": "b2413370-78d7-11e9-b8bb-dbe01980c307"
+    "locationId": "920f8dc0-4ce7-11e9-839a-e73aa5a05cbf"
   },
   "headers": {
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MDEwNDQ3MC04ZWJjLTExZTktOGY1NC0zNTUzYjNhMTEyOTAiLCJndWVzdCI6dHJ1ZSwiaWF0IjoxNTYwNTI3NTA2fQ.vHbd-sMoGEdsd2d_nnUJyjzBxa2ssJ1daLEHhjI6hzA"

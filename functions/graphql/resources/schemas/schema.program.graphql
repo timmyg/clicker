@@ -1,0 +1,46 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  getPrograms(region: String!, startAfter: AWSTimestamp!, endBefore: AWSTimestamp!): [Program]
+}
+
+type Game {
+  id: String!
+  title: String!
+  isOver: Boolean
+  status: String
+  statusDisplay: String
+}
+
+type Program {
+  gameId: String
+  game: Game
+  clickerRating: Int
+  channel: Int
+  channelMinor: Int
+  channelId: Int
+  channelTitle: String
+  createdAt: String
+  description: String
+  durationMins: Int
+  end: AWSTimestamp
+  endFromNow: String
+  expires: String
+  hd: Boolean
+  id: String
+  live: Boolean
+  isSports: Boolean
+  mainCategory: String
+  programmingId: String
+  programType: String
+  region: String
+  repeat: Boolean
+  start: AWSTimestamp
+  startFromNow: String
+  startOriginal: AWSTimestamp
+  title: String
+  updatedAt: String
+}

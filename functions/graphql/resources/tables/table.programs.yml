@@ -1,0 +1,83 @@
+# # component: '@serverless/aws-dynamodb'
+# Type: 'AWS::DynamoDB::Table'
+# Properties:
+#   TableName: ${self:custom.tableProgram}
+#   BillingMode: PAY_PER_REQUEST
+#   AttributeDefinitions:
+#     - AttributeName: locationId
+#       AttributeType: S
+#     - AttributeName: id
+#       AttributeType: S
+#   KeySchema:
+#     - AttributeName: locationId
+#       KeyType: HASH
+#     - AttributeName: id
+#       KeyType: RANGE
+
+# ProgramTable:
+Type: 'AWS::DynamoDB::Table'
+Properties:
+  TableName: ${self:custom.tableProgram}
+  BillingMode: PAY_PER_REQUEST
+  AttributeDefinitions:
+    - AttributeName: region
+      AttributeType: S
+    - AttributeName: start
+      AttributeType: N
+    - AttributeName: id
+      AttributeType: S
+    - AttributeName: programmingId
+      AttributeType: S
+    - AttributeName: channel
+      AttributeType: N
+    - AttributeName: gameId
+      AttributeType: S
+  KeySchema:
+    - AttributeName: region
+      KeyType: HASH
+    - AttributeName: id
+      KeyType: RANGE
+  GlobalSecondaryIndexes:
+    - IndexName: programmingIdGlobalIndex
+      KeySchema:
+        - AttributeName: programmingId
+          KeyType: HASH
+      Projection:
+        ProjectionType: KEYS_ONLY
+    # - IndexName: programmingId2GlobalIndex
+    #   KeySchema:
+    #     - AttributeName: programmingId
+    #       KeyType: HASH
+    #   Projection:
+    #     NonKeyAttributes:
+    #       - start
+    #     ProjectionType: INCLUDE
+    - IndexName: gameIdGlobalIndex
+      KeySchema:
+        - AttributeName: gameId
+          KeyType: HASH
+      Projection:
+        ProjectionType: KEYS_ONLY
+    - IndexName: channelGlobalIndex
+      KeySchema:
+        - AttributeName: channel
+          KeyType: HASH
+      Projection:
+        ProjectionType: ALL
+    # - IndexName: idGlobalIndex
+    #   KeySchema:
+    #     - AttributeName: id
+    #       KeyType: HASH
+    #   Projection:
+    #     ProjectionType: ALL
+  LocalSecondaryIndexes:
+    - IndexName: startLocalIndex
+      KeySchema:
+        - AttributeName: region
+          KeyType: HASH
+        - AttributeName: start
+          KeyType: RANGE
+      Projection:
+        NonKeyAttributes:
+          - id
+        ProjectionType: INCLUDE

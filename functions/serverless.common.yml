@@ -12,11 +12,11 @@ domains:
   prod: api.tryclicker.com
   release: api-release.tryclicker.com
   develop: api-develop.tryclicker.com
-# plugins:
-#   - serverless-prune-plugin
-#   - serverless-deployment-bucket
-#   - serverless-domain-manager
-#   - serverless-sentry
-#   - serverless-dotenv-plugin
-#   - serverless-plugin-tracing
-#   - serverless-bundle
+plugins:
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+  - serverless-domain-manager
+  - serverless-sentry
+  - serverless-dotenv-plugin
+  - serverless-plugin-tracing
+  - serverless-bundle

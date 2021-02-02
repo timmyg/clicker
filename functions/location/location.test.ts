@@ -1,22 +1,17 @@
-const file = require('./location');
+// const file = require('./location');
 const {
-  ControlCenterProgram,
   getAvailableBoxes,
   filterPrograms,
   findBoxGameOver,
-  findBoxBlowout,
   findBoxWithoutRating,
   findBoxWorseRating,
   filterProgramsByTargeting,
   replicatePrograms,
   setBoxStatus,
+  AirtableControlCenterProgram,
 } = require('./location');
-const moment = require('moment');
 
-test('smoke test', () => {
-  const response = file.health();
-  expect(response).toBeTruthy;
-});
+const moment = require('moment');
 
 const program = {
   programmingId: 'A',
@@ -43,7 +38,7 @@ test('ControlCenterProgram model', () => {
       },
     },
   ];
-  const ccPrograms = objects.map(p => new ControlCenterProgram(p));
+  const ccPrograms = objects.map(p => new AirtableControlCenterProgram(p));
   expect(ccPrograms[0].isMinutesFromNow(10)).toBeFalsy();
   expect(ccPrograms[0].isMinutesFromNow(20)).toBeTruthy();
 });
@@ -126,10 +121,6 @@ describe('findBox', () => {
     const result = findBoxGameOver(createBoxes());
     expect(result.id).toBe(4);
   });
-  // test('findBoxBlowout', () => {
-  //   const result = findBoxBlowout(createBoxes());
-  //   expect(result.id).toBe(5);
-  // });
   test('findBoxWithoutRating', () => {
     const result = findBoxWithoutRating(createBoxes());
     expect(result.id).toBe(5);
@@ -430,7 +421,7 @@ describe('get boxes', () => {
       },
     },
   };
-  const reservedZonelessBox = { ...automationInactive, id: 7, zone: '' };
+  const reservedZonelessBox = { ...automationInactive, id: 7, zone: '', live: {} };
   describe("getAvailableBoxes removes boxes that shouldn't be changed", () => {
     test('openGoodBox', () => {
       const result = getAvailableBoxes([openGoodBox]);
