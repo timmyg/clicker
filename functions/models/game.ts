@@ -41,5 +41,5 @@ export default class Game {
   //   total: number;
   // };
   // summary: GameStatus;
-  // isOver: boolean;
+  isOver: boolean;
 }
