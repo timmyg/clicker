@@ -553,6 +553,7 @@ export const getAll = withSentry(async (event) => {
             title
             statusDisplay
           }
+          isSports
         }
       }
   `);

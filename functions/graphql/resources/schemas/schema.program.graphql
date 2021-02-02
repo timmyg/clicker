@@ -32,6 +32,7 @@ type Program {
   hd: Boolean
   id: String
   live: Boolean
+  isSports: Boolean
   mainCategory: String
   programmingId: String
   programType: String
