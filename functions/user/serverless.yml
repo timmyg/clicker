@@ -281,3 +281,4 @@ functions:
       - http:
           path: stripe/webhook
           method: post
+
