@@ -9,3 +9,4 @@ create device for customer use
      - populating .env template with variables (hogan)
 3. copy .env
    `sudo sh copy-env.sh`
+4. copy `wpa_supplicant.conf` if using wi-fi connection
