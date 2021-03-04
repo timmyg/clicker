@@ -96,7 +96,7 @@ const dbUser = dynamoose.model(
   },
 );
 
-module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.health = RavenLambdaWrapper.handler(Raven, async (event) => {
   // Handle the event
   const webhookEvent = getBody(event);
   console.log({ webhookEvent });
@@ -112,7 +112,7 @@ module.exports.health = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async (event) => {
   const webhookEvent = getBody(event);
   console.log(JSON.stringify(webhookEvent));
   switch (webhookEvent.type) {
@@ -121,12 +121,7 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
       const { customer_email: customerEmail, amount_paid: amountPaid, created } = invoice;
       const description = invoice.lines.data[0].description;
       const text = `Invoice Paid: ${customerEmail} $${amountPaid / 100} ${description}`;
-      await new Invoke()
-        .service('notification')
-        .name('sendMoney')
-        .body({ text })
-        .async()
-        .go();
+      await new Invoke().service('notification').name('sendMoney').body({ text }).async().go();
       await new Invoke()
         .service('analytics')
         .name('track')
@@ -144,12 +139,7 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
       const { customer_email: failedCustomerEmail, id } = failedInvoice;
       const failedDescription = failedInvoice.lines.data[0].description;
       const failedText = `Invoice Failed :( ${failedCustomerEmail} ${failedDescription}: ${id}`;
-      await new Invoke()
-        .service('notification')
-        .name('sendMoney')
-        .body({ text: failedText })
-        .async()
-        .go();
+      await new Invoke().service('notification').name('sendMoney').body({ text: failedText }).async().go();
       return respond(200);
     // case 'customer.subscription.created':
     //   const subscription = webhookEvent.data.object;
@@ -168,7 +158,7 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async event => 
   }
 });
 
-module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.create = RavenLambdaWrapper.handler(Raven, async (event) => {
   const id = uuid();
   await dbUser.create({ id, tokens: initialTokens });
   const token = jwt.sign({ sub: id, guest: true }, key);
@@ -176,20 +166,13 @@ module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(201, { token });
 });
 
-module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.referral = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { code } = getBody(event);
   // get user
   const userId = getUserId(event);
-  const user = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  const user = await dbUser.queryOne('id').eq(userId).exec();
 
-  const referrerUser = await dbUser
-    .queryOne('referralCode')
-    .eq(code)
-    .all()
-    .exec();
+  const referrerUser = await dbUser.queryOne('referralCode').eq(code).all().exec();
 
   console.log({ user });
   console.log({ referrerUser });
@@ -208,31 +191,20 @@ module.exports.referral = RavenLambdaWrapper.handler(Raven, async event => {
   await dbUser.update({ id: referrerUser.id }, { $ADD: { tokens: 1 } });
 
   const text = '*New referral*';
-  await new Invoke()
-    .service('notification')
-    .name('sendApp')
-    .body({ text })
-    .async()
-    .go();
+  await new Invoke().service('notification').name('sendApp').body({ text }).async().go();
 
   return respond(200);
 });
 
-module.exports.get = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.get = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { id: userId } = getPathParameters(event);
-  const user = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  const user = await dbUser.queryOne('id').eq(userId).exec();
   return respond(200, user);
 });
 
-module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.wallet = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
-  let user = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  let user = await dbUser.queryOne('id').eq(userId).exec();
   console.log({ user });
 
   // this shouldnt typically happen, but could in dev environments when database cleared
@@ -244,9 +216,7 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
 
   // generate referral code if none
   if (!user.referralCode) {
-    const referralCode = Math.random()
-      .toString(36)
-      .substr(2, 5);
+    const referralCode = Math.random().toString(36).substr(2, 5);
     user = await dbUser.update({ id: userId }, { referralCode }, { returnValues: 'ALL_NEW' });
   }
 
@@ -261,14 +231,11 @@ module.exports.wallet = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, user);
 });
 
-module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
   const { token: stripeCardToken } = getBody(event);
 
-  const user = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  const user = await dbUser.queryOne('id').eq(userId).exec();
 
   if (user.stripeCustomer) {
     const customer = await stripe.customers.update(user.stripeCustomer, {
@@ -286,13 +253,10 @@ module.exports.updateCard = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
 
-  const { stripeCustomer } = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  const { stripeCustomer } = await dbUser.queryOne('id').eq(userId).exec();
 
   const customer = await stripe.customers.retrieve(stripeCustomer);
   const cardToken = customer.sources.data[0].id;
@@ -301,13 +265,10 @@ module.exports.removeCard = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, response);
 });
 
-module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.replenish = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
   const plan = getBody(event);
-  const user = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  const user = await dbUser.queryOne('id').eq(userId).exec();
 
   const { dollars, tokens } = plan;
 
@@ -340,25 +301,17 @@ module.exports.replenish = RavenLambdaWrapper.handler(Raven, async event => {
   console.log('3', updatedUserWithCost);
 
   const text = `$${dollars} Added to Wallet! (${user.phone || '?'}, user: ${userId.substr(userId.length - 5)})`;
-  await new Invoke()
-    .service('notification')
-    .name('sendApp')
-    .body({ text })
-    .async()
-    .go();
+  await new Invoke().service('notification').name('sendApp').body({ text }).async().go();
 
-  await new Invoke()
-    .service('audit')
-    .name('create')
-    .body({
-      type: 'user:wallet:replenished',
-      entity: updatedUserWithCost,
-    });
+  await new Invoke().service('audit').name('create').body({
+    type: 'user:wallet:replenished',
+    entity: updatedUserWithCost,
+  });
 
   return respond(200, updatedUserWithCost);
 });
 
-module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.charge = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { token, amount, email, company, name } = getBody(event);
 
   // create customer in stripe
@@ -384,7 +337,7 @@ module.exports.charge = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, charge);
 });
 
-module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { token, email, company, name, start, plan } = getBody(event);
 
   // create customer in stripe
@@ -412,13 +365,10 @@ module.exports.subscribe = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, subscription);
 });
 
-module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.transaction = RavenLambdaWrapper.handler(Raven, async (event) => {
   const userId = getUserId(event);
   const { tokens, minutes } = getBody(event);
-  let user = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  let user = await dbUser.queryOne('id').eq(userId).exec();
 
   console.log({ user, tokens });
   if (user && user.tokens >= tokens) {
@@ -427,13 +377,10 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
       { $ADD: { tokens: -tokens, lifetimeZaps: 1, lifetimeMinutes: minutes } },
       { returnValues: 'ALL_NEW' },
     );
-    await new Invoke()
-      .service('audit')
-      .name('create')
-      .body({
-        type: 'user:transaction',
-        entity: user,
-      });
+    await new Invoke().service('audit').name('create').body({
+      type: 'user:transaction',
+      entity: user,
+    });
     return respond(200, user);
   } else {
     console.error('Insufficient Funds');
@@ -442,7 +389,7 @@ module.exports.transaction = RavenLambdaWrapper.handler(Raven, async event => {
 });
 
 // not in use
-module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { stripeCustomerId } = getBody(event);
 
   var session = await stripe.billingPortal.sessions.create({
@@ -453,7 +400,7 @@ module.exports.customerPortal = RavenLambdaWrapper.handler(Raven, async event =>
   return respond(200, session);
 });
 
-module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.checkout = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { priceId } = getBody(event);
 
   const host = event.headers.origin || 'http://tryclicker.com';
@@ -481,18 +428,12 @@ module.exports.checkout = RavenLambdaWrapper.handler(Raven, async event => {
   return respond(200, session);
 });
 
-module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.alias = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { fromId, toId } = getPathParameters(event);
 
   // get existing users
-  const fromUser = await dbUser
-    .queryOne('id')
-    .eq(fromId)
-    .exec();
-  const toUser = await dbUser
-    .queryOne('id')
-    .eq(toId)
-    .exec();
+  const fromUser = await dbUser.queryOne('id').eq(fromId).exec();
+  const toUser = await dbUser.queryOne('id').eq(toId).exec();
 
   // count up new token total
   let tokens = fromUser.tokens;
@@ -515,20 +456,18 @@ module.exports.alias = RavenLambdaWrapper.handler(Raven, async event => {
 
   // TODO update reservations to new user!
 
-  await new Invoke()
-    .service('audit')
-    .name('create')
-    .body({
-      type: 'user:alias',
-      entity: { fromUser, toUser },
-    });
+  await new Invoke().service('audit').name('create').body({
+    type: 'user:alias',
+    entity: { fromUser, toUser },
+  });
 
   return respond(201, user);
 });
 
-module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { phone } = getBody(event);
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
+  console.log(twilioAccountSid, twilioAuthToken, twilioServiceSid);
 
   if (phone === demo.phone) {
     return respond(201);
@@ -539,11 +478,12 @@ module.exports.verifyStart = RavenLambdaWrapper.handler(Raven, async event => {
     const response = await client.verify.services(twilioServiceSid).verifications.create({ to: phone, channel: 'sms' });
     return respond(201, response);
   } catch (e) {
+    console.error(e);
     return respond(400, e);
   }
 });
 
-module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.verify = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { phone, code, uuid } = getBody(event);
   console.log({ phone, code, uuid });
   const { twilioAccountSid, twilioAuthToken, twilioServiceSid } = process.env;
@@ -568,13 +508,10 @@ module.exports.verify = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports.addRole = RavenLambdaWrapper.handler(Raven, async event => {
+module.exports.addRole = RavenLambdaWrapper.handler(Raven, async (event) => {
   const { roleType, locationId } = getBody(event);
   const userId = getUserId(event);
-  const user = await dbUser
-    .queryOne('id')
-    .eq(userId)
-    .exec();
+  const user = await dbUser.queryOne('id').eq(userId).exec();
   const role = getRole(roleType);
   let userRoles = user.roles;
   console.log({ role });
@@ -615,11 +552,7 @@ async function getToken(phone, isDemo) {
   //   );
   // }
   const demoTokens = 10;
-  const user: User = await dbUser
-    .queryOne('phone')
-    .eq(phone)
-    .all()
-    .exec();
+  const user: User = await dbUser.queryOne('phone').eq(phone).all().exec();
   if (user) {
     if (isDemo && user.tokens < demoTokens) {
       await dbUser.update({ id: user.id }, { tokens: demoTokens });
