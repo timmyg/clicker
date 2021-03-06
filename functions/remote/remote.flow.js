@@ -193,7 +193,7 @@ async function zapViaFirebase(
 }
 
 function getCurrentProgramText(eventName, location, program) {
-  return `*${eventName}* @ ${location.name} to ${program.title} {${program.clickerRating ||
+  return `*${eventName}* @ ${location.name} (${location.neighborhood}) to ${program.title} {${program.clickerRating ||
     'NR'}}  [${program.channelTitle || ''} ${program.channel || ''}]`;
 }
 
