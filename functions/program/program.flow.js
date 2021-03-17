@@ -86,6 +86,7 @@ const nationalChannels: any[] = [
   { channel: 245, channelTitle: 'TNT' },
   { channel: 247, channelTitle: 'TBS' },
   { channel: 242, channelTitle: 'USA' },
+  { channel: 246, channelTitle: 'TRU' },
   { channel: 703, channelTitle: 'NFLRZ' }, // Redzone (premium)
   { channel: 704, channelTitle: 'NFLFY' }, // Fantasy Zone (premium)
   { channel: 705, channelTitle: 'NFLT' }, //NFL
