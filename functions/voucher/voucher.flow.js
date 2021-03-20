@@ -90,6 +90,7 @@ function getRedeemResponse(voucherType: string, locationName: string): any {
 }
 
 module.exports.create = RavenLambdaWrapper.handler(Raven, async event => {
+  console.log('body', getBody(event));
   const schema = joi.object().keys({
     entityId: joi.string().required(),
     type: joi
