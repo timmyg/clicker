@@ -436,7 +436,7 @@ function transformGameActionToAirtable(game: any) {
   const transformedGame = objectMapper(game, map);
   transformedGame.homeTeam = home.full_name;
   transformedGame.awayTeam = away.full_name;
-  transformedGame.statusDisplay = `${x.teams[1].display_name} ${x.boxscore.total_away_points} ${x.teams[0].display_name} ${x.boxscore.total_home_points}`;
+  transformedGame.statusDisplay = `${game.teams[1].display_name} ${game.boxscore.total_away_points} ${game.teams[0].display_name} ${game.boxscore.total_home_points}`;
   // console.log({ transformedGame });
   transformedGame.isOver = transformedGame.status === 'complete';
 
