@@ -1219,6 +1219,7 @@ export function findBoxGameOver(boxes: Box[]): Box | null | undefined {
     .filter((b) => b.live.program)
     .filter((b) => b.live.program.game)
     .find((b) => b.live.program.game.isOver);
+    
 }
 
 export function findBoxWithoutRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
