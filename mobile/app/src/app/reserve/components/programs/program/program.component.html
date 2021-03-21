@@ -29,7 +29,8 @@
             <ng-container *ngIf="program.start; else noProgram">
               <ion-col size="12">
                 <h1 class="title brand-text">
-                  {{ program.title | truncate: [30] }}
+                  <span *ngIf="program.game?.title; else noGameTitle">{{program.game.title | truncate: [30] }}</span>
+                  <ng-template #noGameTitle>{{ program.title | truncate: [30] }}</ng-template>
                 </h1>
                 <span *ngIf="program.nextProgramTitle">
                   <em

@@ -420,7 +420,8 @@ async function pullFromActionNetwork(dates: Date[]) {
 }
 
 function transformGameActionToAirtable(game: any) {
-  console.log({ game });
+  // console.log({ game });
+  console.log({ game: JSON.stringify(game) });
   const away = game.teams ? game.teams.find((t) => t.id === game.away_team_id) : game.competitors[0];
   const home = game.teams ? game.teams.find((t) => t.id === game.home_team_id) : game.competitors[1];
   const map = {
@@ -435,6 +436,9 @@ function transformGameActionToAirtable(game: any) {
   const transformedGame = objectMapper(game, map);
   transformedGame.homeTeam = home.full_name;
   transformedGame.awayTeam = away.full_name;
+  if (game.teams && game.teams.length) {
+    transformedGame.statusDisplay = `${game.teams[1].display_name} ${game.boxscore.total_away_points} ${game.teams[0].display_name} ${game.boxscore.total_home_points}`;
+  }
   // console.log({ transformedGame });
   transformedGame.isOver = transformedGame.status === 'complete';
 
