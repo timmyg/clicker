@@ -428,7 +428,7 @@ function transformGameActionToAirtable(game: any) {
     id: 'id',
     start_time: 'start',
     status: 'status',
-    // status_display: 'statusDisplay',
+    status_display: 'statusDisplay',
     'broadcast.network': 'channelTitle',
     league_name: 'leagueName',
     status: 'status',
@@ -436,7 +436,9 @@ function transformGameActionToAirtable(game: any) {
   const transformedGame = objectMapper(game, map);
   transformedGame.homeTeam = home.full_name;
   transformedGame.awayTeam = away.full_name;
-  transformedGame.statusDisplay = `${game.teams[1].display_name} ${game.boxscore.total_away_points} ${game.teams[0].display_name} ${game.boxscore.total_home_points}`;
+  if (game.teams && game.teams.length) {
+    transformedGame.statusDisplay = `${game.teams[1].display_name} ${game.boxscore.total_away_points} ${game.teams[0].display_name} ${game.boxscore.total_home_points}`;
+  }
   // console.log({ transformedGame });
   transformedGame.isOver = transformedGame.status === 'complete';
 
