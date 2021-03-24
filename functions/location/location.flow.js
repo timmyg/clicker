@@ -675,6 +675,8 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
 
   for (const box: DirecTVBox of boxes) {
     const { boxId, info } = box;
+
+
     // if (!boxId) {
     //   const error = 'must provide boxId';
     //   console.error(error);
@@ -694,6 +696,29 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     console.log('original channel', originalChannel);
     console.log('current channel', major);
     const region = locationBox.region;
+
+
+    await new Invoke()
+    .service('analytics')
+    .name('track')
+    .body({
+      userId: 'system',
+      name: 'Box Status',
+      data: {
+        ...info,
+        boxId: locationBox._id,
+        label: locationBox.label,
+        zone: locationBox.zone,
+        ip: locationBox.info.ip,
+        locationId: location._id,
+        locationName: `${location.name} (${location.neighborhood})`,
+      },
+      // timestamp: moment().toISOString(),
+    })
+    .async()
+    .go();
+
+
 
     const now = moment().unix() * 1000;
     let updateBoxInfoBody = {
