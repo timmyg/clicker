@@ -706,11 +706,11 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       name: 'Box Status',
       data: {
         ...info,
-        boxId: locationBox._id,
+        boxId: locationBox.id,
         label: locationBox.label,
         zone: locationBox.zone,
         ip: locationBox.info.ip,
-        locationId: location._id,
+        locationId: location.id,
         locationName: `${location.name} (${location.neighborhood})`,
       },
       // timestamp: moment().toISOString(),
