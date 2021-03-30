@@ -952,6 +952,7 @@ export const controlCenterByLocation = withSentry(async function (event, context
 // // npm run invoke:updateAirtableNowShowing
 // module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
 export const updateAirtableNowShowing = withSentry(async function (event, context) {
+  init();
   let locations: Venue[] = await dbLocation
     .scan()
     // .filter('active')
