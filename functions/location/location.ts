@@ -1441,6 +1441,8 @@ function buildAirtableNowShowing(location: Venue) {
         locationName: location.name,
         locationNeighborhood: location.neighborhood,
         program: programTitle || '',
+        programStart: new Date(program.start),
+        programEnd: new Date(program.end),
         game: game?.title || '',
         channel,
         channelMinor,
@@ -1449,6 +1451,7 @@ function buildAirtableNowShowing(location: Venue) {
         zone: zone || '',
         label: label || '',
         category: program.mainCategory,
+        isLive: program.live,
       },
     });
   });

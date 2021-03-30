@@ -64,11 +64,13 @@ export const getAll = withSentry(async (event) => {
               title
               channelTitle
               start
+              end
               clickerRating
               channel
               channelMinor
               gameId
               mainCategory
+              live
               game {
                 isOver
                 title
