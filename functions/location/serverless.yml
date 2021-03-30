@@ -257,14 +257,14 @@ functions:
       - http:
           path: '{id}/control-center'
           method: post
-  # updateAirtableNowShowing:
-  #   handler: location.updateAirtableNowShowing
-  #   timeout: 30
-  #   events:
-  #     - schedule: cron(9/10 * * * ? *)
-  #     - http:
-  #         path: airtable/now-showing
-  #         method: post
+  updateAirtableNowShowing:
+    handler: location.updateAirtableNowShowing
+    timeout: 30
+    events:
+      - schedule: cron(9/10 * * * ? *)
+      - http:
+          path: airtable/now-showing
+          method: post
   # syncAirtableLocations:
   #   handler: location.syncAirtableLocations
   #   timeout: 10

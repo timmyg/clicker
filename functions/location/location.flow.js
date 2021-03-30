@@ -698,25 +698,25 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
     const region = locationBox.region;
 
 
-    await new Invoke()
-    .service('analytics')
-    .name('track')
-    .body({
-      userId: 'system',
-      name: 'Box Status',
-      data: {
-        ...info,
-        boxId: locationBox.id,
-        label: locationBox.label,
-        zone: locationBox.zone,
-        ip: locationBox.info.ip,
-        locationId: location.id,
-        locationName: `${location.name} (${location.neighborhood})`,
-      },
-      // timestamp: moment().toISOString(),
-    })
-    .async()
-    .go();
+    // await new Invoke()
+    // .service('analytics')
+    // .name('track')
+    // .body({
+    //   userId: 'system',
+    //   name: 'Box Status',
+    //   data: {
+    //     ...info,
+    //     boxId: locationBox.id,
+    //     label: locationBox.label,
+    //     zone: locationBox.zone,
+    //     ip: locationBox.info.ip,
+    //     locationId: location.id,
+    //     locationName: `${location.name} (${location.neighborhood})`,
+    //   },
+    //   // timestamp: moment().toISOString(),
+    // })
+    // .async()
+    // .go();
 
 
 
@@ -773,6 +773,7 @@ module.exports.saveBoxesInfo = RavenLambdaWrapper.handler(Raven, async event => 
       };
     }
 
+    console.log('updateLive', {locationId, boxId, updateBoxInfoBody});
     await new Invoke()
       .service('box')
       .name('updateLive')
@@ -1102,19 +1103,20 @@ module.exports.controlCenterByLocation = RavenLambdaWrapper.handler(Raven, async
 module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
   let locations: Venue[] = await dbLocation
     .scan()
-    .filter('active')
-    .eq(true)
-    .and()
-    .filter('controlCenter')
-    .eq(true)
+    // .filter('active')
+    // .eq(true)
+    // .and()
+    // .filter('controlCenter')
+    // .eq(true)
     .all()
     .exec();
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableName = 'Now Showing';
   const nowShowing = [];
-  locations.forEach(location => {
-    nowShowing.push(...buildAirtableNowShowing(location));
-  });
+  for (const location of locations) {
+    const locationWithBoxes = await getLocationWithBoxes(location.id, true);
+    nowShowing.push(...buildAirtableNowShowing(locationWithBoxes));
+  };
   console.log('nowShowing:', nowShowing.length);
   const promises = [];
   while (!!nowShowing.length) {
