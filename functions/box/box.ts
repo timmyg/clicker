@@ -59,6 +59,7 @@ export const getAll = withSentry(async (event) => {
             lockedUntil
             lockedProgrammingIds
             region
+            updatedAt
             program @include(if: $fetchProgram) {
               title
               channelTitle
@@ -67,6 +68,7 @@ export const getAll = withSentry(async (event) => {
               channel
               channelMinor
               gameId
+              mainCategory
               game {
                 isOver
                 title
