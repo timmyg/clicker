@@ -1069,7 +1069,8 @@ export const migration = withSentry(async function (event, context) {
 });
 
 export const syncLocationsBoxes = withSentry(async function (event, context) {
-  const locations: Venue[] = await dbLocation.scan().filter('active').eq(true).all().exec();
+  init();
+  const locations: Venue[] = await dbLocation.scan().all().exec();
 
   for (const location of locations) {
     const { losantId, losantProductionOverride } = location;
