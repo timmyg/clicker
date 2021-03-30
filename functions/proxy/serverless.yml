@@ -40,6 +40,7 @@ custom:
     develop: api-develop.tryclicker.com
   pythonRequirements:
     dockerizePip: non-linux
+    pythonBin: python3
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: proxy
