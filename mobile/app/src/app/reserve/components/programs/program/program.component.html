@@ -29,7 +29,8 @@
             <ng-container *ngIf="program.start; else noProgram">
               <ion-col size="12">
                 <h1 class="title brand-text">
-                  {{ program.title | truncate: [30] }}
+                  <span *ngIf="program.game?.title; else noGameTitle">{{program.game.title | truncate: [30] }}</span>
+                  <ng-template #noGameTitle>{{ program.title | truncate: [30] }}</ng-template>
                 </h1>
                 <span *ngIf="program.nextProgramTitle">
                   <em
@@ -40,10 +41,10 @@
                 <div class="flex ion-align-items-center">
                   <ion-chip
                     color="secondary"
-                    *ngIf="program.game && program.game.summary"
+                    *ngIf="program.game && program.game.statusDisplay"
                   >
                     <label color="secondary">{{
-                      program.game.summary.description
+                      program.game.statusDisplay
                     }}</label></ion-chip
                   >
                   <ion-chip color="secondary" *ngIf="vegas">

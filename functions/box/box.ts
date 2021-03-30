@@ -1,14 +1,15 @@
-import { getBody, getPathParameters, respond, Raven, RavenLambdaWrapper, Invoke } from 'serverless-helpers';
+import { getBody, getPathParameters, respond, Invoke } from 'serverless-helpers';
 const uuid = require('uuid/v1');
 import vals from '../shared/example';
 const gql = require('graphql-tag');
-require('cross-fetch/polyfill');
+const withSentry = require('serverless-sentry-lib');
+// require('cross-fetch/polyfill');
 
-export const health = RavenLambdaWrapper.handler(Raven, async event => {
+export const health = withSentry(async (event) => {
   return respond(200, { vals });
 });
 
-export const get = RavenLambdaWrapper.handler(Raven, async event => {
+export const get = withSentry(async (event) => {
   const { locationId, boxId } = getPathParameters(event);
 
   const query = gql(`
@@ -27,19 +28,14 @@ export const get = RavenLambdaWrapper.handler(Raven, async event => {
     id: boxId,
     locationId,
   };
-  const result = await new Invoke()
-    .service('graphql')
-    .name('query')
-    .body({ query, variables })
-    .sync()
-    .go();
+  const result = await new Invoke().service('graphql').name('query').body({ query, variables }).sync().go();
 
   console.log({ result });
 
   return respond(200, result.data.box);
 });
 
-export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
+export const getAll = withSentry(async (event) => {
   const { locationId } = getPathParameters(event);
   const fetchProgram = (event.queryStringParameters && event.queryStringParameters.fetchProgram) || false;
 
@@ -94,17 +90,12 @@ export const getAll = RavenLambdaWrapper.handler(Raven, async event => {
 
   console.log({ query, variables });
 
-  const result = await new Invoke()
-    .service('graphql')
-    .name('query')
-    .body({ query, variables })
-    .sync()
-    .go();
+  const result = await new Invoke().service('graphql').name('query').body({ query, variables }).sync().go();
 
   return respond(200, !result || !result.data ? [] : result.data.boxes);
 });
 
-export const remove = RavenLambdaWrapper.handler(Raven, async event => {
+export const remove = withSentry(async (event) => {
   const { locationId, boxId } = getPathParameters(event);
 
   const mutation = gql(
@@ -120,17 +111,12 @@ export const remove = RavenLambdaWrapper.handler(Raven, async event => {
     id: boxId,
   };
 
-  const result = await new Invoke()
-    .service('graphql')
-    .name('mutate')
-    .body({ mutation, variables })
-    .sync()
-    .go();
+  const result = await new Invoke().service('graphql').name('mutate').body({ mutation, variables }).sync().go();
 
   return respond(200, result.deleteBox);
 });
 
-export const create = RavenLambdaWrapper.handler(Raven, async event => {
+export const create = withSentry(async (event) => {
   const { locationId } = getPathParameters(event);
   const boxes = getBody(event);
 
@@ -169,19 +155,14 @@ export const create = RavenLambdaWrapper.handler(Raven, async event => {
     const variables = newBox;
     console.log(variables);
 
-    const result = await new Invoke()
-      .service('graphql')
-      .name('mutate')
-      .body({ mutation, variables })
-      .sync()
-      .go();
+    const result = await new Invoke().service('graphql').name('mutate').body({ mutation, variables }).sync().go();
 
     boxesCreated.push(result.data.addBox);
   }
   return respond(201, boxesCreated);
 });
 
-export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
+export const createDirectv = withSentry(async (event) => {
   const { ip, boxes }: DirectvBoxRequest = getBody(event);
   const { locationId } = getPathParameters(event);
 
@@ -204,12 +185,8 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
       clientAddress: boxes[0].clientAddr,
       locationName: boxes[0].locationName,
     },
-    label: Math.random()
-      .toString(36)
-      .substr(2, 2),
-    zone: Math.random()
-      .toString(36)
-      .substr(2, 2),
+    label: Math.random().toString(36).substr(2, 2),
+    zone: Math.random().toString(36).substr(2, 2),
     live: {
       channel: 0,
       channelChangeSource: 'manual',
@@ -220,17 +197,12 @@ export const createDirectv = RavenLambdaWrapper.handler(Raven, async event => {
   console.log([newBox]);
   console.log({ region: location.region });
 
-  const { data } = await new Invoke()
-    .service('box')
-    .name('create')
-    .pathParams({ locationId })
-    .body([newBox])
-    .go();
+  const { data } = await new Invoke().service('box').name('create').pathParams({ locationId }).body([newBox]).go();
 
   return respond(200, data);
 });
 
-export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
+export const updateLive = withSentry(async (event) => {
   const { locationId, boxId } = getPathParameters(event);
   const live = getBody(event);
 
@@ -262,22 +234,12 @@ export const updateLive = RavenLambdaWrapper.handler(Raven, async event => {
     locationId,
   };
 
-  const result = await new Invoke()
-    .service('graphql')
-    .name('mutate')
-    .body({ mutation, variables })
-    .sync()
-    .go();
+  const result = await new Invoke().service('graphql').name('mutate').body({ mutation, variables }).sync().go();
 
   return respond(200, result.data.updateBoxLive);
 });
 
-class DirectvBox {
-  major: number;
-  minor: number;
-  clientAddr: string;
-  locationName: string;
-}
+import DirectvBox from '../models/directvBox';
 
 class DirectvBoxRequest {
   boxes: DirectvBox[];

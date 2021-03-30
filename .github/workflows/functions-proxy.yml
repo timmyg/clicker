@@ -2,7 +2,7 @@ name: test + deploy serverless function
 on:
   push:
     paths:
-      - "functions/job/**"
+      - "functions/proxy/**"
     branches:
       - master
       - release
@@ -13,7 +13,7 @@ jobs:
     name: serverless
     runs-on: ubuntu-latest
     env:
-      working-directory: functions/job
+      working-directory: functions/proxy
       # TODO these arent all needed for this function
       SENTRY_DSN_ENDPOINT: ${{ secrets.SENTRY_DSN_ENDPOINT }}
       TWILIO_SERVICE_SID: ${{ secrets.TWILIO_SERVICE_SID }}
@@ -66,10 +66,10 @@ jobs:
       - name: Install NPM dependencies
         # if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm install
-      - name: Build if needed
-        run: npm run build --if-present
-      - name: Run tests
-        run: npm test
+      # - name: Build if needed
+      #   run: npm run build --if-present
+      # - name: Run tests
+      #   run: npm test
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:

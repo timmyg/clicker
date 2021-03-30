@@ -1,0 +1,73 @@
+service: proxy
+frameworkVersion: '>=2.19.0 <3.0.0'
+provider:
+  name: aws
+  runtime: python3.6
+  memorySize: 1024
+  versionFunctions: false
+  logRetentionInDays: 14
+  deploymentBucket:
+    name: serverless-deploys-clicker
+  environment:
+    stage: ${self:custom.stage}
+    serviceName: ${self:service}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
+
+plugins:
+  - serverless-domain-manager
+  - serverless-prune-plugin
+  - serverless-sentry
+  - serverless-plugin-tracing
+  - serverless-python-requirements
+package:
+  exclude:
+    - node_modules/**
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
+  domains:
+    prod: api.tryclicker.com
+    release: api-release.tryclicker.com
+    develop: api-develop.tryclicker.com
+  pythonRequirements:
+    dockerizePip: non-linux
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: proxy
+    certificateName: 'api.tryclicker.com'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: 'edge'
+  sentry:
+    dsn: ${env:SENTRY_DSN_ENDPOINT}
+functions:
+  health:
+    handler: proxy.health
+    runtime: nodejs12.x
+    events:
+      - http:
+          path: health
+          method: get
+  getSchedule:
+    handler: proxy.getSchedule
+    timeout: 40
+    events:
+      - http:
+          path: py/schedule
+          method: get
+  getProgramDetail:
+    handler: proxy.getProgramDetail
+    timeout: 60
+    events:
+      - http:
+          path: py/program/detail
+          method: get

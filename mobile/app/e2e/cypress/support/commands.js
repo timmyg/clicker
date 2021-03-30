@@ -11,7 +11,7 @@
 //
 
 Cypress.Commands.add("landingPage", (callback) => {
-  const baseUrl = "http://localhost:4100";
+  const baseUrl = "http://localhost:4141";
   cy.fixture("geolocation.json").as("fakeLocation");
   cy.get("@fakeLocation").then((fakeLocation) => {
     cy.visit(baseUrl, {
@@ -38,17 +38,17 @@ Cypress.Commands.add("initialSetup", (callback) => {
   indexedDB.deleteDatabase(dbName);
   let db;
   let openRequest = indexedDB.open(dbName, 1);
-  openRequest.onupgradeneeded = function(e) {
+  openRequest.onupgradeneeded = function (e) {
     let db = e.target.result;
     if (!db.objectStoreNames.contains(storeName)) {
       let storeOS = db.createObjectStore(storeName);
     }
   };
-  openRequest.onsuccess = function(e) {
+  openRequest.onsuccess = function (e) {
     db = e.target.result;
     addItem();
   };
-  openRequest.onerror = function(e) {
+  openRequest.onerror = function (e) {
     console.log("on error!");
   };
   function addItem() {
@@ -56,13 +56,13 @@ Cypress.Commands.add("initialSetup", (callback) => {
     let store = transaction.objectStore(storeName);
     let request = store.add(true, "onboarded");
     let request2 = store.add("allowed", "permission.geolocation");
-    request.onerror = function(e) {
+    request.onerror = function (e) {
       console.log("Error", e.target.error.name);
     };
-    request.onsuccess = function(e) {
+    request.onsuccess = function (e) {
       console.log("Woot! Did it");
     };
-    request2.onsuccess = function(e) {
+    request2.onsuccess = function (e) {
       console.log("Woot! Did it");
       callback();
     };

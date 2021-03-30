@@ -50,7 +50,7 @@ jobs:
           working-directory: mobile/app
           build: npm run build
           start: npm run start:static
-          wait-on: "http://localhost:4100"
+          wait-on: "http://localhost:4141"
           browser: chrome
           record: true
           headless: true

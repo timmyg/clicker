@@ -1,5 +1,6 @@
 schemas:
   - resources/schemas/schema.box.graphql
+  - resources/schemas/schema.program.graphql
 
 dataSources:
   - type: AMAZON_DYNAMODB
@@ -16,6 +17,10 @@ dataSources:
     description: 'attach program game'
     config:
       functionName: fetchBoxProgramGame
+  - type: AMAZON_DYNAMODB
+    name: Programs
+    config:
+      tableName: ${self:custom.tableProgram}
 
 mappingTemplates:
   - dataSource: Boxes
@@ -53,3 +58,8 @@ mappingTemplates:
     field: game
     request: box/request-get-source.vtl
     response: response.vtl
+  - dataSource: Programs
+    type: Query
+    field: getPrograms
+    request: program/request-get-all.vtl
+    response: response-list.vtl

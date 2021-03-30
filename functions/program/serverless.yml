@@ -2,10 +2,10 @@ service: program
 frameworkVersion: '>=1.1.0 <2.0.0'
 provider:
   name: aws
-  # runtime: nodejs12.x
   memorySize: 1024
   versionFunctions: false
   # tracing: true
+  runtime: nodejs12.x
   logRetentionInDays: 14
   deploymentBucket:
     name: serverless-deploys-clicker
@@ -57,19 +57,20 @@ plugins:
   - serverless-sentry
   - serverless-dotenv-plugin
   - serverless-plugin-tracing
-  - serverless-python-requirements
+  - serverless-bundle
 custom:
   stage: ${opt:stage, self:provider.stage}
   prune:
     automatic: true
     number: 3
+  bundle:
+    sourcemaps: false
+    linting: false
   tableProgram: programs-${self:custom.stage}
   domains:
     prod: api.tryclicker.com
     release: api-release.tryclicker.com
     develop: api-develop.tryclicker.com
-  pythonRequirements:
-    dockerizePip: non-linux
   airtableBase:
     prod: ${env:AIRTABLE_BASE}
     release: ${env:AIRTABLE_BASE_RELEASE}
@@ -201,77 +202,9 @@ resources:
           - Arn
         Protocol: sqs
         RawMessageDelivery: 'true'
-    ProgramTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:custom.tableProgram}
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: region
-            AttributeType: S
-          - AttributeName: start
-            AttributeType: N
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: programmingId
-            AttributeType: S
-          - AttributeName: channel
-            AttributeType: N
-          - AttributeName: gameId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: region
-            KeyType: HASH
-          - AttributeName: id
-            KeyType: RANGE
-        GlobalSecondaryIndexes:
-          - IndexName: programmingIdGlobalIndex
-            KeySchema:
-              - AttributeName: programmingId
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
-          # - IndexName: programmingId2GlobalIndex
-          #   KeySchema:
-          #     - AttributeName: programmingId
-          #       KeyType: HASH
-          #   Projection:
-          #     NonKeyAttributes:
-          #       - start
-          #     ProjectionType: INCLUDE
-          - IndexName: gameIdGlobalIndex
-            KeySchema:
-              - AttributeName: gameId
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
-          - IndexName: channelGlobalIndex
-            KeySchema:
-              - AttributeName: channel
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-          # - IndexName: idGlobalIndex
-          #   KeySchema:
-          #     - AttributeName: id
-          #       KeyType: HASH
-          #   Projection:
-          #     ProjectionType: ALL
-        LocalSecondaryIndexes:
-          - IndexName: startLocalIndex
-            KeySchema:
-              - AttributeName: region
-                KeyType: HASH
-              - AttributeName: start
-                KeyType: RANGE
-            Projection:
-              NonKeyAttributes:
-                - id
-              ProjectionType: INCLUDE
 functions:
   health:
     handler: program.health
-    runtime: nodejs12.x
     events:
       - http:
           path: health
@@ -279,7 +212,6 @@ functions:
   getAll:
     handler: program.getAll
     # provisionedConcurrency: 1
-    runtime: nodejs12.x
     timeout: 20
     events:
       - http:
@@ -296,28 +228,21 @@ functions:
   syncRegions:
     handler: program.syncRegions
     description: pull in directv data from their api into programs table for all regions
-    runtime: nodejs12.x
     # timeout: 60
     events:
       - schedule: rate(2 hours)
-      # - schedule: rate(60 minutes)
-      # - schedule: cron(0 5 * * ? *) # every day @ 1am eastern
-      # - schedule: cron(0 13 * * ? *) # every day @ 9am eastern
-      # - schedule: cron(0 21 * * ? *) # every day @ 5pm eastern
       - schedule: cron(58 8 * * ? *) # every day @ 3:58/4:58am eastern
       - http:
           path: sync
           method: post
   syncRegionNextFewHours:
     handler: program.syncRegionNextFewHours
-    runtime: nodejs12.x
     timeout: 30
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
   syncAirtable:
     handler: program.syncAirtable
-    runtime: nodejs12.x
     description: call syncAirtableRegion for each region
     timeout: 12
     events:
@@ -327,7 +252,6 @@ functions:
           method: post
   syncAirtableRegion:
     handler: program.syncAirtableRegion
-    runtime: nodejs12.x
     description: sync programs in DTV api to airtable for region
     timeout: 120
     reservedConcurrency: 1
@@ -335,7 +259,6 @@ functions:
       newProgramAirtableTopicArn: ${self:custom.newProgramAirtableTopicArn.deployed}
   syncAirtableUpdates:
     handler: program.syncAirtableUpdates
-    runtime: nodejs12.x
     description: sync user program game id/rating/early from airtable to programs db
     timeout: 15
     events:
@@ -346,7 +269,6 @@ functions:
   consumeNewProgramUpdateDetails:
     timeout: 30
     handler: program.consumeNewProgramUpdateDetails
-    runtime: nodejs12.x
     description: Consume new db program and update description
     reservedConcurrency: 1
     events:
@@ -358,7 +280,6 @@ functions:
   consumeNewProgramAirtableUpdateDetails:
     timeout: 30
     handler: program.consumeNewProgramAirtableUpdateDetails
-    runtime: nodejs12.x
     description: Consume new airtable program update description
     reservedConcurrency: 1
     events:
@@ -367,25 +288,8 @@ functions:
             - newProgramAirtableQueue
             - Arn
           batchSize: 1
-  getSchedulePy:
-    handler: programPy.getPrograms
-    runtime: python3.6
-    timeout: 40
-    events:
-      - http:
-          path: py/schedule
-          method: get
-  getProgramDetailPy:
-    handler: programPy.getProgramDetail
-    runtime: python3.6
-    timeout: 60
-    events:
-      - http:
-          path: py/program/detail
-          method: get
   get:
     handler: program.get
-    runtime: nodejs12.x
     timeout: 30
     events:
       - http:
@@ -393,14 +297,12 @@ functions:
           method: get
   regions:
     handler: program.regions
-    runtime: nodejs12.x
     events:
       - http:
           path: regions
           method: get
   upcoming:
     handler: program.upcoming
-    runtime: nodejs12.x
     # reservedConcurrency: 1
     events:
       - http:
@@ -409,7 +311,6 @@ functions:
   clearDatabase:
     handler: program.clearDatabase
     description: clear out programs database table
-    runtime: nodejs12.x
     timeout: 120
     events:
       - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern
@@ -419,7 +320,6 @@ functions:
   clearAirtable:
     handler: program.clearAirtable
     description: clear out games and control center airtables
-    runtime: nodejs12.x
     timeout: 120
     events:
       - schedule: cron(57 8 * * ? *) # every day @ 3:57/4:57am eastern
