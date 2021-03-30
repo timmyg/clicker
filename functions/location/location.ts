@@ -1434,26 +1434,30 @@ function buildAirtableNowShowing(location: Venue) {
         programTitle += `: ${program.description.substring(0, 20)}`;
       }
     }
-    transformed.push({
-      fields: {
-        pingTime: updatedAt,
-        location: `${location.name}: ${location.neighborhood}`,
-        locationName: location.name,
-        locationNeighborhood: location.neighborhood,
-        program: programTitle || '',
-        programStart: new Date(program.start),
-        programEnd: new Date(program.end),
-        game: game?.title || '',
-        channel,
-        channelMinor,
-        channelName: program?.channelTitle || '',
-        source,
-        zone: zone || '',
-        label: label || '',
-        category: program.mainCategory,
-        isLive: program.live,
-      },
-    });
+    try {
+      transformed.push({
+        fields: {
+          pingTime: updatedAt,
+          location: `${location.name}: ${location.neighborhood}`,
+          locationName: location.name,
+          locationNeighborhood: location.neighborhood,
+          program: programTitle || '',
+          programStart: program.start && new Date(program.start),
+          programEnd: program.end && new Date(program.end),
+          game: game?.title || '',
+          channel,
+          channelMinor,
+          channelName: program?.channelTitle || '',
+          source,
+          zone: zone || '',
+          label: label || '',
+          category: program.mainCategory,
+          isLive: program.live,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
   });
   return transformed;
 }
