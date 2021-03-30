@@ -77,11 +77,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy Lambda functions develop
+        uses: vlaaaaaaad/github-action@python-too
         if: github.ref == 'refs/heads/develop'
         run: SLS_DEBUG=* npx serverless deploy --stage develop --verbose
       - name: Deploy Lambda functions release
+        uses: vlaaaaaaad/github-action@python-too
         if: github.ref == 'refs/heads/release'
         run: SLS_DEBUG=* npx serverless deploy --stage release --verbose
       - name: Deploy Lambda functions master
+        uses: vlaaaaaaad/github-action@python-too
         if: github.ref == 'refs/heads/master'
         run: SLS_DEBUG=* npx serverless deploy --stage prod --verbose
