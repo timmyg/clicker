@@ -951,36 +951,36 @@ export const controlCenterByLocation = withSentry(async function (event, context
 // =======
 // // npm run invoke:updateAirtableNowShowing
 // module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
-// export const updateAirtableNowShowing = withSentry(async function (event, context) {
-//   let locations: Venue[] = await dbLocation
-//     .scan()
-//     // .filter('active')
-//     // .eq(true)
-//     // .and()
-//     // .filter('controlCenter')
-//     // .eq(true)
-//     .all()
-//     .exec();
-//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
-//   const airtableName = 'Now Showing';
-//   const nowShowing = [];
-//   for (const location of locations) {
-//     const locationWithBoxes = await getLocationWithBoxes(location.id, true);
-//     nowShowing.push(...buildAirtableNowShowing(locationWithBoxes));
-//   }
-//   console.log('nowShowing:', nowShowing.length);
-//   const promises = [];
-//   while (!!nowShowing.length) {
-//     const slice = nowShowing.splice(0, 10);
-//     promises.push(base(airtableName).create(slice));
-//   }
-//   try {
-//     await Promise.all(promises);
-//   } catch (e) {
-//     console.error(e);
-//   }
-//   return respond(200);
-// });
+export const updateAirtableNowShowing = withSentry(async function (event, context) {
+  let locations: Venue[] = await dbLocation
+    .scan()
+    // .filter('active')
+    // .eq(true)
+    // .and()
+    // .filter('controlCenter')
+    // .eq(true)
+    .all()
+    .exec();
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableName = 'Now Showing';
+  const nowShowing = [];
+  for (const location of locations) {
+    const locationWithBoxes = await getLocationWithBoxes(location.id, true);
+    nowShowing.push(...buildAirtableNowShowing(locationWithBoxes));
+  }
+  console.log('nowShowing:', nowShowing.length);
+  const promises = [];
+  while (!!nowShowing.length) {
+    const slice = nowShowing.splice(0, 10);
+    promises.push(base(airtableName).create(slice));
+  }
+  try {
+    await Promise.all(promises);
+  } catch (e) {
+    console.error(e);
+  }
+  return respond(200);
+});
 
 export const getLocationDetailsPage = withSentry(async function (event, context) {
   const { id } = getPathParameters(event);
@@ -1419,4 +1419,37 @@ export function filterProgramsByTargeting(
     }
   });
   return results;
+}
+
+function buildAirtableNowShowing(location: Venue) {
+  const transformed = [];
+  location.boxes.forEach((box) => {
+    const { zone, label } = box;
+    const { appActive } = box.configuration;
+    const { channel, channelChangeSource: source, program } = box.live;
+    let game, programTitle, rating;
+    if (program) {
+      game = program.game;
+      console.log(game);
+      programTitle = program.title;
+      rating = program.clickerRating;
+      if (program.description) {
+        programTitle += `: ${program.description.substring(0, 20)}`;
+      }
+    }
+    transformed.push({
+      fields: {
+        location: `${location.name}: ${location.neighborhood}`,
+        program: programTitle ? programTitle : '',
+        game: game ? JSON.stringify(game) : '',
+        rating: rating,
+        channel,
+        channelName: program ? program.channelTitle : null,
+        source,
+        zone: zone ? zone : appActive ? `${label} (app)` : '',
+        time: moment().toDate(),
+      },
+    });
+  });
+  return transformed;
 }
