@@ -399,6 +399,7 @@ export function setBoxStatus(box: Box): Box {
 }
 
 export const remove = withSentry(async function (event, context) {
+  init();
   const { id } = getPathParameters(event);
   const location: Venue = await dbLocation.delete({ id });
   return respond(202, location);
@@ -406,6 +407,7 @@ export const remove = withSentry(async function (event, context) {
 
 export const create = withSentry(async function (event, context) {
   try {
+    init();
     const body = getBody(event);
     body._v = 2;
     if (body.id) {
@@ -424,6 +426,7 @@ export const create = withSentry(async function (event, context) {
 
 export const update = withSentry(async function (event, context) {
   try {
+    init();
     const { id } = getPathParameters(event);
     const body = getBody(event);
 
@@ -438,6 +441,7 @@ export const update = withSentry(async function (event, context) {
 });
 
 export const setBoxes = withSentry(async function (event, context) {
+  init();
   const body = getBody(event);
   const requestBoxes: DirecTVBoxRaw[] = body.boxes;
   const ip = body.ip;
@@ -493,6 +497,7 @@ export const setBoxes = withSentry(async function (event, context) {
 });
 
 export const setBoxReserved = withSentry(async function (event, context) {
+  init();
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
   console.log({ locationId, boxId, end });
@@ -511,6 +516,7 @@ export const setBoxReserved = withSentry(async function (event, context) {
 });
 
 export const setBoxFree = withSentry(async function (event, context) {
+  init();
   const { id: locationId, boxId } = getPathParameters(event);
   await new Invoke()
     .service('box')
@@ -525,12 +531,12 @@ export const setBoxFree = withSentry(async function (event, context) {
   return respond(200);
 });
 
-async function getLocationBoxes(locationId) {
-  const {
-    data: { boxes: locationBoxes },
-  } = await new Invoke().service('box').name('getAll').pathParams({ locationId }).go();
-  return locationBoxes;
-}
+// async function getLocationBoxes(locationId) {
+//   const {
+//     data: { boxes: locationBoxes },
+//   } = await new Invoke().service('box').name('getAll').pathParams({ locationId }).go();
+//   return locationBoxes;
+// }
 
 // TODO use graphql for this
 async function getLocationWithBoxes(locationId, fetchProgram) {
@@ -552,6 +558,7 @@ async function getLocationWithBoxes(locationId, fetchProgram) {
 
 // called from antenna
 export const saveBoxesInfo = withSentry(async function (event, context) {
+  init();
   const { id: locationId } = getPathParameters(event);
   const body = getBody(event);
   // const boxes: DirecTVBox[] = body.boxes;
@@ -677,6 +684,7 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
 });
 
 export const connected = withSentry(async function (event, context) {
+  init();
   const { losantId } = getPathParameters(event);
 
   const connected = true;
@@ -694,6 +702,7 @@ export const connected = withSentry(async function (event, context) {
 });
 
 export const disconnected = withSentry(async function (event, context) {
+  init();
   const { losantId } = getPathParameters(event);
 
   const connected = false;
