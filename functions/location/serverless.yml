@@ -240,6 +240,42 @@ functions:
       - http:
           path: '{id}/control-center'
           method: post
+  updateAirtableNowShowing:
+    handler: location.updateAirtableNowShowing
+    timeout: 30
+    events:
+      - schedule: cron(9/10 * * * ? *)
+      - http:
+          path: airtable/now-showing
+          method: post
+  # syncAirtableLocations:
+  #   handler: location.syncAirtableLocations
+  #   timeout: 10
+  #   events:
+  #     - schedule: cron(00 10 * * ? *) # every day @ 6am eastern
+  #     - http:
+  #         path: airtable/data/locations
+  #         method: post
+  syncAirtableRegions:
+    handler: location.syncAirtableRegions
+    timeout: 10
+    events:
+      - schedule: cron(00 10 * * ? *) # every day @ 6am eastern
+      - http:
+          path: airtable/data/regions
+          method: post
+  # updateAllBoxesPrograms:
+  #   handler: location.updateAllBoxesPrograms
+  #   description: update all location boxes current program (for when antenna doesnt actually call)
+  #   timeout: 30
+  #   events:
+  #     # - schedule: cron(0/5 21-4 ? * * *) # Every 5 minutes between 11pm UTC and 4am UTC
+  #     # - schedule: cron(0/15 4-21 ? * * *) # Every 15 minutes between 4am UTC and 9pm UTC
+  #     - schedule: cron(6/10 * * * ? *) # Every 6th minute
+  #     - http:
+  #         path: boxes/programs
+  #         method: post
+# >>>>>>> 3deb297788cd300f199522c1f51879f6d8342df3
   getLocationDetailsPage:
     handler: location.getLocationDetailsPage
     reservedConcurrency: 1

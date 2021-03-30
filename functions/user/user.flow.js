@@ -154,7 +154,7 @@ module.exports.stripeWebhook = RavenLambdaWrapper.handler(Raven, async (event) =
     //     .go();
     //   return respond(200);
     default:
-      return respond(400, `webhook ${webhookEvent.type} not supported by Clicker API`);
+      return respond(200, `webhook ${webhookEvent.type} not supported by Clicker API`);
   }
 });
 

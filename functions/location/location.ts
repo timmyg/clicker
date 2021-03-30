@@ -568,6 +568,7 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
 
   for (const box of boxes) {
     const { boxId, info } = box;
+
     // if (!boxId) {
     //   const error = 'must provide boxId';
     //   console.error(error);
@@ -587,6 +588,26 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
     console.log('original channel', originalChannel);
     console.log('current channel', major);
     const region = locationBox.region;
+
+    // await new Invoke()
+    // .service('analytics')
+    // .name('track')
+    // .body({
+    //   userId: 'system',
+    //   name: 'Box Status',
+    //   data: {
+    //     ...info,
+    //     boxId: locationBox.id,
+    //     label: locationBox.label,
+    //     zone: locationBox.zone,
+    //     ip: locationBox.info.ip,
+    //     locationId: location.id,
+    //     locationName: `${location.name} (${location.neighborhood})`,
+    //   },
+    //   // timestamp: moment().toISOString(),
+    // })
+    // .async()
+    // .go();
 
     const now = moment().unix() * 1000;
     let updateBoxInfoBody = {
@@ -642,6 +663,7 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
       };
     }
 
+    console.log('updateLive', { locationId, boxId, updateBoxInfoBody });
     await new Invoke()
       .service('box')
       .name('updateLive')
@@ -923,6 +945,42 @@ export const controlCenterByLocation = withSentry(async function (event, context
   }
   return respond(200);
 });
+
+// <<<<<<< HEAD:functions/location/location.ts
+// export const getLocationDetailsPage = withSentry(async function (event, context) {
+// =======
+// // npm run invoke:updateAirtableNowShowing
+// module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
+// export const updateAirtableNowShowing = withSentry(async function (event, context) {
+//   let locations: Venue[] = await dbLocation
+//     .scan()
+//     // .filter('active')
+//     // .eq(true)
+//     // .and()
+//     // .filter('controlCenter')
+//     // .eq(true)
+//     .all()
+//     .exec();
+//   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+//   const airtableName = 'Now Showing';
+//   const nowShowing = [];
+//   for (const location of locations) {
+//     const locationWithBoxes = await getLocationWithBoxes(location.id, true);
+//     nowShowing.push(...buildAirtableNowShowing(locationWithBoxes));
+//   }
+//   console.log('nowShowing:', nowShowing.length);
+//   const promises = [];
+//   while (!!nowShowing.length) {
+//     const slice = nowShowing.splice(0, 10);
+//     promises.push(base(airtableName).create(slice));
+//   }
+//   try {
+//     await Promise.all(promises);
+//   } catch (e) {
+//     console.error(e);
+//   }
+//   return respond(200);
+// });
 
 export const getLocationDetailsPage = withSentry(async function (event, context) {
   const { id } = getPathParameters(event);
@@ -1219,7 +1277,6 @@ export function findBoxGameOver(boxes: Box[]): Box | null | undefined {
     .filter((b) => b.live.program)
     .filter((b) => b.live.program.game)
     .find((b) => b.live.program.game.isOver);
-    
 }
 
 export function findBoxWithoutRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
