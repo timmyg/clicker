@@ -946,22 +946,9 @@ export const controlCenterByLocation = withSentry(async function (event, context
   return respond(200);
 });
 
-// <<<<<<< HEAD:functions/location/location.ts
-// export const getLocationDetailsPage = withSentry(async function (event, context) {
-// =======
-// // npm run invoke:updateAirtableNowShowing
-// module.exports.updateAirtableNowShowing = RavenLambdaWrapper.handler(Raven, async event => {
 export const updateAirtableNowShowing = withSentry(async function (event, context) {
   init();
-  let locations: Venue[] = await dbLocation
-    .scan()
-    // .filter('active')
-    // .eq(true)
-    // .and()
-    // .filter('controlCenter')
-    // .eq(true)
-    .all()
-    .exec();
+  let locations: Venue[] = await dbLocation.scan().all().exec();
   const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
   const airtableName = 'Now Showing';
   const nowShowing = [];
@@ -1427,7 +1414,7 @@ function buildAirtableNowShowing(location: Venue) {
   location.boxes.forEach((box) => {
     const { zone, label } = box;
     const { appActive } = box.configuration;
-    const { channel, channelChangeSource: source, program } = box.live;
+    const { channel, channelMinor, channelChangeSource: source, program, updatedAt } = box.live;
     let game, programTitle, rating;
     if (program) {
       game = program.game;
@@ -1440,15 +1427,19 @@ function buildAirtableNowShowing(location: Venue) {
     }
     transformed.push({
       fields: {
+        pingTime: updatedAt,
         location: `${location.name}: ${location.neighborhood}`,
-        program: programTitle ? programTitle : '',
-        game: game ? JSON.stringify(game) : '',
-        rating: rating,
+        locationName: location.name,
+        locationNeighborhood: location.neighborhood,
+        program: programTitle || '',
+        game: game?.title || '',
         channel,
-        channelName: program ? program.channelTitle : null,
+        channelMinor,
+        channelName: program?.channelTitle || '',
         source,
-        zone: zone ? zone : appActive ? `${label} (app)` : '',
-        time: moment().toDate(),
+        zone: zone || '',
+        label: label || '',
+        category: program.mainCategory,
       },
     });
   });
