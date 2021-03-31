@@ -10,7 +10,7 @@ class BoxLive {
   lockedUntil: number;
   lockedProgrammingIds: string[];
   lockedMessage: string;
-  program: Program;
+  updatedAt: number;
 }
 
 class Box {

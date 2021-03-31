@@ -399,6 +399,7 @@ export function setBoxStatus(box: Box): Box {
 }
 
 export const remove = withSentry(async function (event, context) {
+  init();
   const { id } = getPathParameters(event);
   const location: Venue = await dbLocation.delete({ id });
   return respond(202, location);
@@ -406,6 +407,7 @@ export const remove = withSentry(async function (event, context) {
 
 export const create = withSentry(async function (event, context) {
   try {
+    init();
     const body = getBody(event);
     body._v = 2;
     if (body.id) {
@@ -424,6 +426,7 @@ export const create = withSentry(async function (event, context) {
 
 export const update = withSentry(async function (event, context) {
   try {
+    init();
     const { id } = getPathParameters(event);
     const body = getBody(event);
 
@@ -438,6 +441,7 @@ export const update = withSentry(async function (event, context) {
 });
 
 export const setBoxes = withSentry(async function (event, context) {
+  init();
   const body = getBody(event);
   const requestBoxes: DirecTVBoxRaw[] = body.boxes;
   const ip = body.ip;
@@ -493,6 +497,7 @@ export const setBoxes = withSentry(async function (event, context) {
 });
 
 export const setBoxReserved = withSentry(async function (event, context) {
+  init();
   const { id: locationId, boxId } = getPathParameters(event);
   const { end } = getBody(event);
   console.log({ locationId, boxId, end });
@@ -511,6 +516,7 @@ export const setBoxReserved = withSentry(async function (event, context) {
 });
 
 export const setBoxFree = withSentry(async function (event, context) {
+  init();
   const { id: locationId, boxId } = getPathParameters(event);
   await new Invoke()
     .service('box')
@@ -525,12 +531,12 @@ export const setBoxFree = withSentry(async function (event, context) {
   return respond(200);
 });
 
-async function getLocationBoxes(locationId) {
-  const {
-    data: { boxes: locationBoxes },
-  } = await new Invoke().service('box').name('getAll').pathParams({ locationId }).go();
-  return locationBoxes;
-}
+// async function getLocationBoxes(locationId) {
+//   const {
+//     data: { boxes: locationBoxes },
+//   } = await new Invoke().service('box').name('getAll').pathParams({ locationId }).go();
+//   return locationBoxes;
+// }
 
 // TODO use graphql for this
 async function getLocationWithBoxes(locationId, fetchProgram) {
@@ -552,6 +558,7 @@ async function getLocationWithBoxes(locationId, fetchProgram) {
 
 // called from antenna
 export const saveBoxesInfo = withSentry(async function (event, context) {
+  init();
   const { id: locationId } = getPathParameters(event);
   const body = getBody(event);
   // const boxes: DirecTVBox[] = body.boxes;
@@ -568,6 +575,7 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
 
   for (const box of boxes) {
     const { boxId, info } = box;
+
     // if (!boxId) {
     //   const error = 'must provide boxId';
     //   console.error(error);
@@ -587,6 +595,26 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
     console.log('original channel', originalChannel);
     console.log('current channel', major);
     const region = locationBox.region;
+
+    // await new Invoke()
+    // .service('analytics')
+    // .name('track')
+    // .body({
+    //   userId: 'system',
+    //   name: 'Box Status',
+    //   data: {
+    //     ...info,
+    //     boxId: locationBox.id,
+    //     label: locationBox.label,
+    //     zone: locationBox.zone,
+    //     ip: locationBox.info.ip,
+    //     locationId: location.id,
+    //     locationName: `${location.name} (${location.neighborhood})`,
+    //   },
+    //   // timestamp: moment().toISOString(),
+    // })
+    // .async()
+    // .go();
 
     const now = moment().unix() * 1000;
     let updateBoxInfoBody = {
@@ -642,6 +670,7 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
       };
     }
 
+    console.log('updateLive', { locationId, boxId, updateBoxInfoBody });
     await new Invoke()
       .service('box')
       .name('updateLive')
@@ -655,6 +684,7 @@ export const saveBoxesInfo = withSentry(async function (event, context) {
 });
 
 export const connected = withSentry(async function (event, context) {
+  init();
   const { losantId } = getPathParameters(event);
 
   const connected = true;
@@ -672,6 +702,7 @@ export const connected = withSentry(async function (event, context) {
 });
 
 export const disconnected = withSentry(async function (event, context) {
+  init();
   const { losantId } = getPathParameters(event);
 
   const connected = false;
@@ -924,6 +955,30 @@ export const controlCenterByLocation = withSentry(async function (event, context
   return respond(200);
 });
 
+export const updateAirtableNowShowing = withSentry(async function (event, context) {
+  init();
+  let locations: Venue[] = await dbLocation.scan().all().exec();
+  const base = new Airtable({ apiKey: process.env.airtableKey }).base(process.env.airtableBase);
+  const airtableName = 'Now Showing';
+  const nowShowing = [];
+  for (const location of locations) {
+    const locationWithBoxes = await getLocationWithBoxes(location.id, true);
+    nowShowing.push(...buildAirtableNowShowing(locationWithBoxes));
+  }
+  console.log('nowShowing:', nowShowing.length);
+  const promises = [];
+  while (!!nowShowing.length) {
+    const slice = nowShowing.splice(0, 10);
+    promises.push(base(airtableName).create(slice));
+  }
+  try {
+    await Promise.all(promises);
+  } catch (e) {
+    console.error(e);
+  }
+  return respond(200);
+});
+
 export const getLocationDetailsPage = withSentry(async function (event, context) {
   const { id } = getPathParameters(event);
   console.time('get location');
@@ -1011,7 +1066,8 @@ export const migration = withSentry(async function (event, context) {
 });
 
 export const syncLocationsBoxes = withSentry(async function (event, context) {
-  const locations: Venue[] = await dbLocation.scan().filter('active').eq(true).all().exec();
+  init();
+  const locations: Venue[] = await dbLocation.scan().all().exec();
 
   for (const location of locations) {
     const { losantId, losantProductionOverride } = location;
@@ -1219,7 +1275,6 @@ export function findBoxGameOver(boxes: Box[]): Box | null | undefined {
     .filter((b) => b.live.program)
     .filter((b) => b.live.program.game)
     .find((b) => b.live.program.game.isOver);
-    
 }
 
 export function findBoxWithoutRating(boxes: Box[], program: AirtableControlCenterProgram): Box | null | undefined {
@@ -1361,4 +1416,51 @@ export function filterProgramsByTargeting(
     }
   });
   return results;
+}
+
+function buildAirtableNowShowing(location: Venue) {
+  const transformed = [];
+  location.boxes.forEach((box) => {
+    const { zone, label } = box;
+    const { appActive } = box.configuration;
+    const { channel, channelMinor, channelChangeSource: source, program, updatedAt } = box.live;
+    let game, programTitle, rating;
+    if (program) {
+      game = program.game;
+      console.log(game);
+      programTitle = program.title;
+      rating = program.clickerRating;
+      if (program.description) {
+        programTitle += `: ${program.description.substring(0, 20)}`;
+      }
+    }
+    try {
+      transformed.push({
+        fields: {
+          boxId: box.id,
+          ip: box.info?.ip,
+          pingTime: updatedAt,
+          location: `${location.name}: ${location.neighborhood}`,
+          locationName: location.name,
+          locationNeighborhood: location.neighborhood,
+          program: programTitle || '',
+          programStart: program.start && new Date(program.start),
+          programEnd: program.end && new Date(program.end),
+          game: game?.title || '',
+          channel,
+          channelMinor,
+          channelName: program?.channelTitle || '',
+          source,
+          zone: zone || '',
+          label: label || '',
+          category: program.mainCategory,
+          isLive: program.live,
+          clickerRating: program.clickerRating,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  });
+  return transformed;
 }

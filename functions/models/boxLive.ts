@@ -11,4 +11,5 @@ export default class BoxLive {
   lockedProgrammingIds: string[];
   lockedMessage: string;
   program: Program;
+  updatedAt: number;
 }
