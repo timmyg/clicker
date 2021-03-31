@@ -1437,6 +1437,8 @@ function buildAirtableNowShowing(location: Venue) {
     try {
       transformed.push({
         fields: {
+          boxId: box.id,
+          ip: box.info?.ip,
           pingTime: updatedAt,
           location: `${location.name}: ${location.neighborhood}`,
           locationName: location.name,
