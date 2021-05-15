@@ -1304,6 +1304,8 @@ export function getDefaultRating(program: Program): number | null | undefined {
   const match = defaultRatings.find((dr) => program.title.toLowerCase().includes(dr.search.toLowerCase()));
   if (match && !ratingsIgnore.includes(program.title.toLowerCase())) {
     return match.rating;
+  } else if (match && program.live) {
+    return 5;
   }
 }
 
