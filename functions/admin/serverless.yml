@@ -65,7 +65,7 @@ functions:
     events:
       # - schedule: cron(0 19,20 ? * MON-FRI *) # weekdays ~ 3pm, 4pm eastern
       # - schedule: cron(30 12,14 ? * SAT,SUN *) # weekends ~ 830am, 1030am eastern
-      - schedule: cron(30 13,15 ? * * *) # ~830am, 1030am eastern
+      # - schedule: cron(30 13,15 ? * * *) # ~830am, 1030am eastern
       - http:
           path: check/control-center
           method: post
