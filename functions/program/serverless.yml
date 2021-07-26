@@ -237,7 +237,7 @@ functions:
           method: post
   syncRegionNextFewHours:
     handler: program.syncRegionNextFewHours
-    timeout: 30
+    timeout: 90
     environment:
       # newProgramTopicArn: ${self:custom.newProgramTopicArn.${self:provider.stage}}
       newProgramTopicArn: ${self:custom.newProgramTopicArn.deployed}
