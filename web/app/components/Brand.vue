@@ -24,7 +24,7 @@
           <div class="card">
             <header>Logo</header>
             <div>
-              <img src="https://clicker-brand.s3.amazonaws.com/logo.png" alt="Clicker logo" />
+              <img src="/logo.png" alt="Clicker logo" />
             </div>
           </div>
         </div>

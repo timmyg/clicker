@@ -13,7 +13,7 @@
         >
           <a :href="link || '/'">
             <img
-              src="https://clicker-brand.s3.amazonaws.com/logo.png"
+              src="/logo.png"
               width="150"
               alt="Clicker logo"
             />
